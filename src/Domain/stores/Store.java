@@ -1,4 +1,4 @@
-package stores;
+package Domain.stores;
 
 public class Store {
 }

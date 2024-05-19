@@ -1,9 +1,7 @@
-package users;
-
-import stores.ShoppingCart;
+package Domain.users;
 
 public class Visitor extends User{
-    public Visitor(int id, ShoppingCart shopping_cart) {
+    public Visitor(int id, Cart shopping_cart) {
         super(id, shopping_cart);
     }
 
