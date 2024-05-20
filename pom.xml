@@ -12,11 +12,17 @@
 	<artifactId>trading_system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>trading_system</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Trading system web application</description>
 	<properties>
 		<java.version>22</java.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -34,12 +40,17 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.mockito</groupId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<version>3.2.5</version>
+		</dependency>
+    
+    <dependency>
+       <groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>4.0.0</version>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
 
 	<build>
