@@ -1,6 +1,6 @@
-package com.example.artifact.domain.users;
+package com.example.trading_system.domain.users;
 
-import com.example.artifact.domain.stores.Store; ;
+import com.example.trading_system.domain.stores.Store; ;
 
 public class Role {
     private RoleState roleState;

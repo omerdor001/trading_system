@@ -1,4 +1,4 @@
-package com.example.artifact;
+package com.example.trading_system;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

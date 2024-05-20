@@ -1,13 +1,13 @@
-package com.example.artifact;
+package com.example.trading_system;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ArtifactApplication {
+public class TradingSystemApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ArtifactApplication.class, args);
+		SpringApplication.run(TradingSystemApplication.class, args);
 	}
 
 }

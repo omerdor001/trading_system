@@ -1,6 +1,4 @@
-package com.example.artifact.domain.users;
-
-import com.example.artifact.domain.users.ShoppingBag; ;
+package com.example.trading_system.domain.users;
 
 public class Registered extends User{
     private int userId;

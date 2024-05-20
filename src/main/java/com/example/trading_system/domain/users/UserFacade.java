@@ -1,4 +1,4 @@
-package com.example.artifact.domain.users;
+package com.example.trading_system.domain.users;
 
 public interface UserFacade {
     void exit();
