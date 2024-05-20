@@ -2,47 +2,56 @@ package com.example.trading_system.Service;
 
 import com.example.trading_system.Domain.externalservices.Service;
 import com.example.trading_system.Domain.externalservices.ServiceFacade;
-import com.example.trading_system.Domain.externalservices.ServiceFacadeImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.client.RestTemplate;
 
 public class ExternalServices {
     private ServiceFacade facade;
     private static final Logger logger= LoggerFactory.getLogger(ExternalServices.class);
-    public ExternalServices(){
-        facade=new ServiceFacadeImp();
+    public ExternalServices(ServiceFacade facade){
+        this.facade=facade;
 
     }
-    public void addService(String serviceName, RestTemplate restTemplate){//Add connection
-        logger.info("Trying adding external service: {}",serviceName);
+    public boolean addService(Service service) {//Add connection
+        boolean result;
+        logger.info("Trying adding external service: {}", service.getServiceName());
         try {
-            facade.addService(serviceName,restTemplate);
+            boolean _result=facade.addService(service);
+            result=_result;
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed trying adding external service: {}", e.getMessage(), service.getServiceName());
+            return false;
         }
-        catch (Exception e){
-            logger.error("Error occurred : {} , Failed trying adding external service: {}",e.getMessage(),serviceName);
-        }
-        logger.info("Finish adding external service: {}",serviceName);
-
+        logger.info("Finish adding external service: {}", service.getServiceName());
+        return result;
     }
-    public void replaceService(Service newService, Service oldService){
+
+    public boolean replaceService(Service newService, Service oldService){
+        boolean result;
         logger.info("Trying replacing external service: {} to {} ",oldService.getServiceName(),newService.getServiceName());
         try {
-            facade.replaceService(newService,oldService);
+            boolean _result=facade.replaceService(newService,oldService);
+            result=_result;
         }
         catch (Exception e){
             logger.error("Error occurred : {} ,Failed trying replacing external service: {} to {} ",e.getMessage(),oldService.getServiceName(),newService.getServiceName());
+            return false;
         }
         logger.info("Finish replacing external service: {} to {} ",oldService.getServiceName(),newService.getServiceName());
+        return result;
     }
-    public void changeServiceName(Service serviceToChangeAt,String newName){
+    public boolean changeServiceName(Service serviceToChangeAt,String newName){
+        boolean result;
         logger.info("Trying changing name to external service: {} to name : {} ",serviceToChangeAt.getServiceName(),newName);
         try {
-            facade.changeServiceName(serviceToChangeAt,newName);
+            boolean _result=facade.changeServiceName(serviceToChangeAt,newName);
+            result=_result;
         }
         catch (Exception e){
             logger.error("Error occurred : {} , Failed trying changing name to external service: {} to name : {} ",e.getMessage(),serviceToChangeAt.getServiceName(),newName);
+            return false;
         }
         logger.info("Finish changing name to external service: {} to name : {} ",serviceToChangeAt.getServiceName(),newName);
+        return result;
     }
 }

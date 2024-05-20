@@ -2,22 +2,28 @@ package com.example.trading_system.Domain.externalservices;
 
 import org.springframework.web.client.RestTemplate;
 
+import javax.management.InstanceAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 public class ServiceFacadeImp implements ServiceFacade {
-    public List<Service> services;
+    private List<Service> services;
     public ServiceFacadeImp(){
         services=new ArrayList<>();
     }
+
     @Override
-    public void addService(String serviceName, RestTemplate restTemplate) {
-        services.add(new Service(serviceName,restTemplate));
+    public boolean addService(Service service) throws InstanceAlreadyExistsException {
+        if (services.contains(service)){
+            throw new InstanceAlreadyExistsException("This service already exist");
+        }
+        services.add(service);
+        return true;
     }
 
     @Override
-    public void replaceService(Service newService, Service oldService) {
+    public boolean replaceService(Service newService, Service oldService) {
         if (!services.contains(oldService)){
             throw new NoSuchElementException("Service is not exist");
         }
@@ -26,10 +32,15 @@ public class ServiceFacadeImp implements ServiceFacade {
         }
         services.remove(oldService);
         services.add(newService);
+        return true;
     }
 
     @Override
-    public void changeServiceName(Service serviceToChangeAt,String newName) {
-       serviceToChangeAt.setServiceName(newName);
+    public boolean changeServiceName(Service serviceToChangeAt,String newName) {
+        if (!services.contains(serviceToChangeAt)){
+            throw new NoSuchElementException("Service is not exist");
+        }
+        serviceToChangeAt.setServiceName(newName);
+        return true;
     }
 }
