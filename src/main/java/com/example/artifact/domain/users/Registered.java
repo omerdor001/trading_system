@@ -1,6 +1,6 @@
-package users;
+package com.example.artifact.domain.users;
 
-import stores.ShoppingCart;
+import com.example.artifact.domain.users.ShoppingBag; ;
 
 public class Registered extends User{
     private int userId;
@@ -9,8 +9,8 @@ public class Registered extends User{
     private int age;
     private boolean isAdmin;
 
-    public Registered(int id, ShoppingCart shopping_cart, int userId, String userName, String address, int age) {
-        super(id, shopping_cart);
+    public Registered(int id, Cart shoppingCart, int userId, String userName, String address, int age) {
+        super(id, shoppingCart);
         this.userId=userId;
         this.userName=userName;    //Can be change to email
         this.address=address;
@@ -20,7 +20,7 @@ public class Registered extends User{
 
     public void logout(){}
     public void openStore(){}
-    public void performBuying(ShoppingCart shopping_cart) {}
+    public void performBuying(Cart shopping_cart) {}
     public boolean approveAppointment(int userId) { return false; }
     public void searchProduct(int productId) {}
     public void seeHistoryPurchase() {}

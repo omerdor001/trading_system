@@ -1,4 +1,4 @@
-package Domain.users;
+package com.example.artifact.domain.users;
 
 public class User {
     public int id;

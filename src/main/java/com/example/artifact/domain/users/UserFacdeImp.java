@@ -1,4 +1,4 @@
-package users;
+package com.example.artifact.domain.users;
 
 public class UserFacdeImp implements UserFacade{
     @Override

@@ -1,6 +1,6 @@
-package users;
+package com.example.artifact.domain.users;
 
-import stores.Store;
+import com.example.artifact.domain.stores.Store; ;
 
 public class Role {
     private RoleState roleState;
