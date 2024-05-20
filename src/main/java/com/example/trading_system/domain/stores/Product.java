@@ -8,7 +8,8 @@ public class Product {
     private int product_quantity;
     private int rating;
     private String store_id;
-    private String category_id;
+    private String category_name;
+
     public Product(int product_id, String product_name, String product_description,
                    int product_price, int product_quantity, int rating) {
         this.product_id = product_id;
@@ -18,7 +19,7 @@ public class Product {
         this.product_quantity = product_quantity;
         this.rating = rating;
         this.store_id = "";
-        this.category_id = "";
+        this.category_name = "";
     }
 
     public int getProduct_id() {
@@ -64,10 +65,10 @@ public class Product {
         this.store_id = store_id;
     }
     public String getCategory_id() {
-        return category_id;
-    }
-    public void setCategory_id(String category_id) {
-        this.category_id = category_id;
+        return category_name;
     }
 
+    public void setCategory(String category) {
+        this.category_name = category;
+    }
 }

@@ -1,7 +1,11 @@
 package com.example.trading_system.domain.stores;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class Category {
-    private String categoryName;
+    private String categoryName; //this will be the ID for the category
     private String categoryDescription;
     private List<Product> products = new ArrayList<>();
     public  Category(String categoryName,String categoryDescription){
