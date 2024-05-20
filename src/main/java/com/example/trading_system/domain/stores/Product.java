@@ -14,13 +14,8 @@ public class Product {
     private int rating;
     private String store_id;
     private String category_id;
-
-    public Product(int product_id,
-                   String product_name,
-                   String product_description,
-                   int product_price,
-                   int product_quantity,
-                   int rating) {
+    public Product(int product_id, String product_name, String product_description,
+                   int product_price, int product_quantity, int rating) {
         this.product_id = product_id;
         this.product_name = product_name;
         this.product_description = product_description;
