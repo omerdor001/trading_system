@@ -1,6 +1,8 @@
 package com.example.trading_system.domain.stores;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Store {
     private String name_id;//this will be the ID for the store
@@ -21,12 +23,36 @@ public class Store {
     public HashMap<Integer, Product> getProducts() {
         return products;
     }
-
     public String getDescription() {
         return description;
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Product> searchName(String name){
+        List<Product> list_products = new ArrayList<>();
+        for(Product p : products.values()){
+            if(p.getProduct_name().equals(name))
+                list_products.add(p);
+        }
+        return list_products;
+    }
+    public List<Product> searchCategory(Category category){
+        List<Product> list_products = new ArrayList<>();
+        for(Product p : products.values()){
+            if(p.getCategory().equals(category))
+                list_products.add(p);
+        }
+        return list_products;
+    }
+    public List<Product> searchKeywords(String keyWords){
+        List<Product> list_products = new ArrayList<>();
+        for(Product p : products.values()){
+            if(p.getKeyWords().contains(keyWords))
+                list_products.add(p);
+        }
+        return list_products;
     }
     public String toString() {
         StringBuilder sb = new StringBuilder();
