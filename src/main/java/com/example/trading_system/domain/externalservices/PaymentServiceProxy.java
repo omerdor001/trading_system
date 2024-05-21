@@ -12,7 +12,7 @@ public class PaymentServiceProxy {
         if (amount>0) {
             realPaymentService.processPayment(amount);
         } else {
-            System.out.println("Payment authorization failed.");
+            throw new IllegalArgumentException("Payment authorization failed");
         }
     }
 }

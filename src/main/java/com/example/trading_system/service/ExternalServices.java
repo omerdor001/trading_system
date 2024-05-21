@@ -70,4 +70,19 @@ public class ExternalServices {
         logger.info("Finish making payment with service: {} ",serviceName);
         return result;
     }
+
+    public boolean makeDelivery(String serviceName,String address){
+        boolean result;
+        logger.info("Trying making delivery with service {} ",serviceName);
+        try {
+            boolean _result=facade.makeDelivery(serviceName,address);
+            result=_result;
+        }
+        catch (Exception e){
+            logger.error("Error occurred : {} , Failed making delivery with service: {}  ",e.getMessage(),serviceName);
+            return false;
+        }
+        logger.info("Finish making delivery with service: {} ",serviceName);
+        return result;
+    }
 }

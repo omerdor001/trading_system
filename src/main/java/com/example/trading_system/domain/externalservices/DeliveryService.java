@@ -11,4 +11,9 @@ public class DeliveryService extends Service{
         super(serviceName);
     }
 
+    public void processDelivery(String address) {
+        System.out.println("Processing delivery of $" + address);
+        // Here would be the real delivery processing logic, e.g., calling an external delivery gateway API
+    }
+
 }

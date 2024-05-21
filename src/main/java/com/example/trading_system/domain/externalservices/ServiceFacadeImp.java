@@ -59,4 +59,14 @@ public class ServiceFacadeImp implements ServiceFacade {
         paymentService.processPayment(amount);
         return true;
     }
+
+    @Override
+    public boolean makeDelivery(String serviceName, String address) {
+        if (!findServiceByName(serviceName)){
+            throw new NoSuchElementException("Service is not exist");
+        }
+        DeliveryServiceProxy deliveryServiceProxy = new DeliveryServiceProxy(serviceName);
+        deliveryServiceProxy.processDelivery(address);
+        return true;
+    }
 }

@@ -94,6 +94,29 @@ class ExternalServicesUnitTest {
         assertEquals(result,false);
     }
 
+    @Test
+    void makingDelivery_Success() {
+        Service delivery1=new DeliveryService("Parcel");
+        externalServices.addService(delivery1);
+        boolean result=externalServices.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704");
+        assertEquals(result,true);
+    }
+
+    @Test
+    void makingDelivery_ServiceNotExist() {
+        Service delivery1=new DeliveryService("Parcel");
+        boolean result=externalServices.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704");
+        assertEquals(result,false);
+    }
+
+    @Test
+    void makingDelivery_InvalidAddress() {
+        Service delivery1=new DeliveryService("Parcel");
+        externalServices.addService(delivery1);
+        boolean result=externalServices.makeDelivery("Parcel","Invalid Address");
+        assertEquals(result,false);
+    }
+
 
 
 }

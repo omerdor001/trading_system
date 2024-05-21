@@ -99,6 +99,7 @@ class ExternalServicesAcceptanceTest {
     @Test
     void makingPayment_ServiceNotExist() {
         Service payment1=new PaymentService("Paypal");
+        externalServices.addService(payment1);
         when(serviceFacade.makePayment("Paypal",100)).thenReturn(false);
         boolean result=externalServices.makePayment("Paypal",100);
         assertEquals(result,false);
@@ -111,6 +112,34 @@ class ExternalServicesAcceptanceTest {
         boolean result=externalServices.makePayment("Paypal",-100);
         assertEquals(result,false);
     }
+
+    @Test
+    void makingDelivery_Success() {
+        Service delivery1=new DeliveryService("Parcel");
+        externalServices.addService(delivery1);
+        when(serviceFacade.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704")).thenReturn(true);
+        boolean result=externalServices.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704");
+        assertEquals(result,true);
+    }
+
+    @Test
+    void makingDelivery_ServiceNotExist() {
+        Service delivery1=new DeliveryService("Parcel");
+        when(serviceFacade.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704")).thenReturn(false);
+        boolean result=externalServices.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704");
+        assertEquals(result,false);
+    }
+
+    @Test
+    void makingPayment_InvalidAddress() {
+        Service delivery1=new DeliveryService("Parcel");
+        externalServices.addService(delivery1);
+        when(serviceFacade.makeDelivery("Parcel","Invalid Address")).thenReturn(false);
+        boolean result=externalServices.makeDelivery("Parcel","Invalid Address");
+        assertEquals(result,false);
+    }
+
+
 
 
 }
