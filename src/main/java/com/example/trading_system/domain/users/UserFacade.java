@@ -6,4 +6,5 @@ public interface UserFacade {
     void login();     //Complete with what to login
     void addUser(User user);
     void removeUser(User user);
+    boolean sendNotification(User sender, User receiver, String content);
 }
