@@ -1,5 +1,9 @@
 package com.example.trading_system.domain.stores;
 
+public enum Category {
+    Sport, Art, Food, Clothes, Films;
+    }
+/*
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,5 +40,6 @@ public class Category {
     public void removeProduct(Product product) {
         products.remove(product);
     }
-    
+
 }
+*/
