@@ -1,5 +1,5 @@
 package com.example.trading_system.Service;
-import com.example.trading_system.Domain.externalservices.*;
+import com.example.trading_system.domain.externalservices.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;

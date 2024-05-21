@@ -1,4 +1,4 @@
-package com.example.trading_system.Domain.externalservices;
+package com.example.trading_system.domain.externalservices;
 
 import javax.management.InstanceAlreadyExistsException;
 import java.util.ArrayList;

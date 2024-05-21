@@ -1,9 +1,9 @@
 package com.example.trading_system.Service;
 
-import com.example.trading_system.Domain.externalservices.DeliveryService;
-import com.example.trading_system.Domain.externalservices.PaymentService;
-import com.example.trading_system.Domain.externalservices.Service;
-import com.example.trading_system.Domain.externalservices.ServiceFacade;
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.externalservices.Service;
+import com.example.trading_system.domain.externalservices.ServiceFacade;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

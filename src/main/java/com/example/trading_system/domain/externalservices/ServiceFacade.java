@@ -1,7 +1,5 @@
 package com.example.trading_system.domain.externalservices;
 
-import org.springframework.web.client.RestTemplate;
-
 import javax.management.InstanceAlreadyExistsException;
 
 public interface ServiceFacade {
