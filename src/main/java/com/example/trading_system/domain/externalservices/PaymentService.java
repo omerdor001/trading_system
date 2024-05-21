@@ -1,7 +1,5 @@
-package com.example.trading_system.Domain.externalservices;
+package com.example.trading_system.domain.externalservices;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 

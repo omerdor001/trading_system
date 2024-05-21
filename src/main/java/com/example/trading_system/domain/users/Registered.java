@@ -1,4 +1,4 @@
-package com.example.trading_system.Domain.users;
+package com.example.trading_system.domain.users;
 
 public class Registered extends User{
     private int userId;
