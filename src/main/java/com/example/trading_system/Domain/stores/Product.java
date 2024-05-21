@@ -2,13 +2,13 @@ package com.example.trading_system.Domain.stores;
 
 public class Product {
     private int product_id;
+    private String store_name;
     private String product_name;
     private String product_description;
     private int product_price;
     private int product_quantity;
     private int rating;
-    private String store_id;
-    private String category_name;
+    private Category category;
 
     public Product(int product_id, String product_name, String product_description,
                    int product_price, int product_quantity, int rating) {
@@ -18,8 +18,8 @@ public class Product {
         this.product_price = product_price;
         this.product_quantity = product_quantity;
         this.rating = rating;
-        this.store_id = "";
-        this.category_name = "";
+        this.store_name = "";
+        this.category = null;
     }
 
     public int getProduct_id() {
@@ -58,17 +58,29 @@ public class Product {
     public void setRating(int rating) {
         this.rating = rating;
     }
-    public String getStore_id() {
-        return store_id;
+    public String getStore_name() {
+        return store_name;
     }
-    public void setStore_id(String store_id) {
-        this.store_id = store_id;
+    public void setStore_name(String store_name) {
+        this.store_name = store_name;
     }
-    public String getCategory_id() {
-        return category_name;
+    public Category getCategory() {
+        return category;
+    }
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+    public String toString() {
+        return "{" +
+                "\"product_id\":" + product_id +
+                ", \"store_name\":\"" + store_name + "\"" +
+                ", \"product_name\":\"" + product_name + "\"" +
+                ", \"product_description\":\"" + product_description + "\"" +
+                ", \"product_price\":" + product_price +
+                ", \"product_quantity\":" + product_quantity +
+                ", \"rating\":" + rating +
+                ", \"category\":" + (category != null ? category.toString() : "null") +
+                '}';
     }
 
-    public void setCategory(String category) {
-        this.category_name = category;
-    }
 }
