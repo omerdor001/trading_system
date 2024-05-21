@@ -1,18 +1,24 @@
 package com.example.trading_system.domain.users;
+import java.time.LocalDate;
 
 public class Registered extends User{
-    private int userId;
     private String userName;
     private String address;
-    private int age;
+    private LocalDate birthdate;
     private boolean isAdmin;
 
-    public Registered(int id, Cart shoppingCart, int userId, String userName, String address, int age) {
+    public Registered(int id, Cart shoppingCart, String userName, String address, LocalDate birthdate) {
         super(id, shoppingCart);
-        this.userId=userId;
         this.userName=userName;    //Can be change to email
         this.address=address;
-        this.age=age;
+        this.birthdate = birthdate;
+        this.isAdmin=false;
+    }
+
+    public Registered(int id, Cart shoppingCart, String userName, LocalDate birthdate) {
+        super(id, shoppingCart);
+        this.userName=userName;    //Can be change to email
+        this.birthdate = birthdate;
         this.isAdmin=false;
     }
 
