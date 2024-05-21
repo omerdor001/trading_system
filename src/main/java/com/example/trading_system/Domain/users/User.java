@@ -1,4 +1,4 @@
-package com.example.trading_system.domain.users;
+package com.example.trading_system.Domain.users;
 
 public class User {
     public int id;
