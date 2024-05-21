@@ -1,4 +1,4 @@
-package com.example.trading_system.Domain.externalservices;
+package com.example.trading_system.domain.externalservices;
 
 public class PaymentServiceProxy {
     private PaymentService realPaymentService;
@@ -12,7 +12,7 @@ public class PaymentServiceProxy {
         if (amount>0) {
             realPaymentService.processPayment(amount);
         } else {
-            System.out.println("Payment authorization failed.");
+            throw new IllegalArgumentException("Payment authorization failed");
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.trading_system.Domain.externalservices;
+package com.example.trading_system.domain.externalservices;
 
 import javax.management.InstanceAlreadyExistsException;
 import java.util.ArrayList;
@@ -57,6 +57,16 @@ public class ServiceFacadeImp implements ServiceFacade {
         }
         PaymentServiceProxy paymentService = new PaymentServiceProxy(serviceName);
         paymentService.processPayment(amount);
+        return true;
+    }
+
+    @Override
+    public boolean makeDelivery(String serviceName, String address) {
+        if (!findServiceByName(serviceName)){
+            throw new NoSuchElementException("Service is not exist");
+        }
+        DeliveryServiceProxy deliveryServiceProxy = new DeliveryServiceProxy(serviceName);
+        deliveryServiceProxy.processDelivery(address);
         return true;
     }
 }

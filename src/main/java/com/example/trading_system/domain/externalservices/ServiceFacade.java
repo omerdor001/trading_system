@@ -1,6 +1,4 @@
-package com.example.trading_system.Domain.externalservices;
-
-import org.springframework.web.client.RestTemplate;
+package com.example.trading_system.domain.externalservices;
 
 import javax.management.InstanceAlreadyExistsException;
 

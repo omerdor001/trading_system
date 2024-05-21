@@ -1,4 +1,4 @@
-package com.example.trading_system.Domain.stores;
+package com.example.trading_system.domain.stores;
 
 public class Product {
     private int product_id;

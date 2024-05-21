@@ -1,4 +1,4 @@
-package com.example.trading_system.Domain.externalservices;
+package com.example.trading_system.domain.externalservices;
 
 public class DeliveryService extends Service{
 

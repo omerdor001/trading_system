@@ -1,4 +1,4 @@
-package com.example.trading_system.Domain.users;
+package com.example.trading_system.domain.users;
 
 import java.util.HashMap;
 import java.time.LocalDate;

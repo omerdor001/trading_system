@@ -1,7 +1,6 @@
 package com.example.trading_system.service;
-import com.example.trading_system.Domain.externalservices.*;
+import com.example.trading_system.domain.externalservices.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

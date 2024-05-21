@@ -1,4 +1,4 @@
-package com.example.trading_system.Domain.externalservices;
+package com.example.trading_system.domain.externalservices;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
