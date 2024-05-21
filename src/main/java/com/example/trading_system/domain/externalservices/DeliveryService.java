@@ -7,8 +7,8 @@ import org.springframework.web.client.RestTemplate;
 
 public class DeliveryService extends Service{
 
-    public DeliveryService(String serviceName, RestTemplate restTemplate) {
-        super(serviceName,restTemplate);
+    public DeliveryService(String serviceName) {
+        super(serviceName);
     }
 
 }
