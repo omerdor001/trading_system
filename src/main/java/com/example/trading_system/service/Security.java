@@ -1,4 +1,4 @@
-package com.example.trading_system.Service;
+package com.example.trading_system.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;

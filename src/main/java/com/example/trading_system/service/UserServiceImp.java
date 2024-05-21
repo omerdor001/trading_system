@@ -1,7 +1,6 @@
-package com.example.trading_system.Service;
+package com.example.trading_system.service;
 
-import com.example.trading_system.domain.externalservices.ServiceFacade;
-import com.example.trading_system.domain.users.UserFacade;
+import com.example.trading_system.Domain.users.UserFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.time.LocalDate;

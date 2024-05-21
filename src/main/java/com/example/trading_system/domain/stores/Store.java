@@ -1,4 +1,4 @@
-package com.example.trading_system.domain.stores;
+package com.example.trading_system.Domain.stores;
 
 import java.util.HashMap;
 

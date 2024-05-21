@@ -1,4 +1,4 @@
-package com.example.trading_system.Service;
+package com.example.trading_system.service;
 
 import java.time.LocalDate;
 

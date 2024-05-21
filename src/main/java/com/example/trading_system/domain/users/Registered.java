@@ -1,4 +1,4 @@
-package com.example.trading_system.domain.users;
+package com.example.trading_system.Domain.users;
 import java.time.LocalDate;
 
 public class Registered extends User{

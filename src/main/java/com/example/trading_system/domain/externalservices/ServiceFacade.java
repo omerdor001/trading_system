@@ -1,4 +1,4 @@
-package com.example.trading_system.domain.externalservices;
+package com.example.trading_system.Domain.externalservices;
 
 import org.springframework.web.client.RestTemplate;
 
@@ -10,6 +10,7 @@ public interface ServiceFacade {
     public boolean changeServiceName(Service serviceToChangeAt, String newName);
 
     public boolean makePayment(String serviceName,double amount);
+    public boolean makeDelivery(String serviceName,String address);
 
 
 }

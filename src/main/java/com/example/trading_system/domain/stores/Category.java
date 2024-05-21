@@ -1,7 +1,6 @@
-package com.example.trading_system.domain.stores;
+package com.example.trading_system.Domain.stores;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Category {

@@ -1,7 +1,7 @@
-package com.example.trading_system.Service;
+package com.example.trading_system.service;
 
-import com.example.trading_system.domain.externalservices.Service;
-import com.example.trading_system.domain.externalservices.ServiceFacade;
+import com.example.trading_system.Domain.externalservices.Service;
+import com.example.trading_system.Domain.externalservices.ServiceFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +68,21 @@ public class ExternalServices {
             return false;
         }
         logger.info("Finish making payment with service: {} ",serviceName);
+        return result;
+    }
+
+    public boolean makeDelivery(String serviceName,String address){
+        boolean result;
+        logger.info("Trying making delivery with service {} ",serviceName);
+        try {
+            boolean _result=facade.makeDelivery(serviceName,address);
+            result=_result;
+        }
+        catch (Exception e){
+            logger.error("Error occurred : {} , Failed making delivery with service: {}  ",e.getMessage(),serviceName);
+            return false;
+        }
+        logger.info("Finish making delivery with service: {} ",serviceName);
         return result;
     }
 }

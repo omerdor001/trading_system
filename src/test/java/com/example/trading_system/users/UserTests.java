@@ -1,6 +1,6 @@
 package com.example.trading_system.users;
 
-import com.example.trading_system.domain.stores.Store;
+import com.example.trading_system.Domain.stores.Store;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

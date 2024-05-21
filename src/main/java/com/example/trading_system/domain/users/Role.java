@@ -1,6 +1,6 @@
-package com.example.trading_system.domain.users;
+package com.example.trading_system.Domain.users;
 
-import com.example.trading_system.domain.stores.Store; ;
+import com.example.trading_system.Domain.stores.Store; ;
 
 public class Role {
     private RoleState roleState;
