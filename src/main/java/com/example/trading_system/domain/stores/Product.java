@@ -1,5 +1,8 @@
 package com.example.trading_system.domain.stores;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Product {
     private int product_id;
     private String store_name;
@@ -9,6 +12,7 @@ public class Product {
     private int product_quantity;
     private int rating;
     private Category category;
+    private List<String> keyWords;
 
     public Product(int product_id, String product_name, String product_description,
                    int product_price, int product_quantity, int rating) {
@@ -20,6 +24,7 @@ public class Product {
         this.rating = rating;
         this.store_name = "";
         this.category = null;
+        this.keyWords = new ArrayList<String>();
     }
 
     public int getProduct_id() {
@@ -70,6 +75,11 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
+    public List<String> getKeyWords() {return keyWords;}
+
+    public void addKeyWord(String keyWord) {
+        this.keyWords.add(keyWord);
+    }
     public String toString() {
         return "{" +
                 "\"product_id\":" + product_id +
@@ -80,6 +90,7 @@ public class Product {
                 ", \"product_quantity\":" + product_quantity +
                 ", \"rating\":" + rating +
                 ", \"category\":" + (category != null ? category.toString() : "null") +
+                ", \"keyWords\":" + keyWords +
                 '}';
     }
 
