@@ -7,6 +7,8 @@ public abstract class User {
     public int id;
     private Cart shopping_cart;
 
+
+
     public User(int id) {
         this.id = id;            //Might be change ?
         this.shopping_cart = new Cart();
