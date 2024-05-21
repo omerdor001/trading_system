@@ -1,4 +1,4 @@
-package com.example.trading_system.Service;
+package com.example.trading_system.service;
 
 import com.example.trading_system.domain.users.UserFacade;
 import org.slf4j.Logger;

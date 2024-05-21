@@ -1,4 +1,4 @@
-package com.example.trading_system.Service;
+package com.example.trading_system.service;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
