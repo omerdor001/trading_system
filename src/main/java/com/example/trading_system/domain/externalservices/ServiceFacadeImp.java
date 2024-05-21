@@ -41,4 +41,22 @@ public class ServiceFacadeImp implements ServiceFacade {
         serviceToChangeAt.setServiceName(newName);
         return true;
     }
+
+    public boolean findServiceByName(String serviceName){
+        for (Service service:services){
+            if (service.getServiceName().equals(serviceName))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean makePayment(String serviceName, double amount) {
+        if (!findServiceByName(serviceName)){
+            throw new NoSuchElementException("Service is not exist");
+        }
+        PaymentServiceProxy paymentService = new PaymentServiceProxy(serviceName);
+        paymentService.processPayment(amount);
+        return true;
+    }
 }

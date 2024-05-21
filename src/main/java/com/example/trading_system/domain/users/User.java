@@ -4,6 +4,7 @@ public class User {
     public int id;
     private Cart shopping_cart;
 
+
     public User(int id, Cart shopping_cart) {
         this.id = id;            //Might be change ?
         this.shopping_cart = shopping_cart;

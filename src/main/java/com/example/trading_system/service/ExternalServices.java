@@ -1,4 +1,4 @@
-package com.example.trading_system.Service;
+package com.example.trading_system.service;
 
 import com.example.trading_system.domain.externalservices.Service;
 import com.example.trading_system.domain.externalservices.ServiceFacade;
@@ -40,6 +40,7 @@ public class ExternalServices {
         logger.info("Finish replacing external service: {} to {} ",oldService.getServiceName(),newService.getServiceName());
         return result;
     }
+
     public boolean changeServiceName(Service serviceToChangeAt,String newName){
         boolean result;
         logger.info("Trying changing name to external service: {} to name : {} ",serviceToChangeAt.getServiceName(),newName);
@@ -52,6 +53,21 @@ public class ExternalServices {
             return false;
         }
         logger.info("Finish changing name to external service: {} to name : {} ",serviceToChangeAt.getServiceName(),newName);
+        return result;
+    }
+
+    public boolean makePayment(String serviceName,double amount){
+        boolean result;
+        logger.info("Trying making Payment with service {} ",serviceName);
+        try {
+            boolean _result=facade.makePayment(serviceName,amount);
+            result=_result;
+        }
+        catch (Exception e){
+            logger.error("Error occurred : {} , Failed making payment with service: {}  ",e.getMessage(),serviceName);
+            return false;
+        }
+        logger.info("Finish making payment with service: {} ",serviceName);
         return result;
     }
 }

@@ -1,14 +1,13 @@
 package com.example.trading_system.domain.externalservices;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class Service {
     private String serviceName;
-    protected final RestTemplate restTemplate;
 
-    public Service(String serviceName,RestTemplate restTemplate){
+    public Service(String serviceName){
         this.serviceName=serviceName;
-        this.restTemplate = restTemplate;
     }
 
     public String getServiceName() {

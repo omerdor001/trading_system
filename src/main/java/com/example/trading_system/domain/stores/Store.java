@@ -1,4 +1,5 @@
 package com.example.trading_system.domain.stores;
+
 import java.util.HashMap;
 
 public class Store {
