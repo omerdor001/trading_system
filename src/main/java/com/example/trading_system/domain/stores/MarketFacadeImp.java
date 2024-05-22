@@ -1,9 +1,13 @@
 package com.example.trading_system.domain.stores;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 
 public class MarketFacadeImp implements MarketFacade {
     private HashMap<String, Store> stores;
+    private static final Logger logger = LoggerFactory.getLogger(Store.class);
 
 
     public MarketFacadeImp() {
@@ -35,7 +39,11 @@ public class MarketFacadeImp implements MarketFacade {
     public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category) {
         StringBuilder sb = new StringBuilder();
         for (Store store : stores.values()) {
-            sb.append(store.searchName(name, minPrice, maxPrice, minRating, category).toString());
+            try {
+                sb.append(store.searchName(name, minPrice, maxPrice, minRating, category).toString());
+            } catch (Exception e) {
+                logger.error("Error occurred while searching products in store '{}': {}", store.getName_id(), e.getMessage());
+            }
         }
         return sb.toString();
     }
@@ -43,7 +51,11 @@ public class MarketFacadeImp implements MarketFacade {
     public String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating) {
         StringBuilder sb = new StringBuilder();
         for (Store store : stores.values()) {
-            sb.append(store.searchCategory(category, minPrice, maxPrice, minRating).toString());
+            try {
+                sb.append(store.searchCategory(category, minPrice, maxPrice, minRating).toString());
+            } catch (Exception e) {
+                logger.error("Error occurred while searching products in store '{}': {}", store.getName_id(), e.getMessage());
+            }
         }
         return sb.toString();
     }
@@ -51,8 +63,13 @@ public class MarketFacadeImp implements MarketFacade {
     public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category) {
         StringBuilder sb = new StringBuilder();
         for (Store store : stores.values()) {
-            sb.append(store.searchKeywords(keyWords, minPrice, maxPrice, minRating, category).toString());
+            try {
+                sb.append(store.searchKeywords(keyWords, minPrice, maxPrice, minRating, category).toString());
+            } catch (Exception e) {
+                logger.error("Error occurred while searching products in store '{}': {}", store.getName_id(), e.getMessage());
+            }
         }
+
         return sb.toString();
     }
 
