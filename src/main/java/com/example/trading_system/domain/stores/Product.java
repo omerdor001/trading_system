@@ -8,13 +8,14 @@ public class Product {
     private String store_name;
     private String product_name;
     private String product_description;
-    private int product_price;
+    private double product_price;
     private int product_quantity;
-    private int rating;
+    private double rating;
     private Category category;
     private List<String> keyWords;
 
-    public Product(int product_id, String product_name, String product_description, int product_price, int product_quantity, int rating) {
+    public Product(int product_id, String product_name, String product_description,
+                   double product_price, int product_quantity, double rating, Category category, List<String> keyWords) {
         this.product_id = product_id;
         this.product_name = product_name;
         this.product_description = product_description;
@@ -22,8 +23,8 @@ public class Product {
         this.product_quantity = product_quantity;
         this.rating = rating;
         this.store_name = "";
-        this.category = null;
-        this.keyWords = new ArrayList<String>();
+        this.category = category;
+        this.keyWords = keyWords;
     }
 
     public int getProduct_id() {
@@ -50,7 +51,7 @@ public class Product {
         this.product_description = product_description;
     }
 
-    public int getProduct_price() {
+    public double getProduct_price() {
         return product_price;
     }
 
@@ -66,7 +67,7 @@ public class Product {
         this.product_quantity = product_quantity;
     }
 
-    public int getRating() {
+    public double getRating() {
         return rating;
     }
 
@@ -99,7 +100,17 @@ public class Product {
     }
 
     public String toString() {
-        return "{" + "\"product_id\":" + product_id + ", \"store_name\":\"" + store_name + "\"" + ", \"product_name\":\"" + product_name + "\"" + ", \"product_description\":\"" + product_description + "\"" + ", \"product_price\":" + product_price + ", \"product_quantity\":" + product_quantity + ", \"rating\":" + rating + ", \"category\":" + (category != null ? category.toString() : "null") + ", \"keyWords\":" + keyWords + '}';
+        return "{" +
+                "\"product_id\":" + product_id +
+                ", \"store_name\":\"" + store_name + "\"" +
+                ", \"product_name\":\"" + product_name + "\"" +
+                ", \"product_description\":\"" + product_description + "\"" +
+                ", \"product_price\":" + product_price +
+                ", \"product_quantity\":" + product_quantity +
+                ", \"rating\":" + rating +
+                ", \"category\":" + (category != null ? category.toString() : "null") +
+                ", \"keyWords\":" + keyWords +
+                '}';
     }
 
 }

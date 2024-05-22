@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,7 +19,7 @@ class NotificationUnitTests {
 
     @BeforeEach
     void setUp() {
-        registeredUser = new Registered(1, 1, "testUser", "testAddress", 25);
+        registeredUser = new Registered(1,  "testUser", "testAddress", LocalDate.of(2000,1,1));
         visitor = new Visitor(2);
     }
 
