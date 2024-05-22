@@ -42,22 +42,54 @@ public class SearchUnitTests {
     }
 
     @Test
-    void SearchName_nullName() throws Exception {
+    void SearchNameInStore_nullName() throws Exception {
         Exception exception = assertThrows(Exception.class, () -> marketFacade.searchNameInStore(null, "store1", 5.0, 5.0, 5.0, Category.Food));
         assertEquals(exception.getMessage(), "No name provided");
     }
 
     @Test
-    void SearchCategory_nullCategory() throws Exception {
+    void SearchCategoryInStore_nullCategory() throws Exception {
         Exception exception = assertThrows(Exception.class, () -> marketFacade.searchCategoryInStore(null, "store1", 5.0, 5.0, 5.0));
         assertEquals(exception.getMessage(), "No category provided");
     }
 
     @Test
-    void Searchkeyword_nullkeyword() throws Exception {
+    void SearchkeywordInStore_nullkeyword() throws Exception {
         Exception exception = assertThrows(Exception.class, () -> marketFacade.searchKeywordsInStore(null, "store1", 5.0, 5.0, 5.0, Category.Food));
         assertEquals(exception.getMessage(), "No keywords provided");
     }
 
+
+    ///////////////////////////tests for searching in stores - without specific focus
+
+
+    void SearchNameInStores_Success() throws Exception {
+        assertDoesNotThrow(() -> marketFacade.searchNameInStores("p1", 5.0, 5.0, 5.0, Category.Food));
+        assertTrue(marketFacade.searchNameInStores("p1", 5.0, 5.0, 5.0, Category.Food).contains("p1"));
+    }
+
+    @Test
+    void SearchName1InStores_Success() throws Exception {
+        assertDoesNotThrow(() -> marketFacade.searchNameInStores("p", 5.0, 5.0, 5.0, Category.Food));
+        assertFalse(marketFacade.searchNameInStores("p", 5.0, 5.0, 5.0, Category.Food).contains("p1"));
+    }
+
+    @Test
+    void SearchNameInStores_nullName() throws Exception {
+        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchNameInStores(null, 5.0, 5.0, 5.0, Category.Food));
+        assertEquals(exception.getMessage(), "No name provided");
+    }
+
+    @Test
+    void SearchCategoryInStores_nullCategory() throws Exception {
+        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchCategoryInStores(null, 5.0, 5.0, 5.0));
+        assertEquals(exception.getMessage(), "No category provided");
+    }
+
+    @Test
+    void SearchkeywordInStores_nullkeyword() throws Exception {
+        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchKeywordsInStores(null, 5.0, 5.0, 5.0, Category.Food));
+        assertEquals(exception.getMessage(), "No keywords provided");
+    }
 
 }
