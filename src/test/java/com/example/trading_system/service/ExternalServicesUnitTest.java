@@ -1,6 +1,7 @@
 package com.example.trading_system.service;
 import com.example.trading_system.domain.externalservices.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,34 +9,33 @@ import org.junit.jupiter.api.Test;
 import javax.management.InstanceAlreadyExistsException;
 
 class ExternalServicesUnitTest {
-    private ExternalServices externalServices;
+    private ServiceFacade serviceFacade;
     @BeforeEach
     public void setUp() {
-        ServiceFacade serviceFacade=new ServiceFacadeImp();
-        externalServices=new ExternalServices(serviceFacade);
+        serviceFacade=new ServiceFacadeImp();
     }
 
     @Test
     void addService_Success() throws InstanceAlreadyExistsException {
         Service payment1=new PaymentService("Paypal");
-        boolean result=externalServices.addService(payment1);
+        boolean result=serviceFacade.addService(payment1);
         assertEquals(result,true);
     }
 
     @Test
-    void addService_AlreadyExist(){
+    void addService_AlreadyExist() throws InstanceAlreadyExistsException {
         Service payment1=new PaymentService("Paypal");
-        externalServices.addService(payment1);
-        boolean result=externalServices.addService(payment1);
-        assertEquals(result,false);
+        serviceFacade.addService(payment1);
+        Exception exception = assertThrows(Exception.class, () -> serviceFacade.addService(payment1));
+        assertEquals("This service already exist", exception.getMessage());
     }
 
     @Test
-    void replaceService_Success() {
+    void replaceService_Success() throws InstanceAlreadyExistsException {
         Service delivery1=new DeliveryService("Flex");
         Service delivery2=new DeliveryService("Parcel");
-        externalServices.addService(delivery1);
-        boolean result=externalServices.replaceService(delivery2,delivery1);
+        serviceFacade.addService(delivery1);
+        boolean result=serviceFacade.replaceService(delivery2,delivery1);
         assertEquals(result,true);
     }
 
@@ -43,78 +43,79 @@ class ExternalServicesUnitTest {
     void replaceService_NotExistOld() {
         Service delivery1=new DeliveryService("Flex");
         Service delivery2=new DeliveryService("Parcel");
-        boolean result=externalServices.replaceService(delivery2,delivery1);
-        assertEquals(result,false);
+        Exception exception = assertThrows(Exception.class, () -> serviceFacade.replaceService(delivery2,delivery1));
+        assertEquals("Service is not exist", exception.getMessage());
     }
 
     @Test
-    void replaceService_AlreadyExistNew() {
+    void replaceService_AlreadyExistNew() throws InstanceAlreadyExistsException {
         Service delivery1=new DeliveryService("Flex");
         Service delivery2=new DeliveryService("Parcel");
-        externalServices.addService(delivery1);
-        externalServices.addService(delivery2);
-        boolean result=externalServices.replaceService(delivery2,delivery1);
-        assertEquals(result,false);
+        serviceFacade.addService(delivery1);
+        serviceFacade.addService(delivery2);
+        Exception exception = assertThrows(Exception.class, () -> serviceFacade.replaceService(delivery2,delivery1));
+        assertEquals("Service is exist (no need to replace)", exception.getMessage());
     }
 
     @Test
-    void changeServiceName_Success() {
+    void changeServiceName_Success() throws InstanceAlreadyExistsException {
         Service payment1=new PaymentService("Paypal");
-        externalServices.addService(payment1);
-        boolean result=externalServices.changeServiceName(payment1,"Paypal1");
+        serviceFacade.addService(payment1);
+        boolean result=serviceFacade.changeServiceName(payment1,"Paypal1");
         assertEquals(result,true);
     }
 
     @Test
     void changeServiceName_NotExist() {
         Service payment1=new PaymentService("Paypal");
-        boolean result=externalServices.changeServiceName(payment1,"Paypal1");
-        assertEquals(result,false);
+        Exception exception = assertThrows(Exception.class, () -> serviceFacade.changeServiceName(payment1,"Paypal1"));
+        assertEquals("Service is not exist", exception.getMessage());
     }
 
     @Test
-    void makingPayment_Success() {
+    void makingPayment_Success() throws InstanceAlreadyExistsException {
         Service payment1=new PaymentService("Paypal");
-        externalServices.addService(payment1);
-        boolean result=externalServices.makePayment("Paypal",100);
+        serviceFacade.addService(payment1);
+        boolean result=serviceFacade.makePayment("Paypal",100);
         assertEquals(result,true);
     }
 
     @Test
     void makingPayment_ServiceNotExist() {
         Service payment1=new PaymentService("Paypal");
-        boolean result=externalServices.makePayment("Paypal",100);
-        assertEquals(result,false);
+        Exception exception = assertThrows(Exception.class, () -> serviceFacade.makePayment("Paypal",100));
+        assertEquals("Service is not exist", exception.getMessage());
     }
 
     @Test
-    void makingPayment_InvalidAmount() {
+    void makingPayment_InvalidAmount() throws InstanceAlreadyExistsException {
         Service payment1=new PaymentService("Paypal");
-        boolean result=externalServices.makePayment("Paypal",-100);
-        assertEquals(result,false);
+        serviceFacade.addService(payment1);
+        Exception exception = assertThrows(Exception.class, () -> serviceFacade.makePayment("Paypal",-100));
+        assertEquals("Payment authorization failed", exception.getMessage());
     }
 
     @Test
-    void makingDelivery_Success() {
+    void makingDelivery_Success() throws InstanceAlreadyExistsException {
         Service delivery1=new DeliveryService("Parcel");
-        externalServices.addService(delivery1);
-        boolean result=externalServices.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704");
+        serviceFacade.addService(delivery1);
+        boolean result=serviceFacade.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704");
         assertEquals(result,true);
     }
 
     @Test
     void makingDelivery_ServiceNotExist() {
         Service delivery1=new DeliveryService("Parcel");
-        boolean result=externalServices.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704");
-        assertEquals(result,false);
+        Exception exception = assertThrows(Exception.class, () -> serviceFacade.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704"));
+        assertEquals("Service is not exist", exception.getMessage());
     }
 
     @Test
-    void makingDelivery_InvalidAddress() {
+    void makingDelivery_InvalidAddress() throws InstanceAlreadyExistsException {
         Service delivery1=new DeliveryService("Parcel");
-        externalServices.addService(delivery1);
-        boolean result=externalServices.makeDelivery("Parcel","Invalid Address");
-        assertEquals(result,false);
+        serviceFacade.addService(delivery1);
+        Exception exception = assertThrows(Exception.class, () -> serviceFacade.makeDelivery("Parcel","Invalid Address"));
+        assertEquals("Delivery authorization failed", exception.getMessage());
     }
 
 

@@ -3,7 +3,6 @@ package com.example.trading_system.service;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.externalservices.Service;
-import com.example.trading_system.domain.externalservices.ServiceFacade;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,40 +12,38 @@ import javax.management.InstanceAlreadyExistsException;
 
 
 class ExternalServicesAcceptanceTest {
-    private ExternalServices externalServices;
-    private ServiceFacade serviceFacade;
+    private Facade facade;
 
 
     @BeforeEach
     public void setUp() {
-        serviceFacade=mock(ServiceFacade.class);
-        externalServices=new ExternalServices(serviceFacade);
+        facade=mock(Facade.class);
     }
 
     @Test
     void addService_Success() throws InstanceAlreadyExistsException {
         Service payment1=new PaymentService("Paypal");
-        when(serviceFacade.addService(payment1)).thenReturn(true);
-        boolean result=externalServices.addService(payment1);
+        when(facade.addService(payment1)).thenReturn(true);
+        boolean result=facade.addService(payment1);
         assertEquals(result,true);
     }
 
     @Test
     void addService_AlreadyExist() throws InstanceAlreadyExistsException {
         Service payment1=new PaymentService("Paypal");
-        when(serviceFacade.addService(payment1)).thenReturn(false);
-        externalServices.addService(payment1);
-        boolean result=externalServices.addService(payment1);
+        when(facade.addService(payment1)).thenReturn(false);
+        facade.addService(payment1);
+        boolean result=facade.addService(payment1);
         assertEquals(result,false);
     }
 
     @Test
-    void replaceService_Success() {
+    void replaceService_Success() throws InstanceAlreadyExistsException {
         Service delivery1=new DeliveryService("Flex");
         Service delivery2=new DeliveryService("Parcel");
-        externalServices.addService(delivery1);
-        when(serviceFacade.replaceService(delivery2,delivery1)).thenReturn(true);
-        boolean result=externalServices.replaceService(delivery2,delivery1);
+        facade.addService(delivery1);
+        when(facade.replaceService(delivery2,delivery1)).thenReturn(true);
+        boolean result=facade.replaceService(delivery2,delivery1);
         assertEquals(result,true);
     }
 
@@ -54,88 +51,88 @@ class ExternalServicesAcceptanceTest {
     void replaceService_NotExistOld() {
         Service delivery1=new DeliveryService("Flex");
         Service delivery2=new DeliveryService("Parcel");
-        when(serviceFacade.replaceService(delivery2,delivery1)).thenReturn(false);
-        boolean result=externalServices.replaceService(delivery2,delivery1);
+        when(facade.replaceService(delivery2,delivery1)).thenReturn(false);
+        boolean result=facade.replaceService(delivery2,delivery1);
         assertEquals(result,false);
     }
 
     @Test
-    void replaceService_AlreadyExistNew() {
+    void replaceService_AlreadyExistNew() throws InstanceAlreadyExistsException {
         Service delivery1=new DeliveryService("Flex");
         Service delivery2=new DeliveryService("Parcel");
-        externalServices.addService(delivery1);
-        externalServices.addService(delivery2);
-        when(serviceFacade.replaceService(delivery2,delivery1)).thenReturn(false);
-        boolean result=externalServices.replaceService(delivery2,delivery1);
+        facade.addService(delivery1);
+        facade.addService(delivery2);
+        when(facade.replaceService(delivery2,delivery1)).thenReturn(false);
+        boolean result=facade.replaceService(delivery2,delivery1);
         assertEquals(result,false);
     }
 
     @Test
-    void changeServiceName_Success() {
+    void changeServiceName_Success() throws InstanceAlreadyExistsException {
         Service payment1=new PaymentService("Paypal");
-        externalServices.addService(payment1);
-        when(serviceFacade.changeServiceName(payment1,"Paypal1")).thenReturn(true);
-        boolean result=externalServices.changeServiceName(payment1,"Paypal1");
+        facade.addService(payment1);
+        when(facade.changeServiceName(payment1,"Paypal1")).thenReturn(true);
+        boolean result=facade.changeServiceName(payment1,"Paypal1");
         assertEquals(result,true);
     }
 
     @Test
     void changeServiceName_NotExist() {
         Service payment1=new PaymentService("Paypal");
-        when(serviceFacade.changeServiceName(payment1,"Paypal1")).thenReturn(false);
-        boolean result=externalServices.changeServiceName(payment1,"Paypal1");
+        when(facade.changeServiceName(payment1,"Paypal1")).thenReturn(false);
+        boolean result=facade.changeServiceName(payment1,"Paypal1");
         assertEquals(result,false);
     }
 
     @Test
-    void makingPayment_Success() {
+    void makingPayment_Success() throws InstanceAlreadyExistsException {
         Service payment1=new PaymentService("Paypal");
-        externalServices.addService(payment1);
-        when(serviceFacade.makePayment("Paypal",100)).thenReturn(true);
-        boolean result=externalServices.makePayment("Paypal",100);
+        facade.addService(payment1);
+        when(facade.makePayment("Paypal",100)).thenReturn(true);
+        boolean result=facade.makePayment("Paypal",100);
         assertEquals(result,true);
     }
 
     @Test
-    void makingPayment_ServiceNotExist() {
+    void makingPayment_ServiceNotExist() throws InstanceAlreadyExistsException {
         Service payment1=new PaymentService("Paypal");
-        externalServices.addService(payment1);
-        when(serviceFacade.makePayment("Paypal",100)).thenReturn(false);
-        boolean result=externalServices.makePayment("Paypal",100);
+        facade.addService(payment1);
+        when(facade.makePayment("Paypal",100)).thenReturn(false);
+        boolean result=facade.makePayment("Paypal",100);
         assertEquals(result,false);
     }
 
     @Test
     void makingPayment_InvalidAmount() {
         Service payment1=new PaymentService("Paypal");
-        when(serviceFacade.makePayment("Paypal",-100)).thenReturn(false);
-        boolean result=externalServices.makePayment("Paypal",-100);
+        when(facade.makePayment("Paypal",-100)).thenReturn(false);
+        boolean result=facade.makePayment("Paypal",-100);
         assertEquals(result,false);
     }
 
     @Test
-    void makingDelivery_Success() {
+    void makingDelivery_Success() throws InstanceAlreadyExistsException {
         Service delivery1=new DeliveryService("Parcel");
-        externalServices.addService(delivery1);
-        when(serviceFacade.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704")).thenReturn(true);
-        boolean result=externalServices.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704");
+        facade.addService(delivery1);
+        when(facade.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704")).thenReturn(true);
+        boolean result=facade.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704");
         assertEquals(result,true);
     }
 
     @Test
     void makingDelivery_ServiceNotExist() {
         Service delivery1=new DeliveryService("Parcel");
-        when(serviceFacade.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704")).thenReturn(false);
-        boolean result=externalServices.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704");
+        when(facade.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704")).thenReturn(false);
+        boolean result=facade.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704");
         assertEquals(result,false);
     }
 
     @Test
-    void makingPayment_InvalidAddress() {
+    void makingPayment_InvalidAddress() throws InstanceAlreadyExistsException {
         Service delivery1=new DeliveryService("Parcel");
-        externalServices.addService(delivery1);
-        when(serviceFacade.makeDelivery("Parcel","Invalid Address")).thenReturn(false);
-        boolean result=externalServices.makeDelivery("Parcel","Invalid Address");
+        facade.addService(delivery1);
+        when(facade.makeDelivery("Parcel","Invalid Address")).thenReturn(false);
+        boolean result=facade.makeDelivery("Parcel","Invalid Address");
         assertEquals(result,false);
     }
 

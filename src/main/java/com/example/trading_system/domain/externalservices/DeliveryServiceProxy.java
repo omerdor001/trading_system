@@ -27,7 +27,7 @@ public class DeliveryServiceProxy {
         if (isValidAddress(address)) {
             realDeliveryService.processDelivery(address);
         } else {
-            throw new IllegalArgumentException("Payment authorization failed");
+            throw new IllegalArgumentException("Delivery authorization failed");
         }
     }
 }
