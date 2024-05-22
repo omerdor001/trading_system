@@ -51,15 +51,6 @@ public class Store {
     }
 
     public List<Product> searchName(String name, Double minPrice, Double maxPrice, Double minRating, Category category) {
-        if(name == null) {
-            logger.error("No name provided");
-            return new ArrayList<>();
-        }
-        if(products.isEmpty())
-        {
-            logger.warn("No products Available");
-            return new ArrayList<>();
-        }
         List<Product> list_products = new ArrayList<>();
         for (Product p : products.values()) {
             if (p.getProduct_name().equals(name))
@@ -69,20 +60,6 @@ public class Store {
     }
 
     public List<Product> searchCategory(Category category, Double minPrice, Double maxPrice, Double minRating) {
-        if(category == null) {
-            logger.error("No category provided");
-            return new ArrayList<>();
-        }
-        if(!EnumSet.allOf(Category.class).contains(category))
-        {
-            logger.error("Category is not a valid category");
-            throw new RuntimeException("Category is not a valid category");
-        }
-        if(products.isEmpty())
-        {
-            logger.warn("No products Available");
-            return new ArrayList<>();
-        }
         List<Product> list_products = new ArrayList<>();
         for (Product p : products.values()) {
             if (p.getCategory().equals(category))
@@ -92,15 +69,6 @@ public class Store {
     }
 
     public List<Product> searchKeywords(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category) {
-        if(keyWords == null) {
-            logger.error("No keywords provided");
-            return new ArrayList<>();
-        }
-        if(products.isEmpty())
-        {
-            logger.warn("No products Available");
-            return new ArrayList<>();
-        }
         List<Product> list_products = new ArrayList<>();
         for (Product p : products.values()) {
             if (p.getKeyWords().contains(keyWords))

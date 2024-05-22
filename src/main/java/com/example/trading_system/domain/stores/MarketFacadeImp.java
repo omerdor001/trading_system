@@ -3,6 +3,7 @@ package com.example.trading_system.domain.stores;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 
 public class MarketFacadeImp implements MarketFacade {
@@ -37,37 +38,41 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category) {
+        if (name == null) {
+            logger.error("No name provided");
+            throw new IllegalArgumentException("No name provided");
+        }
         StringBuilder sb = new StringBuilder();
         for (Store store : stores.values()) {
-            try {
-                sb.append(store.searchName(name, minPrice, maxPrice, minRating, category).toString());
-            } catch (Exception e) {
-                logger.error("Error occurred while searching products in store '{}': {}", store.getName_id(), e.getMessage());
-            }
+            sb.append(store.searchName(name, minPrice, maxPrice, minRating, category).toString());
         }
         return sb.toString();
     }
 
     public String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating) {
+        if (category == null) {
+            logger.error("No category provided");
+            throw new IllegalArgumentException("No category provided");
+        }
+        if (!EnumSet.allOf(Category.class).contains(category)) {
+            logger.error("Category is not a valid category");
+            throw new RuntimeException("Category is not a valid category");
+        }
         StringBuilder sb = new StringBuilder();
         for (Store store : stores.values()) {
-            try {
-                sb.append(store.searchCategory(category, minPrice, maxPrice, minRating).toString());
-            } catch (Exception e) {
-                logger.error("Error occurred while searching products in store '{}': {}", store.getName_id(), e.getMessage());
-            }
+            sb.append(store.searchCategory(category, minPrice, maxPrice, minRating).toString());
         }
         return sb.toString();
     }
 
     public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category) {
+        if (keyWords == null) {
+            logger.error("No keywords provided");
+            throw new IllegalArgumentException("No keywords provided");
+        }
         StringBuilder sb = new StringBuilder();
         for (Store store : stores.values()) {
-            try {
-                sb.append(store.searchKeywords(keyWords, minPrice, maxPrice, minRating, category).toString());
-            } catch (Exception e) {
-                logger.error("Error occurred while searching products in store '{}': {}", store.getName_id(), e.getMessage());
-            }
+            sb.append(store.searchKeywords(keyWords, minPrice, maxPrice, minRating, category).toString());
         }
 
         return sb.toString();
