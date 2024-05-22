@@ -97,4 +97,9 @@ public class Store {
     public Product getProduct(int productId) {
         return products.get(productId);
     }
+
+    public void addProductToStore( Product product) {
+        products.put(product.getProduct_id(), product);
+    }
+
 }
