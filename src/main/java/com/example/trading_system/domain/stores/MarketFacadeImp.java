@@ -44,7 +44,8 @@ public class MarketFacadeImp {
             throw new IllegalArgumentException("No name provided");
         }
         if (stores.get(store_name).getProducts().isEmpty()) {
-            throw new IllegalArgumentException("No products provided");
+            logger.warn("No products Available");
+            return "{}";
         }
         return stores.get(store_name).searchName(name, minPrice, maxPrice, minRating, category).toString();
     }
@@ -52,10 +53,11 @@ public class MarketFacadeImp {
     public String searchCategoryInStore(Category category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
         if (category == null) {
             logger.error("No category provided");
-            throw new IllegalArgumentException("No name provided");
+            throw new IllegalArgumentException("No category provided");
         }
         if (stores.get(store_name).getProducts().isEmpty()) {
-            throw new IllegalArgumentException("No products provided");
+            logger.warn("No products Available");
+            return "{}";
         }
         if (!EnumSet.allOf(Category.class).contains(category)) {
             logger.error("Category is not a valid category");
@@ -71,7 +73,8 @@ public class MarketFacadeImp {
             throw new IllegalArgumentException("No keywords provided");
         }
         if (stores.get(store_name).getProducts().isEmpty()) {
-            throw new IllegalArgumentException("No products provided");
+            logger.warn("No products Available");
+            return "{}";
         }
         return stores.get(store_name).searchKeywords(keyWords, minPrice, maxPrice, minRating, category).toString();
     }
