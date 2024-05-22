@@ -1,23 +1,35 @@
 package com.example.trading_system.domain.users;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Registered extends User {
-    private int userId;
     private String userName;
+    private String encryption;
     private String address;
-    private int age;
+    private LocalDate birthdate;
     private boolean isAdmin;
     private boolean isLogged;
     private List<Notification> notifications;
 
-    public Registered(int id, int userId, String userName, String address, int age) {
+    public Registered(int id, String userName, String encryption, String address, LocalDate birthdate) {
         super(id);
-        this.userId = userId;
         this.userName = userName; // Can be changed to email
+        this.encryption = encryption;
         this.address = address;
-        this.age = age;
+        this.birthdate= birthdate;
+        this.isAdmin = false;
+        this.isLogged = false;
+        this.notifications = new LinkedList<>();
+    }
+
+    public Registered(int id, String userName, String encryption, LocalDate birthdate) {
+        super(id);
+        this.userName = userName; // Can be changed to email
+        this.encryption = encryption;
+        this.address = "No address";
+        this.birthdate= birthdate;
         this.isAdmin = false;
         this.isLogged = false;
         this.notifications = new LinkedList<>();
@@ -45,8 +57,12 @@ public class Registered extends User {
 
     @Override
     public void receiveNotification(String notificationString) {
-        //TODO add distinction if logged in or not
-        Notification notification = Notification.fromString(notificationString);
-        this.notifications.add(notification);
+        if(!isLogged) {
+            Notification notification = Notification.fromString(notificationString);
+            this.notifications.add(notification);
+        }
+        else{
+            //TODO show in UI
+        }
     }
 }
