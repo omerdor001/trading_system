@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -22,8 +23,8 @@ class NotificationAcceptanceTests {
     @Test
     void sendNotification() {
         // Create sender and receiver instances
-        Registered sender = new Registered(2, 2, "Sender", "Sender Address", 30);
-        Registered receiver = new Registered(1, 1, "Receiver", "Receiver Address", 25);
+        Registered sender = new Registered(2, "Sender", "Sender Address", LocalDate.of(2000,1,1));
+        Registered receiver = new Registered(1, "Receiver", "Receiver Address",  LocalDate.of(2000,2,2));
 
         // Create the date string in the expected format
         String dateStr = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new Date());
