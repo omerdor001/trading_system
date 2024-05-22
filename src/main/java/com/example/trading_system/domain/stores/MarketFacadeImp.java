@@ -3,18 +3,22 @@ package com.example.trading_system.domain.stores;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 
-public class MarketFacadeImp implements MarketFacade {
+public class MarketFacadeImp {
     private HashMap<String, Store> stores;
-    private static final Logger logger = LoggerFactory.getLogger(Store.class);
+    private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
 
 
     public MarketFacadeImp() {
+
         stores = new HashMap<>();
     }
-
+    public void addStore(Store store) {
+        stores.put(store.getName_id(),store);
+    }
     public String getAllStores() {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
@@ -77,5 +81,4 @@ public class MarketFacadeImp implements MarketFacade {
 
         return sb.toString();
     }
-
 }
