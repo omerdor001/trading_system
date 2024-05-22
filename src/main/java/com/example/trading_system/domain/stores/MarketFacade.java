@@ -15,4 +15,10 @@ public interface MarketFacade {
     String searchCategoryInStore(Category category, String store_name, Double minPrice, Double maxPrice, Double minRating);
 
     String searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category);
+
+    String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category);
+
+    String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating);
+
+    String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category);
 }

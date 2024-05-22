@@ -56,40 +56,83 @@ public class MarketService {
         return result;
     }
 
-    public String searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category){
+    //search in specific store
+    public String searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category) {
         String result;
-        logger.info("Trying to search products in store : {} with name : {}", store_name,name );
-        try{
+        logger.info("Trying to search products in store : {} with name : {}", store_name, name);
+        try {
             result = marketFacade.searchNameInStore(name, store_name, minPrice, maxPrice, minRating, category);
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in store : {} with name : {}}", e.getMessage(), store_name, name);
             return "";
         }
         logger.info("FINISHED Searching products in store ");
         return result;
     }
-    public String searchCategoryInStore(Category category, String store_name, Double minPrice, Double maxPrice, Double minRating){
+
+    public String searchCategoryInStore(Category category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
         String result;
-        logger.info("Trying to search products in store : {} with category, : {}", store_name,category );
-        try{
+        logger.info("Trying to search products in store : {} with category, : {}", store_name, category);
+        try {
             result = marketFacade.searchCategoryInStore(category, store_name, minPrice, maxPrice, minRating);
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in store : {} with category : {}}", e.getMessage(), store_name, category);
             return "";
         }
         logger.info("FINISHED Searching products in store ");
         return result;
     }
-    public String searchKeywordsInStore(String keyWords,  String store_name, Double minPrice, Double maxPrice, Double minRating, Category category){
+
+    public String searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category) {
         String result;
-        logger.info("Trying to search products in store : {} with keyWords,  : {}", store_name,keyWords );
-        try{
-            result = marketFacade.searchKeywordsInStore( keyWords,  store_name, minPrice, maxPrice, minRating, category);
-        }catch(Exception e){
+        logger.info("Trying to search products in store : {} with keyWords,  : {}", store_name, keyWords);
+        try {
+            result = marketFacade.searchKeywordsInStore(keyWords, store_name, minPrice, maxPrice, minRating, category);
+        } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in store : {} with keyWords,  : {}}", e.getMessage(), store_name, keyWords);
             return "";
         }
         logger.info("FINISHED Searching products in store ");
+        return result;
+    }
+
+    //search in stores
+    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category) {
+        String result;
+        logger.info("Trying to search products in stores with name : {}", name);
+        try {
+            result = marketFacade.searchNameInStores(name, minPrice, maxPrice, minRating, category);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} ,  to search products in stores: {}}", e.getMessage(), name);
+            return "";
+        }
+        logger.info("FINISHED Searching products in stores ");
+        return result;
+    }
+
+    public String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating) {
+        String result;
+        logger.info("Trying to search products in stores with category, : {}", category);
+        try {
+            result = marketFacade.searchCategoryInStores(category, minPrice, maxPrice, minRating);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} ,  to search products in stores with category : {}}", e.getMessage(), category);
+            return "";
+        }
+        logger.info("FINISHED Searching products in stores ");
+        return result;
+    }
+
+    public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category) {
+        String result;
+        logger.info("Trying to search products in stores with keyWords,  : {}", keyWords);
+        try {
+            result = marketFacade.searchKeywordsInStores(keyWords, minPrice, maxPrice, minRating, category);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} ,  to search products in stores with keyWords,  : {}}", e.getMessage(), keyWords);
+            return "";
+        }
+        logger.info("FINISHED Searching products in stores ");
         return result;
     }
 }
