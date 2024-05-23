@@ -1,6 +1,7 @@
 package com.example.trading_system.domain.users;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class Registered extends User {
     private LocalDate birthdate;
     private boolean isAdmin;
     private boolean isLogged;
+    private List<Role> roles;
     private List<Notification> notifications;
 
     public Registered(int id, String userName, String encryption, String address, LocalDate birthdate) {
@@ -22,6 +24,7 @@ public class Registered extends User {
         this.isAdmin = false;
         this.isLogged = false;
         this.notifications = new LinkedList<>();
+        this.roles=new ArrayList<>();
     }
 
     public Registered(int id, String userName, String encryption, LocalDate birthdate) {
@@ -65,4 +68,13 @@ public class Registered extends User {
             //TODO show in UI
         }
     }
+
+    public Role getRoleByStoreId(String store_name_id){
+        for (Role role:roles){
+            if (role.getStoreId().equals(store_name_id))
+                return role;
+        }
+        return null;    //TODO change this
+    }
+
 }

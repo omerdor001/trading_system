@@ -1,35 +1,22 @@
 package com.example.trading_system.domain.users;
 
-
-import com.example.trading_system.domain.stores.Store;
-
 public class Role {
     private RoleState roleState;
-    private Store store;
-    private Registered user;
+    private String name_id;
     private int appointedById;
 
-    public Role(RoleState roleState,Store store,Registered user,int appointedById) {
+    public Role(RoleState roleState,String name_id,int appointedById) {
         this.roleState=roleState;
-        this.store = store;
-        this.user=user;
+        this.name_id=name_id;
         this.appointedById=appointedById;
     }
 
-    public Store getStore() {
-        return store;
+    public String getStoreId() {
+        return name_id;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
-    }
-
-    public Registered getUser() {
-        return user;
-    }
-
-    public void setUser(Registered user) {
-        this.user = user;
+    public void setStoreId(String name_id) {
+        this.name_id = name_id;
     }
 
     public int getAppointedById() {

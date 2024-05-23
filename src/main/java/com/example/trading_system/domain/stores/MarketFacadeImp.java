@@ -3,10 +3,8 @@ package com.example.trading_system.domain.stores;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.Map;
 
 public class MarketFacadeImp {
     private HashMap<String, Store> stores;
@@ -14,7 +12,6 @@ public class MarketFacadeImp {
 
 
     public MarketFacadeImp() {
-
         stores = new HashMap<>();
     }
 

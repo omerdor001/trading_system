@@ -98,8 +98,43 @@ public class Store {
         return products.get(productId);
     }
 
-    public void addProductToStore( Product product) {
+    public void addProductToStore(Product product) {
         products.put(product.getProduct_id(), product);
     }
 
-}
+    public void removeProductToStore(Product product) {
+        products.remove(product.getProduct_id(), product);
+    }
+
+    public void setProduct_name(int productId,String product_name) {
+        Product product=getProduct(productId);
+        product.setProduct_name(product_name);
+    }
+
+    public void setProduct_description(int productId,String product_description){
+        Product product=getProduct(productId);
+        product.setProduct_description(product_description);
+    }
+
+    public void setProduct_price(int productId,int product_price) {
+        Product product=getProduct(productId);
+        product.setProduct_price(product_price);
+    }
+
+    public void setProduct_quantity(int productId,int product_quantity) {
+        Product product=getProduct(productId);
+        product.setProduct_quantity(product_quantity);
+    }
+
+    public void setRating(int productId,int rating){
+        Product product=getProduct(productId);
+        product.setRating(rating);
+    }
+
+    public void setCategory(int productId,Category category) {
+        Product product=getProduct(productId);
+        product.setCategory(category);
+    }
+
+
+    }
