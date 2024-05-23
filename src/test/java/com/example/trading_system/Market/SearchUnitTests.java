@@ -1,9 +1,6 @@
 package com.example.trading_system.Market;
 
-import com.example.trading_system.domain.stores.Category;
-import com.example.trading_system.domain.stores.MarketFacadeImp;
-import com.example.trading_system.domain.stores.Product;
-import com.example.trading_system.domain.stores.Store;
+import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.domain.users.Visitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +19,7 @@ public class SearchUnitTests {
     @BeforeEach
     void setUp() {
         marketFacade = new MarketFacadeImp();
-        Store store = new Store("store1", "description");
+        Store store = new Store("store1", "description",new StorePolicy());
         Product product = new Product(1, "p1", "", 5, 5, 5, Category.Food, new ArrayList<>());
         store.addProductToStore(product);
         marketFacade.getStores().put(store.getName_id(), store);

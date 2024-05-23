@@ -1,16 +1,29 @@
 package com.example.trading_system.domain.users;
 
+import com.example.trading_system.domain.stores.MarketFacade;
+import com.example.trading_system.domain.stores.MarketFacadeImp;
+import com.example.trading_system.domain.stores.Store;
+import com.example.trading_system.domain.stores.StorePolicy;
+import com.example.trading_system.service.UserServiceImp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDate;
 import java.util.HashMap;
+
+import java.time.LocalDate;
 
 public class UserFacadeImp implements UserFacade{
     private HashMap<Integer, Visitor> visitors;
     private HashMap<String, Registered> registers;
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
+    MarketFacadeImp marketFacade = MarketFacadeImp.getInstance();
 
     public UserFacadeImp() {
         this.registers = new HashMap<>();
         this.visitors = new HashMap<>();
     }
+
 
     public HashMap<Integer, Visitor> getVisitors() {
         return visitors;
@@ -50,6 +63,7 @@ public class UserFacadeImp implements UserFacade{
 
     }
 
+
     @Override
     public void addUser(User user) {
 
@@ -67,4 +81,30 @@ public class UserFacadeImp implements UserFacade{
         return receiver.getLogged();
         //TODO return something to show the notification if receiver is logged in - maybe boolean if logged in
     }
+
+    @Override
+    public void addToCart(int id, int productId, String storeName, int quantity) {
+
+    }
+
+    @Override
+    public void openStore(String username, String storeName, String description, StorePolicy policy) {
+        if(storeName == null){
+            logger.error("Store name is null");
+            throw new RuntimeException("Store name is null");
+        }
+        if(marketFacade.getStores().containsKey(storeName)){
+            logger.error("Store with name " + storeName + " already exists");
+            throw new RuntimeException("Store with name " + storeName + " already exists");
+        }
+        if(!registers.containsKey(username)){
+            logger.error("User not found");
+            throw new RuntimeException("User not found");
+        }
+        Store store = new Store(storeName, description, policy);
+        marketFacade.addStore(store);
+        registers.get(username).openStore();
+
+    }
+
 }
