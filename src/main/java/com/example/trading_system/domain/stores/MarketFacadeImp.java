@@ -17,6 +17,12 @@ public class MarketFacadeImp {
 
         stores = new HashMap<>();
     }
+    private  static class Singleton  {
+        private static final MarketFacadeImp INSTANCE = new MarketFacadeImp();
+    }
+    public static MarketFacadeImp getInstance() {
+        return Singleton.INSTANCE;
+    }
 
     public void addStore(Store store) {
         stores.put(store.getName_id(), store);
