@@ -15,6 +15,7 @@
 	<description>Trading system web application</description>
 	<properties>
 		<java.version>22</java.version>
+		<maven.compiler.release>${java.version}</maven.compiler.release>
 	</properties>
 	<dependencies>
 		<dependency>
