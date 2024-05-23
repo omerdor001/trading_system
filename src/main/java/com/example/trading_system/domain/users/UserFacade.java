@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 public interface UserFacade {
 
+    void createVisitor(int id);
     void exit();
     void registration(int id, String username, String token, LocalDate birthdate) throws Exception;    //Complete with what to register
 

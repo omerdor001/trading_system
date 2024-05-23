@@ -17,6 +17,12 @@ public class UserServiceImp implements UserService {
         this.facade = facade;
     }
 
+    public void enter(int id){
+        logger.info("Trying enter to system as a visitor , with id : {}", id);
+        facade.createVisitor(id);
+        Security.generateToken("v"+id);
+        logger.info("Finish enter to system as a visitor , with id : {}", id);
+    }
 
     @Override
     public boolean registration(int id, String username, String password, LocalDate birthdate) {

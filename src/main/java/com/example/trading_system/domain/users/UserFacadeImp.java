@@ -33,6 +33,13 @@ public class UserFacadeImp implements UserFacade{
         return registers;
     }
 
+
+    @Override
+    public void createVisitor(int id) {
+        Visitor visitor=new Visitor(id);
+        visitors.put(id,visitor);
+    }
+
     @Override
     public void exit() {
 
