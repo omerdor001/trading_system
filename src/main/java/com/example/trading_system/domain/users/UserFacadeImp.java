@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.util.HashMap;
 
+import java.time.LocalDate;
+
 public class UserFacadeImp implements UserFacade{
     private HashMap<Integer, Visitor> visitors;
     private HashMap<String, Registered> registers;
@@ -60,6 +62,7 @@ public class UserFacadeImp implements UserFacade{
     public void login() {
 
     }
+
 
     @Override
     public void addUser(User user) {
