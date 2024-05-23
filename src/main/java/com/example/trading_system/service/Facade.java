@@ -10,6 +10,7 @@ import com.example.trading_system.domain.users.UserFacadeImp;
 import org.springframework.http.ResponseEntity;
 
 import javax.management.InstanceAlreadyExistsException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class Facade {
@@ -54,7 +55,27 @@ public class Facade {
         return marketService.addProduct(username,product_id,store_name,product_name,product_description,product_price,product_quantity,rating,category,keyWords);
     }
 
+    public ResponseEntity<String> removeProduct(String username, String store_name, int product_id){
+        return marketService.removeProduct(username,store_name,product_id);
+    }
 
-
+    public ResponseEntity<String> setProduct_name(String username,String store_name_id,int productId,String product_name){
+        return marketService.setProduct_name(username,store_name_id,productId,product_name);
+    }
+    public ResponseEntity<String> setProduct_description(String username,String store_name_id,int productId,String product_description){
+        return marketService.setProduct_description(username,store_name_id,productId,product_description);
+    }
+    public ResponseEntity<String> setProduct_price(String username,String store_name_id,int productId,int product_price){
+        return marketService.setProduct_price(username,store_name_id,productId,product_price);
+    }
+    public ResponseEntity<String> setProduct_quantity(String username,String store_name_id,int productId,int product_quantity){
+        return marketService.setProduct_quantity(username,store_name_id,productId,product_quantity);
+    }
+    public ResponseEntity<String> setRating(String username,String store_name_id,int productId,int rating){
+        return marketService.setRating(username,store_name_id,productId,rating);
+    }
+    public ResponseEntity<String> setCategory(String username,String store_name_id,int productId,Category category){
+        return marketService.setCategory(username,store_name_id,productId,category);
+    }
 
 }

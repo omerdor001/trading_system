@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class Registered extends User {
     private String userName;
@@ -74,7 +75,9 @@ public class Registered extends User {
             if (role.getStoreId().equals(store_name_id))
                 return role;
         }
-        return null;    //TODO change this
+        throw new NoSuchElementException("User doesn't have permission to this store");
     }
+
+
 
 }

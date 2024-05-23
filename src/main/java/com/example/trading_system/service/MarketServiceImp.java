@@ -139,7 +139,7 @@ public class MarketServiceImp implements MarketService {
     public ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
                                              double product_price, int product_quantity, double rating, Category category, List<String> keyWords){
         boolean result;
-        logger.info("Trying to add products to store,  : {}", store_name);
+        logger.info("Trying to add products to store : {}", store_name);
         try {
             result = marketFacade.addProduct(username,product_id,store_name,product_name,product_description,product_price,product_quantity,rating,category,keyWords);
             if(result){
@@ -155,7 +155,7 @@ public class MarketServiceImp implements MarketService {
 
     public ResponseEntity<String> removeProduct(String username, String store_name, int product_id){
         boolean result;
-        logger.info("Trying to remove products to store,  : {}", store_name);
+        logger.info("Trying to remove products to store : {}", store_name);
         try {
             result = marketFacade.removeProduct(username,store_name,product_id);
             if(result){
@@ -168,4 +168,102 @@ public class MarketServiceImp implements MarketService {
         logger.info("Finished remove products to store : {}",store_name);
         return new ResponseEntity<>("Success removing products", HttpStatus.OK);
     }
+
+    public ResponseEntity<String> setProduct_name(String username,String store_name_id,int productId,String product_name){
+        boolean result;
+        logger.info("Trying to edit name to product : {}", productId);
+        try {
+            result = marketFacade.setProduct_name(username,store_name_id,productId,product_name);
+            if(result){
+                return new ResponseEntity<>("Success editing name to product", HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to edit name to product : {}", e.getMessage(),productId);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished edit name of product : {}",productId);
+        return new ResponseEntity<>("Success editing name to product", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> setProduct_description(String username,String store_name_id,int productId,String product_description){
+        boolean result;
+        logger.info("Trying to edit description to product : {}", productId);
+        try {
+            result = marketFacade.setProduct_description(username,store_name_id,productId,product_description);
+            if(result){
+                return new ResponseEntity<>("Success editing name to product", HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to edit description to product : {}", e.getMessage(),productId);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished edit description of product : {}",productId);
+        return new ResponseEntity<>("Success editing description to product", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> setProduct_price(String username,String store_name_id,int productId,int product_price){
+        boolean result;
+        logger.info("Trying to edit price to product : {}", productId);
+        try {
+            result = marketFacade.setProduct_price(username,store_name_id,productId,product_price);
+            if(result){
+                return new ResponseEntity<>("Success editing price to product", HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to edit price to product : {}", e.getMessage(),productId);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished edit price of product : {}",productId);
+        return new ResponseEntity<>("Success editing price to product", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> setProduct_quantity(String username,String store_name_id,int productId,int product_quantity){
+        boolean result;
+        logger.info("Trying to edit quantity to product : {}", productId);
+        try {
+            result = marketFacade.setProduct_quantity(username,store_name_id,productId,product_quantity);
+            if(result){
+                return new ResponseEntity<>("Success editing quantity to product", HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to edit quantity to product : {}", e.getMessage(),productId);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished edit quantity of product : {}",productId);
+        return new ResponseEntity<>("Success editing quantity to product", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> setRating(String username,String store_name_id,int productId,int rating){
+        boolean result;
+        logger.info("Trying to edit rating to product : {}", productId);
+        try {
+            result = marketFacade.setRating(username,store_name_id,productId,rating);
+            if(result){
+                return new ResponseEntity<>("Success editing rating to product", HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to edit rating to product : {}", e.getMessage(),productId);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished edit rating of product : {}",productId);
+        return new ResponseEntity<>("Success editing rating to product", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> setCategory(String username,String store_name_id,int productId,Category category){
+        boolean result;
+        logger.info("Trying to edit category to product : {}", productId);
+        try {
+            result = marketFacade.setCategory(username,store_name_id,productId,category);
+            if(result){
+                return new ResponseEntity<>("Success editing category to product", HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to edit category to product : {}", e.getMessage(),productId);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished edit category of product : {}",productId);
+        return new ResponseEntity<>("Success editing category to product", HttpStatus.OK);
+    }
+
+
 }
