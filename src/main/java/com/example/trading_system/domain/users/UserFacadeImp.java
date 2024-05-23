@@ -67,4 +67,8 @@ public class UserFacadeImp implements UserFacade{
         return receiver.getLogged();
         //TODO return something to show the notification if receiver is logged in - maybe boolean if logged in
     }
+
+
+
+
 }

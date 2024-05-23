@@ -102,8 +102,14 @@ public class Store {
         products.put(product.getProduct_id(), product);
     }
 
-    public void removeProductToStore(Product product) {
-        products.remove(product.getProduct_id(), product);
+    public void addProduct(int product_id,String store_name,String product_name,String product_description,
+                           double product_price,int product_quantity,double rating,Category category,List<String> keyWords) {
+        Product product=new Product(product_id,store_name,product_description,product_price,product_quantity,rating,category,keyWords);
+        products.put(product.getProduct_id(), product);
+    }
+
+    public void removeProduct(int productId) {
+        products.remove(productId, products.get(productId));
     }
 
     public void setProduct_name(int productId,String product_name) {

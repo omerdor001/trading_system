@@ -17,7 +17,7 @@ public class Registered extends User {
 
     public Registered(int id, String userName, String encryption, String address, LocalDate birthdate) {
         super(id);
-        this.userName = userName; // Can be changed to email
+        this.userName = userName;
         this.encryption = encryption;
         this.address = address;
         this.birthdate= birthdate;
