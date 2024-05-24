@@ -1,6 +1,5 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.Store;
 import com.example.trading_system.domain.stores.StorePolicy;
@@ -10,8 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.HashMap;
-
-import java.time.LocalDate;
 
 public class UserFacadeImp implements UserFacade{
     private HashMap<Integer, Visitor> visitors;
@@ -90,8 +87,91 @@ public class UserFacadeImp implements UserFacade{
     }
 
     @Override
-    public void addToCart(int id, int productId, String storeName, int quantity) {
+    public void visitorAddToCart(int id, int productId, String storeName, int quantity) {
+        int quntityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
+        int quantityInShoppingBag = visitors.get(id).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
+        if(quantity+quantityInShoppingBag > quntityInStore)
+        {
+            logger.error("Product quantity is too low");
+            throw new RuntimeException("Product quantity is too low");
+        }
+        if(storeName == null){
+            logger.error("Store name is null");
+            throw new RuntimeException("Store name is null");
+        }
+        if(marketFacade.getStores().containsKey(storeName)){
+            logger.error("Store with name " + storeName + " already exists");
+            throw new RuntimeException("Store with name " + storeName + " already exists");
+        }
+        if(visitors.containsKey(id)){
+            visitors.get(id).getShopping_cart().addProductToCart(productId,quantity,storeName);
+        }
+    }
+    @Override
+    public void visitorRemoveFromCart(int id, int productId, String storeName, int quantity) {
+        if(storeName == null){
+            logger.error("Store name is null");
+            throw new RuntimeException("Store name is null");
+        }
+        if(marketFacade.getStores().containsKey(storeName)){
+            logger.error("Store with name " + storeName + " already exists");
+            throw new RuntimeException("Store with name " + storeName + " already exists");
+        }
+        if(visitors.containsKey(id)){
+            visitors.get(id).getShopping_cart().removeProductFromCart(productId,quantity,storeName);
+        }
+    }
+    @Override
+    public void registerdAddToCart(String username, int productId, String storeName, int quantity) {
 
+        if(storeName == null){
+            logger.error("Store name is null");
+            throw new RuntimeException("Store name is null");
+        }
+        if(marketFacade.getStores().containsKey(storeName)){
+            logger.error("Store with name " + storeName + " already exists");
+            throw new RuntimeException("Store with name " + storeName + " already exists");
+        }
+        if(registers.get(username) == null){
+            logger.error("User with name " + username + " does not exist");
+            throw new RuntimeException("User with name " + username + " does not exist");
+        }
+        if(!registers.get(username).getLogged()){
+            logger.error("user is not logged");
+            throw new RuntimeException("user is not logged");
+        }
+        int quntityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
+        int quantityInShoppingBag = registers.get(username).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
+        if(quantity+quantityInShoppingBag > quntityInStore)
+        {
+            logger.error("Product quantity is too low");
+            throw new RuntimeException("Product quantity is too low");
+        }
+        if(registers.containsKey(username)){
+            registers.get(username).getShopping_cart().addProductToCart(productId,quantity,storeName);
+        }
+    }
+    @Override
+    public void registerdRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception {
+        if(storeName == null){
+            logger.error("Store name is null");
+            throw new RuntimeException("Store name is null");
+        }
+        if(marketFacade.getStores().containsKey(storeName)){
+            logger.error("Store with name " + storeName + " already exists");
+            throw new RuntimeException("Store with name " + storeName + " already exists");
+        }
+        if(registers.get(username) == null){
+            logger.error("User with name " + username + " does not exist");
+            throw new RuntimeException("User with name " + username + " does not exist");
+        }
+        if(!registers.get(username).getLogged()){
+            logger.error("user is not logged");
+            throw new RuntimeException("user is not logged");
+        }
+        if(registers.containsKey(username)){
+            registers.get(username).getShopping_cart().removeProductFromCart(productId, quantity, storeName);
+        }
     }
 
     @Override

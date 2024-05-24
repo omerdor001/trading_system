@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
-import java.util.Map;
 
 public class UserServiceImp implements UserService {
 
@@ -40,12 +39,39 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean addToCart(int id, int productId, String storeName, int quantity) {
+    public boolean visitorAddToCart(int id, int productId, String storeName, int quantity){
         boolean result;
-        logger.info("Trying adding to cart  product with id: {}", productId);
+        logger.info("Trying adding to cart product with id: {}", productId);
         try {
-            facade.addToCart(id, productId, storeName, quantity);
-        } catch (Exception e) {
+            facade.visitorAddToCart(id, productId, storeName, quantity);
+        }catch (Exception e){
+            logger.error("Error occurred : {} , Failed Trying adding to cart  product with id: {}", e.getMessage(), productId);
+            return false;
+        }
+        logger.info("Finished adding to cart product with id: {}", productId);
+        return true;
+    }
+    @Override
+    public boolean visitorRemoveFromCart(int id, int productId, String storeName, int quantity){
+        boolean result;
+        logger.info("Trying removing from cart product with id: {}", productId);
+        try {
+            facade.visitorRemoveFromCart(id, productId, storeName, quantity);
+        }catch (Exception e){
+            logger.error("Error occurred : {} , Failed Trying removing to cart  product with id: {}", e.getMessage(), productId);
+            return false;
+        }
+        logger.info("Finished removing from cart product with id: {}", productId);
+        return true;
+    }
+
+    @Override
+    public boolean registerdAddToCart(String username, int productId, String storeName, int quantity){
+        boolean result;
+        logger.info("Trying adding to cart product with id: {}", productId);
+        try {
+            facade.registerdAddToCart(username, productId, storeName, quantity);
+        }catch (Exception e){
             logger.error("Error occurred : {} , Failed Trying adding to cart  product with id: {}", e.getMessage(), productId);
             return false;
         }
@@ -53,6 +79,19 @@ public class UserServiceImp implements UserService {
         return true;
     }
 
+    @Override
+    public boolean registerdRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception {
+        boolean result;
+        logger.info("Trying removing from cart product with id: {}", productId);
+        try {
+            facade.registerdRemoveFromCart(username, productId, storeName, quantity);
+        }catch (Exception e){
+            logger.error("Error occurred : {} , Failed Trying removing to cart  product with id: {}", e.getMessage(), productId);
+            return false;
+        }
+        logger.info("Finished removing from cart product with id: {}", productId);
+        return true;
+    }
     @Override
     public boolean openStore(String username, String storeName, String description, StorePolicy policy) {
         boolean result;
