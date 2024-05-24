@@ -26,8 +26,14 @@ public class UserFacadeImp implements UserFacade{
     public HashMap<Integer, Visitor> getVisitors() {
         return visitors;
     }
+
     public HashMap<String, Registered> getRegisters() {
         return registers;
+    }
+
+    @Override
+    public void exit() {
+
     }
 
 
@@ -57,9 +63,11 @@ public class UserFacadeImp implements UserFacade{
         }
     }
 
+
     @Override
     public void registration(int id, String username, String encryption, LocalDate birthdate) throws Exception {
         registerChecks(id, username, encryption, birthdate);
+        Cart shopping_cart = new Cart();
         Registered newUser = new Registered(id,username,encryption, birthdate);
         registers.put(username,newUser);
         visitors.remove(id);
@@ -77,6 +85,16 @@ public class UserFacadeImp implements UserFacade{
 
     @Override
     public void login() {
+
+    }
+
+    @Override
+    public void addUser(User user) {
+
+    }
+
+    @Override
+    public void removeUser(User user) {
 
     }
 

@@ -4,6 +4,9 @@ import com.example.trading_system.domain.externalservices.Service;
 import com.example.trading_system.domain.externalservices.ServiceFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 
 public class ExternalServicesImp implements ExternalServices{
     private ServiceFacade facade;
@@ -24,6 +27,22 @@ public class ExternalServicesImp implements ExternalServices{
         }
         logger.info("Finish adding external service: {}", service.getServiceName());
         return result;
+    }
+
+    @Override
+    public ResponseEntity<String> addServiceNew(Service service) {
+        logger.info("Trying add external service: {}", service.getServiceName());
+        try {
+            boolean result=facade.addService(service);
+            if(result){
+                return new ResponseEntity<>("Success in adding External Service", HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed trying add external service: {}", e.getMessage(), service.getServiceName());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finish add external service: {}", service.getServiceName());
+        return new ResponseEntity<>("Success in adding External Service", HttpStatus.OK);
     }
 
     public boolean replaceService(Service newService, Service oldService){
