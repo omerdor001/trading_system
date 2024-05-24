@@ -34,44 +34,34 @@ public class Security {
     }
 
     // Extract the username from the token
-    private static String extractUsername(String token) {
+    private String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     // Extract expiration date from the token
-    private static Date extractExpiration(String token) {
+    private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
     // Extract claims from the token
-    private static <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
     // Extract all claims from the token
-    private static Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
     // Check if the token is expired
-    private static Boolean isTokenExpired(String token) {
+    private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
     // Validate the token by checking the username and expiry date
-    public static Boolean validateToken(String token, String username) {
+    public Boolean validateToken(String token, String username) {
         final String tokenUsername = extractUsername(token);
         return (username.equals(tokenUsername) && !isTokenExpired(token));
-    }
-
-    // Method to make a token expire immediately
-    public static void makeTokenExpire(String token) {
-        Claims claims = extractAllClaims(token);
-        claims.setExpiration(new Date(System.currentTimeMillis())); // Set expiration to current time
-        Jwts.builder()
-                .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
     }
 }

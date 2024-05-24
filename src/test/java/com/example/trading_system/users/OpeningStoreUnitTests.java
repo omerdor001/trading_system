@@ -30,7 +30,7 @@ class OpeningStoreUnitTests {
         StorePolicy policy = new StorePolicy();
 
         Registered registered = new Registered(1, username, "address", LocalDate.of(1990, 1, 1));
-        userFacade.getRegistered().put(username, registered);
+        userFacade.getRegisters().put(username, registered);
 
         userFacade.openStore(username, storeName, description, policy);
 
@@ -48,7 +48,7 @@ class OpeningStoreUnitTests {
         StorePolicy policy = new StorePolicy();
 
         Registered registered = new Registered(1, username, "address", LocalDate.of(1990, 1, 1));
-        userFacade.getRegistered().put(username, registered);
+        userFacade.getRegisters().put(username, registered);
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
             userFacade.openStore(username, null, description, policy);
@@ -65,7 +65,7 @@ class OpeningStoreUnitTests {
         StorePolicy policy = new StorePolicy();
 
         Registered registered = new Registered(1, username, "address", LocalDate.of(1990, 1, 1));
-        userFacade.getRegistered().put(username, registered);
+        userFacade.getRegisters().put(username, registered);
 
         Store existingStore = new Store(storeName, description, new StorePolicy());
         marketFacade.addStore(existingStore);

@@ -6,30 +6,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 public class UserServiceImp implements UserService {
 
-    private UserFacade userFacade;
+    private UserFacade facade;
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
 
     public UserServiceImp(UserFacade facade) {
-        this.userFacade = facade;
+        this.facade = facade;
     }
 
     public void enter(int id){
         logger.info("Trying enter to system as a visitor , with id : {}", id);
-        userFacade.createVisitor(id);
+        facade.createVisitor(id);
         Security.generateToken("v"+id);
         logger.info("Finish enter to system as a visitor , with id : {}", id);
     }
 
     @Override
-    public boolean register(int id, String username, String password, LocalDate birthdate) {
+    public boolean registration(int id, String username, String password, LocalDate birthdate) {
         boolean result;
         logger.info("Trying registering a new user: {}", username);
         try {
-            String encrypted_pass = Security.encrypt(password);
-            userFacade.registration(id, username, encrypted_pass, birthdate);
+            String encryption = Security.encrypt(password);
+            facade.registration(id, username, encryption, birthdate);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed trying registering user: {}", e.getMessage(), username);
             return false;
@@ -43,7 +44,7 @@ public class UserServiceImp implements UserService {
         boolean result;
         logger.info("Trying adding to cart  product with id: {}", productId);
         try {
-            userFacade.addToCart(id, productId, storeName, quantity);
+            facade.addToCart(id, productId, storeName, quantity);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed Trying adding to cart  product with id: {}", e.getMessage(), productId);
             return false;
@@ -57,7 +58,7 @@ public class UserServiceImp implements UserService {
         boolean result;
         logger.info("Trying opening store with name: {}", storeName);
         try{
-            userFacade.openStore(username,storeName,description,policy);
+            facade.openStore(username,storeName,description,policy);
         }catch (Exception e){
             logger.error("Error occurred : {} , Failed opening store with name: {}", e.getMessage(), storeName);
             return false;
@@ -66,23 +67,5 @@ public class UserServiceImp implements UserService {
         return true;
     }
 
-    @Override
-    public boolean login(int id, String username, String password) {
-        logger.info("Trying to login user: {}", username);
-        try{
-            String encrypted_pass = userFacade.getUserPassword(username);
-            if (Security.checkPassword(password, encrypted_pass)) {
-                userFacade.login(username);
-                userFacade.removeVisitor(id);
-            }
-            else
-                throw new RuntimeException("Wrong password");
-            logger.info("User: {} logged in", username);
-            return true;
-        }catch (Exception e){
-            logger.error("Error occurred : {} , Failed login user: {}", e.getMessage(), username);
-            return false;
-        }
-    }
 }
 

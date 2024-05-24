@@ -1,5 +1,6 @@
 package com.example.trading_system.domain.users;
 
+import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.Store;
 import com.example.trading_system.domain.stores.StorePolicy;
@@ -10,14 +11,16 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.util.HashMap;
 
+import java.time.LocalDate;
+
 public class UserFacadeImp implements UserFacade{
     private HashMap<Integer, Visitor> visitors;
-    private HashMap<String, Registered> registered;
+    private HashMap<String, Registered> registers;
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
     MarketFacadeImp marketFacade = MarketFacadeImp.getInstance();
 
     public UserFacadeImp() {
-        this.registered = new HashMap<>();
+        this.registers = new HashMap<>();
         this.visitors = new HashMap<>();
     }
 
@@ -26,8 +29,8 @@ public class UserFacadeImp implements UserFacade{
         return visitors;
     }
 
-    public HashMap<String, Registered> getRegistered() {
-        return registered;
+    public HashMap<String, Registered> getRegisters() {
+        return registers;
     }
 
 
@@ -44,29 +47,27 @@ public class UserFacadeImp implements UserFacade{
 
 
     @Override
-    public void registration(int id, String username, String encrypted_pass, LocalDate birthdate) throws Exception {
-        registerChecks(id, username, encrypted_pass, birthdate);
-        Registered newUser = new Registered(id,username,encrypted_pass, birthdate);
-        registered.put(username,newUser);
+    public void registration(int id, String username, String encryption, LocalDate birthdate) throws Exception {
+        registerChecks(id, username, encryption, birthdate);
+        Cart shopping_cart = new Cart();
+        Registered newUser = new Registered(id,username,encryption, birthdate);
+        registers.put(username,newUser);
         visitors.remove(id);
     }
 
-    private void registerChecks(int id, String username, String encrypted_pass, LocalDate birthdate) throws Exception {
+    private void registerChecks(int id, String username, String encryption, LocalDate birthdate) throws Exception {
         if(username == null) throw new Exception("Username is null");
         if(username.isEmpty()) throw new Exception("Username is empty");
-        if(encrypted_pass == null) throw new Exception("Encrypted password is null");
-        if(encrypted_pass.isEmpty()) throw new Exception("Encrypted password is empty");
+        if(encryption == null) throw new Exception("Encrypted password is null");
+        if(encryption.isEmpty()) throw new Exception("Encrypted password is empty");
         if(birthdate == null) throw new Exception("Birthdate password is null");
         if(!visitors.containsKey(id)) throw new Exception("No visitor with id - " + id);
-        if(registered.containsKey(username)) throw new Exception("username already exists - " + username);
+        if(registers.containsKey(username)) throw new Exception("username already exists - " + username);
     }
 
     @Override
-    public void login(String username) {
-        User u = registered.get(username);
-        if (u == null)
-            throw new RuntimeException("No such user " + username);
-        u.login();
+    public void login() {
+
     }
 
 
@@ -103,26 +104,14 @@ public class UserFacadeImp implements UserFacade{
             logger.error("Store with name " + storeName + " already exists");
             throw new RuntimeException("Store with name " + storeName + " already exists");
         }
-        if(!registered.containsKey(username)){
+        if(!registers.containsKey(username)){
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
         Store store = new Store(storeName, description, policy);
         marketFacade.addStore(store);
-        registered.get(username).openStore();
+        registers.get(username).openStore();
 
     }
 
-    @Override
-    public String getUserPassword(String username) {
-        User u = registered.get(username);
-        if (u == null)
-            throw new RuntimeException("No such registered user " + username);
-        return u.getPass();
-    }
-
-    @Override
-    public void removeVisitor(int id) {
-        visitors.remove(id);
-    }
 }
