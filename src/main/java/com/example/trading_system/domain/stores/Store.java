@@ -13,11 +13,13 @@ public class Store {
     private String name_id;//this will be the ID for the store
     private String description;
     private HashMap<Integer, Product> products;
+    private StorePolicy storePolicy;
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
 
-    public Store(String name_id, String description) {
+    public Store(String name_id, String description, StorePolicy storePolicy) {
         this.name_id = name_id;
         this.description = description;
+        this.storePolicy = storePolicy;
         this.products = new HashMap<>();
     }
 
@@ -39,6 +41,14 @@ public class Store {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public StorePolicy getStorePolicy() {
+        return storePolicy;
+    }
+
+    public void setStorePolicy(StorePolicy storePolicy) {
+        this.storePolicy = storePolicy;
     }
 
     public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, Category category) {

@@ -20,6 +20,12 @@ public class MarketFacadeImp implements MarketFacade{
         stores = new HashMap<>();
         userFacade=new UserFacadeImp();
     }
+    private  static class Singleton  {
+        private static final MarketFacadeImp INSTANCE = new MarketFacadeImp();
+    }
+    public static MarketFacadeImp getInstance() {
+        return Singleton.INSTANCE;
+    }
 
     public void addStore(Store store) {
         stores.put(store.getName_id(), store);

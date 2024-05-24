@@ -40,7 +40,6 @@ public class Registered extends User {
     }
 
     public void logout() {}
-    public void openStore() {}
     public void performBuying(Cart shopping_cart) {}
     public boolean approveAppointment(int userId) { return false; }
     public void searchProduct(int productId) {}
@@ -49,6 +48,11 @@ public class Registered extends User {
     public void openMarket() {}
     public void closeMarket() {}
 
+    public void openStore() {
+        this.isAdmin=true;
+        //SET THE ROLE TO OWNER OF STORE
+
+    }
     @Override
     public boolean getLogged() {
         return this.isLogged;
