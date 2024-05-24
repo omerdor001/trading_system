@@ -158,23 +158,23 @@ public class UserFacadeImp implements UserFacade{
             logger.error("Store with name " + storeName + " already exists");
             throw new RuntimeException("Store with name " + storeName + " already exists");
         }
-        if(registers.get(username) == null){
+        if(registered.get(username) == null){
             logger.error("User with name " + username + " does not exist");
             throw new RuntimeException("User with name " + username + " does not exist");
         }
-        if(!registers.get(username).getLogged()){
+        if(!registered.get(username).getLogged()){
             logger.error("user is not logged");
             throw new RuntimeException("user is not logged");
         }
         int quntityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
-        int quantityInShoppingBag = registers.get(username).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
+        int quantityInShoppingBag = registered.get(username).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
         if(quantity+quantityInShoppingBag > quntityInStore)
         {
             logger.error("Product quantity is too low");
             throw new RuntimeException("Product quantity is too low");
         }
-        if(registers.containsKey(username)){
-            registers.get(username).getShopping_cart().addProductToCart(productId,quantity,storeName);
+        if(registered.containsKey(username)){
+            registered.get(username).getShopping_cart().addProductToCart(productId,quantity,storeName);
         }
     }
     @Override
@@ -187,16 +187,16 @@ public class UserFacadeImp implements UserFacade{
             logger.error("Store with name " + storeName + " already exists");
             throw new RuntimeException("Store with name " + storeName + " already exists");
         }
-        if(registers.get(username) == null){
+        if(registered.get(username) == null){
             logger.error("User with name " + username + " does not exist");
             throw new RuntimeException("User with name " + username + " does not exist");
         }
-        if(!registers.get(username).getLogged()){
+        if(!registered.get(username).getLogged()){
             logger.error("user is not logged");
             throw new RuntimeException("user is not logged");
         }
-        if(registers.containsKey(username)){
-            registers.get(username).getShopping_cart().removeProductFromCart(productId, quantity, storeName);
+        if(registered.containsKey(username)){
+            registered.get(username).getShopping_cart().removeProductFromCart(productId, quantity, storeName);
         }
     }
 

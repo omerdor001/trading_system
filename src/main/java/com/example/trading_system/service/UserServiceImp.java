@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
-import java.util.Map;
 
 public class UserServiceImp implements UserService {
 
@@ -54,11 +53,11 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean addToCart(int id, int productId, String storeName, int quantity) {
+    public boolean visitorAddToCart(int id, int productId, String storeName, int quantity) {
         boolean result;
         logger.info("Trying adding to cart  product with id: {}", productId);
         try {
-            userFacade.addToCart(id, productId, storeName, quantity);
+            userFacade.visitorAddToCart(id, productId, storeName, quantity);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed Trying adding to cart  product with id: {}", e.getMessage(), productId);
             return false;
@@ -81,7 +80,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean registerdAddToCart(String username, int productId, String storeName, int quantity){
+    public boolean registeredAddToCart(String username, int productId, String storeName, int quantity){
         boolean result;
         logger.info("Trying adding to cart product with id: {}", productId);
         try {
@@ -95,7 +94,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean registerdRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception {
+    public boolean registeredRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception {
         boolean result;
         logger.info("Trying removing from cart product with id: {}", productId);
         try {
@@ -119,6 +118,11 @@ public class UserServiceImp implements UserService {
         }
         logger.info("Finished opening store with name: {}", storeName);
         return true;
+    }
+
+    @Override
+    public boolean register(int id, String username, String password, LocalDate birthdate) {
+        return false;
     }
 
     @Override
