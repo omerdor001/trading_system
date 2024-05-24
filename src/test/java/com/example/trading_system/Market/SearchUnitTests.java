@@ -1,16 +1,12 @@
 package com.example.trading_system.Market;
 
 import com.example.trading_system.domain.stores.*;
-import com.example.trading_system.domain.users.Visitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public class SearchUnitTests {
     private MarketFacadeImp marketFacade;
@@ -20,9 +16,9 @@ public class SearchUnitTests {
     void setUp() {
         marketFacade = new MarketFacadeImp();
         Store store = new Store("store1", "description",new StorePolicy());
-        Product product = new Product(1, "p1", "", 5, 5, 5, Category.Food, new ArrayList<>());
+        Product product = new Product(1, "p1", "", 5, 5, 5, Category.Food, new ArrayList<>(), "store1");
         store.addProductToStore(product);
-        marketFacade.getStores().put(store.getName_id(), store);
+        marketFacade.getStores().put(store.getNameId(), store);
         //marketFacade.getStores().put("store2", new Store("store2","description"));
     }
 

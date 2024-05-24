@@ -1,48 +1,40 @@
 package com.example.trading_system.domain.users;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Manager extends RoleState{
-    private boolean watch;
-    private boolean editSupply;
-    private boolean editBuyPolicy;
-    private boolean editDiscountPolicy;
-
-    public Manager(Role role,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) {
+    public Manager(Role role) {
         super(role);
-        this.watch=watch;
-        this.editBuyPolicy=editBuyPolicy;
-        this.editDiscountPolicy=editDiscountPolicy;
-        this.editSupply=editSupply;
     }
 
-    public boolean isWatch() {
-        return watch;
-    }
+    private void addProduct(int storeId,String product_details) {} //Change product_details Type
 
-    public void setWatch(boolean watch) {
-        this.watch = watch;
-    }
+    private void editProduct(int storeId,int productId) {}
 
-    public boolean isEditSupply() {
-        return editSupply;
-    }
+    private void removeProduct(int storeId,int productId) {}
 
-    public void setEditSupply(boolean editSupply) {
-        this.editSupply = editSupply;
-    }
+    private void changeProduct(int storeId,int productId) {}
 
-    public boolean isEditBuyPolicy() {
-        return editBuyPolicy;
-    }
+    private void addBuyPolicy(int storeId,int productId) {}
 
-    public void setEditBuyPolicy(boolean editBuyPolicy) {
-        this.editBuyPolicy = editBuyPolicy;
-    }
+    private void removeBuyPolicy(int storeId,int productId) {}
 
-    public boolean isEditDiscountPolicy() {
-        return editDiscountPolicy;
-    }
+    private void editBuyPolicy(int storeId,int productId) {}
 
-    public void setEditDiscountPolicy(boolean editDiscountPolicy) {
-        this.editDiscountPolicy = editDiscountPolicy;
-    }
+    private void addDiscountPolicy(int storeId,int productId) {}
+
+    private void removeDiscountPolicy(int storeId,int productId) {}
+
+    private void editDiscountPolicy(int storeId,int productId) {}
+
+    private void addProduct(String product_details) {} //Change product_details Type
+
+    private void editProduct(int productId) {}
+
+    private void removeProduct(int productId) {}
+
+    private void changeProduct(int productId) {}
 }

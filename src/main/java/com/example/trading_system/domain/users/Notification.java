@@ -5,12 +5,16 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+@Setter
+@Getter
 @Component
 public class Notification {
     private int senderId;
@@ -37,38 +41,6 @@ public class Notification {
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.dateOfCreation = dateOfCreation;
-        this.textContent = textContent;
-    }
-
-    public int getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(int senderId) {
-        this.senderId = senderId;
-    }
-
-    public int getReceiverId() {
-        return receiverId;
-    }
-
-    public void setReceiverId(int receiverId) {
-        this.receiverId = receiverId;
-    }
-
-    public Date getDateOfCreation() {
-        return dateOfCreation;
-    }
-
-    public void setDateOfCreation(Date dateOfCreation) {
-        this.dateOfCreation = dateOfCreation;
-    }
-
-    public String getTextContent() {
-        return textContent;
-    }
-
-    public void setTextContent(String textContent) {
         this.textContent = textContent;
     }
 

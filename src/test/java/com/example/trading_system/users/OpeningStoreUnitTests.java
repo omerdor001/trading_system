@@ -37,7 +37,7 @@ class OpeningStoreUnitTests {
         Store store = marketFacade.getStores().get(storeName);
 
         assertNotNull(store);
-        assertEquals(storeName, store.getName_id());
+        assertEquals(storeName, store.getNameId());
         assertEquals(description, store.getDescription());
     }
 
