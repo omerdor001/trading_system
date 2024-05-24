@@ -107,4 +107,15 @@ public class Facade {
         return marketService.setCategory(username,store_name_id,productId,category);
     }
 
+    public String login(int id, String username, String password){
+        if (userService.login(id, username, password)){
+            Security.makeTokenExpire("v" + id);
+            return Security.generateToken(username);
+        }
+        else
+            return "";
+    }
+
 }
+
+

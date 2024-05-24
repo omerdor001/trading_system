@@ -147,10 +147,10 @@ public class MarketFacadeImp implements MarketFacade{
             throw new IllegalArgumentException("Quantity must be natural number");
         if(rating<0)
             throw new IllegalArgumentException("Rating can't be negative number");
-        if(!userFacade.getRegisters().containsKey(username)){
+        if(!userFacade.getRegistered().containsKey(username)){
             throw new IllegalArgumentException("User must exist");
         }
-        Registered registered =userFacade.getRegisters().get(username);
+        Registered registered =userFacade.getRegistered().get(username);
         registered.getRoleByStoreId(store_name).addProduct(username,product_id,store_name,product_name,product_description,product_price,product_quantity,rating,category,keyWords);
         stores.get(store_name).addProduct(product_id,store_name,product_name,product_description,product_price,product_quantity,rating,category,keyWords);
         return true;
@@ -161,10 +161,10 @@ public class MarketFacadeImp implements MarketFacade{
         if(!stores.containsKey(store_name_id)){
             throw new IllegalArgumentException("Store must exist");
         }
-        if(!userFacade.getRegisters().containsKey(username)){
+        if(!userFacade.getRegistered().containsKey(username)){
             throw new IllegalArgumentException("User must exist");
         }
-        Registered registered =userFacade.getRegisters().get(username);
+        Registered registered =userFacade.getRegistered().get(username);
         registered.getRoleByStoreId(store_name_id).removeProduct(username,store_name_id,product_id);
         if(!stores.get(store_name_id).getProducts().containsKey(product_id)) {
             throw new IllegalArgumentException("Product must exist");
@@ -181,10 +181,10 @@ public class MarketFacadeImp implements MarketFacade{
         if(!stores.get(store_name_id).getProducts().containsKey(productId)) {
             throw new IllegalArgumentException("Product must exist");
         }
-        if(!userFacade.getRegisters().containsKey(username)){
+        if(!userFacade.getRegistered().containsKey(username)){
             throw new IllegalArgumentException("User must exist");
         }
-        Registered registered =userFacade.getRegisters().get(username);
+        Registered registered =userFacade.getRegistered().get(username);
         registered.getRoleByStoreId(store_name_id).setProduct_name(username,store_name_id,productId,product_name);
         stores.get(store_name_id).setProduct_name(productId,product_name);
         return true;
@@ -198,10 +198,10 @@ public class MarketFacadeImp implements MarketFacade{
         if(!stores.get(store_name_id).getProducts().containsKey(productId)) {
             throw new IllegalArgumentException("Product must exist");
         }
-        if(!userFacade.getRegisters().containsKey(username)){
+        if(!userFacade.getRegistered().containsKey(username)){
             throw new IllegalArgumentException("User must exist");
         }
-        Registered registered =userFacade.getRegisters().get(username);
+        Registered registered =userFacade.getRegistered().get(username);
         registered.getRoleByStoreId(store_name_id).setProduct_description(username,store_name_id,productId,product_description);
         stores.get(store_name_id).setProduct_description(productId,product_description);
         return true;
@@ -217,10 +217,10 @@ public class MarketFacadeImp implements MarketFacade{
         }
         if(product_price<0)
             throw new IllegalArgumentException("Price can't be negative number");
-        if(!userFacade.getRegisters().containsKey(username)){
+        if(!userFacade.getRegistered().containsKey(username)){
             throw new IllegalArgumentException("User must exist");
         }
-        Registered registered =userFacade.getRegisters().get(username);
+        Registered registered =userFacade.getRegistered().get(username);
         registered.getRoleByStoreId(store_name_id).setProduct_price(username,store_name_id,productId,product_price);
         stores.get(store_name_id).setProduct_price(productId,product_price);
         return true;
@@ -236,10 +236,10 @@ public class MarketFacadeImp implements MarketFacade{
         }
         if(product_quantity<=0)
             throw new IllegalArgumentException("Quantity must be natural number");
-        if(!userFacade.getRegisters().containsKey(username)){
+        if(!userFacade.getRegistered().containsKey(username)){
             throw new IllegalArgumentException("User must exist");
         }
-        Registered registered =userFacade.getRegisters().get(username);
+        Registered registered =userFacade.getRegistered().get(username);
         registered.getRoleByStoreId(store_name_id).setProduct_quantity(username,store_name_id,productId,product_quantity);
         stores.get(store_name_id).setProduct_quantity(productId,product_quantity);
         return true;
@@ -255,10 +255,10 @@ public class MarketFacadeImp implements MarketFacade{
         }
         if(rating<0)
             throw new IllegalArgumentException("Rating can't be negative number");
-        if(!userFacade.getRegisters().containsKey(username)){
+        if(!userFacade.getRegistered().containsKey(username)){
             throw new IllegalArgumentException("User must exist");
         }
-        Registered registered =userFacade.getRegisters().get(username);
+        Registered registered =userFacade.getRegistered().get(username);
         registered.getRoleByStoreId(store_name_id).setRating(username,store_name_id,productId,rating);
         stores.get(store_name_id).setRating(productId,rating);
         return true;
@@ -272,10 +272,10 @@ public class MarketFacadeImp implements MarketFacade{
         if(!stores.get(store_name_id).getProducts().containsKey(productId)) {
             throw new IllegalArgumentException("Product must exist");
         }
-        if(!userFacade.getRegisters().containsKey(username)){
+        if(!userFacade.getRegistered().containsKey(username)){
             throw new IllegalArgumentException("User must exist");
         }
-        Registered registered =userFacade.getRegisters().get(username);
+        Registered registered =userFacade.getRegistered().get(username);
         registered.getRoleByStoreId(store_name_id).setCategory(username,store_name_id,productId,category);
         stores.get(store_name_id).setCategory(productId,category);
         return true;

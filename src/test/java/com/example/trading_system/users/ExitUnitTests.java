@@ -19,8 +19,8 @@ class ExitUnitTests {
         userFacade.getVisitors().put(1, new Visitor(1));
         userFacade.getVisitors().put(2, new Visitor(2));
         userFacade.getVisitors().put(3, new Visitor(3));
-        userFacade.getRegisters().put("user1", new Registered(4, "user1", "password1", LocalDate.of(1990, 5, 15)));
-        userFacade.getRegisters().put("user2", new Registered(5, "user2", "password2", LocalDate.of(1991, 6, 20)));
+        userFacade.getRegistered().put("user1", new Registered(4, "user1", "password1", LocalDate.of(1990, 5, 15)));
+        userFacade.getRegistered().put("user2", new Registered(5, "user2", "password2", LocalDate.of(1991, 6, 20)));
     }
 
     @Test
@@ -41,7 +41,7 @@ class ExitUnitTests {
     void exitRegisteredUser_Success() {
         String username = "user1";
         assertDoesNotThrow(() -> userFacade.exit(username));
-        assertFalse(userFacade.getRegisters().containsKey(username));
+        assertFalse(userFacade.getRegistered().containsKey(username));
     }
 
     @Test
