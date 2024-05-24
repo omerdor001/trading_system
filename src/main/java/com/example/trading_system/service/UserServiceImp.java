@@ -38,7 +38,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean register(int id, String username, String password, LocalDate birthdate) {
+    public boolean registration(int id, String username, String password, LocalDate birthdate) {
         boolean result;
         logger.info("Trying registering a new user: {}", username);
         try {
@@ -53,11 +53,11 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean addToCart(int id, int productId, String storeName, int quantity) {
+    public boolean visitorAddToCart(int id, int productId, String storeName, int quantity) {
         boolean result;
         logger.info("Trying adding to cart  product with id: {}", productId);
         try {
-            userFacade.addToCart(id, productId, storeName, quantity);
+            userFacade.visitorAddToCart(id, productId, storeName, quantity);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed Trying adding to cart  product with id: {}", e.getMessage(), productId);
             return false;
@@ -65,7 +65,47 @@ public class UserServiceImp implements UserService {
         logger.info("Finished adding to cart product with id: {}", productId);
         return true;
     }
+    @Override
+    public boolean visitorRemoveFromCart(int id, int productId, String storeName, int quantity){
+        boolean result;
+        logger.info("Trying removing from cart product with id: {}", productId);
+        try {
+            userFacade.visitorRemoveFromCart(id, productId, storeName, quantity);
+        }catch (Exception e){
+            logger.error("Error occurred : {} , Failed Trying removing to cart  product with id: {}", e.getMessage(), productId);
+            return false;
+        }
+        logger.info("Finished removing from cart product with id: {}", productId);
+        return true;
+    }
 
+    @Override
+    public boolean registeredAddToCart(String username, int productId, String storeName, int quantity){
+        boolean result;
+        logger.info("Trying adding to cart product with id: {}", productId);
+        try {
+            userFacade.registerdAddToCart(username, productId, storeName, quantity);
+        }catch (Exception e){
+            logger.error("Error occurred : {} , Failed Trying adding to cart  product with id: {}", e.getMessage(), productId);
+            return false;
+        }
+        logger.info("Finished adding to cart product with id: {}", productId);
+        return true;
+    }
+
+    @Override
+    public boolean registeredRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception {
+        boolean result;
+        logger.info("Trying removing from cart product with id: {}", productId);
+        try {
+            userFacade.registerdRemoveFromCart(username, productId, storeName, quantity);
+        }catch (Exception e){
+            logger.error("Error occurred : {} , Failed Trying removing to cart  product with id: {}", e.getMessage(), productId);
+            return false;
+        }
+        logger.info("Finished removing from cart product with id: {}", productId);
+        return true;
+    }
     @Override
     public boolean openStore(String username, String storeName, String description, StorePolicy policy) {
         boolean result;
@@ -78,6 +118,11 @@ public class UserServiceImp implements UserService {
         }
         logger.info("Finished opening store with name: {}", storeName);
         return true;
+    }
+
+    @Override
+    public boolean register(int id, String username, String password, LocalDate birthdate) {
+        return false;
     }
 
     @Override
