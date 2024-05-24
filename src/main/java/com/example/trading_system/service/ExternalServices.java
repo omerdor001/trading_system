@@ -1,15 +1,17 @@
 package com.example.trading_system.service;
 
 import com.example.trading_system.domain.externalservices.Service;
+import org.springframework.http.ResponseEntity;
 
 public interface ExternalServices {
-    public boolean addService(Service service);
+    ResponseEntity<String> addService(Service service);
 
-    public boolean replaceService(Service newService, Service oldService);
 
-    public boolean changeServiceName(Service serviceToChangeAt,String newName);
+    ResponseEntity<String> replaceService(Service newService, Service oldService);
 
-    public boolean makePayment(String serviceName,double amount);
+    ResponseEntity<String> changeServiceName(Service serviceToChangeAt,String newName);
 
-    public boolean makeDelivery(String serviceName,String address);
+    ResponseEntity<String> makePayment(String serviceName,double amount);
+
+    ResponseEntity<String> makeDelivery(String serviceName,String address);
 }

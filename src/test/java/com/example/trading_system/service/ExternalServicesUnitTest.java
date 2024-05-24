@@ -2,120 +2,123 @@ package com.example.trading_system.service;
 import com.example.trading_system.domain.externalservices.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import javax.management.InstanceAlreadyExistsException;
 
 class ExternalServicesUnitTest {
-    private ServiceFacade serviceFacade;
+    private ExternalServices externalServices;
     @BeforeEach
     public void setUp() {
-        serviceFacade=new ServiceFacadeImp();
+        externalServices=new ExternalServicesImp(new ServiceFacadeImp());
     }
 
     @Test
-    void addService_Success() throws InstanceAlreadyExistsException {
+    void addService_Success(){
         Service payment1=new PaymentService("Paypal");
-        boolean result=serviceFacade.addService(payment1);
-        assertEquals(result,true);
+        ResponseEntity<String> result=externalServices.addService(payment1);
+        assertEquals(new ResponseEntity<>("Success adding external service", HttpStatus.OK),result);
     }
 
     @Test
-    void addService_AlreadyExist() throws InstanceAlreadyExistsException {
+    void addService_AlreadyExist() {
         Service payment1=new PaymentService("Paypal");
-        serviceFacade.addService(payment1);
-        Exception exception = assertThrows(Exception.class, () -> serviceFacade.addService(payment1));
-        assertEquals("This service already exist", exception.getMessage());
+        externalServices.addService(payment1);
+        ResponseEntity<String> result=externalServices.addService(payment1);
+        assertEquals(new ResponseEntity<>("This service already exist", HttpStatus.BAD_REQUEST),result);
     }
 
     @Test
-    void replaceService_Success() throws InstanceAlreadyExistsException {
+    void replaceService_Success() {
         Service delivery1=new DeliveryService("Flex");
         Service delivery2=new DeliveryService("Parcel");
-        serviceFacade.addService(delivery1);
-        boolean result=serviceFacade.replaceService(delivery2,delivery1);
-        assertEquals(result,true);
+        externalServices.addService(delivery1);
+        ResponseEntity<String> result=externalServices.replaceService(delivery2,delivery1);
+        assertEquals(new ResponseEntity<>("Success replacing external service", HttpStatus.OK),result);
     }
 
     @Test
     void replaceService_NotExistOld() {
         Service delivery1=new DeliveryService("Flex");
         Service delivery2=new DeliveryService("Parcel");
-        Exception exception = assertThrows(Exception.class, () -> serviceFacade.replaceService(delivery2,delivery1));
-        assertEquals("Service is not exist", exception.getMessage());
+        ResponseEntity<String> result=externalServices.replaceService(delivery2,delivery1);
+        assertEquals(new ResponseEntity<>("Service is not exist", HttpStatus.BAD_REQUEST),result);
     }
 
     @Test
-    void replaceService_AlreadyExistNew() throws InstanceAlreadyExistsException {
+    void replaceService_AlreadyExistNew() {
         Service delivery1=new DeliveryService("Flex");
         Service delivery2=new DeliveryService("Parcel");
-        serviceFacade.addService(delivery1);
-        serviceFacade.addService(delivery2);
-        Exception exception = assertThrows(Exception.class, () -> serviceFacade.replaceService(delivery2,delivery1));
-        assertEquals("Service is exist (no need to replace)", exception.getMessage());
+        externalServices.addService(delivery1);
+        externalServices.addService(delivery2);
+        ResponseEntity<String> result=externalServices.replaceService(delivery2,delivery1);
+        assertEquals(new ResponseEntity<>("Service is exist (no need to replace)", HttpStatus.BAD_REQUEST),result);
     }
 
     @Test
-    void changeServiceName_Success() throws InstanceAlreadyExistsException {
+    void changeServiceName_Success() {
         Service payment1=new PaymentService("Paypal");
-        serviceFacade.addService(payment1);
-        boolean result=serviceFacade.changeServiceName(payment1,"Paypal1");
-        assertEquals(result,true);
+        externalServices.addService(payment1);
+        ResponseEntity<String> result=externalServices.changeServiceName(payment1,"Paypal1");
+        assertEquals(new ResponseEntity<>("Success changing external service name", HttpStatus.OK),result);
     }
 
     @Test
     void changeServiceName_NotExist() {
         Service payment1=new PaymentService("Paypal");
-        Exception exception = assertThrows(Exception.class, () -> serviceFacade.changeServiceName(payment1,"Paypal1"));
-        assertEquals("Service is not exist", exception.getMessage());
+        ResponseEntity<String> result=externalServices.changeServiceName(payment1,"Paypal1");
+        assertEquals(new ResponseEntity<>("Service is not exist", HttpStatus.BAD_REQUEST),result);
     }
 
     @Test
-    void makingPayment_Success() throws InstanceAlreadyExistsException {
+    void makingPayment_Success() {
         Service payment1=new PaymentService("Paypal");
-        serviceFacade.addService(payment1);
-        boolean result=serviceFacade.makePayment("Paypal",100);
-        assertEquals(result,true);
+        externalServices.addService(payment1);
+        ResponseEntity<String> result=externalServices.makePayment("Paypal",100);
+        assertEquals(new ResponseEntity<>("Success making payment", HttpStatus.OK),result);
     }
 
     @Test
     void makingPayment_ServiceNotExist() {
         Service payment1=new PaymentService("Paypal");
-        Exception exception = assertThrows(Exception.class, () -> serviceFacade.makePayment("Paypal",100));
-        assertEquals("Service is not exist", exception.getMessage());
+        ResponseEntity<String> result=externalServices.makePayment("Paypal",100);
+        assertEquals(new ResponseEntity<>("Service is not exist", HttpStatus.BAD_REQUEST),result);
     }
 
     @Test
-    void makingPayment_InvalidAmount() throws InstanceAlreadyExistsException {
+    void makingPayment_InvalidAmount() {
         Service payment1=new PaymentService("Paypal");
-        serviceFacade.addService(payment1);
-        Exception exception = assertThrows(Exception.class, () -> serviceFacade.makePayment("Paypal",-100));
-        assertEquals("Payment authorization failed", exception.getMessage());
+        externalServices.addService(payment1);
+        ResponseEntity<String> result=externalServices.makePayment("Paypal",-100);
+        assertEquals(new ResponseEntity<>("Payment authorization failed", HttpStatus.BAD_REQUEST),result);
     }
 
     @Test
-    void makingDelivery_Success() throws InstanceAlreadyExistsException {
+    void makingDelivery_Success() {
         Service delivery1=new DeliveryService("Parcel");
-        serviceFacade.addService(delivery1);
-        boolean result=serviceFacade.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704");
-        assertEquals(result,true);
+        externalServices.addService(delivery1);
+        ResponseEntity<String> result=externalServices.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704");
+        assertEquals(new ResponseEntity<>("Success making delivery", HttpStatus.OK),result);
     }
 
     @Test
     void makingDelivery_ServiceNotExist() {
         Service delivery1=new DeliveryService("Parcel");
-        Exception exception = assertThrows(Exception.class, () -> serviceFacade.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704"));
-        assertEquals("Service is not exist", exception.getMessage());
+        ResponseEntity<String> result=externalServices.makeDelivery("Parcel","123 Main St, Springfield, IL, 62704");
+        assertEquals(new ResponseEntity<>("Service is not exist", HttpStatus.BAD_REQUEST),result);
     }
 
     @Test
-    void makingDelivery_InvalidAddress() throws InstanceAlreadyExistsException {
+    void makingDelivery_InvalidAddress() {
         Service delivery1=new DeliveryService("Parcel");
-        serviceFacade.addService(delivery1);
-        Exception exception = assertThrows(Exception.class, () -> serviceFacade.makeDelivery("Parcel","Invalid Address"));
-        assertEquals("Delivery authorization failed", exception.getMessage());
+        externalServices.addService(delivery1);
+        ResponseEntity<String> result=externalServices.makeDelivery("Parcel","Invalid Address");
+        assertEquals(new ResponseEntity<>("Delivery authorization failed", HttpStatus.BAD_REQUEST),result);
     }
 
 

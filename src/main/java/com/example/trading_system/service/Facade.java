@@ -3,8 +3,10 @@ package com.example.trading_system.service;
 import com.example.trading_system.domain.externalservices.Service;
 import com.example.trading_system.domain.externalservices.ServiceFacade;
 import com.example.trading_system.domain.externalservices.ServiceFacadeImp;
+import com.example.trading_system.domain.users.RoleState;
 import com.example.trading_system.domain.users.UserFacade;
 import com.example.trading_system.domain.users.UserFacadeImp;
+import org.springframework.http.ResponseEntity;
 
 import javax.management.InstanceAlreadyExistsException;
 
@@ -23,24 +25,24 @@ public class Facade {
         userService=new UserServiceImp(userFacade);
     }
 
-    public boolean addService(Service service) throws InstanceAlreadyExistsException {
-        return serviceFacade.addService(service);
+    public ResponseEntity<String> addService(Service service) {
+        return externalServices.addService(service);
     }
 
-    public boolean replaceService(Service newService, Service oldService){
-        return serviceFacade.replaceService(newService,oldService);
+    public ResponseEntity<String> replaceService(Service newService, Service oldService){
+        return externalServices.replaceService(newService,oldService);
     }
 
-    public boolean changeServiceName(Service serviceToChangeAt,String newName){
-        return serviceFacade.changeServiceName(serviceToChangeAt,newName);
+    public ResponseEntity<String> changeServiceName(Service serviceToChangeAt,String newName){
+        return externalServices.changeServiceName(serviceToChangeAt,newName);
     }
 
-    public boolean makePayment(String serviceName,double amount){
-        return serviceFacade.makePayment(serviceName,amount);
+    public ResponseEntity<String> makePayment(String serviceName,double amount){
+        return externalServices.makePayment(serviceName,amount);
     }
 
-    public boolean makeDelivery(String serviceName,String address){
-        return serviceFacade.makeDelivery(serviceName,address);
+    public ResponseEntity<String> makeDelivery(String serviceName,String address){
+        return externalServices.makeDelivery(serviceName,address);
     }
 
 }

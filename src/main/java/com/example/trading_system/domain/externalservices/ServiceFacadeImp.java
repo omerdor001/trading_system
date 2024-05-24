@@ -12,16 +12,15 @@ public class ServiceFacadeImp implements ServiceFacade {
     }
 
     @Override
-    public boolean addService(Service service) throws InstanceAlreadyExistsException {
+    public void addService(Service service) throws InstanceAlreadyExistsException {
         if (services.contains(service)){
             throw new InstanceAlreadyExistsException("This service already exist");
         }
         services.add(service);
-        return true;
     }
 
     @Override
-    public boolean replaceService(Service newService, Service oldService) {
+    public void replaceService(Service newService, Service oldService) {
         if (!services.contains(oldService)){
             throw new NoSuchElementException("Service is not exist");
         }
@@ -30,16 +29,14 @@ public class ServiceFacadeImp implements ServiceFacade {
         }
         services.remove(oldService);
         services.add(newService);
-        return true;
     }
 
     @Override
-    public boolean changeServiceName(Service serviceToChangeAt,String newName) {
+    public void changeServiceName(Service serviceToChangeAt,String newName) {
         if (!services.contains(serviceToChangeAt)){
             throw new NoSuchElementException("Service is not exist");
         }
         serviceToChangeAt.setServiceName(newName);
-        return true;
     }
 
     public boolean findServiceByName(String serviceName){
@@ -51,22 +48,20 @@ public class ServiceFacadeImp implements ServiceFacade {
     }
 
     @Override
-    public boolean makePayment(String serviceName, double amount) {
+    public void makePayment(String serviceName, double amount) {
         if (!findServiceByName(serviceName)){
             throw new NoSuchElementException("Service is not exist");
         }
         PaymentServiceProxy paymentService = new PaymentServiceProxy(serviceName);
         paymentService.processPayment(amount);
-        return true;
     }
 
     @Override
-    public boolean makeDelivery(String serviceName, String address) {
+    public void makeDelivery(String serviceName, String address) {
         if (!findServiceByName(serviceName)){
             throw new NoSuchElementException("Service is not exist");
         }
         DeliveryServiceProxy deliveryServiceProxy = new DeliveryServiceProxy(serviceName);
         deliveryServiceProxy.processDelivery(address);
-        return true;
     }
 }
