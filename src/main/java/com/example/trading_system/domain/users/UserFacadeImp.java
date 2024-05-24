@@ -1,6 +1,5 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.Store;
 import com.example.trading_system.domain.stores.StorePolicy;
@@ -24,32 +23,43 @@ public class UserFacadeImp implements UserFacade{
         this.visitors = new HashMap<>();
     }
 
-
     public HashMap<Integer, Visitor> getVisitors() {
         return visitors;
     }
-
     public HashMap<String, Registered> getRegisters() {
         return registers;
     }
 
 
     @Override
-    public void createVisitor(int id) {
+    public void enter(int id) {
         Visitor visitor=new Visitor(id);
         visitors.put(id,visitor);
     }
 
     @Override
-    public void exit() {
-
+    public void exit(int id) throws Exception {
+        if(visitors.containsKey(id)){
+            visitors.remove(id);
+        }
+        else{
+            throw new Exception("No such visitor with id- " + id);
+        }
     }
 
+    @Override
+    public void exit(String username) throws Exception {
+        if(registers.containsKey(username)){
+            registers.remove(username);
+        }
+        else{
+            throw new Exception("No such user with username- " + username);
+        }
+    }
 
     @Override
     public void registration(int id, String username, String encryption, LocalDate birthdate) throws Exception {
         registerChecks(id, username, encryption, birthdate);
-        Cart shopping_cart = new Cart();
         Registered newUser = new Registered(id,username,encryption, birthdate);
         registers.put(username,newUser);
         visitors.remove(id);
@@ -67,17 +77,6 @@ public class UserFacadeImp implements UserFacade{
 
     @Override
     public void login() {
-
-    }
-
-
-    @Override
-    public void addUser(User user) {
-
-    }
-
-    @Override
-    public void removeUser(User user) {
 
     }
 

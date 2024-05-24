@@ -7,6 +7,7 @@ import com.example.trading_system.domain.users.UserFacade;
 import com.example.trading_system.domain.users.UserFacadeImp;
 
 import javax.management.InstanceAlreadyExistsException;
+import java.time.LocalDate;
 
 public class Facade {
     public ServiceFacade serviceFacade;
@@ -24,10 +25,31 @@ public class Facade {
         userService=new UserServiceImp(userFacade);
     }
 
-    public void enter(){
-        userService.enter(counter_user);
+    public String enter(){
+        String token = userService.enter(counter_user);
         counter_user++;
         //TODO Show UI
+        return token;
+    }
+
+    public void exit(String token, int id) throws Exception {
+        userService.exit(id);
+        Security.makeTokenExpire(token);
+    }
+
+    public void exit(String token, String username) throws Exception {
+        userService.exit(username);
+        Security.makeTokenExpire(token);
+    }
+
+    public boolean registration(String token, int id, String username, String password, LocalDate birthdate) throws Exception {
+        if(Security.validateToken(token,"v"+id)){
+            userFacade.registration(id,username,password,birthdate);
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public boolean addService(Service service) throws InstanceAlreadyExistsException {
@@ -49,5 +71,4 @@ public class Facade {
     public boolean makeDelivery(String serviceName,String address){
         return serviceFacade.makeDelivery(serviceName,address);
     }
-
 }

@@ -17,11 +17,23 @@ public class UserServiceImp implements UserService {
         this.facade = facade;
     }
 
-    public void enter(int id){
+    public String enter(int id){
         logger.info("Trying enter to system as a visitor , with id : {}", id);
-        facade.createVisitor(id);
-        Security.generateToken("v"+id);
+        facade.enter(id);
         logger.info("Finish enter to system as a visitor , with id : {}", id);
+        return Security.generateToken("v"+id);
+    }
+
+    public void exit(int id) throws Exception {
+        logger.info("Trying exit to system as a visitor , with id : {}", id);
+        facade.exit(id);
+        logger.info("Finish exit to system as a visitor , with id : {}", id);
+    }
+
+    public void exit(String username) throws Exception {
+        logger.info("Trying exit to system as a user , with username: {}", username);
+        facade.exit(username);
+        logger.info("Finish exit to system as a user , with username : {}", username);
     }
 
     @Override
