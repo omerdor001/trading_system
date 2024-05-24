@@ -20,4 +20,8 @@ public interface UserFacade {
     boolean sendNotification(User sender, User receiver, String content);
     void addToCart(int id, int productId, String storeName, int quantity);
     void openStore(String username, String storeName, String description, StorePolicy policy);
+
+    String visitorViewCart(int id);
+
+    String registerdViewCart(String username);
 }
