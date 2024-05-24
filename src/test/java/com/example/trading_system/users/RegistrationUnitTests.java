@@ -5,10 +5,8 @@ import com.example.trading_system.domain.users.Visitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
-import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class RegistrationUnitTests {
     private UserFacadeImp userFacade;
@@ -30,7 +28,7 @@ class RegistrationUnitTests {
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
 
         assertDoesNotThrow(() -> userFacade.registration(id, username, encryption, birthdate));
-        assertTrue(userFacade.getRegisters().containsKey(username));
+        assertTrue(userFacade.getRegistered().containsKey(username));
         assertFalse(userFacade.getVisitors().containsKey(id));
     }
 
