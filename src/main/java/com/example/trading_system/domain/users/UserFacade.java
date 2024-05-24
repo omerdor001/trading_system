@@ -8,7 +8,7 @@ import java.util.HashMap;
 public interface UserFacade {
 
     public HashMap<Integer, Visitor> getVisitors();
-    public HashMap<String, Registered> getRegisters();
+    public HashMap<String, Registered> getRegistered();
     void exit();
     void enter(int id);
     void exit(int id) throws Exception;
@@ -26,4 +26,6 @@ public interface UserFacade {
 
     String getUserPassword(String username);
     public void removeVisitor(int id);
+
+    void createVisitor(int id);
 }

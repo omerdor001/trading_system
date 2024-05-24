@@ -27,13 +27,13 @@ public class UserServiceImp implements UserService {
 
     public void exit(int id) throws Exception {
         logger.info("Trying exit to system as a visitor , with id : {}", id);
-        facade.exit(id);
+        userFacade.exit(id);
         logger.info("Finish exit to system as a visitor , with id : {}", id);
     }
 
     public void exit(String username) throws Exception {
         logger.info("Trying exit to system as a user , with username: {}", username);
-        facade.exit(username);
+        userFacade.exit(username);
         logger.info("Finish exit to system as a user , with username : {}", username);
     }
 

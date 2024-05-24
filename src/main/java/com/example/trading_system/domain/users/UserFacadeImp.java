@@ -25,13 +25,19 @@ public class UserFacadeImp implements UserFacade{
         return visitors;
     }
 
+    @Override
     public HashMap<String, Registered> getRegistered() {
         return registered;
     }
 
+
+    @Override
+    public void createVisitor(int id) {
+        Visitor visitor=new Visitor(id);
+        visitors.put(id,visitor);
+    }
     @Override
     public void exit() {
-
     }
 
 
@@ -53,8 +59,8 @@ public class UserFacadeImp implements UserFacade{
 
     @Override
     public void exit(String username) throws Exception {
-        if(registers.containsKey(username)){
-            registers.remove(username);
+        if(registered.containsKey(username)){
+            registered.remove(username);
         }
         else{
             throw new Exception("No such user with username- " + username);

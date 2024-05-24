@@ -116,15 +116,6 @@ public class Facade {
             return "";
     }
 
-    public boolean registration(String token, int id, String username, String password, LocalDate birthdate) throws Exception {
-        if(Security.validateToken(token,"v"+id)){
-            userFacade.registration(id,username,password,birthdate);
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
 }
-}
+
 
