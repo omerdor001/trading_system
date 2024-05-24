@@ -31,6 +31,11 @@ public class UserFacadeImp implements UserFacade{
         return registers;
     }
 
+    @Override
+    public void exit() {
+
+    }
+
 
     @Override
     public void enter(int id) {
