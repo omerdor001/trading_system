@@ -21,7 +21,6 @@ public class UserFacadeImp implements UserFacade{
         this.visitors = new HashMap<>();
     }
 
-
     public HashMap<Integer, Visitor> getVisitors() {
         return visitors;
     }
@@ -30,16 +29,36 @@ public class UserFacadeImp implements UserFacade{
         return registered;
     }
 
+    @Override
+    public void exit() {
+
+    }
+
 
     @Override
-    public void createVisitor(int id) {
+    public void enter(int id) {
         Visitor visitor=new Visitor(id);
         visitors.put(id,visitor);
     }
 
     @Override
-    public void exit() {
+    public void exit(int id) throws Exception {
+        if(visitors.containsKey(id)){
+            visitors.remove(id);
+        }
+        else{
+            throw new Exception("No such visitor with id- " + id);
+        }
+    }
 
+    @Override
+    public void exit(String username) throws Exception {
+        if(registers.containsKey(username)){
+            registers.remove(username);
+        }
+        else{
+            throw new Exception("No such user with username- " + username);
+        }
     }
 
 
@@ -68,7 +87,6 @@ public class UserFacadeImp implements UserFacade{
             throw new RuntimeException("No such user " + username);
         u.login();
     }
-
 
     @Override
     public void addUser(User user) {

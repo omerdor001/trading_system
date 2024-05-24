@@ -1,9 +1,11 @@
 package com.example.trading_system.service;
 
 import com.example.trading_system.domain.externalservices.Service;
+import org.springframework.http.ResponseEntity;
 
 public interface ExternalServices {
-    public boolean addService(Service service);
+    boolean addService(Service service);
+    ResponseEntity<String> addServiceNew(Service service);
 
     public boolean replaceService(Service newService, Service oldService);
 

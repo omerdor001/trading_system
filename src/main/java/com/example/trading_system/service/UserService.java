@@ -12,4 +12,6 @@ public interface UserService {
 
     boolean login(int id, String username, String password);
 
+    void exit(int id) throws Exception;
+    void exit(String username) throws Exception;
 }
