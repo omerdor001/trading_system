@@ -97,12 +97,47 @@ public class UserFacadeImp implements UserFacade{
         u.login();
     }
 
+    public void logout(String username) {
+        User u = registered.get(username);
+        if (u == null)
+            throw new RuntimeException("No such user " + username);
+        u.logout();
+    }
+
+
     @Override
     public boolean sendNotification(User sender, User receiver, String content){
         String notification = sender.sendNotification(receiver.getId(), content);
         receiver.receiveNotification(notification);
         return receiver.getLogged();
         //TODO return something to show the notification if receiver is logged in - maybe boolean if logged in
+    }
+
+    @Override
+    public void saveUserCart(String username) {
+        registered.get(username).getShopping_cart().saveCart();
+    }
+
+    @Override
+    public void saveUserCart(int id, int productId, String storeName, int quantity) {
+        int quntityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
+        int quantityInShoppingBag = visitors.get(id).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
+        if(quantity+quantityInShoppingBag > quntityInStore)
+        {
+            logger.error("Product quantity is too low");
+            throw new RuntimeException("Product quantity is too low");
+        }
+        if(storeName == null){
+            logger.error("Store name is null");
+            throw new RuntimeException("Store name is null");
+        }
+        if(marketFacade.getStores().containsKey(storeName)){
+            logger.error("Store with name " + storeName + " already exists");
+            throw new RuntimeException("Store with name " + storeName + " already exists");
+        }
+        if(visitors.containsKey(id)){
+            visitors.get(id).getShopping_cart().addProductToCart(productId,quantity,storeName);
+        }
     }
 
     @Override
@@ -141,7 +176,7 @@ public class UserFacadeImp implements UserFacade{
         }
     }
     @Override
-    public void registerdAddToCart(String username, int productId, String storeName, int quantity) {
+    public void registeredAddToCart(String username, int productId, String storeName, int quantity) {
 
         if(storeName == null){
             logger.error("Store name is null");
@@ -171,7 +206,7 @@ public class UserFacadeImp implements UserFacade{
         }
     }
     @Override
-    public void registerdRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception {
+    public void registeredRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception {
         if(storeName == null){
             logger.error("Store name is null");
             throw new RuntimeException("Store name is null");
@@ -225,4 +260,6 @@ public class UserFacadeImp implements UserFacade{
     public void removeVisitor(int id) {
         visitors.remove(id);
     }
+
+
 }

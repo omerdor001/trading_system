@@ -37,6 +37,41 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public boolean login(int id, String username, String password) {
+        logger.info("Trying to login user: {}", username);
+        try{
+            String encrypted_pass = userFacade.getUserPassword(username);
+            if (Security.checkPassword(password, encrypted_pass)) {
+                userFacade.login(username);
+                userFacade.removeVisitor(id);
+            }
+            else
+                throw new RuntimeException("Wrong password");
+            logger.info("User: {} logged in", username);
+            return true;
+        }catch (Exception e){
+            logger.error("Error occurred : {} , Failed login user: {}", e.getMessage(), username);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean logout(int id, String username) {
+        logger.info("Trying to logout user: {}", username);
+        try{
+            userFacade.saveUserCart(username);
+            userFacade.logout(username);
+            userFacade.enter(id);
+            logger.info("User: {} logged out", username);
+            return true;
+        }catch (Exception e){
+            logger.error("Error occurred : {} , Failed logging out user: {}", e.getMessage(), username);
+            return false;
+        }
+    }
+
+
+    @Override
     public boolean register(int id, String username, String password, LocalDate birthdate) {
         logger.info("Trying registering a new user: {}", username);
         try {
@@ -81,7 +116,7 @@ public class UserServiceImp implements UserService {
         boolean result;
         logger.info("Trying adding to cart product with id: {}", productId);
         try {
-            userFacade.registerdAddToCart(username, productId, storeName, quantity);
+            userFacade.registeredAddToCart(username, productId, storeName, quantity);
         }catch (Exception e){
             logger.error("Error occurred : {} , Failed Trying adding to cart  product with id: {}", e.getMessage(), productId);
             return false;
@@ -95,7 +130,7 @@ public class UserServiceImp implements UserService {
         boolean result;
         logger.info("Trying removing from cart product with id: {}", productId);
         try {
-            userFacade.registerdRemoveFromCart(username, productId, storeName, quantity);
+            userFacade.registeredRemoveFromCart(username, productId, storeName, quantity);
         }catch (Exception e){
             logger.error("Error occurred : {} , Failed Trying removing to cart  product with id: {}", e.getMessage(), productId);
             return false;
@@ -117,23 +152,7 @@ public class UserServiceImp implements UserService {
         return true;
     }
 
-    @Override
-    public boolean login(int id, String username, String password) {
-        logger.info("Trying to login user: {}", username);
-        try{
-            String encrypted_pass = userFacade.getUserPassword(username);
-            if (Security.checkPassword(password, encrypted_pass)) {
-                userFacade.login(username);
-                userFacade.removeVisitor(id);
-            }
-            else
-                throw new RuntimeException("Wrong password");
-            logger.info("User: {} logged in", username);
-            return true;
-        }catch (Exception e){
-            logger.error("Error occurred : {} , Failed login user: {}", e.getMessage(), username);
-            return false;
-        }
-    }
+
+
 }
 
