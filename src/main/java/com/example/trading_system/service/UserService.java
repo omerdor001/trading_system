@@ -6,7 +6,6 @@ import java.time.LocalDate;
 
 public interface UserService {
     String enter(int id);
-    boolean registration(int id, String username, String password, LocalDate birthdate);
     boolean visitorAddToCart(int id, int productId, String storeName, int quantity);
 
     boolean visitorRemoveFromCart(int id, int productId, String storeName, int quantity);
