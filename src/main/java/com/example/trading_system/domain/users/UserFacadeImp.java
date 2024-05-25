@@ -265,14 +265,32 @@ public class UserFacadeImp implements UserFacade{
         if(newManagerUser.isOwner(store_name_id)){
             throw new IllegalAccessException("User cannot be owner of this store");
         }
-        newManagerUser.addManagerRole(appoint,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+        newManagerUser.addManagerRole(appoint,store_name_id);
         newManagerUser.setPermissionsToManager(store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+
     }
 
-
-
-
-
+    @Override
+    public void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
+        if(registered.containsKey(userId)){
+            throw new NoSuchElementException("No user called "+userId+ "exist");
+        }
+        if(!registered.containsKey(managerToEdit)){
+            throw new NoSuchElementException("No user called "+managerToEdit+ "exist");
+        }
+        Registered appointUser=registered.get(userId);
+        Registered newManagerUser=registered.get(managerToEdit);
+        if(appointUser.isOwner(storeNameId)){
+            throw new IllegalAccessException("User cannot be owner of this store");
+        }
+        if(newManagerUser.isManager(storeNameId)){
+            throw new IllegalAccessException("User already Manager of this store");
+        }
+        if(newManagerUser.getRoleByStoreId(storeNameId).getAppointedById().equals(userId)){
+            throw new IllegalAccessException("Owner cant edit permissions to manager that he/she didn't appointed");
+        }
+        newManagerUser.setPermissionsToManager(storeNameId,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+    }
 
 
     @Override

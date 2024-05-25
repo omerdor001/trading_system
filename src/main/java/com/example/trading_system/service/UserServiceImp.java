@@ -184,5 +184,18 @@ public class UserServiceImp implements UserService {
         logger.info("Finished appointing manager : {} to store : {}", newManager,store_name_id);
         return new ResponseEntity<>("Success appointing manager", HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+        logger.info("{} is Trying to edit permission for manager : {} in store : {}", userId, managerToEdit,storeNameId);
+        try {
+            userFacade.editPermissionForManager(userId,managerToEdit,storeNameId,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while {} is trying to edit permission for manager : {} : in store : {}", e.getMessage(),userId ,managerToEdit,storeNameId);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished edit permission to manager : {}  in store : {}", managerToEdit,storeNameId);
+        return new ResponseEntity<>("Success edit permission for manager ", HttpStatus.OK);
+    }
 }
 

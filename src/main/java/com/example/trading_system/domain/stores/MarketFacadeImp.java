@@ -12,7 +12,8 @@ import java.util.List;
 
 public class MarketFacadeImp implements MarketFacade{
     private HashMap<String, Store> stores;
-    private UserFacade userFacade;
+        private UserFacade userFacade;
+
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
 
 
@@ -30,6 +31,15 @@ public class MarketFacadeImp implements MarketFacade{
     public void addStore(Store store) {
         stores.put(store.getName_id(), store);
     }
+    public void deactivateStore(String storeId){
+        Store store = stores.get(storeId);
+        if(store!=null){
+            if(store.isActive()){
+                store.setActive(false);
+            }
+            else throw new RuntimeException("Can't deactivate store that already not active");
+        }
+    }
 
     public String getAllStores() {
         StringBuilder sb = new StringBuilder();
@@ -46,7 +56,11 @@ public class MarketFacadeImp implements MarketFacade{
     }
 
     public String getStoreProducts(String store_name) {
-        return stores.get(store_name).toString();
+       if(stores.get(store_name).isActive()){
+           return stores.get(store_name).toString();
+       }
+       else
+
     }
 
     public String getProductInfo(String store_name, int product_id) {

@@ -1,12 +1,11 @@
 package com.example.trading_system.domain.stores;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Store {
@@ -14,6 +13,11 @@ public class Store {
     private String description;
     private HashMap<Integer, Product> products;
     private StorePolicy storePolicy;
+    @Getter
+    @Setter
+    private boolean isActive;
+
+    private StoreSalesHistory salesHistory;
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
 
     public Store(String name_id, String description, StorePolicy storePolicy) {
@@ -21,6 +25,8 @@ public class Store {
         this.description = description;
         this.storePolicy = storePolicy;
         this.products = new HashMap<>();
+        this.isActive = true;
+        this.salesHistory = new StoreSalesHistory();
     }
 
     public String getName_id() {
@@ -150,6 +156,9 @@ public class Store {
     public void setCategory(int productId,Category category) {
         Product product=getProduct(productId);
         product.setCategory(category);
+    }
+    public  List<Purchase> getHistoryPurchasesByCustomer(int customerId){
+        return salesHistory.getPurchasesByCustomer(customerId);
     }
 
 

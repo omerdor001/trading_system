@@ -34,6 +34,7 @@ public abstract class RoleState {
     private void removeDiscountPolicy(int storeId,int productId) {}
 
     private void editDiscountPolicy(int storeId,int productId) {}
+    public void requestInformationAboutRolesInStore(int storeId)throws IllegalAccessException{throw new IllegalArgumentException("");}
 
     public abstract void addProduct(String username,  int product_id, String store_name, String product_name, String product_description,
                                     double product_price, int product_quantity, double rating, Category category, List<String> keyWords) throws IllegalAccessException;

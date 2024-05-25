@@ -55,5 +55,7 @@ public class Owner extends RoleState{
     @Override
     public void setEditDiscountPolicy(boolean editDiscountPolicy) {}
 
+    void requestInftomationAboutRolesInStore(){}
+
 
 }

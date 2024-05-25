@@ -90,7 +90,7 @@ public class Registered extends User {
         return roles;
     }
 
-    public void addManagerRole(String appoint, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy){
+    public void addManagerRole(String appoint, String store_name_id){
         Role manager=new Role(store_name_id,appoint);
         manager.setRoleState(new Manager());
         getRoles().add(manager);

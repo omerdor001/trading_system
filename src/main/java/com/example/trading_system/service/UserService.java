@@ -29,4 +29,6 @@ public interface UserService {
     ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) ;
     void exit(int id) throws Exception;
     void exit(String username) throws Exception;
+
+    ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 }

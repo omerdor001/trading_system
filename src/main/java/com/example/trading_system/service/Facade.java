@@ -118,6 +118,10 @@ public class Facade {
     public ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
         return userService.appointManager(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
     }
+    ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy){
+        return userService.editPermissionForManager(userId, managerToEdit,storeNameId,  watch,  editSupply,  editBuyPolicy,  editDiscountPolicy);
+    }
+
 
     public String login(int id, String username, String password){
         if (userService.login(id, username, password)){

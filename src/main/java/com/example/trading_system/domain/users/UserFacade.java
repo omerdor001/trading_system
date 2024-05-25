@@ -35,7 +35,11 @@ public interface UserFacade {
     void suggestManage(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException;
     void approveManage(String newManager,String store_name_id);
     void appointManager(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException;
-
+    /**
+     * @param userId  is the current user that do the update
+     * @param managerToEdit  is the manager that the update will affect
+     **/
+    void editPermissionForManager(String userId, String managerToEdit,String storeNameId, boolean watch,boolean editSupply,boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
     String getUserPassword(String username);
     void removeVisitor(int id);
 
