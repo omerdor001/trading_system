@@ -19,6 +19,8 @@ public interface UserFacade {
 
 
     void login(String username);
+    void logout(String username);
+
 
     void addUser(User user);
     void removeUser(User user);
@@ -29,9 +31,9 @@ public interface UserFacade {
 
     void visitorRemoveFromCart(int id, int productId, String storeName, int quantity);
 
-    void registerdAddToCart(String username, int productId, String storeName, int quantity);
+    void registeredAddToCart(String username, int productId, String storeName, int quantity);
 
-    void registerdRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception;
+    void registeredRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception;
     void openStore(String username, String storeName, String description, StorePolicy policy);
 
     String getUserPassword(String username);

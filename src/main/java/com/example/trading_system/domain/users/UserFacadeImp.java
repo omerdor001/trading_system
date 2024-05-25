@@ -94,6 +94,13 @@ public class UserFacadeImp implements UserFacade{
         u.login();
     }
 
+    public void logout(String username) {
+        User u = registered.get(username);
+        if (u == null)
+            throw new RuntimeException("No such user " + username);
+        u.logout();
+    }
+
     @Override
     public void addUser(User user) {
 
@@ -148,7 +155,7 @@ public class UserFacadeImp implements UserFacade{
         }
     }
     @Override
-    public void registerdAddToCart(String username, int productId, String storeName, int quantity) {
+    public void registeredAddToCart(String username, int productId, String storeName, int quantity) {
 
         if(storeName == null){
             logger.error("Store name is null");
@@ -178,7 +185,7 @@ public class UserFacadeImp implements UserFacade{
         }
     }
     @Override
-    public void registerdRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception {
+    public void registeredRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception {
         if(storeName == null){
             logger.error("Store name is null");
             throw new RuntimeException("Store name is null");

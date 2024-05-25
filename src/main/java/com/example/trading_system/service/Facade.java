@@ -40,11 +40,12 @@ public class Facade {
         return token;
     }
 
+
+    //TODO: Do we even need that if we have logout?
     public void exit(String token, int id) throws Exception {
         userService.exit(id);
         Security.makeTokenExpire(token);
     }
-
     public void exit(String token, String username) throws Exception {
         userService.exit(username);
         Security.makeTokenExpire(token);
@@ -114,6 +115,11 @@ public class Facade {
         }
         else
             return "";
+    }
+
+    public void logout(int id, String userName){
+        userService.logout(id, userName);
+//        Security.makeTokenExpire(token);
     }
 
 }

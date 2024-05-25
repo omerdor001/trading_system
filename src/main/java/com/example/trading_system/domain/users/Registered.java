@@ -40,7 +40,6 @@ public class Registered extends User {
         this.notifications = new LinkedList<>();
     }
 
-    public void logout() {}
     public void performBuying(Cart shopping_cart) {}
     public boolean approveAppointment(int userId) { return false; }
     public void searchProduct(int productId) {}
@@ -62,7 +61,16 @@ public class Registered extends User {
 
     @Override
     public void login(){
+        if (getLogged())
+            throw new RuntimeException("User already logged in");
         this.isLogged = true;
+    }
+
+    @Override
+    public void logout(){
+        if (getLogged())
+            throw new RuntimeException("User already logged out");
+        this.isLogged = false;
     }
 
     @Override
