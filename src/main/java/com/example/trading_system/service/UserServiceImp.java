@@ -19,10 +19,9 @@ public class UserServiceImp implements UserService {
     public String enter(int id){
         logger.info("Trying enter to system as a visitor , with id : {}", id);
         userFacade.createVisitor(id);
-        Security.generateToken("v"+id);
-//         facade.enter(id);
+        String token = Security.generateToken("v"+id);
         logger.info("Finish enter to system as a visitor , with id : {}", id);
-        return Security.generateToken("v"+id);
+        return token;
     }
 
     public void exit(int id) throws Exception {
@@ -73,12 +72,10 @@ public class UserServiceImp implements UserService {
 
 
     @Override
-    public boolean registration(int id, String username, String password, LocalDate birthdate) {
-        boolean result;
+    public boolean register(int id, String username, String password, LocalDate birthdate) {
         logger.info("Trying registering a new user: {}", username);
         try {
-            String encrypted_pass = Security.encrypt(password);
-            userFacade.registration(id, username, encrypted_pass, birthdate);
+            userFacade.register(id, username, password, birthdate);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed trying registering user: {}", e.getMessage(), username);
             return false;
@@ -155,10 +152,7 @@ public class UserServiceImp implements UserService {
         return true;
     }
 
-    @Override
-    public boolean register(int id, String username, String password, LocalDate birthdate) {
-        return false;
-    }
+
 
 }
 

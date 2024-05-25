@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 
 public interface UserFacade {
+
     void createVisitor(int id);
 
     HashMap<Integer, Visitor> getVisitors();
