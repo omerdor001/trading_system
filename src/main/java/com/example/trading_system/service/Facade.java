@@ -107,6 +107,18 @@ public class Facade {
         return marketService.setCategory(username,store_name_id,productId,category);
     }
 
+    public ResponseEntity<String> suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+        return userService.suggestManage(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+    }
+
+    public ResponseEntity<String> approveManager(String newManager, String store_name_id) {
+        return userService.approveManage(newManager,store_name_id);
+    }
+
+    public ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+        return userService.appointManager(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+    }
+
     public String login(int id, String username, String password){
         if (userService.login(id, username, password)){
             Security.makeTokenExpire("v" + id);

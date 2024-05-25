@@ -20,8 +20,6 @@ public interface UserFacade {
 
     void login(String username);
 
-    void addUser(User user);
-    void removeUser(User user);
     boolean sendNotification(User sender, User receiver, String content);
 
 
@@ -34,7 +32,11 @@ public interface UserFacade {
     void registerdRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception;
     void openStore(String username, String storeName, String description, StorePolicy policy);
 
+    void suggestManage(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException;
+    void approveManage(String newManager,String store_name_id);
+    void appointManager(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException;
+
     String getUserPassword(String username);
-    public void removeVisitor(int id);
+    void removeVisitor(int id);
 
 }

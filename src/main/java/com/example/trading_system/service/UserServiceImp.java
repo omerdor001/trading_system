@@ -4,6 +4,8 @@ import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.domain.users.UserFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 
@@ -142,6 +144,45 @@ public class UserServiceImp implements UserService {
             logger.error("Error occurred : {} , Failed login user: {}", e.getMessage(), username);
             return false;
         }
+    }
+
+    @Override
+    public ResponseEntity<String> suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+        logger.info("Trying to suggest user : {} to be a manager in store : {}", newManager,store_name_id);
+        try {
+            userFacade.suggestManage(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to suggest the user : {} to be a manager in store : {}", e.getMessage(),appoint,store_name_id);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished suggesting manager : {} to be a manager in store : {}", newManager,store_name_id);
+        return new ResponseEntity<>("Success suggesting manager", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> approveManage(String newManager, String store_name_id) {
+        logger.info("Trying to approve manage to store : {}",store_name_id);
+        try {
+            userFacade.approveManage(newManager,store_name_id);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to approve management to store : {}", e.getMessage(),store_name_id);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished approving manage to store : {}", store_name_id);
+        return new ResponseEntity<>("Success approving manage", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+        logger.info("Trying to appoint manager : {} to store : {}", newManager,store_name_id);
+        try {
+            userFacade.appointManager(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to appoint the user : {} to store : {}", e.getMessage(),appoint,store_name_id);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished appointing manager : {} to store : {}", newManager,store_name_id);
+        return new ResponseEntity<>("Success appointing manager", HttpStatus.OK);
     }
 }
 

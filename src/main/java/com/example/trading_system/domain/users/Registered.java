@@ -1,10 +1,7 @@
 package com.example.trading_system.domain.users;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class Registered extends User {
     private String userName;
@@ -15,18 +12,21 @@ public class Registered extends User {
     private boolean isLogged;
     private List<Role> roles;
     private List<Notification> notifications;
+    private HashMap<String,List<Boolean>> managerToApprove;
+    private List<String> ownerToApprove;
 
     public Registered(int id, String userName, String encrypted_pass, String address, LocalDate birthdate) {
         super(id);
         this.userName = userName; // Can be changed to email
         this.encrypted_pass = encrypted_pass;
-
         this.address = address;
         this.birthdate= birthdate;
         this.isAdmin = false;
         this.isLogged = false;
         this.notifications = new LinkedList<>();
         this.roles=new ArrayList<>();
+        this.managerToApprove=new HashMap<>();
+        this.ownerToApprove=new ArrayList<>();
     }
 
     public Registered(int id, String userName, String encryption, LocalDate birthdate) {
@@ -86,6 +86,24 @@ public class Registered extends User {
         }
     }
 
+    public List<Role> getRoles(){
+        return roles;
+    }
+
+    public void addManagerRole(String appoint, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy){
+        Role manager=new Role(store_name_id,appoint);
+        manager.setRoleState(new Manager());
+        getRoles().add(manager);
+    }
+
+    public void setPermissionsToManager(String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy){
+        Role manager=getRoleByStoreId(store_name_id);
+        manager.getRoleState().setWatch(watch);
+        manager.getRoleState().setEditSupply(editSupply);
+        manager.getRoleState().setEditBuyPolicy(editBuyPolicy);
+        manager.getRoleState().setEditDiscountPolicy(editDiscountPolicy);
+    }
+
     public Role getRoleByStoreId(String store_name_id){
         for (Role role:roles){
             if (role.getStoreId().equals(store_name_id))
@@ -93,6 +111,34 @@ public class Registered extends User {
         }
         throw new NoSuchElementException("User doesn't have permission to this store");
     }
+
+    public boolean isOwner(String store_name_id){
+        if(getRoleByStoreId(store_name_id).getRoleState().isOwner()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean isManager(String store_name_id){
+        if(getRoleByStoreId(store_name_id).getRoleState().isManager()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public void addWaitingAppoint_Manager(String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy){
+        managerToApprove.put(store_name_id,Arrays.asList(watch,editSupply,editBuyPolicy,editDiscountPolicy));
+    }
+
+    public void removeWaitingAppoint_Manager(String store_name_id){
+        managerToApprove.remove(store_name_id);
+    }
+
+
 
 
 

@@ -5,7 +5,7 @@ import com.example.trading_system.domain.stores.Category;
 import java.util.List;
 
 public abstract class RoleState {
-    Role role;
+    protected Role role;
 
     public Role getRole() {
         return role;
@@ -51,4 +51,16 @@ public abstract class RoleState {
     public abstract void setRating(String username,String store_name_id,int productId,int rating) throws IllegalAccessException;
 
     public abstract void setCategory(String username,String store_name_id,int productId,Category category) throws IllegalAccessException;
+
+    public abstract boolean isManager();
+
+    public abstract boolean isOwner();
+
+    public abstract void setWatch(boolean watch);
+
+    public abstract void setEditSupply(boolean editSupply);
+
+    public abstract void setEditBuyPolicy(boolean editBuyPolicy);
+
+    public abstract void setEditDiscountPolicy(boolean editDiscountPolicy);
 }

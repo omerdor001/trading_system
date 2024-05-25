@@ -1,6 +1,7 @@
 package com.example.trading_system.service;
 
 import com.example.trading_system.domain.stores.StorePolicy;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 
@@ -23,6 +24,9 @@ public interface UserService {
 
     boolean login(int id, String username, String password);
 
+    ResponseEntity<String> suggestManage(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy);
+    ResponseEntity<String> approveManage(String newManager,String store_name_id);
+    ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) ;
     void exit(int id) throws Exception;
     void exit(String username) throws Exception;
 }

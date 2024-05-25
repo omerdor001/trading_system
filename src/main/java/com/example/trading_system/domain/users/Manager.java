@@ -10,18 +10,18 @@ public class Manager extends RoleState{
     private boolean editBuyPolicy;
     private boolean editDiscountPolicy;
 
-    public Manager(Role role,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) {
-        this.role=role;
-        this.watch=watch;
-        this.editBuyPolicy=editBuyPolicy;
-        this.editDiscountPolicy=editDiscountPolicy;
-        this.editSupply=editSupply;
+    public Manager() {
+        this.watch=false;
+        this.editBuyPolicy=false;
+        this.editDiscountPolicy=false;
+        this.editSupply=false;
     }
 
     public boolean isWatch() {
         return watch;
     }
 
+    @Override
     public void setWatch(boolean watch) {
         this.watch = watch;
     }
@@ -30,6 +30,7 @@ public class Manager extends RoleState{
         return editSupply;
     }
 
+    @Override
     public void setEditSupply(boolean editSupply) {
         this.editSupply = editSupply;
     }
@@ -38,6 +39,7 @@ public class Manager extends RoleState{
         return editBuyPolicy;
     }
 
+    @Override
     public void setEditBuyPolicy(boolean editBuyPolicy) {
         this.editBuyPolicy = editBuyPolicy;
     }
@@ -46,6 +48,7 @@ public class Manager extends RoleState{
         return editDiscountPolicy;
     }
 
+    @Override
     public void setEditDiscountPolicy(boolean editDiscountPolicy) {
         this.editDiscountPolicy = editDiscountPolicy;
     }
@@ -89,5 +92,15 @@ public class Manager extends RoleState{
     @Override
     public void setCategory(String username,String store_name_id,int productId,Category category) throws IllegalAccessException {
         throw new IllegalAccessException("Manager cannot remove products");
+    }
+
+    @Override
+    public boolean isManager() {
+        return true;
+    }
+
+    @Override
+    public boolean isOwner() {
+        return false;
     }
 }

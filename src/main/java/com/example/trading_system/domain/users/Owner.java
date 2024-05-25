@@ -33,5 +33,27 @@ public class Owner extends RoleState{
     @Override
     public void setCategory(String username, String store_name_id, int productId, Category category) {}
 
+    @Override
+    public boolean isManager() {
+        return false;
+    }
+
+    @Override
+    public boolean isOwner() {
+        return true;
+    }
+
+    @Override
+    public void setWatch(boolean watch) {}
+
+    @Override
+    public void setEditSupply(boolean editSupply) {}
+
+    @Override
+    public void setEditBuyPolicy(boolean editBuyPolicy) {}
+
+    @Override
+    public void setEditDiscountPolicy(boolean editDiscountPolicy) {}
+
 
 }
