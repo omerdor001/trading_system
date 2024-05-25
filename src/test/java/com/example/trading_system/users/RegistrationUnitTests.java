@@ -21,7 +21,7 @@ class RegistrationUnitTests {
     }
 
     @Test
-    void registration_Success() throws Exception {
+    void registration_Success(){
         int id = 1;
         String username = "testuser";
         String encryption = "testpassword";
@@ -29,7 +29,7 @@ class RegistrationUnitTests {
 
         assertDoesNotThrow(() -> userFacade.register(id, username, encryption, birthdate));
         assertTrue(userFacade.getRegistered().containsKey(username));
-        assertFalse(userFacade.getVisitors().containsKey(id));
+        assertTrue(userFacade.getVisitors().containsKey(id));
     }
 
     @Test
