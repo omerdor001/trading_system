@@ -38,4 +38,9 @@ public interface MarketFacade {
 
     boolean setCategory(String username,String store_name_id,int productId,Category category) throws IllegalAccessException;
 
-}
+    String getAllHistoryPurchases(String userName, String storeName) throws IllegalArgumentException;
+
+    String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) throws IllegalAccessException;
+
+
+    }

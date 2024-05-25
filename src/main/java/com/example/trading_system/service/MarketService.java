@@ -16,6 +16,8 @@ public interface MarketService {
     String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category);
     String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating);
     String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category);
+    String getAllHistoryPurchases(String userName, String storeName);
+    String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName);
     ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
                                              double product_price, int product_quantity, double rating, Category category, List<String> keyWords);
     ResponseEntity<String> removeProduct(String username, String store_name, int product_id);

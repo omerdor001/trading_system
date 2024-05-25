@@ -16,4 +16,9 @@ public class ProductInSale {
         return price * quantity;
     }
 
+    @Override
+    public String toString() {
+        return "Product: " + productName + ", Quantity: " + quantity + ", Price: $" + price;
+    }
+
 }

@@ -161,5 +161,9 @@ public class Store {
         return salesHistory.getPurchasesByCustomer(customerId);
     }
 
+    public  List<Purchase> getAllHistoryPurchases(){
+        return salesHistory.getAllPurchases();
+    }
+
 
     }

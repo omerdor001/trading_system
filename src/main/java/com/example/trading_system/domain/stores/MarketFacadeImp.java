@@ -300,6 +300,36 @@ public class MarketFacadeImp implements MarketFacade{
     }
 
 
+    public String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) throws IllegalAccessException {
+        if(!stores.containsKey(storeName)){
+            throw new IllegalArgumentException("Store must exist");
+        }
+        if(!userFacade.getRegistered().containsKey(userName)){
+            throw new IllegalArgumentException("User must exist");
+        }
+        if(!userFacade.getRegistered().containsKey(customerUserName)){
+            throw new IllegalArgumentException("Customer must exist");
+        }
+        Registered registered =userFacade.getRegistered().get(userName);
+        Registered customer =userFacade.getRegistered().get(customerUserName);
+        registered.getRoleByStoreId(storeName).getHistoryPurchasesByCustomer();
+        return stores.get(storeName).getHistoryPurchasesByCustomer(customer.getId()).stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
+    }
+
+    public String getAllHistoryPurchases(String userName, String storeName) throws IllegalArgumentException{
+        if(!stores.containsKey(storeName)){
+            throw new IllegalArgumentException("Store must exist");
+        }
+        if(!userFacade.getRegistered().containsKey(userName)){
+            throw new IllegalArgumentException("User must exist");
+        }
+        Registered registered =userFacade.getRegistered().get(userName);
+        registered.getRoleByStoreId(storeName).getAllHistoryPurchases();
+
+        return stores.get(storeName).getAllHistoryPurchases().stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
+
+    }
+
 
 
 }

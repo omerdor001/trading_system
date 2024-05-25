@@ -106,6 +106,12 @@ public class Facade {
     public ResponseEntity<String> setCategory(String username,String store_name_id,int productId,Category category){
         return marketService.setCategory(username,store_name_id,productId,category);
     }
+    public String getAllHistoryPurchases(String userName, String storeName) {
+        return marketService.getAllHistoryPurchases(userName,storeName);
+    }
+    public String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) {
+        return marketService.getHistoryPurchasesByCustomer(userName,storeName,customerUserName);
+    }
 
     public ResponseEntity<String> suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
         return userService.suggestManage(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);

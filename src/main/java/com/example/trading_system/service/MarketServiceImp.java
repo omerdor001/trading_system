@@ -264,6 +264,32 @@ public class MarketServiceImp implements MarketService {
         logger.info("Finished edit category of product : {}",productId);
         return new ResponseEntity<>("Success editing category to product", HttpStatus.OK);
     }
+    public String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName)
+    {
+        String historyPurchases;
+        logger.info("{} trying to get history purchases from store {} by {}",userName, storeName, customerUserName);
+        try {
+            historyPurchases = marketFacade.getHistoryPurchasesByCustomer(userName, storeName, customerUserName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , {} Failed to get history purchases from store {} by {}.", e.getMessage(), userName, storeName, customerUserName);
+            return "";
+        }
+        logger.info("FINISHED get history purchases by customer");
+        return historyPurchases;
+    }
 
+    public String getAllHistoryPurchases(String userName, String storeName)
+    {
+        String historyPurchases;
+        logger.info("{} trying to get all history purchases from store {}",userName, storeName);
+        try {
+            historyPurchases = marketFacade.getAllHistoryPurchases(userName, storeName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , {} Failed to get all history purchases from store {} .", e.getMessage(), userName, storeName);
+            return "";
+        }
+        logger.info("FINISHED get all history purchases.");
+        return historyPurchases;
+    }
 
 }

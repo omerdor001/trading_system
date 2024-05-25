@@ -34,10 +34,15 @@ public abstract class RoleState {
     private void removeDiscountPolicy(int storeId,int productId) {}
 
     private void editDiscountPolicy(int storeId,int productId) {}
+
     public void requestInformationAboutRolesInStore(int storeId)throws IllegalAccessException{throw new IllegalArgumentException("");}
 
     public abstract void addProduct(String username,  int product_id, String store_name, String product_name, String product_description,
                                     double product_price, int product_quantity, double rating, Category category, List<String> keyWords) throws IllegalAccessException;
+
+    public abstract void getHistoryPurchasesByCustomer() throws IllegalAccessException;
+
+    public abstract void getAllHistoryPurchases() throws IllegalAccessException;
 
     public abstract void removeProduct(String username, String store_name_id, int product_id) throws IllegalAccessException;
 
@@ -64,4 +69,6 @@ public abstract class RoleState {
     public abstract void setEditBuyPolicy(boolean editBuyPolicy);
 
     public abstract void setEditDiscountPolicy(boolean editDiscountPolicy);
+
+
 }

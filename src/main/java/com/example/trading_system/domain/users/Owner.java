@@ -34,6 +34,12 @@ public class Owner extends RoleState{
     public void setCategory(String username, String store_name_id, int productId, Category category) {}
 
     @Override
+    public void getHistoryPurchasesByCustomer(){}
+
+    @Override
+    public void getAllHistoryPurchases() {}
+
+    @Override
     public boolean isManager() {
         return false;
     }

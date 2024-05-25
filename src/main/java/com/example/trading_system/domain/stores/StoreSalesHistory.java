@@ -23,5 +23,9 @@ public class StoreSalesHistory {
     public List<Purchase> getPurchasesByCustomer(int customerId) {
         return purchases.stream().filter(purchase -> customerId == purchase.getCustomerId()).collect(Collectors.toList());
     }
+
+    public List<Purchase> getAllPurchases() {
+        return purchases;
+    }
 }
 
