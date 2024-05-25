@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public interface UserService {
     String enter(int id);
 
-    boolean registration(int id, String username, String password, LocalDate birthdate);
+    boolean register(int id, String username, String password, LocalDate birthdate);
 
 
     boolean visitorAddToCart(int id, int productId, String storeName, int quantity);
@@ -19,7 +19,6 @@ public interface UserService {
     boolean registeredRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception;
 
     boolean openStore(String username, String storeName, String description, StorePolicy policy);
-    boolean register(int id, String username, String password, LocalDate birthdate);
 
     boolean login(int id, String username, String password);
 
