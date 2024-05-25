@@ -12,7 +12,7 @@ public class Registered extends User {
     private String address;
     private LocalDate birthdate;
     private boolean isAdmin;
-    private boolean isLogged;
+    private boolean isLogged = false;
     private List<Role> roles;
     private List<Notification> notifications;
 

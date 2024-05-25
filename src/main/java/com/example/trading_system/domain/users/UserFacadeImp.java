@@ -101,6 +101,7 @@ public class UserFacadeImp implements UserFacade{
         u.logout();
     }
 
+
     @Override
     public void addUser(User user) {
 
