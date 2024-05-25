@@ -1,11 +1,11 @@
 package com.example.trading_system.domain.users;
 
-public class RoleState {
-    Role role;
+import com.example.trading_system.domain.stores.Category;
 
-    public RoleState(Role role) {
-        this.role = role;
-    }
+import java.util.List;
+
+public abstract class RoleState {
+    Role role;
 
     public Role getRole() {
         return role;
@@ -15,7 +15,7 @@ public class RoleState {
         this.role = role;
     }
 
-    private void addProduct(int storeId,String product_details) {} //Change product_details Type
+    private void addProduct(int storeId,String product_details) {}
 
     private void editProduct(int storeId,int productId) {}
 
@@ -35,11 +35,20 @@ public class RoleState {
 
     private void editDiscountPolicy(int storeId,int productId) {}
 
-    private void addProduct(String product_details) {} //Change product_details Type
+    public abstract void addProduct(String username,  int product_id, String store_name, String product_name, String product_description,
+                                    double product_price, int product_quantity, double rating, Category category, List<String> keyWords) throws IllegalAccessException;
 
-    private void editProduct(int productId) {}
+    public abstract void removeProduct(String username, String store_name_id, int product_id) throws IllegalAccessException;
 
-    private void removeProduct(int productId) {}
+    public abstract void setProduct_name(String username,String store_name_id,int productId,String product_name) throws IllegalAccessException;
 
-    private void changeProduct(int productId) {}
+    public abstract void setProduct_description(String username,String store_name_id,int productId,String product_description) throws IllegalAccessException;
+
+    public abstract void setProduct_price(String username,String store_name_id,int productId,int product_price) throws IllegalAccessException;
+
+    public abstract void setProduct_quantity(String username,String store_name_id,int productId,int product_quantity) throws IllegalAccessException;
+
+    public abstract void setRating(String username,String store_name_id,int productId,int rating) throws IllegalAccessException;
+
+    public abstract void setCategory(String username,String store_name_id,int productId,Category category) throws IllegalAccessException;
 }
