@@ -6,26 +6,25 @@ import java.time.LocalDate;
 import java.util.HashMap;
 
 public interface UserFacade {
-
     void createVisitor(int id);
 
-    public HashMap<Integer, Visitor> getVisitors();
-    public HashMap<String, Registered> getRegistered();
+    HashMap<Integer, Visitor> getVisitors();
+    HashMap<String, Registered> getRegistered();
+
     void exit();
     void enter(int id);
     void exit(int id) throws Exception;
     void exit(String username) throws Exception;
     void registration(int id, String username, String token, LocalDate birthdate) throws Exception;    //Complete with what to register
 
-
     void login(String username);
     void logout(String username);
-
+    void saveUserCart(String username);
 
     void addUser(User user);
     void removeUser(User user);
     boolean sendNotification(User sender, User receiver, String content);
-
+    void saveUserCart(int id, int productId, String storeName, int quantity);
 
     void visitorAddToCart(int id, int productId, String storeName, int quantity);
 
