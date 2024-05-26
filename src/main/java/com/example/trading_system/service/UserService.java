@@ -5,9 +5,7 @@ import com.example.trading_system.domain.stores.StorePolicy;
 import java.time.LocalDate;
 
 public interface UserService {
-
     String enter(int id);
-
     boolean visitorAddToCart(int id, int productId, String storeName, int quantity);
 
     boolean visitorRemoveFromCart(int id, int productId, String storeName, int quantity);
@@ -21,11 +19,9 @@ public interface UserService {
     boolean register(int id, String username, String password, LocalDate birthdate);
 
     boolean login(int id, String username, String password);
-
     boolean logout(int id, String username);
 
     void exit(int id) throws Exception;
-
     void exit(String username) throws Exception;
 
     String registeredViewCart(String username);

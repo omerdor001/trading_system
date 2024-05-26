@@ -1,88 +1,54 @@
 package com.example.trading_system.users;
-
-import com.example.trading_system.domain.users.Registered;
-import com.example.trading_system.domain.users.User;
-import com.example.trading_system.domain.users.UserFacade;
+import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.service.Security;
 import com.example.trading_system.service.UserServiceImp;
+import net.bytebuddy.dynamic.scaffold.FieldLocator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class LogoutUnitTests {
-
-    @Mock
-    UserFacade userFacade;
-    @Mock
-    UserServiceImp userService;
-    @Mock
-    Registered registered;
-
-    String username1 = "testUser";
-    String password = "password123";
-    int userId = 1;
+    private UserFacadeImp userFacade;
+    int id = 1;
+    String username = "testuser";
+    String encryption = "testpassword";
+    LocalDate birthdate = LocalDate.of(1990, 5, 15);
 
 
     @BeforeEach
-    void setUp() {
-        userFacade = Mockito.mock(UserFacade.class);
-        userService = new UserServiceImp(userFacade);
+    void setUp() throws Exception {
+        userFacade = new UserFacadeImp();
+        userFacade.createVisitor(1);
+        userFacade.register(id, username, encryption, birthdate);
+        userFacade.login(username);
     }
-
-
-    @ParameterizedTest
-    @ValueSource(strings = {"testVisitor"})
-    void givenValidCredentials_whenNotRegistered_thenThrowNewException(String username) {
-
-        Mockito.when(userFacade.getRegistered().get(username)).thenReturn(null);
-//        Mockito.when(userFacade.getRegistered().get(username)).thenReturn(registered);
-
-        Assertions.assertTrue(userService.logout(userId, username), "logout should not be successful");
-
-        verify(userFacade, times(1)).saveUserCart(username);
-        verify(userFacade, times(1)).logout(username);
-    }
-
-
 
     @Test
-    void givenValidCredentials_whenNotSavedCart_thenThrowNewException() {
-
-//        Mockito.doThrow(/*some Exception*/)when(userFacade.saveUserCart(username1));
-        Mockito.when(userFacade.getRegistered().get(username1)).thenReturn(registered);
-
-        boolean logoutResult = userService.logout(userId, username1);
-        Assertions.assertTrue(logoutResult, "logout should not be successful");
-
-        verify(userFacade, times(1)).saveUserCart(username1);
-        verify(userFacade, times(1)).logout(username1);
-
+    void logout_Success() {
+        assertDoesNotThrow(() -> userFacade.logout(id, username));
+        assertEquals(userFacade.getRegistered().get(username).getLogged(), false);
     }
 
-
-
-
-    @ParameterizedTest
-    @NullSource
-    @ValueSource(strings = {"testVisitor"})
-    void givenValidUser_whenLoggedIn_thenSuccess(String username) {
-
-        Mockito.when(userFacade.getRegistered().get(username)).thenReturn(registered);
-
-        boolean logoutResult = userService.logout(userId, username);
-        Assertions.assertTrue(logoutResult, "logout should be successful");
-
-        verify(userFacade, times(1)).saveUserCart(username);
-        verify(userFacade, times(1)).logout(username);
+    @Test
+    void logout_NonExistentUser_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                userFacade.logout(id, null));
+        assertEquals(exception.getMessage(), "No such user null");
     }
+
+    @Test
+    void logout_UserAlreadyLoggedOut_ThrowsException() {
+        userFacade.logout(1, username);
+        Exception exception = assertThrows(RuntimeException.class, () ->
+                userFacade.logout(id, username));
+        assertEquals(exception.getMessage(), "User " + username + "already Logged out");
+    }
+
 
 }
