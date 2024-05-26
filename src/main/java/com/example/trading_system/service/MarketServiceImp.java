@@ -292,4 +292,47 @@ public class MarketServiceImp implements MarketService {
         return historyPurchases;
     }
 
+    public String requestInformationAboutOfficialsInStore(String userName, String storeName)
+    {
+        String informationAboutOfficials;
+        logger.info("{} trying to get informations about officials from store {}",userName, storeName);
+        try {
+            informationAboutOfficials = marketFacade.requestInformationAboutOfficialsInStore(userName, storeName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , {} Failed to get informations about officials from store {} .", e.getMessage(), userName, storeName);
+            return "";
+        }
+        logger.info("FINISHED get all informations about officials.");
+        return informationAboutOfficials;
+    }
+
+    public String requestManagersPermissions(String userName, String storeName)
+    {
+        String managerPermissions;
+        logger.info("{} trying to get managers permissions from store {}",userName, storeName);
+        try {
+            managerPermissions = marketFacade.requestManagersPermissions(userName, storeName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , {} Failed to get managers permissions from store {} .", e.getMessage(), userName, storeName);
+            return "";
+        }
+        logger.info("FINISHED get all managers permissions.");
+        return managerPermissions;
+    }
+
+    public String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName)
+    {
+        String officialInformation;
+        logger.info("{} trying to get information about {} from store {}",userName, officialUserName, storeName);
+        try {
+            officialInformation = marketFacade.requestInformationAboutSpecificOfficialInStore(userName, storeName, officialUserName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , {} Failed to get information about {} from store {} .", e.getMessage(), userName, officialUserName, storeName);
+            return "";
+        }
+        logger.info("FINISHED get infomation about {} from store {}.", officialUserName, storeName);
+        return officialInformation;
+    }
+
+
 }

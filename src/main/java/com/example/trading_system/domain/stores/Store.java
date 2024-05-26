@@ -12,6 +12,9 @@ public class Store {
     private String name_id;//this will be the ID for the store
     private String description;
     private HashMap<Integer, Product> products;
+    private List<String> managers;
+    private List<String> owners;
+    private String founder;
     private StorePolicy storePolicy;
     @Getter
     @Setter
@@ -20,13 +23,16 @@ public class Store {
     private StoreSalesHistory salesHistory;
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
 
-    public Store(String name_id, String description, StorePolicy storePolicy) {
+    public Store(String name_id, String description, StorePolicy storePolicy, String founder) {
         this.name_id = name_id;
         this.description = description;
         this.storePolicy = storePolicy;
         this.products = new HashMap<>();
         this.isActive = true;
         this.salesHistory = new StoreSalesHistory();
+        this.founder = founder;
+        this.managers = new LinkedList<>();
+        this.owners = new LinkedList<>();
     }
 
     public String getName_id() {
@@ -166,4 +172,11 @@ public class Store {
     }
 
 
+    public List<String> getManagers() {
+        return managers;
     }
+
+    public List<String> getOwners() {
+        return owners;
+    }
+}

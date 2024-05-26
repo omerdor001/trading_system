@@ -1,6 +1,7 @@
 package com.example.trading_system.domain.stores;
 
 import com.example.trading_system.domain.users.Registered;
+import com.example.trading_system.domain.users.RoleState;
 import com.example.trading_system.domain.users.UserFacade;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import org.slf4j.Logger;
@@ -327,6 +328,113 @@ public class MarketFacadeImp implements MarketFacade{
         registered.getRoleByStoreId(storeName).getAllHistoryPurchases();
 
         return stores.get(storeName).getAllHistoryPurchases().stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
+
+    }
+
+    public String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException
+    {
+        if(!stores.containsKey(storeName)){
+            throw new IllegalArgumentException("Store must exist");
+        }
+        if(!userFacade.getRegistered().containsKey(userName)){
+            throw new IllegalArgumentException("User must exist");
+        }
+        Registered registered =userFacade.getRegistered().get(userName);
+        registered.getRoleByStoreId(storeName).getRoleState().requestInformationAboutOfficialsInStore();
+
+        List<String> storeOwners = stores.get(storeName).getOwners();
+        List<String> storeManagers = stores.get(storeName).getManagers();
+
+
+        StringBuilder result = new StringBuilder();
+        result.append(storeName).append("\n");
+        result.append("Role id username address birthdate").append("\n");
+        for (String owner : storeOwners) {
+            Registered registered2 =userFacade.getRegistered().get(owner);
+
+            result.append("Owner ").append(registered2.getId()).append(owner).append(registered2.getAddress()).append(registered2.getBirthdate()).append("\n");
+        }
+        for (String manager : storeManagers) {
+            Registered registered2 =userFacade.getRegistered().get(manager);
+
+            result.append("Manager ").append(registered2.getId()).append(manager).append(registered2.getAddress()).append(registered2.getBirthdate()).append("\n");
+
+        }
+
+        return result.toString();
+
+    }
+
+    public String requestManagersPermissions(String userName, String storeName) throws IllegalArgumentException
+    {
+        if(!stores.containsKey(storeName)){
+            throw new IllegalArgumentException("Store must exist");
+        }
+        if(!userFacade.getRegistered().containsKey(userName)){
+            throw new IllegalArgumentException("User must exist");
+        }
+        Registered registered =userFacade.getRegistered().get(userName);
+        registered.getRoleByStoreId(storeName).getRoleState().requestManagersPermissions();
+
+        List<String> storeManagers = stores.get(storeName).getManagers();
+
+        StringBuilder result = new StringBuilder();
+        result.append(storeName).append("\n\n");
+        result.append("Managers :").append("\n");
+        result.append("id username watch editSupply editBuyPolicy editDiscountPolicy").append("\n");
+        for (String manager : storeManagers) {
+            Registered registered2 =userFacade.getRegistered().get(manager);
+            RoleState managerRole = registered2.getRoleByStoreId(storeName).getRoleState();
+            result.append(registered2.getId()).append(manager).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append("\n");
+        }
+        return result.toString();
+
+    }
+
+    public String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException
+    {
+        if(!stores.containsKey(storeName)){
+            throw new IllegalArgumentException("Store must exist");
+        }
+        if(!userFacade.getRegistered().containsKey(userName)){
+            throw new IllegalArgumentException("User must exist");
+        }
+        if(!userFacade.getRegistered().containsKey(officialUserName)){
+            throw new IllegalArgumentException("User must exist");
+        }
+
+        Registered registered =userFacade.getRegistered().get(userName);
+        registered.getRoleByStoreId(storeName).getRoleState().requestInformationAboutSpecificOfficialInStore();
+
+
+        LinkedList<String> storeOwners = stores.get(storeName).getOwners();
+
+        StringBuilder result = new StringBuilder();
+        result.append(storeName).append("\n");
+
+        if(storeOwners.contains(officialUserName))
+        {
+            Registered registered2 =userFacade.getRegistered().get(officialUserName);
+            result.append("Role id username address birthdate").append("\n");
+            result.append("Owner ").append(registered2.getId()).append(officialUserName).append(registered2.getAddress()).append(registered2.getBirthdate()).append("\n");
+        }
+        else
+        {
+            LinkedList<String> storeManagers = stores.get(storeName).getManagers();
+            if(storeManagers.contains(officialUserName))
+            {
+                Registered registered2 =userFacade.getRegistered().get(manager);
+                RoleState managerRole = registered2.getRoleByStoreId(storeName).getRoleState();
+                result.append("Role id username address birthdate watch editSupply editBuyPolicy editDiscountPolicy").append("\n");
+                result.append("Manager ").append(registered2.getId()).append(manager).append(registered2.getAddress()).append(registered2.getBirthdate()).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append("\n");
+            }
+            else
+                throw new IllegalArgumentException("User is not employeed in this store.");
+
+
+        }
+
+        return result.toString();
 
     }
 

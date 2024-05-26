@@ -152,7 +152,11 @@ public class Registered extends User {
     }
 
 
+    public String getAddress() {
+        return address;
+    }
 
-
-
+    public LocalDate getBirthdate() {
+        return birthdate;
+    }
 }

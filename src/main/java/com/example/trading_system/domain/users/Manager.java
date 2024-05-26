@@ -105,6 +105,12 @@ public class Manager extends RoleState{
         throw new IllegalAccessException("Manager cannot get all history purchases");
     }
 
+    @Override
+    public void requestInformationAboutOfficialsInStore(){
+        throw new IllegalAccessException("Manager cannot request information about officials in store.");
+    }
+
+
 
     @Override
     public boolean isManager() {

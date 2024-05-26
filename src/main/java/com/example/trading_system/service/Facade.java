@@ -141,6 +141,18 @@ public class Facade {
         return userService.editPermissionForManager(userId, managerToEdit,storeNameId,  watch,  editSupply,  editBuyPolicy,  editDiscountPolicy);
     }
 
+    String requestInformationAboutOfficialsInStore(String userName, String storeName){
+        return marketService.requestInformationAboutOfficialsInStore(userName, storeName);
+    }
+
+    String requestManagersPermissions(String userName, String storeName){
+        return marketService.requestManagersPermissions(userName, storeName);
+    }
+
+    String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName){
+        return marketService.requestInformationAboutSpecificOfficialInStore(userName, storeName, officialUserName);
+    }
+
 
     public String login(int id, String username, String password){
         if (userService.login(id, username, password)){

@@ -42,5 +42,10 @@ public interface MarketFacade {
 
     String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) throws IllegalAccessException;
 
+    String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException;
 
-    }
+    String requestManagersPermissions(String userName, String storeName) throws IllegalArgumentException;
+
+    String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException;
+
+}

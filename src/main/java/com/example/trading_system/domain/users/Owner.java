@@ -40,6 +40,9 @@ public class Owner extends RoleState{
     public void getAllHistoryPurchases() {}
 
     @Override
+    public void requestInformationAboutOfficialsInStore(){}
+
+    @Override
     public boolean isManager() {
         return false;
     }
@@ -61,7 +64,15 @@ public class Owner extends RoleState{
     @Override
     public void setEditDiscountPolicy(boolean editDiscountPolicy) {}
 
-    void requestInftomationAboutRolesInStore(){}
+    @Override
+    public void requestInftomationAboutRolesInStore(){}
+
+    @Override
+    public void requestManagersPermissions(){}
+
+    @Override
+    public void requestInformationAboutSpecificOfficialInStore(){}
+
 
 
 }
