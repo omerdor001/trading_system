@@ -28,5 +28,4 @@ public interface UserService {
 
     String visitorViewCart(int id);
 
-//    boolean logout(int id);
 }

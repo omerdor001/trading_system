@@ -60,9 +60,7 @@ public class UserServiceImp implements UserService {
     public boolean logout(int id, String username) {
         logger.info("Trying to logout user: {}", username);
         try{
-            userFacade.saveUserCart(username);
-            userFacade.logout(username);
-            userFacade.enter(id);
+            userFacade.logout(id, username);
             logger.info("User: {} logged out", username);
             return true;
         }catch (Exception e){

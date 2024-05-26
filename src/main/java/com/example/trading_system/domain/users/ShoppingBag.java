@@ -27,7 +27,7 @@ public class ShoppingBag {
             products_list.put(productId, quantity);
     }
     public void removeProduct(int productId,int quantity) {
-        if (products_list.get(productId)-quantity == 0) {
+        if (products_list.get(productId)-quantity <= 0) {
             products_list.remove(productId);
         }
         else

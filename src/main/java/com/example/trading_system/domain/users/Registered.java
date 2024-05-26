@@ -61,15 +61,11 @@ public class Registered extends User {
 
     @Override
     public void login(){
-        if (getLogged())
-            throw new RuntimeException("User already logged in");
         this.isLogged = true;
     }
 
     @Override
     public void logout(){
-        if (getLogged())
-            throw new RuntimeException("User already logged out");
         this.isLogged = false;
     }
 
