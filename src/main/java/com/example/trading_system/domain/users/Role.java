@@ -40,7 +40,7 @@ public class Role {
     }
 
     public void addProduct(String username,  int product_id, String store_name, String product_name, String product_description,
-                           double product_price, int product_quantity, double rating, Category category, List<String> keyWords) throws IllegalAccessException {
+                           double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
         roleState.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
     }
 
@@ -72,7 +72,7 @@ public class Role {
         roleState.setRating(username, store_name_id, productId, rating);
     }
 
-    public void setCategory(String username, String store_name_id, int productId, Category category) throws IllegalAccessException {
+    public void setCategory(String username, String store_name_id, int productId, int category) throws IllegalAccessException {
         roleState.setCategory(username, store_name_id, productId, category);
     }
 

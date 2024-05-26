@@ -1,7 +1,5 @@
 package com.example.trading_system.domain.users;
 
-import org.springframework.web.client.HttpClientErrorException;
-
 import java.util.Date;
 import java.util.List;
 
