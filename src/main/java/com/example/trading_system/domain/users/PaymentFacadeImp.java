@@ -105,6 +105,8 @@ public class PaymentFacadeImp implements PaymentFacade {
             @Override
             public void run() {
                 VisitorReleaseReservedProducts(visitor);
+                throw  new RuntimeException("time out !");
+
             }
         }, 10 * 60 * 1000);
 
@@ -116,8 +118,12 @@ public class PaymentFacadeImp implements PaymentFacade {
             logger.info("Purchase successful. Inventory updated.");
         } else {
             logger.error("Payment failed. Please try again.");
+            VisitorReleaseReservedProducts(visitor);
+            throw new RuntimeException("Payment failed. Please try again.");
         }
         addPurchaseVisitor(visitorId);
+        timer.cancel();
+        timer.purge();
     }
 
     private synchronized void VisitorReleaseReservedProducts(Visitor visitor) {
@@ -170,6 +176,7 @@ public class PaymentFacadeImp implements PaymentFacade {
             @Override
             public void run() {
                 RegisteredReleaseReservedProducts(registered);
+                throw  new RuntimeException("time out !");
             }
         }, 10 * 60 * 1000);
 
@@ -181,8 +188,12 @@ public class PaymentFacadeImp implements PaymentFacade {
             logger.info("Purchase successful. Inventory updated.");
         } else {
             logger.error("Payment failed. Please try again.");
+            registeredCheckAvailabilityAndConditions(registeredId);
+            throw new RuntimeException("Payment failed. Please try again.");
         }
         addPurchaseRegistered(registeredId);
+        timer.cancel();
+        timer.purge();
     }
 
     private synchronized void RegisteredReleaseReservedProducts(Registered registered) {
