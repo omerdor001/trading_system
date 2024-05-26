@@ -298,15 +298,15 @@ public class UserFacadeImp implements UserFacade{
     @Override
     public void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
         if(!registered.containsKey(appoint)){
-            throw new NoSuchElementException("No user called "+appoint+ "exist");
+            throw new NoSuchElementException("No user called "+appoint+ " exist");
         }
         if(!registered.containsKey(newManager)){
-            throw new NoSuchElementException("No user called "+newManager+ "exist");
+            throw new NoSuchElementException("No user called "+newManager+ " exist");
         }
         Registered appointUser=registered.get(appoint);
         Registered newManagerUser=registered.get(newManager);
         if(!appointUser.isOwner(store_name_id)){
-            throw new IllegalAccessException("User must be Owner");
+            throw new IllegalAccessException("Appoint user must be Owner");
         }
         if(!appointUser.getLogged()){
             throw new IllegalAccessException("Appoint user is not logged");
@@ -323,15 +323,15 @@ public class UserFacadeImp implements UserFacade{
     @Override
     public void approveManage(String newManager, String store_name_id, String appoint) throws  IllegalAccessException {
         if(!registered.containsKey(newManager)){
-            throw new NoSuchElementException("No user called "+newManager+ "exist");
+            throw new NoSuchElementException("No user called "+newManager+ " exist");
         }
         if(!registered.containsKey(appoint)){
-            throw new NoSuchElementException("No user called "+appoint+ "exist");
+            throw new NoSuchElementException("No user called "+appoint+ " exist");
         }
         Registered appointUser=registered.get(appoint);
         Registered newManagerUser=registered.get(newManager);
         if(!appointUser.isOwner(store_name_id)){
-            throw new IllegalAccessException("User must be Owner");
+            throw new IllegalAccessException("Appoint user must be Owner");
         }
         if(newManagerUser.isManager(store_name_id)){
             throw new IllegalAccessException("User already Manager of this store");
