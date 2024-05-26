@@ -154,11 +154,11 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public String registerdViewCart(String username) {
+    public String registeredViewCart(String username) {
         String result = "";
         logger.info("Trying registerd : {} view cart ", username);
         try {
-            result = facade.registerdViewCart(username);
+            result = userFacade.registeredViewCart(username);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed registerd view cart ", username);
             return "";
@@ -172,7 +172,7 @@ public class UserServiceImp implements UserService {
         String result;
         logger.info("Trying view cart");
         try {
-            result = facade.visitorViewCart(id);
+            result = userFacade.visitorViewCart(id);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed view cart ", id);
             return "";

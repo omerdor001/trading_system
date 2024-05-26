@@ -41,4 +41,5 @@ public interface UserFacade {
     String visitorViewCart(int id);
 
     String registeredViewCart(String username);
+
 }

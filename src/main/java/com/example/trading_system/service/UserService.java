@@ -23,10 +23,8 @@ public interface UserService {
 
     void exit(int id) throws Exception;
     void exit(String username) throws Exception;
-    boolean registration(int id, String username, String password, LocalDate birthdate);
-    boolean addToCart(int id,int productId,String storeName,int quantity);
 
-    String registerdViewCart(String username);
+    String registeredViewCart(String username);
 
     String visitorViewCart(int id);
 

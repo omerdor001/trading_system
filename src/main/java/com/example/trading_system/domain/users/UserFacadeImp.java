@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.util.HashMap;
 
-import java.time.LocalDate;
 import java.util.Map;
 
 public class UserFacadeImp implements UserFacade{
@@ -298,7 +297,7 @@ public class UserFacadeImp implements UserFacade{
     }
 
     @Override
-    public String registerdViewCart(String username) {
+    public String registeredViewCart(String username) {
         if (!registered.containsKey(username)) {
             logger.error("User not found");
             throw new RuntimeException("User not found");
@@ -330,5 +329,5 @@ public class UserFacadeImp implements UserFacade{
         cartDetails.append("Overall Total for All Stores: ").append(totalAllStores).append("\n");
         return cartDetails.toString();
 
-
     }
+}
