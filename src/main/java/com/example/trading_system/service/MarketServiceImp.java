@@ -5,6 +5,8 @@ import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -113,7 +115,7 @@ public class MarketServiceImp implements MarketService {
     }
 
     public void addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                              double product_price, int product_quantity, double rating, Category category, List<String> keyWords) throws IllegalAccessException {
+                              double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
         logger.info("Trying to add products to store : {}", store_name);
         marketFacade.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
         logger.info("Finished add products to store : {}", store_name);
@@ -156,7 +158,7 @@ public class MarketServiceImp implements MarketService {
         logger.info("Finished edit rating of product : {}", productId);
     }
 
-    public void setCategory(String username, String store_name_id, int productId, Category category) throws IllegalAccessException {
+    public void setCategory(String username, String store_name_id, int productId, int category) throws IllegalAccessException {
         logger.info("Trying to edit category to product : {}", productId);
         marketFacade.setCategory(username, store_name_id, productId, category);
         logger.info("Finished edit category of product : {}", productId);
@@ -168,4 +170,9 @@ public class MarketServiceImp implements MarketService {
         marketFacade.openStoreExist(storeName);
         logger.error("Failed on closing Store with name : {}", storeName);
     }
+}
+
+
+
+
 }

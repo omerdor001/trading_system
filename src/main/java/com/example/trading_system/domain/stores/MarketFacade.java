@@ -1,3 +1,4 @@
+
 package com.example.trading_system.domain.stores;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +24,7 @@ public interface MarketFacade {
                        double productPrice,
                        int productQuantity,
                        double rating,
-                       Category category,
+                       int category,
                        List<String> keyWords) throws IllegalAccessException;
     boolean removeProduct         (String username, String storeName,int productId) throws IllegalAccessException;
     boolean setProductName        (String username, String storeName, int productId, String productName) throws IllegalAccessException;
@@ -31,7 +32,7 @@ public interface MarketFacade {
     boolean setProductPrice       (String username, String storeName, int productId, int productPrice) throws IllegalAccessException;
     boolean setProductQuantity    (String username, String storeName, int productId, int productQuantity) throws IllegalAccessException;
     boolean setRating             (String username, String storeName, int productId, int rating) throws IllegalAccessException;
-    boolean setCategory           (String username, String storeName, int productId, Category category) throws IllegalAccessException;
+    boolean setCategory           (String username, String storeName, int productId, int category) throws IllegalAccessException;
     String  getAllHistoryPurchases(String userName, String storeName) throws IllegalAccessException;
     String  getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) throws IllegalAccessException;
 

@@ -1,3 +1,4 @@
+
 package com.example.trading_system.domain.stores;
 
 import lombok.Getter;
@@ -22,6 +23,8 @@ public class Store {
     private List<String> owners;
     private String founder;
     private StorePolicy storePolicy;
+    @Getter
+    @Setter
     private boolean isActive;
     private boolean isOpen;
     private StoreSalesHistory salesHistory;
@@ -102,8 +105,8 @@ public class Store {
     }
 
     public synchronized void addProduct(int product_id, String store_name, String product_name, String product_description,
-                                        double product_price, int product_quantity, double rating, Category category, List<String> keyWords) {
-        Product product = new Product(product_id, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
+                                        double product_price, int product_quantity, double rating, int category, List<String> keyWords) {
+        Product product = new Product(product_id, product_name, product_description, product_price, product_quantity, rating, Category.values()[category], keyWords);
         products.put(product.getProduct_id(), product);
     }
 
@@ -146,7 +149,7 @@ public class Store {
         }
     }
 
-    public synchronized void setCategory(int productId, Category category) {
+    public synchronized void setCategory(int productId, int category) {
         Product product = getProduct(productId);
         if (product != null) {
             product.setCategory(category);

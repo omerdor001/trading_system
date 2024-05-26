@@ -6,6 +6,10 @@ import org.springframework.http.ResponseEntity;
 import javax.management.InstanceAlreadyExistsException;
 
 public interface ExternalServices {
+    ResponseEntity<String> addPaymentService(String serviceName) ;
+    ResponseEntity<String> addPaymentProxyService(String serviceName) ;
+    ResponseEntity<String> addDeliveryService(String serviceName) ;
+    ResponseEntity<String> addDeliveryProxyService(String serviceName) ;
     void addService(String service) throws InstanceAlreadyExistsException;
     void addServiceNew(String service) throws InstanceAlreadyExistsException;
 

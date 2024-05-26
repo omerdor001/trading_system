@@ -23,6 +23,76 @@ public class ExternalServicesImp implements ExternalServices {
         return ExternalServicesImp.Singleton.INSTANCE;
     }
 
+    public ResponseEntity<String> addService(String serviceName) {//Add connection
+        logger.info("Trying adding external service: {}", serviceName);
+        try {
+            facade.addService(serviceName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed trying adding external service: {}", e.getMessage(), serviceName);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        }
+        logger.info("Finish adding external payment service: {}", serviceName);
+        return new ResponseEntity<String>("Success adding external payment service", HttpStatus.OK);
+    }
+    //TODO:
+/*
+    @Override
+    public ResponseEntity<String> addPaymentService(String serviceName) {
+        logger.info("Trying adding external payment service: {}", serviceName);
+        try {
+            facade.addPaymentService(serviceName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed trying adding external payment service: {}", e.getMessage(), serviceName);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        }
+        logger.info("Finish adding external payment service: {}", serviceName);
+        return new ResponseEntity<String>("Success adding external payment service", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> addPaymentProxyService(String serviceName) {
+        logger.info("Trying adding external payment proxy service: {}", serviceName);
+        try {
+            facade.addPaymentProxyService(serviceName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed trying adding external payment proxy service: {}", e.getMessage(), serviceName);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        }
+        logger.info("Finish adding external payment proxy service: {}", serviceName);
+        return new ResponseEntity<String>("Success adding external payment proxy service", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> addDeliveryService(String serviceName) {
+        logger.info("Trying adding external delivery service: {}", serviceName);
+        try {
+            facade.addDeliveryService(serviceName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed trying adding external delivery service: {}", e.getMessage(), serviceName);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        }
+        logger.info("Finish adding external delivery service: {}", serviceName);
+        return new ResponseEntity<String>("Success adding external delivery service", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> addDeliveryProxyService(String serviceName) {
+        logger.info("Trying adding external delivery proxy service: {}", serviceName);
+        try {
+            facade.addDeliveryProxyService(serviceName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed trying adding external delivery proxy service: {}", e.getMessage(), serviceName);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        }
+        logger.info("Finish adding external delivery proxy service: {}", serviceName);
+        return new ResponseEntity<String>("Success adding external delivery proxy service", HttpStatus.OK);
+    }*/
+
     public void addService(String service) throws InstanceAlreadyExistsException {//Add connection
         logger.info("Trying adding external service: {}", service);
         facade.addService(service);

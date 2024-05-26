@@ -2,12 +2,18 @@ package com.example.trading_system.domain.externalservices;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DeliveryServiceProxy {
-    private DeliveryService realDeliveryService;
+public class DeliveryServiceProxy extends Service{
 
     public DeliveryServiceProxy(String serviceName) {
-        this.realDeliveryService = new DeliveryService(serviceName);
+        super(serviceName);
+
     }
+
+    @Override
+    public void makePayment(String serviceName, double amount) {}
+
+    @Override
+    public void cancelPayment(String serviceName) {}
 
     private static final String ADDRESS_PATTERN =
             "^\\d+\\s+[A-Za-z0-9\\s]+,\\s+[A-Za-z\\s]+,\\s+[A-Z]{2},\\s+\\d{5}(-\\d{4})?$";
@@ -21,14 +27,25 @@ public class DeliveryServiceProxy {
         return matcher.matches();
     }
 
-
-    public void processDelivery(String address) {
+    @Override
+    public void makeDelivery(String serviceName, String address) {
         // Additional logic before delegating to the real payment service
         if (isValidAddress(address)) {
-            realDeliveryService.processDelivery(address);
+            System.out.println("Processing delivery of $" + address);
+            // Here would be the real delivery processing logic, e.g., calling an external delivery gateway API
         } else {
             throw new IllegalArgumentException("Delivery authorization failed");
         }
+    }
+
+    @Override
+    public void cancelDelivery(String serviceName, String address) {
+
+    }
+
+    @Override
+    public boolean connect() {
+        return true;
     }
 }
 
