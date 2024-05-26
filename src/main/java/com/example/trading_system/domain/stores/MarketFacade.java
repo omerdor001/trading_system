@@ -1,4 +1,5 @@
 package com.example.trading_system.domain.stores;
+import java.util.HashMap;
 import java.util.List;
 
 public interface MarketFacade {
@@ -38,4 +39,7 @@ public interface MarketFacade {
 
     boolean setCategory(String username,String store_name_id,int productId,Category category) throws IllegalAccessException;
 
+    HashMap<String, Store> getStores();
+
+    void addStore(Store store);
 }

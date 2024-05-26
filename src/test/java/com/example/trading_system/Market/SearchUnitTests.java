@@ -18,7 +18,7 @@ public class SearchUnitTests {
     ////////////////Check if more tests are needed.
     @BeforeEach
     void setUp() {
-        marketFacade = new MarketFacadeImp();
+        marketFacade = MarketFacadeImp.getInstance();
         Store store = new Store("store1", "description",new StorePolicy());
         Product product = new Product(1, "p1", "", 5, 5, 5, Category.Food, new ArrayList<>());
         store.addProductToStore(product);

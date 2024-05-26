@@ -3,9 +3,11 @@ package com.example.trading_system.service;
 import com.example.trading_system.domain.externalservices.Service;
 import org.springframework.http.ResponseEntity;
 
+import javax.management.InstanceAlreadyExistsException;
+
 public interface ExternalServices {
-    boolean addService(Service service);
-    ResponseEntity<String> addServiceNew(Service service);
+    boolean addService(Service service) throws InstanceAlreadyExistsException;
+    boolean addServiceNew(Service service) throws InstanceAlreadyExistsException;
 
     public boolean replaceService(Service newService, Service oldService);
 

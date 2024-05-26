@@ -2,7 +2,7 @@ package com.example.trading_system.Market;
 
 import com.example.trading_system.domain.stores.Category;
 import com.example.trading_system.domain.users.Registered;
-import com.example.trading_system.service.Facade;
+import com.example.trading_system.service.TradingSystemImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -17,12 +17,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class StockManagementAcceptanceTests {
-    Facade facade;
+    TradingSystemImp facade;
     List<String> keyWords;
     Category category;
     @BeforeEach
     public void setUp() {
-        facade=mock(Facade.class);
+        facade=mock(TradingSystemImp.class);
         List<String> keyWords=new ArrayList();
         keyWords.add("Samba");
         category=Category.Sport;
@@ -142,7 +142,7 @@ class StockManagementAcceptanceTests {
         ////TODO register user
         //TODO Make him manager
         facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords);
-        when(facade.setProduct_name("testuser","Adidas",123,"Samba Shoes")).thenReturn(new ResponseEntity("Success editing name to product", HttpStatus.OK));
+        when(facade.setProductName("testuser","Adidas",123,"Samba Shoes")).thenReturn(new ResponseEntity("Success editing name to product", HttpStatus.OK));
         ResponseEntity<String> response=facade.setProduct_name("testuser","Adidas",123,"Samba Shoes");
         assertEquals(response,new ResponseEntity("Success editing name to product", HttpStatus.OK));
     }

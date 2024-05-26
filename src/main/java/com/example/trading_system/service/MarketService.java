@@ -25,21 +25,21 @@ public interface MarketService {
 
     String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category);
 
-    ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                                      double product_price, int product_quantity, double rating, Category category, List<String> keyWords);
+    void addProduct(String username, int product_id, String store_name, String product_name, String product_description,
+                                      double product_price, int product_quantity, double rating, Category category, List<String> keyWords) throws IllegalAccessException;
 
-    ResponseEntity<String> removeProduct(String username, String store_name, int product_id);
+    void removeProduct(String username, String store_name, int product_id) throws IllegalAccessException;
 
-    ResponseEntity<String> setProduct_name(String username, String store_name_id, int productId, String product_name);
+    void setProductName(String username, String store_name_id, int productId, String product_name) throws IllegalAccessException;
 
-    ResponseEntity<String> setProduct_description(String username, String store_name_id, int productId, String product_description);
+    void setProductDescription(String username, String store_name_id, int productId, String product_description) throws IllegalAccessException;
 
-    ResponseEntity<String> setProduct_price(String username, String store_name_id, int productId, int product_price);
+    void setProductPrice(String username, String store_name_id, int productId, int product_price) throws IllegalAccessException;
 
-    ResponseEntity<String> setProduct_quantity(String username, String store_name_id, int productId, int product_quantity);
+    void setProductQuantity(String username, String store_name_id, int productId, int product_quantity) throws IllegalAccessException;
 
-    ResponseEntity<String> setRating(String username, String store_name_id, int productId, int rating);
+    void setRating(String username, String store_name_id, int productId, int rating) throws IllegalAccessException;
 
-    ResponseEntity<String> setCategory(String username, String store_name_id, int productId, Category category);
+    void setCategory(String username, String store_name_id, int productId, Category category) throws IllegalAccessException;
 
 }

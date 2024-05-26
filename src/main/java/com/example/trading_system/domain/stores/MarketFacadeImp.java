@@ -12,13 +12,11 @@ import java.util.List;
 
 public class MarketFacadeImp implements MarketFacade{
     private HashMap<String, Store> stores;
-    private UserFacade userFacade;
+    private UserFacade userFacade = UserFacadeImp.getInstance();
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
 
-
-    public MarketFacadeImp() {
+    private MarketFacadeImp() {
         stores = new HashMap<>();
-        userFacade=new UserFacadeImp();
     }
     private  static class Singleton  {
         private static final MarketFacadeImp INSTANCE = new MarketFacadeImp();
@@ -281,6 +279,7 @@ public class MarketFacadeImp implements MarketFacade{
         return true;
     }
 
+    @Override
     public HashMap<String, Store> getStores() {
         return stores;
     }

@@ -1,23 +1,18 @@
 package com.example.trading_system.service;
 
-import com.example.trading_system.domain.externalservices.DeliveryService;
-import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.externalservices.Service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.*;
 
-import javax.management.InstanceAlreadyExistsException;
+import static org.mockito.Mockito.*;
 
 
 class ExternalServicesAcceptanceTest {
-    private Facade facade;
+    private TradingSystemImp facade;
 
 
     @BeforeEach
     public void setUp() {
-        facade=mock(Facade.class);
+        facade=mock(TradingSystemImp.class);
     }
 
 //    @Test

@@ -12,7 +12,7 @@ class ExternalServicesUnitTest {
     private ServiceFacade serviceFacade;
     @BeforeEach
     public void setUp() {
-        serviceFacade=new ServiceFacadeImp();
+        serviceFacade= ServiceFacadeImp.getInstance();
     }
 
     @Test

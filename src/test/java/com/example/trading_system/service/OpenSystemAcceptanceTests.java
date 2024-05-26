@@ -10,11 +10,11 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class OpenSystemAcceptanceTests {
-    private Facade facade;
+    private TradingSystemImp facade;
 
     @BeforeEach
     void setUp() {
-        facade = new Facade();
+        facade = TradingSystemImp.getInstance();
     }
 
     @Test

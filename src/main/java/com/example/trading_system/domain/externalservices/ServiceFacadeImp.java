@@ -1,5 +1,7 @@
 package com.example.trading_system.domain.externalservices;
 
+import com.example.trading_system.domain.stores.MarketFacadeImp;
+
 import javax.management.InstanceAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +9,15 @@ import java.util.NoSuchElementException;
 
 public class ServiceFacadeImp implements ServiceFacade {
     private List<Service> services;
-    public ServiceFacadeImp(){
+    private ServiceFacadeImp(){
         services=new ArrayList<>();
+    }
+
+    private  static class Singleton  {
+        private static final ServiceFacadeImp INSTANCE = new ServiceFacadeImp();
+    }
+    public static ServiceFacadeImp getInstance() {
+        return ServiceFacadeImp.Singleton.INSTANCE;
     }
 
     @Override

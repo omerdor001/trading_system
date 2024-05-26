@@ -9,13 +9,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class OpenSystemUnitTests {
-    private Facade facade;
+    private TradingSystemImp facade;
     private UserService userService;
 
     @BeforeEach
     public void setUp() {
         userService = mock(UserService.class);
-        facade = new Facade();
+        facade = TradingSystemImp.getInstance();
         facade.userService = userService;
     }
 

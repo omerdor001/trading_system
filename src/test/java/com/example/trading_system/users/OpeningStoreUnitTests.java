@@ -19,7 +19,7 @@ class OpeningStoreUnitTests {
     @BeforeEach
     void setUp() {
         marketFacade = MarketFacadeImp.getInstance();
-        userFacade = new UserFacadeImp();
+        userFacade = UserFacadeImp.getInstance();
     }
 
     @Test

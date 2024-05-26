@@ -23,7 +23,7 @@ class LogoutUnitTests {
 
     @BeforeEach
     void setUp() throws Exception {
-        userFacade = new UserFacadeImp();
+        userFacade = UserFacadeImp.getInstance();
         userFacade.createVisitor(1);
         userFacade.register(id, username, encryption, birthdate);
         userFacade.login(username);

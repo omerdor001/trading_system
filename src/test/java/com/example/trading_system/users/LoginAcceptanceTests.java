@@ -1,7 +1,6 @@
 package com.example.trading_system.users;
 
-import com.example.trading_system.service.Facade;
-import com.example.trading_system.service.Security;
+import com.example.trading_system.service.TradingSystemImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -15,14 +14,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class LoginAcceptanceTests {
 
     String token1;
-    private Facade facade;
+    private TradingSystemImp facade;
 
     @BeforeEach
     void setUp() throws Exception {
-        facade = new Facade();
-        token1 = facade.enter();
+        facade = TradingSystemImp.getInstance();
         facade.register(0, "testuser", "password123", LocalDate.now());
         facade.openSystem();
+        ResponseEntity<String> response = facade.enter();
+        token1 = response.getBody();
     }
 
     @Test
@@ -31,9 +31,8 @@ class LoginAcceptanceTests {
         String username = "testuser";
         String password = "password123";
         ResponseEntity<String> response = facade.login(token1, userId, username, password);
-
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(!response.getBody().isEmpty(), "Token should not be empty");
+        assertTrue(response.getBody() != null && !response.getBody().isEmpty(), "Token should not be empty");
     }
 
     @Test

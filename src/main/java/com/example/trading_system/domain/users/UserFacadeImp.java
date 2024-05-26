@@ -1,9 +1,6 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.MarketFacadeImp;
-import com.example.trading_system.domain.stores.Product;
-import com.example.trading_system.domain.stores.Store;
-import com.example.trading_system.domain.stores.StorePolicy;
+import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.service.Security;
 import com.example.trading_system.service.UserServiceImp;
 import org.slf4j.Logger;
@@ -18,13 +15,13 @@ public class UserFacadeImp implements UserFacade{
     private HashMap<Integer, Visitor> visitors;
     private HashMap<String, Registered> registered;
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
-    MarketFacadeImp marketFacade = MarketFacadeImp.getInstance();
+    MarketFacade marketFacade = MarketFacadeImp.getInstance();
 
-    public UserFacadeImp() {
+    private UserFacadeImp() {
         this.registered = new HashMap<>();
         this.visitors = new HashMap<>();
     }
-    private static class Singleton {
+    public static class Singleton {
         private static final UserFacadeImp INSTANCE = new UserFacadeImp();
     }
 
