@@ -18,10 +18,11 @@ class ExternalServicesAcceptanceTest {
     public void setUp() throws Exception {
         facade= new Facade();
         token1 = facade.enter();
-        token2=facade.enter();
-        facade.register(token1,0, "testuser1", "password123", LocalDate.now());
-        facade.register(token1,1, "testuser2", "password124", LocalDate.now());
-        facade.login(1,"testuser2","password124");
+        token2 = facade.enter();
+        facade.register(0, "testuser1", "password123", LocalDate.now());
+        facade.register(1, "testuser2", "password124", LocalDate.now());
+        facade.openSystem();
+        facade.login(token1,1,"testuser2","password124");
     }
 
     @Test
