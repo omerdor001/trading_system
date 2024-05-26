@@ -21,7 +21,7 @@ public class MarketFacadeImp implements MarketFacade{
 
     private MarketFacadeImp() {
         stores = new HashMap<>();
-        userFacade=new UserFacadeImp();
+        userFacade= UserFacadeImp.getInstance();
     }
     private  static class Singleton  {
         private static final MarketFacadeImp INSTANCE = new MarketFacadeImp();
@@ -62,18 +62,14 @@ public class MarketFacadeImp implements MarketFacade{
 
     @Override
     public String getStoreProducts(String storeName) {
-       if(stores.get(storeName).isActive()){
-           return stores.get(storeName).toString();
-       }
-       else {
-           logger.error("Can't find store with name {}", storeName);
-           return null;
-       }
-   }
-
-    public String getProductInfo(String store_name, int product_id) {
-        return stores.get(store_name).getProduct(product_id).toString();
+        if (stores.get(storeName).isActive()) {
+            return stores.get(storeName).toString();
+        } else {
+            logger.error("Can't find store with name {}", storeName);
+            return null;
+        }
     }
+
 
     @Override
     public String getProductInfo(String storeName, int productId) {

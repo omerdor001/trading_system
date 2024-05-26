@@ -127,26 +127,26 @@ public class MarketServiceImp implements MarketService {
 
     public void setProductName(String username, String store_name_id, int productId, String product_name) throws IllegalAccessException {
         logger.info("Trying to edit name to product : {}", productId);
-        marketFacade.setProduct_name(username, store_name_id, productId, product_name);
+        marketFacade.setProductName(username, store_name_id, productId, product_name);
         logger.info("Finished edit name of product : {}", productId);
 
     }
 
     public void setProductDescription(String username, String store_name_id, int productId, String product_description) throws IllegalAccessException {
         logger.info("Trying to edit description to product : {}", productId);
-        marketFacade.setProduct_description(username, store_name_id, productId, product_description);
+        marketFacade.setProductDescription(username, store_name_id, productId, product_description);
         logger.info("Finished edit description of product : {}", productId);
     }
 
     public void setProductPrice(String username, String store_name_id, int productId, int product_price) throws IllegalAccessException {
         logger.info("Trying to edit price to product : {}", productId);
-        marketFacade.setProduct_price(username, store_name_id, productId, product_price);
+        marketFacade.setProductPrice(username, store_name_id, productId, product_price);
         logger.info("Finished edit price of product : {}", productId);
     }
 
     public void setProductQuantity(String username, String store_name_id, int productId, int product_quantity) throws IllegalAccessException {
         logger.info("Trying to edit quantity to product : {}", productId);
-        marketFacade.setProduct_quantity(username, store_name_id, productId, product_quantity);
+        marketFacade.setProductQuantity(username, store_name_id, productId, product_quantity);
         logger.info("Finished edit quantity of product : {}", productId);
     }
 
@@ -160,5 +160,12 @@ public class MarketServiceImp implements MarketService {
         logger.info("Trying to edit category to product : {}", productId);
         marketFacade.setCategory(username, store_name_id, productId, category);
         logger.info("Finished edit category of product : {}", productId);
+    }
+
+    @Override
+    public void closeStoreExist(String storeName) {
+        logger.info("Trying to close store with name : {}", storeName);
+        marketFacade.openStoreExist(storeName);
+        logger.error("Failed on closing Store with name : {}", storeName);
     }
 }

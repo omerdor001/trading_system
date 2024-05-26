@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface TradingSystem {
     ResponseEntity<String> openSystem();
-    String enter();
+    ResponseEntity<String> enter();
     ResponseEntity<String> exit(String token, int id);
     ResponseEntity<String> exit(String token, String username);
     ResponseEntity<String> register(int id, String username, String password, LocalDate birthdate);

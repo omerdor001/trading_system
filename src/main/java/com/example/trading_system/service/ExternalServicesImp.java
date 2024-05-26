@@ -23,29 +23,29 @@ public class ExternalServicesImp implements ExternalServices {
         return ExternalServicesImp.Singleton.INSTANCE;
     }
 
-    public void addService(Service service) throws InstanceAlreadyExistsException {//Add connection
-        logger.info("Trying adding external service: {}", service.getServiceName());
+    public void addService(String service) throws InstanceAlreadyExistsException {//Add connection
+        logger.info("Trying adding external service: {}", service);
         facade.addService(service);
-        logger.info("Finish adding external service: {}", service.getServiceName());
+        logger.info("Finish adding external service: {}", service);
     }
 
     @Override
-    public void addServiceNew(Service service) throws InstanceAlreadyExistsException {
-        logger.info("Trying add external service: {}", service.getServiceName());
+    public void addServiceNew(String service) throws InstanceAlreadyExistsException {
+        logger.info("Trying add external service: {}", service);
         facade.addService(service);
-        logger.info("Finish add external service: {}", service.getServiceName());
+        logger.info("Finish add external service: {}", service);
     }
 
-    public void replaceService(Service newService, Service oldService) {
-        logger.info("Trying replacing external service: {} to {} ", oldService.getServiceName(), newService.getServiceName());
+    public void replaceService(String newService, String oldService) {
+        logger.info("Trying replacing external service: {} to {} ", oldService, newService);
         facade.replaceService(newService, oldService);
-        logger.info("Finish replacing external service: {} to {} ", oldService.getServiceName(), newService.getServiceName());
+        logger.info("Finish replacing external service: {} to {} ", oldService, newService);
     }
 
-    public void changeServiceName(Service serviceToChangeAt, String newName) {
-        logger.info("Trying changing name to external service: {} to name : {} ", serviceToChangeAt.getServiceName(), newName);
+    public void changeServiceName(String serviceToChangeAt, String newName) {
+        logger.info("Trying changing name to external service: {} to name : {} ", serviceToChangeAt, newName);
         facade.changeServiceName(serviceToChangeAt, newName);
-        logger.info("Finish changing name to external service: {} to name : {} ", serviceToChangeAt.getServiceName(), newName);
+        logger.info("Finish changing name to external service: {} to name : {} ", serviceToChangeAt, newName);
     }
 
     public void makePayment(String serviceName, double amount) {

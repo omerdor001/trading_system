@@ -16,7 +16,7 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.util.List;
 
-public class TradingSystemImp {
+public class TradingSystemImp implements TradingSystem{
     private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
     public UserFacade userFacade = UserFacadeImp.getInstance();
     public UserService userService = UserServiceImp.getInstance();
@@ -130,7 +130,22 @@ public class TradingSystemImp {
         }
     }
 
+    @Override
     public ResponseEntity<String> addService(Service service) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<String> replaceService(Service newService, Service oldService) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<String> changeServiceName(Service serviceToChangeAt, String newName) {
+        return null;
+    }
+
+    public ResponseEntity<String> addService(String service) {
         logger.info("Attempting to add service: {}", service);
         try {
             if (!checkSystemOpen()) {
@@ -148,7 +163,7 @@ public class TradingSystemImp {
         }
     }
 
-    public ResponseEntity<String> replaceService(Service newService, Service oldService) {
+    public ResponseEntity<String> replaceService(String newService, String oldService) {
         logger.info("Attempting to replace service: {} with new service: {}", oldService, newService);
         try {
             if (!checkSystemOpen()) {
@@ -163,7 +178,7 @@ public class TradingSystemImp {
         }
     }
 
-    public ResponseEntity<String> changeServiceName(Service serviceToChangeAt, String newName) {
+    public ResponseEntity<String> changeServiceName(String serviceToChangeAt, String newName) {
         logger.info("Attempting to change service name of service: {} to new name: {}", serviceToChangeAt, newName);
         try {
             if (!checkSystemOpen()) {
