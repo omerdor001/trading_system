@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Registered extends User {
+
+
     private String userName;
     private String encrypted_pass;
     private String address;
@@ -53,7 +55,9 @@ public class Registered extends User {
         //SET THE ROLE TO OWNER OF STORE
 
     }
-
+    public String getUserName() {
+        return userName;
+    }
     @Override
     public String getPass(){
         return this.encrypted_pass;
@@ -61,15 +65,11 @@ public class Registered extends User {
 
     @Override
     public void login(){
-        if (getLogged())
-            throw new RuntimeException("User already logged in");
         this.isLogged = true;
     }
 
     @Override
     public void logout(){
-        if (getLogged())
-            throw new RuntimeException("User already logged out");
         this.isLogged = false;
     }
 
@@ -159,12 +159,18 @@ public class Registered extends User {
         ownerToApprove.remove(storeName);
     }
 
-
     public String getAddress() {
         return address;
     }
 
     public LocalDate getBirthdate() {
         return birthdate;
+
+    public boolean isAdmin(){
+        return this.isAdmin;
+    }
+
+    public void setAdmin(boolean value){
+        this.isAdmin = value;
     }
 }
