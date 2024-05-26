@@ -1,5 +1,6 @@
 package com.example.trading_system.service;
 
+import com.example.trading_system.domain.stores.Purchase;
 import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.domain.users.UserFacade;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class UserServiceImp implements UserService {
 
@@ -275,9 +277,5 @@ public class UserServiceImp implements UserService {
 
 
 
-    @Override
-    public boolean isAdminRegistered() {
-        return userFacade.isAdminRegistered();
-    }
 }
 

@@ -1,6 +1,7 @@
 package com.example.trading_system.domain.users;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -8,7 +9,9 @@ import java.util.*;
 public class Registered extends User {
     private String userName;
     private String encrypted_pass;
+    @Getter
     private String address;
+    @Getter
     private LocalDate birthdate;
     private boolean isAdmin;
     private boolean isLogged = false;
@@ -17,6 +20,9 @@ public class Registered extends User {
     private List<Notification> notifications;
     private HashMap<String,List<Boolean>> managerToApprove;
     private List<String> ownerToApprove;
+    @Getter
+    @Setter
+    private boolean commercialManager;
 
     public Registered(int id, String userName, String encrypted_pass, String address, LocalDate birthdate) {
         super(id);
@@ -31,6 +37,7 @@ public class Registered extends User {
         this.roles=new ArrayList<>();
         this.managerToApprove=new HashMap<>();
         this.ownerToApprove=new ArrayList<>();
+        this.commercialManager=false;
     }
 
     public Registered(int id, String userName, String encryption, LocalDate birthdate) {
@@ -162,13 +169,8 @@ public class Registered extends User {
     public void removeWaitingAppoint_Owner(String storeName){
         ownerToApprove.remove(storeName);
     }
-
-
-    public String getAddress() {
-        return address;
+    public int getId(String userName){
+        return  id;
     }
 
-    public LocalDate getBirthdate() {
-        return birthdate;
-    }
 }

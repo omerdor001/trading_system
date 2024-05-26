@@ -54,4 +54,32 @@ public class PaymentServiceImp implements PaymentService{
         logger.info("Purchase approved for registered user with ID: {} using payment service: {}", registeredId, paymentService);
 
     }
+
+    @Override
+    public String getPurchaseHistory(String username, String storeName, Integer id, Integer productBarcode) {
+        String result="";
+        logger.info("Get Purchase History");
+        try {
+             result= paymentFacade.getPurchaseHistory(username,storeName,id,productBarcode);
+        }catch (Exception e){
+            logger.error("Error occurred while Getting Purchase History");
+            return  "";
+        }
+        return result;
+    }
+
+    @Override
+    public String getStoresPurchaseHistory(String username, String storeName, Integer id, Integer productBarcode) {
+        String result="";
+        logger.info("Get Purchase Stores History");
+        try {
+            result= paymentFacade.getStoresPurchaseHistory(username,storeName,id,productBarcode);
+        }catch (Exception e){
+            logger.error("Error occurred while Getting Purchase Stores History");
+            return  "";
+        }
+        return result;
+    }
+
+
 }
