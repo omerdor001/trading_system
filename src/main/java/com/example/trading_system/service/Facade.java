@@ -131,7 +131,6 @@ public class Facade {
         serviceFacade.makeDelivery(serviceName, address);
         return new ResponseEntity<>("Delivery made successfully.", HttpStatus.OK);
     }
-
     public ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
                                              double product_price, int product_quantity, double rating, Category category, List<String> keyWords) {
         if (!checkSystemOpen()) {
@@ -151,28 +150,28 @@ public class Facade {
         if (!checkSystemOpen()) {
             return systemClosedResponse();
         }
-        return marketService.setProduct_name(username, store_name_id, productId, product_name);
+        return marketService.setProductName(username, store_name_id, productId, product_name);
     }
 
     public ResponseEntity<String> setProduct_description(String username, String store_name_id, int productId, String product_description) {
         if (!checkSystemOpen()) {
             return systemClosedResponse();
         }
-        return marketService.setProduct_description(username, store_name_id, productId, product_description);
+        return marketService.setProductDescription(username, store_name_id, productId, product_description);
     }
 
     public ResponseEntity<String> setProduct_price(String username, String store_name_id, int productId, int product_price) {
         if (!checkSystemOpen()) {
             return systemClosedResponse();
         }
-        return marketService.setProduct_price(username, store_name_id, productId, product_price);
+        return marketService.setProductPrice(username, store_name_id, productId, product_price);
     }
 
     public ResponseEntity<String> setProduct_quantity(String username, String store_name_id, int productId, int product_quantity) {
         if (!checkSystemOpen()) {
             return systemClosedResponse();
         }
-        return marketService.setProduct_quantity(username, store_name_id, productId, product_quantity);
+        return marketService.setProductQuantity(username, store_name_id, productId, product_quantity);
     }
 
     public ResponseEntity<String> setRating(String username, String store_name_id, int productId, int rating) {
@@ -188,6 +187,60 @@ public class Facade {
         }
         return marketService.setCategory(username, store_name_id, productId, category);
     }
+    public String getAllHistoryPurchases(String userName, String storeName) {
+        return marketService.getAllHistoryPurchases(userName,storeName);
+    }
+    public String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) {
+        return marketService.getHistoryPurchasesByCustomer(userName,storeName,customerUserName);
+    }
+
+    public ResponseEntity<String> suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+        return userService.suggestManage(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+    }
+
+    public ResponseEntity<String> approveManager(String newManager, String store_name_id, String appoint) {
+        return userService.approveManage(newManager,store_name_id, appoint);
+    }
+
+//    public ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+//        return userService.appointManager(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+//    }
+
+    public ResponseEntity<String> suggestOwner(String appoint, String newOwner, String storeName) {
+        return userService.suggestOwner(appoint,newOwner,storeName);
+    }
+
+    public ResponseEntity<String> approveOwner(String newOwner, String storeName, String appoint) {
+        return userService.approveOwner(newOwner,storeName, appoint);
+    }
+
+//    public ResponseEntity<String> appointOwner(String appoint, String newOwner, String storeName) {
+//        return userService.appointOwner(appoint,newOwner,storeName);
+//    }
+
+    ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy){
+        return userService.editPermissionForManager(userId, managerToEdit,storeNameId,  watch,  editSupply,  editBuyPolicy,  editDiscountPolicy);
+    }
+    public void openStroeExist(String storeName){
+        marketFacade.openStoreExist(storeName);
+    }
+
+    public void closeStroeExist(String storeName){
+        marketFacade.closeStoreExist(storeName);
+    }
+
+    String requestInformationAboutOfficialsInStore(String userName, String storeName){
+        return marketService.requestInformationAboutOfficialsInStore(userName, storeName);
+    }
+
+    String requestManagersPermissions(String userName, String storeName){
+        return marketService.requestManagersPermissions(userName, storeName);
+    }
+
+    String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName){
+        return marketService.requestInformationAboutSpecificOfficialInStore(userName, storeName, officialUserName);
+    }
+
 
     public ResponseEntity<String> login(String token, int id, String username, String password) {
         if (!checkSystemOpen()) {
@@ -210,4 +263,7 @@ public class Facade {
         userService.logout(id, userName);
         return new ResponseEntity<>("Logout successful.", HttpStatus.OK);
     }
+
 }
+
+
