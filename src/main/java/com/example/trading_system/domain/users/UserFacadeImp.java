@@ -300,11 +300,12 @@ public class UserFacadeImp implements UserFacade{
 
     }
 
+    @Override
     public void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException {
         if(!registered.containsKey(appoint)){
             throw new NoSuchElementException("No user called "+appoint+ "exist");
         }
-        if(!registered.containsKey(newManager)){
+        if(!registered.containsKey(newOwner)){
             throw new NoSuchElementException("No user called "+newOwner+ "exist");
         }
         Registered appointUser=registered.get(appoint);
