@@ -3,9 +3,13 @@ package com.example.trading_system.service;
 import com.example.trading_system.domain.externalservices.Service;
 import org.springframework.http.ResponseEntity;
 
-public interface ExternalServices {
-    ResponseEntity<String> addService(String serviceName);
+import javax.management.InstanceAlreadyExistsException;
 
+public interface ExternalServices {
+    ResponseEntity<String> addPaymentService(String serviceName) ;
+    ResponseEntity<String> addPaymentProxyService(String serviceName) ;
+    ResponseEntity<String> addDeliveryService(String serviceName) ;
+    ResponseEntity<String> addDeliveryProxyService(String serviceName) ;
 
     ResponseEntity<String> replaceService(String newServiceName, String oldServiceName);
 
