@@ -23,7 +23,7 @@ class LoginUnitTests {
     }
 
     @Test
-    void givenValidCredentials_whenLogin_thenVisitorRemoved() {
+    void login_Success() {
         // Given
         String username = "testvisitor";
         String password = "password123";
@@ -44,7 +44,7 @@ class LoginUnitTests {
     }
 
     @Test
-    void givenNonExistingUserName_whenLogin_thenFalse() {
+    void login_Wrong_User() {
         // Given
         String username = "nonExistingUser";
         String password = "password123";
@@ -60,7 +60,7 @@ class LoginUnitTests {
     }
 
     @Test
-    void givenInvalidPassword_whenLogin_thenFalse() {
+    void login_Wrong_Password() {
         // Given
         String username = "testuser";
         String password = "wrongPassword";

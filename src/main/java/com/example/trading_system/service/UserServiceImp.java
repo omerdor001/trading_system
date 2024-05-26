@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 public class UserServiceImp implements UserService {
 
@@ -21,10 +22,9 @@ public class UserServiceImp implements UserService {
     public String enter(int id){
         logger.info("Trying enter to system as a visitor , with id : {}", id);
         userFacade.createVisitor(id);
-        Security.generateToken("v"+id);
-//         facade.enter(id);
+        String token = Security.generateToken("v"+id);
         logger.info("Finish enter to system as a visitor , with id : {}", id);
-        return Security.generateToken("v"+id);
+        return token;
     }
 
     public void exit(int id) throws Exception {
@@ -40,8 +40,42 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean registration(int id, String username, String password, LocalDate birthdate) {
-        boolean result;
+    public boolean login(int id, String username, String password) {
+        logger.info("Trying to login user: {}", username);
+        try{
+            String encrypted_pass = userFacade.getUserPassword(username);
+            if (Security.checkPassword(password, encrypted_pass)) {
+                userFacade.login(username);
+                userFacade.removeVisitor(id);
+            }
+            else
+                throw new RuntimeException("Wrong password");
+            logger.info("User: {} logged in", username);
+            return true;
+        }catch (Exception e){
+            logger.error("Error occurred : {} , Failed login user: {}", e.getMessage(), username);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean logout(int id, String username) {
+        logger.info("Trying to logout user: {}", username);
+        try{
+            userFacade.saveUserCart(username);
+            userFacade.logout(username);
+            userFacade.enter(id);
+            logger.info("User: {} logged out", username);
+            return true;
+        }catch (Exception e){
+            logger.error("Error occurred : {} , Failed logging out user: {}", e.getMessage(), username);
+            return false;
+        }
+    }
+
+
+    @Override
+    public boolean register(int id, String username, String password, LocalDate birthdate) {
         logger.info("Trying registering a new user: {}", username);
         try {
             String encrypted_pass = Security.encrypt(password);
@@ -123,27 +157,31 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean register(int id, String username, String password, LocalDate birthdate) {
-        return false;
+    public String registeredViewCart(String username) {
+        String result = "";
+        logger.info("Trying registerd : {} view cart ", username);
+        try {
+            result = userFacade.registeredViewCart(username);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed registerd view cart ", username);
+            return "";
+        }
+        logger.info("Finished registerd view cart ");
+        return result;
     }
 
     @Override
-    public boolean login(int id, String username, String password) {
-        logger.info("Trying to login user: {}", username);
-        try{
-            String encrypted_pass = userFacade.getUserPassword(username);
-            if (Security.checkPassword(password, encrypted_pass)) {
-                userFacade.login(username);
-                userFacade.removeVisitor(id);
-            }
-            else
-                throw new RuntimeException("Wrong password");
-            logger.info("User: {} logged in", username);
-            return true;
-        }catch (Exception e){
-            logger.error("Error occurred : {} , Failed login user: {}", e.getMessage(), username);
-            return false;
+    public String visitorViewCart(int id) {
+        String result;
+        logger.info("Trying view cart");
+        try {
+            result = userFacade.visitorViewCart(id);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed view cart ", id);
+            return "";
         }
+        logger.info("Finished view cart ");
+        return result;
     }
 
     @Override
@@ -237,5 +275,8 @@ public class UserServiceImp implements UserService {
         logger.info("Finished edit permission to manager : {}  in store : {}", managerToEdit,storeNameId);
         return new ResponseEntity<>("Success edit permission for manager ", HttpStatus.OK);
     }
+
+
+
 }
 

@@ -26,9 +26,9 @@ public abstract class User {
         throw new RuntimeException("Only registered users have a password");
     }
 
-    public void login(){
-        throw new RuntimeException("Only registered users can login");
-    }
+    public abstract void login();
+    public abstract void logout();
+
 
     public Cart getShopping_cart() {
         return shopping_cart;

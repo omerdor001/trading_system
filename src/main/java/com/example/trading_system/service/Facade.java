@@ -40,24 +40,20 @@ public class Facade {
         return token;
     }
 
+
+    //TODO: Do we even need that if we have logout?
     public void exit(String token, int id) throws Exception {
         userService.exit(id);
         Security.makeTokenExpire(token);
     }
-
     public void exit(String token, String username) throws Exception {
         userService.exit(username);
         Security.makeTokenExpire(token);
     }
 
-    public boolean registration(String token, int id, String username, String password, LocalDate birthdate) throws Exception {
-        if(Security.validateToken(token,"v"+id)){
-            userFacade.registration(id,username,password,birthdate);
-            return true;
-        }
-        else{
-            return false;
-        }
+    public boolean register(int id, String username, String password, LocalDate birthdate) throws Exception {
+        userFacade.register(id,username,password,birthdate);
+        return true;
     }
 
     public boolean addService(Service service) throws InstanceAlreadyExistsException {
@@ -161,14 +157,19 @@ public class Facade {
     }
 
 
-    public String login(int id, String username, String password){
+    public String login(String token, int id, String username, String password){
         if (userService.login(id, username, password)){
-            Security.makeTokenExpire("v" + id);
+            Security.makeTokenExpire(token);
             return Security.generateToken(username);
         }
         else {
             return "";
         }
+    }
+
+    public void logout(int id, String userName){
+        userService.logout(id, userName);
+//        Security.makeTokenExpire(token);
     }
 
 }
