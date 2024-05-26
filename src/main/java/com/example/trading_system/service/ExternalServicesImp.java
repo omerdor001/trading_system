@@ -14,93 +14,69 @@ public class ExternalServicesImp implements ExternalServices{
         this.facade=facade;
 
     }
-    public boolean addService(Service service) {//Add connection
-        boolean result;
-        logger.info("Trying adding external service: {}", service.getServiceName());
+    public ResponseEntity<String> addService(String serviceName) {//Add connection
+        logger.info("Trying adding external service: {}", serviceName);
         try {
-            boolean _result=facade.addService(service);
-            result=_result;
+            facade.addService(serviceName);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed trying adding external service: {}", e.getMessage(), service.getServiceName());
-            return false;
+            logger.error("Error occurred : {} , Failed trying adding external service: {}", e.getMessage(), serviceName);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
         }
-        logger.info("Finish adding external service: {}", service.getServiceName());
-        return result;
+        logger.info("Finish adding external service: {}", serviceName);
+        return new ResponseEntity<String>("Success adding external service", HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<String> addServiceNew(Service service) {
-        logger.info("Trying add external service: {}", service.getServiceName());
+    public ResponseEntity<String> replaceService(String newServiceName, String oldServiceName){
+        logger.info("Trying replacing external service: {} to {} ",oldServiceName,newServiceName);
         try {
-            boolean result=facade.addService(service);
-            if(result){
-                return new ResponseEntity<>("Success in adding External Service", HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed trying add external service: {}", e.getMessage(), service.getServiceName());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-        logger.info("Finish add external service: {}", service.getServiceName());
-        return new ResponseEntity<>("Success in adding External Service", HttpStatus.OK);
-    }
-
-    public boolean replaceService(Service newService, Service oldService){
-        boolean result;
-        logger.info("Trying replacing external service: {} to {} ",oldService.getServiceName(),newService.getServiceName());
-        try {
-            boolean _result=facade.replaceService(newService,oldService);
-            result=_result;
+            facade.replaceService(newServiceName,oldServiceName);
         }
         catch (Exception e){
-            logger.error("Error occurred : {} ,Failed trying replacing external service: {} to {} ",e.getMessage(),oldService.getServiceName(),newService.getServiceName());
-            return false;
+            logger.error("Error occurred : {} ,Failed trying replacing external service: {} to {} ",e.getMessage(),oldServiceName,newServiceName);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finish replacing external service: {} to {} ",oldService.getServiceName(),newService.getServiceName());
-        return result;
+        logger.info("Finish replacing external service: {} to {} ",oldServiceName,newServiceName);
+        return new ResponseEntity<String>("Success replacing external service", HttpStatus.OK);
     }
 
-    public boolean changeServiceName(Service serviceToChangeAt,String newName){
-        boolean result;
-        logger.info("Trying changing name to external service: {} to name : {} ",serviceToChangeAt.getServiceName(),newName);
+    public ResponseEntity<String> changeServiceName(String serviceToChangeAtName,String newName){
+        logger.info("Trying changing name to external service: {} to name : {} ",serviceToChangeAtName,newName);
         try {
-            boolean _result=facade.changeServiceName(serviceToChangeAt,newName);
-            result=_result;
+            facade.changeServiceName(serviceToChangeAtName,newName);
         }
         catch (Exception e){
-            logger.error("Error occurred : {} , Failed trying changing name to external service: {} to name : {} ",e.getMessage(),serviceToChangeAt.getServiceName(),newName);
-            return false;
+            logger.error("Error occurred : {} , Failed trying changing name to external service: {} to name : {} ",e.getMessage(),serviceToChangeAtName,newName);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finish changing name to external service: {} to name : {} ",serviceToChangeAt.getServiceName(),newName);
-        return result;
+        logger.info("Finish changing name to external service: {} to name : {} ",serviceToChangeAtName,newName);
+        return new ResponseEntity<String>("Success changing external service name", HttpStatus.OK);
     }
 
-    public boolean makePayment(String serviceName,double amount){
-        boolean result;
+    public ResponseEntity<String> makePayment(String serviceName,double amount){
         logger.info("Trying making Payment with service {} ",serviceName);
         try {
-            boolean _result=facade.makePayment(serviceName,amount);
-            result=_result;
+            facade.makePayment(serviceName,amount);
         }
         catch (Exception e){
             logger.error("Error occurred : {} , Failed making payment with service: {}  ",e.getMessage(),serviceName);
-            return false;
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         logger.info("Finish making payment with service: {} ",serviceName);
-        return result;
+        return new ResponseEntity<String>("Success making payment", HttpStatus.OK);
     }
 
-    public boolean makeDelivery(String serviceName,String address){
+    public ResponseEntity<String> makeDelivery(String serviceName,String address){
         boolean result;
         logger.info("Trying making delivery with service {} ",serviceName);
         try {
-            boolean _result=facade.makeDelivery(serviceName,address);
-            result=_result;
+            facade.makeDelivery(serviceName,address);
         }
         catch (Exception e){
             logger.error("Error occurred : {} , Failed making delivery with service: {}  ",e.getMessage(),serviceName);
-            return false;
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         logger.info("Finish making delivery with service: {} ",serviceName);
-        return result;
+        return new ResponseEntity<String>("Success making delivery", HttpStatus.OK);
     }
 }

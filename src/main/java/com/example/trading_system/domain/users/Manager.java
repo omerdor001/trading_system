@@ -2,11 +2,18 @@ package com.example.trading_system.domain.users;
 
 import java.util.List;
 
-public class Manager extends RoleState{
+public class Manager extends RoleState {
     private boolean watch;
     private boolean editSupply;
     private boolean editBuyPolicy;
     private boolean editDiscountPolicy;
+
+    public Manager() {
+        this.watch=false;
+        this.editBuyPolicy=false;
+        this.editDiscountPolicy=false;
+        this.editSupply=false;
+    }
 
     public Manager(Role role,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) {
         this.role=role;
@@ -16,18 +23,22 @@ public class Manager extends RoleState{
         this.editSupply=editSupply;
     }
 
+    @Override
     public boolean isWatch() {
         return watch;
     }
 
+    @Override
     public void setWatch(boolean watch) {
         this.watch = watch;
     }
 
+    @Override
     public boolean isEditSupply() {
         return editSupply;
     }
 
+    @Override
     public void setEditSupply(boolean editSupply) {
         this.editSupply = editSupply;
     }
@@ -36,6 +47,7 @@ public class Manager extends RoleState{
         return editBuyPolicy;
     }
 
+    @Override
     public void setEditBuyPolicy(boolean editBuyPolicy) {
         this.editBuyPolicy = editBuyPolicy;
     }
@@ -44,6 +56,7 @@ public class Manager extends RoleState{
         return editDiscountPolicy;
     }
 
+    @Override
     public void setEditDiscountPolicy(boolean editDiscountPolicy) {
         this.editDiscountPolicy = editDiscountPolicy;
     }
@@ -87,5 +100,31 @@ public class Manager extends RoleState{
     @Override
     public void setCategory(String username,String store_name_id,int productId,int category) throws IllegalAccessException {
         throw new IllegalAccessException("Manager cannot remove products");
+    }
+
+    @Override
+    public void getHistoryPurchasesByCustomer() throws IllegalAccessException {
+        throw new IllegalAccessException("Manager cannot get history purchases by customer");
+
+    }
+
+    @Override
+    public void getAllHistoryPurchases() throws IllegalAccessException {
+        throw new IllegalAccessException("Manager cannot get all history purchases");
+    }
+
+    @Override
+    public void requestInformationAboutOfficialsInStore() throws IllegalAccessException {
+        throw new IllegalAccessException("Manager cannot request information about officials in store.");
+    }
+
+    @Override
+    public boolean isManager() {
+        return true;
+    }
+
+    @Override
+    public boolean isOwner() {
+        return false;
     }
 }

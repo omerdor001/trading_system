@@ -21,6 +21,7 @@ public class Notification {
     private String textContent;
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
     static {
         // Configure the ObjectMapper to use the local time zone
         objectMapper.setTimeZone(TimeZone.getDefault());

@@ -4,14 +4,14 @@ import com.example.trading_system.domain.externalservices.Service;
 import org.springframework.http.ResponseEntity;
 
 public interface ExternalServices {
-    boolean addService(Service service);
-    ResponseEntity<String> addServiceNew(Service service);
+    ResponseEntity<String> addService(String serviceName);
 
-    boolean replaceService(Service newService, Service oldService);
 
-    boolean changeServiceName(Service serviceToChangeAt,String newName);
+    ResponseEntity<String> replaceService(String newServiceName, String oldServiceName);
 
-    boolean makePayment(String serviceName,double amount);
+    ResponseEntity<String> changeServiceName(String serviceToChangeAtName,String newName);
 
-    boolean makeDelivery(String serviceName,String address);
+    ResponseEntity<String> makePayment(String serviceName,double amount);
+
+    ResponseEntity<String> makeDelivery(String serviceName,String address);
 }

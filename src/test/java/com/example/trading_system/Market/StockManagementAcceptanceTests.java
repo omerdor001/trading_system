@@ -34,9 +34,9 @@ class StockManagementAcceptanceTests {
     void addProduct_Success() {
         ////TODO register user
         //TODO Make him manager
-        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords)).
+        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords,"111111")).
                 thenReturn(new ResponseEntity("Success adding products", HttpStatus.OK));
-        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords);
+        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords,"111111");
         assertEquals(response,new ResponseEntity("Success adding products", HttpStatus.OK));
     }
 
@@ -49,9 +49,9 @@ class StockManagementAcceptanceTests {
     void addProduct_StoreNotExist() {
         ////TODO register user
         //TODO Make him manager
-        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords)).
+        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords,"111111")).
                 thenReturn(new ResponseEntity("Store must exist", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords);
+        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords,"111111");
         assertEquals(response,new ResponseEntity("Store must exist", HttpStatus.BAD_REQUEST));
     }
 
@@ -59,9 +59,9 @@ class StockManagementAcceptanceTests {
     void addProduct_PriceLessThanZero() {
         ////TODO register user
         //TODO Make him manager
-        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",-350.0,1,8.0,category,keyWords)).
+        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",-350.0,1,8.0,category,keyWords,"111111")).
                 thenReturn(new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",-350.0,1,8.0,Category.Sport,keyWords);
+        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",-350.0,1,8.0,Category.Sport,keyWords,"111111");
         assertEquals(response,new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
     }
 
@@ -69,9 +69,9 @@ class StockManagementAcceptanceTests {
     void addProduct_QuantityLessEqualThanZero() {
         ////TODO register user
         //TODO Make him manager
-        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,-1,8.0,category,keyWords)).
+        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,-1,8.0,category,keyWords,"111111")).
                 thenReturn(new ResponseEntity("Quantity must be natural number", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,-1,8.0,Category.Sport,keyWords);
+        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,-1,8.0,Category.Sport,keyWords,"111111");
         assertEquals(response,new ResponseEntity("Quantity must be natural number", HttpStatus.BAD_REQUEST));
     }
 
@@ -79,18 +79,18 @@ class StockManagementAcceptanceTests {
     void addProduct_RatingLessThanZero() {
         ////TODO register user
         //TODO Make him manager
-        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,-8.0,category,keyWords)).
+        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,-8.0,category,keyWords,"111111")).
                 thenReturn(new ResponseEntity("Rating can't be negative number", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,-8.0,Category.Sport,keyWords);
+        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,-8.0,Category.Sport,keyWords,"111111");
         assertEquals(response,new ResponseEntity("Rating can't be negative number", HttpStatus.BAD_REQUEST));
     }
 
     @Test
     void addProduct_NotManager() {
         ////TODO register user
-        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords)).
+        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords,"111111")).
                 thenReturn(new ResponseEntity("User doesn't have permission to this store", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords);
+        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords,"111111");
         assertEquals(response,new ResponseEntity("User doesn't have permission to this store", HttpStatus.BAD_REQUEST));
     }
 
@@ -98,9 +98,9 @@ class StockManagementAcceptanceTests {
     void removeProduct_success() {
         ////TODO register user
         //TODO Make him manager
-        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords);
-        when(facade.removeProduct("testuser","Adidas",123)).thenReturn(new ResponseEntity("Success removing products", HttpStatus.OK));
-        ResponseEntity<String> response=facade.removeProduct("testuser","Adidas",123);
+        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords,"111111");
+        when(facade.removeProduct("testuser","Adidas",123,"111111")).thenReturn(new ResponseEntity("Success removing products", HttpStatus.OK));
+        ResponseEntity<String> response=facade.removeProduct("testuser","Adidas",123,"111111");
         assertEquals(response,new ResponseEntity("Success removing products", HttpStatus.OK));
     }
 
@@ -113,9 +113,9 @@ class StockManagementAcceptanceTests {
     void removeProduct_StoreNotExist() {
         ////TODO register user
         //TODO Make him manager
-        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords);
-        when(facade.removeProduct("testuser","Adidas",123)).thenReturn(new ResponseEntity("Store must exist", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.removeProduct("testuser","Adidas",123);
+        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords,"111111");
+        when(facade.removeProduct("testuser","Adidas",123,"111111")).thenReturn(new ResponseEntity("Store must exist", HttpStatus.BAD_REQUEST));
+        ResponseEntity<String> response=facade.removeProduct("testuser","Adidas",123,"111111");
         assertEquals(response,new ResponseEntity("Store must exist", HttpStatus.BAD_REQUEST));
     }
 
@@ -123,17 +123,17 @@ class StockManagementAcceptanceTests {
     void removeProduct_ProductNotExist() {
         ////TODO register user
         //TODO Make him manager
-        when(facade.removeProduct("testuser","Adidas",123)).thenReturn(new ResponseEntity("Product must exist", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.removeProduct("testuser","Adidas",123);
+        when(facade.removeProduct("testuser","Adidas",123,"111111")).thenReturn(new ResponseEntity("Product must exist", HttpStatus.BAD_REQUEST));
+        ResponseEntity<String> response=facade.removeProduct("testuser","Adidas",123,"111111");
         assertEquals(response,new ResponseEntity("Product must exist", HttpStatus.BAD_REQUEST));
     }
 
     @Test
     void removeProduct_NotManager() {
         ////TODO register user
-        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords);
-        when(facade.removeProduct("testuser","Adidas",123)).thenReturn(new ResponseEntity("User doesn't have permission to this store", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.removeProduct("testuser","Adidas",123);
+        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords,"111111");
+        when(facade.removeProduct("testuser","Adidas",123,"111111")).thenReturn(new ResponseEntity("User doesn't have permission to this store", HttpStatus.BAD_REQUEST));
+        ResponseEntity<String> response=facade.removeProduct("testuser","Adidas",123,"111111");
         assertEquals(response,new ResponseEntity("User doesn't have permission to this store", HttpStatus.BAD_REQUEST));
     }
 
@@ -141,9 +141,9 @@ class StockManagementAcceptanceTests {
     void setProduct_name_success() {
         ////TODO register user
         //TODO Make him manager
-        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords);
-        when(facade.setProduct_name("testuser","Adidas",123,"Samba Shoes")).thenReturn(new ResponseEntity("Success editing name to product", HttpStatus.OK));
-        ResponseEntity<String> response=facade.setProduct_name("testuser","Adidas",123,"Samba Shoes");
+        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords,"111111");
+        when(facade.setProduct_name("testuser","Adidas",123,"Samba Shoes","111111")).thenReturn(new ResponseEntity("Success editing name to product", HttpStatus.OK));
+        ResponseEntity<String> response=facade.setProduct_name("testuser","Adidas",123,"Samba Shoes","111111");
         assertEquals(response,new ResponseEntity("Success editing name to product", HttpStatus.OK));
     }
 
@@ -151,9 +151,9 @@ class StockManagementAcceptanceTests {
     void setProduct_Price_PriceLessThanZero() {
         ////TODO register user
         //TODO Make him manager
-        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords);
-        when(facade.setProduct_price("testuser","Adidas",123,-300)).thenReturn(new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.setProduct_price("testuser","Adidas",123,-300);
+        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords,"111111");
+        when(facade.setProduct_price("testuser","Adidas",123,-300,"111111")).thenReturn(new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
+        ResponseEntity<String> response=facade.setProduct_price("testuser","Adidas",123,-300,"111111");
         assertEquals(response,new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
     }
 
@@ -161,18 +161,5 @@ class StockManagementAcceptanceTests {
     void setProduct_description_UserNotExist() {
         //TODO Make this test
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

@@ -4,11 +4,12 @@ import com.example.trading_system.service.Facade;
 import com.example.trading_system.service.Security;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 
@@ -22,6 +23,7 @@ class LoginAcceptanceTests {
         facade = new Facade();
         token1 = facade.enter();
         facade.register(0, "testuser", "password123", LocalDate.now());
+        facade.openSystem();
     }
 
     @Test
@@ -29,8 +31,10 @@ class LoginAcceptanceTests {
         int userId = 0;
         String username = "testuser";
         String password = "password123";
-        String token = facade.login(token1, userId, username, password);
-        assertTrue(!token.isEmpty(), "Token should not be empty");
+        ResponseEntity<String> response = facade.login(token1, userId, username, password);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(!response.getBody().isEmpty(), "Token should not be empty");
     }
 
     @Test
@@ -38,8 +42,9 @@ class LoginAcceptanceTests {
         int userId = 0;
         String username = "testuser";
         String password = "wrongPassword";
-        String token = facade.login(token1, userId, username, password);
-        assertTrue(token.isEmpty(), "Token should be empty");
+        ResponseEntity<String> response = facade.login(token1, userId, username, password);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
     @Test
@@ -47,8 +52,9 @@ class LoginAcceptanceTests {
         int userId = 0;
         String username = "wronguser";
         String password = "password123";
-        String token = facade.login(token1, userId, username, password);
-        assertTrue(token.isEmpty(), "Token should be empty");
+        ResponseEntity<String> response = facade.login(token1, userId, username, password);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
     @Test
@@ -56,8 +62,9 @@ class LoginAcceptanceTests {
         int userId = 0;
         String username = "testuser";
         String password = "password123";
-        String token = facade.login(token1, userId, username, password);
-        token = facade.login(token, userId, username, password);
-        assertTrue(token.isEmpty(), "Token should be empty");
+        ResponseEntity<String> response1 = facade.login(token1, userId, username, password);
+        ResponseEntity<String> response2 = facade.login(response1.getBody(), userId, username, password);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response2.getStatusCode());
     }
 }

@@ -10,13 +10,14 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public class MarketServiceImp implements MarketService {
-    public MarketFacade marketFacade;
+    private final MarketFacade marketFacade;
     private static final Logger logger = LoggerFactory.getLogger(MarketServiceImp.class);
 
     public MarketServiceImp(MarketFacade marketFacade) {
         this.marketFacade = marketFacade;
     }
 
+    @Override
     public String getAllStores() {
         String result;
         logger.info("Trying to Gather All Stores");
@@ -29,27 +30,51 @@ public class MarketServiceImp implements MarketService {
         logger.info("FINISHED Gather All Stores Info");
         return result;
     }
+    @Override
+    public void openStoreExist(String storeName) {
+        logger.info("Trying to open store with name : {}", storeName);
+        try {
+            marketFacade.openStoreExist(storeName);
+        }
+        catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on opening Store with name : {}", e.getMessage(), storeName);
+        }
+    }
 
-    public String getStoreProducts(String store_name) {
+    @Override
+    public void closeStoreExist(String storeName) {
+        logger.info("Trying to close store with name : {}", storeName);
+        try {
+            marketFacade.openStoreExist(storeName);
+
+        }
+        catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on closing Store with name : {}", e.getMessage(), storeName);
+        }
+    }
+
+    @Override
+    public String getStoreProducts(String storeName) {
         String result;
         logger.info("Trying to Gather ALL Store Products");
         try {
-            result = marketFacade.getStoreProducts(store_name);
+            result = marketFacade.getStoreProducts(storeName);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed on Gathering Store Products Info with Store Id : {} ", e.getMessage(), store_name);
+            logger.error("Error occurred : {} , Failed on Gathering Store Products Info with Store Id : {} ", e.getMessage(), storeName);
             return "";
         }
         logger.info("FINISHED Gather ALL Store Products Info");
         return result;
     }
 
-    public String getProductInfo(String store_name, int product_Id) {
+    @Override
+    public String getProductInfo(String storeName, int productId) {
         String result;
-        logger.info("Trying to Gather Product Info with Store Id : {} and product ID: {}", store_name, product_Id);
+        logger.info("Trying to Gather Product Info with Store Id : {} and product ID: {}", storeName, productId);
         try {
-            result = marketFacade.getProductInfo(store_name, product_Id);
+            result = marketFacade.getProductInfo(storeName, productId);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed on Gathering Product Info with Store Id : {} and product ID:{}", e.getMessage(), store_name, product_Id);
+            logger.error("Error occurred : {} , Failed on Gathering Product Info with Store Id : {} and product ID:{}", e.getMessage(), storeName, productId);
             return "";
         }
         logger.info("FINISHED Gather Product Info");
@@ -57,39 +82,42 @@ public class MarketServiceImp implements MarketService {
     }
 
     //search in specific store
-    public String searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    @Override
+    public String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category) {
         String result;
-        logger.info("Trying to search products in store : {} with name : {}", store_name, name);
+        logger.info("Trying to search products in store : {} with name : {}", storeName, name);
         try {
-            result = marketFacade.searchNameInStore(name, store_name, minPrice, maxPrice, minRating, category);
+            result = marketFacade.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category);
         } catch (Exception e) {
-            logger.error("Error occurred : {} ,  to search products in store : {} with name : {}}", e.getMessage(), store_name, name);
+            logger.error("Error occurred : {} ,  to search products in store : {} with name : {}}", e.getMessage(), storeName, name);
             return "";
         }
         logger.info("FINISHED Searching products in store ");
         return result;
     }
 
-    public String searchCategoryInStore(Category category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
+    @Override
+    public String searchCategoryInStore(Category category, String storeName, Double minPrice, Double maxPrice, Double minRating) {
         String result;
-        logger.info("Trying to search products in store : {} with category, : {}", store_name, category);
+        logger.info("Trying to search products in store : {} with category, : {}", storeName, category);
         try {
-            result = marketFacade.searchCategoryInStore(category, store_name, minPrice, maxPrice, minRating);
+            result = marketFacade.searchCategoryInStore(category, storeName, minPrice, maxPrice, minRating);
         } catch (Exception e) {
-            logger.error("Error occurred : {} ,  to search products in store : {} with category : {}}", e.getMessage(), store_name, category);
+            logger.error("Error occurred : {} ,  to search products in store : {} with category : {}}", e.getMessage(), storeName, category);
             return "";
         }
         logger.info("FINISHED Searching products in store ");
         return result;
     }
 
-    public String searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    @Override
+    public String searchKeywordsInStore(String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category) {
         String result;
-        logger.info("Trying to search products in store : {} with keyWords,  : {}", store_name, keyWords);
+        logger.info("Trying to search products in store : {} with keyWords,  : {}", storeName, keyWords);
         try {
-            result = marketFacade.searchKeywordsInStore(keyWords, store_name, minPrice, maxPrice, minRating, category);
+            result = marketFacade.searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category);
         } catch (Exception e) {
-            logger.error("Error occurred : {} ,  to search products in store : {} with keyWords,  : {}}", e.getMessage(), store_name, keyWords);
+            logger.error("Error occurred : {} ,  to search products in store : {} with keyWords,  : {}}", e.getMessage(), storeName, keyWords);
             return "";
         }
         logger.info("FINISHED Searching products in store ");
@@ -97,6 +125,7 @@ public class MarketServiceImp implements MarketService {
     }
 
     //search in stores
+    @Override
     public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category) {
         String result;
         logger.info("Trying to search products in stores with name : {}", name);
@@ -110,6 +139,7 @@ public class MarketServiceImp implements MarketService {
         return result;
     }
 
+    @Override
     public String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating) {
         String result;
         logger.info("Trying to search products in stores with category, : {}", category);
@@ -123,6 +153,7 @@ public class MarketServiceImp implements MarketService {
         return result;
     }
 
+    @Override
     public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category) {
         String result;
         logger.info("Trying to search products in stores with keyWords,  : {}", keyWords);
@@ -136,44 +167,47 @@ public class MarketServiceImp implements MarketService {
         return result;
     }
 
-    public ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                                             double product_price, int product_quantity, double rating, int category, List<String> keyWords){
+    @Override
+    public ResponseEntity<String> addProduct(String username, int productId, String storeName, String productName, String productDescription,
+                                             double productPrice, int productQuantity, double rating, Category category, List<String> keyWords){
         boolean result;
-        logger.info("Trying to add products to store : {}", store_name);
+        logger.info("Trying to add products to store : {}", storeName);
         try {
-            result = marketFacade.addProduct(username,product_id,store_name,product_name,product_description,product_price,product_quantity,rating,category,keyWords);
+            result = marketFacade.addProduct(username, productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
             if(result){
                 return new ResponseEntity<>("Success adding products", HttpStatus.OK);
             }
         } catch (Exception e) {
-            logger.error("Error occurred : {} ,  while trying to add products to store : {}", e.getMessage(),store_name);
+            logger.error("Error occurred : {} ,  while trying to add products to store : {}", e.getMessage(), storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished add products to store : {}",store_name);
+        logger.info("Finished add products to store : {}", storeName);
         return new ResponseEntity<>("Success adding products", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> removeProduct(String username, String store_name, int product_id){
+    @Override
+    public ResponseEntity<String> removeProduct(String username, String storeName, int productId){
         boolean result;
-        logger.info("Trying to remove products to store : {}", store_name);
+        logger.info("Trying to remove products to store : {}", storeName);
         try {
-            result = marketFacade.removeProduct(username,store_name,product_id);
+            result = marketFacade.removeProduct(username, storeName, productId);
             if(result){
                 return new ResponseEntity<>("Success removing products", HttpStatus.OK);
             }
         } catch (Exception e) {
-            logger.error("Error occurred : {} , while trying to remove products to store : {}", e.getMessage(),store_name);
+            logger.error("Error occurred : {} , while trying to remove products to store : {}", e.getMessage(), storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished remove products to store : {}",store_name);
+        logger.info("Finished remove products to store : {}", storeName);
         return new ResponseEntity<>("Success removing products", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> setProduct_name(String username,String store_name_id,int productId,String product_name){
+    @Override
+    public ResponseEntity<String> setProductName(String username, String storeNameId, int productId, String productName){
         boolean result;
         logger.info("Trying to edit name to product : {}", productId);
         try {
-            result = marketFacade.setProduct_name(username,store_name_id,productId,product_name);
+            result = marketFacade.setProductName(username, storeNameId,productId, productName);
             if(result){
                 return new ResponseEntity<>("Success editing name to product", HttpStatus.OK);
             }
@@ -185,11 +219,12 @@ public class MarketServiceImp implements MarketService {
         return new ResponseEntity<>("Success editing name to product", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> setProduct_description(String username,String store_name_id,int productId,String product_description){
+    @Override
+    public ResponseEntity<String> setProductDescription(String username, String storeNameId, int productId, String productDescription){
         boolean result;
         logger.info("Trying to edit description to product : {}", productId);
         try {
-            result = marketFacade.setProduct_description(username,store_name_id,productId,product_description);
+            result = marketFacade.setProductDescription(username, storeNameId,productId, productDescription);
             if(result){
                 return new ResponseEntity<>("Success editing name to product", HttpStatus.OK);
             }
@@ -201,11 +236,12 @@ public class MarketServiceImp implements MarketService {
         return new ResponseEntity<>("Success editing description to product", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> setProduct_price(String username,String store_name_id,int productId,int product_price){
+    @Override
+    public ResponseEntity<String> setProductPrice(String username, String storeNameId, int productId, int productPrice){
         boolean result;
         logger.info("Trying to edit price to product : {}", productId);
         try {
-            result = marketFacade.setProduct_price(username,store_name_id,productId,product_price);
+            result = marketFacade.setProductPrice(username, storeNameId,productId, productPrice);
             if(result){
                 return new ResponseEntity<>("Success editing price to product", HttpStatus.OK);
             }
@@ -217,11 +253,12 @@ public class MarketServiceImp implements MarketService {
         return new ResponseEntity<>("Success editing price to product", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> setProduct_quantity(String username,String store_name_id,int productId,int product_quantity){
+    @Override
+    public ResponseEntity<String> setProductQuantity(String username, String storeNameId, int productId, int productQuantity){
         boolean result;
         logger.info("Trying to edit quantity to product : {}", productId);
         try {
-            result = marketFacade.setProduct_quantity(username,store_name_id,productId,product_quantity);
+            result = marketFacade.setProductQuantity(username, storeNameId,productId, productQuantity);
             if(result){
                 return new ResponseEntity<>("Success editing quantity to product", HttpStatus.OK);
             }
@@ -233,11 +270,12 @@ public class MarketServiceImp implements MarketService {
         return new ResponseEntity<>("Success editing quantity to product", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> setRating(String username,String store_name_id,int productId,int rating){
+    @Override
+    public ResponseEntity<String> setRating(String username, String storeNameId, int productId, int rating){
         boolean result;
         logger.info("Trying to edit rating to product : {}", productId);
         try {
-            result = marketFacade.setRating(username,store_name_id,productId,rating);
+            result = marketFacade.setRating(username, storeNameId,productId,rating);
             if(result){
                 return new ResponseEntity<>("Success editing rating to product", HttpStatus.OK);
             }
@@ -249,11 +287,12 @@ public class MarketServiceImp implements MarketService {
         return new ResponseEntity<>("Success editing rating to product", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> setCategory(String username,String store_name_id,int productId,int category){
+    @Override
+    public ResponseEntity<String> setCategory(String username, String storeNameId, int productId, Category category){
         boolean result;
         logger.info("Trying to edit category to product : {}", productId);
         try {
-            result = marketFacade.setCategory(username,store_name_id,productId,category);
+            result = marketFacade.setCategory(username, storeNameId,productId,category);
             if(result){
                 return new ResponseEntity<>("Success editing category to product", HttpStatus.OK);
             }
@@ -264,6 +303,79 @@ public class MarketServiceImp implements MarketService {
         logger.info("Finished edit category of product : {}",productId);
         return new ResponseEntity<>("Success editing category to product", HttpStatus.OK);
     }
+    @Override
+    public String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName)
+    {
+        String historyPurchases;
+        logger.info("{} trying to get history purchases from store {} by {}",userName, storeName, customerUserName);
+        try {
+            historyPurchases = marketFacade.getHistoryPurchasesByCustomer(userName, storeName, customerUserName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , {} Failed to get history purchases from store {} by {}.", e.getMessage(), userName, storeName, customerUserName);
+            return "";
+        }
+        logger.info("FINISHED get history purchases by customer");
+        return historyPurchases;
+    }
+
+    @Override
+    public String getAllHistoryPurchases(String userName, String storeName)
+    {
+        String historyPurchases;
+        logger.info("{} trying to get all history purchases from store {}",userName, storeName);
+        try {
+            historyPurchases = marketFacade.getAllHistoryPurchases(userName, storeName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , {} Failed to get all history purchases from store {} .", e.getMessage(), userName, storeName);
+            return "";
+        }
+        logger.info("FINISHED get all history purchases.");
+        return historyPurchases;
+    }
+
+    public String requestInformationAboutOfficialsInStore(String userName, String storeName)
+    {
+        String informationAboutOfficials;
+        logger.info("{} trying to get informations about officials from store {}",userName, storeName);
+        try {
+            informationAboutOfficials = marketFacade.requestInformationAboutOfficialsInStore(userName, storeName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , {} Failed to get informations about officials from store {} .", e.getMessage(), userName, storeName);
+            return "";
+        }
+        logger.info("FINISHED get all informations about officials.");
+        return informationAboutOfficials;
+    }
+
+    public String requestManagersPermissions(String userName, String storeName)
+    {
+        String managerPermissions;
+        logger.info("{} trying to get managers permissions from store {}",userName, storeName);
+        try {
+            managerPermissions = marketFacade.requestManagersPermissions(userName, storeName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , {} Failed to get managers permissions from store {} .", e.getMessage(), userName, storeName);
+            return "";
+        }
+        logger.info("FINISHED get all managers permissions.");
+        return managerPermissions;
+    }
+
+    public String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName)
+    {
+        String officialInformation;
+        logger.info("{} trying to get information about {} from store {}",userName, officialUserName, storeName);
+        try {
+            officialInformation = marketFacade.requestInformationAboutSpecificOfficialInStore(userName, storeName, officialUserName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , {} Failed to get information about {} from store {} .", e.getMessage(), userName, officialUserName, storeName);
+            return "";
+        }
+        logger.info("FINISHED get infomation about {} from store {}.", officialUserName, storeName);
+        return officialInformation;
+    }
+
+
 
 
 }

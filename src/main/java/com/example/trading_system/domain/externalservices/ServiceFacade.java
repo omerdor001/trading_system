@@ -3,12 +3,12 @@ package com.example.trading_system.domain.externalservices;
 import javax.management.InstanceAlreadyExistsException;
 
 public interface ServiceFacade {
-    boolean addService(Service service) throws InstanceAlreadyExistsException;
-    boolean replaceService(Service newService, Service oldService);
-    boolean changeServiceName(Service serviceToChangeAt, String newName);
+    void addService(String serviceName) throws InstanceAlreadyExistsException;
+    void replaceService(String newServiceName, String oldServiceName);
+    void changeServiceName(String serviceToChangeAtName,String newName);
 
-    boolean makePayment(String serviceName,double amount);
-    boolean makeDelivery(String serviceName,String address);
+    void makePayment(String serviceName,double amount);
+    void makeDelivery(String serviceName,String address);
 
 
 }
