@@ -1,6 +1,6 @@
-package com.example.trading_system.domain.users;
+package com.example.trading_system.service;
 
-public interface PaymentFacade {
+public interface PaymentService {
       boolean VisitorCheckAvailabilityAndConditions(int visitorId);
 
       boolean registeredCheckAvailabilityAndConditions(String registeredId);
@@ -9,5 +9,5 @@ public interface PaymentFacade {
 
       void RegisteredApprovePurchase(String registeredId, String paymentService);
 
-
 }
+
