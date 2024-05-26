@@ -5,10 +5,8 @@ import com.example.trading_system.domain.users.Visitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
-import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class RegistrationUnitTests {
     private UserFacadeImp userFacade;
@@ -23,15 +21,15 @@ class RegistrationUnitTests {
     }
 
     @Test
-    void registration_Success() throws Exception {
+    void registration_Success(){
         int id = 1;
         String username = "testuser";
         String encryption = "testpassword";
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
 
-        assertDoesNotThrow(() -> userFacade.registration(id, username, encryption, birthdate));
-        assertTrue(userFacade.getRegisters().containsKey(username));
-        assertFalse(userFacade.getVisitors().containsKey(id));
+        assertDoesNotThrow(() -> userFacade.register(id, username, encryption, birthdate));
+        assertTrue(userFacade.getRegistered().containsKey(username));
+        assertTrue(userFacade.getVisitors().containsKey(id));
     }
 
     @Test
@@ -41,7 +39,7 @@ class RegistrationUnitTests {
         String encryption = "testpassword";
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
 
-        Exception exception = assertThrows(Exception.class, () -> userFacade.registration(id, username, encryption, birthdate));
+        Exception exception = assertThrows(Exception.class, () -> userFacade.register(id, username, encryption, birthdate));
         assertEquals("Username is null", exception.getMessage());
     }
 
@@ -52,7 +50,7 @@ class RegistrationUnitTests {
         String encryption = "testpassword";
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
 
-        Exception exception = assertThrows(Exception.class, () -> userFacade.registration(id, username, encryption, birthdate));
+        Exception exception = assertThrows(Exception.class, () -> userFacade.register(id, username, encryption, birthdate));
         assertEquals("Username is empty", exception.getMessage());
     }
 
@@ -63,7 +61,7 @@ class RegistrationUnitTests {
         String encryption = null;
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
 
-        Exception exception = assertThrows(Exception.class, () -> userFacade.registration(id, username, encryption, birthdate));
+        Exception exception = assertThrows(Exception.class, () -> userFacade.register(id, username, encryption, birthdate));
         assertEquals("Encrypted password is null", exception.getMessage());
     }
 
@@ -74,7 +72,7 @@ class RegistrationUnitTests {
         String encryption = "";
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
 
-        Exception exception = assertThrows(Exception.class, () -> userFacade.registration(id, username, encryption, birthdate));
+        Exception exception = assertThrows(Exception.class, () -> userFacade.register(id, username, encryption, birthdate));
         assertEquals("Encrypted password is empty", exception.getMessage());
     }
 
@@ -85,7 +83,7 @@ class RegistrationUnitTests {
         String encryption = "testpassword";
         LocalDate birthdate = null;
 
-        Exception exception = assertThrows(Exception.class, () -> userFacade.registration(id, username, encryption, birthdate));
+        Exception exception = assertThrows(Exception.class, () -> userFacade.register(id, username, encryption, birthdate));
         assertEquals("Birthdate password is null", exception.getMessage());
     }
 
@@ -96,9 +94,9 @@ class RegistrationUnitTests {
         String encryption = "testpassword";
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
         // Add the user once
-        userFacade.registration(id, username, encryption, birthdate);
+        userFacade.register(id, username, encryption, birthdate);
         // Attempt to add the same user again
-        Exception exception = assertThrows(Exception.class, () -> userFacade.registration(3, username, "newpassword", LocalDate.of(1991, 6, 20)));
+        Exception exception = assertThrows(Exception.class, () -> userFacade.register(3, username, "newpassword", LocalDate.of(1991, 6, 20)));
         assertEquals("username already exists - " + username, exception.getMessage());
     }
 
@@ -109,8 +107,8 @@ class RegistrationUnitTests {
         String encryption = "testpassword";
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
 
-        Exception exception = assertThrows(Exception.class, () -> userFacade.registration(id, username, encryption, birthdate));
-        assertEquals("No visitor with id - " + id, exception.getMessage());
+        Exception exception = assertThrows(Exception.class, () -> userFacade.register(id, username, encryption, birthdate));
+        assertEquals("No visitor with id: " + id, exception.getMessage());
     }
 
 }

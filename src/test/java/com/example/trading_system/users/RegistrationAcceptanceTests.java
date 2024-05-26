@@ -1,12 +1,8 @@
 package com.example.trading_system.users;
 
-import com.example.trading_system.domain.users.*;
 import com.example.trading_system.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -27,10 +23,10 @@ public class RegistrationAcceptanceTests {
         String username = "TestUser";
         String password = "TestPassword";
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
-        when(userService.registration(id, username, password, birthdate)).thenReturn(true);
+        when(userService.register(id, username, password, birthdate)).thenReturn(true);
 
         // Perform registration
-        boolean result = userService.registration(id, username, password, birthdate);
+        boolean result = userService.register(id, username, password, birthdate);
 
         // Verify registration is successful
         assertTrue(result);
@@ -43,10 +39,10 @@ public class RegistrationAcceptanceTests {
         String username = "ExistingUser";
         String password = "ExistingPassword";
         LocalDate birthdate = LocalDate.of(1995, 10, 20);
-        when(userService.registration(id, username, password, birthdate)).thenReturn(false);
+        when(userService.register(id, username, password, birthdate)).thenReturn(false);
 
         // Perform registration
-        boolean result = userService.registration(id, username, password, birthdate);
+        boolean result = userService.register(id, username, password, birthdate);
 
         // Verify registration fails
         assertFalse(result);

@@ -1,13 +1,13 @@
 package com.example.trading_system.domain.users;
 
+import org.springframework.web.client.HttpClientErrorException;
+
 import java.util.Date;
 import java.util.List;
 
 public abstract class User {
     public int id;
     private Cart shopping_cart;
-
-
 
     public User(int id) {
         this.id = id;            //Might be change ?
@@ -21,6 +21,14 @@ public abstract class User {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getPass(){
+        throw new RuntimeException("Only registered users have a password");
+    }
+
+    public abstract void login();
+    public abstract void logout();
+
 
     public Cart getShopping_cart() {
         return shopping_cart;
