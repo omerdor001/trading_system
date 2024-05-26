@@ -228,6 +228,11 @@ public class UserServiceImp implements UserService {
         return new ResponseEntity<>("Success edit permission for manager ", HttpStatus.OK);
     }
 
+    @Override
+    public boolean isAdminRegistered() {
+        return userFacade.isAdminRegistered();
+    }
+
 
 
 }

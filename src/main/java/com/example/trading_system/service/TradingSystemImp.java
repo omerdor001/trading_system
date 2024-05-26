@@ -224,7 +224,7 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     public ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                                             double product_price, int product_quantity, double rating, Category category, List<String> keyWords) {
+                                             double product_price, int product_quantity, double rating, int category, List<String> keyWords) {
         logger.info("Attempting to add product: {} to store: {}", product_name, store_name);
         try {
             if (!checkSystemOpen()) {
