@@ -24,6 +24,13 @@ public class UserFacadeImp implements UserFacade{
         this.registered = new HashMap<>();
         this.visitors = new HashMap<>();
     }
+    private static class Singleton {
+        private static final UserFacadeImp INSTANCE = new UserFacadeImp();
+    }
+
+    public static UserFacadeImp getInstance() {
+        return UserFacadeImp.Singleton.INSTANCE;
+    }
 
     public HashMap<Integer, Visitor> getVisitors() {
         return visitors;
