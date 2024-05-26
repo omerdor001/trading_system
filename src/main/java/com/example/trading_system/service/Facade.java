@@ -33,9 +33,6 @@ public class Facade {
     }
 
     public String enter() {
-        if (!checkSystemOpen()) {
-            return "";  // Return empty string if the system is not open
-        }
         String token = userService.enter(counter_user);
         counter_user++;
         // TODO Show UI
@@ -84,38 +81,33 @@ public class Facade {
     public ResponseEntity<String> register(int id, String username, String password, LocalDate birthdate) {
         // Registration is allowed even if the system is not open
         try {
-            userFacade.register(id, username, password, birthdate);
+            userFacade.register(id,username,password,birthdate);
             return new ResponseEntity<>("User registered successfully.", HttpStatus.OK);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-    public ResponseEntity<String> addService(Service service) throws InstanceAlreadyExistsException {
-        if (!checkSystemOpen()) {
-            return systemClosedResponse();
-        }
-        serviceFacade.addService(service);
-        return new ResponseEntity<>("Service added successfully.", HttpStatus.OK);
+    public ResponseEntity<String> addService(String serviceName,String username,String token) {
+        return externalServices.addService(serviceName);
     }
 
-    public ResponseEntity<String> replaceService(Service newService, Service oldService) {
-        if (!checkSystemOpen()) {
-            return systemClosedResponse();
+    public ResponseEntity<String> replaceService(String newServiceName, String oldServiceName,String username,String token){
+        if(Security.validateToken(token,username)) {
+            return externalServices.replaceService(newServiceName, oldServiceName);
         }
-        serviceFacade.replaceService(newService, oldService);
-        return new ResponseEntity<>("Service replaced successfully.", HttpStatus.OK);
+        else{
+            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public ResponseEntity<String> changeServiceName(Service serviceToChangeAt, String newName) {
-        if (!checkSystemOpen()) {
-            return systemClosedResponse();
-        }
-        serviceFacade.changeServiceName(serviceToChangeAt, newName);
-        return new ResponseEntity<>("Service name changed successfully.", HttpStatus.OK);
-    }
+    public ResponseEntity<String> changeServiceName(String serviceToChangeAtName,String newName,String username,String token) {
+        if (Security.validateToken(token, username)) {
+            return externalServices.changeServiceName(serviceToChangeAtName, newName);
+        } else {
+            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
 
+        }
+    }
     public ResponseEntity<String> makePayment(String serviceName, double amount) {
         if (!checkSystemOpen()) {
             return systemClosedResponse();
@@ -124,35 +116,48 @@ public class Facade {
         return new ResponseEntity<>("Payment made successfully.", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> makeDelivery(String serviceName, String address) {
-        if (!checkSystemOpen()) {
-            return systemClosedResponse();
+    public ResponseEntity<String> makePayment(String serviceName,double amount,String username,String token){
+        if(Security.validateToken(token,username)) {
+            return externalServices.makePayment(serviceName, amount);
         }
-        serviceFacade.makeDelivery(serviceName, address);
-        return new ResponseEntity<>("Delivery made successfully.", HttpStatus.OK);
+        else{
+            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<String> makeDelivery(String serviceName,String address,String username,String token){
+        if(Security.validateToken(token,username)) {
+            return externalServices.makeDelivery(serviceName, address);
+        }
+        else{
+            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
+        }
     }
     public ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                                             double product_price, int product_quantity, double rating, Category category, List<String> keyWords) {
-        if (!checkSystemOpen()) {
-            return systemClosedResponse();
+                                             double product_price, int product_quantity, double rating, Category category, List<String> keyWords,String token){
+        if(Security.validateToken(token,username)) {
+            return marketService.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
         }
-        return marketService.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
-    }
-
-    public ResponseEntity<String> removeProduct(String username, String store_name, int product_id) {
-        if (!checkSystemOpen()) {
-            return systemClosedResponse();
+        else{
+            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
         }
-        return marketService.removeProduct(username, store_name, product_id);
     }
-
-    public ResponseEntity<String> setProduct_name(String username, String store_name_id, int productId, String product_name) {
-        if (!checkSystemOpen()) {
-            return systemClosedResponse();
+    public ResponseEntity<String> removeProduct(String username, String store_name, int product_id,String token){
+        if(Security.validateToken(token,username)) {
+            return marketService.removeProduct(username, store_name, product_id);
         }
-        return marketService.setProductName(username, store_name_id, productId, product_name);
+        else{
+            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
+        }
     }
-
+    public ResponseEntity<String> setProduct_name(String username, String store_name_id, int productId, String product_name,String token){
+        if(Security.validateToken(token,username)) {
+            return marketService.setProductName(username, store_name_id, productId, product_name);
+        }
+        else{
+            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
+        }
+    }
     public ResponseEntity<String> setProduct_description(String username, String store_name_id, int productId, String product_description) {
         if (!checkSystemOpen()) {
             return systemClosedResponse();
@@ -160,18 +165,20 @@ public class Facade {
         return marketService.setProductDescription(username, store_name_id, productId, product_description);
     }
 
-    public ResponseEntity<String> setProduct_price(String username, String store_name_id, int productId, int product_price) {
-        if (!checkSystemOpen()) {
-            return systemClosedResponse();
+    public ResponseEntity<String> setProduct_price(String username,String store_name_id,int productId,int product_price,String token){
+        if(Security.validateToken(token,username)) {
+            return marketService.setProductPrice(username, store_name_id, productId, product_price);
         }
-        return marketService.setProductPrice(username, store_name_id, productId, product_price);
+        else{
+            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
+        }
     }
-
-    public ResponseEntity<String> setProduct_quantity(String username, String store_name_id, int productId, int product_quantity) {
-        if (!checkSystemOpen()) {
-            return systemClosedResponse();
+    public ResponseEntity<String> setProduct_quantity(String username,String store_name_id,int productId,int product_quantity,String token) {
+        if (Security.validateToken(token, username)) {
+            return marketService.setProductQuantity(username, store_name_id, productId, product_quantity);
+        } else {
+            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
         }
-        return marketService.setProductQuantity(username, store_name_id, productId, product_quantity);
     }
 
     public ResponseEntity<String> setRating(String username, String store_name_id, int productId, int rating) {

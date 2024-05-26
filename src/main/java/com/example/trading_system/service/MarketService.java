@@ -44,4 +44,6 @@ public interface MarketService {
     String requestManagersPermissions(String userName, String storeName);
 
     String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName);
+
+
 }
