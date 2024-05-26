@@ -1,53 +1,42 @@
 package com.example.trading_system.domain.stores;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+@Setter
+@Getter
 public class Store {
-    private String name_id; // this will be the ID for the store
+    private String nameId; // this will be the ID for the store
     private String description;
-    private ConcurrentHashMap<Integer, Product> products;
+    private HashMap<Integer, Product> products;
+
+    @Getter
+    private List<String> managers;
+    @Getter
+    private List<String> owners;
+    private String founder;
     private StorePolicy storePolicy;
+    private boolean isActive;
+    private boolean isOpen;
+    private StoreSalesHistory salesHistory;
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
 
-    public Store(String name_id, String description, StorePolicy storePolicy) {
-        this.name_id = name_id;
+    public Store(String nameId, String description, StorePolicy storePolicy, String founder) {
+        this.nameId = nameId;
         this.description = description;
         this.storePolicy = storePolicy;
-        this.products = new ConcurrentHashMap<>();
-    }
-
-    public String getName_id() {
-        return name_id;
-    }
-
-    public void setName_id(String name_id) {
-        this.name_id = name_id;
-    }
-
-    public ConcurrentHashMap<Integer, Product> getProducts() {
-        return products;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public StorePolicy getStorePolicy() {
-        return storePolicy;
-    }
-
-    public void setStorePolicy(StorePolicy storePolicy) {
-        this.storePolicy = storePolicy;
+        this.products = new HashMap<>();
+        this.isActive = true;
+        this.salesHistory = new StoreSalesHistory();
+        this.founder = founder;
+        this.managers = new LinkedList<>();
+        this.owners = new LinkedList<>();
     }
 
     public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, Category category) {
@@ -90,7 +79,7 @@ public class Store {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
-        sb.append("\"name_id\":\"").append(name_id).append("\"");
+        sb.append("\"name_id\":\"").append(nameId).append("\"");
         sb.append(", \"description\":\"").append(description).append("\"");
         sb.append(", \"products\":[");
 
@@ -122,28 +111,28 @@ public class Store {
         products.remove(productId);
     }
 
-    public synchronized void setProduct_name(int productId, String product_name) {
+    public synchronized void setProductName(int productId, String product_name) {
         Product product = getProduct(productId);
         if (product != null) {
             product.setProduct_name(product_name);
         }
     }
 
-    public synchronized void setProduct_description(int productId, String product_description) {
+    public synchronized void setProductDescription(int productId, String product_description) {
         Product product = getProduct(productId);
         if (product != null) {
             product.setProduct_description(product_description);
         }
     }
 
-    public synchronized void setProduct_price(int productId, int product_price) {
+    public synchronized void setProductPrice(int productId, int product_price) {
         Product product = getProduct(productId);
         if (product != null) {
             product.setProduct_price(product_price);
         }
     }
 
-    public synchronized void setProduct_quantity(int productId, int product_quantity) {
+    public synchronized void setProductQuantity(int productId, int product_quantity) {
         Product product = getProduct(productId);
         if (product != null) {
             product.setProduct_quantity(product_quantity);
@@ -162,5 +151,17 @@ public class Store {
         if (product != null) {
             product.setCategory(category);
         }
+    }
+    List<Purchase> getHistoryPurchasesByCustomer(int customerId){
+        return salesHistory.getPurchasesByCustomer(customerId);
+    }
+
+    List<Purchase> getAllHistoryPurchases(){
+        return salesHistory.getAllPurchases();
+    }
+
+
+    public String getNameId() {
+        return nameId;
     }
 }

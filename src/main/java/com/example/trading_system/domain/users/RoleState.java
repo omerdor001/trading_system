@@ -5,7 +5,7 @@ import com.example.trading_system.domain.stores.Category;
 import java.util.List;
 
 public abstract class RoleState {
-    Role role;
+    protected Role role;
 
     public Role getRole() {
         return role;
@@ -35,8 +35,33 @@ public abstract class RoleState {
 
     private void editDiscountPolicy(int storeId,int productId) {}
 
-    public abstract void addProduct(String username,  int product_id, String store_name, String product_name, String product_description,
-                                    double product_price, int product_quantity, double rating, Category category, List<String> keyWords) throws IllegalAccessException;
+    public void requestInformationAboutRolesInStore(int storeId)throws IllegalAccessException{throw new IllegalArgumentException("");}
+
+    public boolean isWatch()              throws IllegalAccessException { throw new IllegalAccessException("Only managers can access isWatch");}
+    public boolean isEditSupply()         throws IllegalAccessException { throw new IllegalAccessException("Only managers can access isEditSupply");}
+    public boolean isEditBuyPolicy()      throws IllegalAccessException { throw new IllegalAccessException("Only managers can access isEditBuyPolicy");}
+    public boolean isEditDiscountPolicy() throws IllegalAccessException { throw new IllegalAccessException("Only managers can access isEditDiscountPolicy");}
+
+    public abstract void addProduct(String username,
+                                    int product_id,
+                                    String store_name,
+                                    String product_name,
+                                    String product_description,
+                                    double product_price,
+                                    int product_quantity,
+                                    double rating,
+                                    Category category,
+                                    List<String> keyWords) throws IllegalAccessException;
+
+    public abstract void getHistoryPurchasesByCustomer() throws IllegalAccessException;
+
+    public abstract void getAllHistoryPurchases() throws IllegalAccessException;
+
+    public abstract void requestInformationAboutOfficialsInStore() throws IllegalAccessException;
+
+     public void requestManagersPermissions() throws IllegalArgumentException { throw new IllegalArgumentException("only owners can request manager permissions"); }
+
+    public void requestInformationAboutSpecificOfficialInStore() throws IllegalArgumentException { throw new IllegalArgumentException("only owners can request information about specific employee"); }
 
     public abstract void removeProduct(String username, String store_name_id, int product_id) throws IllegalAccessException;
 
@@ -51,4 +76,18 @@ public abstract class RoleState {
     public abstract void setRating(String username,String store_name_id,int productId,int rating) throws IllegalAccessException;
 
     public abstract void setCategory(String username,String store_name_id,int productId,Category category) throws IllegalAccessException;
+
+    public abstract boolean isManager();
+
+    public abstract boolean isOwner();
+
+    public abstract void setWatch(boolean watch);
+
+    public abstract void setEditSupply(boolean editSupply);
+
+    public abstract void setEditBuyPolicy(boolean editBuyPolicy);
+
+    public abstract void setEditDiscountPolicy(boolean editDiscountPolicy);
+
+
 }
