@@ -143,7 +143,7 @@ class StockManagementAcceptanceTests {
         //TODO Make him manager
         facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords);
         when(facade.setProductName("testuser","Adidas",123,"Samba Shoes")).thenReturn(new ResponseEntity("Success editing name to product", HttpStatus.OK));
-        ResponseEntity<String> response=facade.setProduct_name("testuser","Adidas",123,"Samba Shoes");
+        ResponseEntity<String> response=facade.setProductName("testuser","Adidas",123,"Samba Shoes");
         assertEquals(response,new ResponseEntity("Success editing name to product", HttpStatus.OK));
     }
 
@@ -152,8 +152,8 @@ class StockManagementAcceptanceTests {
         ////TODO register user
         //TODO Make him manager
         facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords);
-        when(facade.setProduct_price("testuser","Adidas",123,-300)).thenReturn(new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.setProduct_price("testuser","Adidas",123,-300);
+        when(facade.setProductPrice("testuser","Adidas",123,-300)).thenReturn(new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
+        ResponseEntity<String> response=facade.setProductPrice("testuser","Adidas",123,-300);
         assertEquals(response,new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
     }
 

@@ -439,5 +439,3 @@ public class SearchAcceptanceTests {
 
 
 }
-
-
