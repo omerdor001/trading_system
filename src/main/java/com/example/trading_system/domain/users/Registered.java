@@ -102,6 +102,11 @@ public class Registered extends User {
         throw new NoSuchElementException("User doesn't have permission to this store");
     }
 
+    public boolean isAdmin(){
+        return this.isAdmin;
+    }
 
-
+    public void setAdmin(boolean value){
+        this.isAdmin = value;
+    }
 }

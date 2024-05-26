@@ -1,0 +1,41 @@
+package com.example.trading_system.service;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+class OpenSystemUnitTests {
+    private Facade facade;
+    private UserService userService;
+
+    @BeforeEach
+    public void setUp() {
+        userService = mock(UserService.class);
+        facade = new Facade();
+        facade.userService = userService;
+    }
+
+    @Test
+    void openSystem_Success() {
+        when(userService.isAdminRegistered()).thenReturn(true);
+        ResponseEntity<String> response = facade.openSystem();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("System opened successfully.", response.getBody());
+        verify(userService, times(1)).isAdminRegistered();
+    }
+
+    @Test
+    void openSystem_No_Admin() {
+        when(userService.isAdminRegistered()).thenReturn(false);
+        ResponseEntity<String> response = facade.openSystem();
+
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        assertEquals("System cannot be opened without at least one admin registered.", response.getBody());
+        verify(userService, times(1)).isAdminRegistered();
+    }
+}
