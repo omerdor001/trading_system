@@ -33,5 +33,43 @@ public class Owner extends RoleState{
     @Override
     public void setCategory(String username, String store_name_id, int productId, Category category) {}
 
+    @Override
+    public void getHistoryPurchasesByCustomer(){}
+
+    @Override
+    public void getAllHistoryPurchases()throws IllegalAccessException {}
+
+    @Override
+    public void requestInformationAboutOfficialsInStore(){}
+
+    @Override
+    public boolean isManager() {
+        return false;
+    }
+
+    @Override
+    public boolean isOwner() {
+        return true;
+    }
+
+    @Override
+    public void setWatch(boolean watch) {}
+
+    @Override
+    public void setEditSupply(boolean editSupply) {}
+
+    @Override
+    public void setEditBuyPolicy(boolean editBuyPolicy) {}
+
+    @Override
+    public void setEditDiscountPolicy(boolean editDiscountPolicy) {}
+
+    @Override
+    public void requestManagersPermissions(){}
+
+    @Override
+    public void requestInformationAboutSpecificOfficialInStore(){}
+
+
 
 }
