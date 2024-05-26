@@ -365,8 +365,8 @@ public class MarketFacadeImp implements MarketFacade{
 
     }
 
-    public String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException
-    {
+    @Override
+    public String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException {
         if(!stores.containsKey(storeName)){
             throw new IllegalArgumentException("Store must exist");
         }
@@ -399,8 +399,15 @@ public class MarketFacadeImp implements MarketFacade{
 
     }
 
-    public String requestManagersPermissions(String userName, String storeName) throws IllegalArgumentException
-    {
+    /**
+     * @param userName
+     * @param storeName
+     * @return
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     */
+    @Override
+    public String requestManagersPermissions(String userName, String storeName) throws IllegalAccessException {
         if(!stores.containsKey(storeName)){
             throw new IllegalArgumentException("Store must exist");
         }
@@ -419,14 +426,21 @@ public class MarketFacadeImp implements MarketFacade{
         for (String manager : storeManagers) {
             Registered registered2 =userFacade.getRegistered().get(manager);
             RoleState managerRole = registered2.getRoleByStoreId(storeName).getRoleState();
-            result.append(registered2.getId()).append(manager).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append("\n");
+            result.append(registered2.getId()).append(manager).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append('\n');
         }
         return result.toString();
 
     }
 
-    public String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException
-    {
+    /**
+     * @param userName
+     * @param storeName
+     * @param officialUserName
+     * @return
+     * @throws IllegalArgumentException
+     */
+    @Override
+    public String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalAccessException {
         if(!stores.containsKey(storeName)){
             throw new IllegalArgumentException("Store must exist");
         }
@@ -441,31 +455,29 @@ public class MarketFacadeImp implements MarketFacade{
         registered.getRoleByStoreId(storeName).getRoleState().requestInformationAboutSpecificOfficialInStore();
 
 
-        LinkedList<String> storeOwners = stores.get(storeName).getOwners();
+        List<String> storeOwners = stores.get(storeName).getOwners();
 
         StringBuilder result = new StringBuilder();
-        result.append(storeName).append("\n");
+        result.append(storeName).append('\n');
 
         if(storeOwners.contains(officialUserName))
         {
             Registered registered2 =userFacade.getRegistered().get(officialUserName);
-            result.append("Role id username address birthdate").append("\n");
-            result.append("Owner ").append(registered2.getId()).append(officialUserName).append(registered2.getAddress()).append(registered2.getBirthdate()).append("\n");
+            result.append("Role id username address birthdate").append('\n');
+            result.append("Owner ").append(registered2.getId()).append(officialUserName).append(registered2.getAddress()).append(registered2.getBirthdate()).append('\n');
         }
         else
         {
-            LinkedList<String> storeManagers = stores.get(storeName).getManagers();
+            List<String> storeManagers = stores.get(storeName).getManagers();
             if(storeManagers.contains(officialUserName))
             {
-                Registered registered2 =userFacade.getRegistered().get(manager);
+                Registered registered2 =userFacade.getRegistered().get(officialUserName);
                 RoleState managerRole = registered2.getRoleByStoreId(storeName).getRoleState();
                 result.append("Role id username address birthdate watch editSupply editBuyPolicy editDiscountPolicy").append("\n");
-                result.append("Manager ").append(registered2.getId()).append(manager).append(registered2.getAddress()).append(registered2.getBirthdate()).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append("\n");
+                result.append("Manager ").append(registered2.getId()).append(officialUserName).append(registered2.getAddress()).append(registered2.getBirthdate()).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append("\n");
             }
             else
                 throw new IllegalArgumentException("User is not employeed in this store.");
-
-
         }
 
         return result.toString();

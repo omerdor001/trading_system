@@ -34,10 +34,10 @@ public interface MarketFacade {
     String  getAllHistoryPurchases(String userName, String storeName) throws IllegalAccessException;
     String  getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) throws IllegalAccessException;
 
-    String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException;
+    String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
 
-    String requestManagersPermissions(String userName, String storeName) throws IllegalArgumentException;
+    String requestManagersPermissions(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
 
-    String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException;
+    String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
 
 }

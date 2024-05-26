@@ -67,7 +67,7 @@ class OpeningStoreUnitTests {
         Registered registered = new Registered(1, username, "address", LocalDate.of(1990, 1, 1));
         userFacade.getRegistered().put(username, registered);
 
-        Store existingStore = new Store(storeName, description, new StorePolicy());
+        Store existingStore = new Store(storeName, description, new StorePolicy(), "robert");
         marketFacade.addStore(existingStore);
 
         Exception exception = assertThrows(RuntimeException.class, () -> {

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class UserFacadeImp implements UserFacade{
@@ -22,6 +23,7 @@ public class UserFacadeImp implements UserFacade{
         this.visitors = new HashMap<>();
     }
 
+    @Override
     public HashMap<Integer, Visitor> getVisitors() {
         return visitors;
     }
@@ -211,6 +213,7 @@ public class UserFacadeImp implements UserFacade{
 
     }
 
+    @Override
     public void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException{
         if(!registered.containsKey(appoint)){
             throw new NoSuchElementException("No user called "+appoint+ "exist");
@@ -233,7 +236,8 @@ public class UserFacadeImp implements UserFacade{
 
     }
 
-    public void suggestManage(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
+    @Override
+    public void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
         if(!registered.containsKey(appoint)){
             throw new NoSuchElementException("No user called "+appoint+ "exist");
         }
@@ -257,7 +261,8 @@ public class UserFacadeImp implements UserFacade{
         newManagerUser.addWaitingAppoint_Manager(store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
     }
 
-    public void approveManage(String newManager,String store_name_id, String appoint) throws NoSuchElementException{
+    @Override
+    public void approveManage(String newManager, String store_name_id, String appoint) throws  IllegalAccessException {
         if(!registered.containsKey(newManager)){
             throw new NoSuchElementException("No user called "+newManager+ "exist");
         }
@@ -275,23 +280,24 @@ public class UserFacadeImp implements UserFacade{
         if(newManagerUser.isOwner(store_name_id)){
             throw new IllegalAccessException("User cannot be owner of this store");
         }
-        LinkedList<Boolean> permissions = newManagerUser.removeWaitingAppoint_Manager(store_name_id);
+        List<Boolean> permissions = newManagerUser.removeWaitingAppoint_Manager(store_name_id);
         newManagerUser.addManagerRole(appoint,store_name_id);
         newManagerUser.setPermissionsToManager(store_name_id, permissions.get(0), permissions.get(1), permissions.get(2), permissions.get(3));
     }
 
 
-    public void approveOwner(String newOwner,String storeName, String appoint) throws NoSuchElementException{
+    @Override
+    public void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException {
         if(!registered.containsKey(newOwner)){
             throw new NoSuchElementException("No user called "+newOwner+ "exist");
         }
         if(!registered.containsKey(appoint)){
             throw new NoSuchElementException("No user called "+appoint+ "exist");
         }
+        Registered appointUser=registered.get(appoint);
         if(!appointUser.isOwner(storeName)){
             throw new IllegalAccessException("User must be Owner");
         }
-        Registered appointUser=registered.get(appoint);
         Registered newOwnerUser=registered.get(newOwner);
         if(newOwnerUser.isOwner(storeName)){
             throw new IllegalAccessException("User already Owner of this store");
@@ -371,8 +377,9 @@ public class UserFacadeImp implements UserFacade{
     @Override
     public String getUserPassword(String username) {
         User u = registered.get(username);
-        if (u == null)
+        if (u == null) {
             throw new RuntimeException("No such registered user " + username);
+        }
         return u.getPass();
     }
 

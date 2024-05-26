@@ -1,5 +1,7 @@
 package com.example.trading_system.users;
 
+import com.example.trading_system.domain.users.Manager;
+import com.example.trading_system.domain.users.Registered;
 import com.example.trading_system.service.Facade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,8 @@ class AppointManagerAcceptanceTests {
 
     @BeforeEach
     void setup(){
+        Registered registered1 = mock(Registered.class);
+        Manager manager1 = mock(Manager.class);
         facade=mock(Facade.class);
     }
 

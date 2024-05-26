@@ -25,7 +25,7 @@ public class Store {
     private StoreSalesHistory salesHistory;
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
 
-    public Store(String nameId, String description, StorePolicy storePolicy) {
+    public Store(String nameId, String description, StorePolicy storePolicy, String founder) {
         this.nameId = nameId;
         this.description = description;
         this.storePolicy = storePolicy;

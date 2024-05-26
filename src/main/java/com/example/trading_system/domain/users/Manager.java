@@ -17,6 +17,7 @@ public class Manager extends RoleState{
         this.editSupply=false;
     }
 
+    @Override
     public boolean isWatch() {
         return watch;
     }
@@ -26,6 +27,7 @@ public class Manager extends RoleState{
         this.watch = watch;
     }
 
+    @Override
     public boolean isEditSupply() {
         return editSupply;
     }
@@ -106,12 +108,10 @@ public class Manager extends RoleState{
     }
 
     @Override
-    public void requestInformationAboutOfficialsInStore(){
+    public void requestInformationAboutOfficialsInStore() throws IllegalAccessException {
         throw new IllegalAccessException("Manager cannot request information about officials in store.");
     }
-
-
-
+    
     @Override
     public boolean isManager() {
         return true;
