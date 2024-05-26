@@ -160,6 +160,20 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public ResponseEntity<String> suggestOwner(String appoint, String newOwner, String storeName) {
+        logger.info("{} trying to suggest user : {} to be a owner in store : {}", appoint, newOwner,storeName);
+        try {
+            userFacade.suggestOwner(appoint,newOwner,storeName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to suggest the user : {} to be a owner in store : {}", e.getMessage(),appoint,storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished suggesting  : {} to be a owner in store : {}", newOwner,storeName);
+        return new ResponseEntity<>("Success suggesting owner", HttpStatus.OK);
+    }
+
+
+    @Override
     public ResponseEntity<String> approveManage(String newManager, String store_name_id) {
         logger.info("Trying to approve manage to store : {}",store_name_id);
         try {
@@ -173,6 +187,19 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public ResponseEntity<String> approveOwner(String newOwner, String storeName) {
+        logger.info("{} trying to approve owner to store : {}",newOwner, storeName);
+        try {
+            userFacade.approveOwner(newOwner,storeName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to approve owner to store : {}", e.getMessage(),storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished approving owner to store : {}", storeName);
+        return new ResponseEntity<>("Success approving owner", HttpStatus.OK);
+    }
+
+    @Override
     public ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
         logger.info("Trying to appoint manager : {} to store : {}", newManager,store_name_id);
         try {
@@ -183,6 +210,19 @@ public class UserServiceImp implements UserService {
         }
         logger.info("Finished appointing manager : {} to store : {}", newManager,store_name_id);
         return new ResponseEntity<>("Success appointing manager", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> appointOwner(String appoint, String newOwner, String storeName) {
+        logger.info("Trying to appoint owner : {} to store : {}", newOwner,storeName);
+        try {
+            userFacade.appointOwner(appoint,newOwner,storeName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to appoint the user : {} to be owner in store : {}", e.getMessage(),appoint,storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished appointing owner : {} to store : {}", newOwner, storeName);
+        return new ResponseEntity<>("Success appointing owner", HttpStatus.OK);
     }
 
     @Override

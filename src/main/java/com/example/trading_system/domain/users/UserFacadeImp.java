@@ -211,12 +211,33 @@ public class UserFacadeImp implements UserFacade{
 
     }
 
-    @Override
-    public void suggestManage(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException {
-        if(registered.containsKey(appoint)){
+    public void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException{
+        if(!registered.containsKey(appoint)){
             throw new NoSuchElementException("No user called "+appoint+ "exist");
         }
-        if(registered.containsKey(newManager)){
+        if(!registered.containsKey(newOwner)){
+            throw new NoSuchElementException("No user called "+newOwner+ "exist");
+        }
+        Registered appointUser=registered.get(appoint);
+        Registered newOwnerUser=registered.get(newOwner);
+        if(!appointUser.isOwner(storeName)){
+            throw new IllegalAccessException("Appoint user must be Owner");
+        }
+        if(!appointUser.getLogged()){
+            throw new IllegalAccessException("Appoint user is not logged");
+        }
+        if(newOwnerUser.isOwner(storeName)){
+            throw new IllegalAccessException("User already Owner of this store");
+        }
+        newOwnerUser.addWaitingAppoint_Owner(storeName);
+
+    }
+
+    public void suggestManage(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
+        if(!registered.containsKey(appoint)){
+            throw new NoSuchElementException("No user called "+appoint+ "exist");
+        }
+        if(!registered.containsKey(newManager)){
             throw new NoSuchElementException("No user called "+newManager+ "exist");
         }
         Registered appointUser=registered.get(appoint);
@@ -236,19 +257,28 @@ public class UserFacadeImp implements UserFacade{
         newManagerUser.addWaitingAppoint_Manager(store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
     }
 
-    public void approveManage(String newManager,String store_name_id){
-        if(registered.containsKey(newManager)){
+    public void approveManage(String newManager,String store_name_id) throws NoSuchElementException{
+        if(!registered.containsKey(newManager)){
             throw new NoSuchElementException("No user called "+newManager+ "exist");
         }
         Registered newManagerUser=registered.get(newManager);
         newManagerUser.removeWaitingAppoint_Manager(store_name_id);
     }
 
-    public void appointManager(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException {
-        if(registered.containsKey(appoint)){
+
+    public void approveOwner(String newOwner,String storeName) throws NoSuchElementException{
+        if(!registered.containsKey(newOwner)){
+            throw new NoSuchElementException("No user called "+newOwner+ "exist");
+        }
+        Registered newOwnerUser=registered.get(newOwner);
+        newOwnerUser.removeWaitingAppoint_Owner(storeName);
+    }
+
+    public void appointManager(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
+        if(!registered.containsKey(appoint)){
             throw new NoSuchElementException("No user called "+appoint+ "exist");
         }
-        if(registered.containsKey(newManager)){
+        if(!registered.containsKey(newManager)){
             throw new NoSuchElementException("No user called "+newManager+ "exist");
         }
         Registered appointUser=registered.get(appoint);
@@ -270,8 +300,26 @@ public class UserFacadeImp implements UserFacade{
 
     }
 
+    public void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException {
+        if(!registered.containsKey(appoint)){
+            throw new NoSuchElementException("No user called "+appoint+ "exist");
+        }
+        if(!registered.containsKey(newManager)){
+            throw new NoSuchElementException("No user called "+newOwner+ "exist");
+        }
+        Registered appointUser=registered.get(appoint);
+        Registered newOwnerUser=registered.get(newOwner);
+        if(!appointUser.isOwner(storeName)){
+            throw new IllegalAccessException("Appoint user must be Owner");
+        }
+        if(newOwnerUser.isOwner(storeName)){
+            throw new IllegalAccessException("User already Owner of this store");
+        }
+        newOwnerUser.addOwnerRole(appoint,storeName);
+    }
+
     @Override
-    public void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
+    public void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
         if(registered.containsKey(userId)){
             throw new NoSuchElementException("No user called "+userId+ "exist");
         }

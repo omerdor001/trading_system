@@ -96,6 +96,12 @@ public class Registered extends User {
         getRoles().add(manager);
     }
 
+    public void addOwnerRole(String appoint, String storeName){
+        Role owner=new Role(storeName,appoint);
+        owner.setRoleState(new Owner(owner));
+        getRoles().add(owner);
+    }
+
     public void setPermissionsToManager(String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy){
         Role manager=getRoleByStoreId(store_name_id);
         manager.getRoleState().setWatch(watch);
@@ -133,9 +139,16 @@ public class Registered extends User {
     public void addWaitingAppoint_Manager(String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy){
         managerToApprove.put(store_name_id,Arrays.asList(watch,editSupply,editBuyPolicy,editDiscountPolicy));
     }
+    public void addWaitingAppoint_Owner(String storeName){
+        ownerToApprove.put(storeName);
+    }
 
     public void removeWaitingAppoint_Manager(String store_name_id){
         managerToApprove.remove(store_name_id);
+    }
+
+    public void removeWaitingAppoint_Owner(String storeName){
+        ownerToApprove.remove(storeName);
     }
 
 
