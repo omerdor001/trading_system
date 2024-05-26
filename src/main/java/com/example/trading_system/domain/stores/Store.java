@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -113,8 +112,8 @@ public class Store {
     }
 
     public void addProduct(int product_id,String store_name,String product_name,String product_description,
-                           double product_price,int product_quantity,double rating,Category category,List<String> keyWords) {
-        Product product=new Product(product_id,store_name,product_description,product_price,product_quantity,rating,category,keyWords);
+                           double product_price,int product_quantity,double rating,int category,List<String> keyWords) {
+        Product product=new Product(product_id,store_name,product_description,product_price,product_quantity,rating,Category.values()[category],keyWords);
         products.put(product.getProduct_id(), product);
     }
 
@@ -147,7 +146,7 @@ public class Store {
         product.setRating(rating);
     }
 
-    public void setCategory(int productId,Category category) {
+    public void setCategory(int productId,int category) {
         Product product=getProduct(productId);
         product.setCategory(category);
     }

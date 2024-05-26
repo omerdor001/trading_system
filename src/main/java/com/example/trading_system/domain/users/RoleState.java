@@ -1,7 +1,5 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.Category;
-
 import java.util.List;
 
 public abstract class RoleState {
@@ -36,7 +34,7 @@ public abstract class RoleState {
     private void editDiscountPolicy(int storeId,int productId) {}
 
     public abstract void addProduct(String username,  int product_id, String store_name, String product_name, String product_description,
-                                    double product_price, int product_quantity, double rating, Category category, List<String> keyWords) throws IllegalAccessException;
+                                    double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException;
 
     public abstract void removeProduct(String username, String store_name_id, int product_id) throws IllegalAccessException;
 
@@ -50,5 +48,5 @@ public abstract class RoleState {
 
     public abstract void setRating(String username,String store_name_id,int productId,int rating) throws IllegalAccessException;
 
-    public abstract void setCategory(String username,String store_name_id,int productId,Category category) throws IllegalAccessException;
+    public abstract void setCategory(String username,String store_name_id,int productId,int category) throws IllegalAccessException;
 }

@@ -55,8 +55,8 @@ public class ServiceFacadeImp implements ServiceFacade {
         if (!findServiceByName(serviceName)){
             throw new NoSuchElementException("Service is not exist");
         }
-        PaymentServiceProxy paymentService = new PaymentServiceProxy(serviceName);
-        paymentService.processPayment(amount);
+        Service paymentService = new PaymentServiceProxy(serviceName);
+        paymentService.makePayment(serviceName,amount);
         return true;
     }
 
@@ -65,8 +65,9 @@ public class ServiceFacadeImp implements ServiceFacade {
         if (!findServiceByName(serviceName)){
             throw new NoSuchElementException("Service is not exist");
         }
-        DeliveryServiceProxy deliveryServiceProxy = new DeliveryServiceProxy(serviceName);
-        deliveryServiceProxy.processDelivery(address);
+        Service deliveryService = new DeliveryServiceProxy(serviceName);
+        deliveryService.makeDelivery(serviceName,address);
         return true;
     }
+
 }

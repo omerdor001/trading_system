@@ -137,7 +137,7 @@ public class MarketFacadeImp implements MarketFacade{
 
     @Override
     public boolean addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                              double product_price, int product_quantity, double rating, Category category, List<String> keyWords) throws IllegalAccessException {
+                              double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
         if(!stores.containsKey(store_name)){
             throw new IllegalArgumentException("Store must exist");
         }
@@ -265,7 +265,7 @@ public class MarketFacadeImp implements MarketFacade{
     }
 
     @Override
-    public boolean setCategory(String username,String store_name_id,int productId,Category category) throws IllegalAccessException {
+    public boolean setCategory(String username,String store_name_id,int productId,int category) throws IllegalAccessException {
         if(!stores.containsKey(store_name_id)){
             throw new IllegalArgumentException("Store must exist");
         }

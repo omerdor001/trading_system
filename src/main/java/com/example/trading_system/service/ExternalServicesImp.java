@@ -5,7 +5,6 @@ import com.example.trading_system.domain.externalservices.ServiceFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
 public class ExternalServicesImp implements ExternalServices{

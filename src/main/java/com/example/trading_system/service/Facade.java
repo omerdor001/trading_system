@@ -3,7 +3,6 @@ package com.example.trading_system.service;
 import com.example.trading_system.domain.externalservices.Service;
 import com.example.trading_system.domain.externalservices.ServiceFacade;
 import com.example.trading_system.domain.externalservices.ServiceFacadeImp;
-import com.example.trading_system.domain.stores.Category;
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.users.UserFacade;
 import com.example.trading_system.domain.users.UserFacadeImp;
@@ -76,7 +75,7 @@ public class Facade {
         return serviceFacade.makeDelivery(serviceName,address);
     }
     public ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                                             double product_price, int product_quantity, double rating, Category category, List<String> keyWords){
+                                             double product_price, int product_quantity, double rating, int category, List<String> keyWords){
         return marketService.addProduct(username,product_id,store_name,product_name,product_description,product_price,product_quantity,rating,category,keyWords);
     }
 
@@ -99,7 +98,7 @@ public class Facade {
     public ResponseEntity<String> setRating(String username,String store_name_id,int productId,int rating){
         return marketService.setRating(username,store_name_id,productId,rating);
     }
-    public ResponseEntity<String> setCategory(String username,String store_name_id,int productId,Category category){
+    public ResponseEntity<String> setCategory(String username,String store_name_id,int productId,int category){
         return marketService.setCategory(username,store_name_id,productId,category);
     }
 

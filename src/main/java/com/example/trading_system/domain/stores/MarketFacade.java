@@ -22,7 +22,7 @@ public interface MarketFacade {
     String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category);
 
     boolean addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                                     double product_price, int product_quantity, double rating, Category category, List<String> keyWords) throws IllegalAccessException;
+                                     double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException;
 
     boolean removeProduct(String username,  String store_name_id,int product_id) throws IllegalAccessException;
 
@@ -36,6 +36,6 @@ public interface MarketFacade {
 
     boolean setRating(String username,String store_name_id,int productId,int rating) throws IllegalAccessException;
 
-    boolean setCategory(String username,String store_name_id,int productId,Category category) throws IllegalAccessException;
+    boolean setCategory(String username,String store_name_id,int productId,int category) throws IllegalAccessException;
 
 }

@@ -1,7 +1,5 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.Category;
-
 import java.util.List;
 
 public class Manager extends RoleState{
@@ -52,7 +50,7 @@ public class Manager extends RoleState{
 
 
     @Override
-    public void addProduct(String username, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, Category category, List<String> keyWords) throws IllegalAccessException {
+    public void addProduct(String username, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
         throw new IllegalAccessException("Manager cannot add products");
     }
 
@@ -87,7 +85,7 @@ public class Manager extends RoleState{
     }
 
     @Override
-    public void setCategory(String username,String store_name_id,int productId,Category category) throws IllegalAccessException {
+    public void setCategory(String username,String store_name_id,int productId,int category) throws IllegalAccessException {
         throw new IllegalAccessException("Manager cannot remove products");
     }
 }

@@ -7,11 +7,11 @@ public interface ExternalServices {
     boolean addService(Service service);
     ResponseEntity<String> addServiceNew(Service service);
 
-    public boolean replaceService(Service newService, Service oldService);
+    boolean replaceService(Service newService, Service oldService);
 
-    public boolean changeServiceName(Service serviceToChangeAt,String newName);
+    boolean changeServiceName(Service serviceToChangeAt,String newName);
 
-    public boolean makePayment(String serviceName,double amount);
+    boolean makePayment(String serviceName,double amount);
 
-    public boolean makeDelivery(String serviceName,String address);
+    boolean makeDelivery(String serviceName,String address);
 }

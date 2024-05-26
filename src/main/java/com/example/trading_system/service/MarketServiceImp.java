@@ -137,7 +137,7 @@ public class MarketServiceImp implements MarketService {
     }
 
     public ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                                             double product_price, int product_quantity, double rating, Category category, List<String> keyWords){
+                                             double product_price, int product_quantity, double rating, int category, List<String> keyWords){
         boolean result;
         logger.info("Trying to add products to store : {}", store_name);
         try {
@@ -249,7 +249,7 @@ public class MarketServiceImp implements MarketService {
         return new ResponseEntity<>("Success editing rating to product", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> setCategory(String username,String store_name_id,int productId,Category category){
+    public ResponseEntity<String> setCategory(String username,String store_name_id,int productId,int category){
         boolean result;
         logger.info("Trying to edit category to product : {}", productId);
         try {
