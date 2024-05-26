@@ -14,13 +14,12 @@ public class UserFacadeImp implements UserFacade {
     private HashMap<Integer, Visitor> visitors;
     private HashMap<String, Registered> registered;
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
-    MarketFacadeImp marketFacade = MarketFacadeImp.getInstance();
+    MarketFacade marketFacade = MarketFacadeImp.getInstance();
 
-    public UserFacadeImp() {
+    private UserFacadeImp() {
         this.registered = new HashMap<>();
         this.visitors = new HashMap<>();
     }
-
     private static class Singleton {
         private static final UserFacadeImp INSTANCE = new UserFacadeImp();
     }

@@ -2,16 +2,10 @@ package com.example.trading_system.users;
 
 import com.example.trading_system.domain.users.Manager;
 import com.example.trading_system.domain.users.Registered;
-import com.example.trading_system.service.Facade;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class AppointManagerAcceptanceTests {
     Facade facade;

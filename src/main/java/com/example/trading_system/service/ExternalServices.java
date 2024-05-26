@@ -10,12 +10,14 @@ public interface ExternalServices {
     ResponseEntity<String> addPaymentProxyService(String serviceName) ;
     ResponseEntity<String> addDeliveryService(String serviceName) ;
     ResponseEntity<String> addDeliveryProxyService(String serviceName) ;
+    void addService(String service) throws InstanceAlreadyExistsException;
+    void addServiceNew(String service) throws InstanceAlreadyExistsException;
 
-    ResponseEntity<String> replaceService(String newServiceName, String oldServiceName);
+    public void replaceService(String newService, String oldService);
 
-    ResponseEntity<String> changeServiceName(String serviceToChangeAtName,String newName);
+    public void changeServiceName(String serviceToChangeAt,String newName);
 
-    ResponseEntity<String> makePayment(String serviceName,double amount);
+    public void makePayment(String serviceName,double amount);
 
-    ResponseEntity<String> makeDelivery(String serviceName,String address);
+    public void makeDelivery(String serviceName,String address);
 }

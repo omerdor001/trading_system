@@ -1,3 +1,4 @@
+/*
 package com.example.trading_system.service;
 
 import com.example.trading_system.domain.externalservices.Service;
@@ -40,8 +41,7 @@ public class Facade {
     }
 
     public ResponseEntity<String> openSystem() {
-        //TODO: FIX ME - is admin registered
-/*        if (userService.isAdminRegistered()) {
+        if (userService.isAdminRegistered()) {
             serviceFacade = new ServiceFacadeImp();
             externalServices = new ExternalServicesImp(serviceFacade);
             marketService = new MarketServiceImp(marketFacade);
@@ -49,9 +49,7 @@ public class Facade {
             return new ResponseEntity<>("System opened successfully.", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("System cannot be opened without at least one admin registered.", HttpStatus.FORBIDDEN);
-        }*/
-        return new ResponseEntity<>("System cannot be opened without at least one admin registered.", HttpStatus.FORBIDDEN);
-
+        }
     }
 
     // Helper method to check if the system is open
@@ -90,37 +88,8 @@ public class Facade {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    public ResponseEntity<String> addPaymentService(String serviceName,String token,String username) {
-        if(Security.validateToken(token,username)) {
-            return externalServices.addPaymentService(serviceName);
-        }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
-        }
-    }
-    public ResponseEntity<String> addPaymentProxyService(String serviceName,String token,String username) {
-        if(Security.validateToken(token,username)) {
-            return externalServices.addPaymentProxyService(serviceName);
-        }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
-        }
-    }
-    public ResponseEntity<String> addDeliveryService(String serviceName,String token,String username) {
-        if(Security.validateToken(token,username)) {
-            return externalServices.addDeliveryService(serviceName);
-        }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
-        }
-    }
-    public ResponseEntity<String>addDeliveryProxyService(String serviceName,String token,String username) {
-        if(Security.validateToken(token,username)) {
-            return externalServices.addDeliveryService(serviceName);
-        }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<String> addService(String serviceName,String username,String token) {
+        return externalServices.addService(serviceName);
     }
 
     public ResponseEntity<String> replaceService(String newServiceName, String oldServiceName,String username,String token){
@@ -166,7 +135,7 @@ public class Facade {
         }
     }
     public ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                                             double product_price, int product_quantity, double rating, int category, List<String> keyWords,String token){
+                                             double product_price, int product_quantity, double rating, Category category, List<String> keyWords,String token){
         if(Security.validateToken(token,username)) {
             return marketService.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
         }
@@ -220,7 +189,7 @@ public class Facade {
         return marketService.setRating(username, store_name_id, productId, rating);
     }
 
-    public ResponseEntity<String> setCategory(String username, String store_name_id, int productId, int category) {
+    public ResponseEntity<String> setCategory(String username, String store_name_id, int productId, Category category) {
         if (!checkSystemOpen()) {
             return systemClosedResponse();
         }
@@ -306,3 +275,4 @@ public class Facade {
 }
 
 
+*/

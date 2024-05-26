@@ -19,7 +19,7 @@ class LoginUnitTests {
     @BeforeEach
     void setUp() {
         userFacade = Mockito.mock(UserFacade.class);
-        userService = new UserServiceImp(userFacade);
+        userService = UserServiceImp.getInstance();
     }
 
     @Test

@@ -7,16 +7,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import static org.mockito.Mockito.*;
+
 import java.time.LocalDate;
 
 class ExternalServicesAcceptanceTest {
-    private Facade facade;
+    private TradingSystemImp facade;
     String token1;
     String token;
 
     @BeforeEach
     public void setUp() throws Exception {
-        facade= new Facade();
+        facade= new TradingSystemImp();
         token1 = facade.enter();
         facade.register(0, "testuser1", "password123", LocalDate.now());
         facade.openSystem();

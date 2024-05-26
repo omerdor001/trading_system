@@ -2,7 +2,7 @@ package com.example.trading_system.Market;
 
 import com.example.trading_system.domain.stores.Category;
 import com.example.trading_system.domain.users.Registered;
-import com.example.trading_system.service.Facade;
+import com.example.trading_system.service.TradingSystemImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -17,13 +17,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class StockManagementAcceptanceTests {
-    Facade facade;
+    TradingSystemImp facade;
     List<String> keyWords;
     int category;
     String token;
     @BeforeEach
     public void setUp() {
-        facade=mock(Facade.class);
+        facade=mock(TradingSystemImp.class);
         List<String> keyWords=new ArrayList();
         keyWords.add("Samba");
         category=1;
@@ -143,9 +143,9 @@ class StockManagementAcceptanceTests {
     void setProduct_name_success() {
         ////TODO register user
         //TODO Make him manager
-        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords,token);
-        when(facade.setProduct_name("testuser","Adidas",123,"Samba Shoes",token)).thenReturn(new ResponseEntity("Success editing name to product", HttpStatus.OK));
-        ResponseEntity<String> response=facade.setProduct_name("testuser","Adidas",123,"Samba Shoes",token);
+        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords);
+        when(facade.setProductName("testuser","Adidas",123,"Samba Shoes")).thenReturn(new ResponseEntity("Success editing name to product", HttpStatus.OK));
+        ResponseEntity<String> response=facade.setProductName("testuser","Adidas",123,"Samba Shoes");
         assertEquals(response,new ResponseEntity("Success editing name to product", HttpStatus.OK));
     }
 
@@ -153,9 +153,9 @@ class StockManagementAcceptanceTests {
     void setProduct_Price_PriceLessThanZero() {
         ////TODO register user
         //TODO Make him manager
-        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords,token);
-        when(facade.setProduct_price("testuser","Adidas",123,-300,token)).thenReturn(new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.setProduct_price("testuser","Adidas",123,-300,token);
+        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,Category.Sport,keyWords);
+        when(facade.setProductPrice("testuser","Adidas",123,-300)).thenReturn(new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
+        ResponseEntity<String> response=facade.setProductPrice("testuser","Adidas",123,-300);
         assertEquals(response,new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
     }
 
@@ -163,18 +163,5 @@ class StockManagementAcceptanceTests {
     void setProduct_description_UserNotExist() {
         //TODO Make this test
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

@@ -1,9 +1,9 @@
 package com.example.trading_system.service;
 
-import com.example.trading_system.domain.externalservices.DeliveryService;
-import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.externalservices.Service;
+import com.example.trading_system.domain.externalservices.*;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -14,10 +14,12 @@ import static org.mockito.Mockito.*;
 
 class ExternalServicesUnitTest {
     private Facade facade;
+    private ServiceFacade serviceFacade;
 
 
     @BeforeEach
     public void setUp() {
+        serviceFacade= ServiceFacadeImp.getInstance();
         facade=mock(Facade.class);
     }
 

@@ -18,7 +18,7 @@ public class SearchAcceptanceTests {
     @BeforeEach
     public void setUp() {
         marketFacadeMock = mock(MarketFacade.class);
-        marketService = new MarketServiceImp(marketFacadeMock);
+        marketService = MarketServiceImp.getInstance();
     }
 
     @Test
@@ -439,5 +439,3 @@ public class SearchAcceptanceTests {
 
 
 }
-
-
