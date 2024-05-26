@@ -37,4 +37,9 @@ public interface UserFacade {
     String getUserPassword(String username);
     public void removeVisitor(int id);
 
+
+    String visitorViewCart(int id);
+
+    String registeredViewCart(String username);
+
 }
