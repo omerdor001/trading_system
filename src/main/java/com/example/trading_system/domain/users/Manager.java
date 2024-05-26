@@ -95,13 +95,13 @@ public class Manager extends RoleState{
     }
 
     @Override
-    public void getHistoryPurchasesByCustomer(){
+    public void getHistoryPurchasesByCustomer() throws IllegalAccessException {
         throw new IllegalAccessException("Manager cannot get history purchases by customer");
 
     }
 
     @Override
-    public void getAllHistoryPurchases() {
+    public void getAllHistoryPurchases() throws IllegalAccessException {
         throw new IllegalAccessException("Manager cannot get all history purchases");
     }
 

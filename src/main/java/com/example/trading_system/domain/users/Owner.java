@@ -37,7 +37,7 @@ public class Owner extends RoleState{
     public void getHistoryPurchasesByCustomer(){}
 
     @Override
-    public void getAllHistoryPurchases() {}
+    public void getAllHistoryPurchases()throws IllegalAccessException {}
 
     @Override
     public void requestInformationAboutOfficialsInStore(){}
