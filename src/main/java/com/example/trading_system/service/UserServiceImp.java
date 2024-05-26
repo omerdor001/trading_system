@@ -27,6 +27,7 @@ public class UserServiceImp implements UserService {
         return token;
     }
 
+
     public void exit(int id) throws Exception {
         logger.info("Trying exit to system as a visitor , with id : {}", id);
         userFacade.exit(id);
@@ -79,7 +80,7 @@ public class UserServiceImp implements UserService {
         logger.info("Trying registering a new user: {}", username);
         try {
             String encrypted_pass = Security.encrypt(password);
-            userFacade.registration(id, username, encrypted_pass, birthdate);
+            userFacade.register(id, username, encrypted_pass, birthdate);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed trying registering user: {}", e.getMessage(), username);
             return false;
@@ -120,7 +121,7 @@ public class UserServiceImp implements UserService {
         boolean result;
         logger.info("Trying adding to cart product with id: {}", productId);
         try {
-            userFacade.registerdAddToCart(username, productId, storeName, quantity);
+            userFacade.registeredAddToCart(username, productId, storeName, quantity);
         }catch (Exception e){
             logger.error("Error occurred : {} , Failed Trying adding to cart  product with id: {}", e.getMessage(), productId);
             return false;
@@ -134,7 +135,7 @@ public class UserServiceImp implements UserService {
         boolean result;
         logger.info("Trying removing from cart product with id: {}", productId);
         try {
-            userFacade.registerdRemoveFromCart(username, productId, storeName, quantity);
+            userFacade.registeredRemoveFromCart(username, productId, storeName, quantity);
         }catch (Exception e){
             logger.error("Error occurred : {} , Failed Trying removing to cart  product with id: {}", e.getMessage(), productId);
             return false;
