@@ -53,7 +53,7 @@ public class Facade {
         Security.makeTokenExpire(token);
     }
 
-    public boolean registration(String token, int id, String username, String password, LocalDate birthdate) throws Exception {
+    public boolean register(String token, int id, String username, String password, LocalDate birthdate) throws Exception {
         if(Security.validateToken(token,"v"+id)){
             userFacade.register(id,username,password,birthdate);
             return true;

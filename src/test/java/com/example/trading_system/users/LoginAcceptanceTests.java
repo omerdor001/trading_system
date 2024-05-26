@@ -21,7 +21,7 @@ class LoginAcceptanceTests {
     void setUp() throws Exception {
         facade = new Facade();
         token1 = facade.enter();
-        facade.register(0, "testuser", "password123", LocalDate.now());
+        facade.register(token1,0, "testuser", "password123", LocalDate.now());
     }
 
     @Test
@@ -29,7 +29,7 @@ class LoginAcceptanceTests {
         int userId = 0;
         String username = "testuser";
         String password = "password123";
-        String token = facade.login(token1, userId, username, password);
+        String token = facade.login(userId, username, password);
         assertTrue(!token.isEmpty(), "Token should not be empty");
     }
 
@@ -38,7 +38,7 @@ class LoginAcceptanceTests {
         int userId = 0;
         String username = "testuser";
         String password = "wrongPassword";
-        String token = facade.login(token1, userId, username, password);
+        String token = facade.login(userId, username, password);
         assertTrue(token.isEmpty(), "Token should be empty");
     }
 
@@ -47,7 +47,7 @@ class LoginAcceptanceTests {
         int userId = 0;
         String username = "wronguser";
         String password = "password123";
-        String token = facade.login(token1, userId, username, password);
+        String token = facade.login(userId, username, password);
         assertTrue(token.isEmpty(), "Token should be empty");
     }
 
@@ -56,8 +56,8 @@ class LoginAcceptanceTests {
         int userId = 0;
         String username = "testuser";
         String password = "password123";
-        String token = facade.login(token1, userId, username, password);
-        token = facade.login(token, userId, username, password);
+        String token = facade.login(userId, username, password);
+        token = facade.login(userId, username, password);
         assertTrue(token.isEmpty(), "Token should be empty");
     }
 }
