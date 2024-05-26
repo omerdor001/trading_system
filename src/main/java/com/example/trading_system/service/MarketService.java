@@ -8,17 +8,13 @@ import java.util.List;
 public interface MarketService {
 
     String getAllStores();
-
-    String getStoreProducts(String store_name);
-
-    String getProductInfo(String store_name, int product_Id);
-
-    String searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category);
-
-    String searchCategoryInStore(Category category, String store_name, Double minPrice, Double maxPrice, Double minRating);
-
-    String searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category);
-
+    void openStoreExist    (String storeName);
+    void closeStoreExist   (String storeName);
+    String getStoreProducts(String storeName);
+    String getProductInfo  (String storeName, int productId);
+    String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category);
+    String searchCategoryInStore(Category category, String storeName, Double minPrice, Double maxPrice, Double minRating);
+    String searchKeywordsInStore(String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category);
     String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category);
 
     String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating);
@@ -41,5 +37,16 @@ public interface MarketService {
     void setRating(String username, String store_name_id, int productId, int rating) throws IllegalAccessException;
 
     void setCategory(String username, String store_name_id, int productId, Category category) throws IllegalAccessException;
+
+    String getAllHistoryPurchases(String userName, String storeName);
+
+    String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName);
+
+    String requestInformationAboutOfficialsInStore(String userName, String storeName);
+
+    String requestManagersPermissions(String userName, String storeName);
+
+    String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName);
+
 
 }

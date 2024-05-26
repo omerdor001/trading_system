@@ -37,7 +37,7 @@ class OpeningStoreUnitTests {
         Store store = marketFacade.getStores().get(storeName);
 
         assertNotNull(store);
-        assertEquals(storeName, store.getName_id());
+        assertEquals(storeName, store.getNameId());
         assertEquals(description, store.getDescription());
     }
 
@@ -67,7 +67,7 @@ class OpeningStoreUnitTests {
         Registered registered = new Registered(1, username, "address", LocalDate.of(1990, 1, 1));
         userFacade.getRegistered().put(username, registered);
 
-        Store existingStore = new Store(storeName, description, new StorePolicy());
+        Store existingStore = new Store(storeName, description, new StorePolicy(), "robert");
         marketFacade.addStore(existingStore);
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
@@ -79,7 +79,6 @@ class OpeningStoreUnitTests {
 
     @Test
     void testOpenStoreWithNonExistingUser() {
-        //TODO: every test should be atomic and separated from the rest of the tests
         String storeName = "store2";
         String description = "A nice store";
         StorePolicy policy = new StorePolicy();

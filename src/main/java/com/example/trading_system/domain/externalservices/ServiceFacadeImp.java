@@ -21,37 +21,34 @@ public class ServiceFacadeImp implements ServiceFacade {
     }
 
     @Override
-    public boolean addService(Service service) throws InstanceAlreadyExistsException {
-        if (services.contains(service)){
+    public void addService(String serviceName) throws InstanceAlreadyExistsException {
+        if (findServiceByName(serviceName)){
             throw new InstanceAlreadyExistsException("This service already exist");
         }
-        services.add(service);
-        return true;
+        services.add(new Service(serviceName));
     }
 
     @Override
-    public boolean replaceService(Service newService, Service oldService) {
-        if (!services.contains(oldService)){
+    public void replaceService(String newServiceName, String oldServiceName) {
+        if (!findServiceByName(oldServiceName)){
             throw new NoSuchElementException("Service is not exist");
         }
-        if (services.contains(newService)){
+        if (findServiceByName(newServiceName)){
             throw new IllegalArgumentException("Service is exist (no need to replace)");
         }
-        services.remove(oldService);
-        services.add(newService);
-        return true;
+        services.remove(getServiceByName(oldServiceName));
+        services.add(getServiceByName(newServiceName));
     }
 
     @Override
-    public boolean changeServiceName(Service serviceToChangeAt,String newName) {
-        if (!services.contains(serviceToChangeAt)){
+    public void changeServiceName(String serviceToChangeAtName,String newName) {
+        if (!findServiceByName(serviceToChangeAtName)){
             throw new NoSuchElementException("Service is not exist");
         }
-        serviceToChangeAt.setServiceName(newName);
-        return true;
+        getServiceByName(serviceToChangeAtName).setServiceName(newName);
     }
 
-    public boolean findServiceByName(String serviceName){
+    private boolean findServiceByName(String serviceName){
         for (Service service:services){
             if (service.getServiceName().equals(serviceName))
                 return true;
@@ -59,23 +56,29 @@ public class ServiceFacadeImp implements ServiceFacade {
         return false;
     }
 
+    private Service getServiceByName(String serviceName){
+        for (Service service:services){
+            if (service.getServiceName().equals(serviceName))
+                return service;
+        }
+        return null;
+    }
+
     @Override
-    public boolean makePayment(String serviceName, double amount) {
+    public void makePayment(String serviceName, double amount) {
         if (!findServiceByName(serviceName)){
             throw new NoSuchElementException("Service is not exist");
         }
         PaymentServiceProxy paymentService = new PaymentServiceProxy(serviceName);
         paymentService.processPayment(amount);
-        return true;
     }
 
     @Override
-    public boolean makeDelivery(String serviceName, String address) {
+    public void makeDelivery(String serviceName, String address) {
         if (!findServiceByName(serviceName)){
             throw new NoSuchElementException("Service is not exist");
         }
         DeliveryServiceProxy deliveryServiceProxy = new DeliveryServiceProxy(serviceName);
         deliveryServiceProxy.processDelivery(address);
-        return true;
     }
 }

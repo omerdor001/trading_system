@@ -23,12 +23,37 @@ public class MarketServiceImp implements MarketService {
         return MarketServiceImp.Singleton.INSTANCE;
     }
 
+    @Override
     public String getAllStores() {
         logger.info("Trying to Gather All Stores");
         String result = marketFacade.getAllStores();
         logger.info("FINISHED Gather All Stores Info");
         return result;
     }
+    @Override
+    public void openStoreExist(String storeName) {
+        logger.info("Trying to open store with name : {}", storeName);
+        try {
+            marketFacade.openStoreExist(storeName);
+        }
+        catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on opening Store with name : {}", e.getMessage(), storeName);
+        }
+    }
+
+/*
+    @Override
+    public void closeStoreExist(String storeName) {
+        logger.info("Trying to close store with name : {}", storeName);
+        try {
+            marketFacade.openStoreExist(storeName);
+
+        }
+        catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on closing Store with name : {}", e.getMessage(), storeName);
+        }
+    }
+*/
 
     public String getStoreProducts(String store_name) {
         logger.info("Trying to Gather ALL Store Products");
@@ -36,6 +61,7 @@ public class MarketServiceImp implements MarketService {
         logger.info("FINISHED Gather ALL Store Products Info");
         return result;
     }
+
 
     public String getProductInfo(String store_name, int product_Id) {
         logger.info("Trying to Gather Product Info with Store Id : {} and product ID: {}", store_name, product_Id);
