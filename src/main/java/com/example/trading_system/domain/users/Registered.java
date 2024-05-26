@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class Registered extends User {
+
+
     private String userName;
     private String encrypted_pass;
     private String address;
@@ -53,7 +55,9 @@ public class Registered extends User {
         //SET THE ROLE TO OWNER OF STORE
 
     }
-
+    public String getUserName() {
+        return userName;
+    }
     @Override
     public String getPass(){
         return this.encrypted_pass;
