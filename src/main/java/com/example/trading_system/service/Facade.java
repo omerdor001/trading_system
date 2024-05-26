@@ -1,6 +1,5 @@
 package com.example.trading_system.service;
 
-import com.example.trading_system.domain.externalservices.Service;
 import com.example.trading_system.domain.externalservices.ServiceFacade;
 import com.example.trading_system.domain.externalservices.ServiceFacadeImp;
 import com.example.trading_system.domain.stores.Category;
@@ -10,7 +9,6 @@ import com.example.trading_system.domain.users.UserFacadeImp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import javax.management.InstanceAlreadyExistsException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -64,15 +62,31 @@ public class Facade {
     }
 
     public ResponseEntity<String> addService(String serviceName,String username,String token) {
-        return externalServices.addService(serviceName);
+        if(Security.validateToken(token,username)) {
+            return externalServices.addService(serviceName);
+        }
+        else{
+            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
+        }
     }
 
     public ResponseEntity<String> replaceService(String newServiceName, String oldServiceName,String username,String token){
-        return externalServices.replaceService(newServiceName,oldServiceName);
+        if(Security.validateToken(token,username)) {
+            return externalServices.replaceService(newServiceName, oldServiceName);
+        }
+        else{
+            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
+        }
     }
 
     public ResponseEntity<String> changeServiceName(String serviceToChangeAtName,String newName,String username,String token){
-        return externalServices.changeServiceName(serviceToChangeAtName,newName);
+        if(Security.validateToken(token,username)) {
+            return externalServices.changeServiceName(serviceToChangeAtName, newName);
+        }
+        else{
+            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     public ResponseEntity<String> makePayment(String serviceName,double amount,String username,String token){
