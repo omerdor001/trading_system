@@ -5,20 +5,32 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
+
 public class Purchase {
-    private final List<ProductInSale> productInSaleList;
+    private List<ProductInSale> productInSaleList;
+    @Getter
     private int customerId;
     private double totalPrice;
+    @Getter
+    private String storeName;
 
-    public Purchase(int customerId, List<ProductInSale> productInSaleList) {
+    public Purchase(int customerId, List<ProductInSale> productInSaleList, String storeName,double totalPrice) {
         this.customerId = customerId;
         this.productInSaleList = productInSaleList;
-        this.totalPrice = productInSaleList.stream().mapToDouble(ProductInSale::getSumPrice).sum();
+        this.storeName = storeName;
+        this.totalPrice = totalPrice;
+    }
+
+
+    public void addProduct(ProductInSale product) {
+        productInSaleList.add(product);
+        totalPrice += product.getPrice();
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
+        builder.append("Store Name: ").append(storeName).append("\n");
         builder.append("Client ID: ").append(customerId).append(", Total Price: $").append(totalPrice).append("\n");
         builder.append("Products:\n");
         for (ProductInSale product : productInSaleList) {

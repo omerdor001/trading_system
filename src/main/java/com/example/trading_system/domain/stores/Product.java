@@ -8,7 +8,7 @@ public class Product {
     private String product_name;
     private String product_description;
     private double product_price;
-    private int product_quantity;
+    private volatile int product_quantity;
     private double rating;
     private Category category;
     private List<String> keyWords;

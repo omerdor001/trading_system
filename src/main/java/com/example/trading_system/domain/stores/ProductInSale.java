@@ -8,9 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductInSale {
-    private String productName;
+    private int id;
     private double price;
     private int quantity;
+    private String storeName;
+
 
     double getSumPrice() {
         return price * quantity;
@@ -18,7 +20,7 @@ public class ProductInSale {
 
     @Override
     public String toString() {
-        return "Product: " + productName + ", Quantity: " + quantity + ", Price: $" + price;
+        return "Product: " + id + ", Quantity: " + quantity + ", Price: $" + price + ", Store Name: " + storeName;
     }
 
 }
