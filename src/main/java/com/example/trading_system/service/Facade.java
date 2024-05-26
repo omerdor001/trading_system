@@ -117,25 +117,25 @@ public class Facade {
         return userService.suggestManage(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
     }
 
-    public ResponseEntity<String> approveManager(String newManager, String store_name_id) {
-        return userService.approveManage(newManager,store_name_id);
+    public ResponseEntity<String> approveManager(String newManager, String store_name_id, String appoint) {
+        return userService.approveManage(newManager,store_name_id, appoint);
     }
 
-    public ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
-        return userService.appointManager(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
-    }
+//    public ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+//        return userService.appointManager(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+//    }
 
     public ResponseEntity<String> suggestOwner(String appoint, String newOwner, String storeName) {
         return userService.suggestOwner(appoint,newOwner,storeName);
     }
 
-    public ResponseEntity<String> approveOwner(String newOwner, String storeName) {
-        return userService.approveOwner(newOwner,storeName);
+    public ResponseEntity<String> approveOwner(String newOwner, String storeName, String appoint) {
+        return userService.approveOwner(newOwner,storeName, appoint);
     }
 
-    public ResponseEntity<String> appointOwner(String appoint, String newOwner, String storeName) {
-        return userService.appointOwner(appoint,newOwner,storeName);
-    }
+//    public ResponseEntity<String> appointOwner(String appoint, String newOwner, String storeName) {
+//        return userService.appointOwner(appoint,newOwner,storeName);
+//    }
 
     ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy){
         return userService.editPermissionForManager(userId, managerToEdit,storeNameId,  watch,  editSupply,  editBuyPolicy,  editDiscountPolicy);

@@ -174,10 +174,10 @@ public class UserServiceImp implements UserService {
 
 
     @Override
-    public ResponseEntity<String> approveManage(String newManager, String store_name_id) {
+    public ResponseEntity<String> approveManage(String newManager, String store_name_id, String appoint) {
         logger.info("Trying to approve manage to store : {}",store_name_id);
         try {
-            userFacade.approveManage(newManager,store_name_id);
+            userFacade.approveManage(newManager,store_name_id, appoint);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while trying to approve management to store : {}", e.getMessage(),store_name_id);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -187,10 +187,10 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public ResponseEntity<String> approveOwner(String newOwner, String storeName) {
+    public ResponseEntity<String> approveOwner(String newOwner, String storeName, String appoint) {
         logger.info("{} trying to approve owner to store : {}",newOwner, storeName);
         try {
-            userFacade.approveOwner(newOwner,storeName);
+            userFacade.approveOwner(newOwner,storeName, appoint);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while trying to approve owner to store : {}", e.getMessage(),storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -199,31 +199,31 @@ public class UserServiceImp implements UserService {
         return new ResponseEntity<>("Success approving owner", HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
-        logger.info("Trying to appoint manager : {} to store : {}", newManager,store_name_id);
-        try {
-            userFacade.appointManager(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , while trying to appoint the user : {} to store : {}", e.getMessage(),appoint,store_name_id);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-        logger.info("Finished appointing manager : {} to store : {}", newManager,store_name_id);
-        return new ResponseEntity<>("Success appointing manager", HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<String> appointOwner(String appoint, String newOwner, String storeName) {
-        logger.info("Trying to appoint owner : {} to store : {}", newOwner,storeName);
-        try {
-            userFacade.appointOwner(appoint,newOwner,storeName);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , while trying to appoint the user : {} to be owner in store : {}", e.getMessage(),appoint,storeName);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-        logger.info("Finished appointing owner : {} to store : {}", newOwner, storeName);
-        return new ResponseEntity<>("Success appointing owner", HttpStatus.OK);
-    }
+//    @Override
+//    public ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+//        logger.info("Trying to appoint manager : {} to store : {}", newManager,store_name_id);
+//        try {
+//            userFacade.appointManager(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+//        } catch (Exception e) {
+//            logger.error("Error occurred : {} , while trying to appoint the user : {} to store : {}", e.getMessage(),appoint,store_name_id);
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//        logger.info("Finished appointing manager : {} to store : {}", newManager,store_name_id);
+//        return new ResponseEntity<>("Success appointing manager", HttpStatus.OK);
+//    }
+//
+//    @Override
+//    public ResponseEntity<String> appointOwner(String appoint, String newOwner, String storeName) {
+//        logger.info("Trying to appoint owner : {} to store : {}", newOwner,storeName);
+//        try {
+//            userFacade.appointOwner(appoint,newOwner,storeName);
+//        } catch (Exception e) {
+//            logger.error("Error occurred : {} , while trying to appoint the user : {} to be owner in store : {}", e.getMessage(),appoint,storeName);
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//        logger.info("Finished appointing owner : {} to store : {}", newOwner, storeName);
+//        return new ResponseEntity<>("Success appointing owner", HttpStatus.OK);
+//    }
 
     @Override
     public ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
