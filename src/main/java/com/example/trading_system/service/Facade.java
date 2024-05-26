@@ -89,16 +89,16 @@ public class Facade {
     }
 
     public ResponseEntity<String> setProduct_name(String username, String store_name_id, int productId, String product_name){
-        return marketService.setProduct_name(username,store_name_id,productId,product_name);
+        return marketService.setProductName(username,store_name_id,productId,product_name);
     }
     public ResponseEntity<String> setProduct_description(String username,String store_name_id,int productId,String product_description){
-        return marketService.setProduct_description(username,store_name_id,productId,product_description);
+        return marketService.setProductDescription(username,store_name_id,productId,product_description);
     }
     public ResponseEntity<String> setProduct_price(String username,String store_name_id,int productId,int product_price){
-        return marketService.setProduct_price(username,store_name_id,productId,product_price);
+        return marketService.setProductPrice(username,store_name_id,productId,product_price);
     }
     public ResponseEntity<String> setProduct_quantity(String username,String store_name_id,int productId,int product_quantity){
-        return marketService.setProduct_quantity(username,store_name_id,productId,product_quantity);
+        return marketService.setProductQuantity(username,store_name_id,productId,product_quantity);
     }
     public ResponseEntity<String> setRating(String username,String store_name_id,int productId,int rating){
         return marketService.setRating(username,store_name_id,productId,rating);
@@ -140,6 +140,13 @@ public class Facade {
     ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy){
         return userService.editPermissionForManager(userId, managerToEdit,storeNameId,  watch,  editSupply,  editBuyPolicy,  editDiscountPolicy);
     }
+    public void openStroeExist(String storeName){
+        marketFacade.openStoreExist(storeName);
+    }
+
+    public void closeStroeExist(String storeName){
+        marketFacade.closeStoreExist(storeName);
+    }
 
 
     public String login(int id, String username, String password){
@@ -147,8 +154,9 @@ public class Facade {
             Security.makeTokenExpire("v" + id);
             return Security.generateToken(username);
         }
-        else
+        else {
             return "";
+        }
     }
 
 }

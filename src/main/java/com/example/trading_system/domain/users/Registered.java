@@ -140,7 +140,7 @@ public class Registered extends User {
         managerToApprove.put(store_name_id,Arrays.asList(watch,editSupply,editBuyPolicy,editDiscountPolicy));
     }
     public void addWaitingAppoint_Owner(String storeName){
-        ownerToApprove.put(storeName);
+        ownerToApprove.add(storeName);
     }
 
     public void removeWaitingAppoint_Manager(String store_name_id){
