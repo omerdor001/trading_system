@@ -109,11 +109,15 @@ public class UserFacadeImp implements UserFacade {
         u.login();
     }
 
-    public void logout(String username) {
-        User u = registered.get(username);
+    public void logout(int id, String username){
+        User u = getRegistered().get(username);
         if (u == null)
-            throw new RuntimeException("No such user " + username);
+            throw new IllegalArgumentException("No such user " + username);
+        if (!u.getLogged())
+            throw new RuntimeException("User "+ username + "already Logged out");
+        saveUserCart(username);
         u.logout();
+        enter(id);
     }
 
 

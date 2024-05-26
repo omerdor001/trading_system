@@ -19,7 +19,7 @@ public interface UserFacade {
     void register(int id, String username, String token, LocalDate birthdate) throws Exception;    //Complete with what to register
 
     void login(String username);
-    void logout(String username);
+    void logout(int id, String username);
     void saveUserCart(String username);
 
     boolean sendNotification(User sender, User receiver, String content);
