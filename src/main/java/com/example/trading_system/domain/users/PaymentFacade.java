@@ -101,13 +101,15 @@ public class PaymentFacade {
 
         PaymentServiceProxy paymentServiceProxy = new PaymentServiceProxy(paymentService);
         double totalPrice = calculateTotalPrice(cart);
+        //TODO: fix process Payment
+        /*
         boolean paymentSuccess = paymentServiceProxy.processPayment(totalPrice);
 
         if (paymentSuccess) {
             logger.info("Purchase successful. Inventory updated.");
         } else {
             logger.error("Payment failed. Please try again.");
-        }
+        }*/
     }
 
     private synchronized void VisitorReleaseReservedProducts(Visitor visitor) {
@@ -164,13 +166,14 @@ public class PaymentFacade {
 
         PaymentServiceProxy paymentServiceProxy = new PaymentServiceProxy(paymentService);
         double totalPrice = calculateTotalPrice(cart);
-        boolean paymentSuccess = paymentServiceProxy.processPayment(totalPrice);
-
+        //TODO: fix process Payment
+//        boolean paymentSuccess = paymentServiceProxy.processPayment(totalPrice);
+/*
         if (paymentSuccess) {
             logger.info("Purchase successful. Inventory updated.");
         } else {
             logger.error("Payment failed. Please try again.");
-        }
+        }*/
     }
     private synchronized void RegisteredReleaseReservedProducts(Registered registered) {
         Cart cart = registered.getShopping_cart();

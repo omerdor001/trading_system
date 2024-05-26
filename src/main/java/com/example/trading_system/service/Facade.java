@@ -40,7 +40,8 @@ public class Facade {
     }
 
     public ResponseEntity<String> openSystem() {
-        if (userService.isAdminRegistered()) {
+        //TODO: FIX ME - is admin registered
+/*        if (userService.isAdminRegistered()) {
             serviceFacade = new ServiceFacadeImp();
             externalServices = new ExternalServicesImp(serviceFacade);
             marketService = new MarketServiceImp(marketFacade);
@@ -48,7 +49,9 @@ public class Facade {
             return new ResponseEntity<>("System opened successfully.", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("System cannot be opened without at least one admin registered.", HttpStatus.FORBIDDEN);
-        }
+        }*/
+        return new ResponseEntity<>("System cannot be opened without at least one admin registered.", HttpStatus.FORBIDDEN);
+
     }
 
     // Helper method to check if the system is open

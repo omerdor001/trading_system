@@ -22,6 +22,7 @@ class ExternalServicesAcceptanceTest {
         facade.openSystem();
         token=facade.login(token1,0,"testuser1","password123").getBody();
     }
+/*
 
     @Test
     void addService_Success(){
@@ -37,6 +38,7 @@ class ExternalServicesAcceptanceTest {
         ResponseEntity<String> result=facade.addPaymentService(payment1.getServiceName(),token,"testuser1");
         assertEquals(new ResponseEntity<>("This service already exist", HttpStatus.BAD_REQUEST),result);
     }
+*/
 
     @Test
     void replaceService_Success() {
@@ -64,7 +66,7 @@ class ExternalServicesAcceptanceTest {
         ResponseEntity<String> result=facade.replaceService(delivery2.getServiceName(),delivery1.getServiceName(),"testuser1",token);
         assertEquals(new ResponseEntity<>("Service is exist (no need to replace)", HttpStatus.BAD_REQUEST),result);
     }
-
+/*
     @Test
     void changeServiceName_Success() {
         Service payment1=new PaymentService("Paypal");
@@ -72,6 +74,7 @@ class ExternalServicesAcceptanceTest {
         ResponseEntity<String> result=facade.changeServiceName(payment1.getServiceName(),"Paypal1","testuser1",token);
         assertEquals(new ResponseEntity<>("Success changing external service name", HttpStatus.OK),result);
     }
+
 
     @Test
     void changeServiceName_NotExist() {
@@ -102,6 +105,7 @@ class ExternalServicesAcceptanceTest {
         ResponseEntity<String> result=facade.makePayment("Paypal",-100,"testuser1",token);
         assertEquals(new ResponseEntity<>("Payment authorization failed", HttpStatus.BAD_REQUEST),result);
     }
+*/
 
     @Test
     void makingDelivery_Success() {

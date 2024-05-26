@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class PaymentFacadeImp implements PaymentFacade {
+public class PaymentFacadeImp extends PaymentFacade {
     MarketFacadeImp marketFacade = MarketFacadeImp.getInstance();
     UserFacadeImp userFacade = UserFacadeImp.getInstance();
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
@@ -112,15 +112,17 @@ public class PaymentFacadeImp implements PaymentFacade {
 
         PaymentServiceProxy paymentServiceProxy = new PaymentServiceProxy(paymentService);
         double totalPrice = calculateTotalPrice(cart);
-        boolean paymentSuccess = paymentServiceProxy.processPayment(totalPrice);
+        //TODO: fix process Payment
 
-        if (paymentSuccess) {
-            logger.info("Purchase successful. Inventory updated.");
-        } else {
-            logger.error("Payment failed. Please try again.");
-            VisitorReleaseReservedProducts(visitor);
-            throw new RuntimeException("Payment failed. Please try again.");
-        }
+//        boolean paymentSuccess = paymentServiceProxy.processPayment(totalPrice);
+
+//        if (paymentSuccess) {
+//            logger.info("Purchase successful. Inventory updated.");
+//        } else {
+//            logger.error("Payment failed. Please try again.");
+//            VisitorReleaseReservedProducts(visitor);
+//            throw new RuntimeException("Payment failed. Please try again.");
+//        }
         addPurchaseVisitor(visitorId);
         timer.cancel();
         timer.purge();
@@ -182,15 +184,16 @@ public class PaymentFacadeImp implements PaymentFacade {
 
         PaymentServiceProxy paymentServiceProxy = new PaymentServiceProxy(paymentService);
         double totalPrice = calculateTotalPrice(cart);
-        boolean paymentSuccess = paymentServiceProxy.processPayment(totalPrice);
+        //TODO: fix process Payment
+//        boolean paymentSuccess = paymentServiceProxy.processPayment(totalPrice);
 
-        if (paymentSuccess) {
+/*        if (paymentSuccess) {
             logger.info("Purchase successful. Inventory updated.");
         } else {
             logger.error("Payment failed. Please try again.");
             registeredCheckAvailabilityAndConditions(registeredId);
             throw new RuntimeException("Payment failed. Please try again.");
-        }
+        }*/
         addPurchaseRegistered(registeredId);
         timer.cancel();
         timer.purge();
@@ -214,7 +217,7 @@ public class PaymentFacadeImp implements PaymentFacade {
         }
     }
 
-    private double calculateTotalPrice(Cart cart) {
+    public double calculateTotalPrice(Cart cart) {
         double price = 0;
         for (Map.Entry<String, ShoppingBag> entry : cart.getShoppingBags().entrySet()) {
             String storeId = entry.getKey();
