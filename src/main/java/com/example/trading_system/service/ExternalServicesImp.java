@@ -23,46 +23,40 @@ public class ExternalServicesImp implements ExternalServices {
         return ExternalServicesImp.Singleton.INSTANCE;
     }
 
-    public boolean addService(Service service) throws InstanceAlreadyExistsException {//Add connection
+    public void addService(Service service) throws InstanceAlreadyExistsException {//Add connection
         logger.info("Trying adding external service: {}", service.getServiceName());
-        boolean result = facade.addService(service);
+        facade.addService(service);
         logger.info("Finish adding external service: {}", service.getServiceName());
-        return result;
     }
 
     @Override
-    public boolean addServiceNew(Service service) throws InstanceAlreadyExistsException {
+    public void addServiceNew(Service service) throws InstanceAlreadyExistsException {
         logger.info("Trying add external service: {}", service.getServiceName());
-        boolean result = facade.addService(service);
+        facade.addService(service);
         logger.info("Finish add external service: {}", service.getServiceName());
-        return result;
     }
 
-    public boolean replaceService(Service newService, Service oldService) {
+    public void replaceService(Service newService, Service oldService) {
         logger.info("Trying replacing external service: {} to {} ", oldService.getServiceName(), newService.getServiceName());
-        boolean result = facade.replaceService(newService, oldService);
+        facade.replaceService(newService, oldService);
         logger.info("Finish replacing external service: {} to {} ", oldService.getServiceName(), newService.getServiceName());
-        return result;
     }
 
-    public boolean changeServiceName(Service serviceToChangeAt, String newName) {
+    public void changeServiceName(Service serviceToChangeAt, String newName) {
         logger.info("Trying changing name to external service: {} to name : {} ", serviceToChangeAt.getServiceName(), newName);
-        boolean result = facade.changeServiceName(serviceToChangeAt, newName);
+        facade.changeServiceName(serviceToChangeAt, newName);
         logger.info("Finish changing name to external service: {} to name : {} ", serviceToChangeAt.getServiceName(), newName);
-        return result;
     }
 
-    public boolean makePayment(String serviceName, double amount) {
+    public void makePayment(String serviceName, double amount) {
         logger.info("Trying making Payment with service {} ", serviceName);
-        boolean result = facade.makePayment(serviceName, amount);
+        facade.makePayment(serviceName, amount);
         logger.info("Finish making payment with service: {} ", serviceName);
-        return result;
     }
 
-    public boolean makeDelivery(String serviceName, String address) {
+    public void makeDelivery(String serviceName, String address) {
         logger.info("Trying making delivery with service {} ", serviceName);
-        boolean result = facade.makeDelivery(serviceName, address);
+        facade.makeDelivery(serviceName, address);
         logger.info("Finish making delivery with service: {} ", serviceName);
-        return result;
     }
 }
