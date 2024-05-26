@@ -10,7 +10,7 @@ public abstract class User {
     private Cart shopping_cart;
 
     public User(int id) {
-        this.id = id;            //Might be change ?
+        this.id = id;
         this.shopping_cart = new Cart();
     }
 

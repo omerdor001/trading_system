@@ -9,8 +9,7 @@ public class Role {
     private String store_name_id;
     private String appointedById;
 
-    public Role(RoleState roleState, String store_name_id, String appointedById) {
-        this.roleState = roleState;
+    public Role( String store_name_id, String appointedById) {
         this.store_name_id = store_name_id;
         this.appointedById = appointedById;
     }
@@ -31,13 +30,26 @@ public class Role {
         this.appointedById = appointedById;
     }
 
-    public void addProduct(String username, int product_id, String store_name, String product_name, String product_description,
+    public void setRoleState(RoleState roleState) {
+        this.roleState = roleState;
+        this.roleState.setRole(this); // Set the role context in the state
+    }
+
+    public RoleState getRoleState() {
+        return roleState;
+    }
+
+    public void addProduct(String username,  int product_id, String store_name, String product_name, String product_description,
                            double product_price, int product_quantity, double rating, Category category, List<String> keyWords) throws IllegalAccessException {
         roleState.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
     }
 
-    public void removeProduct(String username, String store_name_id, int product_id) throws IllegalAccessException {
-        roleState.removeProduct(username, store_name_id, product_id);
+//    public void requestInftomationAboutRolesInStore(String username, String storeId) throws IllegalAccessException {
+//        roleState.requestInftomationAboutRolesInStore(store_name_id);
+//    }
+
+    public void removeProduct(String username,String store_name_id,int product_id) throws IllegalAccessException {
+        roleState.removeProduct(username,store_name_id,product_id);
     }
 
     public void setProduct_name(String username, String store_name_id, int productId, String product_name) throws IllegalAccessException {
