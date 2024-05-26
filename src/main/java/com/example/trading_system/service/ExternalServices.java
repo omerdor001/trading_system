@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 public interface ExternalServices {
     ResponseEntity<String> addService(String serviceName);
 
-
     ResponseEntity<String> replaceService(String newServiceName, String oldServiceName);
 
     ResponseEntity<String> changeServiceName(String serviceToChangeAtName,String newName);

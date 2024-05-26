@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class MarketFacadeImp implements MarketFacade{
     @Getter
     private HashMap<String, Store> stores;
-        private UserFacade userFacade;
+    private UserFacade userFacade;
 
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
 
@@ -64,13 +64,13 @@ public class MarketFacadeImp implements MarketFacade{
 
     @Override
     public String getStoreProducts(String storeName) {
-       if(stores.get(storeName).isActive()){
-           return stores.get(storeName).toString();
-       }
-       else {
-           logger.error("Can't find store with name {}", storeName);
-           return null;
-       }
+        if(stores.get(storeName).isActive()){
+            return stores.get(storeName).toString();
+        }
+        else {
+            logger.error("Can't find store with name {}", storeName);
+            return null;
+        }
 
     }
 

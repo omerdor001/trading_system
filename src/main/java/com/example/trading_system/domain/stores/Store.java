@@ -1,3 +1,4 @@
+
 package com.example.trading_system.domain.stores;
 
 import lombok.Getter;
@@ -146,7 +147,7 @@ public class Store {
         }
     }
 
-    public synchronized void setCategory(int productId, Category category) {
+    public synchronized void setCategory(int productId, int category) {
         Product product = getProduct(productId);
         if (product != null) {
             product.setCategory(category);

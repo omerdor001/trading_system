@@ -1,3 +1,4 @@
+
 package com.example.trading_system.domain.stores;
 import java.util.List;
 

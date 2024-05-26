@@ -50,7 +50,7 @@ public abstract class RoleState {
                                     double product_price,
                                     int product_quantity,
                                     double rating,
-                                    Category category,
+                                    int category,
                                     List<String> keyWords) throws IllegalAccessException;
 
     public abstract void getHistoryPurchasesByCustomer() throws IllegalAccessException;
@@ -75,7 +75,7 @@ public abstract class RoleState {
 
     public abstract void setRating(String username,String store_name_id,int productId,int rating) throws IllegalAccessException;
 
-    public abstract void setCategory(String username,String store_name_id,int productId,Category category) throws IllegalAccessException;
+    public abstract void setCategory(String username,String store_name_id,int productId,int category) throws IllegalAccessException;
 
     public abstract boolean isManager();
 
