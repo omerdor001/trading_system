@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 public class UserServiceImp implements UserService {
 
@@ -150,6 +151,34 @@ public class UserServiceImp implements UserService {
         }
         logger.info("Finished opening store with name: {}", storeName);
         return true;
+    }
+
+    @Override
+    public String registeredViewCart(String username) {
+        String result = "";
+        logger.info("Trying registerd : {} view cart ", username);
+        try {
+            result = userFacade.registeredViewCart(username);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed registerd view cart ", username);
+            return "";
+        }
+        logger.info("Finished registerd view cart ");
+        return result;
+    }
+
+    @Override
+    public String visitorViewCart(int id) {
+        String result;
+        logger.info("Trying view cart");
+        try {
+            result = userFacade.visitorViewCart(id);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed view cart ", id);
+            return "";
+        }
+        logger.info("Finished view cart ");
+        return result;
     }
 
 

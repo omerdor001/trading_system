@@ -24,5 +24,9 @@ public interface UserService {
     void exit(int id) throws Exception;
     void exit(String username) throws Exception;
 
+    String registeredViewCart(String username);
+
+    String visitorViewCart(int id);
+
 //    boolean logout(int id);
 }
