@@ -162,17 +162,4 @@ class StockManagementAcceptanceTests {
         //TODO Make this test
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

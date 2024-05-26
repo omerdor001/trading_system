@@ -1,10 +1,9 @@
 package com.example.trading_system.domain.users;
 
+import lombok.Getter;
+
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class Registered extends User {
     private String userName;
@@ -13,8 +12,11 @@ public class Registered extends User {
     private LocalDate birthdate;
     private boolean isAdmin;
     private boolean isLogged = false;
+    @Getter
     private List<Role> roles;
     private List<Notification> notifications;
+    private HashMap<String,List<Boolean>> managerToApprove;
+    private List<String> ownerToApprove;
 
     public Registered(int id, String userName, String encrypted_pass, String address, LocalDate birthdate) {
         super(id);
@@ -27,6 +29,8 @@ public class Registered extends User {
         this.isLogged = false;
         this.notifications = new LinkedList<>();
         this.roles=new ArrayList<>();
+        this.managerToApprove=new HashMap<>();
+        this.ownerToApprove=new ArrayList<>();
     }
 
     public Registered(int id, String userName, String encryption, LocalDate birthdate) {
@@ -53,7 +57,9 @@ public class Registered extends User {
         //SET THE ROLE TO OWNER OF STORE
 
     }
-
+    public String getUserName() {
+        return userName;
+    }
     @Override
     public String getPass(){
         return this.encrypted_pass;
@@ -61,15 +67,11 @@ public class Registered extends User {
 
     @Override
     public void login(){
-        if (getLogged())
-            throw new RuntimeException("User already logged in");
         this.isLogged = true;
     }
 
     @Override
     public void logout(){
-        if (getLogged())
-            throw new RuntimeException("User already logged out");
         this.isLogged = false;
     }
 
@@ -94,6 +96,26 @@ public class Registered extends User {
         }
     }
 
+    public void addManagerRole(String appoint, String store_name_id){
+        Role manager=new Role(store_name_id,appoint);
+        manager.setRoleState(new Manager());
+        getRoles().add(manager);
+    }
+
+    public void addOwnerRole(String appoint, String storeName){
+        Role owner=new Role(storeName,appoint);
+        owner.setRoleState(new Owner(owner));
+        getRoles().add(owner);
+    }
+
+    public void setPermissionsToManager(String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy){
+        Role manager=getRoleByStoreId(store_name_id);
+        manager.getRoleState().setWatch(watch);
+        manager.getRoleState().setEditSupply(editSupply);
+        manager.getRoleState().setEditBuyPolicy(editBuyPolicy);
+        manager.getRoleState().setEditDiscountPolicy(editDiscountPolicy);
+    }
+
     public Role getRoleByStoreId(String store_name_id){
         for (Role role:roles){
             if (role.getStoreId().equals(store_name_id))
@@ -102,6 +124,51 @@ public class Registered extends User {
         throw new NoSuchElementException("User doesn't have permission to this store");
     }
 
+    public boolean isAdmin(){
+        return this.isAdmin;
+    }
+    public boolean isOwner(String store_name_id){
+        if(getRoleByStoreId(store_name_id).getRoleState().isOwner()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean isManager(String store_name_id){
+        if(getRoleByStoreId(store_name_id).getRoleState().isManager()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public void setAdmin(boolean value){
+        this.isAdmin = value;
+    }
+    public void addWaitingAppoint_Manager(String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy){
+        managerToApprove.put(store_name_id,Arrays.asList(watch,editSupply,editBuyPolicy,editDiscountPolicy));
+    }
+    public void addWaitingAppoint_Owner(String storeName){
+        ownerToApprove.add(storeName);
+    }
+
+    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id){
+        return managerToApprove.remove(store_name_id);
+    }
+
+    public void removeWaitingAppoint_Owner(String storeName){
+        ownerToApprove.remove(storeName);
+    }
 
 
+    public String getAddress() {
+        return address;
+    }
+
+    public LocalDate getBirthdate() {
+        return birthdate;
+    }
 }

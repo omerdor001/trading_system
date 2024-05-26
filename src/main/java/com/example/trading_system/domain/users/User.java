@@ -10,7 +10,7 @@ public abstract class User {
     private Cart shopping_cart;
 
     public User(int id) {
-        this.id = id;            //Might be change ?
+        this.id = id;
         this.shopping_cart = new Cart();
     }
 
@@ -22,11 +22,12 @@ public abstract class User {
         this.id = id;
     }
 
-    public String getPass(){
+    public String getPass() {
         throw new RuntimeException("Only registered users have a password");
     }
 
     public abstract void login();
+
     public abstract void logout();
 
 
@@ -39,11 +40,12 @@ public abstract class User {
     }
 
     public abstract boolean getLogged();
+
     public abstract List<Notification> getNotifications();
 
     public abstract void receiveNotification(String notification);
 
-    public String sendNotification(int receiverId, String content){
+    public String sendNotification(int receiverId, String content) {
         Notification notification = new Notification(this.id, receiverId, new Date(), content);
         return notification.toString();
     }

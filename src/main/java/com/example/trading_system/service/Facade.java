@@ -1,5 +1,6 @@
 package com.example.trading_system.service;
 
+import com.example.trading_system.domain.externalservices.Service;
 import com.example.trading_system.domain.externalservices.ServiceFacade;
 import com.example.trading_system.domain.externalservices.ServiceFacadeImp;
 import com.example.trading_system.domain.stores.Category;
@@ -9,6 +10,7 @@ import com.example.trading_system.domain.users.UserFacadeImp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import javax.management.InstanceAlreadyExistsException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,173 +18,250 @@ public class Facade {
     public ServiceFacade serviceFacade;
     public UserFacade userFacade;
     public MarketFacade marketFacade;
-    public int counter_user=0;
+    public int counter_user = 0;
 
     public ExternalServices externalServices;
     public UserService userService;
     public MarketService marketService;
 
+    private boolean systemOpen;
 
-    public Facade(){
-        serviceFacade=new ServiceFacadeImp();
-        userFacade=new UserFacadeImp();
-
-        externalServices=new ExternalServicesImp(serviceFacade);
-        userService=new UserServiceImp(userFacade);
-        marketService=new MarketServiceImp(marketFacade);
+    public Facade() {
+        userFacade = new UserFacadeImp();
+        userService = new UserServiceImp(userFacade);
+        systemOpen = false;  // Initialize the system as closed
     }
 
-    public String enter(){
+    public String enter() {
+        if (!checkSystemOpen()) {
+            return "";  // Return empty string if the system is not open
+        }
         String token = userService.enter(counter_user);
         counter_user++;
-        //TODO Show UI
+        // TODO Show UI
         return token;
     }
 
+    public ResponseEntity<String> openSystem() {
+        if (userService.isAdminRegistered()) {
+            serviceFacade = new ServiceFacadeImp();
+            externalServices = new ExternalServicesImp(serviceFacade);
+            marketService = new MarketServiceImp(marketFacade);
+            systemOpen = true;
+            return new ResponseEntity<>("System opened successfully.", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("System cannot be opened without at least one admin registered.", HttpStatus.FORBIDDEN);
+        }
+    }
 
-    //TODO: Do we even need that if we have logout?
-    public void exit(String token, int id) throws Exception {
+    // Helper method to check if the system is open
+    private boolean checkSystemOpen() {
+        return systemOpen;
+    }
+
+    private ResponseEntity<String> systemClosedResponse() {
+        return new ResponseEntity<>("System is not open. Only registration is allowed.", HttpStatus.FORBIDDEN);
+    }
+
+    public ResponseEntity<String> exit(String token, int id) throws Exception {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
+        }
         userService.exit(id);
         Security.makeTokenExpire(token);
+        return new ResponseEntity<>("User exited successfully.", HttpStatus.OK);
     }
 
-    public void exit(String token, String username) throws Exception {
+    public ResponseEntity<String> exit(String token, String username) throws Exception {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
+        }
         userService.exit(username);
         Security.makeTokenExpire(token);
+        return new ResponseEntity<>("User exited successfully.", HttpStatus.OK);
     }
 
-    public boolean register(String token, int id, String username, String password, LocalDate birthdate) throws Exception {
-        if(Security.validateToken(token,"v"+id)){
-            userFacade.register(id,username,password,birthdate);
-            return true;
+    public ResponseEntity<String> register(int id, String username, String password, LocalDate birthdate) {
+        // Registration is allowed even if the system is not open
+        try {
+            userFacade.register(id, username, password, birthdate);
+            return new ResponseEntity<>("User registered successfully.", HttpStatus.OK);
         }
-        else{
-            return false;
-        }
-    }
-
-    public ResponseEntity<String> addService(String serviceName,String username,String token) {
-        if(Security.validateToken(token,username)) {
-            return externalServices.addService(serviceName);
-        }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
+        catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    public ResponseEntity<String> replaceService(String newServiceName, String oldServiceName,String username,String token){
-        if(Security.validateToken(token,username)) {
-            return externalServices.replaceService(newServiceName, oldServiceName);
+    public ResponseEntity<String> addService(Service service) throws InstanceAlreadyExistsException {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
         }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
-        }
+        serviceFacade.addService(service);
+        return new ResponseEntity<>("Service added successfully.", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> changeServiceName(String serviceToChangeAtName,String newName,String username,String token){
-        if(Security.validateToken(token,username)) {
-            return externalServices.changeServiceName(serviceToChangeAtName, newName);
+    public ResponseEntity<String> replaceService(Service newService, Service oldService) {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
         }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
-        }
-
+        serviceFacade.replaceService(newService, oldService);
+        return new ResponseEntity<>("Service replaced successfully.", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> makePayment(String serviceName,double amount,String username,String token){
-        if(Security.validateToken(token,username)) {
-            return externalServices.makePayment(serviceName, amount);
+    public ResponseEntity<String> changeServiceName(Service serviceToChangeAt, String newName) {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
         }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
-        }
+        serviceFacade.changeServiceName(serviceToChangeAt, newName);
+        return new ResponseEntity<>("Service name changed successfully.", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> makeDelivery(String serviceName,String address,String username,String token){
-        if(Security.validateToken(token,username)) {
-            return externalServices.makeDelivery(serviceName, address);
+    public ResponseEntity<String> makePayment(String serviceName, double amount) {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
         }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
+        serviceFacade.makePayment(serviceName, amount);
+        return new ResponseEntity<>("Payment made successfully.", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> makeDelivery(String serviceName, String address) {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
         }
+        serviceFacade.makeDelivery(serviceName, address);
+        return new ResponseEntity<>("Delivery made successfully.", HttpStatus.OK);
     }
     public ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                                             double product_price, int product_quantity, double rating, Category category, List<String> keyWords,String token){
-        if(Security.validateToken(token,username)) {
-            return marketService.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
+                                             double product_price, int product_quantity, double rating, Category category, List<String> keyWords) {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
         }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
+        return marketService.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
+    }
+
+    public ResponseEntity<String> removeProduct(String username, String store_name, int product_id) {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
+        }
+        return marketService.removeProduct(username, store_name, product_id);
+    }
+
+    public ResponseEntity<String> setProduct_name(String username, String store_name_id, int productId, String product_name) {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
+        }
+        return marketService.setProductName(username, store_name_id, productId, product_name);
+    }
+
+    public ResponseEntity<String> setProduct_description(String username, String store_name_id, int productId, String product_description) {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
+        }
+        return marketService.setProductDescription(username, store_name_id, productId, product_description);
+    }
+
+    public ResponseEntity<String> setProduct_price(String username, String store_name_id, int productId, int product_price) {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
+        }
+        return marketService.setProductPrice(username, store_name_id, productId, product_price);
+    }
+
+    public ResponseEntity<String> setProduct_quantity(String username, String store_name_id, int productId, int product_quantity) {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
+        }
+        return marketService.setProductQuantity(username, store_name_id, productId, product_quantity);
+    }
+
+    public ResponseEntity<String> setRating(String username, String store_name_id, int productId, int rating) {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
+        }
+        return marketService.setRating(username, store_name_id, productId, rating);
+    }
+
+    public ResponseEntity<String> setCategory(String username, String store_name_id, int productId, Category category) {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
+        }
+        return marketService.setCategory(username, store_name_id, productId, category);
+    }
+    public String getAllHistoryPurchases(String userName, String storeName) {
+        return marketService.getAllHistoryPurchases(userName,storeName);
+    }
+    public String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) {
+        return marketService.getHistoryPurchasesByCustomer(userName,storeName,customerUserName);
+    }
+
+    public ResponseEntity<String> suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+        return userService.suggestManage(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+    }
+
+    public ResponseEntity<String> approveManager(String newManager, String store_name_id, String appoint) {
+        return userService.approveManage(newManager,store_name_id, appoint);
+    }
+
+//    public ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+//        return userService.appointManager(appoint,newManager,store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+//    }
+
+    public ResponseEntity<String> suggestOwner(String appoint, String newOwner, String storeName) {
+        return userService.suggestOwner(appoint,newOwner,storeName);
+    }
+
+    public ResponseEntity<String> approveOwner(String newOwner, String storeName, String appoint) {
+        return userService.approveOwner(newOwner,storeName, appoint);
+    }
+
+//    public ResponseEntity<String> appointOwner(String appoint, String newOwner, String storeName) {
+//        return userService.appointOwner(appoint,newOwner,storeName);
+//    }
+
+    ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy){
+        return userService.editPermissionForManager(userId, managerToEdit,storeNameId,  watch,  editSupply,  editBuyPolicy,  editDiscountPolicy);
+    }
+    public void openStroeExist(String storeName){
+        marketFacade.openStoreExist(storeName);
+    }
+
+    public void closeStroeExist(String storeName){
+        marketFacade.closeStoreExist(storeName);
+    }
+
+    String requestInformationAboutOfficialsInStore(String userName, String storeName){
+        return marketService.requestInformationAboutOfficialsInStore(userName, storeName);
+    }
+
+    String requestManagersPermissions(String userName, String storeName){
+        return marketService.requestManagersPermissions(userName, storeName);
+    }
+
+    String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName){
+        return marketService.requestInformationAboutSpecificOfficialInStore(userName, storeName, officialUserName);
+    }
+
+
+    public ResponseEntity<String> login(String token, int id, String username, String password) {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
+        }
+        if (userService.login(id, username, password)) {
+            if(!token.equals(""))
+                Security.makeTokenExpire(token);
+            String newToken = Security.generateToken(username);
+            return new ResponseEntity<>(newToken, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Login failed.", HttpStatus.UNAUTHORIZED);
         }
     }
 
-    public ResponseEntity<String> removeProduct(String username, String store_name, int product_id,String token){
-        if(Security.validateToken(token,username)) {
-            return marketService.removeProduct(username, store_name, product_id);
+    public ResponseEntity<String> logout(int id, String userName) {
+        if (!checkSystemOpen()) {
+            return systemClosedResponse();
         }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    public ResponseEntity<String> setProduct_name(String username, String store_name_id, int productId, String product_name,String token){
-        if(Security.validateToken(token,username)) {
-            return marketService.setProduct_name(username, store_name_id, productId, product_name);
-        }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
-        }
-    }
-    public ResponseEntity<String> setProduct_description(String username,String store_name_id,int productId,String product_description,String token){
-        if(Security.validateToken(token,username)) {
-            return marketService.setProduct_description(username, store_name_id, productId, product_description);
-        }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
-        }
-    }
-    public ResponseEntity<String> setProduct_price(String username,String store_name_id,int productId,int product_price,String token){
-        if(Security.validateToken(token,username)) {
-            return marketService.setProduct_price(username, store_name_id, productId, product_price);
-        }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
-        }
-    }
-    public ResponseEntity<String> setProduct_quantity(String username,String store_name_id,int productId,int product_quantity,String token){
-        if(Security.validateToken(token,username)) {
-            return marketService.setProduct_quantity(username, store_name_id, productId, product_quantity);
-        }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
-        }
-
-    }
-    public ResponseEntity<String> setRating(String username,String store_name_id,int productId,int rating,String token){
-        if(Security.validateToken(token,username)) {
-            return marketService.setRating(username, store_name_id, productId, rating);
-        }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
-        }
-
-    }
-    public ResponseEntity<String> setCategory(String username,String store_name_id,int productId,Category category,String token){
-        if(Security.validateToken(token,username)) {
-            return marketService.setCategory(username, store_name_id, productId, category);
-        }
-        else{
-            return new ResponseEntity<>("Expired token", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    public String login(int id, String username, String password){
-        if (userService.login(id, username, password)){
-            Security.makeTokenExpire("v" + id);
-            return Security.generateToken(username);
-        }
-        else
-            return "";
+        userService.logout(id, userName);
+        return new ResponseEntity<>("Logout successful.", HttpStatus.OK);
     }
 
 }

@@ -7,12 +7,13 @@ public class PaymentServiceProxy {
         this.realPaymentService = new PaymentService(serviceName);
     }
 
-    public void processPayment(double amount) {
+    public boolean processPayment(double amount) {
         // Additional logic before delegating to the real payment service
         if (amount>0) {
             realPaymentService.processPayment(amount);
         } else {
             throw new IllegalArgumentException("Payment authorization failed");
         }
+        return false;
     }
 }
