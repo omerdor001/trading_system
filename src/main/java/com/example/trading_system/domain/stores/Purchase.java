@@ -6,11 +6,14 @@ import java.util.List;
 
 @Getter
 public class Purchase {
+    private final List<ProductInSale> productInSaleList;
     private int customerId;
     private double totalPrice;
 
     public Purchase(int customerId, List<ProductInSale> productInSaleList) {
-        double totalPrice = productInSaleList.stream().mapToDouble(ProductInSale::getSumPrice).sum();
+        this.customerId = customerId;
+        this.productInSaleList = productInSaleList;
+        this.totalPrice = productInSaleList.stream().mapToDouble(ProductInSale::getSumPrice).sum();
     }
 
     @Override
