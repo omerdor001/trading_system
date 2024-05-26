@@ -4,59 +4,66 @@ import com.example.trading_system.service.Facade;
 import com.example.trading_system.service.Security;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.*;
 
 class LoginAcceptanceTests {
 
+    String token1;
     private Facade facade;
+
     @BeforeEach
     void setUp() throws Exception {
         facade = new Facade();
-// TODO wait for registration to work
-        // Mocking static method Security.validateToken in the setup
-        try (MockedStatic<Security> mockedSecurity = Mockito.mockStatic(Security.class)) {
-            mockedSecurity.when(() -> Security.validateToken(anyString(), anyString())).thenReturn(true);
-            String token = ""; //facade.enter();
-            //facade.registration("", 1, "testuser", "password123", LocalDate.now());
-        }
+        token1 = facade.enter();
+        facade.register(0, "testuser", "password123", LocalDate.now());
+        facade.openSystem();
     }
 
     @Test
-    void givenValidCredentials_whenLogin_thenUserLogged() {
-//        // Given
-//        int userId = -1;
-//        String username = "testuser";
-//        String password = "password123";
-//        LocalDate birthdate = LocalDate.of(1990, 5, 15);
-//
-//        // When
-//        facade.registration("valid_token", userId, username, password, birthdate);
-//        String token = facade.login(userId, username, password);
-//
-//        // Then
-//        assertTrue(!token.isEmpty(), "Token should not be empty");
-//        // You can add more assertions here to verify the state after successful login
+    void login_Success() {
+        int userId = 0;
+        String username = "testuser";
+        String password = "password123";
+        ResponseEntity<String> response = facade.login(token1, userId, username, password);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(!response.getBody().isEmpty(), "Token should not be empty");
     }
 
     @Test
-    void givenInvalidCredentials_whenLogin_thenUserNotLogged(){
-//        // Given
-//        int userId = -1;
-//        String username = "testuser";
-//        String password = "wrongPassword";
-//        LocalDate birthdate = LocalDate.of(1990, 5, 15);
-//
-//        // When
-//        facade.registration("valid_token", userId, username, "correctPassword", birthdate);
-//        String token = facade.login(userId, username, password);
-//
-//        // Then
-//        assertTrue(token.isEmpty(), "Token should be empty");
-//        // You can add more assertions here to verify the state after unsuccessful login
+    void login_Wrong_Password() {
+        int userId = 0;
+        String username = "testuser";
+        String password = "wrongPassword";
+        ResponseEntity<String> response = facade.login(token1, userId, username, password);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+    }
+
+    @Test
+    void login_Wrong_Username() {
+        int userId = 0;
+        String username = "wronguser";
+        String password = "password123";
+        ResponseEntity<String> response = facade.login(token1, userId, username, password);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+    }
+
+    @Test
+    void login_User_Logged_In() {
+        int userId = 0;
+        String username = "testuser";
+        String password = "password123";
+        ResponseEntity<String> response1 = facade.login(token1, userId, username, password);
+        ResponseEntity<String> response2 = facade.login(response1.getBody(), userId, username, password);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response2.getStatusCode());
     }
 }

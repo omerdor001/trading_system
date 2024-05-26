@@ -5,12 +5,17 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Setter
 @Getter
 public class Store {
+
 
     private String nameId;//this will be the ID for the store
     private String description;
@@ -19,6 +24,7 @@ public class Store {
     private List<String> managers;
     private List<String> owners;
     private String founder;
+
     private StorePolicy storePolicy;
     private boolean isActive;
     private boolean isOpen;
@@ -35,6 +41,7 @@ public class Store {
         this.founder = founder;
         this.managers = new LinkedList<>();
         this.owners = new LinkedList<>();
+
     }
 
     public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, Category category) {
@@ -73,6 +80,7 @@ public class Store {
         return filterProducts(list_products, minPrice, maxPrice, minRating, category);
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
@@ -94,48 +102,53 @@ public class Store {
         return products.get(productId);
     }
 
-    public void addProductToStore(Product product) {
+    public synchronized void addProductToStore(Product product) {
         products.put(product.getProduct_id(), product);
     }
 
-    public void addProduct(int productId,String storeName,String product_name,String product_description,
-                           double product_price,int product_quantity,double rating,Category category,List<String> keyWords) {
-        Product product=new Product(productId,storeName,product_description,product_price,product_quantity,rating,category,keyWords);
+    public synchronized void addProduct(int product_id, String store_name, String product_name, String product_description,
+                                        double product_price, int product_quantity, double rating, Category category, List<String> keyWords) {
+        Product product = new Product(product_id, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
         products.put(product.getProduct_id(), product);
     }
 
-    public void removeProduct(int productId) {
-        products.remove(productId, products.get(productId));
+    public synchronized void removeProduct(int productId) {
+        products.remove(productId);
     }
 
-    public void setProductName(int productId, String product_name) {
-        Product product=getProduct(productId);
-        product.setProduct_name(product_name);
+    public synchronized void setProduct_name(int productId, String product_name) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.setProduct_name(product_name);
+        }
     }
 
-    public void setProductDescription(int productId, String product_description){
-        Product product=getProduct(productId);
-        product.setProduct_description(product_description);
+    public synchronized void setProduct_description(int productId, String product_description) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.setProduct_description(product_description);
+        }
     }
 
-    public void setProductPrice(int productId, int product_price) {
-        Product product=getProduct(productId);
-        product.setProduct_price(product_price);
+    public synchronized void setProduct_price(int productId, int product_price) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.setProduct_price(product_price);
+        }
     }
 
-    public void setProductQuantity(int productId, int product_quantity) {
-        Product product=getProduct(productId);
-        product.setProduct_quantity(product_quantity);
+    public synchronized void setProduct_quantity(int productId, int product_quantity) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.setProduct_quantity(product_quantity);
+        }
     }
 
-    public void setRating(int productId,int rating){
-        Product product=getProduct(productId);
-        product.setRating(rating);
-    }
-
-    public void setCategory(int productId,Category category) {
-        Product product=getProduct(productId);
-        product.setCategory(category);
+    public synchronized void setRating(int productId, int rating) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.setRating(rating);
+        }
     }
     List<Purchase> getHistoryPurchasesByCustomer(int customerId){
         return salesHistory.getPurchasesByCustomer(customerId);
@@ -145,12 +158,10 @@ public class Store {
         return salesHistory.getAllPurchases();
     }
 
-
-    public List<String> getManagers() {
-        return managers;
-    }
-
-    public List<String> getOwners() {
-        return owners;
+    public synchronized void setCategory(int productId, Category category) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.setCategory(category);
+        }
     }
 }

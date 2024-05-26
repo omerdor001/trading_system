@@ -12,6 +12,7 @@ public class Role {
     public Role(String store_name_id,String appointedById) {
         this.store_name_id=store_name_id;
         this.appointedById=appointedById;
+
     }
 
     public String getStoreId() {
@@ -39,9 +40,9 @@ public class Role {
         return roleState;
     }
 
-    public void addProduct(String username,  int product_id, String store_name, String product_name, String product_description,
+    public void addProduct(String username, int product_id, String store_name, String product_name, String product_description,
                            double product_price, int product_quantity, double rating, Category category, List<String> keyWords) throws IllegalAccessException {
-        roleState.addProduct(username,product_id,store_name,product_name,product_description,product_price,product_quantity,rating,category,keyWords);
+        roleState.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
     }
 
 //    public void requestInftomationAboutRolesInStore(String username, String storeId) throws IllegalAccessException {
@@ -50,30 +51,31 @@ public class Role {
 
     public void removeProduct(String username,String store_name_id,int product_id) throws IllegalAccessException {
         roleState.removeProduct(username,store_name_id,product_id);
+
     }
 
-    public void setProduct_name(String username,String store_name_id,int productId,String product_name) throws IllegalAccessException {
-        roleState.setProduct_name(username,store_name_id,productId,product_name);
+    public void setProduct_name(String username, String store_name_id, int productId, String product_name) throws IllegalAccessException {
+        roleState.setProduct_name(username, store_name_id, productId, product_name);
     }
 
-    public void setProduct_description(String username,String store_name_id,int productId,String product_description) throws IllegalAccessException {
-        roleState.setProduct_description(username,store_name_id,productId,product_description);
+    public void setProduct_description(String username, String store_name_id, int productId, String product_description) throws IllegalAccessException {
+        roleState.setProduct_description(username, store_name_id, productId, product_description);
     }
 
-    public void setProduct_price(String username,String store_name_id,int productId,int product_price) throws IllegalAccessException {
-        roleState.setProduct_price(username,store_name_id,productId,product_price);
+    public void setProduct_price(String username, String store_name_id, int productId, int product_price) throws IllegalAccessException {
+        roleState.setProduct_price(username, store_name_id, productId, product_price);
     }
 
-    public void setProduct_quantity(String username,String store_name_id,int productId,int product_quantity) throws IllegalAccessException {
-        roleState.setProduct_quantity(username,store_name_id,productId,product_quantity);
+    public void setProduct_quantity(String username, String store_name_id, int productId, int product_quantity) throws IllegalAccessException {
+        roleState.setProduct_quantity(username, store_name_id, productId, product_quantity);
     }
 
-    public void setRating(String username,String store_name_id,int productId,int rating) throws IllegalAccessException {
-        roleState.setRating(username,store_name_id,productId,rating);
+    public void setRating(String username, String store_name_id, int productId, int rating) throws IllegalAccessException {
+        roleState.setRating(username, store_name_id, productId, rating);
     }
 
-    public void setCategory(String username,String store_name_id,int productId,Category category) throws IllegalAccessException {
-        roleState.setCategory(username,store_name_id,productId,category);
+    public void setCategory(String username, String store_name_id, int productId, Category category) throws IllegalAccessException {
+        roleState.setCategory(username, store_name_id, productId, category);
     }
 
 

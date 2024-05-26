@@ -22,13 +22,14 @@ public abstract class User {
         this.id = id;
     }
 
-    public String getPass(){
+    public String getPass() {
         throw new RuntimeException("Only registered users have a password");
     }
 
-    public void login(){
-        throw new RuntimeException("Only registered users can login");
-    }
+    public abstract void login();
+
+    public abstract void logout();
+
 
     public Cart getShopping_cart() {
         return shopping_cart;
@@ -39,11 +40,12 @@ public abstract class User {
     }
 
     public abstract boolean getLogged();
+
     public abstract List<Notification> getNotifications();
 
     public abstract void receiveNotification(String notification);
 
-    public String sendNotification(int receiverId, String content){
+    public String sendNotification(int receiverId, String content) {
         Notification notification = new Notification(this.id, receiverId, new Date(), content);
         return notification.toString();
     }
