@@ -1,33 +1,25 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.Product;
-
 import java.util.HashMap;
-import java.util.Map;
 
 public class Cart {
     private HashMap<String, ShoppingBag> shoppingBags;
-
     public Cart() {
         shoppingBags = new HashMap<>();
     }
-
     public HashMap<String, ShoppingBag> getShoppingBags() {
         return shoppingBags;
     }
-
-    public void addShoppingBag(ShoppingBag shoppingBag, String storeId) {
+    public void addShoppingBag(ShoppingBag shoppingBag,String storeId) {
         shoppingBags.put(storeId, shoppingBag);
     }
-
-    public synchronized void addProductToCart(int productId, int quantity, String storeId) {
+    public void addProductToCart(int productId, int quantity,String storeId) {
         ShoppingBag shoppingBag = shoppingBags.get(storeId);
         shoppingBag.addProduct(productId, quantity);
     }
-
-    public synchronized void removeProductFromCart(int productId, int quantity, String storeId) {
+    public void removeProductFromCart(int productId, int quantity,String storeId) {
         ShoppingBag shoppingBag = shoppingBags.get(storeId);
-        shoppingBag.removeProduct(productId, quantity);
+        shoppingBag.removeProduct(productId,quantity);
     }
 
     public void addShoppingBagToCart(ShoppingBag shoppingBag, String storeId) {
@@ -41,6 +33,4 @@ public class Cart {
     public void saveCart() {
         //TODO when connecting to database.
     }
-
-
 }

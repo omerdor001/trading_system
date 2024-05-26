@@ -100,15 +100,4 @@ class RegistrationUnitTests {
         assertEquals("username already exists - " + username, exception.getMessage());
     }
 
-    @Test
-    void registration_NoVisitorWithId() {
-        int id = 4; // Assuming visitor with id 4 doesn't exist
-        String username = "testuser";
-        String encryption = "testpassword";
-        LocalDate birthdate = LocalDate.of(1990, 5, 15);
-
-        Exception exception = assertThrows(Exception.class, () -> userFacade.register(id, username, encryption, birthdate));
-        assertEquals("No visitor with id: " + id, exception.getMessage());
-    }
-
 }

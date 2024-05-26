@@ -6,18 +6,22 @@ import java.util.HashMap;
 
 public class ShoppingBag {
     private String storeId;
-    private HashMap<Integer,Integer> products_list;
+    private HashMap<Integer, Integer> products_list;
+
     public ShoppingBag(String storeId) {
         this.storeId = storeId;
         products_list = new HashMap<>();
     }
+
     public String getStoreId() {
         return storeId;
     }
+
     public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-    public HashMap<Integer,Integer> getProducts_list() {
+
+    public HashMap<Integer, Integer> getProducts_list() {
         return products_list;
     }
 

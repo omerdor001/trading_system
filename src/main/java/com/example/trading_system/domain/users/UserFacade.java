@@ -35,8 +35,10 @@ public interface UserFacade {
     void openStore(String username, String storeName, String description, StorePolicy policy);
 
     String getUserPassword(String username);
-    public void removeVisitor(int id);
 
+    void removeVisitor(int id);
+
+    boolean isAdminRegistered();
 
     String visitorViewCart(int id);
 

@@ -28,4 +28,5 @@ public interface UserService {
 
     String visitorViewCart(int id);
 
+    boolean isAdminRegistered();
 }
