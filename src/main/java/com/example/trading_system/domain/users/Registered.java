@@ -19,6 +19,7 @@ public class Registered extends User {
         super(id);
         this.userName = userName; // Can be changed to email
         this.encrypted_pass = encrypted_pass;
+
         this.address = address;
         this.birthdate= birthdate;
         this.isAdmin = false;
@@ -53,7 +54,9 @@ public class Registered extends User {
         //SET THE ROLE TO OWNER OF STORE
 
     }
-
+    public String getUserName() {
+        return userName;
+    }
     @Override
     public String getPass(){
         return this.encrypted_pass;
@@ -61,15 +64,11 @@ public class Registered extends User {
 
     @Override
     public void login(){
-        if (getLogged())
-            throw new RuntimeException("User already logged in");
         this.isLogged = true;
     }
 
     @Override
     public void logout(){
-        if (getLogged())
-            throw new RuntimeException("User already logged out");
         this.isLogged = false;
     }
 
@@ -126,6 +125,9 @@ public class Registered extends User {
         throw new NoSuchElementException("User doesn't have permission to this store");
     }
 
+    public boolean isAdmin(){
+        return this.isAdmin;
+    }
     public boolean isOwner(String store_name_id){
         if(getRoleByStoreId(store_name_id).getRoleState().isOwner()){
             return true;
@@ -144,6 +146,9 @@ public class Registered extends User {
         }
     }
 
+    public void setAdmin(boolean value){
+        this.isAdmin = value;
+    }
     public void addWaitingAppoint_Manager(String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy){
         managerToApprove.put(store_name_id,Arrays.asList(watch,editSupply,editBuyPolicy,editDiscountPolicy));
     }

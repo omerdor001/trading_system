@@ -6,17 +6,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Setter
 @Getter
 public class Store {
-
-    private String nameId;//this will be the ID for the store
+    private String name_id; // this will be the ID for the store
     private String description;
+    private ConcurrentHashMap<Integer, Product> products;
+
     @Getter
-    private HashMap<Integer, Product> products;
     private List<String> managers;
+    @Getter
     private List<String> owners;
     private String founder;
     private StorePolicy storePolicy;
@@ -25,16 +27,39 @@ public class Store {
     private StoreSalesHistory salesHistory;
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
 
-    public Store(String nameId, String description, StorePolicy storePolicy, String founder) {
-        this.nameId = nameId;
+    public Store(String name_id, String description, StorePolicy storePolicy) {
+        this.name_id = name_id;
         this.description = description;
         this.storePolicy = storePolicy;
-        this.products = new HashMap<>();
-        this.isActive = true;
-        this.salesHistory = new StoreSalesHistory();
-        this.founder = founder;
-        this.managers = new LinkedList<>();
-        this.owners = new LinkedList<>();
+        this.products = new ConcurrentHashMap<>();
+    }
+
+    public String getName_id() {
+        return name_id;
+    }
+
+    public void setName_id(String name_id) {
+        this.name_id = name_id;
+    }
+
+    public ConcurrentHashMap<Integer, Product> getProducts() {
+        return products;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public StorePolicy getStorePolicy() {
+        return storePolicy;
+    }
+
+    public void setStorePolicy(StorePolicy storePolicy) {
+        this.storePolicy = storePolicy;
     }
 
     public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, Category category) {
@@ -73,10 +98,11 @@ public class Store {
         return filterProducts(list_products, minPrice, maxPrice, minRating, category);
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
-        sb.append("\"name_id\":\"").append(nameId).append("\"");
+        sb.append("\"name_id\":\"").append(name_id).append("\"");
         sb.append(", \"description\":\"").append(description).append("\"");
         sb.append(", \"products\":[");
 
@@ -94,48 +120,60 @@ public class Store {
         return products.get(productId);
     }
 
-    public void addProductToStore(Product product) {
+    public synchronized void addProductToStore(Product product) {
         products.put(product.getProduct_id(), product);
     }
 
-    public void addProduct(int productId,String storeName,String product_name,String product_description,
-                           double product_price,int product_quantity,double rating,Category category,List<String> keyWords) {
-        Product product=new Product(productId,storeName,product_description,product_price,product_quantity,rating,category,keyWords);
+    public synchronized void addProduct(int product_id, String store_name, String product_name, String product_description,
+                                        double product_price, int product_quantity, double rating, Category category, List<String> keyWords) {
+        Product product = new Product(product_id, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
         products.put(product.getProduct_id(), product);
     }
 
-    public void removeProduct(int productId) {
-        products.remove(productId, products.get(productId));
+    public synchronized void removeProduct(int productId) {
+        products.remove(productId);
     }
 
-    public void setProductName(int productId, String product_name) {
-        Product product=getProduct(productId);
-        product.setProduct_name(product_name);
+    public synchronized void setProduct_name(int productId, String product_name) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.setProduct_name(product_name);
+        }
     }
 
-    public void setProductDescription(int productId, String product_description){
-        Product product=getProduct(productId);
-        product.setProduct_description(product_description);
+    public synchronized void setProduct_description(int productId, String product_description) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.setProduct_description(product_description);
+        }
     }
 
-    public void setProductPrice(int productId, int product_price) {
-        Product product=getProduct(productId);
-        product.setProduct_price(product_price);
+    public synchronized void setProduct_price(int productId, int product_price) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.setProduct_price(product_price);
+        }
     }
 
-    public void setProductQuantity(int productId, int product_quantity) {
-        Product product=getProduct(productId);
-        product.setProduct_quantity(product_quantity);
+    public synchronized void setProduct_quantity(int productId, int product_quantity) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.setProduct_quantity(product_quantity);
+        }
     }
 
-    public void setRating(int productId,int rating){
-        Product product=getProduct(productId);
-        product.setRating(rating);
+    public synchronized void setRating(int productId, int rating) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.setRating(rating);
+        }
     }
 
-    public void setCategory(int productId,Category category) {
-        Product product=getProduct(productId);
-        product.setCategory(category);
+    public synchronized void setCategory(int productId, Category category) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.setCategory(category);
+        }
     }
     List<Purchase> getHistoryPurchasesByCustomer(int customerId){
         return salesHistory.getPurchasesByCustomer(customerId);
@@ -146,11 +184,4 @@ public class Store {
     }
 
 
-    public List<String> getManagers() {
-        return managers;
-    }
-
-    public List<String> getOwners() {
-        return owners;
-    }
 }

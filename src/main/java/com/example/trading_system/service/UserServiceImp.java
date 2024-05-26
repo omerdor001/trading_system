@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
-import java.util.Map;
 
 public class UserServiceImp implements UserService {
 
@@ -19,14 +18,13 @@ public class UserServiceImp implements UserService {
         this.userFacade = facade;
     }
 
-    public String enter(int id){
+    public String enter(int id) {
         logger.info("Trying enter to system as a visitor , with id : {}", id);
         userFacade.createVisitor(id);
-        String token = Security.generateToken("v"+id);
+        String token = Security.generateToken("v" + id);
         logger.info("Finish enter to system as a visitor , with id : {}", id);
         return token;
     }
-
 
     public void exit(int id) throws Exception {
         logger.info("Trying exit to system as a visitor , with id : {}", id);
@@ -63,9 +61,7 @@ public class UserServiceImp implements UserService {
     public boolean logout(int id, String username) {
         logger.info("Trying to logout user: {}", username);
         try{
-            userFacade.saveUserCart(username);
-            userFacade.logout(username);
-            userFacade.enter(id);
+            userFacade.logout(id, username);
             logger.info("User: {} logged out", username);
             return true;
         }catch (Exception e){
@@ -103,12 +99,12 @@ public class UserServiceImp implements UserService {
         return true;
     }
     @Override
-    public boolean visitorRemoveFromCart(int id, int productId, String storeName, int quantity){
+    public boolean visitorRemoveFromCart(int id, int productId, String storeName, int quantity) {
         boolean result;
         logger.info("Trying removing from cart product with id: {}", productId);
         try {
             userFacade.visitorRemoveFromCart(id, productId, storeName, quantity);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("Error occurred : {} , Failed Trying removing to cart  product with id: {}", e.getMessage(), productId);
             return false;
         }
@@ -117,12 +113,12 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean registeredAddToCart(String username, int productId, String storeName, int quantity){
+    public boolean registeredAddToCart(String username, int productId, String storeName, int quantity) {
         boolean result;
         logger.info("Trying adding to cart product with id: {}", productId);
         try {
             userFacade.registeredAddToCart(username, productId, storeName, quantity);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("Error occurred : {} , Failed Trying adding to cart  product with id: {}", e.getMessage(), productId);
             return false;
         }
@@ -147,9 +143,9 @@ public class UserServiceImp implements UserService {
     public boolean openStore(String username, String storeName, String description, StorePolicy policy) {
         boolean result;
         logger.info("Trying opening store with name: {}", storeName);
-        try{
-            userFacade.openStore(username,storeName,description,policy);
-        }catch (Exception e){
+        try {
+            userFacade.openStore(username, storeName, description, policy);
+        } catch (Exception e) {
             logger.error("Error occurred : {} , Failed opening store with name: {}", e.getMessage(), storeName);
             return false;
         }
@@ -279,5 +275,9 @@ public class UserServiceImp implements UserService {
 
 
 
+    @Override
+    public boolean isAdminRegistered() {
+        return userFacade.isAdminRegistered();
+    }
 }
 

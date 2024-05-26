@@ -26,6 +26,13 @@ public class UserFacadeImp implements UserFacade{
         this.registered = new HashMap<>();
         this.visitors = new HashMap<>();
     }
+    private static class Singleton {
+        private static final UserFacadeImp INSTANCE = new UserFacadeImp();
+    }
+
+    public static UserFacadeImp getInstance() {
+        return UserFacadeImp.Singleton.INSTANCE;
+    }
 
     @Override
     public HashMap<Integer, Visitor> getVisitors() {
@@ -37,26 +44,26 @@ public class UserFacadeImp implements UserFacade{
         return registered;
     }
 
-
     @Override
     public void createVisitor(int id) {
-        Visitor visitor=new Visitor(id);
-        visitors.put(id,visitor);
+        Visitor visitor = new Visitor(id);
+        visitors.put(id, visitor);
     }
     @Override
     public void exit() {
+
     }
 
 
     @Override
     public void enter(int id) {
-        Visitor visitor=new Visitor(id);
-        visitors.put(id,visitor);
+        Visitor visitor = new Visitor(id);
+        visitors.put(id, visitor);
     }
 
     @Override
     public void exit(int id) throws Exception {
-        if(visitors.containsKey(id)){
+        if (visitors.containsKey(id)) {
             visitors.remove(id);
         }
         else{
@@ -66,7 +73,7 @@ public class UserFacadeImp implements UserFacade{
 
     @Override
     public void exit(String username) throws Exception {
-        if(registered.containsKey(username)){
+        if (registered.containsKey(username)) {
             registered.remove(username);
         }
         else{
@@ -79,19 +86,19 @@ public class UserFacadeImp implements UserFacade{
     public void register(int id, String username, String password, LocalDate birthdate) throws Exception {
         registerChecks(id, username, password, birthdate);
         String encrypted_pass = Security.encrypt(password);
-        Registered newUser = new Registered(id,username,encrypted_pass, birthdate);
-        registered.put(username,newUser);
-        visitors.remove(id);
+        Registered newUser = new Registered(id, username, encrypted_pass, birthdate);
+        if (registered.isEmpty())
+            newUser.setAdmin(true);
+        registered.put(username, newUser);
     }
 
     private void registerChecks(int id, String username, String password, LocalDate birthdate) throws Exception {
-        if(username == null) throw new Exception("Username is null");
-        if(username.isEmpty()) throw new Exception("Username is empty");
-        if(password == null) throw new Exception("Encrypted password is null");
-        if(password.isEmpty()) throw new Exception("Encrypted password is empty");
-        if(birthdate == null) throw new Exception("Birthdate password is null");
-        if(!visitors.containsKey(id)) throw new Exception("No visitor with id: " + id);
-        if(registered.containsKey(username)) throw new Exception("username already exists - " + username);
+        if (username == null) throw new Exception("Username is null");
+        if (username.isEmpty()) throw new Exception("Username is empty");
+        if (password == null) throw new Exception("Encrypted password is null");
+        if (password.isEmpty()) throw new Exception("Encrypted password is empty");
+        if (birthdate == null) throw new Exception("Birthdate password is null");
+        if (registered.containsKey(username)) throw new Exception("username already exists - " + username);
     }
 
     @Override
@@ -104,16 +111,19 @@ public class UserFacadeImp implements UserFacade{
         u.login();
     }
 
-    public void logout(String username) {
-        User u = registered.get(username);
+    public void logout(int id, String username){
+        User u = getRegistered().get(username);
         if (u == null)
-            throw new RuntimeException("No such user " + username);
+            throw new IllegalArgumentException("No such user " + username);
+        if (!u.getLogged())
+            throw new RuntimeException("User "+ username + "already Logged out");
+        saveUserCart(username);
         u.logout();
     }
 
 
     @Override
-    public boolean sendNotification(User sender, User receiver, String content){
+    public boolean sendNotification(User sender, User receiver, String content) {
         String notification = sender.sendNotification(receiver.getId(), content);
         receiver.receiveNotification(notification);
         return receiver.getLogged();
@@ -148,29 +158,36 @@ public class UserFacadeImp implements UserFacade{
     }
 
     @Override
-    public void visitorAddToCart(int id, int productId, String storeName, int quantity) {
+    public synchronized void visitorAddToCart(int id, int productId, String storeName, int quantity) {
         int quntityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
         int quantityInShoppingBag = visitors.get(id).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
-        if(quantity+quantityInShoppingBag > quntityInStore)
-        {
+        if (!visitors.containsKey(id)) {
+            logger.error("User not found");
+            throw new RuntimeException("User not found");
+        }
+        if (quantity + quantityInShoppingBag > quntityInStore) {
             logger.error("Product quantity is too low");
             throw new RuntimeException("Product quantity is too low");
         }
-        if(storeName == null){
+        if (storeName == null) {
             logger.error("Store name is null");
             throw new RuntimeException("Store name is null");
         }
-        if(marketFacade.getStores().containsKey(storeName)){
+        if (marketFacade.getStores().containsKey(storeName)) {
             logger.error("Store with name " + storeName + " already exists");
             throw new RuntimeException("Store with name " + storeName + " already exists");
         }
-        if(visitors.containsKey(id)){
-            visitors.get(id).getShopping_cart().addProductToCart(productId,quantity,storeName);
+        if (visitors.containsKey(id)) {
+            visitors.get(id).getShopping_cart().addProductToCart(productId, quantity, storeName);
         }
     }
     @Override
-    public void visitorRemoveFromCart(int id, int productId, String storeName, int quantity) {
-        if(storeName == null){
+    public synchronized void visitorRemoveFromCart(int id, int productId, String storeName, int quantity) {
+        if (!visitors.containsKey(id)) {
+            logger.error("User not found");
+            throw new RuntimeException("User not found");
+        }
+        if (storeName == null) {
             logger.error("Store name is null");
             throw new RuntimeException("Store name is null");
         }
@@ -183,7 +200,7 @@ public class UserFacadeImp implements UserFacade{
         }
     }
     @Override
-    public void registeredAddToCart(String username, int productId, String storeName, int quantity) {
+    public synchronized void registeredAddToCart(String username, int productId, String storeName, int quantity) {
 
         if(storeName == null){
             logger.error("Store name is null");
@@ -213,8 +230,8 @@ public class UserFacadeImp implements UserFacade{
         }
     }
     @Override
-    public void registeredRemoveFromCart(String username, int productId, String storeName, int quantity){
-        if(storeName == null){
+    public synchronized void registeredRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception {
+        if (storeName == null) {
             logger.error("Store name is null");
             throw new RuntimeException("Store name is null");
         }
@@ -249,7 +266,7 @@ public class UserFacadeImp implements UserFacade{
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        Store store = new Store(storeName, description, policy, username);
+        Store store = new Store(storeName, description, policy);
         marketFacade.addStore(store);
         registered.get(username).openStore();
 
@@ -419,9 +436,8 @@ public class UserFacadeImp implements UserFacade{
     @Override
     public String getUserPassword(String username) {
         User u = registered.get(username);
-        if (u == null) {
+        if (u == null)
             throw new RuntimeException("No such registered user " + username);
-        }
         return u.getPass();
     }
 
@@ -432,10 +448,10 @@ public class UserFacadeImp implements UserFacade{
 
 
     @Override
-    public String visitorViewCart(int id) {
-        if(!visitors.containsKey(id)){
-            logger.error("Visitor with id - " + id + " does not exist");
-            throw new RuntimeException("Visitor with id - " + id + " does not exist");
+    public synchronized String visitorViewCart(int id) {
+        if (!visitors.containsKey(id)) {
+            logger.error("User not found");
+            throw new RuntimeException("User not found");
         }
         Cart cart = visitors.get(id).getShopping_cart();
         StringBuilder cartDetails = new StringBuilder();
@@ -451,7 +467,7 @@ public class UserFacadeImp implements UserFacade{
                 double price = product.getProduct_price();
                 double totalPrice = price * quantity;
                 totalStore += totalPrice;
-                cartDetails.append("Product Id: ").append(product.getProduct_id()).append(", Name: ").append(product.getProduct_name()) // Optional: If you want to display product names
+                cartDetails.append("Product Id: ").append(product.getProduct_id()).append(", Name: ").append(product.getProduct_name())
                         .append(", Quantity: ").append(quantity).append(", Price per unit: ").append(price).append(", Total Price: ").append(totalPrice).append("\n");
             }
             cartDetails.append("Total for Store name ").append(storeId).append(": ").append(totalStore).append("\n\n");
@@ -463,7 +479,7 @@ public class UserFacadeImp implements UserFacade{
     }
 
     @Override
-    public String registeredViewCart(String username) {
+    public synchronized String registeredViewCart(String username) {
         if (!registered.containsKey(username)) {
             logger.error("User not found");
             throw new RuntimeException("User not found");
@@ -495,5 +511,16 @@ public class UserFacadeImp implements UserFacade{
         cartDetails.append("Overall Total for All Stores: ").append(totalAllStores).append("\n");
         return cartDetails.toString();
 
+    }
+
+    @Override
+    public boolean isAdminRegistered() {
+        boolean exists = false;
+        for (Registered r : registered.values())
+            if (r.isAdmin()) {
+                exists = true;
+                break;
+            }
+        return exists;
     }
 }

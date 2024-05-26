@@ -21,10 +21,12 @@ public class Cart {
         ShoppingBag shoppingBag = shoppingBags.get(storeId);
         shoppingBag.removeProduct(productId,quantity);
     }
-    public void addShoppingBagToCart(ShoppingBag shoppingBag,String storeId) {
+
+    public void addShoppingBagToCart(ShoppingBag shoppingBag, String storeId) {
         shoppingBags.put(storeId, shoppingBag);
     }
-    public void removeShoppingBagFromCart(ShoppingBag shoppingBag,String storeId) {
+
+    public void removeShoppingBagFromCart(ShoppingBag shoppingBag, String storeId) {
         shoppingBags.remove(storeId);
     }
 

@@ -4,17 +4,18 @@ import com.example.trading_system.domain.stores.Category;
 
 import java.util.List;
 
-public class Manager extends RoleState{
+public class Manager extends RoleState {
     private boolean watch;
     private boolean editSupply;
     private boolean editBuyPolicy;
     private boolean editDiscountPolicy;
 
-    public Manager() {
-        this.watch=false;
-        this.editBuyPolicy=false;
-        this.editDiscountPolicy=false;
-        this.editSupply=false;
+    public Manager(Role role,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) {
+        this.role=role;
+        this.watch=watch;
+        this.editBuyPolicy=editBuyPolicy;
+        this.editDiscountPolicy=editDiscountPolicy;
+        this.editSupply=editSupply;
     }
 
     @Override
@@ -111,7 +112,7 @@ public class Manager extends RoleState{
     public void requestInformationAboutOfficialsInStore() throws IllegalAccessException {
         throw new IllegalAccessException("Manager cannot request information about officials in store.");
     }
-    
+
     @Override
     public boolean isManager() {
         return true;

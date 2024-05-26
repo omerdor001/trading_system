@@ -7,10 +7,6 @@ import java.time.LocalDate;
 
 public interface UserService {
     String enter(int id);
-
-//    boolean registration(int id, String username, String password, LocalDate birthdate);
-
-
     boolean visitorAddToCart(int id, int productId, String storeName, int quantity);
 
     boolean visitorRemoveFromCart(int id, int productId, String storeName, int quantity);
@@ -20,6 +16,7 @@ public interface UserService {
     boolean registeredRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception;
 
     boolean openStore(String username, String storeName, String description, StorePolicy policy);
+
     boolean register(int id, String username, String password, LocalDate birthdate);
 
     boolean login(int id, String username, String password);
@@ -39,8 +36,5 @@ public interface UserService {
     String registeredViewCart(String username);
 
     String visitorViewCart(int id);
-
-//    boolean logout(int id);
-
     ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 }

@@ -20,7 +20,7 @@ public interface UserFacade {
     void register(int id, String username, String token, LocalDate birthdate) throws Exception;    //Complete with what to register
 
     void login(String username);
-    void logout(String username);
+    void logout(int id, String username);
     void saveUserCart(String username);
 
     boolean sendNotification(User sender, User receiver, String content);
@@ -48,8 +48,10 @@ public interface UserFacade {
      **/
     void editPermissionForManager(String userId, String managerToEdit,String storeNameId, boolean watch,boolean editSupply,boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
     String getUserPassword(String username);
+
     void removeVisitor(int id);
 
+    boolean isAdminRegistered();
 
     String visitorViewCart(int id);
 
