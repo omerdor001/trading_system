@@ -12,11 +12,35 @@ public class ServiceFacadeImp implements ServiceFacade {
     }
 
     @Override
-    public void addService(String serviceName) throws InstanceAlreadyExistsException {
+    public void addPaymentService(String serviceName) throws InstanceAlreadyExistsException {
         if (findServiceByName(serviceName)){
             throw new InstanceAlreadyExistsException("This service already exist");
         }
-       // services.add();
+       services.add(new PaymentService(serviceName));
+    }
+
+    @Override
+    public void addPaymentProxyService(String serviceName) throws InstanceAlreadyExistsException {
+        if (findServiceByName(serviceName)){
+            throw new InstanceAlreadyExistsException("This service already exist");
+        }
+        services.add(new PaymentServiceProxy(serviceName));
+    }
+
+    @Override
+    public void addDeliveryService(String serviceName) throws InstanceAlreadyExistsException {
+        if (findServiceByName(serviceName)){
+            throw new InstanceAlreadyExistsException("This service already exist");
+        }
+        services.add(new DeliveryService(serviceName));
+    }
+
+    @Override
+    public void addDeliveryProxyService(String serviceName) throws InstanceAlreadyExistsException {
+        if (findServiceByName(serviceName)){
+            throw new InstanceAlreadyExistsException("This service already exist");
+        }
+        services.add(new DeliveryServiceProxy(serviceName));
     }
 
     @Override
@@ -28,7 +52,7 @@ public class ServiceFacadeImp implements ServiceFacade {
             throw new IllegalArgumentException("Service is exist (no need to replace)");
         }
         services.remove(getServiceByName(oldServiceName));
-        services.add(getServiceByName(newServiceName));
+        //services.add(getServiceByName(newServiceName));
     }
 
     @Override

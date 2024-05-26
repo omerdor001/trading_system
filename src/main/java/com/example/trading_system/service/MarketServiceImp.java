@@ -169,7 +169,7 @@ public class MarketServiceImp implements MarketService {
 
     @Override
     public ResponseEntity<String> addProduct(String username, int productId, String storeName, String productName, String productDescription,
-                                             double productPrice, int productQuantity, double rating, Category category, List<String> keyWords){
+                                             double productPrice, int productQuantity, double rating, int category, List<String> keyWords){
         boolean result;
         logger.info("Trying to add products to store : {}", storeName);
         try {
@@ -288,7 +288,7 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public ResponseEntity<String> setCategory(String username, String storeNameId, int productId, Category category){
+    public ResponseEntity<String> setCategory(String username, String storeNameId, int productId, int category){
         boolean result;
         logger.info("Trying to edit category to product : {}", productId);
         try {
