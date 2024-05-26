@@ -1,6 +1,5 @@
 package com.example.trading_system.users;
 
-import com.example.trading_system.domain.users.Registered;
 import com.example.trading_system.domain.users.UserFacade;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.service.UserService;
