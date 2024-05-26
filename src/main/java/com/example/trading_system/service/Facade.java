@@ -150,28 +150,28 @@ public class Facade {
         if (!checkSystemOpen()) {
             return systemClosedResponse();
         }
-        return marketService.setProduct_name(username, store_name_id, productId, product_name);
+        return marketService.setProductName(username, store_name_id, productId, product_name);
     }
 
     public ResponseEntity<String> setProduct_description(String username, String store_name_id, int productId, String product_description) {
         if (!checkSystemOpen()) {
             return systemClosedResponse();
         }
-        return marketService.setProduct_description(username, store_name_id, productId, product_description);
+        return marketService.setProductDescription(username, store_name_id, productId, product_description);
     }
 
     public ResponseEntity<String> setProduct_price(String username, String store_name_id, int productId, int product_price) {
         if (!checkSystemOpen()) {
             return systemClosedResponse();
         }
-        return marketService.setProduct_price(username, store_name_id, productId, product_price);
+        return marketService.setProductPrice(username, store_name_id, productId, product_price);
     }
 
     public ResponseEntity<String> setProduct_quantity(String username, String store_name_id, int productId, int product_quantity) {
         if (!checkSystemOpen()) {
             return systemClosedResponse();
         }
-        return marketService.setProduct_quantity(username, store_name_id, productId, product_quantity);
+        return marketService.setProductQuantity(username, store_name_id, productId, product_quantity);
     }
 
     public ResponseEntity<String> setRating(String username, String store_name_id, int productId, int rating) {

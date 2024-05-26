@@ -23,11 +23,25 @@ public interface MarketService {
     ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
                                       double product_price, int product_quantity, double rating, Category category, List<String> keyWords);
     ResponseEntity<String> removeProduct(String username, String store_name, int product_id);
-    ResponseEntity<String> setProduct_name(String username, String store_name_id, int productId, String product_name);
-    ResponseEntity<String> setProduct_description(String username, String store_name_id, int productId, String product_description);
-    ResponseEntity<String> setProduct_price(String username, String store_name_id, int productId, int product_price);
-    ResponseEntity<String> setProduct_quantity(String username, String store_name_id, int productId, int product_quantity);
+
+    ResponseEntity<String> setProductName(String username, String storeNameId, int productId, String productName);
+
+    ResponseEntity<String> setProductDescription(String username, String storeNameId, int productId, String productDescription);
+
+    ResponseEntity<String> setProductPrice(String username, String storeNameId, int productId, int productPrice);
+
+    ResponseEntity<String> setProductQuantity(String username, String storeNameId, int productId, int productQuantity);
+
     ResponseEntity<String> setRating(String username, String store_name_id, int productId, int rating);
     ResponseEntity<String> setCategory(String username, String store_name_id, int productId, Category category);
 
+    String getAllHistoryPurchases(String userName, String storeName);
+
+    String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName);
+
+    String requestInformationAboutOfficialsInStore(String userName, String storeName);
+
+    String requestManagersPermissions(String userName, String storeName);
+
+    String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName);
 }

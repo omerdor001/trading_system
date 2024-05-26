@@ -9,8 +9,7 @@ public class Role {
     private String store_name_id;
     private String appointedById;
 
-    public Role(RoleState roleState, String store_name_id, String appointedById) {
-        this.roleState = roleState;
+    public Role( String store_name_id, String appointedById) {
         this.store_name_id = store_name_id;
         this.appointedById = appointedById;
     }

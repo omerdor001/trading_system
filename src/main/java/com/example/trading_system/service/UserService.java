@@ -37,4 +37,6 @@ public interface UserService {
 
     String visitorViewCart(int id);
     ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+
+    boolean isAdminRegistered();
 }

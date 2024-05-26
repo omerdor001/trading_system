@@ -79,7 +79,6 @@ class OpeningStoreUnitTests {
 
     @Test
     void testOpenStoreWithNonExistingUser() {
-        //TODO: every test should be atomic and separated from the rest of the tests
         String storeName = "store2";
         String description = "A nice store";
         StorePolicy policy = new StorePolicy();

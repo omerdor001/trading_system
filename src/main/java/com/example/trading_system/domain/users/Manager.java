@@ -10,6 +10,13 @@ public class Manager extends RoleState {
     private boolean editBuyPolicy;
     private boolean editDiscountPolicy;
 
+    public Manager() {
+        this.watch=false;
+        this.editBuyPolicy=false;
+        this.editDiscountPolicy=false;
+        this.editSupply=false;
+    }
+
     public Manager(Role role,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) {
         this.role=role;
         this.watch=watch;

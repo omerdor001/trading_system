@@ -1,5 +1,7 @@
 package com.example.trading_system.domain.users;
 
+import lombok.Getter;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -10,6 +12,7 @@ public class Registered extends User {
     private LocalDate birthdate;
     private boolean isAdmin;
     private boolean isLogged = false;
+    @Getter
     private List<Role> roles;
     private List<Notification> notifications;
     private HashMap<String,List<Boolean>> managerToApprove;
@@ -91,10 +94,6 @@ public class Registered extends User {
         else{
             //TODO show in UI
         }
-    }
-
-    public List<Role> getRoles(){
-        return roles;
     }
 
     public void addManagerRole(String appoint, String store_name_id){
