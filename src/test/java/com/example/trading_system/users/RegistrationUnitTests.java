@@ -2,6 +2,7 @@ package com.example.trading_system.users;
 
 import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.Visitor;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
@@ -18,6 +19,13 @@ class RegistrationUnitTests {
         userFacade.getVisitors().put(1, new Visitor(1));
         userFacade.getVisitors().put(2, new Visitor(2));
         userFacade.getVisitors().put(3, new Visitor(3));
+    }
+
+    @AfterEach
+    void reset() {
+        // Adding a sample visitor
+        userFacade.getVisitors().clear();
+        userFacade.getRegistered().clear();
     }
 
     @Test

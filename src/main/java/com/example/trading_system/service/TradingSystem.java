@@ -43,5 +43,4 @@ public interface TradingSystem {
     ResponseEntity<String> appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
     ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
-
 }

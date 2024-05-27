@@ -1,71 +1,107 @@
 package com.example.trading_system.users;
 
-import com.example.trading_system.service.UserService;
+import com.example.trading_system.service.TradingSystem;
+import com.example.trading_system.service.TradingSystemImp;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ExitAcceptanceTests {
-    private UserService userService;
+
+    private static TradingSystem tradingSystem;
+    private String adminToken;
+
+    @BeforeAll
+    public static void setup() {
+        tradingSystem = TradingSystemImp.getInstance();
+    }
 
     @BeforeEach
-    void setUp() {
-        userService = mock(UserService.class);
+    public void openSystemAndRegisterAdmin() {
+        tradingSystem.register(1, "admin", "adminPass", LocalDate.of(1990, 1, 1));
+        tradingSystem.openSystem();
+        ResponseEntity<String> response = tradingSystem.enter();
+        adminToken = response.getBody();
     }
 
     @Test
-    void exitVisitor_Successful() throws Exception {
-        // Mock exit to not throw an exception
-        int id = 1;
-        doNothing().when(userService).exit(id);
+    public void testExitUserByIdSuccessfully() {
+        // Register and enter a user
+        tradingSystem.register(2, "user1", "password1", LocalDate.of(1995, 5, 5));
+        ResponseEntity<String> enterResponse = tradingSystem.enter();
+        String userToken = enterResponse.getBody();
 
-        // Perform exit
-        assertDoesNotThrow(() -> userService.exit(id));
-
-        // Verify the interaction with the mock
-        verify(userService, times(1)).exit(id);
+        // Exit the user by ID
+        ResponseEntity<String> exitResponse = tradingSystem.exit(userToken, 2);
+        assertEquals(HttpStatus.OK, exitResponse.getStatusCode());
+        assertEquals("User exited successfully.", exitResponse.getBody());
     }
 
     @Test
-    void exitVisitor_Failure() throws Exception {
-        // Mock exit to throw an exception
-        int id = 2;
-        doThrow(new Exception("No such visitor with id- " + id)).when(userService).exit(id);
+    public void testExitUserByUsernameSuccessfully() {
+        // Register and enter a user
+        tradingSystem.register(3, "user2", "password2", LocalDate.of(1996, 6, 6));
+        ResponseEntity<String> enterResponse = tradingSystem.enter();
+        String userToken = enterResponse.getBody();
 
-        // Perform exit and verify exception is thrown
-        Exception exception = assertThrows(Exception.class, () -> userService.exit(id));
-        assertEquals("No such visitor with id- " + id, exception.getMessage());
+        // Exit the user by username
+        ResponseEntity<String> exitResponse = tradingSystem.exit(userToken, "user2");
+        assertEquals(HttpStatus.OK, exitResponse.getStatusCode());
+        assertEquals("User exited successfully.", exitResponse.getBody());
+    }
+//
+//    @Test
+//    public void testExitUserByIdSystemClosed() {
+//        // Register and enter a user
+//        tradingSystem.register(4, "user3", "password3", LocalDate.of(1997, 7, 7));
+//        ResponseEntity<String> enterResponse = tradingSystem.enter();
+//        String userToken = enterResponse.getBody();
+//
+//        // Close the system
+//        tradingSystem.closeSystem();
+//
+//        // Attempt to exit the user by ID
+//        ResponseEntity<String> exitResponse = tradingSystem.exit(userToken, 4);
+//        assertEquals(HttpStatus.FORBIDDEN, exitResponse.getStatusCode());
+//        assertEquals("System is not open. Only registration is allowed.", exitResponse.getBody());
+//    }
+//
+//    @Test
+//    public void testExitUserByUsernameSystemClosed() {
+//        // Register and enter a user
+//        tradingSystem.register(5, "user4", "password4", LocalDate.of(1998, 8, 8));
+//        ResponseEntity<String> enterResponse = tradingSystem.enter();
+//        String userToken = enterResponse.getBody();
+//
+//        // Close the system
+//        tradingSystem.closeSystem();
+//
+//        // Attempt to exit the user by username
+//        ResponseEntity<String> exitResponse = tradingSystem.exit(userToken, "user4");
+//        assertEquals(HttpStatus.FORBIDDEN, exitResponse.getStatusCode());
+//        assertEquals("System is not open. Only registration is allowed.", exitResponse.getBody());
+//    }
 
-        // Verify the interaction with the mock
-        verify(userService, times(1)).exit(id);
+    @Test
+    public void testExitNonExistentUserById() {
+        // Attempt to exit a non-existent user by ID
+        ResponseEntity<String> exitResponse = tradingSystem.exit(adminToken, 999);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exitResponse.getStatusCode());
+        assertEquals("No such visitor with id- 999", exitResponse.getBody());
     }
 
     @Test
-    void exitRegisteredUser_Successful() throws Exception {
-        // Mock exit to not throw an exception
-        String username = "user1";
-        doNothing().when(userService).exit(username);
-
-        // Perform exit
-        assertDoesNotThrow(() -> userService.exit(username));
-
-        // Verify the interaction with the mock
-        verify(userService, times(1)).exit(username);
-    }
-
-    @Test
-    void exitRegisteredUser_Failure() throws Exception {
-        // Mock exit to throw an exception
-        String username = "nonexistent";
-        doThrow(new Exception("No such user with username- " + username)).when(userService).exit(username);
-
-        // Perform exit and verify exception is thrown
-        Exception exception = assertThrows(Exception.class, () -> userService.exit(username));
-        assertEquals("No such user with username- " + username, exception.getMessage());
-
-        // Verify the interaction with the mock
-        verify(userService, times(1)).exit(username);
+    public void testExitNonExistentUserByUsername() {
+        // Attempt to exit a non-existent user by username
+        ResponseEntity<String> exitResponse = tradingSystem.exit(adminToken, "nonExistentUser");
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exitResponse.getStatusCode());
+        assertEquals("No such user with username- nonExistentUser", exitResponse.getBody());
     }
 }
