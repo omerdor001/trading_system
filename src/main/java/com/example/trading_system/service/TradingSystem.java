@@ -2,6 +2,8 @@ package com.example.trading_system.service;
 
 import com.example.trading_system.domain.externalservices.Service;
 import com.example.trading_system.domain.stores.Category;
+import com.example.trading_system.domain.stores.StorePolicy;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
@@ -42,6 +44,46 @@ public interface TradingSystem {
     ResponseEntity<String> approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
     ResponseEntity<String> appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
     ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+    public ResponseEntity<String> getAllStores();
+
+    public ResponseEntity<String> getStoreProducts(String store_name);
 
 
+    public ResponseEntity<String> getProductInfo(String store_name, int product_Id) ;
+
+    //search in specific store
+    public ResponseEntity<String> searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category) ;
+
+    public ResponseEntity<String> searchCategoryInStore(Category category, String store_name, Double minPrice, Double maxPrice, Double minRating) ;
+
+    public ResponseEntity<String> searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category);
+
+    //search in stores
+    public ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category);
+    public ResponseEntity<String> searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating);
+    ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category) ;
+
+    ResponseEntity<String> registeredCheckAvailabilityAndConditions(String registeredId);
+
+    ResponseEntity<String> VisitorApprovePurchase(int visitorId, String paymentService);
+
+    ResponseEntity<String> RegisteredApprovePurchase(String registeredId, String paymentService);
+
+    ResponseEntity<String> getPurchaseHistory(String username, String storeName, Integer id, Integer productBarcode);
+
+    ResponseEntity<String> getStoresPurchaseHistory(String username, String storeName, Integer id, Integer productBarcode);
+
+    ResponseEntity<String> visitorAddToCart(int id, int productId, String storeName, int quantity);
+
+    ResponseEntity<String> visitorRemoveFromCart(int id, int productId, String storeName, int quantity);
+
+    ResponseEntity<String> registeredAddToCart(String username, int productId, String storeName, int quantity);
+
+    ResponseEntity<String> registeredRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception;
+
+    ResponseEntity<String> openStore(String username, String storeName, String description, StorePolicy policy);
+
+    ResponseEntity<String> registeredViewCart(String username);
+
+    ResponseEntity<String> visitorViewCart(int id);
 }
