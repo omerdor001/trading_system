@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import javax.management.InstanceAlreadyExistsException;
+import java.awt.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -121,9 +123,6 @@ public class TradingSystemImp implements TradingSystem {
         logger.info("Attempting to register user: {}", username);
         // Registration is allowed even if the system is not open
         try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
             userFacade.register(id, username, password, birthdate);
             logger.info("User registered successfully: {}", username);
             return new ResponseEntity<>("User registered successfully.", HttpStatus.OK);
@@ -404,7 +403,7 @@ public class TradingSystemImp implements TradingSystem {
             }
         } catch (Exception e) {
             logger.error("Error occurred while logging in user: {}: {}", username, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
