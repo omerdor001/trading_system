@@ -121,8 +121,6 @@ public class MarketServiceImp implements MarketService {
         logger.info("Finished add products to store : {}", store_name);
     }
 
-
-
     public void removeProduct(String username, String store_name, int product_id) throws IllegalAccessException {
         logger.info("Trying to remove products to store : {}", store_name);
         marketFacade.removeProduct(username, store_name, product_id);
@@ -158,11 +156,6 @@ public class MarketServiceImp implements MarketService {
         logger.info("Trying to edit rating to product : {}", productId);
         marketFacade.setRating(username, store_name_id, productId, rating);
         logger.info("Finished edit rating of product : {}", productId);
-    }
-
-    @Override
-    public void setCategory(String username, String store_name_id, int productId, Category category) throws IllegalAccessException {
-
     }
 
     public void setCategory(String username, String store_name_id, int productId, int category) throws IllegalAccessException {

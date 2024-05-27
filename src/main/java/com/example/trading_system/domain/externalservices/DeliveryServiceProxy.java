@@ -9,15 +9,16 @@ public class DeliveryServiceProxy extends Service{
 
     }
 
+    private static final String ADDRESS_PATTERN =
+            "^\\d+\\s+[A-Za-z0-9\\s]+,\\s+[A-Za-z\\s]+,\\s+[A-Z]{2},\\s+\\d{5}(-\\d{4})?$";
+    private static final Pattern pattern = Pattern.compile(ADDRESS_PATTERN);
+
     @Override
     public void makePayment(String serviceName, double amount) {}
 
     @Override
     public void cancelPayment(String serviceName) {}
 
-    private static final String ADDRESS_PATTERN =
-            "^\\d+\\s+[A-Za-z0-9\\s]+,\\s+[A-Za-z\\s]+,\\s+[A-Z]{2},\\s+\\d{5}(-\\d{4})?$";
-    private static final Pattern pattern = Pattern.compile(ADDRESS_PATTERN);
 
     public static boolean isValidAddress(String address) {
         if (address == null || address.isEmpty()) {

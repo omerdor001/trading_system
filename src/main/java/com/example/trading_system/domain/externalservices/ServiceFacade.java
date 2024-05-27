@@ -5,8 +5,6 @@ import javax.management.InstanceAlreadyExistsException;
 public interface ServiceFacade {
     void addPaymentService(String serviceName) throws InstanceAlreadyExistsException;
 
-    void addService(String serviceName) throws InstanceAlreadyExistsException;
-
     void addPaymentProxyService(String serviceName) throws InstanceAlreadyExistsException;
 
     void addDeliveryService(String serviceName) throws InstanceAlreadyExistsException;

@@ -359,50 +359,50 @@ public class UserFacadeImp implements UserFacade {
         newOwnerUser.addOwnerRole(appoint, storeName);
     }
 
-//    public void appointManager(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
-//        if(!registered.containsKey(appoint)){
-//            throw new NoSuchElementException("No user called "+appoint+ "exist");
-//        }
-//        if(!registered.containsKey(newManager)){
-//            throw new NoSuchElementException("No user called "+newManager+ "exist");
-//        }
-//        Registered appointUser=registered.get(appoint);
-//        Registered newManagerUser=registered.get(newManager);
-//        if(!appointUser.isOwner(store_name_id)){
-//            throw new IllegalAccessException("User must be Owner");
-//        }
-//        if(!appointUser.getLogged()){
-//            throw new IllegalAccessException("Appoint user is not logged");
-//        }
-//        if(newManagerUser.isManager(store_name_id)){
-//            throw new IllegalAccessException("User already Manager of this store");
-//        }
-//        if(newManagerUser.isOwner(store_name_id)){
-//            throw new IllegalAccessException("User cannot be owner of this store");
-//        }
-//        newManagerUser.addManagerRole(appoint,store_name_id);
-//        newManagerUser.setPermissionsToManager(store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
-//
-//    }
+    public void appointManager(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
+        if(!registered.containsKey(appoint)){
+            throw new NoSuchElementException("No user called "+appoint+ "exist");
+        }
+        if(!registered.containsKey(newManager)){
+            throw new NoSuchElementException("No user called "+newManager+ "exist");
+        }
+        Registered appointUser=registered.get(appoint);
+        Registered newManagerUser=registered.get(newManager);
+        if(!appointUser.isOwner(store_name_id)){
+            throw new IllegalAccessException("User must be Owner");
+        }
+        if(!appointUser.getLogged()){
+            throw new IllegalAccessException("Appoint user is not logged");
+        }
+        if(newManagerUser.isManager(store_name_id)){
+            throw new IllegalAccessException("User already Manager of this store");
+        }
+        if(newManagerUser.isOwner(store_name_id)){
+            throw new IllegalAccessException("User cannot be owner of this store");
+        }
+        newManagerUser.addManagerRole(appoint,store_name_id);
+        newManagerUser.setPermissionsToManager(store_name_id,watch,editSupply,editBuyPolicy,editDiscountPolicy);
 
-//    @Override
-//    public void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException {
-//        if(!registered.containsKey(appoint)){
-//            throw new NoSuchElementException("No user called "+appoint+ "exist");
-//        }
-//        if(!registered.containsKey(newOwner)){
-//            throw new NoSuchElementException("No user called "+newOwner+ "exist");
-//        }
-//        Registered appointUser=registered.get(appoint);
-//        Registered newOwnerUser=registered.get(newOwner);
-//        if(!appointUser.isOwner(storeName)){
-//            throw new IllegalAccessException("Appoint user must be Owner");
-//        }
-//        if(newOwnerUser.isOwner(storeName)){
-//            throw new IllegalAccessException("User already Owner of this store");
-//        }
-//        newOwnerUser.addOwnerRole(appoint,storeName);
-//    }
+    }
+
+    @Override
+    public void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException {
+        if(!registered.containsKey(appoint)){
+            throw new NoSuchElementException("No user called "+appoint+ "exist");
+        }
+        if(!registered.containsKey(newOwner)){
+            throw new NoSuchElementException("No user called "+newOwner+ "exist");
+        }
+        Registered appointUser=registered.get(appoint);
+        Registered newOwnerUser=registered.get(newOwner);
+        if(!appointUser.isOwner(storeName)){
+            throw new IllegalAccessException("Appoint user must be Owner");
+        }
+        if(newOwnerUser.isOwner(storeName)){
+            throw new IllegalAccessException("User already Owner of this store");
+        }
+        newOwnerUser.addOwnerRole(appoint,storeName);
+    }
 
     @Override
     public void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
