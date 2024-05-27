@@ -2,6 +2,7 @@ package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.service.Security;
+import com.example.trading_system.service.TradingSystemImp;
 import com.example.trading_system.service.UserServiceImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,6 +113,7 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("User " + username + "already Logged out");
         saveUserCart(username);
         u.logout();
+        enter(id);
     }
 
 

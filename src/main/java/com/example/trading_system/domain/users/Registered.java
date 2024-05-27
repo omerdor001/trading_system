@@ -24,21 +24,21 @@ public class Registered extends User {
     @Setter
     private boolean commercialManager;
 
-    public Registered(int id, String userName, String encrypted_pass, String address, LocalDate birthdate) {
-        super(id);
-        this.userName = userName; // Can be changed to email
-        this.encrypted_pass = encrypted_pass;
-
-        this.address = address;
-        this.birthdate= birthdate;
-        this.isAdmin = false;
-        this.isLogged = false;
-        this.notifications = new LinkedList<>();
-        this.roles=new ArrayList<>();
-        this.managerToApprove=new HashMap<>();
-        this.ownerToApprove=new ArrayList<>();
-        this.commercialManager=false;
-    }
+//    public Registered(int id, String userName, String encrypted_pass, String address, LocalDate birthdate) {
+//        super(id);
+//        this.userName = userName; // Can be changed to email
+//        this.encrypted_pass = encrypted_pass;
+//
+//        this.address = address;
+//        this.birthdate= birthdate;
+//        this.isAdmin = false;
+//        this.isLogged = false;
+//        this.notifications = new LinkedList<>();
+//        this.roles=new ArrayList<>();
+//        this.managerToApprove=new HashMap<>();
+//        this.ownerToApprove=new ArrayList<>();
+//        this.commercialManager=false;
+//    }
 
     public Registered(int id, String userName, String encryption, LocalDate birthdate) {
         super(id);
