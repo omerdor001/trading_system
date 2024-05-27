@@ -18,7 +18,7 @@
 //
 //    @BeforeEach
 //    public void setUp() throws Exception {
-//        facade= new TradingSystemImp();
+//        facade= TradingSystemImp.getInstance();
 //        token1 = facade.enter();
 //        facade.register(0, "testuser1", "password123", LocalDate.now());
 //        facade.openSystem();
