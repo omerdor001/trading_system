@@ -250,6 +250,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void openStore(String username, String storeName, String description, StorePolicy policy) {
+        marketFacade=MarketFacadeImp.getInstance();
         if (storeName == null) {
             logger.error("Store name is null");
             throw new RuntimeException("Store name is null");

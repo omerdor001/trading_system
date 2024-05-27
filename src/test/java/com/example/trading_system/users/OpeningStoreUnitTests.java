@@ -56,7 +56,6 @@ class OpeningStoreUnitTests {
 
         assertEquals("Store name is null", exception.getMessage());
     }
-
     @Test
     void testOpenStoreWithExistingStoreName() {
         String username = "user1";
