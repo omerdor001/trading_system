@@ -1,21 +1,18 @@
 package com.example.trading_system.service;
 
 import com.example.trading_system.domain.stores.Category;
-import com.example.trading_system.domain.stores.MarketFacade;
-import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public class MarketServiceImp implements MarketService {
-    MarketFacadeImp marketFacade = MarketFacadeImp.getInstance();
+    MarketFacadeImp marketFacade;
     private static final Logger logger = LoggerFactory.getLogger(MarketServiceImp.class);
 
     private MarketServiceImp() {
+        marketFacade = MarketFacadeImp.getInstance();
     }
 
     private static class Singleton {

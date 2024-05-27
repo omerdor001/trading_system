@@ -96,6 +96,10 @@ public class Store {
         return sb.toString();
     }
 
+    public boolean isProductExist(int productId){
+        return products.containsKey(productId);
+    }
+
     public Product getProduct(int productId) {
         return products.get(productId);
     }

@@ -124,6 +124,9 @@ public class Registered extends User {
     }
 
     public Role getRoleByStoreId(String store_name_id){
+        if(roles.isEmpty()){
+            throw new NoSuchElementException("User doesn't have permission to this store");
+        }
         for (Role role:roles){
             if (role.getStoreId().equals(store_name_id))
                 return role;

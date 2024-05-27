@@ -45,6 +45,14 @@ public class MarketFacadeImp implements MarketFacade{
         }
     }
 
+    //For Tests
+    public boolean isProductExist(int productId,String store_name_id){
+        if(!stores.containsKey(store_name_id)){
+            throw new IllegalArgumentException("Store must exist");
+        }
+        return stores.get(store_name_id).isProductExist(productId);
+    }
+
     @Override
     public String getAllStores() {
         StringBuilder sb = new StringBuilder();
@@ -186,6 +194,7 @@ public class MarketFacadeImp implements MarketFacade{
     @Override
     public boolean addProduct(String username, int productId, String storeName, String productName, String productDescription,
                               double productPrice, int productQuantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
+        userFacade=UserFacadeImp.getInstance();
         if(!stores.containsKey(storeName)){
             throw new IllegalArgumentException("Store must exist");
         }
