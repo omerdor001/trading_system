@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class PaymentFacadeImp extends PaymentFacade {
+public class PaymentFacadeImp implements PaymentFacade {
     MarketFacadeImp marketFacade = MarketFacadeImp.getInstance();
     UserFacadeImp userFacade = UserFacadeImp.getInstance();
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);

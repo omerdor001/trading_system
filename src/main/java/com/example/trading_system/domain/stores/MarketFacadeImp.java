@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class MarketFacadeImp implements MarketFacade{
     @Getter
     private HashMap<String, Store> stores;
-    private UserFacade userFacade = UserFacadeImp.getInstance();
+    private UserFacade userFacade;
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
 
     private MarketFacadeImp() {
@@ -186,6 +186,7 @@ public class MarketFacadeImp implements MarketFacade{
     @Override
     public boolean addProduct(String username, int productId, String storeName, String productName, String productDescription,
                               double productPrice, int productQuantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
+        userFacade = UserFacadeImp.getInstance();
         if(!stores.containsKey(storeName)){
             throw new IllegalArgumentException("Store must exist");
         }
@@ -199,7 +200,7 @@ public class MarketFacadeImp implements MarketFacade{
             throw new IllegalArgumentException("User must exist");
         }
         Registered registered =userFacade.getRegistered().get(username);
-        registered.getRoleByStoreId(storeName).addProduct(username, productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
+        registered.getRoleByStoreId(storeName);//TODO create Owner role when opening store
         stores.get(storeName).addProduct(productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
         return true;
     }
