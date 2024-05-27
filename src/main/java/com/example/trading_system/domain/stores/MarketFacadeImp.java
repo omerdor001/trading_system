@@ -481,6 +481,10 @@ public class MarketFacadeImp implements MarketFacade{
 
     }
 
+    @Override
+    public HashMap<String, Store> getStores() {
+        return stores;
+    }
 
 
 }

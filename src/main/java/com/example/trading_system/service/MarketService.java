@@ -22,17 +22,12 @@ public interface MarketService {
     String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category);
     void addProduct(String username, int product_id, String store_name, String product_name, String product_description,
                                       double product_price, int product_quantity, double rating, int category, List<String> keyWords)throws IllegalAccessException ;
-//    ResponseEntity<String> removeProduct(String username, String store_name, int product_id);
-
-//    ResponseEntity<String> setProductName(String username, String storeNameId, int productId, String productName);
 
 
     void removeProduct(String username, String store_name, int product_id) throws IllegalAccessException;
 
     void setProductName(String username, String store_name_id, int productId, String product_name) throws IllegalAccessException;
 
-//    ResponseEntity<String> setRating(String username, String store_name_id, int productId, int rating);
-//    ResponseEntity<String> setCategory(String username, String store_name_id, int productId, int category);
     void setProductDescription(String username, String store_name_id, int productId, String product_description) throws IllegalAccessException;
 
     void setProductPrice(String username, String store_name_id, int productId, int product_price) throws IllegalAccessException;
@@ -41,6 +36,6 @@ public interface MarketService {
 
     void setRating(String username, String store_name_id, int productId, int rating) throws IllegalAccessException;
 
-    void setCategory(String username, String store_name_id, int productId, Category category) throws IllegalAccessException;
+    void setCategory(String username, String store_name_id, int productId, int category) throws IllegalAccessException;
 
 }

@@ -13,9 +13,13 @@ public interface TradingSystem {
     ResponseEntity<String> exit(String token, int id);
     ResponseEntity<String> exit(String token, String username);
     ResponseEntity<String> register(int id, String username, String password, LocalDate birthdate);
-    ResponseEntity<String> addService(Service service);
-    ResponseEntity<String> replaceService(Service newService, Service oldService);
-    ResponseEntity<String> changeServiceName(Service serviceToChangeAt, String newName);
+    ResponseEntity<String> addPaymentService(String serviceName);
+    ResponseEntity<String> addPaymentProxyService(String serviceName);
+    ResponseEntity<String> addDeliveryService(String serviceName);
+    ResponseEntity<String> addDeliveryProxyService(String serviceName);
+
+    ResponseEntity<String> replaceService(String newServiceName, String oldServiceName);
+    ResponseEntity<String> changeServiceName(String serviceToChangeAt, String newName);
     ResponseEntity<String> makePayment(String serviceName, double amount);
     ResponseEntity<String> makeDelivery(String serviceName, String address);
     ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
@@ -26,7 +30,18 @@ public interface TradingSystem {
     ResponseEntity<String> setProductPrice(String username, String store_name_id, int productId, int product_price);
     ResponseEntity<String> setProductQuantity(String username, String store_name_id, int productId, int product_quantity);
     ResponseEntity<String> setRating(String username, String store_name_id, int productId, int rating);
-    ResponseEntity<String> setCategory(String username, String store_name_id, int productId, Category category);
+    ResponseEntity<String> setCategory(String username, String store_name_id, int productId, int category);
     ResponseEntity<String> login(String token, int id, String username, String password);
     ResponseEntity<String> logout(int id, String userName);
+
+    ResponseEntity<String> suggestManage(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException;
+    ResponseEntity<String> approveManage(String newManager,String store_name_id, String appoint) throws IllegalAccessException;
+    ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException;
+
+    ResponseEntity<String> suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
+    ResponseEntity<String> approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
+    ResponseEntity<String> appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
+    ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+
+
 }

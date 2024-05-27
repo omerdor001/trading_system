@@ -19,26 +19,27 @@ public class ServiceFacadeImp implements ServiceFacade {
     }
 
     @Override
-    public void addService(String serviceName) throws InstanceAlreadyExistsException {
+    public void addPaymentProxyService(String serviceName) throws InstanceAlreadyExistsException {
         if (findServiceByName(serviceName)){
             throw new InstanceAlreadyExistsException("This service already exist");
         }
-//        services.add(new Service(serviceName));
-    }
-
-    @Override
-    public void addPaymentProxyService(String serviceName) throws InstanceAlreadyExistsException {
-
+        services.add(new PaymentServiceProxy(serviceName));
     }
 
     @Override
     public void addDeliveryService(String serviceName) throws InstanceAlreadyExistsException {
-
+        if (findServiceByName(serviceName)){
+            throw new InstanceAlreadyExistsException("This service already exist");
+        }
+        services.add(new DeliveryService(serviceName));
     }
 
     @Override
     public void addDeliveryProxyService(String serviceName) throws InstanceAlreadyExistsException {
-
+        if (findServiceByName(serviceName)){
+            throw new InstanceAlreadyExistsException("This service already exist");
+        }
+        services.add(new DeliveryServiceProxy(serviceName));
     }
 
     @Override
@@ -48,54 +49,6 @@ public class ServiceFacadeImp implements ServiceFacade {
         }
        services.add(new PaymentService(serviceName));
     }
-/*  TODO: Fix services
-    @Override
-    public void addPaymentProxyService(String serviceName) throws InstanceAlreadyExistsException {
-        if (findServiceByName(serviceName)){
-            throw new InstanceAlreadyExistsException("This service already exist");
-        }
-        services.add(new PaymentServiceProxy(serviceName));
-    }
-
-    @Override
-    public void addDeliveryService(String serviceName) throws InstanceAlreadyExistsException {
-        if (findServiceByName(serviceName)){
-            throw new InstanceAlreadyExistsException("This service already exist");
-        }
-        services.add(new DeliveryService(serviceName));
-    }
-
-    @Override
-    public void addDeliveryProxyService(String serviceName) throws InstanceAlreadyExistsException {
-        if (findServiceByName(serviceName)){
-            throw new InstanceAlreadyExistsException("This service already exist");
-        }
-        services.add(new DeliveryServiceProxy(serviceName));
-    }
-
-    @Override
-    public void addPaymentProxyService(String serviceName) throws InstanceAlreadyExistsException {
-        if (findServiceByName(serviceName)){
-            throw new InstanceAlreadyExistsException("This service already exist");
-        }
-        services.add(new PaymentServiceProxy(serviceName));
-    }
-
-    @Override
-    public void addDeliveryService(String serviceName) throws InstanceAlreadyExistsException {
-        if (findServiceByName(serviceName)){
-            throw new InstanceAlreadyExistsException("This service already exist");
-        }
-        services.add(new DeliveryService(serviceName));
-    }
-
-    @Override
-    public void addDeliveryProxyService(String serviceName) throws InstanceAlreadyExistsException {
-        if (findServiceByName(serviceName)){
-            throw new InstanceAlreadyExistsException("This service already exist");
-        }
-        services.add(new DeliveryServiceProxy(serviceName));
-    }*/
 
     @Override
     public void replaceService(String newServiceName, String oldServiceName) {

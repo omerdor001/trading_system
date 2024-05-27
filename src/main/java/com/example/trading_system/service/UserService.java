@@ -22,13 +22,13 @@ public interface UserService {
     boolean login(int id, String username, String password);
     boolean logout(int id, String username);
 
-    ResponseEntity<String> suggestManage(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy);
-    ResponseEntity<String> approveManage(String newManager,String store_name_id, String appoint);
-   // ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) ;
+    void suggestManage(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException;
+    void approveManage(String newManager,String store_name_id, String appoint) throws IllegalAccessException;
+    void appointManager(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException;
 
-    ResponseEntity<String> suggestOwner(String appoint, String newOwner, String storeName);
-    ResponseEntity<String> approveOwner(String newOwner, String storeName, String appoint);
-   // ResponseEntity<String> appointOwner(String appoint, String newOwner, String storeName);
+    void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
+    void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
+    void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
 
     void exit(int id) throws Exception;
     void exit(String username) throws Exception;
@@ -36,6 +36,6 @@ public interface UserService {
     String registeredViewCart(String username);
 
     String visitorViewCart(int id);
-    ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+    void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
     boolean isAdminRegistered();
 }
