@@ -121,9 +121,6 @@ public class TradingSystemImp implements TradingSystem{
         logger.info("Attempting to register user: {}", username);
         // Registration is allowed even if the system is not open
         try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
             userFacade.register(id, username, password, birthdate);
             logger.info("User registered successfully: {}", username);
             return new ResponseEntity<>("User registered successfully.", HttpStatus.OK);

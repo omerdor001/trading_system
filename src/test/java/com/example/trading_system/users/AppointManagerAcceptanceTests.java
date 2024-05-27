@@ -1,21 +1,21 @@
-package com.example.trading_system.users;
-
-import com.example.trading_system.domain.users.Manager;
-import com.example.trading_system.domain.users.Registered;
-import org.junit.jupiter.api.BeforeEach;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-
-class AppointManagerAcceptanceTests {
-    Facade facade;
-
-    @BeforeEach
-    void setup(){
-        Registered registered1 = mock(Registered.class);
-        Manager manager1 = mock(Manager.class);
-        facade=mock(Facade.class);
-    }
+//package com.example.trading_system.users;
+//
+//import com.example.trading_system.domain.users.Manager;
+//import com.example.trading_system.domain.users.Registered;
+//import org.junit.jupiter.api.BeforeEach;
+//
+//import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.mockito.Mockito.mock;
+//
+//class AppointManagerAcceptanceTests {
+//    Facade facade;
+//
+//    @BeforeEach
+//    void setup(){
+//        Registered registered1 = mock(Registered.class);
+//        Manager manager1 = mock(Manager.class);
+//        facade=mock(Facade.class);
+//    }
 //
 //    @Test
 //    @Disabled
@@ -81,4 +81,4 @@ class AppointManagerAcceptanceTests {
 //    }
 
 
-}
+//}
