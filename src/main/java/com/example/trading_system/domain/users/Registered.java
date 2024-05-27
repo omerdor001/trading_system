@@ -60,10 +60,10 @@ public class Registered extends User {
     public void closeMarket() {}
 
     public void openStore() {
-        this.isAdmin=true;
         //SET THE ROLE TO OWNER OF STORE
-
+        //TODO create owner role with store id
     }
+
     public String getUserName() {
         return userName;
     }

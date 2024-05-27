@@ -194,7 +194,6 @@ public class MarketFacadeImp implements MarketFacade{
     @Override
     public boolean addProduct(String username, int productId, String storeName, String productName, String productDescription,
                               double productPrice, int productQuantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
-        userFacade=UserFacadeImp.getInstance();
         if(!stores.containsKey(storeName)){
             throw new IllegalArgumentException("Store must exist");
         }
