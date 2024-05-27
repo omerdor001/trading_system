@@ -14,6 +14,7 @@ public interface ExternalServices {
     void replaceService(String newService, String oldService);
 
     void changeServiceName(String serviceToChangeAt,String newName);
+    void clearServices();
 
     void makePayment(String serviceName,double amount);
 

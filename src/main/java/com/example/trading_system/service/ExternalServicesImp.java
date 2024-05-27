@@ -60,6 +60,13 @@ public class ExternalServicesImp implements ExternalServices {
         logger.info("Finish changing name to external service: {} to name : {} ", serviceToChangeAt, newName);
     }
 
+    @Override
+    public void clearServices() {
+        logger.info("Trying removing external services");
+        facade.clearServices();
+        logger.info("Finish adding external services");
+    }
+
     public void makePayment(String serviceName, double amount) {
         logger.info("Trying making Payment with service {} ", serviceName);
         facade.makePayment(serviceName, amount);
