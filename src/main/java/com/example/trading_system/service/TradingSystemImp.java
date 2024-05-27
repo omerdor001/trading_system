@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import javax.management.InstanceAlreadyExistsException;
-import java.awt.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -199,6 +197,23 @@ public class TradingSystemImp implements TradingSystem {
         }
         logger.info("Finish adding external delivery proxy service: {}", serviceName);
         return new ResponseEntity<String>("Success adding external delivery proxy service", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> clearServices() {
+        logger.info("Trying removing external delivery proxy service");
+        try {
+            if (!checkSystemOpen()) {
+                return systemClosedResponse();
+            }
+            externalServices.clearServices();
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed trying removing external services", e.getMessage());
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        }
+        logger.info("Finish removing external services");
+        return new ResponseEntity<String>("Success removing external services", HttpStatus.OK);
     }
 
     @Override

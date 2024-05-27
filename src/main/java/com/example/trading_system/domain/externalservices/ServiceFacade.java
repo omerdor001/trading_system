@@ -17,5 +17,7 @@ public interface ServiceFacade {
     void makePayment(String serviceName,double amount);
     void makeDelivery(String serviceName,String address);
 
+    public void clearServices();
+
 
 }

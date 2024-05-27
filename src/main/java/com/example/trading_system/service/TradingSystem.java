@@ -19,6 +19,7 @@ public interface TradingSystem {
     ResponseEntity<String> addPaymentProxyService(String serviceName);
     ResponseEntity<String> addDeliveryService(String serviceName);
     ResponseEntity<String> addDeliveryProxyService(String serviceName);
+    ResponseEntity<String> clearServices();
 
     ResponseEntity<String> replaceService(String newServiceName, String oldServiceName);
     ResponseEntity<String> changeServiceName(String serviceToChangeAt, String newName);

@@ -104,4 +104,9 @@ public class ServiceFacadeImp implements ServiceFacade {
         deliveryService.makeDelivery(serviceName,address);
     }
 
+    @Override
+    public void clearServices() {
+        services.clear();
+    }
+
 }
