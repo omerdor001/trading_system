@@ -1,4 +1,3 @@
-
 package com.example.trading_system.domain.stores;
 
 import lombok.Getter;
@@ -7,16 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Setter
 @Getter
 public class Store {
+    private static final Logger logger = LoggerFactory.getLogger(Store.class);
     private String nameId; // this will be the ID for the store
     private String description;
     private HashMap<Integer, Product> products;
-
     @Getter
     private List<String> managers;
     @Getter
@@ -28,7 +26,6 @@ public class Store {
     private boolean isActive;
     private boolean isOpen;
     private StoreSalesHistory salesHistory;
-    private static final Logger logger = LoggerFactory.getLogger(Store.class);
 
     public Store(String nameId, String description, StorePolicy storePolicy, String founder) {
         this.nameId = nameId;
@@ -96,7 +93,7 @@ public class Store {
         return sb.toString();
     }
 
-    public boolean isProductExist(int productId){
+    public boolean isProductExist(int productId) {
         return products.containsKey(productId);
     }
 
@@ -159,11 +156,12 @@ public class Store {
             product.setCategory(category);
         }
     }
-    List<Purchase> getHistoryPurchasesByCustomer(int customerId){
+
+    List<Purchase> getHistoryPurchasesByCustomer(int customerId) {
         return salesHistory.getPurchasesByCustomer(customerId);
     }
 
-    List<Purchase> getAllHistoryPurchases(){
+    List<Purchase> getAllHistoryPurchases() {
         return salesHistory.getAllPurchases();
     }
 

@@ -7,15 +7,22 @@ import java.util.NoSuchElementException;
 
 public class ServiceFacadeImp implements ServiceFacade {
     private List<Service> services;
+    private static ServiceFacadeImp instance = null;
+
     private ServiceFacadeImp(){
         services=new ArrayList<>();
     }
 
-    private  static class Singleton  {
-        private static final ServiceFacadeImp INSTANCE = new ServiceFacadeImp();
-    }
     public static ServiceFacadeImp getInstance() {
-        return ServiceFacadeImp.Singleton.INSTANCE;
+        if(instance == null)
+            instance = new ServiceFacadeImp();
+        return instance;
+    }
+
+    @Override
+    public void deleteInstance(){
+        instance = null;
+        services = null;
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.Product;
-
 import java.util.HashMap;
 
 public class ShoppingBag {
@@ -28,17 +26,14 @@ public class ShoppingBag {
     public synchronized void addProduct(int productId, int quantity) {
         if (products_list.containsKey(productId)) {
             products_list.put(productId, products_list.get(productId) + quantity);
-        }
-        else
+        } else
             products_list.put(productId, quantity);
     }
-    public synchronized void removeProduct(int productId,int quantity) {
-        if (products_list.get(productId)-quantity <= 0) {
+
+    public synchronized void removeProduct(int productId, int quantity) {
+        if (products_list.get(productId) - quantity <= 0) {
             products_list.remove(productId);
-        }
-        else
+        } else
             products_list.put(productId, products_list.get(productId) - quantity);
     }
-
-
 }

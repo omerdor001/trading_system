@@ -5,19 +5,27 @@ import com.example.trading_system.domain.users.PaymentFacadeImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PaymentServiceImp implements PaymentService{
-    PaymentFacadeImp paymentFacade = PaymentFacadeImp.getInstance();
+public class PaymentServiceImp implements PaymentService {
     private static final Logger logger = LoggerFactory.getLogger(PaymentServiceImp.class);
+    private PaymentFacade paymentFacade;
+
+    private static PaymentServiceImp instance = null;
 
     private PaymentServiceImp() {
-    }
-
-    private static class Singleton {
-        private static final PaymentServiceImp INSTANCE = new PaymentServiceImp();
+        paymentFacade = PaymentFacadeImp.getInstance();
     }
 
     public static PaymentServiceImp getInstance() {
-        return PaymentServiceImp.Singleton.INSTANCE;
+        if(instance == null)
+            instance = new PaymentServiceImp();
+        return instance;
+    }
+
+    @Override
+    public void deleteInstance(){
+        instance = null;
+        paymentFacade.deleteInstance();
+        paymentFacade = null;
     }
 
     @Override
@@ -29,9 +37,8 @@ public class PaymentServiceImp implements PaymentService{
             logger.error("Error occurred while checking availability cart and conditions for visitor with ID: {}: {}", visitorId, e.getMessage());
             return false;
         }
-
-
     }
+
     @Override
     public boolean registeredCheckAvailabilityAndConditions(String registeredId) {
         logger.info("Checking availability and conditions for registered user with ID: {}", registeredId);
@@ -69,6 +76,4 @@ public class PaymentServiceImp implements PaymentService{
         result = paymentFacade.getStoresPurchaseHistory(username, storeName, id, productBarcode);
         return result;
     }
-
-
 }

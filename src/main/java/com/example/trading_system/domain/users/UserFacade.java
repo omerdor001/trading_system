@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 public interface UserFacade {
+    void deleteInstance();
 
     void createVisitor(int id);
 
@@ -47,11 +48,13 @@ public interface UserFacade {
     void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
 
     void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException;
-    void appointManager(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
+
+    void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
 
     void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
 
     void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
+
     void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException;
 
     /**

@@ -67,7 +67,4 @@ public class Owner extends RoleState{
 
     @Override
     public void requestInformationAboutSpecificOfficialInStore(){}
-
-
-
 }

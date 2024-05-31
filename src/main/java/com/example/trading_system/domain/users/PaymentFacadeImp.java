@@ -10,21 +10,31 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class PaymentFacadeImp implements PaymentFacade {
-    MarketFacadeImp marketFacade = MarketFacadeImp.getInstance();
-    UserFacadeImp userFacade = UserFacadeImp.getInstance();
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
+    private static PaymentFacadeImp instance = null;
+    private MarketFacade marketFacade;
+    private UserFacade userFacade;
     private List<Purchase> purchases;
 
     public PaymentFacadeImp() {
-        purchases = new ArrayList<>();
-    }
-
-    private static class Singleton {
-        private static final PaymentFacadeImp INSTANCE = new PaymentFacadeImp();
+        this.purchases = new ArrayList<>();
+        this.marketFacade = MarketFacadeImp.getInstance();
+        this.userFacade = UserFacadeImp.getInstance();
     }
 
     public static PaymentFacadeImp getInstance() {
-        return PaymentFacadeImp.Singleton.INSTANCE;
+        if (instance == null)
+            instance = new PaymentFacadeImp();
+        return instance;
+    }
+
+    public void deleteInstance() {
+        instance = null;
+        this.purchases = null;
+        this.marketFacade.deleteInstance();
+        this.marketFacade = null;
+        this.userFacade.deleteInstance();
+        this.userFacade = null;
     }
 
     public synchronized boolean VisitorCheckAvailabilityAndConditions(int visitorId) {
@@ -105,7 +115,7 @@ public class PaymentFacadeImp implements PaymentFacade {
             @Override
             public void run() {
                 VisitorReleaseReservedProducts(visitor);
-                throw  new RuntimeException("time out !");
+                throw new RuntimeException("time out !");
 
             }
         }, 10 * 60 * 1000);
@@ -178,7 +188,7 @@ public class PaymentFacadeImp implements PaymentFacade {
             @Override
             public void run() {
                 RegisteredReleaseReservedProducts(registered);
-                throw  new RuntimeException("time out !");
+                throw new RuntimeException("time out !");
             }
         }, 10 * 60 * 1000);
 
@@ -231,6 +241,7 @@ public class PaymentFacadeImp implements PaymentFacade {
         return price;
     }
 
+    @Override
     public String getPurchaseHistory(String username, String storeName, Integer id, Integer productBarcode) {
         if (!userFacade.getRegistered().containsKey(username)) {
             logger.error("User not found");
@@ -240,7 +251,7 @@ public class PaymentFacadeImp implements PaymentFacade {
             logger.error("User is not logged");
             throw new RuntimeException("User is not logged");
         }
-        if (!userFacade.getRegistered().get(username).isCommercialManager()) {
+        if (!userFacade.getRegistered().get(username).isAdmin()) {
             logger.error("User is not commercial manager");
             throw new RuntimeException("User is not commercial manager");
         }
@@ -273,7 +284,7 @@ public class PaymentFacadeImp implements PaymentFacade {
             logger.error("User is not logged");
             throw new RuntimeException("User is not logged");
         }
-        if (!userFacade.getRegistered().get(username).isCommercialManager()) {
+        if (!userFacade.getRegistered().get(username).isAdmin()) {
             logger.error("User is not commercial manager");
             throw new RuntimeException("User is not commercial manager");
         }
@@ -291,7 +302,7 @@ public class PaymentFacadeImp implements PaymentFacade {
 
     private void addPurchaseRegistered(String registeredId) {
         Cart cart = userFacade.getRegistered().get(registeredId).getShopping_cart();
-        double totalcount=0;
+        double totalcount = 0;
         List<ProductInSale> productInSales = new ArrayList<>();
         HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
@@ -302,17 +313,18 @@ public class PaymentFacadeImp implements PaymentFacade {
                 int productId = productEntry.getKey();
                 int quantity = productEntry.getValue();
                 Product product = store.getProducts().get(productId);
-                totalcount =totalcount + quantity*product.getProduct_price();
+                totalcount = totalcount + quantity * product.getProduct_price();
                 ProductInSale productInSale = new ProductInSale(productId, product.getProduct_price(), quantity, storeId);
                 productInSales.add(productInSale);
             }
 
-            Purchase purchase = new Purchase(userFacade.getRegistered().get(registeredId).getId(registeredId), productInSales,storeId,totalcount );
+            Purchase purchase = new Purchase(userFacade.getRegistered().get(registeredId).getId(registeredId), productInSales, storeId, totalcount);
         }
     }
+
     private void addPurchaseVisitor(int id) {
         Cart cart = userFacade.getVisitors().get(id).getShopping_cart();
-        double totalcount=0;
+        double totalcount = 0;
         List<ProductInSale> productInSales = new ArrayList<>();
         HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
@@ -323,12 +335,12 @@ public class PaymentFacadeImp implements PaymentFacade {
                 int productId = productEntry.getKey();
                 int quantity = productEntry.getValue();
                 Product product = store.getProducts().get(productId);
-                totalcount =totalcount + quantity*product.getProduct_price();
+                totalcount = totalcount + quantity * product.getProduct_price();
                 ProductInSale productInSale = new ProductInSale(productId, product.getProduct_price(), quantity, storeId);
                 productInSales.add(productInSale);
             }
 
-            Purchase purchase = new Purchase(id, productInSales,storeId,totalcount );
+            Purchase purchase = new Purchase(id, productInSales, storeId, totalcount);
         }
     }
 }

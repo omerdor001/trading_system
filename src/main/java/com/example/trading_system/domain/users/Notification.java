@@ -12,20 +12,18 @@ import java.util.TimeZone;
 
 @Component
 public class Notification {
-    private int senderId;
-    private int receiverId;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
-    private Date dateOfCreation;
-
-    private String textContent;
-
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     static {
         // Configure the ObjectMapper to use the local time zone
         objectMapper.setTimeZone(TimeZone.getDefault());
     }
+
+    private int senderId;
+    private int receiverId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
+    private Date dateOfCreation;
+    private String textContent;
 
     @JsonCreator
     public Notification(
@@ -38,6 +36,14 @@ public class Notification {
         this.receiverId = receiverId;
         this.dateOfCreation = dateOfCreation;
         this.textContent = textContent;
+    }
+
+    public static Notification fromString(String str) {
+        try {
+            return objectMapper.readValue(str, Notification.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error parsing Notification from JSON", e);
+        }
     }
 
     public int getSenderId() {
@@ -72,20 +78,13 @@ public class Notification {
         this.textContent = textContent;
     }
 
+    //TODO change method and uses of it
     @Override
     public String toString() {
         try {
             return objectMapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Error converting Notification to JSON", e);
-        }
-    }
-
-    public static Notification fromString(String str) {
-        try {
-            return objectMapper.readValue(str, Notification.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error parsing Notification from JSON", e);
         }
     }
 }
