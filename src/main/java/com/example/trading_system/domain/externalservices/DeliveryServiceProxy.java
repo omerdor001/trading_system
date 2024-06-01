@@ -1,23 +1,22 @@
 package com.example.trading_system.domain.externalservices;
+import com.example.trading_system.service.TradingSystemImp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DeliveryServiceProxy extends Service{
-
+public class DeliveryServiceProxy implements DeliveryService{
+    String serviceName;
+    int id=1;
+    private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
     public DeliveryServiceProxy(String serviceName) {
-        super(serviceName);
-
+        this.serviceName=serviceName;
     }
 
     private static final String ADDRESS_PATTERN =
             "^\\d+\\s+[A-Za-z0-9\\s]+,\\s+[A-Za-z\\s]+,\\s+[A-Z]{2},\\s+\\d{5}(-\\d{4})?$";
     private static final Pattern pattern = Pattern.compile(ADDRESS_PATTERN);
-
-    @Override
-    public void makePayment(String serviceName, double amount) {}
-
-    @Override
-    public void cancelPayment(String serviceName) {}
 
 
     public static boolean isValidAddress(String address) {
@@ -29,19 +28,30 @@ public class DeliveryServiceProxy extends Service{
     }
 
     @Override
-    public void makeDelivery(String serviceName, String address) {
-        // Additional logic before delegating to the real payment service
-        if (isValidAddress(address)) {
-            System.out.println("Processing delivery of $" + address);
-            // Here would be the real delivery processing logic, e.g., calling an external delivery gateway API
-        } else {
-            throw new IllegalArgumentException("Delivery authorization failed");
-        }
+    public String getName() {
+        logger.info("Getting name of service : {}",serviceName);
+        return serviceName;
     }
 
     @Override
-    public void cancelDelivery(String serviceName, String address) {
+    public int makeDelivery(String address) {
+        // Additional logic before delegating to the real payment service
+        if (isValidAddress(address)) {
+            System.out.println("Processing delivery of $" + address);
+        } else {
+            logger.error("Delivery authorization failed to address : {}",address);
+            throw new IllegalArgumentException("Delivery authorization failed");
+        }
+        logger.info("Succeed making delivery to {}",address);
+        int deliveryId=id;
+        id++;
+        return deliveryId;
+    }
 
+    @Override
+    public void cancelDelivery(int deliveryId) {
+        logger.info("Cancel delivery with id {}",deliveryId);
+        System.out.println("Delivery cancelled successfully");
     }
 
     @Override

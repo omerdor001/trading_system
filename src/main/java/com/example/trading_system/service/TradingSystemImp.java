@@ -1,7 +1,5 @@
 package com.example.trading_system.service;
 
-import com.example.trading_system.domain.externalservices.ServiceFacade;
-import com.example.trading_system.domain.externalservices.ServiceFacadeImp;
 import com.example.trading_system.domain.stores.Category;
 import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.domain.users.UserFacade;
@@ -18,8 +16,6 @@ public class TradingSystemImp implements TradingSystem {
     private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
     public UserFacade userFacade = UserFacadeImp.getInstance();
     public UserService userService = UserServiceImp.getInstance();
-    public ServiceFacade serviceFacade;
-    public ExternalServices externalServices;
     public MarketService marketService;
     public PaymentServiceImp paymentService;
     public int counter_user = 0;
@@ -42,8 +38,6 @@ public class TradingSystemImp implements TradingSystem {
         logger.info("Attempting to open system");
         try {
             if (userService.isAdminRegistered()) {
-                serviceFacade = ServiceFacadeImp.getInstance();
-                externalServices = ExternalServicesImp.getInstance();
                 marketService = MarketServiceImp.getInstance();
                 paymentService =PaymentServiceImp.getInstance();
                 systemOpen = true;
@@ -127,154 +121,6 @@ public class TradingSystemImp implements TradingSystem {
         } catch (Exception e) {
             logger.error("Error occurred while registering user: {}: {}", username, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
-    public ResponseEntity<String> addPaymentService(String serviceName) {
-        logger.info("Trying adding external payment service: {}", serviceName);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            externalServices.addPaymentService(serviceName);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed trying adding external payment service: {}", e.getMessage(), serviceName);
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-        }
-        logger.info("Finish adding external payment service: {}", serviceName);
-        return new ResponseEntity<String>("Success adding external payment service", HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<String> addPaymentProxyService(String serviceName) {
-        logger.info("Trying adding external payment proxy service: {}", serviceName);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            externalServices.addPaymentProxyService(serviceName);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed trying adding external payment proxy service: {}", e.getMessage(), serviceName);
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-        }
-        logger.info("Finish adding external payment proxy service: {}", serviceName);
-        return new ResponseEntity<String>("Success adding external payment proxy service", HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<String> addDeliveryService(String serviceName) {
-        logger.info("Trying adding external delivery service: {}", serviceName);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            externalServices.addDeliveryService(serviceName);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed trying adding external delivery service: {}", e.getMessage(), serviceName);
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-        }
-        logger.info("Finish adding external delivery service: {}", serviceName);
-        return new ResponseEntity<String>("Success adding external delivery service", HttpStatus.OK);
-    }
-
-
-    @Override
-    public ResponseEntity<String> addDeliveryProxyService(String serviceName) {
-        logger.info("Trying adding external delivery proxy service: {}", serviceName);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            externalServices.addDeliveryProxyService(serviceName);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed trying adding external delivery proxy service: {}", e.getMessage(), serviceName);
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-        }
-        logger.info("Finish adding external delivery proxy service: {}", serviceName);
-        return new ResponseEntity<String>("Success adding external delivery proxy service", HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<String> clearServices() {
-        logger.info("Trying removing external delivery proxy service");
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            externalServices.clearServices();
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed trying removing external services", e.getMessage());
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-        }
-        logger.info("Finish removing external services");
-        return new ResponseEntity<String>("Success removing external services", HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<String> replaceService(String newServiceName, String oldServiceName) {
-        logger.info("Attempting to replace service: {} with new service: {}", oldServiceName, newServiceName);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            serviceFacade.replaceService(newServiceName, oldServiceName);
-            logger.info("Service replaced successfully: {} with new service: {}", oldServiceName, newServiceName);
-            return new ResponseEntity<>("Service replaced successfully.", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while replacing service: {}: {}", oldServiceName, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-    public ResponseEntity<String> changeServiceName(String serviceToChangeAt, String newName) {
-        logger.info("Attempting to change service name of service: {} to new name: {}", serviceToChangeAt, newName);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            serviceFacade.changeServiceName(serviceToChangeAt, newName);
-            logger.info("Service name changed successfully for service: {} to new name: {}", serviceToChangeAt, newName);
-            return new ResponseEntity<>("Service name changed successfully.", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while changing service name of service: {}: {}", serviceToChangeAt, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public ResponseEntity<String> makePayment(String serviceName, double amount) {
-        logger.info("Attempting to make payment to service: {} for amount: {}", serviceName, amount);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            serviceFacade.makePayment(serviceName, amount);
-            logger.info("Payment made successfully to service: {} for amount: {}", serviceName, amount);
-            return new ResponseEntity<>("Payment made successfully.", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while making payment to service: {}: {}", serviceName, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public ResponseEntity<String> makeDelivery(String serviceName, String address) {
-        logger.info("Attempting to make delivery to address: {} using service: {}", address, serviceName);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            serviceFacade.makeDelivery(serviceName, address);
-            logger.info("Delivery made successfully to address: {} using service: {}", address, serviceName);
-            return new ResponseEntity<>("Delivery made successfully.", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while making delivery to address: {} using service: {}: {}", address, serviceName, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
