@@ -51,11 +51,11 @@ public interface MarketFacade {
 
     boolean setProductDescription(String username, String storeName, int productId, String productDescription) throws IllegalAccessException;
 
-    boolean setProductPrice(String username, String storeName, int productId, int productPrice) throws IllegalAccessException;
+    boolean setProductPrice(String username, String storeName, int productId, double productPrice) throws IllegalAccessException;
 
     boolean setProductQuantity(String username, String storeName, int productId, int productQuantity) throws IllegalAccessException;
 
-    boolean setRating(String username, String storeName, int productId, int rating) throws IllegalAccessException;
+    boolean setRating(String username, String storeName, int productId, double rating) throws IllegalAccessException;
 
     boolean setCategory(String username, String storeName, int productId, int category) throws IllegalAccessException;
 
@@ -70,6 +70,8 @@ public interface MarketFacade {
     String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
 
     HashMap<String, Store> getStores();
+    boolean isStoreExist(String store_name);
+    boolean isStoresEmpty();
 
     void addStore(Store store);    //Delete
     void addStore(String storeName, String description, StorePolicy storePolicy, String founder);

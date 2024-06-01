@@ -54,7 +54,7 @@ public class Product {
         return product_price;
     }
 
-    public void setProduct_price(int product_price) {
+    public void setProduct_price(double product_price) {
         this.product_price = product_price;
     }
 
@@ -70,7 +70,7 @@ public class Product {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 

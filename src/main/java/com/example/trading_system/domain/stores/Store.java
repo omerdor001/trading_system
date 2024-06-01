@@ -135,7 +135,7 @@ public class Store {
         }
     }
 
-    public synchronized void setProductPrice(int productId, int product_price) {
+    public synchronized void setProductPrice(int productId, double product_price) {
         if (product_price < 0)
             throw new IllegalArgumentException("Price can't be negative number");
         Product product = getProduct(productId);
@@ -153,7 +153,7 @@ public class Store {
         }
     }
 
-    public synchronized void setRating(int productId, int rating) {
+    public synchronized void setRating(int productId, double rating) {
         if (rating < 0)
             throw new IllegalArgumentException("Rating can't be negative number");
         Product product = getProduct(productId);

@@ -252,7 +252,7 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> setProductPrice(String username, String token, String store_name, int product_id, int product_price) {
+    public ResponseEntity<String> setProductPrice(String username, String token, String store_name, int product_id, double product_price) {
         logger.info("User {} is trying to edit the price : {} to product : {} from store : {}",username,product_price, product_id,store_name);
         try {
             if (!checkSystemOpen())
@@ -288,7 +288,7 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> setRating(String username, String token, String store_name, int product_id, int rating) {
+    public ResponseEntity<String> setRating(String username, String token, String store_name, int product_id, double rating) {
         logger.info("User {} is trying to edit the rating : {} to product : {} from store : {}",username,rating, product_id,store_name);
         try {
             if (!checkSystemOpen())

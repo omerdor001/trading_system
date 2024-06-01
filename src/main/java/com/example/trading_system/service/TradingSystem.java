@@ -24,25 +24,6 @@ public interface TradingSystem {
     ResponseEntity<String> register(int id, String username, String password, LocalDate birthdate);
 
     //TODO check if user is admin is external service functions?
-/*
-    ResponseEntity<String> addPaymentService(String username, String token, String serviceName);
-
-    ResponseEntity<String> addPaymentProxyService(String username, String token, String serviceName);
-
-    ResponseEntity<String> addDeliveryService(String username, String token, String serviceName);
-
-    ResponseEntity<String> addDeliveryProxyService(String username, String token, String serviceName);
-
-    ResponseEntity<String> clearServices(String username, String token);
-
-    ResponseEntity<String> replaceService(String username, String token, String newServiceName, String oldServiceName);
-
-    ResponseEntity<String> changeServiceName(String username, String token, String serviceToChangeAt, String newName);
-
-    ResponseEntity<String> makePayment(String username, String token, String serviceName, double amount);
-
-    ResponseEntity<String> makeDelivery(String username, String token, String serviceName, String address);
-*/
 
     ResponseEntity<String> addProduct(String username, String token, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords);
 
@@ -52,11 +33,11 @@ public interface TradingSystem {
 
     ResponseEntity<String> setProductDescription(String username, String token, String storeName, int productId, String productDescription);
 
-    ResponseEntity<String> setProductPrice(String username, String token, String storeName, int productId, int productPrice);
+    ResponseEntity<String> setProductPrice(String username, String token, String storeName, int productId, double productPrice);
 
     ResponseEntity<String> setProductQuantity(String username, String token, String storeName, int productId, int productQuantity);
 
-    ResponseEntity<String> setRating(String username, String token, String storeName, int productId, int rating);
+    ResponseEntity<String> setRating(String username, String token, String storeName, int productId, double rating);
 
     ResponseEntity<String> setCategory(String username, String token, String storeName, int productId, int category);
 

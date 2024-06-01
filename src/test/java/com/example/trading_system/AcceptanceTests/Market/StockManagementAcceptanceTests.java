@@ -1,4 +1,4 @@
-package com.example.trading_system.Market;
+package com.example.trading_system.AcceptanceTests.Market;
 
 import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.service.TradingSystemImp;
@@ -16,23 +16,32 @@ import static org.mockito.Mockito.mock;
 class StockManagementAcceptanceTests {
     private TradingSystemImp tradingSystem;
     String token1;
+    String token2;
+    String token3;
     @BeforeEach
     public void setUp() {
         tradingSystem = TradingSystemImp.getInstance();
-        tradingSystem.register(0, "testuser", "password123", LocalDate.now());
+        tradingSystem.register(0, "testuser1", "password123", LocalDate.now());
         tradingSystem.openSystem();
-        ResponseEntity<String> response = tradingSystem.enter();
-        token1 = response.getBody();
-        tradingSystem.register(1, "testuser1", "password1231", LocalDate.now());
-        tradingSystem.register(2, "testuser2", "password1232", LocalDate.now());
-        tradingSystem.openStore("testuser","Adidas","shoes",mock(StorePolicy.class));
-        tradingSystem.appointOwner("testuser","testuser2","Adidas");
-        tradingSystem.login(token1,1,"testuser1", "password1231");
+        ResponseEntity<String> response1 = tradingSystem.enter();
+        token1 = response1.getBody();
+        tradingSystem.register(1, "testuser2", "password1232", LocalDate.now());
+        tradingSystem.register(2, "testuser3", "password1233", LocalDate.now());
+        tradingSystem.login(token1,1,"testuser1", "password123");
+        tradingSystem.appointOwner("testuser1",token1,"testuser1","testuser3","Adidas");
+        ResponseEntity<String> response2 = tradingSystem.enter();
+        token2 = response2.getBody();
+        tradingSystem.login(token2,1,"testuser2", "password1232");
+        tradingSystem.openStore("testuser2",token2,"Adidas","shoes",mock(StorePolicy.class));
+        ResponseEntity<String> response3 = tradingSystem.enter();
+        token3=response3.getBody();
     }
 
     @AfterEach
     public void tearDown(){
-        tradingSystem.exit(token1,1);
+        tradingSystem.exit(token1,0);
+        tradingSystem.exit(token2,1);
+        tradingSystem.exit(token3,2);
         tradingSystem.deleteInstance();
     }
 
@@ -40,8 +49,8 @@ class StockManagementAcceptanceTests {
     void addProduct_Success() {
         ArrayList<String> keyWords = new ArrayList<String>();
         keyWords.add("Samba");
-        tradingSystem.appointOwner("testuser2","testuser1","Adidas");
-        ResponseEntity<String> response=tradingSystem.addProduct("testuser1",123,"Adidas","Samba",
+        tradingSystem.appointOwner("testuser3",token3,"testuser3","testuser2","Adidas");
+        ResponseEntity<String> response=tradingSystem.addProduct("testuser2",token2,123,"Adidas","Samba",
                 "white black shoes",300.0,100,5.0,0,keyWords);
         assertEquals(HttpStatus.OK,response.getStatusCode());
     }

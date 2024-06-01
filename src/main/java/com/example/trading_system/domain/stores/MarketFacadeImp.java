@@ -14,17 +14,14 @@ import java.util.stream.Collectors;
 
 public class MarketFacadeImp implements MarketFacade{
     @Getter
-    private StoreMemoryRepository storeMemoryRepository;
+    private StoreRepository storeMemoryRepository;
     private HashMap<String, Store> stores;     //Delete
-    private UserFacade userFacade;
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
     private static MarketFacadeImp instance = null;
+    private UserFacade userFacade;
 
-
-    private MarketFacadeImp() {
-        storeMemoryRepository=new StoreMemoryRepository();
-        stores = new HashMap<>();       //Delete
-        userFacade= UserFacadeImp.getInstance();
+    private MarketFacadeImp(){
+        this.storeMemoryRepository=StoreMemoryRepository.getInstance();
     }
 
     public static MarketFacadeImp getInstance() {
@@ -285,7 +282,7 @@ public class MarketFacadeImp implements MarketFacade{
     }
 
     @Override
-    public boolean setProductPrice(String username, String storeName, int productId, int productPrice) throws IllegalAccessException {
+    public boolean setProductPrice(String username, String storeName, int productId, double productPrice) throws IllegalAccessException {
         if(!storeMemoryRepository.isExist(storeName)){
             throw new IllegalArgumentException("Store must exist");
         }
@@ -319,7 +316,7 @@ public class MarketFacadeImp implements MarketFacade{
     }
 
     @Override
-    public boolean setRating(String username, String storeName, int productId, int rating) throws IllegalAccessException {
+    public boolean setRating(String username, String storeName, int productId, double rating) throws IllegalAccessException {
         if(!storeMemoryRepository.isExist(storeName)){
             throw new IllegalArgumentException("Store must exist");
         }
@@ -490,6 +487,14 @@ public class MarketFacadeImp implements MarketFacade{
                 throw new IllegalArgumentException("User is not employeed in this store.");
         }
         return result.toString();
+    }
+
+    public boolean isStoreExist(String store_name){
+        return storeMemoryRepository.isExist(store_name);
+    }
+
+    public boolean isStoresEmpty(){
+        return storeMemoryRepository.isEmpty();
     }
 
 /*    @Override

@@ -136,7 +136,7 @@ public class MarketServiceImp implements MarketService {
         marketFacade.setProductDescription(username, store_name, productId, product_description);
     }
 
-    public void setProductPrice(String username, String store_name, int productId, int product_price) throws IllegalAccessException {
+    public void setProductPrice(String username, String store_name, int productId, double product_price) throws IllegalAccessException {
         marketFacade.setProductPrice(username, store_name, productId, product_price);
     }
 
@@ -144,7 +144,7 @@ public class MarketServiceImp implements MarketService {
         marketFacade.setProductQuantity(username, store_name, productId, product_quantity);
     }
 
-    public void setRating(String username, String store_name, int productId, int rating) throws IllegalAccessException {
+    public void setRating(String username, String store_name, int productId, double rating) throws IllegalAccessException {
         marketFacade.setRating(username, store_name, productId, rating);
     }
 

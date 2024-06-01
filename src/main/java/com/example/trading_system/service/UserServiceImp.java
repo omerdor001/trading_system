@@ -120,7 +120,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean openStore(String username, String storeName, String description, StorePolicy policy) {
+    public boolean openStore(String username, String storeName, String description, StorePolicy policy){
         logger.info("Trying opening store with name: {}", storeName);
         userFacade.openStore(username, storeName, description, policy);
         logger.info("Finished opening store with name: {}", storeName);

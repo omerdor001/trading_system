@@ -262,7 +262,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Store name is null");
             throw new RuntimeException("Store name is null");
         }
-        if (marketFacade.getStores().containsKey(storeName)) {
+        if (marketFacade.isStoreExist(storeName) && !marketFacade.isStoresEmpty()) {
             logger.error("Store with name " + storeName + " already exists");
             throw new RuntimeException("Store with name " + storeName + " already exists");
         }
@@ -270,9 +270,9 @@ public class UserFacadeImp implements UserFacade {
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        Store store = new Store(storeName, description, policy, username);
-        marketFacade.addStore(store);
+        marketFacade.addStore(storeName, description, policy, username);
         registered.get(username).openStore();
+        registered.get(username).addOwnerRole(username, storeName);
     }
 
     @Override

@@ -20,13 +20,13 @@ public class Owner extends RoleState{
     public void setProduct_description(String username, String store_name_id, int productId, String product_description) {}
 
     @Override
-    public void setProduct_price(String username, String store_name_id, int productId, int product_price) {}
+    public void setProduct_price(String username, String store_name_id, int productId, double product_price) {}
 
     @Override
     public void setProduct_quantity(String username, String store_name_id, int productId, int product_quantity) {}
 
     @Override
-    public void setRating(String username, String store_name_id, int productId, int rating) {}
+    public void setRating(String username, String store_name_id, int productId, double rating) {}
 
     @Override
     public void setCategory(String username, String store_name_id, int productId, int category) {}

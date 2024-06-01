@@ -79,7 +79,7 @@ public class Manager extends RoleState {
     }
 
     @Override
-    public void setProduct_price(String username, String store_name_id, int productId, int product_price) throws IllegalAccessException {
+    public void setProduct_price(String username, String store_name_id, int productId, double product_price) throws IllegalAccessException {
         if (!this.editSupply)
             throw new IllegalAccessException("Manager cannot edit products");
     }
@@ -91,7 +91,7 @@ public class Manager extends RoleState {
     }
 
     @Override
-    public void setRating(String username, String store_name_id, int productId, int rating) throws IllegalAccessException {
+    public void setRating(String username, String store_name_id, int productId, double rating) throws IllegalAccessException {
         if (!this.editSupply)
             throw new IllegalAccessException("Manager cannot edit products");
     }
