@@ -12,71 +12,76 @@ public interface TradingSystem {
 
     ResponseEntity<String> openSystem();
 
+    ResponseEntity<String> closeSystem(String username, String token);
+
     ResponseEntity<String> enter();
 
+    //TODO might be removed because visitor has username v+id
     ResponseEntity<String> exit(String token, int id);
 
     ResponseEntity<String> exit(String token, String username);
 
     ResponseEntity<String> register(int id, String username, String password, LocalDate birthdate);
 
-    ResponseEntity<String> addPaymentService(String serviceName);
+    //TODO check if user is admin is external service functions?
+    ResponseEntity<String> addPaymentService(String username, String token, String serviceName);
 
-    ResponseEntity<String> addPaymentProxyService(String serviceName);
+    ResponseEntity<String> addPaymentProxyService(String username, String token, String serviceName);
 
-    ResponseEntity<String> addDeliveryService(String serviceName);
+    ResponseEntity<String> addDeliveryService(String username, String token, String serviceName);
 
-    ResponseEntity<String> addDeliveryProxyService(String serviceName);
+    ResponseEntity<String> addDeliveryProxyService(String username, String token, String serviceName);
 
-    ResponseEntity<String> clearServices();
+    ResponseEntity<String> clearServices(String username, String token);
 
-    ResponseEntity<String> replaceService(String newServiceName, String oldServiceName);
+    ResponseEntity<String> replaceService(String username, String token, String newServiceName, String oldServiceName);
 
-    ResponseEntity<String> changeServiceName(String serviceToChangeAt, String newName);
+    ResponseEntity<String> changeServiceName(String username, String token, String serviceToChangeAt, String newName);
 
-    ResponseEntity<String> makePayment(String serviceName, double amount);
+    ResponseEntity<String> makePayment(String username, String token, String serviceName, double amount);
 
-    ResponseEntity<String> makeDelivery(String serviceName, String address);
+    ResponseEntity<String> makeDelivery(String username, String token, String serviceName, String address);
 
-    ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                                      double product_price, int product_quantity, double rating, int category, List<String> keyWords);
+    ResponseEntity<String> addProduct(String username, String token, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords);
 
-    ResponseEntity<String> removeProduct(String username, String store_name, int product_id);
+    ResponseEntity<String> removeProduct(String username, String token, String storeName, int productId);
 
-    ResponseEntity<String> setProductName(String username, String store_name_id, int productId, String product_name);
+    ResponseEntity<String> setProductName(String username, String token, String storeName, int productId, String productName);
 
-    ResponseEntity<String> setProductDescription(String username, String store_name_id, int productId, String product_description);
+    ResponseEntity<String> setProductDescription(String username, String token, String storeName, int productId, String productDescription);
 
-    ResponseEntity<String> setProductPrice(String username, String store_name_id, int productId, int product_price);
+    ResponseEntity<String> setProductPrice(String username, String token, String storeName, int productId, int productPrice);
 
-    ResponseEntity<String> setProductQuantity(String username, String store_name_id, int productId, int product_quantity);
+    ResponseEntity<String> setProductQuantity(String username, String token, String storeName, int productId, int productQuantity);
 
-    ResponseEntity<String> setRating(String username, String store_name_id, int productId, int rating);
+    ResponseEntity<String> setRating(String username, String token, String storeName, int productId, int rating);
 
-    ResponseEntity<String> setCategory(String username, String store_name_id, int productId, int category);
+    ResponseEntity<String> setCategory(String username, String token, String storeName, int productId, int category);
 
     ResponseEntity<String> login(String token, int id, String username, String password);
 
-    ResponseEntity<String> logout(int id, String userName);
+    //TODO why id? also create new visitor and return new token + username (maybe return result of enter?)
+    ResponseEntity<String> logout(String token, int id, String username);
 
-    ResponseEntity<String> suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
+    ResponseEntity<String> suggestManage(String username, String token, String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
-    ResponseEntity<String> approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException;
+    ResponseEntity<String> suggestOwner(String username, String token, String appoint, String newOwner, String storeName);
 
-    ResponseEntity<String> appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
+    ResponseEntity<String> approveManage(String username, String token, String newManager, String store_name_id, String appoint);
 
-    ResponseEntity<String> suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
+    ResponseEntity<String> approveOwner(String username, String token, String newOwner, String storeName, String appoint);
 
-    ResponseEntity<String> approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
+    //TODO Same as suggestManager/approveManager?
+    ResponseEntity<String> appointManager(String username, String token, String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
-    ResponseEntity<String> appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
+    //TODO same as suggestOwner/approveOwner?
+    ResponseEntity<String> appointOwner(String username, String token, String appoint, String newOwner, String storeName);
 
-    ResponseEntity<String> editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+    ResponseEntity<String> editPermissionForManager(String username, String token, String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
     ResponseEntity<String> getAllStores();
 
     ResponseEntity<String> getStoreProducts(String store_name);
-
 
     ResponseEntity<String> getProductInfo(String store_name, int product_Id);
 
@@ -94,27 +99,30 @@ public interface TradingSystem {
 
     ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category);
 
-    ResponseEntity<String> registeredCheckAvailabilityAndConditions(String registeredId);
+    //TODO edit all visitor/registered functions to single function (all visitors have username of "v+id")
+    ResponseEntity<String> VisitorCheckAvailabilityAndConditions(String username, String token, int visitorId);
 
-    ResponseEntity<String> VisitorApprovePurchase(int visitorId, String paymentService);
+    ResponseEntity<String> registeredCheckAvailabilityAndConditions(String username, String token, String registeredId);
 
-    ResponseEntity<String> RegisteredApprovePurchase(String registeredId, String paymentService);
+    ResponseEntity<String> VisitorApprovePurchase(String username, String token, int visitorId, String paymentservice);
 
-    ResponseEntity<String> getPurchaseHistory(String username, String storeName, Integer id, Integer productBarcode);
+    ResponseEntity<String> RegisteredApprovePurchase(String username, String token, String registeredId, String paymentservice);
 
-    ResponseEntity<String> getStoresPurchaseHistory(String username, String storeName, Integer id, Integer productBarcode);
+    ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName, Integer id, Integer productBarcode);
 
-    ResponseEntity<String> visitorAddToCart(int id, int productId, String storeName, int quantity);
+    ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer id, Integer productBarcode);
 
-    ResponseEntity<String> visitorRemoveFromCart(int id, int productId, String storeName, int quantity);
+    ResponseEntity<String> visitorAddToCart(String username, String token, int id, int productId, String storeName, int quantity);
 
-    ResponseEntity<String> registeredAddToCart(String username, int productId, String storeName, int quantity);
+    ResponseEntity<String> visitorRemoveFromCart(String username, String token, int id, int productId, String storeName, int quantity);
 
-    ResponseEntity<String> registeredRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception;
+    ResponseEntity<String> registeredAddToCart(String username, String token, int productId, String storeName, int quantity);
 
-    ResponseEntity<String> openStore(String username, String storeName, String description, StorePolicy policy);
+    ResponseEntity<String> registeredRemoveFromCart(String username, String token, int productId, String storeName, int quantity);
 
-    ResponseEntity<String> registeredViewCart(String username);
+    ResponseEntity<String> openStore(String username, String token, String storeName, String description, StorePolicy policy);
 
-    ResponseEntity<String> visitorViewCart(int id);
+    ResponseEntity<String> registeredViewCart(String username, String token);
+
+    ResponseEntity<String> visitorViewCart(String username, String token, int id);
 }

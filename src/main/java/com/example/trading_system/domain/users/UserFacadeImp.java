@@ -523,10 +523,14 @@ public class UserFacadeImp implements UserFacade {
         return exists;
     }
 
-    private static class Singleton {
-        private static final UserFacadeImp INSTANCE = new UserFacadeImp();
+    @Override
+    public boolean isAdmin(String username){
+        for (Registered r : registered.values())
+            if (r.getUserName().equals(username)) {
+                return r.isAdmin();
+            }
+        return false;
     }
-
 }
 
 

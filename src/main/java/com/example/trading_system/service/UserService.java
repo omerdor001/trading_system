@@ -1,7 +1,6 @@
 package com.example.trading_system.service;
 
 import com.example.trading_system.domain.stores.StorePolicy;
-import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 
@@ -9,6 +8,8 @@ public interface UserService {
     void deleteInstance();
 
     String enter(int id);
+
+    boolean isAdmin(String username);
 
     boolean visitorAddToCart(int id, int productId, String storeName, int quantity);
 
