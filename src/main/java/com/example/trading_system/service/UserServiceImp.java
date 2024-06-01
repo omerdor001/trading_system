@@ -34,9 +34,8 @@ public class UserServiceImp implements UserService {
     public String enter(int id) {
         logger.info("Trying enter to system as a visitor , with id : {}", id);
         userFacade.createVisitor(id);
-        String token = Security.generateToken("v" + id);
         logger.info("Finish enter to system as a visitor , with id : {}", id);
-        return token;
+        return "v" + id;
     }
 
     @Override
@@ -52,7 +51,10 @@ public class UserServiceImp implements UserService {
         userFacade.exit(username);
         logger.info("Finish exit to system as a user , with username : {}", username);
     }
-
+    @Override
+    public boolean isAdmin(String username){
+        return userFacade.isAdmin(username);
+    }
     @Override
     public boolean login(int id, String username, String password) {
         logger.info("Trying to login user: {}", username);

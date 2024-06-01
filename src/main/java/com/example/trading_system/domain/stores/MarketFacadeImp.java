@@ -34,10 +34,14 @@ public class MarketFacadeImp implements MarketFacade{
     }
 
     @Override
+    public void initialize(UserFacade userFacade){
+        this.userFacade = userFacade;
+    }
+
+    @Override
     public void deleteInstance() {
         instance = null;
         this.stores = null;
-        this.userFacade.deleteInstance();
         this.userFacade = null;
     }
 
@@ -133,7 +137,6 @@ public class MarketFacadeImp implements MarketFacade{
             logger.error("Category is not a valid category");
             throw new RuntimeException("Category is not a valid category");
         }
-
         return stores.get(storeName).searchCategory(category, minPrice, maxPrice, minRating).toString();
     }
 
@@ -190,7 +193,6 @@ public class MarketFacadeImp implements MarketFacade{
         for (Store store : storeMemoryRepository.getAllStores().values()) {      //Change to Repo
             sb.append(store.searchKeywords(keyWords, minPrice, maxPrice, minRating, category).toString());
         }
-
         return sb.toString();
     }
 
@@ -396,24 +398,18 @@ public class MarketFacadeImp implements MarketFacade{
         List<String> storeOwners = storeMemoryRepository.getStore(storeName).getOwners();
         List<String> storeManagers = storeMemoryRepository.getStore(storeName).getManagers();
 
-
         StringBuilder result = new StringBuilder();
         result.append(storeName).append("\n");
         result.append("Role id username address birthdate").append("\n");
         for (String owner : storeOwners) {
             Registered registered2 = userFacade.getRegistered().get(owner);
-
             result.append("Owner ").append(registered2.getId()).append(owner).append(registered2.getAddress()).append(registered2.getBirthdate()).append("\n");
         }
         for (String manager : storeManagers) {
             Registered registered2 = userFacade.getRegistered().get(manager);
-
             result.append("Manager ").append(registered2.getId()).append(manager).append(registered2.getAddress()).append(registered2.getBirthdate()).append("\n");
-
         }
-
         return result.toString();
-
     }
 
     /**
@@ -446,7 +442,6 @@ public class MarketFacadeImp implements MarketFacade{
             result.append(registered2.getId()).append(manager).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append('\n');
         }
         return result.toString();
-
     }
 
     /**
@@ -494,9 +489,7 @@ public class MarketFacadeImp implements MarketFacade{
             } else
                 throw new IllegalArgumentException("User is not employeed in this store.");
         }
-
         return result.toString();
-
     }
 
 /*    @Override

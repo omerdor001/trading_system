@@ -20,6 +20,7 @@ public class UserFacadeImp implements UserFacade {
         this.registered = new HashMap<>();
         this.visitors = new HashMap<>();
         this.marketFacade = MarketFacadeImp.getInstance();
+        marketFacade.initialize(this);
     }
 
     public static UserFacadeImp getInstance() {
@@ -33,7 +34,8 @@ public class UserFacadeImp implements UserFacade {
         instance = null;
         this.registered = null;
         this.visitors = null;
-        marketFacade.deleteInstance();
+        if(marketFacade != null)
+            marketFacade.deleteInstance();
         this.marketFacade = null;
     }
 
@@ -137,9 +139,9 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void saveUserCart(int id, int productId, String storeName, int quantity) {
-        int quntityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
+        int quantityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
         int quantityInShoppingBag = visitors.get(id).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
-        if (quantity + quantityInShoppingBag > quntityInStore) {
+        if (quantity + quantityInShoppingBag > quantityInStore) {
             logger.error("Product quantity is too low");
             throw new RuntimeException("Product quantity is too low");
         }
@@ -158,13 +160,13 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public synchronized void visitorAddToCart(int id, int productId, String storeName, int quantity) {
-        int quntityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
+        int quantityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
         int quantityInShoppingBag = visitors.get(id).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
         if (!visitors.containsKey(id)) {
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        if (quantity + quantityInShoppingBag > quntityInStore) {
+        if (quantity + quantityInShoppingBag > quantityInStore) {
             logger.error("Product quantity is too low");
             throw new RuntimeException("Product quantity is too low");
         }
@@ -271,7 +273,6 @@ public class UserFacadeImp implements UserFacade {
         Store store = new Store(storeName, description, policy, username);
         marketFacade.addStore(store);
         registered.get(username).openStore();
-
     }
 
     @Override
@@ -294,7 +295,6 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("User already Owner of this store");
         }
         newOwnerUser.addWaitingAppoint_Owner(storeName);
-
     }
 
     @Override
@@ -523,10 +523,14 @@ public class UserFacadeImp implements UserFacade {
         return exists;
     }
 
-    private static class Singleton {
-        private static final UserFacadeImp INSTANCE = new UserFacadeImp();
+    @Override
+    public boolean isAdmin(String username){
+        for (Registered r : registered.values())
+            if (r.getUserName().equals(username)) {
+                return r.isAdmin();
+            }
+        return false;
     }
-
 }
 
 
