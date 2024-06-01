@@ -61,7 +61,7 @@ public class Security {
     }
 
     // Validate the token by checking the username and expiry date
-    public static Boolean validateToken(String token, String username) {
+    public static Boolean validateToken(String username, String token) {
         final String tokenUsername = extractUsername(token);
         return (username.equals(tokenUsername) && !isTokenExpired(token));
     }

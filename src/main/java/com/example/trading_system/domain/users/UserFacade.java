@@ -73,4 +73,5 @@ public interface UserFacade {
 
     String registeredViewCart(String username);
 
+    boolean isAdmin(String username);
 }
