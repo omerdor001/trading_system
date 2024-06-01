@@ -37,7 +37,6 @@ public class TradingSystemImp implements TradingSystem{
         this.userService.deleteInstance();
         userService = null;
         if(systemOpen) {
-            this.externalServices.deleteInstance();
             this.marketService.deleteInstance();
             this.paymentService.deleteInstance();
         }
@@ -90,7 +89,6 @@ public class TradingSystemImp implements TradingSystem{
             username = username.substring(1);
             if (userService.isAdmin(username)) {
                 //TODO call close method in deeper classes? (maybe logout all users)
-                externalServices.deleteInstance();
                 marketService.deleteInstance();
                 paymentService.deleteInstance(); //TODO check if relevant with hierarchy
                 systemOpen = false;
