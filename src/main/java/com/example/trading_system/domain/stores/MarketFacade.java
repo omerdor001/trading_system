@@ -1,10 +1,14 @@
 package com.example.trading_system.domain.stores;
 
+import com.example.trading_system.domain.users.UserFacade;
+
 import java.util.HashMap;
 import java.util.List;
 
 public interface MarketFacade {
     void deleteInstance();
+
+    void initialize(UserFacade userFacade);
 
     String getAllStores();
 

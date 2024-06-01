@@ -3,7 +3,6 @@ package com.example.trading_system.domain.stores;
 import com.example.trading_system.domain.users.Registered;
 import com.example.trading_system.domain.users.RoleState;
 import com.example.trading_system.domain.users.UserFacade;
-import com.example.trading_system.domain.users.UserFacadeImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.EnumSet;
@@ -19,7 +18,6 @@ public class MarketFacadeImp implements MarketFacade {
 
     private MarketFacadeImp() {
         this.stores = new HashMap<>();
-        this.userFacade = UserFacadeImp.getInstance();
     }
 
     public static MarketFacadeImp getInstance() {
@@ -29,10 +27,14 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
+    public void initialize(UserFacade userFacade){
+        this.userFacade = userFacade;
+    }
+
+    @Override
     public void deleteInstance() {
         instance = null;
         this.stores = null;
-        this.userFacade.deleteInstance();
         this.userFacade = null;
     }
 
@@ -123,7 +125,6 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("Category is not a valid category");
             throw new RuntimeException("Category is not a valid category");
         }
-
         return stores.get(storeName).searchCategory(category, minPrice, maxPrice, minRating).toString();
     }
 
@@ -180,7 +181,6 @@ public class MarketFacadeImp implements MarketFacade {
         for (Store store : stores.values()) {
             sb.append(store.searchKeywords(keyWords, minPrice, maxPrice, minRating, category).toString());
         }
-
         return sb.toString();
     }
 
@@ -377,9 +377,7 @@ public class MarketFacadeImp implements MarketFacade {
         }
         Registered registered = userFacade.getRegistered().get(userName);
         registered.getRoleByStoreId(storeName).getRoleState().getAllHistoryPurchases();
-
         return stores.get(storeName).getAllHistoryPurchases().stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
-
     }
 
     @Override
@@ -396,24 +394,18 @@ public class MarketFacadeImp implements MarketFacade {
         List<String> storeOwners = stores.get(storeName).getOwners();
         List<String> storeManagers = stores.get(storeName).getManagers();
 
-
         StringBuilder result = new StringBuilder();
         result.append(storeName).append("\n");
         result.append("Role id username address birthdate").append("\n");
         for (String owner : storeOwners) {
             Registered registered2 = userFacade.getRegistered().get(owner);
-
             result.append("Owner ").append(registered2.getId()).append(owner).append(registered2.getAddress()).append(registered2.getBirthdate()).append("\n");
         }
         for (String manager : storeManagers) {
             Registered registered2 = userFacade.getRegistered().get(manager);
-
             result.append("Manager ").append(registered2.getId()).append(manager).append(registered2.getAddress()).append(registered2.getBirthdate()).append("\n");
-
         }
-
         return result.toString();
-
     }
 
     /**
@@ -446,7 +438,6 @@ public class MarketFacadeImp implements MarketFacade {
             result.append(registered2.getId()).append(manager).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append('\n');
         }
         return result.toString();
-
     }
 
     /**
@@ -491,8 +482,6 @@ public class MarketFacadeImp implements MarketFacade {
             } else
                 throw new IllegalArgumentException("User is not employeed in this store.");
         }
-
         return result.toString();
-
     }
 }

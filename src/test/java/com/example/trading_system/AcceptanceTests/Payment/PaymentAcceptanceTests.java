@@ -6,6 +6,8 @@ import com.example.trading_system.domain.users.*;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.example.trading_system.service.UserServiceImp;
+import org.json.JSONObject;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,31 +24,49 @@ public class PaymentAcceptanceTests {
     private UserFacadeImp userFacade;
     private UserServiceImp userService;
     private PaymentServiceProxy paymentServiceProxy;
+    private String username;
+    private String token;
 
     @BeforeEach
     void setUp() {
         facade = TradingSystemImp.getInstance();
         facade.register(0,"owner1", "password123",LocalDate.now());
         facade.openSystem();
-        String token = facade.enter().getBody();
-        facade.login(token, 0, "owner1", "password123");
-        facade.openStore("owner1", "store1", "", new StorePolicy());
-        facade.addProduct("owner1", 0,"store1","product1", "", 1, 5, 1, 1, new LinkedList<>());
+        String userToken = facade.enter().getBody();
+        try {
+            JSONObject jsonObject = new JSONObject(userToken);
+            token = jsonObject.getString("token");
+        }
+        catch (Exception e){
+            fail("Setup failed: Unable to extract token from JSON response");
+        }
+        userToken = facade.login(token, 0, "owner1", "password123").getBody();
+        try {
+            JSONObject jsonObject = new JSONObject(userToken);
+            username = jsonObject.getString("username");
+            token = jsonObject.getString("token");
+        }
+        catch (Exception e){
+            fail("Setup failed: Unable to extract username and token from JSON response");
+        }
+        facade.openStore(username,token, "store1", "", new StorePolicy());
+        facade.addProduct(username,token, 0,"store1","product1", "", 1, 5, 1, 1, new LinkedList<>());
         paymentFacade = PaymentFacadeImp.getInstance();
         marketFacade = MarketFacadeImp.getInstance();
         userFacade = UserFacadeImp.getInstance();
         userService = mock(UserServiceImp.class);
         paymentServiceProxy = mock(PaymentServiceProxy.class);
         facade.enter();
-        // Reset the singletons for each test
-        marketFacade.getStores().clear();
-        userFacade.getVisitors().clear();
-        userFacade.getRegistered().clear();
+    }
+
+    @AfterEach
+    void setDown(){
+        facade.deleteInstance();
     }
 
     @Test
     void testVisitorCheckAvailabilityAndConditions_Success() {
-        facade.visitorAddToCart(1,0,"store1",1);
+        facade.visitorAddToCart(username, token,1, 0,"store1",1);
         assertTrue(paymentFacade.VisitorCheckAvailabilityAndConditions(1));
     }
 
