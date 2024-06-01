@@ -16,7 +16,7 @@ public class MarketFacadeImp implements MarketFacade{
     @Getter
     private StoreMemoryRepository storeMemoryRepository;
     private HashMap<String, Store> stores;     //Delete
-    private UserFacade userFacade = UserFacadeImp.getInstance();
+    private UserFacade userFacade;
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
     private static MarketFacadeImp instance = null;
 
@@ -24,7 +24,6 @@ public class MarketFacadeImp implements MarketFacade{
     private MarketFacadeImp() {
         storeMemoryRepository=new StoreMemoryRepository();
         stores = new HashMap<>();       //Delete
-        userFacade= UserFacadeImp.getInstance();
     }
 
     public static MarketFacadeImp getInstance() {

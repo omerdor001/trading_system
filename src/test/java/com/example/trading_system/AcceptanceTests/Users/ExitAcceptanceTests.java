@@ -2,21 +2,24 @@ package com.example.trading_system.AcceptanceTests.Users;
 
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class ExitAcceptanceTests {
 
     private static TradingSystem tradingSystem;
-    private String adminToken;
+    private String token;
+    private String username;
 
     @BeforeAll
     public static void setup() {
@@ -25,10 +28,26 @@ public class ExitAcceptanceTests {
 
     @BeforeEach
     public void openSystemAndRegisterAdmin() {
-        tradingSystem.register(1, "admin", "adminPass", LocalDate.of(1990, 1, 1));
+        tradingSystem = TradingSystemImp.getInstance();
+        tradingSystem.register(0, "owner1", "password123", LocalDate.now());
         tradingSystem.openSystem();
-        ResponseEntity<String> response = tradingSystem.enter();
-        adminToken = response.getBody();
+        String userToken = tradingSystem.enter().getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract token from JSON response");
+        }
+        userToken = tradingSystem.login(token, 0, "owner1", "password123").getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            username = rootNode.get("username").asText();
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract username and token from JSON response");
+        }
     }
 
     @Test
@@ -92,7 +111,7 @@ public class ExitAcceptanceTests {
     @Test
     public void testExitNonExistentUserById() {
         // Attempt to exit a non-existent user by ID
-        ResponseEntity<String> exitResponse = tradingSystem.exit(adminToken, 999);
+        ResponseEntity<String> exitResponse = tradingSystem.exit(token, 999);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exitResponse.getStatusCode());
         assertEquals("No such visitor with id- 999", exitResponse.getBody());
     }
@@ -100,8 +119,8 @@ public class ExitAcceptanceTests {
     @Test
     public void testExitNonExistentUserByUsername() {
         // Attempt to exit a non-existent user by username
-        ResponseEntity<String> exitResponse = tradingSystem.exit(adminToken, "nonExistentUser");
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exitResponse.getStatusCode());
-        assertEquals("No such user with username- nonExistentUser", exitResponse.getBody());
+        ResponseEntity<String> exitResponse = tradingSystem.exit(token, "nonExistentUser");
+        assertEquals(HttpStatus.UNAUTHORIZED, exitResponse.getStatusCode());
+        assertEquals("Invalid token was supplied", exitResponse.getBody());
     }
 }
