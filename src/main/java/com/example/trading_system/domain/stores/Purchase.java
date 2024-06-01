@@ -14,7 +14,7 @@ public class Purchase {
     @Getter
     private String storeName;
 
-    public Purchase(int customerId, List<ProductInSale> productInSaleList, String storeName,double totalPrice) {
+    public Purchase(int customerId, List<ProductInSale> productInSaleList, String storeName, double totalPrice) {
         this.customerId = customerId;
         this.productInSaleList = productInSaleList;
         this.storeName = storeName;
