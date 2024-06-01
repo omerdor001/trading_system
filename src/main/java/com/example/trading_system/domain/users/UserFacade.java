@@ -25,7 +25,7 @@ public interface UserFacade {
 
     void register(int id, String username, String token, LocalDate birthdate) throws Exception;    //Complete with what to register
 
-    void login(String username);
+    void login(int id, String username, String password);
 
     void logout(int id, String username);
 
