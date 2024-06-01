@@ -1,172 +1,114 @@
-/*
 package com.example.trading_system.Market;
 
-import com.example.trading_system.domain.users.Registered;
+import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.service.TradingSystemImp;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class StockManagementAcceptanceTests {
-    TradingSystemImp facade;
-    List<String> keyWords;
-    int category;
+    private TradingSystemImp tradingSystem;
+    String token1;
     @BeforeEach
     public void setUp() {
-        facade= Mockito.mock(TradingSystemImp.class);
-        List<String> keyWords=new ArrayList();
-        keyWords.add("Samba");
-        category=1;
+        tradingSystem = TradingSystemImp.getInstance();
+        tradingSystem.register(0, "testuser", "password123", LocalDate.now());
+        tradingSystem.openSystem();
+        ResponseEntity<String> response = tradingSystem.enter();
+        token1 = response.getBody();
+        tradingSystem.register(1, "testuser1", "password1231", LocalDate.now());
+        tradingSystem.register(2, "testuser2", "password1232", LocalDate.now());
+        tradingSystem.openStore("testuser","Adidas","shoes",mock(StorePolicy.class));
+        tradingSystem.appointOwner("testuser","testuser2","Adidas");
+        tradingSystem.login(token1,1,"testuser1", "password1231");
+    }
+
+    @AfterEach
+    public void tearDown(){
+        tradingSystem.exit(token1,1);
+        tradingSystem.deleteInstance();
     }
 
     @Test
     void addProduct_Success() {
-        Registered registered=mock(Registered.class);
-        registered.addOwnerRole("aaaa","Adidas");
-        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords)).
-                thenReturn(new ResponseEntity("Success adding products", HttpStatus.OK));
-        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords);
-        assertEquals(response,new ResponseEntity("Success adding products", HttpStatus.OK));
-    }
-
-    @Test
-    void addProduct_UserNotExist() {
-        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords)).
-                thenReturn(new ResponseEntity("User must exist", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords);
-        assertEquals(response,new ResponseEntity("User must exist", HttpStatus.BAD_REQUEST));
+        ArrayList<String> keyWords = new ArrayList<String>();
+        keyWords.add("Samba");
+        tradingSystem.appointOwner("testuser2","testuser1","Adidas");
+        ResponseEntity<String> response=tradingSystem.addProduct("testuser1",123,"Adidas","Samba",
+                "white black shoes",300.0,100,5.0,0,keyWords);
+        assertEquals(HttpStatus.OK,response.getStatusCode());
     }
 
     @Test
     void addProduct_StoreNotExist() {
-        Registered registered=mock(Registered.class);
-        registered.addOwnerRole("aaaa","Adidas");
-        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords)).
-                thenReturn(new ResponseEntity("Store must exist", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords);
-        assertEquals(response,new ResponseEntity("Store must exist", HttpStatus.BAD_REQUEST));
+
     }
 
     @Test
     void addProduct_PriceLessThanZero() {
-        Registered registered=mock(Registered.class);
-        registered.addOwnerRole("aaaa","Adidas");
-        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",-350.0,1,8.0,category,keyWords)).
-                thenReturn(new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",-350.0,1,8.0,category,keyWords);
-        assertEquals(response,new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
+
     }
 
     @Test
     void addProduct_QuantityLessEqualThanZero() {
-        Registered registered=mock(Registered.class);
-        registered.addOwnerRole("aaaa","Adidas");
-        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,-1,8.0,category,keyWords)).
-                thenReturn(new ResponseEntity("Quantity must be natural number", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,-1,8.0,category,keyWords);
-        assertEquals(response,new ResponseEntity("Quantity must be natural number", HttpStatus.BAD_REQUEST));
+
     }
 
     @Test
     void addProduct_RatingLessThanZero() {
-        Registered registered=mock(Registered.class);
-        registered.addOwnerRole("aaaa","Adidas");
-        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,-8.0,category,keyWords)).
-                thenReturn(new ResponseEntity("Rating can't be negative number", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,-8.0,category,keyWords);
-        assertEquals(response,new ResponseEntity("Rating can't be negative number", HttpStatus.BAD_REQUEST));
+
     }
 
     @Test
     void addProduct_NotManager() {
-        Registered registered=mock(Registered.class);
-        when(facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords)).
-                thenReturn(new ResponseEntity("User doesn't have permission to this store", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords);
-        assertEquals(response,new ResponseEntity("User doesn't have permission to this store", HttpStatus.BAD_REQUEST));
+
     }
 
     @Test
     void removeProduct_success() {
-        Registered registered=mock(Registered.class);
-        registered.addOwnerRole("aaaa","Adidas");
-        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords);
-        when(facade.removeProduct("testuser","Adidas",123)).thenReturn(new ResponseEntity("Success removing products", HttpStatus.OK));
-        ResponseEntity<String> response=facade.removeProduct("testuser","Adidas",123);
-        assertEquals(response,new ResponseEntity("Success removing products", HttpStatus.OK));
+
     }
 
     @Test
     void removeProduct_UserNotExist() {
-        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords);
-        when(facade.removeProduct("testuser","Adidas",123)).thenReturn(new ResponseEntity("User must exist", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.removeProduct("testuser","Adidas",123);
-        assertEquals(response,new ResponseEntity("User must exist", HttpStatus.BAD_REQUEST));
+
     }
 
     @Test
     void removeProduct_StoreNotExist() {
-        Registered registered=mock(Registered.class);
-        registered.addOwnerRole("aaaa","Adidas");
-        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords);
-        when(facade.removeProduct("testuser","Adidas",123)).thenReturn(new ResponseEntity("Store must exist", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.removeProduct("testuser","Adidas",123);
-        assertEquals(response,new ResponseEntity("Store must exist", HttpStatus.BAD_REQUEST));
+
     }
 
     @Test
     void removeProduct_ProductNotExist() {
-        Registered registered=mock(Registered.class);
-        registered.addOwnerRole("aaaa","Adidas");
-        when(facade.removeProduct("testuser","Adidas",123)).thenReturn(new ResponseEntity("Product must exist", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.removeProduct("testuser","Adidas",123);
-        assertEquals(response,new ResponseEntity("Product must exist", HttpStatus.BAD_REQUEST));
+
     }
 
     @Test
     void removeProduct_NotManager() {
-        Registered registered=mock(Registered.class);
-        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,category,keyWords);
-        when(facade.removeProduct("testuser","Adidas",123)).thenReturn(new ResponseEntity("User doesn't have permission to this store", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.removeProduct("testuser","Adidas",123);
-        assertEquals(response,new ResponseEntity("User doesn't have permission to this store", HttpStatus.BAD_REQUEST));
+
     }
 
     @Test
     void setProduct_name_success() {
-        Registered registered=mock(Registered.class);
-        registered.addOwnerRole("aaaa","Adidas");
-        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,0,keyWords);
-        when(facade.setProductName("testuser","Adidas",123,"Samba Shoes")).thenReturn(new ResponseEntity("Success editing name to product", HttpStatus.OK));
-        ResponseEntity<String> response=facade.setProductName("testuser","Adidas",123,"Samba Shoes");
-        assertEquals(response,new ResponseEntity("Success editing name to product", HttpStatus.OK));
+
     }
 
     @Test
     void setProduct_Price_PriceLessThanZero() {
-        Registered registered=mock(Registered.class);
-        registered.addOwnerRole("aaaa","Adidas");
-        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,0,keyWords);
-        when(facade.setProductPrice("testuser","Adidas",123,-300)).thenReturn(new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.setProductPrice("testuser","Adidas",123,-300);
-        assertEquals(response,new ResponseEntity("Price can't be negative number", HttpStatus.BAD_REQUEST));
+
     }
 
     @Test
     void setProduct_description_UserNotExist() {
-        facade.addProduct("testuser",123,"Adidas","Samba shoes","White and black snickers shoes",350.0,1,8.0,0,keyWords);
-        when(facade.setProductDescription("testuser","Adidas",123,"White and black cool snickers shoes")).thenReturn(new ResponseEntity("User must exist", HttpStatus.BAD_REQUEST));
-        ResponseEntity<String> response=facade.setProductDescription("testuser","Adidas",123,"White and black cool snickers shoes");
-        assertEquals(response,new ResponseEntity("User must exist", HttpStatus.BAD_REQUEST));
+
     }
 
-}*/
+}

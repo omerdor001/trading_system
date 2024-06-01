@@ -107,6 +107,12 @@ public class Store {
 
     public synchronized void addProduct(int product_id, String store_name, String product_name, String product_description,
                                         double product_price, int product_quantity, double rating, int category, List<String> keyWords) {
+        if (product_price < 0)
+            throw new IllegalArgumentException("Price can't be negative number");
+        if (product_quantity <= 0)
+            throw new IllegalArgumentException("Quantity must be natural number");
+        if (rating < 0)
+            throw new IllegalArgumentException("Rating can't be negative number");
         Product product = new Product(product_id, product_name, product_description, product_price, product_quantity, rating, Category.values()[category], keyWords);
         products.put(product.getProduct_id(), product);
     }
@@ -130,6 +136,8 @@ public class Store {
     }
 
     public synchronized void setProductPrice(int productId, int product_price) {
+        if (product_price < 0)
+            throw new IllegalArgumentException("Price can't be negative number");
         Product product = getProduct(productId);
         if (product != null) {
             product.setProduct_price(product_price);
@@ -137,6 +145,8 @@ public class Store {
     }
 
     public synchronized void setProductQuantity(int productId, int product_quantity) {
+        if (product_quantity <= 0)
+            throw new IllegalArgumentException("Quantity must be natural number");
         Product product = getProduct(productId);
         if (product != null) {
             product.setProduct_quantity(product_quantity);
@@ -144,6 +154,8 @@ public class Store {
     }
 
     public synchronized void setRating(int productId, int rating) {
+        if (rating < 0)
+            throw new IllegalArgumentException("Rating can't be negative number");
         Product product = getProduct(productId);
         if (product != null) {
             product.setRating(rating);

@@ -172,4 +172,16 @@ public class Registered extends User {
         return id;
     }
 
+    public List<Role> getRoles(){
+        return roles;
+    }
+
+    public String getAddress(){
+        return address;
+    }
+
+    public LocalDate getBirthdate(){
+        return birthdate;
+    }
+
 }

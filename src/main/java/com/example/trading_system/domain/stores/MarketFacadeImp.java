@@ -16,7 +16,7 @@ public class MarketFacadeImp implements MarketFacade{
     @Getter
     private StoreMemoryRepository storeMemoryRepository;
     private HashMap<String, Store> stores;     //Delete
-    private UserFacade userFacade = UserFacadeImp.getInstance();
+    private UserFacade userFacade;
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
     private static MarketFacadeImp instance = null;
 
@@ -214,22 +214,18 @@ public class MarketFacadeImp implements MarketFacade{
         store.setOpen(false);
     }
 
+    //Supply Management
+
     @Override
     public boolean addProduct(String username, int productId, String storeName, String productName, String productDescription,
                               double productPrice, int productQuantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
         if(!storeMemoryRepository.isExist(storeName)){
             throw new IllegalArgumentException("Store must exist");
         }
-        if (productPrice < 0)
-            throw new IllegalArgumentException("Price can't be negative number");
-        if (productQuantity <= 0)
-            throw new IllegalArgumentException("Quantity must be natural number");
-        if (rating < 0)
-            throw new IllegalArgumentException("Rating can't be negative number");
         if (!userFacade.getRegistered().containsKey(username)) {
             throw new IllegalArgumentException("User must exist");
         }
-        Registered registered =userFacade.getRegistered().get(username);
+        Registered registered = userFacade.getRegistered().get(username);
         registered.getRoleByStoreId(storeName).addProduct(username, productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
         storeMemoryRepository.getStore(storeName).addProduct(productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
         return true;
@@ -294,8 +290,6 @@ public class MarketFacadeImp implements MarketFacade{
         if(!storeMemoryRepository.getStore(storeName).getProducts().containsKey(productId)) {
             throw new IllegalArgumentException("Product must exist");
         }
-        if (productPrice < 0)
-            throw new IllegalArgumentException("Price can't be negative number");
         if (!userFacade.getRegistered().containsKey(username)) {
             throw new IllegalArgumentException("User must exist");
         }
@@ -313,8 +307,6 @@ public class MarketFacadeImp implements MarketFacade{
         if(!storeMemoryRepository.getStore(storeName).getProducts().containsKey(productId)) {
             throw new IllegalArgumentException("Product must exist");
         }
-        if (productQuantity <= 0)
-            throw new IllegalArgumentException("Quantity must be natural number");
         if (!userFacade.getRegistered().containsKey(username)) {
             throw new IllegalArgumentException("User must exist");
         }
@@ -332,8 +324,6 @@ public class MarketFacadeImp implements MarketFacade{
         if(!storeMemoryRepository.getStore(storeName).getProducts().containsKey(productId)) {
             throw new IllegalArgumentException("Product must exist");
         }
-        if (rating < 0)
-            throw new IllegalArgumentException("Rating can't be negative number");
         if (!userFacade.getRegistered().containsKey(username)) {
             throw new IllegalArgumentException("User must exist");
         }

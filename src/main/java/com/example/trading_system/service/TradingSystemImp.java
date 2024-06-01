@@ -124,274 +124,130 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-/*
-
-    @Override
-    public ResponseEntity<String> addPaymentService(String serviceName) {
-        logger.info("Trying adding external payment service: {}", serviceName);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            externalServices.addPaymentService(serviceName);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed trying adding external payment service: {}", e.getMessage(), serviceName);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-        }
-        logger.info("Finish adding external payment service: {}", serviceName);
-        return new ResponseEntity<>("Success adding external payment service", HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<String> addPaymentProxyService(String serviceName) {
-        logger.info("Trying adding external payment proxy service: {}", serviceName);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            externalServices.addPaymentProxyService(serviceName);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed trying adding external payment proxy service: {}", e.getMessage(), serviceName);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-        }
-        logger.info("Finish adding external payment proxy service: {}", serviceName);
-        return new ResponseEntity<>("Success adding external payment proxy service", HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<String> addDeliveryService(String serviceName) {
-        logger.info("Trying adding external delivery service: {}", serviceName);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            externalServices.addDeliveryService(serviceName);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed trying adding external delivery service: {}", e.getMessage(), serviceName);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-        }
-        logger.info("Finish adding external delivery service: {}", serviceName);
-        return new ResponseEntity<>("Success adding external delivery service", HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<String> addDeliveryProxyService(String serviceName) {
-        logger.info("Trying adding external delivery proxy service: {}", serviceName);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            externalServices.addDeliveryProxyService(serviceName);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed trying adding external delivery proxy service: {}", e.getMessage(), serviceName);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-        }
-        logger.info("Finish adding external delivery proxy service: {}", serviceName);
-        return new ResponseEntity<>("Success adding external delivery proxy service", HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<String> clearServices() {
-        logger.info("Trying removing external delivery proxy service");
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            externalServices.clearServices();
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed trying removing external services", e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-        }
-        logger.info("Finish removing external services");
-        return new ResponseEntity<>("Success removing external services", HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<String> replaceService(String newServiceName, String oldServiceName) {
-        logger.info("Attempting to replace service: {} with new service: {}", oldServiceName, newServiceName);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            externalServices.replaceService(newServiceName, oldServiceName);
-            logger.info("Service replaced successfully: {} with new service: {}", oldServiceName, newServiceName);
-            return new ResponseEntity<>("Service replaced successfully.", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while replacing service: {}: {}", oldServiceName, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public ResponseEntity<String> changeServiceName(String serviceToChangeAt, String newName) {
-        logger.info("Attempting to change service name of service: {} to new name: {}", serviceToChangeAt, newName);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            externalServices.changeServiceName(serviceToChangeAt, newName);
-            logger.info("Service name changed successfully for service: {} to new name: {}", serviceToChangeAt, newName);
-            return new ResponseEntity<>("Service name changed successfully.", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while changing service name of service: {}: {}", serviceToChangeAt, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public ResponseEntity<String> makePayment(String serviceName, double amount) {
-        logger.info("Attempting to make payment to service: {} for amount: {}", serviceName, amount);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            externalServices.makePayment(serviceName, amount);
-            logger.info("Payment made successfully to service: {} for amount: {}", serviceName, amount);
-            return new ResponseEntity<>("Payment made successfully.", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while making payment to service: {}: {}", serviceName, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public ResponseEntity<String> makeDelivery(String serviceName, String address) {
-        logger.info("Attempting to make delivery to address: {} using service: {}", address, serviceName);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            externalServices.makeDelivery(serviceName, address);
-            logger.info("Delivery made successfully to address: {} using service: {}", address, serviceName);
-            return new ResponseEntity<>("Delivery made successfully.", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while making delivery to address: {} using service: {}: {}", address, serviceName, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-*/
 
     public ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
                                              double product_price, int product_quantity, double rating, int category, List<String> keyWords) {
-        logger.info("Attempting to add product: {} to store: {}", product_name, store_name);
+        logger.info("User {} is trying to add products to store : {} with product Id : {} , product name : {}, product description : {} , product price : {} ," +
+                        "product quantity : {} , rating : {} , category : {} , key words : {} ",username, store_name,product_id,product_name,product_description,product_price,
+                product_quantity,rating,category,keyWords);
         try {
             if (!checkSystemOpen()) {
                 return systemClosedResponse();
             }
             marketService.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
-            logger.info("Product added successfully: {} to store: {}", product_name, store_name);
-            return new ResponseEntity<>("Product was added successfully.", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while adding product: {} to store: {}: {}", product_name, store_name, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        logger.info("User {} finished to add products to store : {} with product Id : {} , product name : {}, product description : {} , product price : {} ," +
+                        "product quantity : {} , rating : {} , category : {} , key words : {} ",username, store_name,product_id,product_name,product_description,product_price,
+                product_quantity,rating,category,keyWords);
+        return new ResponseEntity<>("Product was added successfully.", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> removeProduct(String username, String storeName, int productId) {
-        logger.info("Attempting to remove product with id: {} from store: {}", productId, storeName);
+    public ResponseEntity<String> removeProduct(String username, String store_name, int product_id) {
+        logger.info("User {} is trying to remove product with Id : {} to store : {} ",username,product_id, store_name);
         try {
             if (!checkSystemOpen()) {
                 return systemClosedResponse();
             }
-            marketService.removeProduct(username, storeName, productId);
-            logger.info("Product removed successfully with id: {} from store: {}", productId, storeName);
-            return new ResponseEntity<>("Product was removed successfully.", HttpStatus.OK);
+            marketService.removeProduct(username, store_name, product_id);
         } catch (Exception e) {
-            logger.error("Error occurred while removing product with id: {} from store: {}: {}", productId, storeName, e.getMessage());
+            logger.error("Error occurred while removing product with id: {} from store: {}: {}", product_id, store_name, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        logger.info("User {} finished to remove product with Id :{} to store : {} ",username,product_id, store_name);
+        return new ResponseEntity<>("Product was removed successfully.", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> setProductName(String username, String storeName, int productId, String productName) {
-        logger.info("Attempting to set product name for product id: {} in store: {}", productId, storeName);
+    public ResponseEntity<String> setProductName(String username, String store_name, int productId, String product_name) {
+        logger.info("User {} is trying to edit the name : {} to product : {} from store : {}",username,product_name, productId,store_name);
         try {
             if (!checkSystemOpen()) {
                 return systemClosedResponse();
             }
-            marketService.setProductName(username, storeName, productId, productName);
-            logger.info("Product name set successfully for product id: {} in store: {}", productId, storeName);
-            return new ResponseEntity<>("Product name was set successfully.", HttpStatus.OK);
+            marketService.setProductName(username, store_name, productId, product_name);
         } catch (Exception e) {
-            logger.error("Error occurred while setting product name for product id: {} in store: {}: {}", productId, storeName, e.getMessage());
+            logger.error("Error occurred while setting product name for product id: {} in store: {}: {}", productId, store_name, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        logger.info("User {} finished to edit the name : {} to product : {} from store : {}",username,product_name, productId,store_name);
+        return new ResponseEntity<>("Product name was set successfully.", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> setProductDescription(String username, String storeName, int productId, String productDescription) {
-        logger.info("Attempting to set product description for product id: {} in store: {}", productId, storeName);
+    public ResponseEntity<String> setProductDescription(String username, String store_name, int productId, String product_description) {
+        logger.info("User {} is trying to edit the description : {} to product : {} from store : {}",username,product_description, productId,store_name);
         try {
             if (!checkSystemOpen()) {
                 return systemClosedResponse();
             }
-            marketService.setProductDescription(username, storeName, productId, productDescription);
-            logger.info("Product description set successfully for product id: {} in store: {}", productId, storeName);
-            return new ResponseEntity<>("Product description was set successfully.", HttpStatus.OK);
+            marketService.setProductDescription(username, store_name, productId, product_description);
         } catch (Exception e) {
-            logger.error("Error occurred while setting product description for product id: {} in store: {}: {}", productId, storeName, e.getMessage());
+            logger.error("Error occurred while setting product description for product id: {} in store: {}: {}", productId, store_name, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        logger.info("User {} finished to edit the description : {} to product : {} from store : {}",username,product_description, productId,store_name);
+        return new ResponseEntity<>("Product description was set successfully.", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> setProductPrice(String username, String storeName, int productId, int productPrice) {
-        logger.info("Attempting to set product price for product id: {} in store: {}", productId, storeName);
+    public ResponseEntity<String> setProductPrice(String username, String store_name, int productId, int product_price) {
+        logger.info("User {} is trying to edit the price : {} to product : {} from store : {}",username,product_price, productId,store_name);
         try {
             if (!checkSystemOpen()) {
                 return systemClosedResponse();
             }
-            marketService.setProductPrice(username, storeName, productId, productPrice);
-            logger.info("Product price set successfully for product id: {} in store: {}", productId, storeName);
-            return new ResponseEntity<>("Product price was set successfully.", HttpStatus.OK);
+            marketService.setProductPrice(username, store_name, productId, product_price);
         } catch (Exception e) {
-            logger.error("Error occurred while setting product price for product id: {} in store: {}: {}", productId, storeName, e.getMessage());
+            logger.error("Error occurred while setting product price for product id: {} in store: {}: {}", productId, store_name, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        logger.info("User {} finished to edit the price : {} to product : {} from store : {}",username,product_price, productId,store_name);
+        return new ResponseEntity<>("Product price was set successfully.", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> setProductQuantity(String username, String storeName, int productId, int productQuantity) {
-        logger.info("Attempting to set product quantity for product id: {} in store: {}", productId, storeName);
+    public ResponseEntity<String> setProductQuantity(String username, String store_name, int productId, int product_quantity) {
+        logger.info("User {} is trying to edit the quantity : {} to product : {} from store : {}",username,product_quantity, productId,store_name);
         try {
             if (!checkSystemOpen()) {
                 return systemClosedResponse();
             }
-            marketService.setProductQuantity(username, storeName, productId, productQuantity);
-            logger.info("Product quantity set successfully for product id: {} in store: {}", productId, storeName);
-            return new ResponseEntity<>("Product quantity was set successfully.", HttpStatus.OK);
+            marketService.setProductQuantity(username, store_name, productId, product_quantity);
         } catch (Exception e) {
-            logger.error("Error occurred while setting product quantity for product id: {} in store: {}: {}", productId, storeName, e.getMessage());
+            logger.error("Error occurred while setting product quantity for product id: {} in store: {}: {}", productId, store_name, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        logger.info("User {} finished to edit the quantity : {} to product : {} from store : {}",username,product_quantity, productId,store_name);
+        return new ResponseEntity<>("Product quantity was set successfully.", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> setRating(String username, String storeName, int productId, int rating) {
-        logger.info("Attempting to set rating for product id: {} in store: {}", productId, storeName);
+    public ResponseEntity<String> setRating(String username, String store_name, int productId, int rating) {
+        logger.info("User {} is trying to edit the rating : {} to product : {} from store : {}",username,rating, productId,store_name);
         try {
             if (!checkSystemOpen()) {
                 return systemClosedResponse();
             }
-            marketService.setRating(username, storeName, productId, rating);
-            logger.info("Rating set successfully for product id: {} in store: {}", productId, storeName);
-            return new ResponseEntity<>("Rating was set successfully.", HttpStatus.OK);
+            marketService.setRating(username, store_name, productId, rating);
         } catch (Exception e) {
-            logger.error("Error occurred while setting rating for product id: {} in store: {}: {}", productId, storeName, e.getMessage());
+            logger.error("Error occurred while setting rating for product id: {} in store: {}: {}", productId, store_name, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        logger.info("User {} finished to edit the rating : {} to product : {} from store : {}",username,rating, productId,store_name);
+        return new ResponseEntity<>("Rating was set successfully.", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> setCategory(String username, String storeName, int productId, int category) {
-        logger.info("Attempting to set category for product id: {} in store: {}", productId, storeName);
+    public ResponseEntity<String> setCategory(String username, String store_name, int productId, int category) {
+        logger.info("User {} is trying to edit the category : {} to product : {} from store : {}",username,category, productId,store_name);
         try {
             if (!checkSystemOpen()) {
                 return systemClosedResponse();
             }
-            marketService.setCategory(username, storeName, productId, category);
-            logger.info("Category set successfully for product id: {} in store: {}", productId, storeName);
-            return new ResponseEntity<>("Category was set successfully.", HttpStatus.OK);
+            marketService.setCategory(username, store_name, productId, category);
         } catch (Exception e) {
-            logger.error("Error occurred while setting category for product id: {} in store: {}: {}", productId, storeName, e.getMessage());
+            logger.error("Error occurred while setting category for product id: {} in store: {}: {}", productId, store_name, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        logger.info("User {} finished to edit the category : {} to product : {} from store : {}",username,category, productId,store_name);
+        return new ResponseEntity<>("Category was set successfully.", HttpStatus.OK);
     }
 
     public ResponseEntity<String> login(String token, int id, String username, String password) {
