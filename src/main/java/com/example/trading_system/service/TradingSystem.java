@@ -1,9 +1,7 @@
 package com.example.trading_system.service;
 
-import com.example.trading_system.domain.externalservices.Service;
 import com.example.trading_system.domain.stores.Category;
 import com.example.trading_system.domain.stores.StorePolicy;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
@@ -15,16 +13,6 @@ public interface TradingSystem {
     ResponseEntity<String> exit(String token, int id);
     ResponseEntity<String> exit(String token, String username);
     ResponseEntity<String> register(int id, String username, String password, LocalDate birthdate);
-    ResponseEntity<String> addPaymentService(String serviceName);
-    ResponseEntity<String> addPaymentProxyService(String serviceName);
-    ResponseEntity<String> addDeliveryService(String serviceName);
-    ResponseEntity<String> addDeliveryProxyService(String serviceName);
-    ResponseEntity<String> clearServices();
-
-    ResponseEntity<String> replaceService(String newServiceName, String oldServiceName);
-    ResponseEntity<String> changeServiceName(String serviceToChangeAt, String newName);
-    ResponseEntity<String> makePayment(String serviceName, double amount);
-    ResponseEntity<String> makeDelivery(String serviceName, String address);
     ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
                                       double product_price, int product_quantity, double rating, int category, List<String> keyWords);
     ResponseEntity<String> removeProduct(String username, String store_name, int product_id);
