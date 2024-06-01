@@ -1,6 +1,5 @@
 package com.example.trading_system.service;
 
-import com.example.trading_system.domain.externalservices.ServiceFacade;
 import com.example.trading_system.domain.stores.Category;
 import com.example.trading_system.domain.stores.StorePolicy;
 import org.slf4j.Logger;
@@ -14,7 +13,6 @@ public class TradingSystemImp implements TradingSystem {
     private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
     private static TradingSystemImp instance = null;
     public UserService userService;
-    public ExternalServices externalServices;
     public MarketService marketService;
     public PaymentServiceImp paymentService;
     public int counter_user = 0;
@@ -23,7 +21,6 @@ public class TradingSystemImp implements TradingSystem {
     private TradingSystemImp() {
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance();
-        this.externalServices = ExternalServicesImp.getInstance();
         this.marketService = MarketServiceImp.getInstance();
         this.paymentService = PaymentServiceImp.getInstance(); //TODO check if relevant with hierarchy
     }
@@ -43,7 +40,6 @@ public class TradingSystemImp implements TradingSystem {
         logger.info("Attempting to open system");
         try {
             if (userService.isAdminRegistered()) {
-                externalServices = ExternalServicesImp.getInstance();
                 marketService = MarketServiceImp.getInstance();
                 paymentService = PaymentServiceImp.getInstance();
                 systemOpen = true;
@@ -128,6 +124,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+/*
 
     @Override
     public ResponseEntity<String> addPaymentService(String serviceName) {
@@ -274,6 +271,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+*/
 
     public ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
                                              double product_price, int product_quantity, double rating, int category, List<String> keyWords) {

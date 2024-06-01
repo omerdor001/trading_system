@@ -7,8 +7,9 @@ public class DeliveryServiceReal implements DeliveryService{
     }
 
     @Override
-    public void makeDelivery(String address) {
+    public int makeDelivery(String address) {
 
+        return 0;
     }
 
     @Override

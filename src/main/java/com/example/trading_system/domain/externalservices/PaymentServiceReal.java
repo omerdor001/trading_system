@@ -7,8 +7,9 @@ public class PaymentServiceReal implements PaymentService{
     }
 
     @Override
-    public void makePayment(double amount) {
+    public int makePayment(double amount) {
 
+        return 0;
     }
 
     @Override

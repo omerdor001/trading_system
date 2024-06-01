@@ -4,6 +4,7 @@ import com.example.trading_system.domain.users.Registered;
 import com.example.trading_system.domain.users.RoleState;
 import com.example.trading_system.domain.users.UserFacade;
 import com.example.trading_system.domain.users.UserFacadeImp;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.EnumSet;
@@ -508,10 +509,10 @@ public class MarketFacadeImp implements MarketFacade{
 
     }
 
-    @Override
+/*    @Override
     public HashMap<String, Store> getStores() {
         return storeMemoryRepository.getAllStores();
-    }
+    }*/
 
 
 }

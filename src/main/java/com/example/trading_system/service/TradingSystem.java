@@ -20,7 +20,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> register(int id, String username, String password, LocalDate birthdate);
 
-    ResponseEntity<String> addPaymentService(String serviceName);
+/*    ResponseEntity<String> addPaymentService(String serviceName);
 
     ResponseEntity<String> addPaymentProxyService(String serviceName);
 
@@ -36,7 +36,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> makePayment(String serviceName, double amount);
 
-    ResponseEntity<String> makeDelivery(String serviceName, String address);
+    ResponseEntity<String> makeDelivery(String serviceName, String address);*/
 
     ResponseEntity<String> addProduct(String username, int product_id, String store_name, String product_name, String product_description,
                                       double product_price, int product_quantity, double rating, int category, List<String> keyWords);
