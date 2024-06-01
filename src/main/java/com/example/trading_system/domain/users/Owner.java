@@ -1,7 +1,5 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.Category;
-
 import java.util.List;
 
 public class Owner extends RoleState{
@@ -10,7 +8,7 @@ public class Owner extends RoleState{
     }
 
     @Override
-    public void addProduct(String username,  int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, Category category, List<String> keyWords) {}
+    public void addProduct(String username,  int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords) {}
 
     @Override
     public void removeProduct(String username, String store_name_id, int product_id) {}
@@ -31,7 +29,7 @@ public class Owner extends RoleState{
     public void setRating(String username, String store_name_id, int productId, int rating) {}
 
     @Override
-    public void setCategory(String username, String store_name_id, int productId, Category category) {}
+    public void setCategory(String username, String store_name_id, int productId, int category) {}
 
     @Override
     public void getHistoryPurchasesByCustomer(){}

@@ -19,7 +19,7 @@ class OpeningStoreUnitTests {
     @BeforeEach
     void setUp() {
         marketFacade = MarketFacadeImp.getInstance();
-        userFacade = new UserFacadeImp();
+        userFacade = UserFacadeImp.getInstance();
     }
 
     @Test
@@ -56,7 +56,6 @@ class OpeningStoreUnitTests {
 
         assertEquals("Store name is null", exception.getMessage());
     }
-
     @Test
     void testOpenStoreWithExistingStoreName() {
         String username = "user1";

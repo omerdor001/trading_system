@@ -1,7 +1,7 @@
 package com.example.trading_system.users;
 
-import com.example.trading_system.service.Facade;
-import com.example.trading_system.service.Security;
+import com.example.trading_system.service.TradingSystemImp;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -16,14 +16,20 @@ import static org.mockito.ArgumentMatchers.*;
 class LoginAcceptanceTests {
 
     String token1;
-    private Facade facade;
+    private TradingSystemImp facade;
 
     @BeforeEach
-    void setUp() throws Exception {
-        facade = new Facade();
-        token1 = facade.enter();
+    void setUp(){
+        facade = TradingSystemImp.getInstance();
         facade.register(0, "testuser", "password123", LocalDate.now());
         facade.openSystem();
+        ResponseEntity<String> response = facade.enter();
+        token1 = response.getBody();
+    }
+
+    @AfterEach
+    void setDown(){
+        facade.logout(0, "testuser");
     }
 
     @Test
@@ -32,9 +38,8 @@ class LoginAcceptanceTests {
         String username = "testuser";
         String password = "password123";
         ResponseEntity<String> response = facade.login(token1, userId, username, password);
-
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(!response.getBody().isEmpty(), "Token should not be empty");
+        assertTrue(response.getBody() != null && !response.getBody().isEmpty(), "Token should not be empty");
     }
 
     @Test
@@ -54,7 +59,7 @@ class LoginAcceptanceTests {
         String password = "password123";
         ResponseEntity<String> response = facade.login(token1, userId, username, password);
 
-        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
@@ -65,6 +70,6 @@ class LoginAcceptanceTests {
         ResponseEntity<String> response1 = facade.login(token1, userId, username, password);
         ResponseEntity<String> response2 = facade.login(response1.getBody(), userId, username, password);
 
-        assertEquals(HttpStatus.UNAUTHORIZED, response2.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response2.getStatusCode());
     }
 }

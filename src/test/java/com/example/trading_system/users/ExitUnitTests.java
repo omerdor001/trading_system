@@ -14,7 +14,7 @@ class ExitUnitTests {
 
     @BeforeEach
     void setUp() {
-        userFacade = new UserFacadeImp();
+        userFacade = UserFacadeImp.getInstance();
         // Adding sample visitors and registered users
         userFacade.getVisitors().put(1, new Visitor(1));
         userFacade.getVisitors().put(2, new Visitor(2));

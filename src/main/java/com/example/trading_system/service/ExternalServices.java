@@ -3,15 +3,20 @@ package com.example.trading_system.service;
 import com.example.trading_system.domain.externalservices.Service;
 import org.springframework.http.ResponseEntity;
 
+import javax.management.InstanceAlreadyExistsException;
+
 public interface ExternalServices {
-    ResponseEntity<String> addService(String serviceName);
+    void addPaymentService(String serviceName) throws InstanceAlreadyExistsException;
+    void addPaymentProxyService(String serviceName) throws InstanceAlreadyExistsException;
+    void addDeliveryService(String serviceName) throws InstanceAlreadyExistsException;
+    void addDeliveryProxyService(String serviceName) throws InstanceAlreadyExistsException;
 
+    void replaceService(String newService, String oldService);
 
-    ResponseEntity<String> replaceService(String newServiceName, String oldServiceName);
+    void changeServiceName(String serviceToChangeAt,String newName);
+    void clearServices();
 
-    ResponseEntity<String> changeServiceName(String serviceToChangeAtName,String newName);
+    void makePayment(String serviceName,double amount);
 
-    ResponseEntity<String> makePayment(String serviceName,double amount);
-
-    ResponseEntity<String> makeDelivery(String serviceName,String address);
+    void makeDelivery(String serviceName,String address);
 }

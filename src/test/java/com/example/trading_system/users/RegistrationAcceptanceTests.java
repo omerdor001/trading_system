@@ -1,50 +1,50 @@
 package com.example.trading_system.users;
 
-import com.example.trading_system.service.UserService;
+import com.example.trading_system.service.TradingSystem;
+import com.example.trading_system.service.TradingSystemImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class RegistrationAcceptanceTests {
-    private UserService userService;
+    private TradingSystem tradingSystem;
+
 
     @BeforeEach
     void setUp() {
-        userService = mock(UserService.class);
+        tradingSystem = TradingSystemImp.getInstance();
+        // Open the system before each test
+        tradingSystem.openSystem();
     }
 
     @Test
     void registration_Successful() {
-        // Mock registration to return true
         int id = 1;
         String username = "TestUser";
         String password = "TestPassword";
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
-        when(userService.register(id, username, password, birthdate)).thenReturn(true);
 
-        // Perform registration
-        boolean result = userService.register(id, username, password, birthdate);
+        ResponseEntity<String> response = tradingSystem.register(id, username, password, birthdate);
 
-        // Verify registration is successful
-        assertTrue(result);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("User registered successfully.", response.getBody());
     }
 
     @Test
     void registration_Failure() {
-        // Mock registration to return false
         int id = 2;
         String username = "ExistingUser";
         String password = "ExistingPassword";
         LocalDate birthdate = LocalDate.of(1995, 10, 20);
-        when(userService.register(id, username, password, birthdate)).thenReturn(false);
 
-        // Perform registration
-        boolean result = userService.register(id, username, password, birthdate);
+        tradingSystem.register(id, username, password, birthdate);
+        ResponseEntity<String> response = tradingSystem.register(id, username, password, birthdate);
 
-        // Verify registration fails
-        assertFalse(result);
+        assertEquals(400, response.getStatusCodeValue());
+        assertEquals("username already exists - ExistingUser", response.getBody());
     }
 }

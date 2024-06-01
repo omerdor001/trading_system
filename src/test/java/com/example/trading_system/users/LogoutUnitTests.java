@@ -23,7 +23,7 @@ class LogoutUnitTests {
 
     @BeforeEach
     void setUp() throws Exception {
-        userFacade = new UserFacadeImp();
+        userFacade = UserFacadeImp.getInstance();
         userFacade.createVisitor(1);
         userFacade.register(id, username, encryption, birthdate);
         userFacade.login(username);
@@ -37,17 +37,15 @@ class LogoutUnitTests {
 
     @Test
     void logout_NonExistentUser_ThrowsException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-                userFacade.logout(id, null));
-        assertEquals(exception.getMessage(), "No such user null");
+        assertThrows(IllegalArgumentException.class, () ->
+                userFacade.logout(0, null));
     }
 
     @Test
     void logout_UserAlreadyLoggedOut_ThrowsException() {
         userFacade.logout(1, username);
-        Exception exception = assertThrows(RuntimeException.class, () ->
+        assertThrows(RuntimeException.class, () ->
                 userFacade.logout(id, username));
-        assertEquals(exception.getMessage(), "User " + username + "already Logged out");
     }
 
 

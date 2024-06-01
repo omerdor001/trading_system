@@ -7,16 +7,47 @@ import java.util.NoSuchElementException;
 
 public class ServiceFacadeImp implements ServiceFacade {
     private List<Service> services;
-    public ServiceFacadeImp(){
+    private ServiceFacadeImp(){
         services=new ArrayList<>();
     }
 
+    private  static class Singleton  {
+        private static final ServiceFacadeImp INSTANCE = new ServiceFacadeImp();
+    }
+    public static ServiceFacadeImp getInstance() {
+        return ServiceFacadeImp.Singleton.INSTANCE;
+    }
+
     @Override
-    public void addService(String serviceName) throws InstanceAlreadyExistsException {
+    public void addPaymentProxyService(String serviceName) throws InstanceAlreadyExistsException {
         if (findServiceByName(serviceName)){
             throw new InstanceAlreadyExistsException("This service already exist");
         }
-        services.add(new Service(serviceName));
+        services.add(new PaymentServiceProxy(serviceName));
+    }
+
+    @Override
+    public void addDeliveryService(String serviceName) throws InstanceAlreadyExistsException {
+        if (findServiceByName(serviceName)){
+            throw new InstanceAlreadyExistsException("This service already exist");
+        }
+        services.add(new DeliveryService(serviceName));
+    }
+
+    @Override
+    public void addDeliveryProxyService(String serviceName) throws InstanceAlreadyExistsException {
+        if (findServiceByName(serviceName)){
+            throw new InstanceAlreadyExistsException("This service already exist");
+        }
+        services.add(new DeliveryServiceProxy(serviceName));
+    }
+
+    @Override
+    public void addPaymentService(String serviceName) throws InstanceAlreadyExistsException {
+        if (findServiceByName(serviceName)){
+            throw new InstanceAlreadyExistsException("This service already exist");
+        }
+       services.add(new PaymentService(serviceName));
     }
 
     @Override
@@ -28,7 +59,7 @@ public class ServiceFacadeImp implements ServiceFacade {
             throw new IllegalArgumentException("Service is exist (no need to replace)");
         }
         services.remove(getServiceByName(oldServiceName));
-        services.add(getServiceByName(newServiceName));
+        //services.add(getServiceByName(newServiceName));
     }
 
     @Override
@@ -39,7 +70,7 @@ public class ServiceFacadeImp implements ServiceFacade {
         getServiceByName(serviceToChangeAtName).setServiceName(newName);
     }
 
-    private boolean findServiceByName(String serviceName){
+    public boolean findServiceByName(String serviceName){
         for (Service service:services){
             if (service.getServiceName().equals(serviceName))
                 return true;
@@ -47,12 +78,12 @@ public class ServiceFacadeImp implements ServiceFacade {
         return false;
     }
 
-    private Service getServiceByName(String serviceName){
+    public Service getServiceByName(String serviceName){
         for (Service service:services){
             if (service.getServiceName().equals(serviceName))
                 return service;
         }
-        return null;
+        throw new NoSuchElementException("No service exist");
     }
 
     @Override
@@ -60,8 +91,8 @@ public class ServiceFacadeImp implements ServiceFacade {
         if (!findServiceByName(serviceName)){
             throw new NoSuchElementException("Service is not exist");
         }
-        PaymentServiceProxy paymentService = new PaymentServiceProxy(serviceName);
-        paymentService.processPayment(amount);
+        Service paymentService = new PaymentServiceProxy(serviceName);
+        paymentService.makePayment(serviceName,amount);
     }
 
     @Override
@@ -69,7 +100,13 @@ public class ServiceFacadeImp implements ServiceFacade {
         if (!findServiceByName(serviceName)){
             throw new NoSuchElementException("Service is not exist");
         }
-        DeliveryServiceProxy deliveryServiceProxy = new DeliveryServiceProxy(serviceName);
-        deliveryServiceProxy.processDelivery(address);
+        Service deliveryService = new DeliveryServiceProxy(serviceName);
+        deliveryService.makeDelivery(serviceName,address);
     }
+
+    @Override
+    public void clearServices() {
+        services.clear();
+    }
+
 }

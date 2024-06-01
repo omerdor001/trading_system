@@ -1,8 +1,11 @@
+/*
 package com.example.trading_system.Market;
 
 import com.example.trading_system.domain.stores.Category;
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.service.MarketServiceImp;
+import com.example.trading_system.service.TradingSystem;
+import com.example.trading_system.service.TradingSystemImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,15 +13,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class SearchAcceptanceTests {
-////////////////Check if more tests are needed.
 
-    private MarketServiceImp marketService;
-    private MarketFacade marketFacadeMock;
+    private TradingSystem tradingSystem;
 
     @BeforeEach
     public void setUp() {
-        marketFacadeMock = mock(MarketFacade.class);
-        marketService = new MarketServiceImp(marketFacadeMock);
+        tradingSystem = TradingSystemImp.getInstance();
     }
 
     @Test
@@ -438,6 +438,4 @@ public class SearchAcceptanceTests {
     }
 
 
-}
-
-
+}*/

@@ -1,60 +1,50 @@
 package com.example.trading_system.users;
-import com.example.trading_system.service.UserService;
+
+import com.example.trading_system.service.TradingSystemImp;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-public class LogoutAcceptanceTests {
+import java.time.LocalDate;
 
-    private UserService userService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class LogoutAcceptanceTests {
+
+    String token1;
+    private TradingSystemImp facade;
 
     @BeforeEach
-    void setUp() {
-        userService = mock(UserService.class);
+    void setUp(){
+        facade = TradingSystemImp.getInstance();
+        facade.register(0, "testuser", "password123", LocalDate.now());
+        facade.openSystem();
+        ResponseEntity<String> response = facade.enter();
+        token1 = response.getBody();
+        facade.login(token1, 0, "testuser", "password123");
     }
 
-    // Existing test for failed logout
-    @Test
-    void logout_Failed_Descriptive() {
-        int userId = 0;
-        String username = "testuser";
-        boolean result = userService.logout(userId, username);
-        assertFalse(result);
+    @AfterEach
+    void setDown(){
+        facade.logout(0, "testuser");
     }
 
-    // Test successful logout
     @Test
     void logout_Success() {
-        int userId = 1;
-        String username = "validuser";
-        when(userService.logout(userId, username)).thenReturn(true);
-        assertTrue(userService.logout(userId, username));
+        int userId = 0;
+        String username = "testuser";
+        ResponseEntity<String> response = facade.logout(userId, username);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Logout successful.", response.getBody(), "Logout message should be 'Logout successful.'");
     }
 
-    // Test logout with null username
     @Test
-    void logout_NullUsername() {
-        int userId = 1;
-        assertFalse( userService.logout(userId, null));
-    }
-
-    // Test logout with non-existing user
-    @Test
-    void logout_NonExistingUser() {
-        int userId = 1;
-        String username = "nonexisting";
-        when(userService.logout(userId, username)).thenReturn(false);
-        assertFalse(userService.logout(userId, username));
-    }
-
-    // Test logout when user already logged out
-    @Test
-    void logout_AlreadyLoggedOut() {
-        int userId = 1;
-        String username = "alreadyLoggedOutUser";
-        when(userService.logout(userId, username)).thenThrow(new RuntimeException("User already logged out"));
-        Exception exception = assertThrows(RuntimeException.class, () -> userService.logout(userId, username));
-        assertEquals("User already logged out", exception.getMessage());
+    void logout_User_Not_Logged_In() {
+        int userId = 0;
+        String username = "nonexistentuser";
+        ResponseEntity<String> response = facade.logout(userId, username);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode(), "Expected an internal server error for a non-logged-in user.");
     }
 }

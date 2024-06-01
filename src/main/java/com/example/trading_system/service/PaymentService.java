@@ -1,12 +1,18 @@
-package com.example.trading_system.domain.users;
+package com.example.trading_system.service;
 
-public interface PaymentFacade {
+public interface PaymentService {
     boolean VisitorCheckAvailabilityAndConditions(int visitorId);
 
     boolean registeredCheckAvailabilityAndConditions(String registeredId);
+
     void VisitorApprovePurchase(int visitorId, String paymentService);
 
     void RegisteredApprovePurchase(String registeredId, String paymentService);
 
-    double calculateTotalPrice(Cart cart);
+    String getPurchaseHistory(String username, String storeName, Integer id, Integer productBarcode);
+
+    String getStoresPurchaseHistory(String username, String storeName, Integer id, Integer productBarcode);
+
+
 }
+
