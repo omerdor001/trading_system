@@ -169,4 +169,35 @@ public class Store {
     public String getNameId() {
         return nameId;
     }
+
+    public HashMap<Integer,Product> getProducts(){     //Added because missing
+        return products;
+    }
+
+    public void setActive(Boolean active){             //Added because missing
+        this.isActive=active;
+    }
+
+    public Boolean isActive(){                      //Added because missing
+        return isActive;
+    }
+
+    public Boolean setOpen(Boolean open){            //Added because missing
+        return isOpen;
+    }
+
+    public List<String> getOwners(){                //Added because missing
+        return owners;
+    }
+
+    public List<String> getManagers(){                //Added because missing
+        return managers;
+    }
+
+
+
+
+
+
+
 }

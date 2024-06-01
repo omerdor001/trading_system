@@ -15,16 +15,24 @@ public class PaymentFacadeImp implements PaymentFacade {
     private MarketFacade marketFacade;
     private UserFacade userFacade;
     private List<Purchase> purchases;
+    PaymentService paymentService;
+    DeliveryService deliveryService;
 
-    public PaymentFacadeImp() {
-        this.purchases = new ArrayList<>();
+    public PaymentFacadeImp(PaymentService paymentService,DeliveryService deliveryService) {
+        purchases = new ArrayList<>();
+        this.paymentService=paymentService;
+        this.deliveryService=deliveryService;
         this.marketFacade = MarketFacadeImp.getInstance();
         this.userFacade = UserFacadeImp.getInstance();
     }
 
+    private static class Singleton {
+        private static final PaymentFacadeImp INSTANCE = null; //Will be deleted
+    }
+
     public static PaymentFacadeImp getInstance() {
         if (instance == null)
-            instance = new PaymentFacadeImp();
+            instance = PaymentFacadeImp.Singleton.INSTANCE;
         return instance;
     }
 
@@ -83,7 +91,9 @@ public class PaymentFacadeImp implements PaymentFacade {
         return true;
     }
 
-    public synchronized void VisitorApprovePurchase(int visitorId, String paymentService) {
+
+    //Need to add address for delivery
+    public synchronized void VisitorApprovePurchase(int visitorId, String payment_Service) {
         if (!VisitorCheckAvailabilityAndConditions(visitorId)) {
             logger.error("Products are not available or do not meet purchase conditions.");
             throw new RuntimeException("Products are not available or do not meet purchase conditions.");
@@ -119,20 +129,25 @@ public class PaymentFacadeImp implements PaymentFacade {
 
             }
         }, 10 * 60 * 1000);
-
-        PaymentServiceProxy paymentServiceProxy = new PaymentServiceProxy(paymentService);
+        //Making delivery
+        int deliveryId=0;  //For cancelling
+        String address = ""; //TODO : Need to be a parameter of this function
+        try {
+            deliveryId=deliveryService.makeDelivery(address);
+        }
+        catch (Exception e){
+            //Release the products and message for another try
+        }
+        //Making payment
+        int paymentId=0;   //For cancelling
         double totalPrice = calculateTotalPrice(cart);
-        //TODO: fix process Payment
-
-//        boolean paymentSuccess = paymentServiceProxy.processPayment(totalPrice);
-
-//        if (paymentSuccess) {
-//            logger.info("Purchase successful. Inventory updated.");
-//        } else {
-//            logger.error("Payment failed. Please try again.");
-//            VisitorReleaseReservedProducts(visitor);
-//            throw new RuntimeException("Payment failed. Please try again.");
-//        }
+        try {
+            paymentId=paymentService.makePayment(totalPrice);
+        }
+        catch (Exception e){
+            deliveryService.cancelDelivery(deliveryId);
+            //Release the products and message for another try
+        }
         addPurchaseVisitor(visitorId);
         timer.cancel();
         timer.purge();
@@ -156,7 +171,7 @@ public class PaymentFacadeImp implements PaymentFacade {
         }
     }
 
-    public synchronized void RegisteredApprovePurchase(String registeredId, String paymentService) {
+    public synchronized void RegisteredApprovePurchase(String registeredId, String payment_Service) {
         if (!registeredCheckAvailabilityAndConditions(registeredId)) {
             logger.error("Products are not available or do not meet purchase conditions.");
             throw new RuntimeException("Products are not available or do not meet purchase conditions.");
@@ -192,18 +207,27 @@ public class PaymentFacadeImp implements PaymentFacade {
             }
         }, 10 * 60 * 1000);
 
-        PaymentServiceProxy paymentServiceProxy = new PaymentServiceProxy(paymentService);
+        PaymentServiceProxy paymentServiceProxy = new PaymentServiceProxy(payment_Service);   //Need to delete
         double totalPrice = calculateTotalPrice(cart);
         //TODO: fix process Payment
-//        boolean paymentSuccess = paymentServiceProxy.processPayment(totalPrice);
-
-/*        if (paymentSuccess) {
-            logger.info("Purchase successful. Inventory updated.");
-        } else {
-            logger.error("Payment failed. Please try again.");
-            registeredCheckAvailabilityAndConditions(registeredId);
-            throw new RuntimeException("Payment failed. Please try again.");
-        }*/
+        //Making delivery
+        int deliveryId=0;  //For cancelling
+        String address = ""; //TODO : Need to be a parameter of this function
+        try {
+            deliveryId=deliveryService.makeDelivery(address);
+        }
+        catch (Exception e){
+            //Release the products and message for another try
+        }
+        //Making payment
+        int paymentId=0;   //For cancelling
+        try {
+            paymentId=paymentService.makePayment(totalPrice);
+        }
+        catch (Exception e){
+            deliveryService.cancelDelivery(deliveryId);
+            //Release the products and message for another try
+        }
         addPurchaseRegistered(registeredId);
         timer.cancel();
         timer.purge();
