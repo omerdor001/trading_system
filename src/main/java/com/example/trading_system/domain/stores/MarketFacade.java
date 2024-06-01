@@ -71,5 +71,6 @@ public interface MarketFacade {
 
     HashMap<String, Store> getStores();
 
-    void addStore(Store store);
+    void addStore(Store store);    //Delete
+    void addStore(String storeName, String description, StorePolicy storePolicy, String founder);
 }

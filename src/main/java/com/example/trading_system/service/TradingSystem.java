@@ -24,6 +24,7 @@ public interface TradingSystem {
     ResponseEntity<String> register(int id, String username, String password, LocalDate birthdate);
 
     //TODO check if user is admin is external service functions?
+/*
     ResponseEntity<String> addPaymentService(String username, String token, String serviceName);
 
     ResponseEntity<String> addPaymentProxyService(String username, String token, String serviceName);
@@ -41,6 +42,7 @@ public interface TradingSystem {
     ResponseEntity<String> makePayment(String username, String token, String serviceName, double amount);
 
     ResponseEntity<String> makeDelivery(String username, String token, String serviceName, String address);
+*/
 
     ResponseEntity<String> addProduct(String username, String token, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords);
 
