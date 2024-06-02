@@ -23,7 +23,6 @@ class RegistrationUnitTests {
 
     @AfterEach
     void reset() {
-        // Adding a sample visitor
         userFacade.getVisitors().clear();
         userFacade.getRegistered().clear();
     }

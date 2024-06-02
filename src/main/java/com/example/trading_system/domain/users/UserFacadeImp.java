@@ -51,26 +51,15 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void createVisitor(int id) {
-        Visitor visitor = new Visitor(id);
-        visitors.put(id, visitor);
-    }
-
-    @Override
-    public void exit() {
-
-    }
-
-    @Override
     public void enter(int id) {
-        Visitor visitor = new Visitor(id);
-        visitors.put(id, visitor);
+        Visitor visitor = new Visitor(id);    //Responsibility of Repo
+        visitors.put(id, visitor);     //Responsibility of Repo
     }
 
     @Override
     public void exit(int id) throws Exception {
-        if (visitors.containsKey(id)) {
-            visitors.remove(id);
+        if (visitors.containsKey(id)) {     //Responsibility of Repo
+            visitors.remove(id);     //Responsibility of Repo
         } else {
             throw new Exception("No such visitor with id- " + id);
         }
@@ -78,8 +67,8 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void exit(String username) throws Exception {
-        if (registered.containsKey(username)) {
-            registered.remove(username);
+        if (registered.containsKey(username)) {     //Responsibility of Repo
+            registered.remove(username);     //Responsibility of Repo
         } else {
             throw new Exception("No such user with username- " + username);
         }
@@ -90,9 +79,9 @@ public class UserFacadeImp implements UserFacade {
         registerChecks(username, password, birthdate);
         String encrypted_pass = encrypt(password);
         Registered newUser = new Registered(id, username, encrypted_pass, birthdate);
-        if (registered.isEmpty())
+        if (registered.isEmpty())       //Responsibility of Repo
             newUser.setAdmin(true);
-        registered.put(username, newUser);
+        registered.put(username, newUser);   //Responsibility of Repo
     }
 
     private void registerChecks(String username, String password, LocalDate birthdate) throws Exception {

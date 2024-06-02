@@ -9,13 +9,9 @@ import java.util.NoSuchElementException;
 public interface UserFacade {
     void deleteInstance();
 
-    void createVisitor(int id);
-
     HashMap<Integer, Visitor> getVisitors();
 
     HashMap<String, Registered> getRegistered();
-
-    void exit();
 
     void enter(int id);
 

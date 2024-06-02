@@ -1,11 +1,8 @@
 package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.users.UserFacadeImp;
-import com.example.trading_system.domain.users.Visitor;
-import com.example.trading_system.domain.users.Registered;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 public class EnterUnitTests {

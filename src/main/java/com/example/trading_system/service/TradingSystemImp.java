@@ -111,6 +111,7 @@ public class TradingSystemImp implements TradingSystem{
                 logger.warn("System is not open, entry forbidden");
                 return new ResponseEntity<>("", HttpStatus.FORBIDDEN);
             }
+            logger.info("Trying enter to system as a visitor , with id : {}", counter_user);
             String username = userService.enter(counter_user);
             String token = Security.generateToken(username);
             counter_user++;
@@ -131,6 +132,7 @@ public class TradingSystemImp implements TradingSystem{
             if (!checkSystemOpen()) {
                 return systemClosedResponse();
             }
+            logger.info("Trying exit to system as a visitor , with id : {}", id);
             userService.exit(id);
             Security.makeTokenExpire(token);
             logger.info("User exited successfully with id: {}", id);
@@ -150,6 +152,7 @@ public class TradingSystemImp implements TradingSystem{
             if(!checkToken(username,token))
                 return invalidTokenResponse();
             username = username.substring(1);
+            logger.info("Trying exit to system as a user , with username: {}", username);
             userService.exit(username);
             Security.makeTokenExpire(token);
             logger.info("User exited successfully: {}", username);
@@ -162,13 +165,13 @@ public class TradingSystemImp implements TradingSystem{
 
     @Override
     public ResponseEntity<String> register(int id, String username, String password, LocalDate birthdate) {
-        logger.info("Attempting to register user: {}", username);
+        logger.info("Attempting to register user: {} with password : {} and birthdate : {} ", username,password,birthdate);
         try {
             userService.register(id, username, password, birthdate);
-            logger.info("User registered successfully: {}", username);
+            logger.info("User registered successfully : {} with password : {} and birthdate : {}", username,password,birthdate);
             return new ResponseEntity<>("User registered successfully.", HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred while registering user: {}: {}", username, e.getMessage());
+            logger.error("Error occurred while registering user : {} with password : {} and birthdate : {} : {}", username,password,birthdate, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
