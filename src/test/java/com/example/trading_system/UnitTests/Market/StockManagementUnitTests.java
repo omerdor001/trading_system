@@ -27,9 +27,9 @@ class StockManagementUnitTests {
             userFacade.register(0,"testuser0","1pA22w0rd", LocalDate.now());
             userFacade.register(1,"testuser1","pA22w0rd1", LocalDate.now());
             userFacade.register(2,"testuser2","pA22w0rd2", LocalDate.now());
-            userFacade.login("testuser0");
-            userFacade.login("testuser1");
-            userFacade.login("testuser2");
+            userFacade.login(0,"testuser0","1pA22w0rd");
+            userFacade.login(1,"testuser1","pA22w0rd1");
+            userFacade.login(2,"testuser2","pA22w0rd2");
             userFacade.openStore("testuser0","Adidas","sport shop",mock(StorePolicy.class));
             userFacade.openStore("testuser0","Nike","sport shop",mock(StorePolicy.class));
             userFacade.appointOwner("testuser0","testuser1","Adidas");

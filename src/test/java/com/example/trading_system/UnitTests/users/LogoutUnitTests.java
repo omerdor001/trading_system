@@ -26,7 +26,7 @@ class LogoutUnitTests {
         userFacade = UserFacadeImp.getInstance();
         userFacade.createVisitor(1);
         userFacade.register(id, username, encryption, birthdate);
-        userFacade.login(username);
+        userFacade.login(1,username,encryption);
     }
 
     @Test
