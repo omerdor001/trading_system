@@ -32,24 +32,18 @@ public class UserServiceImp implements UserService {
 
     @Override
     public String enter(int id) {
-        logger.info("Trying enter to system as a visitor , with id : {}", id);
-        userFacade.createVisitor(id);
-        logger.info("Finish enter to system as a visitor , with id : {}", id);
+        userFacade.enter(id);
         return "v" + id;
     }
 
     @Override
     public void exit(int id) throws Exception {
-        logger.info("Trying exit to system as a visitor , with id : {}", id);
         userFacade.exit(id);
-        logger.info("Finish exit to system as a visitor , with id : {}", id);
     }
 
     @Override
     public void exit(String username) throws Exception {
-        logger.info("Trying exit to system as a user , with username: {}", username);
         userFacade.exit(username);
-        logger.info("Finish exit to system as a user , with username : {}", username);
     }
 
     @Override
@@ -76,9 +70,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public boolean register(int id, String username, String password, LocalDate birthdate) throws Exception {
-        logger.info("Trying registering a new user: {}", username);
         userFacade.register(id, username, password, birthdate);
-        logger.info("Finished registering user: {}", username);
         return true;
     }
 
