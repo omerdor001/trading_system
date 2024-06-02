@@ -5,6 +5,7 @@ import com.example.trading_system.service.Security;
 import com.example.trading_system.service.UserServiceImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -87,7 +88,7 @@ public class UserFacadeImp implements UserFacade {
     @Override
     public void register(int id, String username, String password, LocalDate birthdate) throws Exception {
         registerChecks(username, password, birthdate);
-        String encrypted_pass = Security.encrypt(password);
+        String encrypted_pass = encrypt(password);
         Registered newUser = new Registered(id, username, encrypted_pass, birthdate);
         if (registered.isEmpty())
             newUser.setAdmin(true);
@@ -104,13 +105,19 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void login(String username) {
+    public void login(int id, String username, String password) {
         User u = registered.get(username);
         if (u == null)
             throw new RuntimeException("No such user " + username);
         if (u.getLogged())
             throw new RuntimeException("User " + username + " already logged in");
-        u.login();
+        if (checkPassword(password, u.getPass())) {
+            removeVisitor(id);
+            u.login();
+        } else {
+            logger.error("Wrong password, Failed login user: {}", username);
+            throw new RuntimeException("Wrong password");
+        }
     }
 
     public void logout(int id, String username) {
@@ -530,6 +537,18 @@ public class UserFacadeImp implements UserFacade {
                 return r.isAdmin();
             }
         return false;
+    }
+
+    // Method to encrypt a given password
+    private static String encrypt(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
+    }
+
+    // Method to check if a password matches its hashed version
+    private static boolean checkPassword(String password, String hashedPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.matches(password, hashedPassword);
     }
 }
 

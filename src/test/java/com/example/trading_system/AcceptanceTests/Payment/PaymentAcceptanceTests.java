@@ -6,11 +6,11 @@ import com.example.trading_system.domain.users.*;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.example.trading_system.service.UserServiceImp;
-import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.util.LinkedList;
 
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class PaymentAcceptanceTests {
-    private TradingSystem facade;
+    private TradingSystem tradingSystem;
     private PaymentFacade paymentFacade;
     private MarketFacadeImp marketFacade;
     private UserFacadeImp userFacade;
@@ -29,44 +29,44 @@ public class PaymentAcceptanceTests {
 
     @BeforeEach
     void setUp() {
-        facade = TradingSystemImp.getInstance();
-        facade.register(0,"owner1", "password123",LocalDate.now());
-        facade.openSystem();
-        String userToken = facade.enter().getBody();
+        tradingSystem = TradingSystemImp.getInstance();
+        tradingSystem.register(0,"owner1", "password123",LocalDate.now());
+        tradingSystem.openSystem();
+        String userToken = tradingSystem.enter().getBody();
         try {
-            JSONObject jsonObject = new JSONObject(userToken);
-            token = jsonObject.getString("token");
-        }
-        catch (Exception e){
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
             fail("Setup failed: Unable to extract token from JSON response");
         }
-        userToken = facade.login(token, 0, "owner1", "password123").getBody();
+        userToken = tradingSystem.login(token, 0, "owner1", "password123").getBody();
         try {
-            JSONObject jsonObject = new JSONObject(userToken);
-            username = jsonObject.getString("username");
-            token = jsonObject.getString("token");
-        }
-        catch (Exception e){
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            username = rootNode.get("username").asText();
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        facade.openStore(username,token, "store1", "", new StorePolicy());
-        facade.addProduct(username,token, 0,"store1","product1", "", 1, 5, 1, 1, new LinkedList<>());
+        tradingSystem.openStore(username,token, "store1", "", new StorePolicy());
+        tradingSystem.addProduct(username,token, 0,"store1","product1", "", 1, 5, 1, 1, new LinkedList<>());
         paymentFacade = PaymentFacadeImp.getInstance();
         marketFacade = MarketFacadeImp.getInstance();
         userFacade = UserFacadeImp.getInstance();
         userService = mock(UserServiceImp.class);
         paymentServiceProxy = mock(PaymentServiceProxy.class);
-        facade.enter();
+        tradingSystem.enter();
     }
 
     @AfterEach
     void setDown(){
-        facade.deleteInstance();
+        tradingSystem.deleteInstance();
     }
 
     @Test
     void testVisitorCheckAvailabilityAndConditions_Success() {
-        facade.visitorAddToCart(username, token,1, 0,"store1",1);
+        tradingSystem.visitorAddToCart(username, token,1, 0,"store1",1);
         assertTrue(paymentFacade.VisitorCheckAvailabilityAndConditions(1));
     }
 

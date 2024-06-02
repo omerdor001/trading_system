@@ -1,7 +1,10 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.example.trading_system.domain.users.*;
+import com.example.trading_system.service.TradingSystem;
+import com.example.trading_system.service.TradingSystemImp;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,15 +12,36 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class NotificationAcceptanceTests {
-    private UserFacade userFacade;
+    private TradingSystem tradingSystem;
+    private String token;
+    private String username;
 
     @BeforeEach
     public void setUp() {
-        userFacade = mock(UserFacade.class);
+        tradingSystem = TradingSystemImp.getInstance();
+        tradingSystem.register(0, "owner1", "password123", LocalDate.now());
+        tradingSystem.openSystem();
+        String userToken = tradingSystem.enter().getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract token from JSON response");
+        }
+        userToken = tradingSystem.login(token, 0, "owner1", "password123").getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            username = rootNode.get("username").asText();
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract username and token from JSON response");
+        }
     }
 
     @Test
@@ -29,17 +53,17 @@ class NotificationAcceptanceTests {
         // Create the date string in the expected format
         String dateStr = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new Date());
 
-
-        // Mock userFacade to trigger receiver.receiveNotification
-        doAnswer(invocation -> {
-            String notifStr = invocation.getArgument(2, String.class);
-            String sentNotification = sender.sendNotification(receiver.getId(), notifStr);
-            receiver.receiveNotification(sentNotification);
-            return null;
-        }).when(userFacade).sendNotification(sender, receiver, "Test Content");
-
-        // Trigger the userFacade to send the notification
-        userFacade.sendNotification(sender, receiver, "Test Content");
+        //TODO change from mock to actual notifications
+//        // Mock userFacade to trigger receiver.receiveNotification
+//        doAnswer(invocation -> {
+//            String notifStr = invocation.getArgument(2, String.class);
+//            String sentNotification = sender.sendNotification(receiver.getId(), notifStr);
+//            receiver.receiveNotification(sentNotification);
+//            return null;
+//        }).when(userFacade).sendNotification(sender, receiver, "Test Content");
+//
+//        // Trigger the userFacade to send the notification
+//        userFacade.sendNotification(sender, receiver, "Test Content");
 
         // Verify the receiver's notifications
         assertEquals(1, receiver.getNotifications().size());

@@ -2,6 +2,8 @@ package com.example.trading_system.AcceptanceTests.Users;
 
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,11 +14,13 @@ import org.springframework.test.context.event.annotation.BeforeTestClass;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class EnterAcceptanceTests {
 
     private static TradingSystem tradingSystem;
-    private String adminToken;
+    private String token;
+    private String username;
 
     @BeforeAll
     public static void setup() {
@@ -25,10 +29,26 @@ public class EnterAcceptanceTests {
 
     @BeforeEach
     public void openSystemAndRegisterAdmin() {
-        tradingSystem.register(1, "admin", "adminPass", LocalDate.of(1990, 1, 1));
+        tradingSystem = TradingSystemImp.getInstance();
+        tradingSystem.register(0, "owner1", "password123", LocalDate.now());
         tradingSystem.openSystem();
-        ResponseEntity<String> response = tradingSystem.enter();
-        adminToken = response.getBody();
+        String userToken = tradingSystem.enter().getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract token from JSON response");
+        }
+        userToken = tradingSystem.login(token, 0, "owner1", "password123").getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            username = rootNode.get("username").asText();
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract username and token from JSON response");
+        }
     }
 
     @Test

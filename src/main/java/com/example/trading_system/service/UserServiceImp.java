@@ -51,23 +51,18 @@ public class UserServiceImp implements UserService {
         userFacade.exit(username);
         logger.info("Finish exit to system as a user , with username : {}", username);
     }
+
     @Override
-    public boolean isAdmin(String username){
+    public boolean isAdmin(String username) {
         return userFacade.isAdmin(username);
     }
+
     @Override
     public boolean login(int id, String username, String password) {
         logger.info("Trying to login user: {}", username);
-        String encrypted_pass = userFacade.getUserPassword(username);
-        if (Security.checkPassword(password, encrypted_pass)) {
-            userFacade.login(username);
-            userFacade.removeVisitor(id);
-            logger.info("User: {} logged in", username);
-            return true;
-        } else {
-            logger.error("Wrong password, Failed login user: {}", username);
-            return false;
-        }
+        userFacade.login(id, username, password);
+        logger.info("User: {} logged in", username);
+        return true;
     }
 
     @Override
