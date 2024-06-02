@@ -41,11 +41,11 @@ public interface MarketService {
 
     void setProductDescription(String username, String store_name_id, int productId, String product_description) throws IllegalAccessException;
 
-    void setProductPrice(String username, String store_name_id, int productId, int product_price) throws IllegalAccessException;
+    void setProductPrice(String username, String store_name_id, int productId, double product_price) throws IllegalAccessException;
 
     void setProductQuantity(String username, String store_name_id, int productId, int product_quantity) throws IllegalAccessException;
 
-    void setRating(String username, String store_name_id, int productId, int rating) throws IllegalAccessException;
+    void setRating(String username, String store_name_id, int productId, double rating) throws IllegalAccessException;
 
     void setCategory(String username, String store_name_id, int productId, int category) throws IllegalAccessException;
 

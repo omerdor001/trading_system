@@ -23,7 +23,7 @@ class OpeningStoreUnitTests {
     }
 
     @Test
-    void testOpenStoreWithValidInputs() {
+    void testOpenStoreWithValidInputs() throws IllegalAccessException {
         String username = "user1";
         String storeName = "store1";
         String description = "A nice store";

@@ -29,6 +29,7 @@ public class Registered extends User {
         this.isAdmin = false;
         this.isLogged = false;
         this.notifications = new LinkedList<>();
+        this.roles=new ArrayList<>();
     }
 
     public void performBuying(Cart shopping_cart) {
@@ -119,7 +120,7 @@ public class Registered extends User {
 
     public Role getRoleByStoreId(String store_name_id) {
         if (roles.isEmpty()) {
-            throw new NoSuchElementException("User doesn't have permission to this store");
+            throw new NoSuchElementException("User doesn't have roles");
         }
         for (Role role : roles) {
             if (role.getStoreId().equals(store_name_id))
@@ -137,7 +138,10 @@ public class Registered extends User {
     }
 
     public boolean isOwner(String store_name_id) {
-        if (getRoleByStoreId(store_name_id).getRoleState().isOwner()) {
+        if(roles.isEmpty()){
+            return false;
+        }
+        else if (getRoleByStoreId(store_name_id).getRoleState().isOwner()) {
             return true;
         } else {
             return false;
@@ -145,7 +149,10 @@ public class Registered extends User {
     }
 
     public boolean isManager(String store_name_id) {
-        if (getRoleByStoreId(store_name_id).getRoleState().isManager()) {
+        if(roles.isEmpty()){
+            return false;
+        }
+        else if (getRoleByStoreId(store_name_id).getRoleState().isManager()) {
             return true;
         } else {
             return false;
@@ -170,6 +177,18 @@ public class Registered extends User {
 
     public int getId(String userName) {
         return id;
+    }
+
+    public List<Role> getRoles(){
+        return roles;
+    }
+
+    public String getAddress(){
+        return address;
+    }
+
+    public LocalDate getBirthdate(){
+        return birthdate;
     }
 
 }

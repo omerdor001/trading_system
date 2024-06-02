@@ -14,16 +14,15 @@ import java.util.stream.Collectors;
 
 public class MarketFacadeImp implements MarketFacade{
     @Getter
-    private StoreMemoryRepository storeMemoryRepository;
+    private StoreRepository storeMemoryRepository;
     private HashMap<String, Store> stores;     //Delete
     private UserFacade userFacade;
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
     private static MarketFacadeImp instance = null;
 
 
-    private MarketFacadeImp() {
-        storeMemoryRepository=new StoreMemoryRepository();
-        stores = new HashMap<>();       //Delete
+    private MarketFacadeImp(){
+        this.storeMemoryRepository=StoreMemoryRepository.getInstance();
     }
 
     public static MarketFacadeImp getInstance() {
@@ -215,22 +214,18 @@ public class MarketFacadeImp implements MarketFacade{
         store.setOpen(false);
     }
 
+    //Supply Management
+
     @Override
     public boolean addProduct(String username, int productId, String storeName, String productName, String productDescription,
                               double productPrice, int productQuantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
         if(!storeMemoryRepository.isExist(storeName)){
             throw new IllegalArgumentException("Store must exist");
         }
-        if (productPrice < 0)
-            throw new IllegalArgumentException("Price can't be negative number");
-        if (productQuantity <= 0)
-            throw new IllegalArgumentException("Quantity must be natural number");
-        if (rating < 0)
-            throw new IllegalArgumentException("Rating can't be negative number");
         if (!userFacade.getRegistered().containsKey(username)) {
             throw new IllegalArgumentException("User must exist");
         }
-        Registered registered =userFacade.getRegistered().get(username);
+        Registered registered = userFacade.getRegistered().get(username);
         registered.getRoleByStoreId(storeName).addProduct(username, productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
         storeMemoryRepository.getStore(storeName).addProduct(productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
         return true;
@@ -288,7 +283,7 @@ public class MarketFacadeImp implements MarketFacade{
     }
 
     @Override
-    public boolean setProductPrice(String username, String storeName, int productId, int productPrice) throws IllegalAccessException {
+    public boolean setProductPrice(String username, String storeName, int productId, double productPrice) throws IllegalAccessException {
         if(!storeMemoryRepository.isExist(storeName)){
             throw new IllegalArgumentException("Store must exist");
         }
@@ -326,7 +321,7 @@ public class MarketFacadeImp implements MarketFacade{
     }
 
     @Override
-    public boolean setRating(String username, String storeName, int productId, int rating) throws IllegalAccessException {
+    public boolean setRating(String username, String storeName, int productId, double rating) throws IllegalAccessException {
         if(!storeMemoryRepository.isExist(storeName)){
             throw new IllegalArgumentException("Store must exist");
         }
@@ -499,6 +494,14 @@ public class MarketFacadeImp implements MarketFacade{
                 throw new IllegalArgumentException("User is not employeed in this store.");
         }
         return result.toString();
+    }
+
+    public boolean isStoreExist(String store_name){
+        return storeMemoryRepository.isExist(store_name);
+    }
+
+    public boolean isStoresEmpty(){
+        return storeMemoryRepository.isEmpty();
     }
 
 /*    @Override

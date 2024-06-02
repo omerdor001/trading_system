@@ -43,7 +43,7 @@ public interface UserFacade {
 
     void registeredRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception;
 
-    void openStore(String username, String storeName, String description, StorePolicy policy);
+    void openStore(String username, String storeName, String description, StorePolicy policy) throws IllegalAccessException;
 
     void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
 

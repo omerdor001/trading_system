@@ -69,11 +69,11 @@ public abstract class RoleState {
 
     public abstract void setProduct_description(String username,String store_name_id,int productId,String product_description) throws IllegalAccessException;
 
-    public abstract void setProduct_price(String username,String store_name_id,int productId,int product_price) throws IllegalAccessException;
+    public abstract void setProduct_price(String username,String store_name_id,int productId,double product_price) throws IllegalAccessException;
 
     public abstract void setProduct_quantity(String username,String store_name_id,int productId,int product_quantity) throws IllegalAccessException;
 
-    public abstract void setRating(String username,String store_name_id,int productId,int rating) throws IllegalAccessException;
+    public abstract void setRating(String username,String store_name_id,int productId,double rating) throws IllegalAccessException;
 
     public abstract void setCategory(String username,String store_name_id,int productId,int category) throws IllegalAccessException;
 
