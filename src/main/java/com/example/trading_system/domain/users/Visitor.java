@@ -1,6 +1,5 @@
 package com.example.trading_system.domain.users;
 
-
 import java.util.List;
 
 public class Visitor extends User {
@@ -22,9 +21,6 @@ public class Visitor extends User {
     public void receiveNotification(String notification) {
         throw new UnsupportedOperationException("Visitors cannot receive notifications");
     }
-
-    public void registration() {
-    }   //Missing details to register
 
     @Override
     public void login() {

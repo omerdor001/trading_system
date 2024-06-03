@@ -7,14 +7,11 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 public interface UserFacade {
-
-    void createVisitor(int id);
+    void deleteInstance();
 
     HashMap<Integer, Visitor> getVisitors();
 
     HashMap<String, Registered> getRegistered();
-
-    void exit();
 
     void enter(int id);
 
@@ -24,7 +21,7 @@ public interface UserFacade {
 
     void register(int id, String username, String token, LocalDate birthdate) throws Exception;    //Complete with what to register
 
-    void login(String username);
+    void login(int id, String username, String password);
 
     void logout(int id, String username);
 
@@ -42,16 +39,18 @@ public interface UserFacade {
 
     void registeredRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception;
 
-    void openStore(String username, String storeName, String description, StorePolicy policy);
+    void openStore(String username, String storeName, String description, StorePolicy policy) throws IllegalAccessException;
 
     void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
 
     void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException;
-    void appointManager(String appoint, String newManager, String store_name_id,boolean watch,boolean editSupply,boolean editBuyPolicy,boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
+
+    void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
 
     void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
 
     void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
+
     void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException;
 
     /**
@@ -70,4 +69,5 @@ public interface UserFacade {
 
     String registeredViewCart(String username);
 
+    boolean isAdmin(String username);
 }

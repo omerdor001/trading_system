@@ -1,6 +1,7 @@
 package com.example.trading_system.service;
 
 import com.example.trading_system.domain.stores.Category;
+import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,19 +9,25 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 public class MarketServiceImp implements MarketService {
-    MarketFacadeImp marketFacade;
     private static final Logger logger = LoggerFactory.getLogger(MarketServiceImp.class);
+    private static MarketServiceImp instance = null;
+    private MarketFacade marketFacade;
 
     private MarketServiceImp() {
         marketFacade = MarketFacadeImp.getInstance();
     }
 
-    private static class Singleton {
-        private static final MarketServiceImp INSTANCE = new MarketServiceImp();
+    public static MarketServiceImp getInstance() {
+        if (instance == null)
+            instance = new MarketServiceImp();
+        return instance;
     }
 
-    public static MarketServiceImp getInstance() {
-        return MarketServiceImp.Singleton.INSTANCE;
+    @Override
+    public void deleteInstance() {
+        instance = null;
+        this.marketFacade.deleteInstance();
+        this.marketFacade = null;
     }
 
     @Override
@@ -30,13 +37,13 @@ public class MarketServiceImp implements MarketService {
         logger.info("FINISHED Gather All Stores Info");
         return result;
     }
+
     @Override
     public void openStoreExist(String storeName) {
         logger.info("Trying to open store with name : {}", storeName);
         try {
             marketFacade.openStoreExist(storeName);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Error occurred : {} , Failed on opening Store with name : {}", e.getMessage(), storeName);
         }
     }
@@ -113,53 +120,36 @@ public class MarketServiceImp implements MarketService {
     }
 
     public void addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                              double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
-        logger.info("Trying to add products to store : {}", store_name);
+                           double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
         marketFacade.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
-        logger.info("Finished add products to store : {}", store_name);
     }
 
     public void removeProduct(String username, String store_name, int product_id) throws IllegalAccessException {
-        logger.info("Trying to remove products to store : {}", store_name);
         marketFacade.removeProduct(username, store_name, product_id);
-        logger.info("Finished remove products to store : {}", store_name);
     }
 
-    public void setProductName(String username, String store_name_id, int productId, String product_name) throws IllegalAccessException {
-        logger.info("Trying to edit name to product : {}", productId);
-        marketFacade.setProductName(username, store_name_id, productId, product_name);
-        logger.info("Finished edit name of product : {}", productId);
-
+    public void setProductName(String username, String store_name, int productId, String product_name) throws IllegalAccessException {
+        marketFacade.setProductName(username, store_name, productId, product_name);
     }
 
-    public void setProductDescription(String username, String store_name_id, int productId, String product_description) throws IllegalAccessException {
-        logger.info("Trying to edit description to product : {}", productId);
-        marketFacade.setProductDescription(username, store_name_id, productId, product_description);
-        logger.info("Finished edit description of product : {}", productId);
+    public void setProductDescription(String username, String store_name, int productId, String product_description) throws IllegalAccessException {
+        marketFacade.setProductDescription(username, store_name, productId, product_description);
     }
 
-    public void setProductPrice(String username, String store_name_id, int productId, int product_price) throws IllegalAccessException {
-        logger.info("Trying to edit price to product : {}", productId);
-        marketFacade.setProductPrice(username, store_name_id, productId, product_price);
-        logger.info("Finished edit price of product : {}", productId);
+    public void setProductPrice(String username, String store_name, int productId, double product_price) throws IllegalAccessException {
+        marketFacade.setProductPrice(username, store_name, productId, product_price);
     }
 
-    public void setProductQuantity(String username, String store_name_id, int productId, int product_quantity) throws IllegalAccessException {
-        logger.info("Trying to edit quantity to product : {}", productId);
-        marketFacade.setProductQuantity(username, store_name_id, productId, product_quantity);
-        logger.info("Finished edit quantity of product : {}", productId);
+    public void setProductQuantity(String username, String store_name, int productId, int product_quantity) throws IllegalAccessException {
+        marketFacade.setProductQuantity(username, store_name, productId, product_quantity);
     }
 
-    public void setRating(String username, String store_name_id, int productId, int rating) throws IllegalAccessException {
-        logger.info("Trying to edit rating to product : {}", productId);
-        marketFacade.setRating(username, store_name_id, productId, rating);
-        logger.info("Finished edit rating of product : {}", productId);
+    public void setRating(String username, String store_name, int productId, double rating) throws IllegalAccessException {
+        marketFacade.setRating(username, store_name, productId, rating);
     }
 
-    public void setCategory(String username, String store_name_id, int productId, int category) throws IllegalAccessException {
-        logger.info("Trying to edit category to product : {}", productId);
-        marketFacade.setCategory(username, store_name_id, productId, category);
-        logger.info("Finished edit category of product : {}", productId);
+    public void setCategory(String username, String store_name, int productId, int category) throws IllegalAccessException {
+        marketFacade.setCategory(username, store_name, productId, category);
     }
 
     @Override

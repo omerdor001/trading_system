@@ -1,4 +1,3 @@
-
 package com.example.trading_system.domain.stores;
 
 import lombok.Getter;
@@ -7,16 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Setter
 @Getter
 public class Store {
+    private static final Logger logger = LoggerFactory.getLogger(Store.class);
     private String nameId; // this will be the ID for the store
     private String description;
     private HashMap<Integer, Product> products;
-
     @Getter
     private List<String> managers;
     @Getter
@@ -28,7 +26,6 @@ public class Store {
     private boolean isActive;
     private boolean isOpen;
     private StoreSalesHistory salesHistory;
-    private static final Logger logger = LoggerFactory.getLogger(Store.class);
 
     public Store(String nameId, String description, StorePolicy storePolicy, String founder) {
         this.nameId = nameId;
@@ -96,7 +93,7 @@ public class Store {
         return sb.toString();
     }
 
-    public boolean isProductExist(int productId){
+    public boolean isProductExist(int productId) {
         return products.containsKey(productId);
     }
 
@@ -110,6 +107,12 @@ public class Store {
 
     public synchronized void addProduct(int product_id, String store_name, String product_name, String product_description,
                                         double product_price, int product_quantity, double rating, int category, List<String> keyWords) {
+        if (product_price < 0)
+            throw new IllegalArgumentException("Price can't be negative number");
+        if (product_quantity <= 0)
+            throw new IllegalArgumentException("Quantity must be natural number");
+        if (rating < 0)
+            throw new IllegalArgumentException("Rating can't be negative number");
         Product product = new Product(product_id, product_name, product_description, product_price, product_quantity, rating, Category.values()[category], keyWords);
         products.put(product.getProduct_id(), product);
     }
@@ -132,7 +135,9 @@ public class Store {
         }
     }
 
-    public synchronized void setProductPrice(int productId, int product_price) {
+    public synchronized void setProductPrice(int productId, double product_price) {
+        if (product_price < 0)
+            throw new IllegalArgumentException("Price can't be negative number");
         Product product = getProduct(productId);
         if (product != null) {
             product.setProduct_price(product_price);
@@ -140,13 +145,17 @@ public class Store {
     }
 
     public synchronized void setProductQuantity(int productId, int product_quantity) {
+        if (product_quantity <= 0)
+            throw new IllegalArgumentException("Quantity must be natural number");
         Product product = getProduct(productId);
         if (product != null) {
             product.setProduct_quantity(product_quantity);
         }
     }
 
-    public synchronized void setRating(int productId, int rating) {
+    public synchronized void setRating(int productId, double rating) {
+        if (rating < 0)
+            throw new IllegalArgumentException("Rating can't be negative number");
         Product product = getProduct(productId);
         if (product != null) {
             product.setRating(rating);
@@ -159,11 +168,12 @@ public class Store {
             product.setCategory(category);
         }
     }
-    List<Purchase> getHistoryPurchasesByCustomer(int customerId){
+
+    List<Purchase> getHistoryPurchasesByCustomer(int customerId) {
         return salesHistory.getPurchasesByCustomer(customerId);
     }
 
-    List<Purchase> getAllHistoryPurchases(){
+    List<Purchase> getAllHistoryPurchases() {
         return salesHistory.getAllPurchases();
     }
 
