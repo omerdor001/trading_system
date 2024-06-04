@@ -135,7 +135,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void saveUserCart(int id, int productId, String storeName, int quantity) {
-        int quantityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
+        int quantityInStore = marketFacade.getStore(storeName).getProducts().get(productId).getProduct_quantity();
         int quantityInShoppingBag = visitors.get(id).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
         if (quantity + quantityInShoppingBag > quantityInStore) {
             logger.error("Product quantity is too low");
@@ -156,7 +156,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public synchronized void visitorAddToCart(int id, int productId, String storeName, int quantity) {
-        int quantityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
+        int quantityInStore = marketFacade.getStore(storeName).getProducts().get(productId).getProduct_quantity();
         int quantityInShoppingBag = visitors.get(id).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
         if (!visitors.containsKey(id)) {
             logger.error("User not found");
@@ -217,7 +217,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("user is not logged");
             throw new RuntimeException("user is not logged");
         }
-        int quantityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
+        int quantityInStore = marketFacade.getStore(storeName).getProducts().get(productId).getProduct_quantity();
         int quantityInShoppingBag = registered.get(username).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
         if (quantity + quantityInShoppingBag > quantityInStore) {
             logger.error("Product quantity is too low");
