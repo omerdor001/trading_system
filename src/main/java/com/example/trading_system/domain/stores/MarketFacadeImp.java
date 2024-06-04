@@ -380,7 +380,7 @@ public class MarketFacadeImp implements MarketFacade{
         Registered registered = userFacade.getRegistered().get(userName);
         Registered customer = userFacade.getRegistered().get(customerUserName);
         registered.getRoleByStoreId(storeName).getRoleState().getHistoryPurchasesByCustomer();
-        return storeMemoryRepository.getStore(storeName).getHistoryPurchasesByCustomer(customer.getId()).stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
+        return storeMemoryRepository.getStore(storeName).getHistoryPurchasesByCustomer(customer.getUserName()).stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
     }
 
     @Override
@@ -417,11 +417,11 @@ public class MarketFacadeImp implements MarketFacade{
         result.append("Role id username address birthdate").append("\n");
         for (String owner : storeOwners) {
             Registered registered2 = userFacade.getRegistered().get(owner);
-            result.append("Owner ").append(registered2.getId()).append(owner).append(registered2.getAddress()).append(registered2.getBirthdate()).append("\n");
+            result.append("Owner ").append(registered2.getUsername()).append(owner).append(registered2.getAddress()).append(registered2.getBirthdate()).append("\n");
         }
         for (String manager : storeManagers) {
             Registered registered2 = userFacade.getRegistered().get(manager);
-            result.append("Manager ").append(registered2.getId()).append(manager).append(registered2.getAddress()).append(registered2.getBirthdate()).append("\n");
+            result.append("Manager ").append(registered2.getUsername()).append(manager).append(registered2.getAddress()).append(registered2.getBirthdate()).append("\n");
         }
         return result.toString();
     }
@@ -453,7 +453,7 @@ public class MarketFacadeImp implements MarketFacade{
         for (String manager : storeManagers) {
             Registered registered2 = userFacade.getRegistered().get(manager);
             RoleState managerRole = registered2.getRoleByStoreId(storeName).getRoleState();
-            result.append(registered2.getId()).append(manager).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append('\n');
+            result.append(registered2.getUsername()).append(manager).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append('\n');
         }
         return result.toString();
     }
@@ -489,7 +489,7 @@ public class MarketFacadeImp implements MarketFacade{
         if (storeOwners.contains(officialUserName)) {
             Registered registered2 = userFacade.getRegistered().get(officialUserName);
             result.append("Role id username address birthdate").append('\n');
-            result.append("Owner ").append(registered2.getId()).append(officialUserName).append(registered2.getAddress()).append(registered2.getBirthdate()).append('\n');
+            result.append("Owner ").append(registered2.getUsername()).append(officialUserName).append(registered2.getAddress()).append(registered2.getBirthdate()).append('\n');
         }
         else
         {
@@ -499,7 +499,7 @@ public class MarketFacadeImp implements MarketFacade{
                 Registered registered2 =userFacade.getRegistered().get(officialUserName);
                 RoleState managerRole = registered2.getRoleByStoreId(storeName).getRoleState();
                 result.append("Role id username address birthdate watch editSupply editBuyPolicy editDiscountPolicy").append("\n");
-                result.append("Manager ").append(registered2.getId()).append(officialUserName).append(registered2.getAddress()).append(registered2.getBirthdate()).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append("\n");
+                result.append("Manager ").append(registered2.getUsername()).append(officialUserName).append(registered2.getAddress()).append(registered2.getBirthdate()).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append("\n");
             } else
                 throw new IllegalArgumentException("User is not employeed in this store.");
         }

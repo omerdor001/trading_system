@@ -13,27 +13,25 @@ public interface UserFacade {
 
     HashMap<String, Registered> getRegistered();
 
-    void enter(int id);
+    void enter(String username);
 
     void exit(int id) throws Exception;
 
     void exit(String username) throws Exception;
 
-    void register(int id, String username, String token, LocalDate birthdate) throws Exception;    //Complete with what to register
+    void register(String username, String token, LocalDate birthdate) throws Exception;    //Complete with what to register
 
-    void login(int id, String username, String password);
+    void login(String usernameV,String username, String password);
 
-    void logout(int id, String username);
-
-    void saveUserCart(String username);
+    void logout(String username,String usernameV);
 
     boolean sendNotification(User sender, User receiver, String content);
 
-    void saveUserCart(int id, int productId, String storeName, int quantity);
+    void saveUserCart(String username, int productId, String storeName, int quantity);
 
-    void visitorAddToCart(int id, int productId, String storeName, int quantity);
+    void addToCart(String username, int productId, String storeName, int quantity);
 
-    void visitorRemoveFromCart(int id, int productId, String storeName, int quantity);
+    void visitorRemoveFromCart(String username,int productId, String storeName, int quantity);
 
     void registeredAddToCart(String username, int productId, String storeName, int quantity);
 
@@ -70,4 +68,10 @@ public interface UserFacade {
     String registeredViewCart(String username);
 
     boolean isAdmin(String username);
+
+
+
+    String viewCart(String username);
+
+    void removeFromCart(String username,int productId, String storeName, int quantity);
 }

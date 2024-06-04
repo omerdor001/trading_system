@@ -75,9 +75,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean visitorAddToCart(int id, int productId, String storeName, int quantity) {
+    public boolean visitorAddToCart(String username,int productId, String storeName, int quantity) {
         logger.info("Trying adding to cart  product with id: {}", productId);
-        userFacade.visitorAddToCart(id, productId, storeName, quantity);
+        userFacade.visitorAddToCart(username, productId, storeName, quantity);
         logger.info("Finished adding to cart product with id: {}", productId);
         return true;
     }
