@@ -805,7 +805,7 @@ public class TradingSystemImp implements TradingSystem{
             userService.openStore(username, storeName, description, policy);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed opening store with name: {}", e.getMessage(), storeName);
-            return new ResponseEntity<>("Error occurred : {} , Failed opening store with name: {}", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error occurred in opening store", HttpStatus.BAD_REQUEST);
         }
         logger.info("Finished opening store with name: {}", storeName);
         return new ResponseEntity<>("Finished opening store with name: {}", HttpStatus.OK);

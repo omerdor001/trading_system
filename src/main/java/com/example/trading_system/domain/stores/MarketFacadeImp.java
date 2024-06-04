@@ -93,6 +93,9 @@ public class MarketFacadeImp implements MarketFacade{
 
     @Override
     public String getStoreProducts(String storeName) {
+        if(storeMemoryRepository.getStore(storeName) == null){
+            throw new RuntimeException("Can't find store with name " + storeName);
+        }
         if (storeMemoryRepository.getStore(storeName).isActive()) {    //Change to Repo
             return storeMemoryRepository.getStore(storeName).toString();
         } else {
@@ -103,6 +106,13 @@ public class MarketFacadeImp implements MarketFacade{
 
     @Override
     public String getProductInfo(String storeName, int productId) {     //Change to Reop
+        if(storeMemoryRepository.getStore(storeName).getProduct(productId) == null)
+        {
+            throw new RuntimeException("Can't find product with id " + productId);
+        }
+        if(storeMemoryRepository.getStore(storeName) == null){
+            throw new RuntimeException("Can't find store with name " + storeName);
+        }
         return storeMemoryRepository.getStore(storeName).getProduct(productId).toString();
 
     }
