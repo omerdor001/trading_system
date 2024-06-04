@@ -65,5 +65,18 @@ public class Visitor extends User {
     @Override
     public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {}
 
+    @Override
+    public void addOwnerRole(String appoint, String storeName) {}
+
+    @Override
+    public Role getRoleByStoreId(String store_name_id) {
+        return null;
+    }
+
+    @Override
+    public boolean isAdmin() {
+        return false;
+    }
+
 
 }

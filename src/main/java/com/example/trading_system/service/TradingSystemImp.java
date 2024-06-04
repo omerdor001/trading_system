@@ -124,25 +124,6 @@ public class TradingSystemImp implements TradingSystem{
         }
     }
 
-    //TODO might be removed because visitor has username v+id
-    @Override
-    public ResponseEntity<String> exit(String token, int id) {
-        logger.info("Attempting to exit user with id: {}", id);
-        try {
-            if (!checkSystemOpen()) {
-                return systemClosedResponse();
-            }
-            logger.info("Trying exit to system as a visitor , with id : {}", id);
-            userService.exit(id);
-            Security.makeTokenExpire(token);
-            logger.info("User exited successfully with id: {}", id);
-            return new ResponseEntity<>("User exited successfully.", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while exiting user with id: {}: {}", id, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     @Override
     public ResponseEntity<String> exit(String token, String username) {
         logger.info("Attempting to exit user: {}", username);
@@ -327,12 +308,12 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> login(String token, int id, String username, String password) {
+    public ResponseEntity<String> login(String token, String usernameV, String username, String password) {
         logger.info("Attempting to login user: {}", username);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if (userService.login(id, username, password)) {
+            if (userService.login(usernameV, username, password)) {
                 if (!token.isEmpty())
                     Security.makeTokenExpire(token);
                 String newToken = Security.generateToken("r" + username);
@@ -724,14 +705,14 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> visitorAddToCart(String username, String token, int id, int productId, String storeName, int quantity) {
+    public ResponseEntity<String> addToCart(String username, String token, int productId, String storeName, int quantity) {
         logger.info("Trying adding to cart  product with id: {}", productId);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            userService.visitorAddToCart(id, productId, storeName, quantity);
+            userService.addToCart(username, productId, storeName, quantity);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed Trying adding to cart  product with id: {}", e.getMessage(), productId);
             return new ResponseEntity<>("Error occurred : {} , Failed Trying adding to cart  product with id: {}", HttpStatus.BAD_REQUEST);
@@ -741,50 +722,14 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> visitorRemoveFromCart(String username, String token, int id, int productId, String storeName, int quantity) {
+    public ResponseEntity<String> removeFromCart(String username, String token, int productId, String storeName, int quantity) {
         logger.info("Trying removing from cart product with id: {}", productId);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            userService.visitorRemoveFromCart(id, productId, storeName, quantity);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed Trying removing to cart  product with id: {}", e.getMessage(), productId);
-            return new ResponseEntity<>("Error occurred : {} , Failed Trying removing to cart  product with id: {}", HttpStatus.BAD_REQUEST);
-        }
-        logger.info("Finished removing from cart product with id: {}", productId);
-        return new ResponseEntity<>("Finished removing from cart product with id: {}", HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<String> registeredAddToCart(String username, String token, int productId, String storeName, int quantity) {
-        logger.info("Trying adding to cart product with id: {}", productId);
-        try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(username,token))
-                return invalidTokenResponse();
-            username = username.substring(1);
-            userService.registeredAddToCart(username, productId, storeName, quantity);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed Trying adding to cart  product with id: {}", e.getMessage(), productId);
-            return new ResponseEntity<>("Error occurred : {} , Failed Trying adding to cart  product with id: {}", HttpStatus.BAD_REQUEST);
-        }
-        logger.info("Finished adding to cart product with id: {}", productId);
-        return new ResponseEntity<>("Finished adding to cart product with id: {}", HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<String> registeredRemoveFromCart(String username, String token, int productId, String storeName, int quantity) {
-        logger.info("Trying removing from cart product with id: {}", productId);
-        try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(username,token))
-                return invalidTokenResponse();
-            username = username.substring(1);
-            userService.registeredRemoveFromCart(username, productId, storeName, quantity);
+            userService.removeFromCart(username, productId, storeName, quantity);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed Trying removing to cart  product with id: {}", e.getMessage(), productId);
             return new ResponseEntity<>("Error occurred : {} , Failed Trying removing to cart  product with id: {}", HttpStatus.BAD_REQUEST);
@@ -812,7 +757,7 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> registeredViewCart(String username, String token) {
+    public ResponseEntity<String> viewCart(String username, String token) {
         logger.info("Trying registered : {} view cart ", username);
         try {
             if (!checkSystemOpen())
@@ -820,26 +765,11 @@ public class TradingSystemImp implements TradingSystem{
             if(!checkToken(username,token))
                 return invalidTokenResponse();
             username = username.substring(1);
-            String result = userService.registeredViewCart(username);
+            String result = userService.viewCart(username);
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed registered view cart ", username);
             return new ResponseEntity<>("Finished registered view cart ", HttpStatus.OK);
         }
-    }
-
-    @Override
-    public ResponseEntity<String> visitorViewCart(String username, String token, int id) {
-        logger.info("Trying view cart");
-        try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            userService.visitorViewCart(id);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed view cart ", id);
-            return new ResponseEntity<>("Error occurred  Failed view cart", HttpStatus.BAD_REQUEST);
-        }
-        logger.info("Finished view cart ");
-        return new ResponseEntity<>("Finished view cart ", HttpStatus.OK);
     }
 }

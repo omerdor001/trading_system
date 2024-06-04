@@ -17,7 +17,6 @@ public interface TradingSystem {
     ResponseEntity<String> enter();
 
     //TODO might be removed because visitor has username v+id
-    ResponseEntity<String> exit(String token, int id);
 
     ResponseEntity<String> exit(String token, String username);
 
@@ -41,7 +40,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> setCategory(String username, String token, String storeName, int productId, int category);
 
-    ResponseEntity<String> login(String token, int id, String username, String password);
+    ResponseEntity<String> login(String token, String usernameV, String username, String password);
 
     //TODO why id? also create new visitor and return new token + username (maybe return result of enter?)
     ResponseEntity<String> logout(String token, int id, String username);
@@ -95,17 +94,11 @@ public interface TradingSystem {
 
     ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer id, Integer productBarcode);
 
-    ResponseEntity<String> visitorAddToCart(String username, String token, int id, int productId, String storeName, int quantity);
+    ResponseEntity<String> addToCart(String username, String token, int productId, String storeName, int quantity);
 
-    ResponseEntity<String> visitorRemoveFromCart(String username, String token, int id, int productId, String storeName, int quantity);
-
-    ResponseEntity<String> registeredAddToCart(String username, String token, int productId, String storeName, int quantity);
-
-    ResponseEntity<String> registeredRemoveFromCart(String username, String token, int productId, String storeName, int quantity);
+    ResponseEntity<String> removeFromCart(String username, String token, int productId, String storeName, int quantity);
 
     ResponseEntity<String> openStore(String username, String token, String storeName, String description, StorePolicy policy);
 
-    ResponseEntity<String> registeredViewCart(String username, String token);
-
-    ResponseEntity<String> visitorViewCart(String username, String token, int id);
+    ResponseEntity<String> viewCart(String username, String token);
 }

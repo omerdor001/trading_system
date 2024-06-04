@@ -9,13 +9,7 @@ import java.util.NoSuchElementException;
 public interface UserFacade {
     void deleteInstance();
 
-    HashMap<Integer, Visitor> getVisitors();
-
-    HashMap<String, Registered> getRegistered();
-
-    void enter(String username);
-
-    void exit(int id) throws Exception;
+    void enter(int id);
 
     void exit(String username) throws Exception;
 
@@ -23,19 +17,13 @@ public interface UserFacade {
 
     void login(String usernameV,String username, String password);
 
-    void logout(String username,String usernameV);
+    void logout(int id,String username);
 
     boolean sendNotification(User sender, User receiver, String content);
 
     void saveUserCart(String username, int productId, String storeName, int quantity);
 
     void addToCart(String username, int productId, String storeName, int quantity);
-
-    void visitorRemoveFromCart(String username,int productId, String storeName, int quantity);
-
-    void registeredAddToCart(String username, int productId, String storeName, int quantity);
-
-    void registeredRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception;
 
     void openStore(String username, String storeName, String description, StorePolicy policy) throws IllegalAccessException;
 
@@ -59,17 +47,9 @@ public interface UserFacade {
 
     String getUserPassword(String username);
 
-    void removeVisitor(int id);
-
     boolean isAdminRegistered();
 
-    String visitorViewCart(int id);
-
-    String registeredViewCart(String username);
-
     boolean isAdmin(String username);
-
-
 
     String viewCart(String username);
 

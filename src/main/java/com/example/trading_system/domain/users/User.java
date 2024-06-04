@@ -46,6 +46,11 @@ public abstract class User {
 
     public abstract void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
+    public abstract void addOwnerRole(String appoint, String storeName);
+
+    public abstract Role getRoleByStoreId(String store_name_id);
+
+    public abstract boolean isAdmin();
 
     public Cart getShopping_cart() {
         return shopping_cart;
