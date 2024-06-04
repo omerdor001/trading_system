@@ -123,12 +123,16 @@ public class MarketFacadeImp implements MarketFacade{
             logger.error("No name provided");
             throw new IllegalArgumentException("No name provided");
         }
+        if(storeName == null){
+            logger.error("No store name provided");
+            throw new IllegalArgumentException("No store name provided");
+        }
 
         if (storeMemoryRepository.getStore(storeName).getProducts().isEmpty()) {    //Change To Repo
             logger.warn("No products Available");
             return "{}";
         }
-        return stores.get(storeName).searchName(name, minPrice, maxPrice, minRating, category).toString();
+        return storeMemoryRepository.getStore(storeName).searchName(name, minPrice, maxPrice, minRating, category).toString();
     }
 
     @Override
@@ -137,6 +141,11 @@ public class MarketFacadeImp implements MarketFacade{
             logger.error("No category provided");
             throw new IllegalArgumentException("No category provided");
         }
+        if(storeName == null){
+            logger.error("No store name provided");
+            throw new IllegalArgumentException("No store name provided");
+        }
+
         if (storeMemoryRepository.getStore(storeName).getProducts().isEmpty()) {   //Change to Repo
             logger.warn("No products Available");
             return "{}";
@@ -145,7 +154,7 @@ public class MarketFacadeImp implements MarketFacade{
             logger.error("Category is not a valid category");
             throw new RuntimeException("Category is not a valid category");
         }
-        return stores.get(storeName).searchCategory(category, minPrice, maxPrice, minRating).toString();
+        return storeMemoryRepository.getStore(storeName).searchCategory(category, minPrice, maxPrice, minRating).toString();
     }
 
     @Override
@@ -154,11 +163,16 @@ public class MarketFacadeImp implements MarketFacade{
             logger.error("No keywords provided");
             throw new IllegalArgumentException("No keywords provided");
         }
+        if(storeName == null){
+            logger.error("No store name provided");
+            throw new IllegalArgumentException("No store name provided");
+        }
+
         if (storeMemoryRepository.getStore(storeName).getProducts().isEmpty()) {    //Change to Repo
             logger.warn("No products Available");
             return "{}";
         }
-        return stores.get(storeName).searchKeywords(keyWords, minPrice, maxPrice, minRating, category).toString();
+        return storeMemoryRepository.getStore(storeName).searchKeywords(keyWords, minPrice, maxPrice, minRating, category).toString();
     }
 
     @Override
