@@ -98,23 +98,23 @@ public class MarketServiceImp implements MarketService {
         return result;
     }
 
-    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
         logger.info("Trying to search products in stores with name : {}", name);
-        String result = marketFacade.searchNameInStores(name, minPrice, maxPrice, minRating, category);
+        String result = marketFacade.searchNameInStores(name, minPrice, maxPrice, minRating, category,storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }
 
-    public String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating) {
+    public String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
         logger.info("Trying to search products in stores with category, : {}", category);
-        String result = marketFacade.searchCategoryInStores(category, minPrice, maxPrice, minRating);
+        String result = marketFacade.searchCategoryInStores(category, minPrice, maxPrice, minRating,storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }
 
-    public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
         logger.info("Trying to search products in stores with keyWords,  : {}", keyWords);
-        String result = marketFacade.searchKeywordsInStores(keyWords, minPrice, maxPrice, minRating, category);
+        String result = marketFacade.searchKeywordsInStores(keyWords, minPrice, maxPrice, minRating, category,storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }

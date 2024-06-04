@@ -7,5 +7,5 @@ public interface StoreRepository {
     HashMap<String,Store> getAllStores();
     void deleteStore(String storeName);
     boolean isEmpty();
-    void addStore(String storeName, String description, StorePolicy storePolicy, String founder);
+    void addStore(String storeName, String description, StorePolicy storePolicy, String founder,Double storeRating);
 }
