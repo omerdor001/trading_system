@@ -76,11 +76,11 @@ public interface TradingSystem {
     ResponseEntity<String> searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category);
 
     //search in stores
-    ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category);
+    ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
 
-    ResponseEntity<String> searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating);
+    ResponseEntity<String> searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
 
-    ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category);
+    ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
 
     //TODO edit all visitor/registered functions to single function (all visitors have username of "v+id")
     ResponseEntity<String> VisitorCheckAvailabilityAndConditions(String username, String token, int visitorId);

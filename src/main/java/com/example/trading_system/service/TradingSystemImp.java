@@ -579,12 +579,12 @@ public class TradingSystemImp implements TradingSystem{
 
     //search in stores
     @Override
-    public ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
         logger.info("Trying to search products in stores with name : {}", name);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            marketService.searchNameInStores(name, minPrice, maxPrice, minRating, category);
+            marketService.searchNameInStores(name, minPrice, maxPrice, minRating, category,storeRating);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in stores: {}}", e.getMessage(), name);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -594,12 +594,12 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating) {
+    public ResponseEntity<String> searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
         logger.info("Trying to search products in stores with category, : {}", category);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            marketService.searchCategoryInStores(category, minPrice, maxPrice, minRating);
+            marketService.searchCategoryInStores(category, minPrice, maxPrice, minRating,storeRating);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in stores with category : {}}", e.getMessage(), category);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -609,12 +609,12 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
         logger.info("Trying to search products in stores with keyWords,  : {}", keyWords);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            marketService.searchKeywordsInStores(keyWords, minPrice, maxPrice, minRating, category);
+            marketService.searchKeywordsInStores(keyWords, minPrice, maxPrice, minRating, category,storeRating);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in stores with keyWords,  : {}}", e.getMessage(), keyWords);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -805,7 +805,7 @@ public class TradingSystemImp implements TradingSystem{
             userService.openStore(username, storeName, description, policy);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed opening store with name: {}", e.getMessage(), storeName);
-            return new ResponseEntity<>("Error occurred : {} , Failed opening store with name: {}", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error occurred in opening store", HttpStatus.BAD_REQUEST);
         }
         logger.info("Finished opening store with name: {}", storeName);
         return new ResponseEntity<>("Finished opening store with name: {}", HttpStatus.OK);
