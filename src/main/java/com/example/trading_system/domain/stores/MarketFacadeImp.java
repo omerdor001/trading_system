@@ -47,8 +47,8 @@ public class MarketFacadeImp implements MarketFacade{
         stores.put(store.getNameId(), store);
     }
 
-    public void addStore(String storeName, String description, StorePolicy storePolicy, String founder){
-        storeMemoryRepository.addStore(storeName,description,storePolicy,founder);
+    public void addStore(String storeName, String description, StorePolicy storePolicy, String founder,Double storeRating){
+        storeMemoryRepository.addStore(storeName,description,storePolicy,founder,storeRating);
     }
 
     public void deactivateStore(String storeName){
@@ -162,20 +162,20 @@ public class MarketFacadeImp implements MarketFacade{
     }
 
     @Override
-    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
         if (name == null) {
             logger.error("No name provided");
             throw new IllegalArgumentException("No name provided");
         }
         StringBuilder sb = new StringBuilder();
         for (Store store : storeMemoryRepository.getAllStores().values()) {     //Change to Repo
-            sb.append(store.searchName(name, minPrice, maxPrice, minRating, category).toString());
+            sb.append(store.searchName(name, minPrice, maxPrice, minRating, category,storeRating).toString());
         }
         return sb.toString();
     }
 
     @Override
-    public String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating) {
+    public String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
         if (category == null) {
             logger.error("No category provided");
             throw new IllegalArgumentException("No category provided");
@@ -186,20 +186,20 @@ public class MarketFacadeImp implements MarketFacade{
         }
         StringBuilder sb = new StringBuilder();
         for (Store store : storeMemoryRepository.getAllStores().values()) {    //Change to Repo
-            sb.append(store.searchCategory(category, minPrice, maxPrice, minRating).toString());
+            sb.append(store.searchCategory(category, minPrice, maxPrice, minRating,storeRating).toString());
         }
         return sb.toString();
     }
 
     @Override
-    public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
         if (keyWords == null) {
             logger.error("No keywords provided");
             throw new IllegalArgumentException("No keywords provided");
         }
         StringBuilder sb = new StringBuilder();
         for (Store store : storeMemoryRepository.getAllStores().values()) {      //Change to Repo
-            sb.append(store.searchKeywords(keyWords, minPrice, maxPrice, minRating, category).toString());
+            sb.append(store.searchKeywords(keyWords, minPrice, maxPrice, minRating, category,storeRating).toString());
         }
         return sb.toString();
     }

@@ -50,8 +50,8 @@ public class StoreMemoryRepository implements StoreRepository{
 
 
     @Override
-    public void addStore(String storeName, String description, StorePolicy storePolicy, String founder) {
-        stores.put(storeName,new Store(storeName,description,storePolicy,founder));
+    public void addStore(String storeName, String description, StorePolicy storePolicy, String founder,Double storeRating) {
+        stores.put(storeName,new Store(storeName,description,storePolicy,founder,storeRating));
     }
 
 
