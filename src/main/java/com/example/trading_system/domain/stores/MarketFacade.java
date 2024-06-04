@@ -28,11 +28,11 @@ public interface MarketFacade {
 
     String searchKeywordsInStore(String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category);
 
-    String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category);
+    String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
 
-    String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating);
+    String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
 
-    String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category);
+    String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
 
     boolean addProduct(String username,
                        int productId,
@@ -74,5 +74,5 @@ public interface MarketFacade {
     boolean isStoresEmpty();
 
     void addStore(Store store);    //Delete
-    void addStore(String storeName, String description, StorePolicy storePolicy, String founder);
+    void addStore(String storeName, String description, StorePolicy storePolicy, String founder,Double storeRating);
 }

@@ -266,7 +266,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        marketFacade.addStore(storeName, description, policy, username);
+        marketFacade.addStore(storeName, description, policy, username,null);
         registered.get(username).openStore();
         registered.get(username).addOwnerRole(username, storeName);
     }
