@@ -82,17 +82,14 @@ public interface TradingSystem {
     ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
 
     //TODO edit all visitor/registered functions to single function (all visitors have username of "v+id")
-    ResponseEntity<String> VisitorCheckAvailabilityAndConditions(String username, String token, int visitorId);
 
-    ResponseEntity<String> registeredCheckAvailabilityAndConditions(String username, String token, String registeredId);
+    ResponseEntity<String> checkAvailabilityAndConditions(String username, String token);
 
-    ResponseEntity<String> VisitorApprovePurchase(String username, String token, int visitorId, String paymentservice);
+    ResponseEntity<String> approvePurchase(String username, String token);
 
-    ResponseEntity<String> RegisteredApprovePurchase(String username, String token, String registeredId, String paymentservice);
+    ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName, Integer productBarcode);
 
-    ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName, Integer id, Integer productBarcode);
-
-    ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer id, Integer productBarcode);
+    ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer productBarcode);
 
     ResponseEntity<String> addToCart(String username, String token, int productId, String storeName, int quantity);
 

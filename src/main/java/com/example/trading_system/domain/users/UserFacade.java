@@ -13,6 +13,8 @@ public interface UserFacade {
 
     void exit(String username) throws Exception;
 
+    HashMap<String, User> getUsers();
+
     void register(String username, String token, LocalDate birthdate) throws Exception;    //Complete with what to register
 
     void login(String usernameV,String username, String password);

@@ -604,73 +604,40 @@ public class TradingSystemImp implements TradingSystem{
         return new ResponseEntity<>("FINISHED Searching products in store ", HttpStatus.OK);
     }
 
-    //TODO edit all visitor/registered functions to single function (all visitors have username of "v+id")
     @Override
-    public ResponseEntity<String> VisitorCheckAvailabilityAndConditions(String username, String token, int visitorId) {
-        logger.info("Checking availability and conditions for visitor with ID: {}", visitorId);
+    public ResponseEntity<String> checkAvailabilityAndConditions(String username, String token) {
+        logger.info("Checking availability and conditions for registered user with ID: {}", username);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            paymentService.VisitorCheckAvailabilityAndConditions(visitorId);
+            paymentService.checkAvailabilityAndConditions(username);
             return new ResponseEntity<>("FINISHED checking availability and conditions ", HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred while checking availability cart and conditions for visitor with ID: {}: {}", visitorId, e.getMessage());
+            logger.error("Error occurred while checking availability cart and conditions for registered user with ID: {}: {}", username, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @Override
-    public ResponseEntity<String> registeredCheckAvailabilityAndConditions(String username, String token, String registeredId) {
-        logger.info("Checking availability and conditions for registered user with ID: {}", registeredId);
+    public ResponseEntity<String> approvePurchase(String username, String token) {
+        logger.info("Approving purchase for registered user with ID: {} ", username);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            paymentService.registeredCheckAvailabilityAndConditions(registeredId);
-            return new ResponseEntity<>("FINISHED checking availability and conditions ", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while checking availability cart and conditions for registered user with ID: {}: {}", registeredId, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
-    public ResponseEntity<String> VisitorApprovePurchase(String username, String token, int visitorId, String paymentService) {
-        logger.info("Approving purchase for visitor with ID: {} using payment service: {}", visitorId, this.paymentService);
-        try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(username,token))
-                return invalidTokenResponse();
-            this.paymentService.VisitorApprovePurchase(visitorId, paymentService);
-            return new ResponseEntity<>("FINISHED Visitor Approve Purchase ", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while approving purchase for visitor with ID: {} using payment service: {}: {}", visitorId, this.paymentService, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
-    public ResponseEntity<String> RegisteredApprovePurchase(String username, String token, String registeredId, String paymentService) {
-        logger.info("Approving purchase for registered user with ID: {} using payment service: {}", registeredId, this.paymentService);
-        try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(username,token))
-                return invalidTokenResponse();
-            this.paymentService.RegisteredApprovePurchase(registeredId, paymentService);
+            this.paymentService.approvePurchase(username);
             return new ResponseEntity<>("FINISHED Registered Approve Purchase ", HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred while approving purchase for registered user with ID: {} using payment service: {}: {}", registeredId, this.paymentService, e.getMessage());
+            logger.error("Error occurred while approving purchase for registered user with ID: {} using payment service: {}: {}", username, this.paymentService, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @Override
-    public ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName, Integer id, Integer productBarcode) {
+    public ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName, Integer productBarcode) {
         logger.info("Get Purchase History");
         try {
             if (!checkSystemOpen())
@@ -678,7 +645,7 @@ public class TradingSystemImp implements TradingSystem{
             if(!checkToken(username,token))
                 return invalidTokenResponse();
             username = username.substring(1);
-            String result = paymentService.getPurchaseHistory(username, storeName, id, productBarcode);
+            String result = paymentService.getPurchaseHistory(username, storeName, productBarcode);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while Getting Purchase History");
@@ -687,7 +654,7 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer id, Integer productBarcode) {
+    public ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer productBarcode) {
         logger.info("Get Purchase Stores History");
         try {
             if (!checkSystemOpen())
@@ -695,7 +662,7 @@ public class TradingSystemImp implements TradingSystem{
             if(!checkToken(username,token))
                 return invalidTokenResponse();
             username = username.substring(1);
-            String result = paymentService.getStoresPurchaseHistory(username, storeName, id, productBarcode);
+            String result = paymentService.getStoresPurchaseHistory(username, storeName, productBarcode);
             return new ResponseEntity<>(result, HttpStatus.OK);
 
         } catch (Exception e) {

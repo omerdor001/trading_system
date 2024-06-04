@@ -35,6 +35,7 @@ public class UserFacadeImp implements UserFacade {
         this.marketFacade = null;
     }
 
+    @Override
     public HashMap<String, User> getUsers() {
         return users;
     }
