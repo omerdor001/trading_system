@@ -132,7 +132,6 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             logger.info("Trying exit to system as a user , with username: {}", username);
             userService.exit(username);
             Security.makeTokenExpire(token);

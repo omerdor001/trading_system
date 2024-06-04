@@ -57,8 +57,8 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void logout(int id,String username) {
-        if(username.charAt(0)=='v'){
-            throw new IllegalArgumentException("User performs like Visitor");
+        if(username.charAt(0)!='r'){
+            throw new IllegalArgumentException("User performs Not like a registered");
         }
         User u = users.get(username);
         if (u == null)
@@ -132,12 +132,6 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void saveUserCart(String username, int productId, String storeName, int quantity) {
-        int quantityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
-        int quantityInShoppingBag = users.get(username).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
-        if (quantity + quantityInShoppingBag > quantityInStore) {
-            logger.error("Product quantity is too low");
-            throw new RuntimeException("Product quantity is too low");
-        }
         if (storeName == null) {
             logger.error("Store name is null");
             throw new RuntimeException("Store name is null");
@@ -148,6 +142,12 @@ public class UserFacadeImp implements UserFacade {
         }
         if (users.containsKey(username)) {
             users.get(username).getShopping_cart().addProductToCart(productId, quantity, storeName);
+        }
+        int quantityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
+        int quantityInShoppingBag = users.get(username).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
+        if (quantity + quantityInShoppingBag > quantityInStore) {
+            logger.error("Product quantity is too low");
+            throw new RuntimeException("Product quantity is too low");
         }
     }
 
