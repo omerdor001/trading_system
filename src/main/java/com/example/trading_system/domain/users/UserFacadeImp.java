@@ -101,7 +101,7 @@ public class UserFacadeImp implements UserFacade {
         if (password == null) throw new Exception("Encrypted password is null");
         if (password.isEmpty()) throw new Exception("Encrypted password is empty");
         if (birthdate == null) throw new Exception("Birthdate password is null");
-        if (registered.containsKey(username)) throw new Exception("username already exists - " + username);
+        if (users.containsKey(username)) throw new Exception("username already exists - " + username);
     }
 
     @Override

@@ -408,7 +408,7 @@ public class TradingSystemImp implements TradingSystem{
 
     @Override
     public ResponseEntity<String> rejectToOwnStore(String username, String token, String storeName, String appoint) {
-        logger.info("{} trying to reject owner to store : {}", newOwner, storeName);
+        logger.info("{} trying to reject owner to store : {}", username, storeName);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
