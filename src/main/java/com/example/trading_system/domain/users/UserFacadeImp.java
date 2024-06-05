@@ -253,22 +253,18 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void openStore(String username, String storeName, String description, StorePolicy policy) {
-        marketFacade = MarketFacadeImp.getInstance();
-        if (storeName == null) {
-            logger.error("Store name is null");
-            throw new RuntimeException("Store name is null");
-        }
-        if (marketFacade.isStoreExist(storeName) && !marketFacade.isStoresEmpty()) {
-            logger.error("Store with name " + storeName + " already exists");
-            throw new RuntimeException("Store with name " + storeName + " already exists");
-        }
         if (!registered.containsKey(username)) {
-            logger.error("User not found");
+            logger.error("While opening store - User not found");
             throw new RuntimeException("User not found");
         }
-        marketFacade.addStore(storeName, description, policy, username,null);
-        registered.get(username).openStore();
-        registered.get(username).addOwnerRole(username, storeName);
+        marketFacade.addStore(storeName, description, policy, username, null);
+        try {
+            registered.get(username).openStore();
+            registered.get(username).addOwnerRole(username, storeName);
+        } catch (Exception e) {
+            logger.error("Failed to open store: {}", e.getMessage());
+            throw new RuntimeException("Failed to open store", e);
+        }
     }
 
     @Override

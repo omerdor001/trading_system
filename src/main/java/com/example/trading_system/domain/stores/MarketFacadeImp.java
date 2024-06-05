@@ -43,12 +43,21 @@ public class MarketFacadeImp implements MarketFacade {
         this.userFacade = null;
     }
 
-    // public void addStore(Store store) {             //DeleteAllFunction
-    //    stores.put(store.getNameId(), store);
-    // }
-
     public void addStore(String storeName, String description, StorePolicy storePolicy, String founder, Double storeRating) {
-        storeMemoryRepository.addStore(storeName, description, storePolicy, founder, storeRating);
+        if (storeName == null || storeName.trim().isEmpty()) {
+            logger.error("While opening store - Store name is null");
+            throw new RuntimeException("Store name should not be null");
+        }
+        if (storeMemoryRepository.isExist(storeName)) {
+            logger.error("While opening store - Store with name: {} already exists", storeName);
+            throw new RuntimeException("Store with name " + storeName + " already exists");
+        }
+        try {
+            storeMemoryRepository.addStore(storeName, description, storePolicy, founder, storeRating);
+        } catch (Exception e) {
+            logger.error("Failed to open store: {}", e.getMessage());
+            throw new RuntimeException("Failed to open store", e);
+        }
     }
 
     public void deactivateStore(String storeName) {
@@ -61,11 +70,6 @@ public class MarketFacadeImp implements MarketFacade {
             }
         }
     }
-
-    //@Override
-    //public HashMap<String, Store> getStores() {
-    //    return stores;
-    //}
 
     //For Tests
     public boolean isProductExist(int productId, String storeName) {
@@ -515,13 +519,6 @@ public class MarketFacadeImp implements MarketFacade {
         return result.toString();
     }
 
-    public boolean isStoreExist(String store_name) {
-        return storeMemoryRepository.isExist(store_name);
-    }
-
-    public boolean isStoresEmpty() {
-        return storeMemoryRepository.isEmpty();
-    }
 
     @Override
     public HashMap<String, Store> getStores() {

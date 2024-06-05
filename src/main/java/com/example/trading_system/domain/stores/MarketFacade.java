@@ -69,11 +69,6 @@ public interface MarketFacade {
 
     String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
 
-    //HashMap<String, Store> getStores();
-    boolean isStoreExist(String store_name);
-    boolean isStoresEmpty();
-
-   // void addStore(Store store);    //Delete
     void addStore(String storeName, String description, StorePolicy storePolicy, String founder,Double storeRating);
 
     HashMap<String, Store> getStores();
