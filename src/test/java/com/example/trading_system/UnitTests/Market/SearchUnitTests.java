@@ -21,7 +21,7 @@ public class SearchUnitTests {
         marketFacade = MarketFacadeImp.getInstance();
         Store store = new Store("store1", "description",new StorePolicy(),"robert",null);
         Product product = new Product(1, "p1", "", 5, 5, 5, Category.Food, new ArrayList<>());
-        store.addProductToStore(product);
+        store.addProduct(1, "smartwatch","p1", "", 5, 5, 5, 3, new ArrayList<>());
         marketFacade.getStores().put(store.getNameId(), store);
         //marketFacade.getStores().put("store2", new Store("store2","description"));
     }
