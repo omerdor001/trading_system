@@ -37,4 +37,8 @@ public class Purchase {
         }
         return builder.toString();
     }
+
+    public String getStoreName() {
+        return null;
+    }
 }

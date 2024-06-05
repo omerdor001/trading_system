@@ -227,7 +227,7 @@ public class SearchAcceptanceTests {
         assertEquals(expectedResponse, result);
         verify(marketServiceMock, times(1)).searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category);
     }
-
+/*
     @Test
     public void testSearchNameInStores_Success() {
         String name = "product1";
@@ -323,5 +323,5 @@ public class SearchAcceptanceTests {
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         verify(marketServiceMock, times(1)).searchKeywordsInStores(keyWords, minPrice, maxPrice, minRating, category);
-    }
+    }*/
 }

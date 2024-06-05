@@ -8,13 +8,13 @@ import java.util.*;
 public class Registered extends User {
     private String userName;      //May be removed
     private String encrypted_pass;
-    @Getter
+
     private String address;
-    @Getter
+
     private LocalDate birthdate;
     private boolean isAdmin;
     private boolean isLogged = false;
-    @Getter
+
     private List<Role> roles;
     private List<Notification> notifications;
     private HashMap<String, List<Boolean>> managerToApprove;
@@ -36,8 +36,10 @@ public class Registered extends User {
         addOwnerRole(username, storeName);
     }
 
-    public String getUserName() {
-        return userName;
+    public void addOwnerRole(String appoint, String storeName) {
+        Role owner = new Role(storeName, appoint);
+        owner.setRoleState(new Owner(owner));
+        getRoles().add(owner);
     }
 
     @Override
@@ -81,11 +83,6 @@ public class Registered extends User {
         getRoles().add(manager);
     }
 
-    public void addOwnerRole(String appoint, String storeName) {
-        Role owner = new Role(storeName, appoint);
-        owner.setRoleState(new Owner(owner));
-        getRoles().add(owner);
-    }
 
     public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
         Role manager = getRoleByStoreId(store_name_id);
