@@ -20,8 +20,8 @@ public class StoreSalesHistory {
         purchases.add(purchase);
     }
 
-    public List<Purchase> getPurchasesByCustomer(int customerId) {
-        return purchases.stream().filter(purchase -> customerId == purchase.getCustomerId()).collect(Collectors.toList());
+    public List<Purchase> getPurchasesByCustomer(String customerUsername) {
+        return purchases.stream().filter(purchase -> customerUsername.equals(purchase.getCustomerUsername())).collect(Collectors.toList());
     }
 
     public List<Purchase> getAllPurchases() {
