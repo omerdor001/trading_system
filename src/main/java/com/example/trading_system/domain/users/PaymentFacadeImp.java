@@ -262,7 +262,9 @@ public class PaymentFacadeImp implements PaymentFacade {
                 productInSales.add(productInSale);
             }
 
-            Purchase purchase = new Purchase(userFacade.getUsers().get(registeredId).getUsername(), productInSales, storeId, totalcount);
+            Purchase purchase = new Purchase(userFacade.getUsers().get(registeredId).getUsername(), productInSales, totalcount);
+            store.addPurchase(purchase);
+
         }
     }
 }

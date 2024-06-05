@@ -261,6 +261,9 @@ public class Store {
         return managers;
     }
 
+    public void addPurchase(Purchase purchase){
+        salesHistory.addPurchase(purchase);
+    }
 
 
 

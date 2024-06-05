@@ -12,10 +12,6 @@ public class ProductInSale {
     private double price;
     private int quantity;
 
-    double getSumPrice() {
-        return price * quantity;
-    }
-
     @Override
     public String toString() {
         return "Product: " + id + ", Quantity: " + quantity + ", Price: $" + price;
