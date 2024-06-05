@@ -308,6 +308,10 @@ public class PaymentFacadeImp implements PaymentFacade {
             logger.error("User is not logged");
             throw new RuntimeException("User is not logged");
         }
+        if(marketFacade.getStore(storeName)== null){
+            logger.error("store not found");
+            throw new RuntimeException("store not found");
+        }
         if (!userFacade.getRegistered().get(username).isAdmin()) {
             logger.error("User is not commercial manager");
             throw new RuntimeException("User is not commercial manager");
