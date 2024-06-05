@@ -1,6 +1,7 @@
 package com.example.trading_system.domain.users;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -13,6 +14,8 @@ public class Registered extends User {
     @Getter
     private LocalDate birthdate;
     private boolean isAdmin;
+    @Getter
+    @Setter
     private boolean isLogged = false;
     @Getter
     private List<Role> roles;

@@ -14,6 +14,8 @@ public class PaymentFacadeImp implements PaymentFacade {
     private static PaymentFacadeImp instance = null;
     private MarketFacade marketFacade;
     private UserFacade userFacade;
+
+
     private List<Purchase> purchases;
     PaymentService paymentService;
     DeliveryService deliveryService;
@@ -371,4 +373,9 @@ public class PaymentFacadeImp implements PaymentFacade {
             Purchase purchase = new Purchase(id, productInSales, storeId, totalcount);
         }
     }
+    public List<Purchase> getPurchases() {
+        return purchases;
+    }
+
+
 }
