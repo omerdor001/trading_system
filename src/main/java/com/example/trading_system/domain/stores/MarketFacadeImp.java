@@ -121,6 +121,10 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("No name provided");
             throw new IllegalArgumentException("No name provided");
         }
+        if(storeName == null){
+            logger.error("No store name provided");
+            throw new IllegalArgumentException("No store name provided");
+        }
 
         if (storeMemoryRepository.getStore(storeName).getProducts().isEmpty()) {    //Change To Repo
             logger.warn("No products Available");
@@ -135,6 +139,11 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("No category provided");
             throw new IllegalArgumentException("No category provided");
         }
+        if(storeName == null){
+            logger.error("No store name provided");
+            throw new IllegalArgumentException("No store name provided");
+        }
+
         if (storeMemoryRepository.getStore(storeName).getProducts().isEmpty()) {   //Change to Repo
             logger.warn("No products Available");
             return "{}";
@@ -152,6 +161,11 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("No keywords provided");
             throw new IllegalArgumentException("No keywords provided");
         }
+        if(storeName == null){
+            logger.error("No store name provided");
+            throw new IllegalArgumentException("No store name provided");
+        }
+
         if (storeMemoryRepository.getStore(storeName).getProducts().isEmpty()) {    //Change to Repo
             logger.warn("No products Available");
             return "{}";
