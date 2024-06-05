@@ -1,5 +1,6 @@
 package com.example.trading_system.domain.users;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class Visitor extends User {
@@ -20,6 +21,16 @@ public class Visitor extends User {
     @Override
     public void receiveNotification(String notification) {
         throw new UnsupportedOperationException("Visitors cannot receive notifications");
+    }
+
+    @Override
+    public String getAddress() {
+        return "";
+    }
+
+    @Override
+    public LocalDate getBirthdate() {
+        return null;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.trading_system.domain.users;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -65,6 +66,10 @@ public abstract class User {
     public abstract List<Notification> getNotifications();
 
     public abstract void receiveNotification(String notification);
+
+    public abstract String getAddress();
+
+    public abstract LocalDate getBirthdate();
 
     public String sendNotification(String receiverUsername, String content) {
         Notification notification = new Notification(this.username, receiverUsername, new Date(), content);

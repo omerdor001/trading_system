@@ -338,7 +338,6 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             userService.logout(id, username);
             logger.info("User: {} logged out successfully", username);
             return new ResponseEntity<>("Logout successful.", HttpStatus.OK);
