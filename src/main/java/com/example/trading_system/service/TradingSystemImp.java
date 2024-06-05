@@ -86,7 +86,6 @@ public class TradingSystemImp implements TradingSystem{
         try {
             if (!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             if (userService.isAdmin(username)) {
                 //TODO call close method in deeper classes? (maybe logout all users)
                 marketService.deleteInstance();
@@ -168,7 +167,6 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             marketService.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
         } catch (Exception e) {
             logger.error("Error occurred while adding product: {} to store: {}: {}", product_name, store_name, e.getMessage());
@@ -188,7 +186,6 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             marketService.removeProduct(username, store_name, product_id);
         } catch (Exception e) {
             logger.error("Error occurred while removing product with id: {} from store: {}: {}", product_id, store_name, e.getMessage());
@@ -206,7 +203,6 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             marketService.setProductName(username, store_name, product_id, product_name);
         } catch (Exception e) {
             logger.error("Error occurred while setting product name for product id: {} in store: {}: {}", product_id, store_name, e.getMessage());
@@ -224,7 +220,6 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             marketService.setProductDescription(username, store_name, product_id, product_description);
         } catch (Exception e) {
             logger.error("Error occurred while setting product description for product id: {} in store: {}: {}", product_id, store_name, e.getMessage());
@@ -242,7 +237,6 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             marketService.setProductPrice(username, store_name, product_id, product_price);
         } catch (Exception e) {
             logger.error("Error occurred while setting product price for product id: {} in store: {}: {}", product_id, store_name, e.getMessage());
@@ -260,7 +254,6 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             marketService.setProductQuantity(username, store_name, product_id, product_quantity);
         } catch (Exception e) {
             logger.error("Error occurred while setting product quantity for product id: {} in store: {}: {}", product_id, store_name, e.getMessage());
@@ -278,7 +271,6 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             marketService.setRating(username, store_name, product_id, rating);
         } catch (Exception e) {
             logger.error("Error occurred while setting rating for product id: {} in store: {}: {}", product_id, store_name, e.getMessage());
@@ -296,7 +288,6 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             marketService.setCategory(username, store_name, product_id, category);
         } catch (Exception e) {
             logger.error("Error occurred while setting category for product id: {} in store: {}: {}", product_id, store_name, e.getMessage());
@@ -642,7 +633,6 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             String result = paymentService.getPurchaseHistory(username, storeName, productBarcode);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
@@ -659,7 +649,6 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             String result = paymentService.getStoresPurchaseHistory(username, storeName, productBarcode);
             return new ResponseEntity<>(result, HttpStatus.OK);
 
@@ -711,7 +700,6 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             userService.openStore(username, storeName, description, policy);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed opening store with name: {}", e.getMessage(), storeName);
@@ -729,7 +717,6 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            username = username.substring(1);
             String result = userService.viewCart(username);
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
