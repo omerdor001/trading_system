@@ -26,8 +26,11 @@ public class Store {
     private boolean isActive;
     private boolean isOpen;
     private StoreSalesHistory salesHistory;
+    @Getter
+    @Setter
+    private Double storeRating;
 
-    public Store(String nameId, String description, StorePolicy storePolicy, String founder) {
+    public Store(String nameId, String description, StorePolicy storePolicy, String founder,Double storeRating) {
         this.nameId = nameId;
         this.description = description;
         this.storePolicy = storePolicy;
@@ -37,6 +40,7 @@ public class Store {
         this.founder = founder;
         this.managers = new LinkedList<>();
         this.owners = new LinkedList<>();
+        this.storeRating=storeRating;
     }
 
     public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, Category category) {
@@ -73,6 +77,42 @@ public class Store {
                 list_products.add(p);
         }
         return filterProducts(list_products, minPrice, maxPrice, minRating, category);
+    }
+    public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
+        return productList.stream()
+                .filter(p -> minPrice == null || p.getProduct_price() >= minPrice)
+                .filter(p -> maxPrice == null || p.getProduct_price() <= maxPrice)
+                .filter(p -> minRating == null || p.getRating() >= minRating)
+                .filter(p -> storeRating == null || p.getRating() >= storeRating)
+                .filter(p -> category == null || p.getCategory() == category)
+                .collect(Collectors.toList());
+    }
+
+    public List<Product> searchName(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
+        List<Product> list_products = new ArrayList<>();
+        for (Product p : products.values()) {
+            if (p.getProduct_name().equals(name))
+                list_products.add(p);
+        }
+        return filterProducts(list_products, minPrice, maxPrice, minRating, category,storeRating);
+    }
+
+    public List<Product> searchCategory(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
+        List<Product> list_products = new ArrayList<>();
+        for (Product p : products.values()) {
+            if (p.getCategory().equals(category))
+                list_products.add(p);
+        }
+        return filterProducts(list_products, minPrice, maxPrice, minRating, category,storeRating);
+    }
+
+    public List<Product> searchKeywords(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
+        List<Product> list_products = new ArrayList<>();
+        for (Product p : products.values()) {
+            if (p.getKeyWords().contains(keyWords))
+                list_products.add(p);
+        }
+        return filterProducts(list_products, minPrice, maxPrice, minRating, category,storeRating);
     }
 
     @Override
@@ -111,7 +151,7 @@ public class Store {
             throw new IllegalArgumentException("Quantity must be natural number");
         if (rating < 0)
             throw new IllegalArgumentException("Rating can't be negative number");
-        Product product = new Product(product_id, product_name, product_description, product_price, product_quantity, rating, Category.values()[category], keyWords);
+        Product product = new Product(product_id, product_name, product_description, product_price, product_quantity, rating, Category.getCategoryFromInt(category), keyWords);
         products.put(product.getProduct_id(), product);
     }
 
@@ -184,8 +224,8 @@ public class Store {
 
     }
 
-    List<Purchase> getHistoryPurchasesByCustomer(int customerId) {
-        return salesHistory.getPurchasesByCustomer(customerId);
+    List<Purchase> getHistoryPurchasesByCustomer(String customerUsername) {
+        return salesHistory.getPurchasesByCustomer(customerUsername);
     }
 
     List<Purchase> getAllHistoryPurchases() {

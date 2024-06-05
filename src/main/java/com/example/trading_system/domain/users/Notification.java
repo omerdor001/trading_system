@@ -19,21 +19,21 @@ public class Notification {
         objectMapper.setTimeZone(TimeZone.getDefault());
     }
 
-    private int senderId;
-    private int receiverId;
+    private String senderUsername;
+    private String receiverUsername;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
     private Date dateOfCreation;
     private String textContent;
 
     @JsonCreator
     public Notification(
-            @JsonProperty("senderId") int senderId,
-            @JsonProperty("receiverId") int receiverId,
+            @JsonProperty("senderUsername") String senderUsername,
+            @JsonProperty("receiverUsername") String receiverUsername,
             @JsonProperty("dateOfCreation") Date dateOfCreation,
             @JsonProperty("textContent") String textContent
     ) {
-        this.senderId = senderId;
-        this.receiverId = receiverId;
+        this.senderUsername = senderUsername;
+        this.receiverUsername = receiverUsername;
         this.dateOfCreation = dateOfCreation;
         this.textContent = textContent;
     }
@@ -46,20 +46,20 @@ public class Notification {
         }
     }
 
-    public int getSenderId() {
-        return senderId;
+    public String getSenderUsername() {
+        return senderUsername;
     }
 
-    public void setSenderId(int senderId) {
-        this.senderId = senderId;
+    public void setSenderUsername(String senderUsername) {
+        this.senderUsername = senderUsername;
     }
 
-    public int getReceiverId() {
-        return receiverId;
+    public String getReceiverUsername() {
+        return receiverUsername;
     }
 
-    public void setReceiverId(int receiverId) {
-        this.receiverId = receiverId;
+    public void setReceiverUsername(String receiverUsername) {
+        this.receiverUsername = receiverUsername;
     }
 
     public Date getDateOfCreation() {
