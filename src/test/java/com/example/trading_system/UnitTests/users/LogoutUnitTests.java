@@ -25,14 +25,14 @@ class LogoutUnitTests {
     void setUp() throws Exception {
         userFacade = UserFacadeImp.getInstance();
         userFacade.enter(1);
-        userFacade.register(id, username, encryption, birthdate);
-        userFacade.login(1,username,encryption);
+        userFacade.register( username, encryption, birthdate);
+        userFacade.login("1",username,encryption);
     }
 
     @Test
     void logout_Success() {
         assertDoesNotThrow(() -> userFacade.logout(id, username));
-        assertEquals(userFacade.getRegistered().get(username).getLogged(), false);
+        assertEquals(userFacade.getUsers().get(username).getLogged(), false);
     }
 
     @Test
