@@ -44,7 +44,9 @@ public class Visitor extends User {
     }
 
     @Override
-    public void openStore(String storeName) {}
+    public void openStore(String storeName) {
+        throw new RuntimeException("Only registered users can open store");
+    }
 
     @Override
     public boolean isOwner(String store_name_id) {

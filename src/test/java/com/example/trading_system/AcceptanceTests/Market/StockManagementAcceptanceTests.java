@@ -27,11 +27,11 @@ class StockManagementAcceptanceTests {
         token1 = response1.getBody();
         tradingSystem.register(1, "testuser2", "password1232", LocalDate.now());
         tradingSystem.register(2, "testuser3", "password1233", LocalDate.now());
-        tradingSystem.login(token1,1,"testuser1", "password123");
+        tradingSystem.login(token1,"1","testuser1", "password123");
         tradingSystem.appointOwner("testuser1",token1,"testuser1","testuser3","Adidas");
         ResponseEntity<String> response2 = tradingSystem.enter();
         token2 = response2.getBody();
-        tradingSystem.login(token2,1,"testuser2", "password1232");
+        tradingSystem.login(token2,"1","testuser2", "password1232");
         tradingSystem.openStore("testuser2",token2,"Adidas","shoes",mock(StorePolicy.class));
         ResponseEntity<String> response3 = tradingSystem.enter();
         token3=response3.getBody();
@@ -39,9 +39,9 @@ class StockManagementAcceptanceTests {
 
     @AfterEach
     public void tearDown(){
-        tradingSystem.exit(token1,0);
-        tradingSystem.exit(token2,1);
-        tradingSystem.exit(token3,2);
+        tradingSystem.exit(token1,"0");
+        tradingSystem.exit(token2,"1");
+        tradingSystem.exit(token3,"2");
         tradingSystem.deleteInstance();
     }
 

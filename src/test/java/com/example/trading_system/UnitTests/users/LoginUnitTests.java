@@ -70,14 +70,14 @@ class LoginUnitTests {
     @Test
     void registeredLogin_Success() {
         String username = "testuser";
-        Registered registered = new Registered(1, username, "encryptedPassword", LocalDate.now());
+        Registered registered = new Registered( username, "encryptedPassword", LocalDate.now());
         registered.login();
         assertTrue(registered.getLogged(), "User should be logged in");
     }
 
     @Test
     void visitorLogin() {
-        Visitor visitor = new Visitor(1);
+        Visitor visitor = new Visitor("testuser");
         assertThrows(RuntimeException.class, visitor::login);
     }
 }
