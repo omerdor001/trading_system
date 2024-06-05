@@ -101,12 +101,10 @@ public class Store {
         return products.get(productId);
     }
 
-    public synchronized void addProductToStore(Product product) {
-        products.put(product.getProduct_id(), product);
-    }
-
     public synchronized void addProduct(int product_id, String store_name, String product_name, String product_description,
                                         double product_price, int product_quantity, double rating, int category, List<String> keyWords) {
+        if(isProductExist(product_id))
+            throw new IllegalArgumentException("Product with id " + product_id + " already exists");
         if (product_price < 0)
             throw new IllegalArgumentException("Price can't be negative number");
         if (product_quantity <= 0)
@@ -118,6 +116,8 @@ public class Store {
     }
 
     public synchronized void removeProduct(int productId) {
+        if(!isProductExist(productId))
+            throw new IllegalArgumentException("Product with id " + productId + " does not exist");
         products.remove(productId);
     }
 
@@ -126,6 +126,8 @@ public class Store {
         if (product != null) {
             product.setProduct_name(product_name);
         }
+        else
+            throw new IllegalArgumentException("Product with id " + productId + " does not exist");
     }
 
     public synchronized void setProductDescription(int productId, String product_description) {
@@ -133,6 +135,8 @@ public class Store {
         if (product != null) {
             product.setProduct_description(product_description);
         }
+        else
+            throw new IllegalArgumentException("Product with id " + productId + " does not exist");
     }
 
     public synchronized void setProductPrice(int productId, double product_price) {
@@ -142,6 +146,9 @@ public class Store {
         if (product != null) {
             product.setProduct_price(product_price);
         }
+        else
+            throw new IllegalArgumentException("Product with id " + productId + " does not exist");
+
     }
 
     public synchronized void setProductQuantity(int productId, int product_quantity) {
@@ -151,6 +158,8 @@ public class Store {
         if (product != null) {
             product.setProduct_quantity(product_quantity);
         }
+        else
+            throw new IllegalArgumentException("Product with id " + productId + " does not exist");
     }
 
     public synchronized void setRating(int productId, double rating) {
@@ -160,6 +169,9 @@ public class Store {
         if (product != null) {
             product.setRating(rating);
         }
+        else
+            throw new IllegalArgumentException("Product with id " + productId + " does not exist");
+
     }
 
     public synchronized void setCategory(int productId, int category) {
@@ -167,6 +179,9 @@ public class Store {
         if (product != null) {
             product.setCategory(category);
         }
+        else
+            throw new IllegalArgumentException("Product with id " + productId + " does not exist");
+
     }
 
     List<Purchase> getHistoryPurchasesByCustomer(int customerId) {

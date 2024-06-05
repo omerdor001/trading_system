@@ -31,11 +31,15 @@ public interface UserService {
 
     void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException;
 
+    void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException;
+
     void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
 
     void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
 
     void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
+
+    void rejectToOwnStore(String userName, String storeName, String appoint) throws IllegalAccessException;
 
     void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
 

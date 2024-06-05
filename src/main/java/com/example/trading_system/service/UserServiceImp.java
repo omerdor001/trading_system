@@ -153,9 +153,23 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException {
+        logger.info("{} trying to approve owner to store : {}", userName, storeName);
+        userFacade.rejectToManageStore(userName, storeName, appoint);
+        logger.info("Finished approving owner to store : {}", storeName);
+    }
+
+    @Override
     public void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException {
         logger.info("{} trying to approve owner to store : {}", newOwner, storeName);
         userFacade.approveOwner(newOwner, storeName, appoint);
+        logger.info("Finished approving owner to store : {}", storeName);
+    }
+
+    @Override
+    public void rejectToOwnStore(String userName, String storeName, String appoint) throws IllegalAccessException {
+        logger.info("{} trying to approve owner to store : {}", userName, storeName);
+        userFacade.rejectToOwnStore(userName, storeName, appoint);
         logger.info("Finished approving owner to store : {}", storeName);
     }
 

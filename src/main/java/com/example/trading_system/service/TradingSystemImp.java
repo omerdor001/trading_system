@@ -369,12 +369,12 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> suggestManage(String username, String token, String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+    public ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
         logger.info("Trying to suggest user : {} to be a manager in store : {}", newManager, store_name_id);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(username,token))
+            if(!checkToken(appoint,token))
                 return invalidTokenResponse();
             userService.suggestManage(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
         } catch (Exception e) {
@@ -386,12 +386,12 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> suggestOwner(String username, String token, String appoint, String newOwner, String storeName) {
+    public ResponseEntity<String> suggestOwner(String appoint, String token, String newOwner, String storeName) {
         logger.info("{} trying to suggest user : {} to be a owner in store : {}", appoint, newOwner, storeName);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(username,token))
+            if(!checkToken(appoint,token))
                 return invalidTokenResponse();
             userService.suggestOwner(appoint, newOwner, storeName);
         } catch (Exception e) {
@@ -403,12 +403,12 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> approveManage(String username, String token, String newManager, String store_name_id, String appoint) {
+    public ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint) {
         logger.info("Trying to approve manage to store : {}", store_name_id);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(username,token))
+            if(!checkToken(newManager,token))
                 return invalidTokenResponse();
             userService.approveManage(newManager, store_name_id, appoint);
         } catch (Exception e) {
@@ -420,12 +420,12 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> approveOwner(String username, String token, String newOwner, String storeName, String appoint) {
+    public ResponseEntity<String> approveOwner(String newOwner, String token, String storeName, String appoint) {
         logger.info("{} trying to approve owner to store : {}", newOwner, storeName);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(username,token))
+            if(!checkToken(newOwner,token))
                 return invalidTokenResponse();
             userService.approveOwner(newOwner, storeName, appoint);
         } catch (Exception e) {
@@ -435,6 +435,42 @@ public class TradingSystemImp implements TradingSystem{
         logger.info("Finished approving owner to store : {}", storeName);
         return new ResponseEntity<>("Success approving owner", HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<String> rejectToOwnStore(String username, String token, String storeName, String appoint) {
+        logger.info("{} trying to reject owner to store : {}", newOwner, storeName);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(username,token))
+                return invalidTokenResponse();
+            userService.rejectToOwnStore(username, storeName, appoint);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to reject owner to store : {}", e.getMessage(), storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished reject owner to store : {}", storeName);
+        return new ResponseEntity<>("Success reject to be owner", HttpStatus.OK);
+    }
+
+
+    @Override
+    public ResponseEntity<String> rejectToManageStore(String userName, String token, String store_name_id, String appoint) {
+        logger.info("Trying to reject to manage to store : {}", store_name_id);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            userService.rejectToManageStore(userName, store_name_id, appoint);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to reject management to store : {}", e.getMessage(), store_name_id);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished reject manage to store : {}", store_name_id);
+        return new ResponseEntity<>("Success rejecting manage", HttpStatus.OK);
+    }
+
 
     //TODO Same as suggestManager/approveManager?
     @Override
