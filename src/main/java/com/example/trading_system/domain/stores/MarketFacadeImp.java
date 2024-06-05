@@ -1,7 +1,6 @@
 package com.example.trading_system.domain.stores;
-
-import com.example.trading_system.domain.users.Registered;
 import com.example.trading_system.domain.users.RoleState;
+import com.example.trading_system.domain.users.User;
 import com.example.trading_system.domain.users.UserFacade;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ import java.util.stream.Collectors;
 public class MarketFacadeImp implements MarketFacade {
     @Getter
     private StoreRepository storeMemoryRepository;
-    // private HashMap<String, Store> stores;     //Delete
     private UserFacade userFacade;
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
     private static MarketFacadeImp instance = null;
@@ -39,13 +37,8 @@ public class MarketFacadeImp implements MarketFacade {
     @Override
     public void deleteInstance() {
         instance = null;
-        // this.stores = null;
         this.userFacade = null;
     }
-
-    // public void addStore(Store store) {             //DeleteAllFunction
-    //    stores.put(store.getNameId(), store);
-    // }
 
     public void addStore(String storeName, String description, StorePolicy storePolicy, String founder, Double storeRating) {
         storeMemoryRepository.addStore(storeName, description, storePolicy, founder, storeRating);
@@ -61,11 +54,6 @@ public class MarketFacadeImp implements MarketFacade {
             }
         }
     }
-
-    //@Override
-    //public HashMap<String, Store> getStores() {
-    //    return stores;
-    //}
 
     //For Tests
     public boolean isProductExist(int productId, String storeName) {
