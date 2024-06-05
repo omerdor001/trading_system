@@ -153,7 +153,7 @@ public class Store {
             throw new IllegalArgumentException("Quantity must be natural number");
         if (rating < 0)
             throw new IllegalArgumentException("Rating can't be negative number");
-        Product product = new Product(product_id, product_name, product_description, product_price, product_quantity, rating, Category.values()[category], keyWords);
+        Product product = new Product(product_id, product_name, product_description, product_price, product_quantity, rating, Category.getCategoryFromInt(category), keyWords);
         products.put(product.getProduct_id(), product);
     }
 

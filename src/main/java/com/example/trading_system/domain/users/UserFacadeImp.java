@@ -1,6 +1,7 @@
 package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.stores.*;
+import com.example.trading_system.service.Security;
 import com.example.trading_system.service.UserServiceImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,6 +101,7 @@ public class UserFacadeImp implements UserFacade {
         if (password == null) throw new Exception("Encrypted password is null");
         if (password.isEmpty()) throw new Exception("Encrypted password is empty");
         if (birthdate == null) throw new Exception("Birthdate password is null");
+        if (registered.containsKey(username)) throw new Exception("username already exists - " + username);
     }
 
     @Override
