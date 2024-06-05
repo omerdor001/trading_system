@@ -16,24 +16,24 @@ class ExitUnitTests {
     void setUp() {
         userFacade = UserFacadeImp.getInstance();
         // Adding sample visitors and registered users
-        userFacade.getVisitors().put(1, new Visitor(1));
-        userFacade.getVisitors().put(2, new Visitor(2));
-        userFacade.getVisitors().put(3, new Visitor(3));
-        userFacade.getRegistered().put("user1", new Registered(4, "user1", "password1", LocalDate.of(1990, 5, 15)));
-        userFacade.getRegistered().put("user2", new Registered(5, "user2", "password2", LocalDate.of(1991, 6, 20)));
+        userFacade.getUsers().put("v1", new Visitor("v1"));
+        userFacade.getUsers().put("v2", new Visitor("v2"));
+        userFacade.getUsers().put("v3", new Visitor("v3"));
+        userFacade.getUsers().put("ruser1", new Registered( "user1", "password1", LocalDate.of(1990, 5, 15)));
+        userFacade.getUsers().put("ruser2", new Registered( "user2", "password2", LocalDate.of(1991, 6, 20)));
     }
 
     @Test
     void exitVisitor_Success() {
         int id = 1;
-        assertDoesNotThrow(() -> userFacade.exit(id));
-        assertFalse(userFacade.getVisitors().containsKey(id));
+        assertDoesNotThrow(() -> userFacade.exit("v"+id));
+        assertFalse(userFacade.getUsers().containsKey("v"+id));
     }
 
     @Test
     void exitVisitor_NoSuchVisitor() {
         int id = 4; // Assuming visitor with id 4 doesn't exist
-        Exception exception = assertThrows(Exception.class, () -> userFacade.exit(id));
+        Exception exception = assertThrows(Exception.class, () -> userFacade.exit("v"+id));
         assertEquals("No such visitor with id- " + id, exception.getMessage());
     }
 
@@ -41,13 +41,13 @@ class ExitUnitTests {
     void exitRegisteredUser_Success() {
         String username = "user1";
         assertDoesNotThrow(() -> userFacade.exit(username));
-        assertFalse(userFacade.getRegistered().containsKey(username));
+        assertFalse(userFacade.getUsers().containsKey("r"+username));
     }
 
     @Test
     void exitRegisteredUser_NoSuchUser() {
         String username = "nonexistent"; // Assuming this user doesn't exist
-        Exception exception = assertThrows(Exception.class, () -> userFacade.exit(username));
+        Exception exception = assertThrows(Exception.class, () -> userFacade.exit("v"+username));
         assertEquals("No such user with username- " + username, exception.getMessage());
     }
 }

@@ -4,17 +4,13 @@ public interface PaymentFacade {
 
     void deleteInstance();
 
-    boolean VisitorCheckAvailabilityAndConditions(int visitorId);
+    boolean checkAvailabilityAndConditions(String username);
 
-    boolean registeredCheckAvailabilityAndConditions(String registeredId);
-
-    void VisitorApprovePurchase(int visitorId, String paymentService);
-
-    void RegisteredApprovePurchase(String registeredId, String paymentService);
+    void approvePurchase(String username);
 
     double calculateTotalPrice(Cart cart);
 
-    String getPurchaseHistory(String username, String storeName, Integer id, Integer productBarcode);
+    String getPurchaseHistory(String username, String storeName, Integer productBarcode);
 
-    String getStoresPurchaseHistory(String username, String storeName, Integer id, Integer productBarcode);
+    String getStoresPurchaseHistory(String username, String storeName, Integer productBarcode);
 }

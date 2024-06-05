@@ -45,13 +45,14 @@ public class PaymentFacadeImp implements PaymentFacade {
         this.userFacade = null;
     }
 
-    public synchronized boolean VisitorCheckAvailabilityAndConditions(int visitorId) {
-        if (!userFacade.getVisitors().containsKey(visitorId)) {
+    @Override
+    public synchronized boolean checkAvailabilityAndConditions(String username) {
+        if (!userFacade.getUsers().containsKey(username)) {
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        Visitor visitor = userFacade.getVisitors().get(visitorId);
-        Cart cart = visitor.getShopping_cart();
+        User user = userFacade.getUsers().get(username);
+        Cart cart = user.getShopping_cart();
         HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             String storeId = entry.getKey();
@@ -66,91 +67,6 @@ public class PaymentFacadeImp implements PaymentFacade {
             }
         }
         return true;
-    }
-
-    public synchronized boolean registeredCheckAvailabilityAndConditions(String registeredId) {
-        if (!userFacade.getRegistered().containsKey(registeredId)) {
-            logger.error("User not found");
-            throw new RuntimeException("User not found");
-        }
-        Registered registered1 = userFacade.getRegistered().get(registeredId);
-        Cart cart = registered1.getShopping_cart();
-        HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
-        for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
-            String storeId = entry.getKey();
-            ShoppingBag shoppingBag = entry.getValue();
-            Store store = marketFacade.getStores().get(storeId);
-            for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
-                Product product = store.getProducts().get(productEntry.getKey());
-                if (product == null || product.getProduct_quantity() < productEntry.getValue()) {
-                    logger.error("Product doesn't exist or not enough quantity");
-                    throw new RuntimeException("Product doesn't exist or not enough quantity");
-                }
-            }
-        }
-        return true;
-    }
-
-
-    //Need to add address for delivery
-    public synchronized void VisitorApprovePurchase(int visitorId, String payment_Service) {
-        if (!VisitorCheckAvailabilityAndConditions(visitorId)) {
-            logger.error("Products are not available or do not meet purchase conditions.");
-            throw new RuntimeException("Products are not available or do not meet purchase conditions.");
-        }
-
-        if (!userFacade.getVisitors().containsKey(visitorId)) {
-            logger.error("User not found");
-            throw new RuntimeException("User not found");
-        }
-        Visitor visitor = userFacade.getVisitors().get(visitorId);
-        Cart cart = visitor.getShopping_cart();
-        HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
-        for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
-            String storeId = entry.getKey();
-            ShoppingBag shoppingBag = entry.getValue();
-
-            Store store = marketFacade.getStores().get(storeId);
-            for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
-                int productId = productEntry.getKey();
-                int quantity = productEntry.getValue();
-
-                Product product = store.getProducts().get(productId);
-                product.setProduct_quantity(product.getProduct_quantity() - quantity);
-            }
-        }
-
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                VisitorReleaseReservedProducts(visitor);
-                throw new RuntimeException("time out !");
-
-            }
-        }, 10 * 60 * 1000);
-        //Making delivery
-        int deliveryId=0;  //For cancelling
-        String address = ""; //TODO : Need to be a parameter of this function
-        try {
-            deliveryId=deliveryService.makeDelivery(address);
-        }
-        catch (Exception e){
-            //Release the products and message for another try
-        }
-        //Making payment
-        int paymentId=0;   //For cancelling
-        double totalPrice = calculateTotalPrice(cart);
-        try {
-            paymentId=paymentService.makePayment(totalPrice);
-        }
-        catch (Exception e){
-            deliveryService.cancelDelivery(deliveryId);
-            //Release the products and message for another try
-        }
-        addPurchaseVisitor(visitorId);
-        timer.cancel();
-        timer.purge();
     }
 
     private synchronized void VisitorReleaseReservedProducts(Visitor visitor) {
@@ -171,18 +87,19 @@ public class PaymentFacadeImp implements PaymentFacade {
         }
     }
 
-    public synchronized void RegisteredApprovePurchase(String registeredId, String payment_Service) {
-        if (!registeredCheckAvailabilityAndConditions(registeredId)) {
+    @Override
+    public synchronized void approvePurchase(String username) {
+        if (!checkAvailabilityAndConditions(username)) {
             logger.error("Products are not available or do not meet purchase conditions.");
             throw new RuntimeException("Products are not available or do not meet purchase conditions.");
         }
 
-        if (!userFacade.getVisitors().containsKey(registeredId)) {
+        if (!userFacade.getUsers().containsKey(username)) {
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        Registered registered = userFacade.getRegistered().get(registeredId);
-        Cart cart = registered.getShopping_cart();
+        User user = userFacade.getUsers().get(username);
+        Cart cart = user.getShopping_cart();
         HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             String storeId = entry.getKey();
@@ -202,12 +119,10 @@ public class PaymentFacadeImp implements PaymentFacade {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                RegisteredReleaseReservedProducts(registered);
+                releaseReservedProducts(username);
                 throw new RuntimeException("time out !");
             }
         }, 10 * 60 * 1000);
-
-        PaymentServiceProxy paymentServiceProxy = new PaymentServiceProxy(payment_Service);   //Need to delete
         double totalPrice = calculateTotalPrice(cart);
         //TODO: fix process Payment
         //Making delivery
@@ -228,13 +143,18 @@ public class PaymentFacadeImp implements PaymentFacade {
             deliveryService.cancelDelivery(deliveryId);
             //Release the products and message for another try
         }
-        addPurchaseRegistered(registeredId);
+        addPurchase(username);
         timer.cancel();
         timer.purge();
     }
 
-    private synchronized void RegisteredReleaseReservedProducts(Registered registered) {
-        Cart cart = registered.getShopping_cart();
+    private synchronized void releaseReservedProducts(String username) {
+        if (!userFacade.getUsers().containsKey(username)) {
+            logger.error("User not found");
+            throw new RuntimeException("User not found");
+        }
+        User user = userFacade.getUsers().get(username);
+        Cart cart = user.getShopping_cart();
         HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             String storeId = entry.getKey();
@@ -266,25 +186,25 @@ public class PaymentFacadeImp implements PaymentFacade {
     }
 
     @Override
-    public String getPurchaseHistory(String username, String storeName, Integer id, Integer productBarcode) {
-        if (!userFacade.getRegistered().containsKey(username)) {
+    public String getPurchaseHistory(String username, String storeName, Integer productBarcode) {
+        if (!userFacade.getUsers().containsKey(username)) {    //Change when Repo
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        if (!userFacade.getRegistered().get(username).getLogged()) {
+        if (username.charAt(0)=='r' && !userFacade.getUsers().get(username).getLogged()) {
             logger.error("User is not logged");
             throw new RuntimeException("User is not logged");
         }
-        if (!userFacade.getRegistered().get(username).isAdmin()) {
+        if (!userFacade.isAdmin(username)) {
             logger.error("User is not commercial manager");
             throw new RuntimeException("User is not commercial manager");
         }
 
         List<Purchase> filteredPurchases = purchases;
 
-        if (id != null) {
+        if (username != null) {
             filteredPurchases = filteredPurchases.stream()
-                    .filter(p -> p.getCustomerId() == id)
+                    .filter(p -> p.getCustomerUsername() == username)
                     .collect(Collectors.toList());
         }
 
@@ -299,16 +219,16 @@ public class PaymentFacadeImp implements PaymentFacade {
     }
 
 
-    public String getStoresPurchaseHistory(String username, String storeName, Integer id, Integer productBarcode) {
-        if (!userFacade.getRegistered().containsKey(username)) {
+    public String getStoresPurchaseHistory(String username, String storeName, Integer productBarcode) {
+        if (!userFacade.getUsers().containsKey(username)) {    //Change when Repo
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        if (!userFacade.getRegistered().get(username).getLogged()) {
+        if (username.charAt(0)=='r' && !userFacade.getUsers().get(username).getLogged()) {
             logger.error("User is not logged");
             throw new RuntimeException("User is not logged");
         }
-        if (!userFacade.getRegistered().get(username).isAdmin()) {
+        if (!userFacade.isAdmin(username)) {
             logger.error("User is not commercial manager");
             throw new RuntimeException("User is not commercial manager");
         }
@@ -324,8 +244,8 @@ public class PaymentFacadeImp implements PaymentFacade {
                 .collect(Collectors.joining("\n"));
     }
 
-    private void addPurchaseRegistered(String registeredId) {
-        Cart cart = userFacade.getRegistered().get(registeredId).getShopping_cart();
+    private void addPurchase(String registeredId) {
+        Cart cart = userFacade.getUsers().get(registeredId).getShopping_cart();
         double totalcount = 0;
         List<ProductInSale> productInSales = new ArrayList<>();
         HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
@@ -342,29 +262,7 @@ public class PaymentFacadeImp implements PaymentFacade {
                 productInSales.add(productInSale);
             }
 
-            Purchase purchase = new Purchase(userFacade.getRegistered().get(registeredId).getId(registeredId), productInSales, storeId, totalcount);
-        }
-    }
-
-    private void addPurchaseVisitor(int id) {
-        Cart cart = userFacade.getVisitors().get(id).getShopping_cart();
-        double totalcount = 0;
-        List<ProductInSale> productInSales = new ArrayList<>();
-        HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
-        for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
-            String storeId = entry.getKey();
-            ShoppingBag shoppingBag = entry.getValue();
-            Store store = marketFacade.getStores().get(storeId);
-            for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
-                int productId = productEntry.getKey();
-                int quantity = productEntry.getValue();
-                Product product = store.getProducts().get(productId);
-                totalcount = totalcount + quantity * product.getProduct_price();
-                ProductInSale productInSale = new ProductInSale(productId, product.getProduct_price(), quantity, storeId);
-                productInSales.add(productInSale);
-            }
-
-            Purchase purchase = new Purchase(id, productInSales, storeId, totalcount);
+            Purchase purchase = new Purchase(userFacade.getUsers().get(registeredId).getUsername(), productInSales, storeId, totalcount);
         }
     }
 }
