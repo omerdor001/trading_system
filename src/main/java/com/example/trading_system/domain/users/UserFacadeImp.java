@@ -58,6 +58,9 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void logout(int id,String username) {
+        if (username == null || username.isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be null or empty");
+        }
         if(username.charAt(0)!='r'){
             throw new IllegalArgumentException("User performs Not like a registered");
         }
@@ -65,10 +68,18 @@ public class UserFacadeImp implements UserFacade {
         if (u == null)
             throw new IllegalArgumentException("No such user " + username);
         if (username.charAt(0)=='r' && !u.getLogged())
-            throw new RuntimeException("User " + username + "already Logged out");
+            throw new IllegalArgumentException("User " + username + "already Logged out");
         saveUserCart(username);
         u.logout();
         enter(id);
+    }
+
+    private void saveUserCart(String username) {
+        User user = users.get(username);
+        if (user == null || user.getShopping_cart() == null) {
+            throw new IllegalArgumentException("user doesn't exist in the system");
+        }
+        users.get(username).getShopping_cart().saveCart();
     }
 
     @Override
@@ -128,9 +139,6 @@ public class UserFacadeImp implements UserFacade {
         //TODO return something to show the notification if receiver is logged in - maybe boolean if logged in
     }
 
-    private void saveUserCart(String username) {
-        users.get(username).getShopping_cart().saveCart();
-    }
 
     @Override
     public void saveUserCart(String username, int productId, String storeName, int quantity) {
@@ -239,22 +247,22 @@ public class UserFacadeImp implements UserFacade {
     public void openStore(String username, String storeName, String description, StorePolicy policy) {
         if (!users.containsKey(username)) {
             logger.error("While opening store - User not found");
-            throw new RuntimeException("User not found");
+            throw new IllegalArgumentException("User not found");
         }
         if (storeName == null || storeName.trim().isEmpty()) {
             logger.error("While opening store - Store name is null");
-            throw new RuntimeException("Store name should not be null");
+            throw new IllegalArgumentException("Store name should not be null");
         }
         if (marketFacade.isStoreExist(storeName)) {
             logger.error("While opening store - Store with name: {} already exists", storeName);
-            throw new RuntimeException("Store with name " + storeName + " already exists");
+            throw new IllegalArgumentException("Store with name " + storeName + " already exists");
         }
         try {
             marketFacade.addStore(storeName, description, policy, username, null);
             users.get(username).openStore(storeName);
         } catch (Exception e) {
             logger.error("Failed to open store: {}", e.getMessage());
-            throw new RuntimeException("Failed to open store", e);
+            throw new IllegalArgumentException("Failed to open store", e);
         }
     }
 
