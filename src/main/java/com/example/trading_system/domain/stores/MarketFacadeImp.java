@@ -166,9 +166,13 @@ public class MarketFacadeImp implements MarketFacade {
             throw new IllegalArgumentException("No name provided");
         }
         StringBuilder sb = new StringBuilder();
-        for (Store store : storeMemoryRepository.getAllStores().values()) {     //Change to Repo
-            sb.append(store.searchName(name, minPrice, maxPrice, minRating, category, storeRating).toString());
+        for (Store store : storeMemoryRepository.getAllStores().values()) {
+            if (!store.searchName(name, minPrice, maxPrice, minRating, category, storeRating).isEmpty())//Change to Repo
+                sb.append(store.searchName(name, minPrice, maxPrice, minRating, category, storeRating).toString());
+
         }
+        if (sb.isEmpty())
+            return "{}";
         return sb.toString();
     }
 
@@ -184,8 +188,13 @@ public class MarketFacadeImp implements MarketFacade {
         }
         StringBuilder sb = new StringBuilder();
         for (Store store : storeMemoryRepository.getAllStores().values()) {    //Change to Repo
-            sb.append(store.searchCategory(category, minPrice, maxPrice, minRating, storeRating).toString());
+            if (!store.searchCategory(category, minPrice, maxPrice, minRating, storeRating).isEmpty())//Change to Repo
+
+                sb.append(store.searchCategory(category, minPrice, maxPrice, minRating, storeRating).toString());
         }
+        if (sb.isEmpty())
+            return "{}";
+
         return sb.toString();
     }
 
@@ -197,8 +206,11 @@ public class MarketFacadeImp implements MarketFacade {
         }
         StringBuilder sb = new StringBuilder();
         for (Store store : storeMemoryRepository.getAllStores().values()) {      //Change to Repo
-            sb.append(store.searchKeywords(keyWords, minPrice, maxPrice, minRating, category, storeRating).toString());
+            if (!store.searchKeywords(keyWords, minPrice, maxPrice, minRating, category, storeRating).isEmpty())
+                sb.append(store.searchKeywords(keyWords, minPrice, maxPrice, minRating, category, storeRating).toString());
         }
+        if (sb.isEmpty())
+            return "{}";
         return sb.toString();
     }
 
