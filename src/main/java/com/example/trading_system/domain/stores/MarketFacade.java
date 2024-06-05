@@ -71,6 +71,8 @@ public interface MarketFacade {
 
     void addStore(String storeName, String description, StorePolicy storePolicy, String founder,Double storeRating);
 
+    boolean isStoreExist(String store_name);
+
     HashMap<String, Store> getStores();
 
     Store getStore(String storeName);

@@ -101,7 +101,7 @@ public class UserFacadeImp implements UserFacade {
         if (password == null) throw new Exception("Encrypted password is null");
         if (password.isEmpty()) throw new Exception("Encrypted password is empty");
         if (birthdate == null) throw new Exception("Birthdate password is null");
-        if (registered.containsKey(username)) throw new Exception("username already exists - " + username);
+        if (users.containsKey(username)) throw new Exception("username already exists - " + username);
     }
 
     @Override
@@ -241,8 +241,16 @@ public class UserFacadeImp implements UserFacade {
             logger.error("While opening store - User not found");
             throw new RuntimeException("User not found");
         }
-        marketFacade.addStore(storeName, description, policy, username, null);
+        if (storeName == null || storeName.trim().isEmpty()) {
+            logger.error("While opening store - Store name is null");
+            throw new RuntimeException("Store name should not be null");
+        }
+        if (marketFacade.isStoreExist(storeName)) {
+            logger.error("While opening store - Store with name: {} already exists", storeName);
+            throw new RuntimeException("Store with name " + storeName + " already exists");
+        }
         try {
+            marketFacade.addStore(storeName, description, policy, username, null);
             users.get(username).openStore(storeName);
         } catch (Exception e) {
             logger.error("Failed to open store: {}", e.getMessage());

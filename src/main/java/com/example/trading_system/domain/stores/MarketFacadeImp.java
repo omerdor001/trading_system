@@ -36,25 +36,23 @@ public class MarketFacadeImp implements MarketFacade {
 
     @Override
     public void deleteInstance() {
-        instance = null;
-        this.userFacade = null;
+        if (instance != null) {
+            instance.storeMemoryRepository.deleteInstance();
+            instance.storeMemoryRepository = null;
+            instance.userFacade = null;
+            instance = null;
+        }
+/*        this.userFacade = null;
+        this.storeMemoryRepository = null;
+        instance = null;*/
     }
 
+
+    public boolean isStoreExist(String store_name) {
+        return storeMemoryRepository.isExist(store_name);
+    }
     public void addStore(String storeName, String description, StorePolicy storePolicy, String founder, Double storeRating) {
-        if (storeName == null || storeName.trim().isEmpty()) {
-            logger.error("While opening store - Store name is null");
-            throw new RuntimeException("Store name should not be null");
-        }
-        if (storeMemoryRepository.isExist(storeName)) {
-            logger.error("While opening store - Store with name: {} already exists", storeName);
-            throw new RuntimeException("Store with name " + storeName + " already exists");
-        }
-        try {
-            storeMemoryRepository.addStore(storeName, description, storePolicy, founder, storeRating);
-        } catch (Exception e) {
-            logger.error("Failed to open store: {}", e.getMessage());
-            throw new RuntimeException("Failed to open store", e);
-        }
+        storeMemoryRepository.addStore(storeName, description, storePolicy, founder, storeRating);
     }
 
     public void deactivateStore(String storeName) {
