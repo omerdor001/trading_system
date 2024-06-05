@@ -53,6 +53,8 @@ public abstract class User {
 
     public abstract boolean isAdmin();
 
+    public abstract void setAdmin(boolean value);
+
     public Cart getShopping_cart() {
         return shopping_cart;
     }

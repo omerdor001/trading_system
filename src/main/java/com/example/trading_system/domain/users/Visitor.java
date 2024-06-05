@@ -89,5 +89,10 @@ public class Visitor extends User {
         return false;
     }
 
+    @Override
+    public void setAdmin(boolean value) {
+
+    }
+
 
 }
