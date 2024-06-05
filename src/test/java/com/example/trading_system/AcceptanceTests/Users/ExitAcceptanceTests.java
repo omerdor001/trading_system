@@ -39,7 +39,7 @@ public class ExitAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract token from JSON response");
         }
-        userToken = tradingSystem.login(token, 0, "owner1", "password123").getBody();
+        userToken = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -58,7 +58,7 @@ public class ExitAcceptanceTests {
         String userToken = enterResponse.getBody();
 
         // Exit the user by ID
-        ResponseEntity<String> exitResponse = tradingSystem.exit(userToken, 2);
+        ResponseEntity<String> exitResponse = tradingSystem.exit(userToken, "v2");
         assertEquals(HttpStatus.OK, exitResponse.getStatusCode());
         assertEquals("User exited successfully.", exitResponse.getBody());
     }
@@ -111,7 +111,7 @@ public class ExitAcceptanceTests {
     @Test
     public void testExitNonExistentUserById() {
         // Attempt to exit a non-existent user by ID
-        ResponseEntity<String> exitResponse = tradingSystem.exit(token, 999);
+        ResponseEntity<String> exitResponse = tradingSystem.exit(token, "v999");
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exitResponse.getStatusCode());
         assertEquals("No such visitor with id- 999", exitResponse.getBody());
     }

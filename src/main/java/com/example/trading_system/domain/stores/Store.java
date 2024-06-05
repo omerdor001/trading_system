@@ -209,8 +209,8 @@ public class Store {
         }
     }
 
-    List<Purchase> getHistoryPurchasesByCustomer(int customerId) {
-        return salesHistory.getPurchasesByCustomer(customerId);
+    List<Purchase> getHistoryPurchasesByCustomer(String customerUsername) {
+        return salesHistory.getPurchasesByCustomer(customerUsername);
     }
 
     List<Purchase> getAllHistoryPurchases() {
