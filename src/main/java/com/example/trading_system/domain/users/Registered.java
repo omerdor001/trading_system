@@ -7,25 +7,25 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Registered extends User {
-    private String userName;
+    private String userName;      //May be removed
     private String encrypted_pass;
-    @Getter
+
     private String address;
-    @Getter
+
     private LocalDate birthdate;
     private boolean isAdmin;
     @Getter
     @Setter
     private boolean isLogged = false;
-    @Getter
+
     private List<Role> roles;
     private List<Notification> notifications;
     private HashMap<String, List<Boolean>> managerToApprove;
     private List<String> ownerToApprove;
 
-    public Registered(int id, String userName, String encryption, LocalDate birthdate) {
-        super(id);
-        this.userName = userName; // Can be changed to email
+    public Registered(String userName, String encryption, LocalDate birthdate) {
+        super(userName);
+        this.userName = userName;
         this.encrypted_pass = encryption;
         this.address = "No address";
         this.birthdate = birthdate;
@@ -35,35 +35,14 @@ public class Registered extends User {
         this.roles=new ArrayList<>();
     }
 
-    public void performBuying(Cart shopping_cart) {
+    public void openStore(String storeName) {
+        addOwnerRole(username, storeName);
     }
 
-    public boolean approveAppointment(int userId) {
-        return false;
-    }
-
-    public void searchProduct(int productId) {
-    }
-
-    public void seeHistoryPurchase() {
-    }
-
-    public void seeHistoryPurchase(int storeId, int userId, int productId) {
-    }
-
-    public void openMarket() {
-    }
-
-    public void closeMarket() {
-    }
-
-    public void openStore() {
-        //SET THE ROLE TO OWNER OF STORE
-        //TODO create owner role with store id
-    }
-
-    public String getUserName() {
-        return userName;
+    public void addOwnerRole(String appoint, String storeName) {
+        Role owner = new Role(storeName, appoint);
+        owner.setRoleState(new Owner(owner));
+        getRoles().add(owner);
     }
 
     @Override
@@ -107,11 +86,6 @@ public class Registered extends User {
         getRoles().add(manager);
     }
 
-    public void addOwnerRole(String appoint, String storeName) {
-        Role owner = new Role(storeName, appoint);
-        owner.setRoleState(new Owner(owner));
-        getRoles().add(owner);
-    }
 
     public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
         Role manager = getRoleByStoreId(store_name_id);
@@ -176,10 +150,6 @@ public class Registered extends User {
 
     public void removeWaitingAppoint_Owner(String storeName) {
         ownerToApprove.remove(storeName);
-    }
-
-    public int getId(String userName) {
-        return id;
     }
 
     public List<Role> getRoles(){

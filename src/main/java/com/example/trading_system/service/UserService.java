@@ -11,19 +11,15 @@ public interface UserService {
 
     boolean isAdmin(String username);
 
-    boolean visitorAddToCart(int id, int productId, String storeName, int quantity);
+    boolean addToCart(String username,int productId, String storeName, int quantity);
 
-    boolean visitorRemoveFromCart(int id, int productId, String storeName, int quantity);
-
-    boolean registeredAddToCart(String username, int productId, String storeName, int quantity);
-
-    boolean registeredRemoveFromCart(String username, int productId, String storeName, int quantity) throws Exception;
+    boolean removeFromCart(String username, int productId, String storeName, int quantity);
 
     boolean openStore(String username, String storeName, String description, StorePolicy policy);
 
     boolean register(int id, String username, String password, LocalDate birthdate) throws Exception;
 
-    boolean login(int id, String username, String password);
+    boolean login(String usernameV, String username, String password);
 
     boolean logout(int id, String username);
 
@@ -31,21 +27,21 @@ public interface UserService {
 
     void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException;
 
+    void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException;
+
     void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
 
     void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
 
     void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
 
-    void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
+    void rejectToOwnStore(String userName, String storeName, String appoint) throws IllegalAccessException;
 
-    void exit(int id) throws Exception;
+    void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
 
     void exit(String username) throws Exception;
 
-    String registeredViewCart(String username);
-
-    String visitorViewCart(int id);
+    String viewCart(String username);
 
     void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
 

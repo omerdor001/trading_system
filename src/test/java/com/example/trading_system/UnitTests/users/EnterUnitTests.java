@@ -12,14 +12,14 @@ public class EnterUnitTests {
     void setUp() {
         userFacade = UserFacadeImp.getInstance();
         // Ensure the visitors map is cleared before each test
-        userFacade.getVisitors().clear();
+        userFacade.getUsers().clear();
     }
 
     @Test
     void enterVisitor_Success() {
         int id = 1;
         assertDoesNotThrow(() -> userFacade.enter(id));
-        assertTrue(userFacade.getVisitors().containsKey(id));
+        assertTrue(userFacade.getUsers().containsKey(id));
     }
 
     @Test
@@ -27,23 +27,23 @@ public class EnterUnitTests {
         int id = 1;
         userFacade.enter(id); // Enter the visitor for the first time
         assertDoesNotThrow(() -> userFacade.enter(id)); // Enter the visitor again
-        assertEquals(1, userFacade.getVisitors().size());
+        assertEquals(1, userFacade.getUsers().size());
     }
 
     @Test
     void enterMultipleVisitors() {
-        int id1 = 1;
-        int id2 = 2;
-        int id3 = 3;
+        String id1 ="v1";
+        String id2 = "v2";
+        String id3 = "v3";
 
-        userFacade.enter(id1);
-        userFacade.enter(id2);
-        userFacade.enter(id3);
+        userFacade.enter(1);
+        userFacade.enter(2);
+        userFacade.enter(3);
 
-        assertTrue(userFacade.getVisitors().containsKey(id1));
-        assertTrue(userFacade.getVisitors().containsKey(id2));
-        assertTrue(userFacade.getVisitors().containsKey(id3));
-        assertEquals(3, userFacade.getVisitors().size());
+        assertTrue(userFacade.getUsers().containsKey(id1));
+        assertTrue(userFacade.getUsers().containsKey(id2));
+        assertTrue(userFacade.getUsers().containsKey(id3));
+        assertEquals(3, userFacade.getUsers().size());
     }
 
 }

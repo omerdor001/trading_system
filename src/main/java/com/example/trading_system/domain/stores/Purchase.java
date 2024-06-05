@@ -8,17 +8,17 @@ import java.util.List;
 
 public class Purchase {
     private List<ProductInSale> productInSaleList;
-    @Getter
-    private int customerId;
+    private String customerUsername;
     private double totalPrice;
-    @Getter
-    private String storeName;
 
-    public Purchase(int customerId, List<ProductInSale> productInSaleList, String storeName, double totalPrice) {
-        this.customerId = customerId;
+    public Purchase(String customerUsername, List<ProductInSale> productInSaleList, double totalPrice) {
+        this.customerUsername = customerUsername;
         this.productInSaleList = productInSaleList;
-        this.storeName = storeName;
         this.totalPrice = totalPrice;
+    }
+
+    public String getCustomerUsername(){    //Added because Lombok does not work
+        return customerUsername;
     }
 
 
@@ -30,12 +30,15 @@ public class Purchase {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Store Name: ").append(storeName).append("\n");
-        builder.append("Client ID: ").append(customerId).append(", Total Price: $").append(totalPrice).append("\n");
+        builder.append("Client Username: ").append(customerUsername).append(", Total Price: $").append(totalPrice).append("\n");
         builder.append("Products:\n");
         for (ProductInSale product : productInSaleList) {
             builder.append(product.toString()).append("\n");
         }
         return builder.toString();
+    }
+
+    public String getStoreName() {
+        return null;
     }
 }

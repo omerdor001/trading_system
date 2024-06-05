@@ -11,16 +11,10 @@ public class ProductInSale {
     private int id;
     private double price;
     private int quantity;
-    private String storeName;
-
-
-    double getSumPrice() {
-        return price * quantity;
-    }
 
     @Override
     public String toString() {
-        return "Product: " + id + ", Quantity: " + quantity + ", Price: $" + price + ", Store Name: " + storeName;
+        return "Product: " + id + ", Quantity: " + quantity + ", Price: $" + price;
     }
 
 }

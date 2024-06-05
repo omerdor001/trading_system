@@ -37,11 +37,6 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void exit(int id) throws Exception {
-        userFacade.exit(id);
-    }
-
-    @Override
     public void exit(String username) throws Exception {
         userFacade.exit(username);
     }
@@ -52,9 +47,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean login(int id, String username, String password) {
+    public boolean login(String usernameV, String username, String password) {
         logger.info("Trying to login user: {}", username);
-        userFacade.login(id, username, password);
+        userFacade.login(usernameV, username, password);
         logger.info("User: {} logged in", username);
         return true;
     }
@@ -70,38 +65,22 @@ public class UserServiceImp implements UserService {
 
     @Override
     public boolean register(int id, String username, String password, LocalDate birthdate) throws Exception {
-        userFacade.register(id, username, password, birthdate);
+        userFacade.register(username, password, birthdate);
         return true;
     }
 
     @Override
-    public boolean visitorAddToCart(int id, int productId, String storeName, int quantity) {
+    public boolean addToCart(String username,int productId, String storeName, int quantity) {
         logger.info("Trying adding to cart  product with id: {}", productId);
-        userFacade.visitorAddToCart(id, productId, storeName, quantity);
+        userFacade.addToCart(username, productId, storeName, quantity);
         logger.info("Finished adding to cart product with id: {}", productId);
         return true;
     }
 
     @Override
-    public boolean visitorRemoveFromCart(int id, int productId, String storeName, int quantity) {
+    public boolean removeFromCart(String username, int productId, String storeName, int quantity) {
         logger.info("Trying removing from cart product with id: {}", productId);
-        userFacade.visitorRemoveFromCart(id, productId, storeName, quantity);
-        logger.info("Finished removing from cart product with id: {}", productId);
-        return true;
-    }
-
-    @Override
-    public boolean registeredAddToCart(String username, int productId, String storeName, int quantity) {
-        logger.info("Trying adding to cart product with id: {}", productId);
-        userFacade.registeredAddToCart(username, productId, storeName, quantity);
-        logger.info("Finished adding to cart product with id: {}", productId);
-        return true;
-    }
-
-    @Override
-    public boolean registeredRemoveFromCart(String username, int productId, String storeName, int quantity) {
-        logger.info("Trying removing from cart product with id: {}", productId);
-        userFacade.registeredRemoveFromCart(username, productId, storeName, quantity);
+        userFacade.removeFromCart(username, productId, storeName, quantity);
         logger.info("Finished removing from cart product with id: {}", productId);
         return true;
     }
@@ -115,18 +94,10 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public String registeredViewCart(String username) {
+    public String viewCart(String username) {
         logger.info("Trying registered : {} view cart ", username);
-        String result = userFacade.registeredViewCart(username);
+        String result = userFacade.viewCart(username);
         logger.info("Finished registered view cart: {} ", username);
-        return result;
-    }
-
-    @Override
-    public String visitorViewCart(int id) {
-        logger.info("Trying view cart");
-        String result = userFacade.visitorViewCart(id);
-        logger.info("Finished visitor view cart: {}", id);
         return result;
     }
 
@@ -153,9 +124,23 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException {
+        logger.info("{} trying to approve owner to store : {}", userName, storeName);
+        userFacade.rejectToManageStore(userName, storeName, appoint);
+        logger.info("Finished approving owner to store : {}", storeName);
+    }
+
+    @Override
     public void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException {
         logger.info("{} trying to approve owner to store : {}", newOwner, storeName);
         userFacade.approveOwner(newOwner, storeName, appoint);
+        logger.info("Finished approving owner to store : {}", storeName);
+    }
+
+    @Override
+    public void rejectToOwnStore(String userName, String storeName, String appoint) throws IllegalAccessException {
+        logger.info("{} trying to approve owner to store : {}", userName, storeName);
+        userFacade.rejectToOwnStore(userName, storeName, appoint);
         logger.info("Finished approving owner to store : {}", storeName);
     }
 
