@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class TradingSystemImp implements TradingSystem{
@@ -334,6 +335,23 @@ public class TradingSystemImp implements TradingSystem{
             return new ResponseEntity<>("Logout successful.", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while logging out user: {}: {}", username, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> suspendUser(String token, String admin, String toSuspend, LocalDateTime endSuspention) {
+        logger.info("Attempting to suspend user: {}", toSuspend);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(admin,token))
+                return invalidTokenResponse();
+            userService.suspendUser(admin,toSuspend,endSuspention);
+            logger.info("User: {} is suspended successfully", toSuspend);
+            return new ResponseEntity<>("Suspension successful.", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while suspending user: {}: {}", toSuspend, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

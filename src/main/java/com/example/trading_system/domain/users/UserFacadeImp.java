@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class UserFacadeImp implements UserFacade {
@@ -70,6 +71,21 @@ public class UserFacadeImp implements UserFacade {
         saveUserCart(username);
         u.logout();
         enter(id);
+    }
+
+    @Override
+    public void suspendUser(String admin, String toSuspend, LocalDateTime endSuspention) {
+        if(!userMemoryRepository.isExist(admin)){
+            throw new IllegalArgumentException("Admin user doesn't exist in the system");
+        }
+        if(!userMemoryRepository.isExist(toSuspend)){
+            throw new IllegalArgumentException("User to suspend doesn't exist in the system");
+        }
+        if(!userMemoryRepository.getUser(admin).isAdmin()){
+            throw new IllegalArgumentException("Only admin user can suspend users");
+        }
+        User toSuspendUser=userMemoryRepository.getUser(toSuspend);
+        toSuspendUser.setSuspendToDate(endSuspention);
     }
 
     private void saveUserCart(String username) {

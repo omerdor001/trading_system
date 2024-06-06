@@ -5,6 +5,7 @@ import com.example.trading_system.domain.stores.StorePolicy;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TradingSystem {
@@ -45,6 +46,8 @@ public interface TradingSystem {
     //TODO why id? also create new visitor and return new token + username (maybe return result of enter?)
     ResponseEntity<String> logout(String token, int id, String username);
 
+    ResponseEntity<String> suspendUser(String token, String admin, String toSuspend, LocalDateTime endSuspention);
+
     ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
     ResponseEntity<String> suggestOwner(String appoint, String token, String newOwner, String storeName);
@@ -84,8 +87,6 @@ public interface TradingSystem {
     ResponseEntity<String> searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
 
     ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
-
-    //TODO edit all visitor/registered functions to single function (all visitors have username of "v+id")
 
     ResponseEntity<String> checkAvailabilityAndConditions(String username, String token);
 

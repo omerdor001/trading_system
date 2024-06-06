@@ -3,6 +3,7 @@ package com.example.trading_system.service;
 import com.example.trading_system.domain.stores.StorePolicy;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public interface UserService {
     void deleteInstance();
@@ -22,6 +23,8 @@ public interface UserService {
     boolean login(String usernameV, String username, String password);
 
     boolean logout(int id, String username);
+
+    void suspendUser(String admin, String toSuspend, LocalDateTime endSuspention);
 
     void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
 

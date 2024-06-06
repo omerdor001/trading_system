@@ -1,16 +1,21 @@
 package com.example.trading_system.domain.users;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
 public abstract class User {
     public String username;
     private Cart shopping_cart;
+    private boolean suspended;
+    private LocalDateTime suspendedUntil;
 
     public User(String username) {
         this.username=username;
         this.shopping_cart = new Cart();
+        this.suspended=false;
+        this.suspendedUntil=null;
     }
 
     public String getUsername() {
@@ -23,6 +28,37 @@ public abstract class User {
 
     public String getPass() {
         throw new RuntimeException("Only registered users have a password");
+    }
+
+    public boolean isSuspended(){
+        return suspended;
+    }
+
+    public void setSuspended(){
+        this.suspended=!suspended;
+    }
+
+    public LocalDateTime getSuspendedUntil() {
+        return suspendedUntil;
+    }
+
+    public void setSuspendedUntil(LocalDateTime suspendedUntil) {
+        this.suspendedUntil = suspendedUntil;
+    }
+
+    public void setSuspendToDate(LocalDateTime suspendedUntil){
+        setSuspended();
+        setSuspendedUntil(suspendedUntil);
+    }
+
+    public void setSuspendedUntilToDefault(){
+        if(suspendedUntil.compareTo(LocalDateTime.now())==0)
+            suspendedUntil=null;
+    }
+
+    public void finishSuspention(){
+        setSuspendedUntilToDefault();
+        setSuspended();
     }
 
     public abstract void login();
