@@ -19,6 +19,7 @@ public class UserMemoryRepository implements UserRepository{
 
     public void deleteInstance() {
         instance = null;
+        this.users.clear();
         this.users = null;
     }
     @Override

@@ -13,11 +13,9 @@ public class UserFacadeImp implements UserFacade {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
     private static UserFacadeImp instance = null;
     private MarketFacade marketFacade;
-    private HashMap<String,User> users;     //Delete
     private UserRepository userMemoryRepository;
 
     private UserFacadeImp() {
-        this.users=new HashMap<>();
         this.marketFacade = MarketFacadeImp.getInstance();
         this.userMemoryRepository= UserMemoryRepository.getInstance();
         marketFacade.initialize(this);
@@ -79,7 +77,7 @@ public class UserFacadeImp implements UserFacade {
         if (user == null || user.getShopping_cart() == null) {
             throw new IllegalArgumentException("user doesn't exist in the system");
         }
-        users.get(username).getShopping_cart().saveCart();
+        userMemoryRepository.getUser(username).getShopping_cart().saveCart();
     }
 
     @Override
@@ -137,10 +135,6 @@ public class UserFacadeImp implements UserFacade {
         //TODO return something to show the notification if receiver is logged in - maybe boolean if logged in
     }
 
-    private void saveUserCart(String username) {
-        userMemoryRepository.getUser(username).getShopping_cart().saveCart();
-    }
-
     @Override
     public void saveUserCart(String username, int productId, String storeName, int quantity) {
         if (storeName == null) {
@@ -164,7 +158,7 @@ public class UserFacadeImp implements UserFacade {
 
    @Override
    public synchronized String viewCart(String username) {
-       if (!users.containsKey(username)) {
+       if (!userMemoryRepository.isExist(username)) {
            logger.error("User not found");
            throw new RuntimeException("User not found");
        }
@@ -210,7 +204,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Store with name " + storeName + " already exists");
             throw new RuntimeException("Store with name " + storeName + " already exists");
         }
-        if (username.charAt(0)=='r' && !users.get(username).getLogged()){
+        if (username.charAt(0)=='r' && !userMemoryRepository.getUser(username).getLogged()){
             logger.error("User is not logged");
             throw new RuntimeException("User is not logged");
         }
@@ -246,7 +240,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void openStore(String username, String storeName, String description, StorePolicy policy) {
-        if (!users.containsKey(username)) {
+        if (!userMemoryRepository.isExist(username)) {
             logger.error("While opening store - User not found");
             throw new IllegalArgumentException("User not found");
         }
@@ -260,7 +254,7 @@ public class UserFacadeImp implements UserFacade {
         }
         try {
             marketFacade.addStore(storeName, description, policy, username, null);
-            users.get(username).openStore(storeName);
+            userMemoryRepository.getUser(username).openStore(storeName);
         } catch (Exception e) {
             logger.error("Failed to open store: {}", e.getMessage());
             throw new IllegalArgumentException("Failed to open store", e);
@@ -271,10 +265,10 @@ public class UserFacadeImp implements UserFacade {
     public void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException {
         if(!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
-        if (!users.containsKey(appoint)) {
+        if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
-        if (!users.containsKey(newOwner)) {
+        if (!userMemoryRepository.isExist(newOwner)) {
             throw new NoSuchElementException("No user called " + newOwner + " exist");
         }
 
@@ -302,10 +296,10 @@ public class UserFacadeImp implements UserFacade {
     public void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
         if(!marketFacade.isStoreExist(store_name_id))
             throw new NoSuchElementException("No store called " + store_name_id + " exist");
-        if (!users.containsKey(appoint)) {
+        if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
-        if (!users.containsKey(newManager)) {
+        if (!userMemoryRepository.isExist(newManager)) {
             throw new NoSuchElementException("No user called " + newManager + " exist");
         }
         if (appoint.charAt(0)!='r') {
@@ -335,10 +329,10 @@ public class UserFacadeImp implements UserFacade {
     public void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException {
         if(!marketFacade.isStoreExist(store_name_id))
             throw new NoSuchElementException("No store called " + store_name_id + " exist");
-        if (!users.containsKey(newManager)) {
+        if (!userMemoryRepository.isExist(newManager)) {
             throw new NoSuchElementException("No user called " + newManager + " exist");
         }
-        if (!users.containsKey(appoint)) {
+        if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
         if (appoint.charAt(0)!='r') {
@@ -367,14 +361,14 @@ public class UserFacadeImp implements UserFacade {
     public void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException {
         if(!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
-        if (!users.containsKey(userName)) {
+        if (!userMemoryRepository.isExist(userName)) {
             throw new NoSuchElementException("No user called " + userName + " exist");
         }
-        if (!users.containsKey(appoint)) {
+        if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
-        User appointUser = users.get(appoint);
-        User newManagerUser = users.get(userName);
+        User appointUser = userMemoryRepository.getUser(appoint);
+        User newManagerUser = userMemoryRepository.getUser(userName);
         if (!appointUser.isOwner(storeName)) {
             throw new IllegalAccessException("User must be Owner");
         }
@@ -391,10 +385,10 @@ public class UserFacadeImp implements UserFacade {
     public void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException {
         if(!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
-        if (!users.containsKey(newOwner)) {
+        if (!userMemoryRepository.isExist(newOwner)) {
             throw new NoSuchElementException("No user called " + newOwner + " exist");
         }
-        if (!users.containsKey(appoint)) {
+        if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
         if (appoint.charAt(0)!='r') {
@@ -419,17 +413,17 @@ public class UserFacadeImp implements UserFacade {
     public void rejectToOwnStore(String userName, String storeName, String appoint) throws IllegalAccessException {
         if(!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
-        if (!users.containsKey(userName)) {
+        if (!userMemoryRepository.isExist(userName)) {
             throw new NoSuchElementException("No user called " + userName + " exist");
         }
-        if (!users.containsKey(appoint)) {
+        if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
-        User appointUser = users.get(appoint);
+        User appointUser = userMemoryRepository.getUser(appoint);
         if (!appointUser.isOwner(storeName)) {
             throw new IllegalAccessException("User must be Owner");
         }
-        User newOwnerUser = users.get(userName);
+        User newOwnerUser = userMemoryRepository.getUser(userName);
         if (newOwnerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User already Owner of this store");
         }
@@ -439,10 +433,10 @@ public class UserFacadeImp implements UserFacade {
     public void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
         if(!marketFacade.isStoreExist(store_name_id))
             throw new NoSuchElementException("No store called " + store_name_id + " exist");
-        if (!users.containsKey(appoint)) {
+        if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
-        if (!users.containsKey(newManager)) {
+        if (!userMemoryRepository.isExist(newManager)) {
             throw new NoSuchElementException("No user called " + newManager + " exist");
         }
         if (appoint.charAt(0)!='r') {
@@ -474,10 +468,10 @@ public class UserFacadeImp implements UserFacade {
     public void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException {
         if(!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
-        if (!users.containsKey(appoint)) {
+        if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
-        if (!users.containsKey(newOwner)) {
+        if (!userMemoryRepository.isExist(newOwner)) {
             throw new NoSuchElementException("No user called " + newOwner + " exist");
         }
         if (appoint.charAt(0)!='r') {
@@ -501,7 +495,7 @@ public class UserFacadeImp implements UserFacade {
     public void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
         if(!marketFacade.isStoreExist(storeNameId))
             throw new NoSuchElementException("No store called " + storeNameId + " exist");
-        if (users.containsKey(userId)) {
+        if (!userMemoryRepository.isExist(userId)) {
             throw new NoSuchElementException("No user called " + userId + "exist");
         }
         if (!userMemoryRepository.isExist(managerToEdit)) {
