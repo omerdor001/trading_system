@@ -1,7 +1,6 @@
 package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.users.UserFacadeImp;
-import com.example.trading_system.domain.users.Visitor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,9 +15,9 @@ class RegistrationUnitTests {
     void setUp() {
         userFacade = UserFacadeImp.getInstance();
         // Adding a sample visitor
-        userFacade.getUsers().put("1", new Visitor("1"));
-        userFacade.getUsers().put("2", new Visitor("2"));
-        userFacade.getUsers().put("3", new Visitor("3"));
+        userFacade.enter(1);
+        userFacade.enter(2);
+        userFacade.enter(3);
     }
 
     @AfterEach
@@ -34,7 +33,7 @@ class RegistrationUnitTests {
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
 
         assertDoesNotThrow(() -> userFacade.register(username, encryption, birthdate));
-        assertTrue(userFacade.getUsers().containsKey(username));
+        assertTrue(userFacade.isUserExist("r"+username));
     }
 
     @Test

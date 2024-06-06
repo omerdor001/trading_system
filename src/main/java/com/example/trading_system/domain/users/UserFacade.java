@@ -60,4 +60,8 @@ public interface UserFacade {
     String viewCart(String username);
 
     void removeFromCart(String username,int productId, String storeName, int quantity);
+
+    boolean isUserExist(String username);
+
+    User getUser(String username);
 }
