@@ -78,6 +78,11 @@ public class UserServiceImp implements UserService {
         userFacade.checkForEndingSuspension(toSuspend);
     }
 
+    @Override
+    public String watchSuspensions(String admin) {
+        return userFacade.watchSuspensions(admin);
+    }
+
 
     @Override
     public boolean register(int id, String username, String password, LocalDate birthdate) throws Exception {

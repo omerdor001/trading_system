@@ -30,6 +30,8 @@ public interface UserService {
 
     void checkForEndingSuspension(String toSuspend);
 
+    String watchSuspensions(String admin);
+
     void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
 
     void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException;

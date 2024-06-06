@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -88,7 +89,7 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalArgumentException("Date of suspension cannot be before now");
         }
         User toSuspendUser=userMemoryRepository.getUser(toSuspend);
-        toSuspendUser.setSuspendToDate(endSuspention);
+        toSuspendUser.suspend(endSuspention);
     }
 
     @Override
@@ -113,6 +114,25 @@ public class UserFacadeImp implements UserFacade {
         }
         User toSuspendUser=userMemoryRepository.getUser(toSuspend);
         toSuspendUser.finishSuspension();
+    }
+
+    @Override
+    public String watchSuspensions(String admin) {
+        StringBuilder details = new StringBuilder();
+        if(!userMemoryRepository.isExist(admin)){
+            throw new IllegalArgumentException("Admin user doesn't exist in the system");
+        }
+        if(!userMemoryRepository.getUser(admin).isAdmin()){
+            throw new IllegalArgumentException("Only admin user can suspend users");
+        }
+        for (User user:userMemoryRepository.getAllUsersAsList()){
+            details.append("Username - "+user.getUsername() + "\n");
+            details.append("Start of suspension - "+user.getSuspendedStart().toString()+"\n");
+            details.append("Time of suspension (in days) - "+ Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toDays()+"\n");
+            details.append("Time of suspension (in hours) - "+ Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toHours()+"\n");
+            details.append("End of suspension - "+user.getSuspendedEnd().toString());
+        }
+        return details.toString();
     }
 
     private void saveUserCart(String username) {

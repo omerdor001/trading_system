@@ -395,6 +395,23 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
+    public ResponseEntity<String> watchSuspensions(String token, String admin) {
+        logger.info("Attempting to get suspension details");
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(admin,token))
+                return invalidTokenResponse();
+            String details=userService.watchSuspensions(admin);
+            logger.info("Getting details of suspension successfully");
+            return new ResponseEntity<>(details, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while getting information of suspensions : {}", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
     public ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
         logger.info("Trying to suggest user : {} to be a manager in store : {}", newManager, store_name_id);
         try {

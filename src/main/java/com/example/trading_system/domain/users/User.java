@@ -9,13 +9,15 @@ public abstract class User {
     public String username;
     private Cart shopping_cart;
     private boolean suspended;
-    private LocalDateTime suspendedUntil;
+    private LocalDateTime suspendedStart;
+    private LocalDateTime suspendedEnd;
 
     public User(String username) {
         this.username=username;
         this.shopping_cart = new Cart();
         this.suspended=false;
-        this.suspendedUntil=null;
+        this.suspendedStart=null;
+        this.suspendedEnd=null;
     }
 
     public String getUsername() {
@@ -38,22 +40,29 @@ public abstract class User {
         this.suspended=!suspended;
     }
 
-    public LocalDateTime getSuspendedUntil() {
-        return suspendedUntil;
+    public LocalDateTime getSuspendedStart() {
+        return suspendedStart;
     }
 
-    public void setSuspendedUntil(LocalDateTime suspendedUntil) {
-        this.suspendedUntil = suspendedUntil;
+    public LocalDateTime getSuspendedEnd() {
+        return suspendedEnd;
     }
 
-    public void setSuspendToDate(LocalDateTime suspendedUntil){
+    public void setSuspendedEnd(LocalDateTime suspendedEnd) {
+        this.suspendedEnd = suspendedEnd;
+    }
+
+    public void suspend(LocalDateTime suspendedUntil){
         setSuspended();
-        setSuspendedUntil(suspendedUntil);
+        this.suspendedStart=LocalDateTime.now();
+        setSuspendedEnd(suspendedUntil);
     }
 
     public void setSuspendedUntilToDefault(){
-        if(suspendedUntil.compareTo(LocalDateTime.now())==0)
-            suspendedUntil=null;
+        if(suspendedEnd.compareTo(LocalDateTime.now())==0){
+            suspendedStart=null;
+            suspendedEnd=null;
+        }
     }
 
     public void finishSuspension(){
@@ -64,7 +73,8 @@ public abstract class User {
     }
 
     public void finishSuspensionByAdmin(){
-        suspendedUntil=null;
+        suspendedStart=null;
+        suspendedEnd=null;
         setSuspended();
     }
 

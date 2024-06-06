@@ -52,6 +52,8 @@ public interface TradingSystem {
 
     ResponseEntity<String> checkForEndingSuspension(String toSuspend);
 
+    ResponseEntity<String> watchSuspensions(String token,String admin);
+
     ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
     ResponseEntity<String> suggestOwner(String appoint, String token, String newOwner, String storeName);
