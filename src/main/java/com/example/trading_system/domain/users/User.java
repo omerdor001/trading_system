@@ -59,6 +59,9 @@ public abstract class User {
         return shopping_cart;
     }
 
+    public String getShoppingCart_ToString() {
+        return shopping_cart.getShoppingBags_ToString();
+    }
     public void setShopping_cart(Cart shopping_cart) {
         this.shopping_cart = shopping_cart;
     }

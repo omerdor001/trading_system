@@ -137,7 +137,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void saveUserCart(String username, int productId, String storeName, int quantity) {
-        if (storeName == null) {
+        if (storeName == null || storeName.trim().isEmpty()) {
             logger.error("Store name is null");
             throw new RuntimeException("Store name is null");
         }
@@ -148,12 +148,7 @@ public class UserFacadeImp implements UserFacade {
         if (userMemoryRepository.isExist(username)) {
             userMemoryRepository.getUser(username).getShopping_cart().addProductToCart(productId, quantity, storeName);
         }
-        int quantityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
-        int quantityInShoppingBag = userMemoryRepository.getUser(username).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
-        if (quantity + quantityInShoppingBag > quantityInStore) {
-            logger.error("Product quantity is too low");
-            throw new RuntimeException("Product quantity is too low");
-        }
+        checkProductQuantity(username, productId, storeName, quantity);
     }
 
    @Override
@@ -166,6 +161,9 @@ public class UserFacadeImp implements UserFacade {
            logger.error("Registered user is not logged");
            throw new RuntimeException("Registered user is not logged");
        }
+//       return userMemoryRepository.getUser(username).getShoppingCart_ToString();
+
+
        Cart cart = userMemoryRepository.getUser(username).getShopping_cart();
        StringBuilder cartDetails = new StringBuilder();
        double totalAllStores = 0.0;
@@ -192,51 +190,80 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public synchronized void addToCart(String username, int productId, String storeName, int quantity) {
+        if (username == null || username.trim().isEmpty()) {
+            logger.error("Username cannot be null or empty");
+            throw new IllegalArgumentException("Username cannot be null or empty");
+        }
         if (!userMemoryRepository.isExist(username)) {
-            logger.error("User not found");
-            throw new RuntimeException("User not found");
+            logger.error("User not found: " + username);
+            throw new NoSuchElementException("User not found: " + username);
         }
-        if (storeName == null) {
-            logger.error("Store name is null");
-            throw new RuntimeException("Store name is null");
+        if (storeName == null || storeName.trim().isEmpty()) {
+            logger.error("Store name cannot be null or empty");
+            throw new IllegalArgumentException("Store name cannot be null or empty");
         }
-        if (marketFacade.isStoreExist(storeName)) {
-            logger.error("Store with name " + storeName + " already exists");
-            throw new RuntimeException("Store with name " + storeName + " already exists");
+        if (!marketFacade.isStoreExist(storeName)) {
+            logger.error("Store not found: " + storeName);
+            throw new NoSuchElementException("Store not found: " + storeName);
         }
-        if (username.charAt(0)=='r' && !userMemoryRepository.getUser(username).getLogged()){
-            logger.error("User is not logged");
-            throw new RuntimeException("User is not logged");
+        if (username.charAt(0) == 'r' && !userMemoryRepository.getUser(username).getLogged()) {
+            logger.error("User is not logged in: " + username);
+            throw new RuntimeException("User is not logged in: " + username);
         }
-        int quantityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
-        int quantityInShoppingBag = userMemoryRepository.getUser(username).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
-        if (quantity + quantityInShoppingBag > quantityInStore) {
-            logger.error("Product quantity is too low");
-            throw new RuntimeException("Product quantity is too low");
-        }
+        checkProductQuantity(username, productId, storeName, quantity);
         userMemoryRepository.getUser(username).getShopping_cart().addProductToCart(productId, quantity, storeName);
     }
 
+    private void checkProductQuantity(String username, int productId, String storeName, int quantity) {
+        Store store = marketFacade.getStore(storeName);
+        if (store == null) {
+            logger.error("Store not found: " + storeName);
+            throw new NoSuchElementException("Store not found: " + storeName);
+        }
+        Product product = store.getProducts().get(productId);
+        if (product == null) {
+            logger.error("Product not found: " + productId);
+            throw new NoSuchElementException("Product not found: " + productId);
+        }
+        int quantityInStore = product.getProduct_quantity();
+        int quantityInShoppingBag = userMemoryRepository.getUser(username)
+                .getShopping_cart()
+                .getShoppingBags()
+                .getOrDefault(storeName, new ShoppingBag(storeName))
+                .getProducts_list()
+                .getOrDefault(productId, 0);
+
+        if (quantity + quantityInShoppingBag > quantityInStore) {
+            logger.error("Insufficient product quantity in store for product ID: " + productId);
+            throw new RuntimeException("Product quantity is too low");
+        }
+    }
+
     @Override
-    public synchronized void removeFromCart(String username,int productId, String storeName, int quantity) {
+    public synchronized void removeFromCart(String username, int productId, String storeName, int quantity) {
+        if (username == null || username.trim().isEmpty()) {
+            logger.error("Username cannot be null or empty");
+            throw new IllegalArgumentException("Username cannot be null or empty");
+        }
         if (!userMemoryRepository.isExist(username)) {
-            logger.error("User not found");
-            throw new RuntimeException("User not found");
+            logger.error("User not found: " + username);
+            throw new NoSuchElementException("User not found: " + username);
         }
-        if (storeName == null) {
-            logger.error("Store name is null");
-            throw new RuntimeException("Store name is null");
+        if (storeName == null || storeName.trim().isEmpty()) {
+            logger.error("Store name cannot be null or empty");
+            throw new IllegalArgumentException("Store name cannot be null or empty");
         }
-        if (marketFacade.isStoreExist(storeName)) {
-            logger.error("Store with name " + storeName + " already exists");
-            throw new RuntimeException("Store with name " + storeName + " already exists");
+        if (!marketFacade.isStoreExist(storeName)) {
+            logger.error("Store not found: " + storeName);
+            throw new NoSuchElementException("Store not found: " + storeName);
         }
-        if (username.charAt(0)=='r' && !userMemoryRepository.getUser(username).getLogged()){
-            logger.error("User is not logged");
-            throw new RuntimeException("User is not logged");
+        if (username.charAt(0) == 'r' && !userMemoryRepository.getUser(username).getLogged()) {
+            logger.error("User is not logged in: " + username);
+            throw new RuntimeException("User is not logged in: " + username);
         }
         userMemoryRepository.getUser(username).getShopping_cart().removeProductFromCart(productId, quantity, storeName);
     }
+
 
     @Override
     public void openStore(String username, String storeName, String description, StorePolicy policy) {
