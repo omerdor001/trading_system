@@ -1,8 +1,11 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.Product;
+import com.example.trading_system.domain.stores.ProductInSale;
+import com.example.trading_system.domain.stores.Purchase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Cart {
@@ -20,13 +23,13 @@ public class Cart {
         shoppingBags.put(storeId, shoppingBag);
     }
 
-    public void addProductToCart(int productId, int quantity, String storeId) {
+    public void addProductToCart(int productId, int quantity, String storeId,double price) {
         ShoppingBag shoppingBag = shoppingBags.get(storeId);
         if (shoppingBag == null) {
             shoppingBag = new ShoppingBag(storeId);
             shoppingBags.put(storeId, shoppingBag);
         }
-        shoppingBag.addProduct(productId, quantity);
+        shoppingBag.addProduct(productId, quantity,price);
     }
 
     public void removeProductFromCart(int productId, int quantity, String storeId) {
@@ -76,4 +79,28 @@ public class Cart {
         cartDetails.append("Overall Total for All Stores: ").append(totalAllStores).append("\n");*/
         return cartDetails.toString();
     }
+
+    private List<ProductInSale> getProductsToList(){
+        List list = new ArrayList<>();
+        for(ShoppingBag shoppingBag : shoppingBags.values()){
+            list.add(shoppingBag.getProducts_list().values());
+        }
+        return list;
+    }
+
+    public Purchase purchaseProduct(String username) {
+        double totalcount = 0;
+        List<ProductInSale> productInSales = new ArrayList<>();
+        for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
+            ShoppingBag shoppingBag = entry.getValue();
+            for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBag.getProducts_list().entrySet()) {
+                totalcount += productEntry.getValue().sumTotalPrice();
+                productInSales.add(productEntry.getValue());
+            }
+        }
+            Purchase purchase = new Purchase(username, getProductsToList(), totalcount);
+            return purchase;
+
+        }
+
 }

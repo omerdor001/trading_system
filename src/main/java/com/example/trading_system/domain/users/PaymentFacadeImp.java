@@ -52,7 +52,7 @@ public class PaymentFacadeImp implements PaymentFacade {
             throw new RuntimeException("User not found");
         }
         User user = userFacade.getUser(username);
-        Cart cart = user.getShopping_cart();
+        Cart cart = user.getCart();
         HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             String storeId = entry.getKey();
@@ -70,7 +70,7 @@ public class PaymentFacadeImp implements PaymentFacade {
     }
 
     private synchronized void VisitorReleaseReservedProducts(Visitor visitor) {
-        Cart cart = visitor.getShopping_cart();
+        Cart cart = visitor.getCart();
         HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             String storeId = entry.getKey();
@@ -99,7 +99,7 @@ public class PaymentFacadeImp implements PaymentFacade {
             throw new RuntimeException("User not found");
         }
         User user = userFacade.getUser(username);
-        Cart cart = user.getShopping_cart();
+        Cart cart = user.getCart();
         HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             String storeId = entry.getKey();
@@ -154,7 +154,7 @@ public class PaymentFacadeImp implements PaymentFacade {
             throw new RuntimeException("User not found");
         }
         User user = userFacade.getUser(username);
-        Cart cart = user.getShopping_cart();
+        Cart cart = user.getCart();
         HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             String storeId = entry.getKey();
@@ -245,26 +245,6 @@ public class PaymentFacadeImp implements PaymentFacade {
     }
 
     private void addPurchase(String registeredId) {
-        Cart cart = userFacade.getUser(registeredId).getShopping_cart();
-        double totalcount = 0;
-        List<ProductInSale> productInSales = new ArrayList<>();
-        HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
-        for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
-            String storeId = entry.getKey();
-            ShoppingBag shoppingBag = entry.getValue();
-            Store store = marketFacade.getStore(storeId);
-            for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
-                int productId = productEntry.getKey();
-                int quantity = productEntry.getValue();
-                Product product = store.getProducts().get(productId);
-                totalcount = totalcount + quantity * product.getProduct_price();
-               // ProductInSale productInSale = new ProductInSale(productId, product.getProduct_price(), quantity);
-               // productInSales.add(productInSale);
-            }
-
-            Purchase purchase = new Purchase(userFacade.getUsers().get(registeredId).getUsername(), productInSales, totalcount);
-            store.addPurchase(purchase);
-
-        }
+        purchases.add(userFacade.getUser(registeredId).addPurchasedProduct());
     }
 }

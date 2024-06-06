@@ -14,8 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @ExtendWith(MockitoExtension.class)
 public class RemoveFromCartUnitTests {
     @Mock
@@ -67,7 +65,7 @@ public class RemoveFromCartUnitTests {
         store.addProduct(productId, storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
 
         Cart shoppingCart = new Cart();
-        userMemoryRepository.getUser(username).setShopping_cart(shoppingCart);
+        userMemoryRepository.getUser(username).setCart(shoppingCart);
         shoppingCart.addProductToCart(productId, quantity, storeName);
 
         Assertions.assertDoesNotThrow(() -> userFacadeImp.removeFromCart(username, productId, storeName, quantity));

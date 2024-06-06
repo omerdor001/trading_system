@@ -8,13 +8,33 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductInSale {
+    @Getter
+    @Setter
+    private String storeId;
+    @Getter
+    @Setter
     private int id;
+    @Getter
+    @Setter
     private double price;
+    @Getter
+    @Setter
     private int quantity;
 
     @Override
     public String toString() {
-        return "Product: " + id + ", Quantity: " + quantity + ", Price: $" + price;
+        return "Product: " + id + ", Quantity: " + quantity + ", Price: $" + price + ", Store: " + storeId;
+    }
+    public void addQuantity(int newQuantity){
+        this.quantity += newQuantity;
+
+    }
+    public void reduceQuantity(int newQuantity){
+        this.quantity -= newQuantity;
+
+    }
+    public double sumTotalPrice(){
+        return quantity*price;
     }
 
 }

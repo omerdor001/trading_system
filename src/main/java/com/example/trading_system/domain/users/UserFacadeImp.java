@@ -74,10 +74,10 @@ public class UserFacadeImp implements UserFacade {
 
     private void saveUserCart(String username) {
         User user = userMemoryRepository.getUser(username);
-        if (user == null || user.getShopping_cart() == null) {
+        if (user == null || user.getCart() == null) {
             throw new IllegalArgumentException("user doesn't exist in the system");
         }
-        userMemoryRepository.getUser(username).getShopping_cart().saveCart();
+        userMemoryRepository.getUser(username).getCart().saveCart();
     }
 
     @Override
@@ -146,7 +146,8 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("Store with name " + storeName + " already exists");
         }
         if (userMemoryRepository.isExist(username)) {
-            userMemoryRepository.getUser(username).getShopping_cart().addProductToCart(productId, quantity, storeName);
+            double price =marketFacade.getStore(storeName).getProduct(productId).getProduct_price();
+            userMemoryRepository.getUser(username).getCart().addProductToCart(productId, quantity, storeName,price);
         }
         checkProductQuantity(username, productId, storeName, quantity);
     }
@@ -164,7 +165,7 @@ public class UserFacadeImp implements UserFacade {
 //       return userMemoryRepository.getUser(username).getShoppingCart_ToString();
 
 
-       Cart cart = userMemoryRepository.getUser(username).getShopping_cart();
+       Cart cart = userMemoryRepository.getUser(username).getCart();
        StringBuilder cartDetails = new StringBuilder();
        double totalAllStores = 0.0;
        for (Map.Entry<String, ShoppingBag> entry : cart.getShoppingBags().entrySet()) {
@@ -227,7 +228,7 @@ public class UserFacadeImp implements UserFacade {
         }
         int quantityInStore = product.getProduct_quantity();
         int quantityInShoppingBag = userMemoryRepository.getUser(username)
-                .getShopping_cart()
+                .getCart()
                 .getShoppingBags()
                 .getOrDefault(storeName, new ShoppingBag(storeName))
                 .getProducts_list()
