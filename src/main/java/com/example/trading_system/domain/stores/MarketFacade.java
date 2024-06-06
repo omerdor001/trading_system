@@ -12,9 +12,9 @@ public interface MarketFacade {
 
     String getAllStores();
 
-    void openStoreExist(String storeId);
+    void openStoreExist(String userName, String storeName) throws IllegalArgumentException;
 
-    void closeStoreExist(String storeId);
+    void closeStoreExist(String userName, String storeName) throws IllegalArgumentException;
 
     void deactivateStore(String storeId);
 
@@ -24,15 +24,15 @@ public interface MarketFacade {
 
     String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category);
 
-    String searchCategoryInStore(Category category, String storeName, Double minPrice, Double maxPrice, Double minRating);
+    String searchCategoryInStore(String userName, Category category, String storeName, Double minPrice, Double maxPrice, Double minRating);
 
-    String searchKeywordsInStore(String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category);
+    String searchKeywordsInStore(String userName, String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category);
 
     String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
 
-    String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
+    String searchCategoryInStores(String userName, Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
 
-    String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
+    String searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
 
     boolean addProduct(String username,
                        int productId,

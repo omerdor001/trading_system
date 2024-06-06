@@ -11,9 +11,9 @@ public interface MarketService {
 
     String getAllStores();
 
-    void openStoreExist(String storeName);
+    void openStoreExist(String userName, String storeName) throws IllegalArgumentException;
 
-    void closeStoreExist(String storeName);
+    void closeStoreExist(String userName, String storeName) throws IllegalArgumentException;
 
     String getStoreProducts(String storeName);
 
@@ -21,15 +21,15 @@ public interface MarketService {
 
     String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category);
 
-    String searchCategoryInStore(Category category, String storeName, Double minPrice, Double maxPrice, Double minRating);
+    String searchCategoryInStore(String userName, Category category, String storeName, Double minPrice, Double maxPrice, Double minRating);
 
-    String searchKeywordsInStore(String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category);
+    String searchKeywordsInStore(String userName, String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category);
 
     String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
 
-    String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
+    String searchCategoryInStores(String userName, Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
 
-    String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
+    String searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
 
     void addProduct(String username, int product_id, String store_name, String product_name, String product_description,
                     double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException;

@@ -24,6 +24,10 @@ public interface TradingSystem {
 
     //TODO check if user is admin is external service functions?
 
+    ResponseEntity<String> closeStoreExist(String userName, String storeName);
+
+    ResponseEntity<String> openStoreExist(String userName, String storeName);
+
     ResponseEntity<String> addProduct(String username, String token, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords);
 
     ResponseEntity<String> removeProduct(String username, String token, String storeName, int productId);
@@ -70,16 +74,16 @@ public interface TradingSystem {
     //search in specific store
     ResponseEntity<String> searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category);
 
-    ResponseEntity<String> searchCategoryInStore(Category category, String store_name, Double minPrice, Double maxPrice, Double minRating);
+    ResponseEntity<String> searchCategoryInStore(String userName, Category category, String store_name, Double minPrice, Double maxPrice, Double minRating);
 
-    ResponseEntity<String> searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category);
+    ResponseEntity<String> searchKeywordsInStore(String userName, String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category);
 
     //search in stores
     ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
 
-    ResponseEntity<String> searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
+    ResponseEntity<String> searchCategoryInStores(String userName, Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
 
-    ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
+    ResponseEntity<String> searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
 
     //TODO edit all visitor/registered functions to single function (all visitors have username of "v+id")
 
