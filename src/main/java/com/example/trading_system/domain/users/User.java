@@ -59,6 +59,9 @@ public abstract class User {
         return shopping_cart;
     }
 
+    public String getShoppingCart_ToString() {
+        return shopping_cart.getShoppingBags_ToString();
+    }
     public void setShopping_cart(Cart shopping_cart) {
         this.shopping_cart = shopping_cart;
     }
@@ -78,4 +81,11 @@ public abstract class User {
         return notification.toString();
     }
 
+    public void addProductToCart(int productId, int quantity, String storeName) {
+        this.shopping_cart.addProductToCart(productId,quantity,storeName);
+    }
+
+    public void removeProductFromCart(int productId, int quantity, String storeName) {
+        this.shopping_cart.removeProductFromCart(productId, quantity, storeName);
+    }
 }
