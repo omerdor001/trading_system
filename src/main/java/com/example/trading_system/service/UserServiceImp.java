@@ -68,6 +68,16 @@ public class UserServiceImp implements UserService {
         userFacade.suspendUser(admin,toSuspend,endSuspention);
     }
 
+    @Override
+    public void endSuspendUser(String admin, String toSuspend) {
+        userFacade.endSuspendUser(admin,toSuspend);
+    }
+
+    @Override
+    public void checkForEndingSuspension(String toSuspend) {
+        userFacade.checkForEndingSuspension(toSuspend);
+    }
+
 
     @Override
     public boolean register(int id, String username, String password, LocalDate birthdate) throws Exception {

@@ -24,6 +24,10 @@ public interface UserFacade {
 
     void suspendUser(String admin, String toSuspend, LocalDateTime endSuspention);
 
+    void endSuspendUser(String admin, String toSuspend);
+
+    void checkForEndingSuspension(String toSuspend);
+
     boolean sendNotification(User sender, User receiver, String content);
 
     void saveUserCart(String username, int productId, String storeName, int quantity);

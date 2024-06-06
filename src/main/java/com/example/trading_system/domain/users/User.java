@@ -56,8 +56,15 @@ public abstract class User {
             suspendedUntil=null;
     }
 
-    public void finishSuspention(){
-        setSuspendedUntilToDefault();
+    public void finishSuspension(){
+        if(suspended){
+            setSuspendedUntilToDefault();
+            setSuspended();
+        }
+    }
+
+    public void finishSuspensionByAdmin(){
+        suspendedUntil=null;
         setSuspended();
     }
 

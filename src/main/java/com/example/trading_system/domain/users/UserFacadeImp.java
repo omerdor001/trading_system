@@ -84,8 +84,35 @@ public class UserFacadeImp implements UserFacade {
         if(!userMemoryRepository.getUser(admin).isAdmin()){
             throw new IllegalArgumentException("Only admin user can suspend users");
         }
+        if(endSuspention.compareTo(LocalDateTime.now())<0){
+            throw new IllegalArgumentException("Date of suspension cannot be before now");
+        }
         User toSuspendUser=userMemoryRepository.getUser(toSuspend);
         toSuspendUser.setSuspendToDate(endSuspention);
+    }
+
+    @Override
+    public void endSuspendUser(String admin, String toSuspend) {
+        if(!userMemoryRepository.isExist(admin)){
+            throw new IllegalArgumentException("Admin user doesn't exist in the system");
+        }
+        if(!userMemoryRepository.isExist(toSuspend)){
+            throw new IllegalArgumentException("User to suspend doesn't exist in the system");
+        }
+        if(!userMemoryRepository.getUser(admin).isAdmin()){
+            throw new IllegalArgumentException("Only admin user can suspend users");
+        }
+        User toSuspendUser=userMemoryRepository.getUser(toSuspend);
+        toSuspendUser.finishSuspensionByAdmin();
+    }
+
+    @Override
+    public void checkForEndingSuspension(String toSuspend) {
+        if(!userMemoryRepository.isExist(toSuspend)){
+            throw new IllegalArgumentException("User to suspend doesn't exist in the system");
+        }
+        User toSuspendUser=userMemoryRepository.getUser(toSuspend);
+        toSuspendUser.finishSuspension();
     }
 
     private void saveUserCart(String username) {

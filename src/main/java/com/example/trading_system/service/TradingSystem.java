@@ -48,6 +48,10 @@ public interface TradingSystem {
 
     ResponseEntity<String> suspendUser(String token, String admin, String toSuspend, LocalDateTime endSuspention);
 
+    ResponseEntity<String> endSuspendUser(String token, String admin, String toSuspend);
+
+    ResponseEntity<String> checkForEndingSuspension(String toSuspend);
+
     ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
     ResponseEntity<String> suggestOwner(String appoint, String token, String newOwner, String storeName);
