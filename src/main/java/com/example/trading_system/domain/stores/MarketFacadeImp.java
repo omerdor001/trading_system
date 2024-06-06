@@ -36,10 +36,21 @@ public class MarketFacadeImp implements MarketFacade {
 
     @Override
     public void deleteInstance() {
-        instance = null;
-        this.userFacade = null;
+        if (instance != null) {
+            instance.storeMemoryRepository.deleteInstance();
+            instance.storeMemoryRepository = null;
+            instance.userFacade = null;
+            instance = null;
+        }
+/*        this.userFacade = null;
+        this.storeMemoryRepository = null;
+        instance = null;*/
     }
 
+
+    public boolean isStoreExist(String store_name) {
+        return storeMemoryRepository.isExist(store_name);
+    }
     public void addStore(String storeName, String description, StorePolicy storePolicy, String founder, Double storeRating) {
         storeMemoryRepository.addStore(storeName, description, storePolicy, founder, storeRating);
     }
@@ -518,13 +529,6 @@ public class MarketFacadeImp implements MarketFacade {
         return result.toString();
     }
 
-    public boolean isStoreExist(String store_name) {
-        return storeMemoryRepository.isExist(store_name);
-    }
-
-    public boolean isStoresEmpty() {
-        return storeMemoryRepository.isEmpty();
-    }
 
     @Override
     public HashMap<String, Store> getStores() {

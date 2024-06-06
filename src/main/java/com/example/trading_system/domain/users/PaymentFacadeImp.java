@@ -210,7 +210,7 @@ public class PaymentFacadeImp implements PaymentFacade {
 
         if (storeName != null) {
             filteredPurchases = filteredPurchases.stream()
-                    .filter(p -> p.getStoreName().equals(storeName))
+                    .filter(p -> p.getStoreName().equals(storeName)) //TODO: getStoreName added - make sure it works properly.
                     .collect(Collectors.toList());
         }
         return filteredPurchases.stream()
@@ -258,11 +258,13 @@ public class PaymentFacadeImp implements PaymentFacade {
                 int quantity = productEntry.getValue();
                 Product product = store.getProducts().get(productId);
                 totalcount = totalcount + quantity * product.getProduct_price();
-                ProductInSale productInSale = new ProductInSale(productId, product.getProduct_price(), quantity, storeId);
+                ProductInSale productInSale = new ProductInSale(productId, product.getProduct_price(), quantity);
                 productInSales.add(productInSale);
             }
 
-            Purchase purchase = new Purchase(userFacade.getUser(registeredId).getUsername(), productInSales, storeId, totalcount);
+            Purchase purchase = new Purchase(userFacade.getUsers().get(registeredId).getUsername(), productInSales, totalcount);
+            store.addPurchase(purchase);
+
         }
     }
 }

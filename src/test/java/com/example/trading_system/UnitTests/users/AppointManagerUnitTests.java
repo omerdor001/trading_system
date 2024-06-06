@@ -27,7 +27,7 @@ class AppointManagerUnitTests {
             userService.register(2, "appointTest", "encryption1", LocalDate.of(2000, 1, 1));
             userService.register(3, "newManagerTest", "encryption2", LocalDate.of(2000, 1, 1));
             //TODO owner appointTest
-            userService.login(2, "appointTest", "encryption1");
+            userService.login("2", "appointTest", "encryption1");
         }
         catch (Exception e){
         }
