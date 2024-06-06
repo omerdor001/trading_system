@@ -211,7 +211,7 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("User is not logged in: " + username);
         }
         checkProductQuantity(username, productId, storeName, quantity);
-        userMemoryRepository.getUser(username).getShopping_cart().addProductToCart(productId, quantity, storeName);
+        userMemoryRepository.getUser(username).addProductToCart(productId, quantity, storeName);
     }
 
     private void checkProductQuantity(String username, int productId, String storeName, int quantity) {
@@ -234,7 +234,7 @@ public class UserFacadeImp implements UserFacade {
                 .getOrDefault(productId, 0);
 
         if (quantity + quantityInShoppingBag > quantityInStore) {
-            logger.error("Insufficient product quantity in store for product ID: " + productId);
+            logger.error("Insufficient product quantity in store for product ID: {}", productId);
             throw new RuntimeException("Product quantity is too low");
         }
     }
@@ -261,7 +261,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("User is not logged in: " + username);
             throw new RuntimeException("User is not logged in: " + username);
         }
-        userMemoryRepository.getUser(username).getShopping_cart().removeProductFromCart(productId, quantity, storeName);
+        userMemoryRepository.getUser(username).removeProductFromCart(productId, quantity, storeName);
     }
 
 

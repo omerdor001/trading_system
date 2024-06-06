@@ -22,12 +22,23 @@ public class Cart {
 
     public void addProductToCart(int productId, int quantity, String storeId) {
         ShoppingBag shoppingBag = shoppingBags.get(storeId);
+        if (shoppingBag == null) {
+            shoppingBag = new ShoppingBag(storeId);
+            shoppingBags.put(storeId, shoppingBag);
+        }
         shoppingBag.addProduct(productId, quantity);
     }
 
     public void removeProductFromCart(int productId, int quantity, String storeId) {
         ShoppingBag shoppingBag = shoppingBags.get(storeId);
-        shoppingBag.removeProduct(productId, quantity);
+        if (shoppingBag != null) {
+            shoppingBag.removeProduct(productId, quantity);
+            if (shoppingBag.getProducts_list().isEmpty()) {
+                shoppingBags.remove(storeId);
+            }
+        } else {
+            throw new IllegalArgumentException("Shopping bag for store " + storeId + " does not exist.");
+        }
     }
 
     public void addShoppingBagToCart(ShoppingBag shoppingBag, String storeId) {

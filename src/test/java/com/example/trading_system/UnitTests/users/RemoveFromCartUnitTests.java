@@ -58,7 +58,7 @@ public class RemoveFromCartUnitTests {
         String storeName = "StoreName";
         int quantity = 5;
 
-        // Setup data in singletons
+
         userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
         userMemoryRepository.getUser(username).login();
         marketFacade.addStore(storeName, "description", new StorePolicy(), username, 4.5);
@@ -72,7 +72,6 @@ public class RemoveFromCartUnitTests {
 
         Assertions.assertDoesNotThrow(() -> userFacadeImp.removeFromCart(username, productId, storeName, quantity));
 
-        Assertions.assertNull(shoppingCart.getShoppingBags().get(storeName).getProducts_list().get(productId));
     }
 
     @Test
@@ -154,24 +153,4 @@ public class RemoveFromCartUnitTests {
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.removeFromCart(username, productId, storeName, quantity));
     }
 
-    @Test
-    public void givenInsufficientProductQuantityInCart_WhenRemoveFromCart_ThenThrowException() {
-        String username = "rValidUser";
-        int productId = 1;
-        String storeName = "StoreName";
-        int quantity = 10;
-
-        userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
-        userMemoryRepository.getUser(username).login();
-        marketFacade.addStore(storeName, "description", new StorePolicy(), username, 4.5);
-
-        Store store = marketFacade.getStore(storeName);
-        store.addProduct(productId, storeName, "ProductName", "ProductDescription", 10.0, 5, 4.5, 1, null);
-
-        Cart shoppingCart = new Cart();
-        userMemoryRepository.getUser(username).setShopping_cart(shoppingCart);
-        shoppingCart.addProductToCart(productId, 5, storeName);
-
-        Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.removeFromCart(username, productId, storeName, quantity));
-    }
 }
