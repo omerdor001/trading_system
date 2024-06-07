@@ -111,19 +111,4 @@ public class Cart {
         return shoppingBags.get(storeName).checkProductQuantity(productId);
     }
 
-    public synchronized void releaseReservedProducts() {
-        for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
-            String storeId = entry.getKey();
-            ShoppingBag shoppingBag = entry.getValue();
-
-            Store store = marketFacade.getStore(storeId);
-            for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
-                int productId = productEntry.getKey();
-                int quantity = productEntry.getValue();
-
-                Product product = store.getProducts().get(productId);
-                product.setProduct_quantity(product.getProduct_quantity() + quantity);
-            }
-        }
-    }
 }
