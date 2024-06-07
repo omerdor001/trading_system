@@ -1,7 +1,6 @@
 package com.example.trading_system.domain.stores;
 
-import com.example.trading_system.domain.users.UserFacade;
-
+import java.util.Collection;
 import java.util.HashMap;
 
 public class StoreMemoryRepository implements StoreRepository{
@@ -45,6 +44,11 @@ public class StoreMemoryRepository implements StoreRepository{
     @Override
     public void deleteStore(String storeName) {
         stores.remove(storeName);
+    }
+
+    @Override
+    public Collection<Store> getAllStoresByStores() {
+        return stores.values();
     }
 
     @Override
