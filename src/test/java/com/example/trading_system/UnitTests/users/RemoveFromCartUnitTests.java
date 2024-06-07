@@ -66,7 +66,7 @@ public class RemoveFromCartUnitTests {
 
         Cart shoppingCart = new Cart();
         userMemoryRepository.getUser(username).setCart(shoppingCart);
-        shoppingCart.addProductToCart(productId, quantity, storeName);
+        shoppingCart.addProductToCart(productId, quantity, storeName, 10.0);
 
         Assertions.assertDoesNotThrow(() -> userFacadeImp.removeFromCart(username, productId, storeName, quantity));
 

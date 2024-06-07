@@ -103,7 +103,7 @@ public abstract class User {
     }
 
     public void releaseReservedProducts() {
-        cart.releaseReservedProducts();
+//        cart.releaseReservedProducts();
 
     }
 }
