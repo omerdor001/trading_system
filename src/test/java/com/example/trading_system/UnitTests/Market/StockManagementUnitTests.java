@@ -358,5 +358,7 @@ class StockManagementUnitTests {
         assertEquals("Manager cannot edit products", exception.getMessage());
     }
 
+    //Concurrency tests
+
 
 }
