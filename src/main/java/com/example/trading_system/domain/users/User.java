@@ -102,8 +102,4 @@ public abstract class User {
         return cart.checkProductQuantity(productId,storeName);
     }
 
-    public void releaseReservedProducts() {
-//        cart.releaseReservedProducts();
-
-    }
 }
