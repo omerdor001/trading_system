@@ -1,7 +1,6 @@
 package com.example.trading_system.domain.stores;
-import com.example.trading_system.domain.users.RoleState;
-import com.example.trading_system.domain.users.User;
-import com.example.trading_system.domain.users.UserFacade;
+
+import com.example.trading_system.domain.users.*;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MarketFacadeImp implements MarketFacade {
@@ -51,6 +51,7 @@ public class MarketFacadeImp implements MarketFacade {
     public boolean isStoreExist(String store_name) {
         return storeMemoryRepository.isExist(store_name);
     }
+
     public void addStore(String storeName, String description, StorePolicy storePolicy, String founder, Double storeRating) {
         storeMemoryRepository.addStore(storeName, description, storePolicy, founder, storeRating);
     }
@@ -86,7 +87,6 @@ public class MarketFacadeImp implements MarketFacade {
         }
         sb.deleteCharAt(sb.length() - 1);
         sb.append("]");
-        sb.append("}");
         return sb.toString();
     }
 
@@ -121,7 +121,7 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("No name provided");
             throw new IllegalArgumentException("No name provided");
         }
-        if(storeName == null){
+        if (storeName == null) {
             logger.error("No store name provided");
             throw new IllegalArgumentException("No store name provided");
         }
@@ -139,7 +139,7 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("No category provided");
             throw new IllegalArgumentException("No category provided");
         }
-        if(storeName == null){
+        if (storeName == null) {
             logger.error("No store name provided");
             throw new IllegalArgumentException("No store name provided");
         }
@@ -161,7 +161,7 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("No keywords provided");
             throw new IllegalArgumentException("No keywords provided");
         }
-        if(storeName == null){
+        if (storeName == null) {
             logger.error("No store name provided");
             throw new IllegalArgumentException("No store name provided");
         }
@@ -259,9 +259,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
-        User user=userFacade.getUser(username);
-        user.getRoleByStoreId(storeName).addProduct(username, productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
-        storeMemoryRepository.getStore(storeName).addProduct(productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
+        User user = userFacade.getUser(username);
+        user.getRoleByStoreId(storeName).addProduct(username, productId, storeName, productName, productDescription, productPrice, productQuantity, rating, category, keyWords);
+        storeMemoryRepository.getStore(storeName).addProduct(productId, storeName, productName, productDescription, productPrice, productQuantity, rating, category, keyWords);
         return true;
     }
 
@@ -273,9 +273,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
-        User user=userFacade.getUser(username);
+        User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).removeProduct(username, storeName, productId);
-        if(!storeMemoryRepository.getStore(storeName).getProducts().containsKey(productId)) {
+        if (!storeMemoryRepository.getStore(storeName).getProducts().containsKey(productId)) {
             throw new IllegalArgumentException("Product must exist");
         }
         storeMemoryRepository.getStore(storeName).removeProduct(productId);
@@ -293,8 +293,8 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
-        User user=userFacade.getUser(username);
-        user.getRoleByStoreId(storeName).setProduct_name(username, storeName,productId, productName);
+        User user = userFacade.getUser(username);
+        user.getRoleByStoreId(storeName).setProduct_name(username, storeName, productId, productName);
         storeMemoryRepository.getStore(storeName).setProductName(productId, productName);
         return true;
     }
@@ -310,8 +310,8 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
-        User user=userFacade.getUser(username);
-        user.getRoleByStoreId(storeName).setProduct_description(username, storeName,productId, productDescription);
+        User user = userFacade.getUser(username);
+        user.getRoleByStoreId(storeName).setProduct_description(username, storeName, productId, productDescription);
         storeMemoryRepository.getStore(storeName).setProductDescription(productId, productDescription);
         return true;
     }
@@ -329,8 +329,8 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
-        User user=userFacade.getUser(username);
-        user.getRoleByStoreId(storeName).setProduct_price(username, storeName,productId, productPrice);
+        User user = userFacade.getUser(username);
+        user.getRoleByStoreId(storeName).setProduct_price(username, storeName, productId, productPrice);
         storeMemoryRepository.getStore(storeName).setProductPrice(productId, productPrice);
         return true;
     }
@@ -348,8 +348,8 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
-        User user=userFacade.getUser(username);
-        user.getRoleByStoreId(storeName).setProduct_quantity(username, storeName,productId, productQuantity);
+        User user = userFacade.getUser(username);
+        user.getRoleByStoreId(storeName).setProduct_quantity(username, storeName, productId, productQuantity);
         storeMemoryRepository.getStore(storeName).setProductQuantity(productId, productQuantity);
         return true;
     }
@@ -367,9 +367,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
-        User user=userFacade.getUser(username);
-        user.getRoleByStoreId(storeName).setRating(username, storeName,productId,rating);
-        storeMemoryRepository.getStore(storeName).setRating(productId,rating);
+        User user = userFacade.getUser(username);
+        user.getRoleByStoreId(storeName).setRating(username, storeName, productId, rating);
+        storeMemoryRepository.getStore(storeName).setRating(productId, rating);
         return true;
     }
 
@@ -384,9 +384,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
-        User user=userFacade.getUser(username);
-        user.getRoleByStoreId(storeName).setCategory(username, storeName,productId,category);
-        storeMemoryRepository.getStore(storeName).setCategory(productId,category);
+        User user = userFacade.getUser(username);
+        user.getRoleByStoreId(storeName).setCategory(username, storeName, productId, category);
+        storeMemoryRepository.getStore(storeName).setCategory(productId, category);
         return true;
     }
 
@@ -401,7 +401,7 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(customerUserName)) {
             throw new IllegalArgumentException("Customer must exist");
         }
-        User user=userFacade.getUser(userName);
+        User user = userFacade.getUser(userName);
         User customer = userFacade.getUser(customerUserName);
         user.getRoleByStoreId(storeName).getRoleState().getHistoryPurchasesByCustomer();
         return storeMemoryRepository.getStore(storeName).getHistoryPurchasesByCustomer(customer.getUsername()).stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
@@ -415,7 +415,7 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.getUsers().containsKey(userName)) {
             throw new IllegalArgumentException("User must exist");
         }
-        User user=userFacade.getUsers().get(userName);
+        User user = userFacade.getUsers().get(userName);
         user.getRoleByStoreId(storeName).getRoleState().getAllHistoryPurchases();
         return storeMemoryRepository.getStore(storeName).getAllHistoryPurchases().stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
 
@@ -429,7 +429,7 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(userName)) {
             throw new IllegalArgumentException("User must exist");
         }
-        User user=userFacade.getUser(userName);
+        User user = userFacade.getUser(userName);
         user.getRoleByStoreId(storeName).getRoleState().requestInformationAboutOfficialsInStore();
 
         List<String> storeOwners = storeMemoryRepository.getStore(storeName).getOwners();
@@ -513,12 +513,9 @@ public class MarketFacadeImp implements MarketFacade {
             User user2 = userFacade.getUser(officialUserName);
             result.append("Role id username address birthdate").append('\n');
             result.append("Owner ").append(user2.getUsername()).append(officialUserName).append(user2.getAddress()).append(user2.getBirthdate()).append('\n');
-        }
-        else
-        {
+        } else {
             List<String> storeManagers = storeMemoryRepository.getStore(storeName).getManagers();
-            if(storeManagers.contains(officialUserName))
-            {
+            if (storeManagers.contains(officialUserName)) {
                 User user2 = userFacade.getUser(userName);
                 RoleState managerRole = user2.getRoleByStoreId(storeName).getRoleState();
                 result.append("Role id username address birthdate watch editSupply editBuyPolicy editDiscountPolicy").append("\n");
@@ -538,6 +535,31 @@ public class MarketFacadeImp implements MarketFacade {
     @Override
     public Store getStore(String storeName) {
         return storeMemoryRepository.getStore(storeName);
+    }
+
+    @Override
+    public synchronized void releaseReservedProducts(int productId, int quantity, String storeName) {
+        int productQuantity = getStore(storeName).getProduct(productId).getProduct_quantity();
+        getStore(storeName).getProduct(productId).setProduct_quantity(productQuantity + quantity);
+
+    }
+
+    @Override
+    public synchronized void removeReservedProducts(int productId, int quantity, String storeName) {
+        int productQuantity = getStore(storeName).getProduct(productId).getProduct_quantity();
+        getStore(storeName).getProduct(productId).setProduct_quantity(productQuantity - quantity);
+
+    }
+
+    @Override
+    public double calculateTotalPrice(Cart cart) {
+        double price = 0;
+        for (Map.Entry<String, ShoppingBag> shoppingBagInStore : cart.getShoppingBags().entrySet()) {
+            for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
+                price = price + productEntry.getValue().sumTotalPrice();
+            }
+        }
+        return price;
     }
 
 

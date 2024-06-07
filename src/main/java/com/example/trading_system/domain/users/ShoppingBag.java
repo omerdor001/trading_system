@@ -40,4 +40,8 @@ public class ShoppingBag {
         } else
             products_list.get(productId).reduceQuantity(quantity);
     }
+
+    public int checkProductQuantity(int productId) {
+        return products_list.get(productId).getQuantity();
+    }
 }

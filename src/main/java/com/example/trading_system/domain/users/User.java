@@ -93,7 +93,17 @@ public abstract class User {
         this.cart.removeProductFromCart(productId, quantity, storeName);
     }
 
-    public Purchase addPurchasedProduct() {
+    public List<Purchase> addPurchasedProduct() {
        return  cart.purchaseProduct(this.username);
+    }
+
+
+    public int checkProductQuantity(int productId, String storeName) {
+        return cart.checkProductQuantity(productId,storeName);
+    }
+
+    public void releaseReservedProducts() {
+        cart.releaseReservedProducts();
+
     }
 }

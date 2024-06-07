@@ -87,13 +87,11 @@ public interface TradingSystem {
 
     //TODO edit all visitor/registered functions to single function (all visitors have username of "v+id")
 
-    ResponseEntity<String> checkAvailabilityAndConditions(String username, String token);
 
     ResponseEntity<String> approvePurchase(String username, String token);
 
-    ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName, Integer productBarcode);
+    ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName);
 
-    ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer productBarcode);
 
     ResponseEntity<String> addToCart(String username, String token, int productId, String storeName, int quantity);
 

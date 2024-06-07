@@ -1,7 +1,9 @@
 package com.example.trading_system.domain.users;
 
+import com.example.trading_system.domain.stores.Product;
 import com.example.trading_system.domain.stores.ProductInSale;
 import com.example.trading_system.domain.stores.Purchase;
+import com.example.trading_system.domain.stores.Store;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,13 +25,13 @@ public class Cart {
         shoppingBags.put(storeId, shoppingBag);
     }
 
-    public void addProductToCart(int productId, int quantity, String storeId,double price) {
+    public void addProductToCart(int productId, int quantity, String storeId, double price) {
         ShoppingBag shoppingBag = shoppingBags.get(storeId);
         if (shoppingBag == null) {
             shoppingBag = new ShoppingBag(storeId);
             shoppingBags.put(storeId, shoppingBag);
         }
-        shoppingBag.addProduct(productId, quantity,price);
+        shoppingBag.addProduct(productId, quantity, price);
     }
 
     public void removeProductFromCart(int productId, int quantity, String storeId) {
@@ -80,16 +82,17 @@ public class Cart {
         return cartDetails.toString();
     }
 
-    private List<ProductInSale> getProductsToList(){
+    private List<ProductInSale> getProductsToList() {
         List list = new ArrayList<>();
-        for(ShoppingBag shoppingBag : shoppingBags.values()){
+        for (ShoppingBag shoppingBag : shoppingBags.values()) {
             list.add(shoppingBag.getProducts_list().values());
         }
         return list;
     }
 
-    public Purchase purchaseProduct(String username) {
+    public List<Purchase> purchaseProduct(String username) {
         double totalcount = 0;
+        List<Purchase> purchases = new ArrayList<>();
         List<ProductInSale> productInSales = new ArrayList<>();
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             ShoppingBag shoppingBag = entry.getValue();
@@ -97,10 +100,30 @@ public class Cart {
                 totalcount += productEntry.getValue().sumTotalPrice();
                 productInSales.add(productEntry.getValue());
             }
+            purchases.add(new Purchase(username, getProductsToList(), totalcount, entry.getKey()));
         }
-            Purchase purchase = new Purchase(username, getProductsToList(), totalcount);
-            return purchase;
+        return purchases;
 
+    }
+
+
+    public int checkProductQuantity(int productId, String storeName) {
+        return shoppingBags.get(storeName).checkProductQuantity(productId);
+    }
+
+    public synchronized void releaseReservedProducts() {
+        for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
+            String storeId = entry.getKey();
+            ShoppingBag shoppingBag = entry.getValue();
+
+            Store store = marketFacade.getStore(storeId);
+            for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
+                int productId = productEntry.getKey();
+                int quantity = productEntry.getValue();
+
+                Product product = store.getProducts().get(productId);
+                product.setProduct_quantity(product.getProduct_quantity() + quantity);
+            }
         }
-
+    }
 }

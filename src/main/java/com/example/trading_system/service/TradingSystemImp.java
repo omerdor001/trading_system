@@ -15,7 +15,6 @@ public class TradingSystemImp implements TradingSystem{
     private static TradingSystemImp instance = null;
     public UserService userService;
     public MarketService marketService;
-    public PaymentServiceImp paymentService;
     public int counter_user = 0;
     private boolean systemOpen;
 
@@ -23,7 +22,6 @@ public class TradingSystemImp implements TradingSystem{
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance();
         this.marketService = MarketServiceImp.getInstance();
-        this.paymentService = PaymentServiceImp.getInstance(); //TODO check if relevant with hierarchy
     }
 
     public static TradingSystemImp getInstance() {
@@ -38,7 +36,6 @@ public class TradingSystemImp implements TradingSystem{
         userService = null;
         if(systemOpen) {
             this.marketService.deleteInstance();
-            this.paymentService.deleteInstance();
         }
     }
 
@@ -66,7 +63,6 @@ public class TradingSystemImp implements TradingSystem{
         try {
             if (userService.isAdminRegistered()) {
                 marketService = MarketServiceImp.getInstance();
-                paymentService = PaymentServiceImp.getInstance(); //TODO check if relevant with hierarchy
                 systemOpen = true;
                 logger.info("System opened successfully");
                 return new ResponseEntity<>("System opened successfully.", HttpStatus.OK);
@@ -89,7 +85,6 @@ public class TradingSystemImp implements TradingSystem{
             if (userService.isAdmin(username)) {
                 //TODO call close method in deeper classes? (maybe logout all users)
                 marketService.deleteInstance();
-                paymentService.deleteInstance(); //TODO check if relevant with hierarchy
                 systemOpen = false;
                 logger.info("System closed by user: {}", username);
                 return new ResponseEntity<>("System closed successfully.", HttpStatus.OK);
@@ -629,21 +624,6 @@ public class TradingSystemImp implements TradingSystem{
         return new ResponseEntity<>("FINISHED Searching products in store ", HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<String> checkAvailabilityAndConditions(String username, String token) {
-        logger.info("Checking availability and conditions for registered user with ID: {}", username);
-        try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(username,token))
-                return invalidTokenResponse();
-            paymentService.checkAvailabilityAndConditions(username);
-            return new ResponseEntity<>("FINISHED checking availability and conditions ", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while checking availability cart and conditions for registered user with ID: {}: {}", username, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
 
     @Override
     public ResponseEntity<String> approvePurchase(String username, String token) {
@@ -653,23 +633,23 @@ public class TradingSystemImp implements TradingSystem{
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            this.paymentService.approvePurchase(username);
+            this.userService.approvePurchase(username);
             return new ResponseEntity<>("FINISHED Registered Approve Purchase ", HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred while approving purchase for registered user with ID: {} using payment service: {}: {}", username, this.paymentService, e.getMessage());
+            logger.error("Error occurred while approving purchase for registered user with ID: {}", username,e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @Override
-    public ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName, Integer productBarcode) {
+    public ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName) {
         logger.info("Get Purchase History");
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            String result = paymentService.getPurchaseHistory(username, storeName, productBarcode);
+            String result = userService.getPurchaseHistory(username, storeName);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while Getting Purchase History");
@@ -677,22 +657,6 @@ public class TradingSystemImp implements TradingSystem{
         }
     }
 
-    @Override
-    public ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer productBarcode) {
-        logger.info("Get Purchase Stores History");
-        try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(username,token))
-                return invalidTokenResponse();
-            String result = paymentService.getStoresPurchaseHistory(username, storeName, productBarcode);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-
-        } catch (Exception e) {
-            logger.error("Error occurred while Getting Purchase Stores History");
-            return new ResponseEntity<>("Error occurred while Getting Purchase Stores History", HttpStatus.BAD_REQUEST);
-        }
-    }
 
     @Override
     public ResponseEntity<String> addToCart(String username, String token, int productId, String storeName, int quantity) {
