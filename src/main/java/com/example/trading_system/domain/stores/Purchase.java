@@ -8,17 +8,19 @@ import java.util.List;
 
 public class Purchase {
     private List<ProductInSale> productInSaleList;
+    @Getter
     private String customerUsername;
     private double totalPrice;
 
-    public Purchase(String customerUsername, List<ProductInSale> productInSaleList, double totalPrice) {
+    @Getter
+    private String storeName;
+
+
+    public Purchase(String customerUsername, List<ProductInSale> productInSaleList, double totalPrice, String storeName) {
         this.customerUsername = customerUsername;
         this.productInSaleList = productInSaleList;
         this.totalPrice = totalPrice;
-    }
-
-    public String getCustomerUsername(){    //Added because Lombok does not work
-        return customerUsername;
+        this.storeName = storeName;
     }
 
 
@@ -38,7 +40,4 @@ public class Purchase {
         return builder.toString();
     }
 
-    public String getStoreName() {
-        return null;
-    }
 }

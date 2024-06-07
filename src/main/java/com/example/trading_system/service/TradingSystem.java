@@ -86,13 +86,11 @@ public interface TradingSystem {
     ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
 
-    ResponseEntity<String> checkAvailabilityAndConditions(String username, String token);
 
     ResponseEntity<String> approvePurchase(String username, String token);
 
-    ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName, Integer productBarcode);
+    ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName);
 
-    ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer productBarcode);
 
     ResponseEntity<String> addToCart(String username, String token, int productId, String storeName, int quantity);
 

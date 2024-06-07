@@ -1,4 +1,6 @@
 package com.example.trading_system.domain.stores;
+
+import com.example.trading_system.domain.users.Cart;
 import com.example.trading_system.domain.users.UserFacade;
 
 import java.util.HashMap;
@@ -68,11 +70,17 @@ public interface MarketFacade {
 
     String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
 
-    void addStore(String storeName, String description, StorePolicy storePolicy, String founder,Double storeRating);
+    void addStore(String storeName, String description, StorePolicy storePolicy, String founder, Double storeRating);
 
     boolean isStoreExist(String store_name);
 
     HashMap<String, Store> getStores();
 
     Store getStore(String storeName);
+
+    void releaseReservedProducts(int productId, int quantity, String storeName);
+
+    void removeReservedProducts(int productId, int quantity, String storeName);
+
+    double calculateTotalPrice(Cart cart);
 }
