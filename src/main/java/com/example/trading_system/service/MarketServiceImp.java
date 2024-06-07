@@ -1,6 +1,4 @@
 package com.example.trading_system.service;
-
-import com.example.trading_system.domain.stores.Category;
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import org.slf4j.Logger;
@@ -77,42 +75,42 @@ public class MarketServiceImp implements MarketService {
         return result;
     }
 
-    public String searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public String searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
         logger.info("Trying to search products in store : {} with name : {}", store_name, name);
         String result = marketFacade.searchNameInStore(name, store_name, minPrice, maxPrice, minRating, category);
         logger.info("FINISHED Searching products in store ");
         return result;
     }
 
-    public String searchCategoryInStore(Category category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
+    public String searchCategoryInStore(int category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
         logger.info("Trying to search products in store : {} with category, : {}", store_name, category);
         String result = marketFacade.searchCategoryInStore(category, store_name, minPrice, maxPrice, minRating);
         logger.info("FINISHED Searching products in store ");
         return result;
     }
 
-    public String searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public String searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
         logger.info("Trying to search products in store : {} with keyWords,  : {}", store_name, keyWords);
         String result = marketFacade.searchKeywordsInStore(keyWords, store_name, minPrice, maxPrice, minRating, category);
         logger.info("FINISHED Searching products in store ");
         return result;
     }
 
-    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
+    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
         logger.info("Trying to search products in stores with name : {}", name);
         String result = marketFacade.searchNameInStores(name, minPrice, maxPrice, minRating, category,storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }
 
-    public String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
+    public String searchCategoryInStores(int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
         logger.info("Trying to search products in stores with category, : {}", category);
         String result = marketFacade.searchCategoryInStores(category, minPrice, maxPrice, minRating,storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }
 
-    public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
+    public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
         logger.info("Trying to search products in stores with keyWords,  : {}", keyWords);
         String result = marketFacade.searchKeywordsInStores(keyWords, minPrice, maxPrice, minRating, category,storeRating);
         logger.info("FINISHED Searching products in stores ");

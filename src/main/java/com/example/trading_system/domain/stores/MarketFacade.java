@@ -23,17 +23,17 @@ public interface MarketFacade {
 
     String getProductInfo(String storeName, int productId);
 
-    String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category);
+    String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, int category);
 
-    String searchCategoryInStore(Category category, String storeName, Double minPrice, Double maxPrice, Double minRating);
+    String searchCategoryInStore(int category, String storeName, Double minPrice, Double maxPrice, Double minRating);
 
-    String searchKeywordsInStore(String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category);
+    String searchKeywordsInStore(String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, int category);
 
-    String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category, Double storeRating);
+    String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
-    String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating, Double storeRating);
+    String searchCategoryInStores(int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
 
-    String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category, Double storeRating);
+    String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
     boolean addProduct(String username,
                        int productId,

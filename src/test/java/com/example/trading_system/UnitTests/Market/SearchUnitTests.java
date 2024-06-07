@@ -1,16 +1,11 @@
 package com.example.trading_system.UnitTests.Market;
 
 import com.example.trading_system.domain.stores.*;
-import com.example.trading_system.domain.users.Visitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public class SearchUnitTests {
     private MarketFacadeImp marketFacade;
@@ -28,31 +23,31 @@ public class SearchUnitTests {
 
     @Test
     void SearchNameInStore_Success() throws Exception {
-        assertDoesNotThrow(() -> marketFacade.searchNameInStore("p1", "store1", 5.0, 5.0, 5.0, Category.Food));
-        assertTrue(marketFacade.searchNameInStore("p1", "store1", 5.0, 5.0, 5.0, Category.Food).contains("p1"));
+        assertDoesNotThrow(() -> marketFacade.searchNameInStore("p1", "store1", 5.0, 5.0, 5.0, Category.Food.getIntValue()));
+        assertTrue(marketFacade.searchNameInStore("p1", "store1", 5.0, 5.0, 5.0, Category.Food.getIntValue()).contains("p1"));
     }
 
     @Test
     void SearchName1InStore_Success() throws Exception {
-        assertDoesNotThrow(() -> marketFacade.searchNameInStore("p", "store1", 5.0, 5.0, 5.0, Category.Food));
-        assertFalse(marketFacade.searchNameInStore("p", "store1", 5.0, 5.0, 5.0, Category.Food).contains("p1"));
+        assertDoesNotThrow(() -> marketFacade.searchNameInStore("p", "store1", 5.0, 5.0, 5.0, Category.Food.getIntValue()));
+        assertFalse(marketFacade.searchNameInStore("p", "store1", 5.0, 5.0, 5.0, Category.Food.getIntValue()).contains("p1"));
     }
 
     @Test
     void SearchNameInStore_nullName() throws Exception {
-        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchNameInStore(null, "store1", 5.0, 5.0, 5.0, Category.Food));
+        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchNameInStore(null, "store1", 5.0, 5.0, 5.0, Category.Food.getIntValue()));
         assertEquals(exception.getMessage(), "No name provided");
     }
 
     @Test
     void SearchCategoryInStore_nullCategory() throws Exception {
-        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchCategoryInStore(null, "store1", 5.0, 5.0, 5.0));
+        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchCategoryInStore(-1, "store1", 5.0, 5.0, 5.0));
         assertEquals(exception.getMessage(), "No category provided");
     }
 
     @Test
     void SearchkeywordInStore_nullkeyword() throws Exception {
-        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchKeywordsInStore(null, "store1", 5.0, 5.0, 5.0, Category.Food));
+        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchKeywordsInStore(null, "store1", 5.0, 5.0, 5.0, Category.Food.getIntValue()));
         assertEquals(exception.getMessage(), "No keywords provided");
     }
 
@@ -61,31 +56,31 @@ public class SearchUnitTests {
 
 
     void SearchNameInStores_Success() throws Exception {
-        assertDoesNotThrow(() -> marketFacade.searchNameInStores("p1", 5.0, 5.0, 5.0, Category.Food,null));
-        assertTrue(marketFacade.searchNameInStores("p1", 5.0, 5.0, 5.0, Category.Food,null).contains("p1"));
+        assertDoesNotThrow(() -> marketFacade.searchNameInStores("p1", 5.0, 5.0, 5.0, Category.Food.getIntValue(),null));
+        assertTrue(marketFacade.searchNameInStores("p1", 5.0, 5.0, 5.0, Category.Food.getIntValue(),null).contains("p1"));
     }
 
     @Test
     void SearchName1InStores_Success() throws Exception {
-        assertDoesNotThrow(() -> marketFacade.searchNameInStores("p", 5.0, 5.0, 5.0, Category.Food,null));
-        assertFalse(marketFacade.searchNameInStores("p", 5.0, 5.0, 5.0, Category.Food,null).contains("p1"));
+        assertDoesNotThrow(() -> marketFacade.searchNameInStores("p", 5.0, 5.0, 5.0, Category.Food.getIntValue(),null));
+        assertFalse(marketFacade.searchNameInStores("p", 5.0, 5.0, 5.0, Category.Food.getIntValue(),null).contains("p1"));
     }
 
     @Test
     void SearchNameInStores_nullName() throws Exception {
-        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchNameInStores(null, 5.0, 5.0, 5.0, Category.Food,null));
+        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchNameInStores(null, 5.0, 5.0, 5.0, Category.Food.getIntValue(),null));
         assertEquals(exception.getMessage(), "No name provided");
     }
 
     @Test
     void SearchCategoryInStores_nullCategory() throws Exception {
-        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchCategoryInStores(null, 5.0, 5.0, 5.0,null));
+        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchCategoryInStores(-1, 5.0, 5.0, 5.0,null));
         assertEquals(exception.getMessage(), "No category provided");
     }
 
     @Test
     void SearchkeywordInStores_nullkeyword() throws Exception {
-        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchKeywordsInStores(null, 5.0, 5.0, 5.0, Category.Food,null));
+        Exception exception = assertThrows(Exception.class, () -> marketFacade.searchKeywordsInStores(null, 5.0, 5.0, 5.0, Category.Food.getIntValue(),null));
         assertEquals(exception.getMessage(), "No keywords provided");
     }
 

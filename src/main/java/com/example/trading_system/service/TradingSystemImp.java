@@ -1,6 +1,4 @@
 package com.example.trading_system.service;
-
-import com.example.trading_system.domain.stores.Category;
 import com.example.trading_system.domain.stores.StorePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -534,7 +532,7 @@ public class TradingSystemImp implements TradingSystem{
 
     //search in specific store
     @Override
-    public ResponseEntity<String> searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public ResponseEntity<String> searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
         logger.info("Trying to search products in store : {} with name : {}", store_name, name);
         try {
             if (!checkSystemOpen())
@@ -549,7 +547,7 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> searchCategoryInStore(Category category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
+    public ResponseEntity<String> searchCategoryInStore(int category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
         logger.info("Trying to search products in store : {} with category, : {}", store_name, category);
         try {
             if (!checkSystemOpen())
@@ -564,7 +562,7 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public ResponseEntity<String> searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
         logger.info("Trying to search products in store : {} with keyWords,  : {}", store_name, keyWords);
         try {
             if (!checkSystemOpen())
@@ -580,7 +578,7 @@ public class TradingSystemImp implements TradingSystem{
 
     //search in stores
     @Override
-    public ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
+    public ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
         logger.info("Trying to search products in stores with name : {}", name);
         try {
             if (!checkSystemOpen())
@@ -595,7 +593,7 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
+    public ResponseEntity<String> searchCategoryInStores(int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
         logger.info("Trying to search products in stores with category, : {}", category);
         try {
             if (!checkSystemOpen())
@@ -610,7 +608,7 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
+    public ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
         logger.info("Trying to search products in stores with keyWords,  : {}", keyWords);
         try {
             if (!checkSystemOpen())
