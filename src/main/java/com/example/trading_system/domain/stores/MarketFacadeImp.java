@@ -80,7 +80,7 @@ public class MarketFacadeImp implements MarketFacade {
         sb.append("[");
         sb.append("\"stores\":");
 
-        for (Store store : storeMemoryRepository.getAllStores().values()) {
+        for (Store store : storeMemoryRepository.getAllStoresByStores()) {
             sb.append(store.getNameId());
             sb.append(",");
         }
@@ -116,7 +116,7 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) {
         if (name == null) {
             logger.error("No name provided");
             throw new IllegalArgumentException("No name provided");
@@ -134,8 +134,8 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchCategoryInStore(Category category, String storeName, Double minPrice, Double maxPrice, Double minRating) {
-        if (category == null) {
+    public String searchCategoryInStore(int category, String storeName, Double minPrice, Double maxPrice, Double minRating) {
+        if (category < 0) {                //TODO fix according to the logics of this function
             logger.error("No category provided");
             throw new IllegalArgumentException("No category provided");
         }
@@ -148,7 +148,7 @@ public class MarketFacadeImp implements MarketFacade {
             logger.warn("No products Available");
             return "{}";
         }
-        if (!EnumSet.allOf(Category.class).contains(category)) {
+        if (!EnumSet.allOf(Category.class).contains(Category.values()[category])) {
             logger.error("Category is not a valid category");
             throw new RuntimeException("Category is not a valid category");
         }
@@ -156,7 +156,7 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchKeywordsInStore(String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public String searchKeywordsInStore(String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) {
         if (keyWords == null) {
             logger.error("No keywords provided");
             throw new IllegalArgumentException("No keywords provided");
@@ -174,13 +174,13 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category, Double storeRating) {
+    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
         if (name == null) {
             logger.error("No name provided");
             throw new IllegalArgumentException("No name provided");
         }
         StringBuilder sb = new StringBuilder();
-        for (Store store : storeMemoryRepository.getAllStores().values()) {
+        for (Store store : storeMemoryRepository.getAllStoresByStores()) {
             if (!store.searchName(name, minPrice, maxPrice, minRating, category, storeRating).isEmpty())//Change to Repo
                 sb.append(store.searchName(name, minPrice, maxPrice, minRating, category, storeRating).toString());
 
@@ -191,19 +191,18 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating, Double storeRating) {
-        if (category == null) {
+    public String searchCategoryInStores(int category, Double minPrice, Double maxPrice, Double minRating, Double storeRating) {
+        if (category < 0) {        //TODO fix according to the logics of this function
             logger.error("No category provided");
             throw new IllegalArgumentException("No category provided");
         }
-        if (!EnumSet.allOf(Category.class).contains(category)) {
+        if (!EnumSet.allOf(Category.class).contains(Category.values()[category])) {
             logger.error("Category is not a valid category");
             throw new RuntimeException("Category is not a valid category");
         }
         StringBuilder sb = new StringBuilder();
-        for (Store store : storeMemoryRepository.getAllStores().values()) {    //Change to Repo
-            if (!store.searchCategory(category, minPrice, maxPrice, minRating, storeRating).isEmpty())//Change to Repo
-
+        for (Store store : storeMemoryRepository.getAllStoresByStores()) {    //Change to Repo
+            if (!store.searchCategory(category, minPrice, maxPrice, minRating, storeRating).isEmpty())
                 sb.append(store.searchCategory(category, minPrice, maxPrice, minRating, storeRating).toString());
         }
         if (sb.isEmpty())
@@ -213,7 +212,7 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category, Double storeRating) {
+    public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
         if (keyWords == null) {
             logger.error("No keywords provided");
             throw new IllegalArgumentException("No keywords provided");

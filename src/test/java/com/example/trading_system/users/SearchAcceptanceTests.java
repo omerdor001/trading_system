@@ -1,7 +1,9 @@
-package com.example.trading_system.service;
+package com.example.trading_system.users;
 
 import com.example.trading_system.domain.stores.Category;
-
+import com.example.trading_system.service.MarketService;
+import com.example.trading_system.service.TradingSystem;
+import com.example.trading_system.service.TradingSystemImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -31,12 +33,12 @@ public class SearchAcceptanceTests {
         Category category = Category.Food;
 
         String expectedResponse = "mocked response";
-        when(marketServiceMock.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category)).thenReturn(expectedResponse);
+        when(marketServiceMock.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue())).thenReturn(expectedResponse);
 
-        String result = tradingSystem.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category).getBody();
+        String result = tradingSystem.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue()).getBody();
 
         assertEquals(expectedResponse, result);
-        verify(marketServiceMock, times(1)).searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category);
+        verify(marketServiceMock, times(1)).searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue());
     }
 
     @Test
@@ -48,12 +50,12 @@ public class SearchAcceptanceTests {
         Double minRating = 4.0;
 
         String expectedResponse = "mocked response";
-        when(marketServiceMock.searchCategoryInStore(category, storeName, minPrice, maxPrice, minRating)).thenReturn(expectedResponse);
+        when(marketServiceMock.searchCategoryInStore(category.getIntValue(), storeName, minPrice, maxPrice, minRating)).thenReturn(expectedResponse);
 
-        String result = tradingSystem.searchCategoryInStore(category, storeName, minPrice, maxPrice, minRating).getBody();
+        String result = tradingSystem.searchCategoryInStore(category.getIntValue(), storeName, minPrice, maxPrice, minRating).getBody();
 
         assertEquals(expectedResponse, result);
-        verify(marketServiceMock, times(1)).searchCategoryInStore(category, storeName, minPrice, maxPrice, minRating);
+        verify(marketServiceMock, times(1)).searchCategoryInStore(category.getIntValue(), storeName, minPrice, maxPrice, minRating);
     }
 
     @Test
@@ -66,12 +68,12 @@ public class SearchAcceptanceTests {
         Category category = Category.Food;
 
         String expectedResponse = "mocked response";
-        when(marketServiceMock.searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category)).thenReturn(expectedResponse);
+        when(marketServiceMock.searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category.getIntValue())).thenReturn(expectedResponse);
 
-        String result = tradingSystem.searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category).getBody();
+        String result = tradingSystem.searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category.getIntValue()).getBody();
 
         assertEquals(expectedResponse, result);
-        verify(marketServiceMock, times(1)).searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category);
+        verify(marketServiceMock, times(1)).searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category.getIntValue());
     }
 
     @Test
@@ -83,12 +85,12 @@ public class SearchAcceptanceTests {
         Double minRating = 4.0;
         Category category = Category.Food;
 
-        when(marketServiceMock.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category)).thenThrow(new RuntimeException("Mocked exception"));
+        when(marketServiceMock.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue())).thenThrow(new RuntimeException("Mocked exception"));
 
-        ResponseEntity<String> result = tradingSystem.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category);
+        ResponseEntity<String> result = tradingSystem.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue());
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
-        verify(marketServiceMock, times(1)).searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category);
+        verify(marketServiceMock, times(1)).searchNameInStore(name, storeName, minPrice, maxPrice, minRating,category.getIntValue());
     }
 
     @Test
@@ -99,12 +101,12 @@ public class SearchAcceptanceTests {
         Double maxPrice = 50.0;
         Double minRating = 4.0;
 
-        when(marketServiceMock.searchCategoryInStore(category, storeName, minPrice, maxPrice, minRating)).thenThrow(new RuntimeException("Mocked exception"));
+        when(marketServiceMock.searchCategoryInStore(category.getIntValue(), storeName, minPrice, maxPrice, minRating)).thenThrow(new RuntimeException("Mocked exception"));
 
-        ResponseEntity<String> result = tradingSystem.searchCategoryInStore(category, storeName, minPrice, maxPrice, minRating);
+        ResponseEntity<String> result = tradingSystem.searchCategoryInStore(category.getIntValue(), storeName, minPrice, maxPrice, minRating);
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
-        verify(marketServiceMock, times(1)).searchCategoryInStore(category, storeName, minPrice, maxPrice, minRating);
+        verify(marketServiceMock, times(1)).searchCategoryInStore(category.getIntValue(), storeName, minPrice, maxPrice, minRating);
     }
 
     @Test
@@ -116,12 +118,12 @@ public class SearchAcceptanceTests {
         Double minRating = 4.0;
         Category category = Category.Food;
 
-        when(marketServiceMock.searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category)).thenThrow(new RuntimeException("Mocked exception"));
+        when(marketServiceMock.searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category.getIntValue())).thenThrow(new RuntimeException("Mocked exception"));
 
-        ResponseEntity<String> result = tradingSystem.searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category);
+        ResponseEntity<String> result = tradingSystem.searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category.getIntValue());
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
-        verify(marketServiceMock, times(1)).searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category);
+        verify(marketServiceMock, times(1)).searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category.getIntValue());
     }
 
     @Test
@@ -137,12 +139,12 @@ public class SearchAcceptanceTests {
         String product2 = "{\"product_id\":2, \"store_name\":\"store1\", \"product_name\":\"product\", \"product_description\":\"desc\", \"product_price\":35.0, \"product_quantity\":5, \"rating\":4.0, \"category\":\"Food\", \"keyWords\":[\"food\"]}";
 
         String expectedResponse = "[" + product2 + "]";
-        when(marketServiceMock.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category)).thenReturn(expectedResponse);
+        when(marketServiceMock.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue())).thenReturn(expectedResponse);
 
-        String result = tradingSystem.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category).getBody();
+        String result = tradingSystem.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue()).getBody();
 
         assertEquals(expectedResponse, result);
-        verify(marketServiceMock, times(1)).searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category);
+        verify(marketServiceMock, times(1)).searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue());
     }
 
     @Test
@@ -158,12 +160,12 @@ public class SearchAcceptanceTests {
         String product2 = "{\"product_id\":2, \"store_name\":\"store1\", \"product_name\":\"product\", \"product_description\":\"desc\", \"product_price\":35.0, \"product_quantity\":5, \"rating\":4.0, \"category\":\"Food\", \"keyWords\":[\"food\"]}";
 
         String expectedResponse = "[" + product2 + "]";
-        when(marketServiceMock.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category)).thenReturn(expectedResponse);
+        when(marketServiceMock.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue())).thenReturn(expectedResponse);
 
-        String result = tradingSystem.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category).getBody();
+        String result = tradingSystem.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue()).getBody();
 
         assertEquals(expectedResponse, result);
-        verify(marketServiceMock, times(1)).searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category);
+        verify(marketServiceMock, times(1)).searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue());
     }
 
     @Test
@@ -178,12 +180,12 @@ public class SearchAcceptanceTests {
         String product2 = "{\"product_id\":2, \"store_name\":\"store1\", \"product_name\":\"product2\", \"product_description\":\"desc\", \"product_price\":35.0, \"product_quantity\":5, \"rating\":4.0, \"category\":\"Food\", \"keyWords\":[\"Food\"]}";
 
         String expectedResponse = "[" + product1 + "]";
-        when(marketServiceMock.searchCategoryInStore(category, storeName, minPrice, maxPrice, minRating)).thenReturn(expectedResponse);
+        when(marketServiceMock.searchCategoryInStore(category.getIntValue(), storeName, minPrice, maxPrice, minRating)).thenReturn(expectedResponse);
 
-        String result = tradingSystem.searchCategoryInStore(category, storeName, minPrice, maxPrice, minRating).getBody();
+        String result = tradingSystem.searchCategoryInStore(category.getIntValue(), storeName, minPrice, maxPrice, minRating).getBody();
 
         assertEquals(expectedResponse, result);
-        verify(marketServiceMock, times(1)).searchCategoryInStore(category, storeName, minPrice, maxPrice, minRating);
+        verify(marketServiceMock, times(1)).searchCategoryInStore(category.getIntValue(), storeName, minPrice, maxPrice, minRating);
     }
 
     @Test
@@ -199,12 +201,12 @@ public class SearchAcceptanceTests {
         String product2 = "{\"product_id\":2, \"store_name\":\"store1\", \"product_name\":\"product2\", \"product_description\":\"desc\", \"product_price\":35.0, \"product_quantity\":5, \"rating\":4.0, \"category\":\"Food\", \"keyWords\":[\"Food\"]}";
 
         String expectedResponse = "[" + product1 + "," + product2 + "]";
-        when(marketServiceMock.searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category)).thenReturn(expectedResponse);
+        when(marketServiceMock.searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category.getIntValue())).thenReturn(expectedResponse);
 
-        String result = tradingSystem.searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category).getBody();
+        String result = tradingSystem.searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category.getIntValue()).getBody();
 
         assertEquals(expectedResponse, result);
-        verify(marketServiceMock, times(1)).searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category);
+        verify(marketServiceMock, times(1)).searchKeywordsInStore(keyWords, storeName, minPrice, maxPrice, minRating, category.getIntValue());
     }
 
     @Test
@@ -220,12 +222,12 @@ public class SearchAcceptanceTests {
         String product2 = "{\"product_id\":2, \"store_name\":\"store1\", \"product_name\":\"product\", \"product_description\":\"desc\", \"product_price\":40.0, \"product_quantity\":5, \"rating\":4.0, \"category\":\"Food\", \"keyWords\":[\"Food\"]}";
 
         String expectedResponse = "[" + product1 + "," + product2 + "]";
-        when(marketServiceMock.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category)).thenReturn(expectedResponse);
+        when(marketServiceMock.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue())).thenReturn(expectedResponse);
 
-        String result = tradingSystem.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category).getBody();
+        String result = tradingSystem.searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue()).getBody();
 
         assertEquals(expectedResponse, result);
-        verify(marketServiceMock, times(1)).searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category);
+        verify(marketServiceMock, times(1)).searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue());
     }
 /*
     @Test
