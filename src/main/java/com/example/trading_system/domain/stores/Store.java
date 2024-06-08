@@ -52,7 +52,7 @@ public class Store {
                 .collect(Collectors.toList());
     }
 
-    public List<Product> searchName(String name, Double minPrice, Double maxPrice, Double minRating, int category) {
+    public List<Product> searchName(String name, Double minPrice, Double maxPrice, Double minRating, Integer category) {
         List<Product> list_products = new ArrayList<>();
         for (Product p : products.values()) {
             if (p.getProduct_name().equals(name))
