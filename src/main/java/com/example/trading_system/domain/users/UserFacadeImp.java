@@ -33,8 +33,10 @@ public class UserFacadeImp implements UserFacade {
         marketFacade.initialize(this);
     }
     public static UserFacadeImp getInstance() {
-        if (instance == null)
+        if (instance == null){
             instance = new UserFacadeImp(new PaymentServiceProxy(),new DeliveryServiceProxy());
+            instance.marketFacade.initialize(instance);
+        }
         return instance;
     }
 
@@ -98,7 +100,7 @@ public class UserFacadeImp implements UserFacade {
         registerChecks(username, password, birthdate);
         String encrypted_pass = encrypt(password);
         userMemoryRepository.addRegistered("r" + username, encrypted_pass, birthdate);
-        if (checkIfRegistersEmpty())
+        if (!checkIfRegistersEmpty())
             userMemoryRepository.getUser("r" + username).setAdmin(true);
     }
 
