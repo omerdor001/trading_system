@@ -1,6 +1,5 @@
 package com.example.trading_system.service;
 
-import com.example.trading_system.domain.stores.Category;
 import com.example.trading_system.domain.stores.StorePolicy;
 import org.springframework.http.ResponseEntity;
 
