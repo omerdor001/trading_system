@@ -9,10 +9,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.NoSuchElementException;
-
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AddCartUnitTests {
@@ -65,7 +62,7 @@ public class AddCartUnitTests {
         store.addProduct(productId, storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
 
         Cart shoppingCart = new Cart();
-        userMemoryRepository.getUser(username).setShopping_cart(shoppingCart);
+        userMemoryRepository.getUser(username).setCart(shoppingCart);
 
         Assertions.assertDoesNotThrow(() -> userFacadeImp.addToCart(username, productId, storeName, quantity));
 
@@ -166,7 +163,7 @@ public class AddCartUnitTests {
         store.addProduct(productId, storeName, "ProductName", "ProductDescription", 10.0, 5, 4.5, 1, null);
 
         Cart shoppingCart = new Cart();
-        userMemoryRepository.getUser(username).setShopping_cart(shoppingCart);
+        userMemoryRepository.getUser(username).setCart(shoppingCart);
 
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity));
     }

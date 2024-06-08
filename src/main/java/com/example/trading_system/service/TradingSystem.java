@@ -76,28 +76,25 @@ public interface TradingSystem {
     ResponseEntity<String> getProductInfo(String userName, String store_name, int product_Id);
 
     //search in specific store
-    ResponseEntity<String> searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category);
+    ResponseEntity<String> searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, int category);
 
-    ResponseEntity<String> searchCategoryInStore(String userName, Category category, String store_name, Double minPrice, Double maxPrice, Double minRating);
+    ResponseEntity<String> searchCategoryInStore(String userName, int category, String store_name, Double minPrice, Double maxPrice, Double minRating);
 
-    ResponseEntity<String> searchKeywordsInStore(String userName, String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category);
+    ResponseEntity<String> searchKeywordsInStore(String userName, String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category);
 
     //search in stores
-    ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
+    ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
-    ResponseEntity<String> searchCategoryInStores(String userName, Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
+    ResponseEntity<String> searchCategoryInStores(String userName, int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
 
-    ResponseEntity<String> searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
+    ResponseEntity<String> searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
-    //TODO edit all visitor/registered functions to single function (all visitors have username of "v+id")
 
-    ResponseEntity<String> checkAvailabilityAndConditions(String username, String token);
 
     ResponseEntity<String> approvePurchase(String username, String token);
 
-    ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName, Integer productBarcode);
+    ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName);
 
-    ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer productBarcode);
 
     ResponseEntity<String> addToCart(String username, String token, int productId, String storeName, int quantity);
 

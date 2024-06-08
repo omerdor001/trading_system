@@ -1,5 +1,6 @@
 package com.example.trading_system.domain.stores;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public interface StoreRepository {
@@ -10,6 +11,8 @@ public interface StoreRepository {
     HashMap<String, Store> getAllStores();
 
     void deleteStore(String storeName);
+
+    Collection<Store> getAllStoresByStores();
 
     boolean isEmpty();
 

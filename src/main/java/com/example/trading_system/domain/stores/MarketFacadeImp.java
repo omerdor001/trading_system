@@ -1,7 +1,6 @@
 package com.example.trading_system.domain.stores;
-import com.example.trading_system.domain.users.RoleState;
-import com.example.trading_system.domain.users.User;
-import com.example.trading_system.domain.users.UserFacade;
+
+import com.example.trading_system.domain.users.*;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +8,10 @@ import org.slf4j.LoggerFactory;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MarketFacadeImp implements MarketFacade {
@@ -16,6 +19,7 @@ public class MarketFacadeImp implements MarketFacade {
     private StoreRepository storeMemoryRepository;
     private UserFacade userFacade;
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
+    private final ConcurrentHashMap<String, Lock> storeLocks = new ConcurrentHashMap<>();
     private static MarketFacadeImp instance = null;
 
 
@@ -42,15 +46,13 @@ public class MarketFacadeImp implements MarketFacade {
             instance.userFacade = null;
             instance = null;
         }
-/*        this.userFacade = null;
-        this.storeMemoryRepository = null;
-        instance = null;*/
     }
 
 
     public boolean isStoreExist(String store_name) {
         return storeMemoryRepository.isExist(store_name);
     }
+
     public void addStore(String storeName, String description, StorePolicy storePolicy, String founder, Double storeRating) {
         storeMemoryRepository.addStore(storeName, description, storePolicy, founder, storeRating);
     }
@@ -86,7 +88,7 @@ public class MarketFacadeImp implements MarketFacade {
         sb.append("[");
         sb.append("\"stores\":");
 
-        for (Store store : storeMemoryRepository.getAllStores().values()) {
+        for (Store store : storeMemoryRepository.getAllStoresByStores()) {
             if(!store.isOpen() && !(userFacade.isAdmin(userName)||store.isRoleHolder(userName)))
                 continue;
             sb.append(store.getNameId());
@@ -94,7 +96,6 @@ public class MarketFacadeImp implements MarketFacade {
         }
         sb.deleteCharAt(sb.length() - 1);
         sb.append("]");
-        sb.append("}");
         return sb.toString();
     }
 
@@ -128,12 +129,12 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) {
         if (name == null) {
             logger.error("No name provided");
             throw new IllegalArgumentException("No name provided");
         }
-        if(storeName == null){
+        if (storeName == null) {
             logger.error("No store name provided");
             throw new IllegalArgumentException("No store name provided");
         }
@@ -161,12 +162,12 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchCategoryInStore(String userName, Category category, String storeName, Double minPrice, Double maxPrice, Double minRating) {
-        if (category == null) {
+    public String searchCategoryInStore(String userName, int category, String storeName, Double minPrice, Double maxPrice, Double minRating) {
+        if (category < 0) {                //TODO fix according to the logics of this function
             logger.error("No category provided");
             throw new IllegalArgumentException("No category provided");
         }
-        if(storeName == null){
+        if (storeName == null) {
             logger.error("No store name provided");
             throw new IllegalArgumentException("No store name provided");
         }
@@ -190,7 +191,7 @@ public class MarketFacadeImp implements MarketFacade {
             logger.warn("No products Available");
             return "{}";
         }
-        if (!EnumSet.allOf(Category.class).contains(category)) {
+        if (!EnumSet.allOf(Category.class).contains(Category.values()[category])) {
             logger.error("Category is not a valid category");
             throw new RuntimeException("Category is not a valid category");
         }
@@ -198,12 +199,12 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchKeywordsInStore(String userName, String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public String searchKeywordsInStore(String userName, String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) {
         if (keyWords == null) {
             logger.error("No keywords provided");
             throw new IllegalArgumentException("No keywords provided");
         }
-        if(storeName == null){
+        if (storeName == null) {
             logger.error("No store name provided");
             throw new IllegalArgumentException("No store name provided");
         }
@@ -231,7 +232,7 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category, Double storeRating) {
+    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
         if (name == null) {
             logger.error("No name provided");
             throw new IllegalArgumentException("No name provided");
@@ -242,7 +243,7 @@ public class MarketFacadeImp implements MarketFacade {
             throw new IllegalArgumentException("User does not exist");
         }
         StringBuilder sb = new StringBuilder();
-        for (Store store : storeMemoryRepository.getAllStores().values()) {
+        for (Store store : storeMemoryRepository.getAllStoresByStores()) {
             if (!store.isOpen())
                 continue;
             if (!store.searchName(name, minPrice, maxPrice, minRating, category, storeRating).isEmpty())//Change to Repo
@@ -255,26 +256,26 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchCategoryInStores(String userName, Category category, Double minPrice, Double maxPrice, Double minRating, Double storeRating) {
-        if (category == null) {
+    public String searchCategoryInStores(String userName, int category, Double minPrice, Double maxPrice, Double minRating, Double storeRating) {
+        if (category < 0) {        //TODO fix according to the logics of this function
             logger.error("No category provided");
             throw new IllegalArgumentException("No category provided");
+        }
+        if (!EnumSet.allOf(Category.class).contains(Category.values()[category])) {
+            logger.error("Category is not a valid category");
+            throw new RuntimeException("Category is not a valid category");
         }
         if(!userFacade.getUsers().containsKey(userName))
         {
             logger.error("User does not exist");
             throw new IllegalArgumentException("User does not exist");
         }
-        if (!EnumSet.allOf(Category.class).contains(category)) {
-            logger.error("Category is not a valid category");
-            throw new RuntimeException("Category is not a valid category");
-        }
         StringBuilder sb = new StringBuilder();
-        for (Store store : storeMemoryRepository.getAllStores().values()) {    //Change to Repo
+
+        for (Store store : storeMemoryRepository.getAllStoresByStores()) {    //Change to Repo
             if (!store.isOpen())
                 continue;
             if (!store.searchCategory(category, minPrice, maxPrice, minRating, storeRating).isEmpty())//Change to Repo
-
                 sb.append(store.searchCategory(category, minPrice, maxPrice, minRating, storeRating).toString());
         }
         if (sb.isEmpty())
@@ -284,7 +285,7 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category, Double storeRating) {
+    public String searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
         if (keyWords == null) {
             logger.error("No keywords provided");
             throw new IllegalArgumentException("No keywords provided");
@@ -349,148 +350,213 @@ public class MarketFacadeImp implements MarketFacade {
     @Override
     public boolean addProduct(String username, int productId, String storeName, String productName, String productDescription,
                               double productPrice, int productQuantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
-        if (!storeMemoryRepository.isExist(storeName)) {
-            throw new IllegalArgumentException("Store must exist");
+        Lock lock = storeLocks.computeIfAbsent(storeName, k -> new ReentrantLock());
+        lock.lock();
+        try{
+            if (!storeMemoryRepository.isExist(storeName)) {
+                throw new IllegalArgumentException("Store must exist");
+            }
+            if (!userFacade.isUserExist(username)) {
+                throw new IllegalArgumentException("User must exist");
+            }
+            Store store = storeMemoryRepository.getStore(storeName);
+            User user=userFacade.getUser(username);
+            user.getRoleByStoreId(storeName).addProduct(username, productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
+            store.addProduct(productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
         }
-        if (!userFacade.isUserExist(username)) {
-            throw new IllegalArgumentException("User must exist");
+        finally {
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
         }
-        Store store = storeMemoryRepository.getStore(storeName);
-        User user=userFacade.getUsers().get(username);
-        user.getRoleByStoreId(storeName).addProduct(username, productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
-        store.addProduct(productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
         return true;
-    }
+
+}
 
     @Override
     public boolean removeProduct(String username, String storeName, int productId) throws IllegalAccessException {
-        if (!storeMemoryRepository.isExist(storeName)) {
-            throw new IllegalArgumentException("Store must exist");
+        Lock lock = storeLocks.computeIfAbsent(storeName, k -> new ReentrantLock());
+        lock.lock();
+        try{
+            if (!storeMemoryRepository.isExist(storeName)) {
+                throw new IllegalArgumentException("Store must exist");
+            }
+            if (!userFacade.isUserExist(username)) {
+                throw new IllegalArgumentException("User must exist");
+            }
+            Store store=storeMemoryRepository.getStore(storeName);
+            User user=userFacade.getUser(username);
+            user.getRoleByStoreId(storeName).removeProduct(username, storeName, productId);
+            if(!store.getProducts().containsKey(productId)) {
+                throw new IllegalArgumentException("Product must exist");
+            }
+            store.removeProduct(productId);
         }
-        if (!userFacade.isUserExist(username)) {
-            throw new IllegalArgumentException("User must exist");
+        finally {
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
         }
-        Store store=storeMemoryRepository.getStore(storeName);
-        User user=userFacade.getUsers().get(username);
-        user.getRoleByStoreId(storeName).removeProduct(username, storeName, productId);
-        if(!store.getProducts().containsKey(productId)) {
-            throw new IllegalArgumentException("Product must exist");
-        }
-        store.removeProduct(productId);
         return true;
     }
 
     @Override
     public boolean setProductName(String username, String storeName, int productId, String productName) throws IllegalAccessException {
-        if (!storeMemoryRepository.isExist(storeName)) {
-            throw new IllegalArgumentException("Store must exist");
+        Lock lock = storeLocks.computeIfAbsent(storeName, k -> new ReentrantLock());
+        lock.lock();
+        try{
+            if (!storeMemoryRepository.isExist(storeName)) {
+                throw new IllegalArgumentException("Store must exist");
+            }
+            Store store = storeMemoryRepository.getStore(storeName);
+            if (!store.getProducts().containsKey(productId)) {
+                throw new IllegalArgumentException("Product must exist");
+            }
+            if (!userFacade.isUserExist(username)) {
+                throw new IllegalArgumentException("User must exist");
+            }
+            User user=userFacade.getUser(username);
+            user.getRoleByStoreId(storeName).setProduct_name(username, storeName,productId, productName);
+            store.setProductName(productId, productName);
         }
-        Store store = storeMemoryRepository.getStore(storeName);
-        if (!store.getProducts().containsKey(productId)) {
-            throw new IllegalArgumentException("Product must exist");
+        finally {
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
         }
-        if (!userFacade.isUserExist(username)) {
-            throw new IllegalArgumentException("User must exist");
-        }
-        User user=userFacade.getUsers().get(username);
-        user.getRoleByStoreId(storeName).setProduct_name(username, storeName,productId, productName);
-        store.setProductName(productId, productName);
         return true;
     }
 
     @Override
     public boolean setProductDescription(String username, String storeName, int productId, String productDescription) throws IllegalAccessException {
-        if (!storeMemoryRepository.isExist(storeName)) {
-            throw new IllegalArgumentException("Store must exist");
+        Lock lock = storeLocks.computeIfAbsent(storeName, k -> new ReentrantLock());
+        lock.lock();
+        try {
+            if (!storeMemoryRepository.isExist(storeName)) {
+                throw new IllegalArgumentException("Store must exist");
+            }
+            Store store = storeMemoryRepository.getStore(storeName);
+            if (!store.getProducts().containsKey(productId)) {
+                throw new IllegalArgumentException("Product must exist");
+            }
+            if (!userFacade.isUserExist(username)) {
+                throw new IllegalArgumentException("User must exist");
+            }
+            User user=userFacade.getUser(username);
+            user.getRoleByStoreId(storeName).setProduct_description(username, storeName,productId, productDescription);
+            store.setProductDescription(productId, productDescription);
         }
-        Store store = storeMemoryRepository.getStore(storeName);
-        if (!store.getProducts().containsKey(productId)) {
-            throw new IllegalArgumentException("Product must exist");
+        finally {
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
         }
-        if (!userFacade.isUserExist(username)) {
-            throw new IllegalArgumentException("User must exist");
-        }
-        User user=userFacade.getUsers().get(username);
-        user.getRoleByStoreId(storeName).setProduct_description(username, storeName,productId, productDescription);
-        store.setProductDescription(productId, productDescription);
         return true;
     }
 
     @Override
     public boolean setProductPrice(String username, String storeName, int productId, double productPrice) throws IllegalAccessException {
-        if (!storeMemoryRepository.isExist(storeName)) {
-            throw new IllegalArgumentException("Store must exist");
+        Lock lock = storeLocks.computeIfAbsent(storeName, k -> new ReentrantLock());
+        lock.lock();
+        try{
+            if (!storeMemoryRepository.isExist(storeName)) {
+                throw new IllegalArgumentException("Store must exist");
+            }
+            Store store = storeMemoryRepository.getStore(storeName);
+            if (!store.getProducts().containsKey(productId)) {
+                throw new IllegalArgumentException("Product must exist");
+            }
+            if (productPrice < 0)
+                throw new IllegalArgumentException("Price can't be negative number");
+            if (!userFacade.isUserExist(username)) {
+                throw new IllegalArgumentException("User must exist");
+            }
+            User user=userFacade.getUser(username);
+            user.getRoleByStoreId(storeName).setProduct_price(username, storeName,productId, productPrice);
+            store.setProductPrice(productId, productPrice);
         }
-        Store store = storeMemoryRepository.getStore(storeName);
-        if (!store.getProducts().containsKey(productId)) {
-            throw new IllegalArgumentException("Product must exist");
+        finally {
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
         }
-        if (productPrice < 0)
-            throw new IllegalArgumentException("Price can't be negative number");
-        if (!userFacade.isUserExist(username)) {
-            throw new IllegalArgumentException("User must exist");
-        }
-        User user=userFacade.getUsers().get(username);
-        user.getRoleByStoreId(storeName).setProduct_price(username, storeName,productId, productPrice);
-        store.setProductPrice(productId, productPrice);
         return true;
     }
 
     @Override
     public boolean setProductQuantity(String username, String storeName, int productId, int productQuantity) throws IllegalAccessException {
-        if (!storeMemoryRepository.isExist(storeName)) {
-            throw new IllegalArgumentException("Store must exist");
+        Lock lock = storeLocks.computeIfAbsent(storeName, k -> new ReentrantLock());
+        lock.lock();
+        try{
+            if (!storeMemoryRepository.isExist(storeName)) {
+                throw new IllegalArgumentException("Store must exist");
+            }
+            Store store = storeMemoryRepository.getStore(storeName);
+            if (!store.getProducts().containsKey(productId)) {
+                throw new IllegalArgumentException("Product must exist");
+            }
+            if (productQuantity <= 0)
+                throw new IllegalArgumentException("Quantity must be natural number");
+            if (!userFacade.isUserExist(username)) {
+                throw new IllegalArgumentException("User must exist");
+            }
+            User user=userFacade.getUser(username);
+            user.getRoleByStoreId(storeName).setProduct_quantity(username, storeName,productId, productQuantity);
+            store.setProductQuantity(productId, productQuantity);
         }
-        Store store = storeMemoryRepository.getStore(storeName);
-        if (!store.getProducts().containsKey(productId)) {
-            throw new IllegalArgumentException("Product must exist");
+        finally {
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
         }
-        if (productQuantity <= 0)
-            throw new IllegalArgumentException("Quantity must be natural number");
-        if (!userFacade.isUserExist(username)) {
-            throw new IllegalArgumentException("User must exist");
-        }
-        User user=userFacade.getUsers().get(username);
-        user.getRoleByStoreId(storeName).setProduct_quantity(username, storeName,productId, productQuantity);
-        store.setProductQuantity(productId, productQuantity);
         return true;
     }
 
     @Override
     public boolean setRating(String username, String storeName, int productId, double rating) throws IllegalAccessException {
-        if (!storeMemoryRepository.isExist(storeName)) {
-            throw new IllegalArgumentException("Store must exist");
+        Lock lock = storeLocks.computeIfAbsent(storeName, k -> new ReentrantLock());
+        lock.lock();
+        try {
+            if (!storeMemoryRepository.isExist(storeName)) {
+                throw new IllegalArgumentException("Store must exist");
+            }
+            Store store = storeMemoryRepository.getStore(storeName);
+            if (!store.getProducts().containsKey(productId)) {
+                throw new IllegalArgumentException("Product must exist");
+            }
+            if (rating < 0)
+                throw new IllegalArgumentException("Rating can't be negative number");
+            if (!userFacade.isUserExist(username)) {
+                throw new IllegalArgumentException("User must exist");
+            }
+            User user=userFacade.getUser(username);
+            user.getRoleByStoreId(storeName).setRating(username, storeName,productId,rating);
+            store.setRating(productId,rating);
         }
-        Store store = storeMemoryRepository.getStore(storeName);
-        if (!store.getProducts().containsKey(productId)) {
-            throw new IllegalArgumentException("Product must exist");
+        finally {
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
         }
-        if (rating < 0)
-            throw new IllegalArgumentException("Rating can't be negative number");
-        if (!userFacade.isUserExist(username)) {
-            throw new IllegalArgumentException("User must exist");
-        }
-        User user=userFacade.getUsers().get(username);
-        user.getRoleByStoreId(storeName).setRating(username, storeName,productId,rating);
-        store.setRating(productId,rating);
         return true;
     }
 
     @Override
     public boolean setCategory(String username, String storeName, int productId, int category) throws IllegalAccessException {
-        if (!storeMemoryRepository.isExist(storeName)) {
-            throw new IllegalArgumentException("Store must exist");
+        Lock lock = storeLocks.computeIfAbsent(storeName, k -> new ReentrantLock());
+        lock.lock();
+        try {
+            if (!storeMemoryRepository.isExist(storeName)) {
+                throw new IllegalArgumentException("Store must exist");
+            }
+            Store store = storeMemoryRepository.getStore(storeName);
+            if (!store.getProducts().containsKey(productId)) {
+                throw new IllegalArgumentException("Product must exist");
+            }
+            if (!userFacade.isUserExist(username)) {
+                throw new IllegalArgumentException("User must exist");
+            }
+            User user=userFacade.getUser(username);
+            user.getRoleByStoreId(storeName).setCategory(username, storeName,productId,category);
+            store.setCategory(productId,category);
         }
-        Store store = storeMemoryRepository.getStore(storeName);
-        if (!store.getProducts().containsKey(productId)) {
-            throw new IllegalArgumentException("Product must exist");
+        finally {
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
         }
-        if (!userFacade.isUserExist(username)) {
-            throw new IllegalArgumentException("User must exist");
-        }
-        User user=userFacade.getUsers().get(username);
-        user.getRoleByStoreId(storeName).setCategory(username, storeName,productId,category);
-        store.setCategory(productId,category);
         return true;
     }
 
@@ -507,7 +573,7 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(customerUserName)) {
             throw new IllegalArgumentException("Customer must exist");
         }
-        User user=userFacade.getUsers().get(userName);
+        User user = userFacade.getUser(userName);
         User customer = userFacade.getUsers().get(customerUserName);
         if(user.isAdmin())
             return store.getHistoryPurchasesByCustomer(customer.getUsername()).stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
@@ -526,7 +592,7 @@ public class MarketFacadeImp implements MarketFacade {
             throw new IllegalArgumentException("User must exist");
         }
         Store store = storeMemoryRepository.getStore(storeName);
-        User user=userFacade.getUsers().get(userName);
+        User user = userFacade.getUsers().get(userName);
 
         if(user.isAdmin())
             return store.getAllHistoryPurchases().stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
@@ -544,8 +610,8 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(userName)) {
             throw new IllegalArgumentException("User must exist");
         }
-        User user=userFacade.getUsers().get(userName);
-        Store store=storeMemoryRepository.getStore(storeName);
+        User user = userFacade.getUser(userName);
+        Store store = storeMemoryRepository.getStore(storeName);
         user.getRoleByStoreId(storeName).getRoleState().requestInformationAboutOfficialsInStore();
 
         List<String> storeOwners = store.getOwners();
@@ -655,6 +721,31 @@ public class MarketFacadeImp implements MarketFacade {
     @Override
     public Store getStore(String storeName) {
         return storeMemoryRepository.getStore(storeName);
+    }
+
+    @Override
+    public synchronized void releaseReservedProducts(int productId, int quantity, String storeName) {
+        int productQuantity = getStore(storeName).getProduct(productId).getProduct_quantity();
+        getStore(storeName).getProduct(productId).setProduct_quantity(productQuantity + quantity);
+
+    }
+
+    @Override
+    public synchronized void removeReservedProducts(int productId, int quantity, String storeName) {
+        int productQuantity = getStore(storeName).getProduct(productId).getProduct_quantity();
+        getStore(storeName).getProduct(productId).setProduct_quantity(productQuantity - quantity);
+
+    }
+
+    @Override
+    public double calculateTotalPrice(Cart cart) {
+        double price = 0;
+        for (Map.Entry<String, ShoppingBag> shoppingBagInStore : cart.getShoppingBags().entrySet()) {
+            for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
+                price = price + productEntry.getValue().sumTotalPrice();
+            }
+        }
+        return price;
     }
 
 
