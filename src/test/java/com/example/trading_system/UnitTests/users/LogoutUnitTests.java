@@ -3,7 +3,6 @@ package com.example.trading_system.UnitTests.users;
 import com.example.trading_system.domain.users.Cart;
 import com.example.trading_system.domain.users.User;
 import com.example.trading_system.domain.users.UserFacadeImp;
-import com.example.trading_system.domain.users.Visitor;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 
@@ -35,7 +34,7 @@ class LogoutUnitTests {
         int id = 123;
 
         when(user.getLogged()).thenReturn(true);
-        when(user.getShopping_cart()).thenReturn(shoppingCart);
+        when(user.getCart()).thenReturn(shoppingCart);
         userFacadeImp.getUsers().put(username, user);
 
         Assertions.assertDoesNotThrow(() -> userFacadeImp.logout(id, username));
@@ -116,7 +115,7 @@ class LogoutUnitTests {
     public void givenUserWithoutCart_WhenSaveUserCart_ThenThrowException() {
         String username = "rValidUserWithoutCart";
 
-        when(user.getShopping_cart()).thenReturn(null);
+        when(user.getCart()).thenReturn(null);
         userFacadeImp.getUsers().put(username, user);
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.logout(123, username));
