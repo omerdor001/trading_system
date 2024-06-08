@@ -54,6 +54,9 @@ public class Cart {
         shoppingBags.remove(storeId);
     }
 
+    public void removeShoppingBagFromCartByStore(String storeName) {
+            shoppingBags.remove(storeName);
+    }
     public void saveCart() {
         //TODO when connecting to database.
     }

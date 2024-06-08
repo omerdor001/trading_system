@@ -642,8 +642,6 @@ public class UserFacadeImp implements UserFacade {
             for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
                 if(marketFacade.getStore(shoppingBagInStore.getKey()) == null)
                     throw new RuntimeException("store not exist");
-                if (!marketFacade.getStore(shoppingBagInStore.getKey()).isOpen())
-                    throw new RuntimeException("Cant check availability or perform buy in closed store ");
                 checkProductQuantity(username, productEntry.getKey(), shoppingBagInStore.getKey(), 0);
             }
         }

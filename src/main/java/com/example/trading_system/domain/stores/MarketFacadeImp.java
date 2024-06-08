@@ -324,6 +324,10 @@ public class MarketFacadeImp implements MarketFacade {
             throw new IllegalArgumentException("Store is already active");
         }
         store.setOpen(true);
+        for (String managerUserName : store.getManagers())
+            userFacade.getUser(managerUserName).receiveNotification(storeName + " has reopened.");
+        for (String ownerUserName : store.getOwners())
+            userFacade.getUser(ownerUserName).receiveNotification(storeName + " has reopened.");
     }
 
     @Override
@@ -343,6 +347,12 @@ public class MarketFacadeImp implements MarketFacade {
             throw new IllegalArgumentException("Store is not active");
         }
         store.setOpen(false);
+        for (User user : userFacade.getUsers().values())
+            user.getCart().removeShoppingBagFromCartByStore(storeName);
+        for (String managerUserName : store.getManagers())
+            userFacade.getUser(managerUserName).receiveNotification(storeName + " has been closed.");
+        for (String ownerUserName : store.getOwners())
+            userFacade.getUser(ownerUserName).receiveNotification(storeName + " has been closed.");
     }
 
     //Supply Management
