@@ -266,8 +266,7 @@ public class Store {
     }
 
 
-
-
-
-
+    public boolean isRoleHolder(String userName) {
+        return managers.contains(userName) || owners.contains(userName);
+    }
 }
