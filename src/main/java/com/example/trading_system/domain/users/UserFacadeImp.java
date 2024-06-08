@@ -1,7 +1,9 @@
 package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.DeliveryServiceProxy;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.externalservices.PaymentServiceProxy;
 import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.service.UserServiceImp;
 import org.slf4j.Logger;
@@ -30,14 +32,9 @@ public class UserFacadeImp implements UserFacade {
 
         marketFacade.initialize(this);
     }
-
-    public UserFacadeImp() {
-
-    }
-
     public static UserFacadeImp getInstance() {
         if (instance == null)
-            instance = new UserFacadeImp();
+            instance = new UserFacadeImp(new PaymentServiceProxy(),new DeliveryServiceProxy());
         return instance;
     }
 
