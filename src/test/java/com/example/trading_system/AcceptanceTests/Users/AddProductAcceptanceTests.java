@@ -30,7 +30,7 @@ class AddProductAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract token from JSON response");
         }
-        userToken = tradingSystem.login(token, 0, "owner1", "password123").getBody();
+        userToken = tradingSystem.login(token, "0", "owner1", "password123").getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);

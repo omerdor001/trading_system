@@ -49,13 +49,17 @@ public interface TradingSystem {
     //TODO why id? also create new visitor and return new token + username (maybe return result of enter?)
     ResponseEntity<String> logout(String token, int id, String username);
 
-    ResponseEntity<String> suggestManage(String username, String token, String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+    ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
-    ResponseEntity<String> suggestOwner(String username, String token, String appoint, String newOwner, String storeName);
+    ResponseEntity<String> suggestOwner(String appoint, String token, String newOwner, String storeName);
 
-    ResponseEntity<String> approveManage(String username, String token, String newManager, String store_name_id, String appoint);
+    ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint);
 
-    ResponseEntity<String> approveOwner(String username, String token, String newOwner, String storeName, String appoint);
+    ResponseEntity<String> approveOwner(String newOwner, String token, String storeName, String appoint);
+
+    ResponseEntity<String> rejectToOwnStore(String username, String token, String storeName, String appoint);
+
+    ResponseEntity<String> rejectToManageStore(String userName, String token, String store_name_id, String appoint);
 
     //TODO Same as suggestManager/approveManager?
     ResponseEntity<String> appointManager(String username, String token, String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);

@@ -27,8 +27,8 @@ public class searchProductStores {
         userFacadeImp = UserFacadeImp.getInstance();
         marketFacade = MarketFacadeImp.getInstance();
         userFacadeImp.enter(1);
-        userFacadeImp.register(1, "testuser", "testpassword", birthdate);
-        userFacadeImp.login(1, "testuser", "testpassword");
+        userFacadeImp.register( "testuser", "testpassword", birthdate);
+        userFacadeImp.login("1", "testuser", "testpassword");
         Store store1 = mock(Store.class);
         Store store2 = mock(Store.class);
         userFacadeImp.openStore("testuser", "store1", "description", new StorePolicy());

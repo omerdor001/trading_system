@@ -26,10 +26,10 @@ public class getInfoProductUT {
 
     @Test
     void getAllStores_Success() {
-        Store store1 = new Store("store1", "desc1",new StorePolicy(),"FOUNDER");
-        Store store2 = new Store("store2", "desc2",new StorePolicy(),"FOUNDER");
-        marketFacade.addStore(store1);
-        marketFacade.addStore(store2);
+//        Store store1 = new Store("store1", "desc1",new StorePolicy(),"FOUNDER",null);
+//        Store store2 = new Store("store2", "desc2",new StorePolicy(),"FOUNDER",null);
+        marketFacade.addStore("store1", "desc1",new StorePolicy(),"FOUNDER",null);
+        marketFacade.addStore("store2", "desc2",new StorePolicy(),"FOUNDER",null);
 
         String expected = "{, \"stores\":[{\"name_id\":\"store1\", \"description\":\"desc1\", \"products\":[]}, {\"name_id\":\"store2\", \"description\":\"desc2\", \"products\":[]}, ]}";
         String result = marketFacade.getAllStores();
@@ -39,9 +39,9 @@ public class getInfoProductUT {
 
     @Test
     void getStoreProducts_Success() {
-        Store store = new Store("store1", "desc1",new StorePolicy(),"FOUNDER");
+        marketFacade.addStore("store1", "desc1",new StorePolicy(),"FOUNDER",null);
+        Store store = new Store("store1", "desc1",new StorePolicy(),"FOUNDER",null);
         store.setActive(true);
-        marketFacade.addStore(store);
 
         String expected = store.toString();
         String result = marketFacade.getStoreProducts("store1");
@@ -51,9 +51,9 @@ public class getInfoProductUT {
 
     @Test
     void getStoreProducts_StoreNotActive() {
-        Store store = new Store("store1", "desc1",new StorePolicy(),"FOUNDER");
+        Store store = new Store("store1", "desc1",new StorePolicy(),"FOUNDER",null);
         store.setActive(false);
-        marketFacade.addStore(store);
+        marketFacade.addStore("store1", "desc1",new StorePolicy(),"FOUNDER",null);
 
         String result = marketFacade.getStoreProducts("store1");
 
@@ -62,9 +62,9 @@ public class getInfoProductUT {
 
     @Test
     void getProductInfo_Success() {
-        Store store = new Store("store1", "desc1",new StorePolicy(),"FOUNDER");
+        Store store = new Store("store1", "desc1",new StorePolicy(),"FOUNDER",null);
         store.addProduct(1, "store1", "product1", "desc", 10.0, 5, 4.5, Category.Food.ordinal(), List.of("food"));
-        marketFacade.addStore(store);
+        marketFacade.addStore("store1", "desc1",new StorePolicy(),"FOUNDER",null);
 
         String expected = store.getProduct(1).toString();
         String result = marketFacade.getProductInfo("store1", 1);

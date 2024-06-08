@@ -47,17 +47,17 @@ public class PaymentFacadeImp implements PaymentFacade {
 
     @Override
     public synchronized boolean checkAvailabilityAndConditions(String username) {
-        if (!userFacade.getUsers().containsKey(username)) {
+        if (!userFacade.isUserExist(username)) {
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        User user = userFacade.getUsers().get(username);
+        User user = userFacade.getUser(username);
         Cart cart = user.getShopping_cart();
         HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             String storeId = entry.getKey();
             ShoppingBag shoppingBag = entry.getValue();
-            Store store = marketFacade.getStores().get(storeId);
+            Store store = marketFacade.getStore(storeId);
             for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
                 Product product = store.getProducts().get(productEntry.getKey());
                 if (product == null || product.getProduct_quantity() < productEntry.getValue()) {
@@ -76,7 +76,7 @@ public class PaymentFacadeImp implements PaymentFacade {
             String storeId = entry.getKey();
             ShoppingBag shoppingBag = entry.getValue();
 
-            Store store = marketFacade.getStores().get(storeId);
+            Store store = marketFacade.getStore(storeId);
             for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
                 int productId = productEntry.getKey();
                 int quantity = productEntry.getValue();
@@ -94,18 +94,18 @@ public class PaymentFacadeImp implements PaymentFacade {
             throw new RuntimeException("Products are not available or do not meet purchase conditions.");
         }
 
-        if (!userFacade.getUsers().containsKey(username)) {
+        if (!userFacade.isUserExist(username)) {
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        User user = userFacade.getUsers().get(username);
+        User user = userFacade.getUser(username);
         Cart cart = user.getShopping_cart();
         HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             String storeId = entry.getKey();
             ShoppingBag shoppingBag = entry.getValue();
 
-            Store store = marketFacade.getStores().get(storeId);
+            Store store = marketFacade.getStore(storeId);
             for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
                 int productId = productEntry.getKey();
                 int quantity = productEntry.getValue();
@@ -149,18 +149,18 @@ public class PaymentFacadeImp implements PaymentFacade {
     }
 
     private synchronized void releaseReservedProducts(String username) {
-        if (!userFacade.getUsers().containsKey(username)) {
+        if (!userFacade.isUserExist(username)) {
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        User user = userFacade.getUsers().get(username);
+        User user = userFacade.getUser(username);
         Cart cart = user.getShopping_cart();
         HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             String storeId = entry.getKey();
             ShoppingBag shoppingBag = entry.getValue();
 
-            Store store = marketFacade.getStores().get(storeId);
+            Store store = marketFacade.getStore(storeId);
             for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
                 int productId = productEntry.getKey();
                 int quantity = productEntry.getValue();
@@ -179,7 +179,7 @@ public class PaymentFacadeImp implements PaymentFacade {
             for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
                 int productId = productEntry.getKey();
                 int quantity = productEntry.getValue();
-                price = price + marketFacade.getStores().get(storeId).getProduct(productId).getProduct_price() * quantity;
+                price = price + marketFacade.getStore(storeId).getProduct(productId).getProduct_price() * quantity;
             }
         }
         return price;
@@ -187,11 +187,11 @@ public class PaymentFacadeImp implements PaymentFacade {
 
     @Override
     public String getPurchaseHistory(String username, String storeName, Integer productBarcode) {
-        if (!userFacade.getUsers().containsKey(username)) {    //Change when Repo
+        if (!userFacade.isUserExist(username)) {    //Change when Repo
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        if (username.charAt(0)=='r' && !userFacade.getUsers().get(username).getLogged()) {
+        if (username.charAt(0)=='r' && !userFacade.getUser(username).getLogged()) {
             logger.error("User is not logged");
             throw new RuntimeException("User is not logged");
         }
@@ -210,7 +210,7 @@ public class PaymentFacadeImp implements PaymentFacade {
 
         if (storeName != null) {
             filteredPurchases = filteredPurchases.stream()
-                    .filter(p -> p.getStoreName().equals(storeName))
+                    .filter(p -> p.getStoreName().equals(storeName)) //TODO: getStoreName added - make sure it works properly.
                     .collect(Collectors.toList());
         }
         return filteredPurchases.stream()
@@ -220,11 +220,11 @@ public class PaymentFacadeImp implements PaymentFacade {
 
 
     public String getStoresPurchaseHistory(String username, String storeName, Integer productBarcode) {
-        if (!userFacade.getUsers().containsKey(username)) {    //Change when Repo
+        if (!userFacade.isUserExist(username)) {    //Change when Repo
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        if (username.charAt(0)=='r' && !userFacade.getUsers().get(username).getLogged()) {
+        if (username.charAt(0)=='r' && !userFacade.getUser(username).getLogged()) {
             logger.error("User is not logged");
             throw new RuntimeException("User is not logged");
         }
@@ -245,24 +245,26 @@ public class PaymentFacadeImp implements PaymentFacade {
     }
 
     private void addPurchase(String registeredId) {
-        Cart cart = userFacade.getUsers().get(registeredId).getShopping_cart();
+        Cart cart = userFacade.getUser(registeredId).getShopping_cart();
         double totalcount = 0;
         List<ProductInSale> productInSales = new ArrayList<>();
         HashMap<String, ShoppingBag> shoppingBags = cart.getShoppingBags();
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             String storeId = entry.getKey();
             ShoppingBag shoppingBag = entry.getValue();
-            Store store = marketFacade.getStores().get(storeId);
+            Store store = marketFacade.getStore(storeId);
             for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
                 int productId = productEntry.getKey();
                 int quantity = productEntry.getValue();
                 Product product = store.getProducts().get(productId);
                 totalcount = totalcount + quantity * product.getProduct_price();
-                ProductInSale productInSale = new ProductInSale(productId, product.getProduct_price(), quantity, storeId);
-                productInSales.add(productInSale);
+               // ProductInSale productInSale = new ProductInSale(productId, product.getProduct_price(), quantity);
+               // productInSales.add(productInSale);
             }
 
-            Purchase purchase = new Purchase(userFacade.getUsers().get(registeredId).getUsername(), productInSales, storeId, totalcount);
+            Purchase purchase = new Purchase(userFacade.getUsers().get(registeredId).getUsername(), productInSales, totalcount);
+            store.addPurchase(purchase);
+
         }
     }
 }

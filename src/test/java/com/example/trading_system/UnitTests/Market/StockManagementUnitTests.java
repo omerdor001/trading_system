@@ -30,10 +30,10 @@ class StockManagementUnitTests {
             userFacade.login("v0","testuser0","1pA22w0rd");
             userFacade.login("v1","testuser1","pA22w0rd1");
             userFacade.login("v2","testuser2","pA22w0rd2");
-            userFacade.openStore("testuser0","Adidas","sport shop",mock(StorePolicy.class));
-            userFacade.openStore("testuser0","Nike","sport shop",mock(StorePolicy.class));
-            userFacade.appointOwner("testuser0","testuser1","Adidas");
-            userFacade.appointManager("testuser0","testuser2","Adidas",false,false,false,false);
+            userFacade.openStore("rtestuser0","Adidas","sport shop",mock(StorePolicy.class));
+            userFacade.openStore("rtestuser0","Nike","sport shop",mock(StorePolicy.class));
+            userFacade.appointOwner("rtestuser0","rtestuser1","Adidas");
+            userFacade.appointManager("rtestuser0","rtestuser2","Adidas",false,false,false,false);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -42,9 +42,9 @@ class StockManagementUnitTests {
 
     @AfterAll
     public void tearDown(){
-        userFacade.logout(0,"testuser0");
-        userFacade.logout(1,"testuser1");
-        userFacade.logout(2,"testuser2");
+        userFacade.logout(0,"rtestuser0");
+        userFacade.logout(1,"rtestuser1");
+        userFacade.logout(2,"rtestuser2");
         marketFacade.deleteInstance();
         userFacade.deleteInstance();
     }
@@ -56,8 +56,8 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Samba");
         assertDoesNotThrow(() -> {
-            marketFacade.addProduct("testuser1", 123, "Adidas", "Samba", "Snickers shoes",
-                    330.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser1", 123, "Adidas", "Samba", "Snickers shoes",
+                    330.0, 100, 5.0, 1, keyWords);
         }, "addProduct should not throw any exceptions");
     }
 
@@ -66,8 +66,8 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Samba");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            marketFacade.addProduct("testuser4", 123, "Adidas", "Samba", "Snickers shoes",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser4", 123, "Adidas", "Samba", "Snickers shoes",
+                    100.0, 100, 5.0, 1, keyWords);
         });
         assertEquals("User must exist", exception.getMessage());
     }
@@ -77,8 +77,8 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Samba");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            marketFacade.addProduct("testuser1", 123, "Adidas1", "Samba", "Snickers shoes",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser1", 123, "Adidas1", "Samba", "Snickers shoes",
+                    100.0, 100, 5.0, 1, keyWords);
         });
         assertEquals("Store must exist", exception.getMessage());
     }
@@ -88,8 +88,8 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Samba");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            marketFacade.addProduct("testuser1", 123, "Adidas", "Samba", "Snickers shoes",
-                    -100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser1", 123, "Adidas", "Samba", "Snickers shoes",
+                    -100.0, 100, 5.0, 1, keyWords);
         });
         assertEquals("Price can't be negative number", exception.getMessage());
     }
@@ -99,8 +99,8 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Samba");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            marketFacade.addProduct("testuser1", 123, "Adidas", "Samba", "Snickers shoes",
-                    100.0, -100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser1", 123, "Adidas", "Samba", "Snickers shoes",
+                    100.0, -100, 5.0, 1, keyWords);
         });
         assertEquals("Quantity must be natural number", exception.getMessage());
     }
@@ -110,8 +110,8 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Samba");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            marketFacade.addProduct("testuser1", 123, "Adidas", "Samba", "Snickers shoes",
-                    100.0, 100, -5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser1", 123, "Adidas", "Samba", "Snickers shoes",
+                    100.0, 100, -5.0, 1, keyWords);
         });
         assertEquals("Rating can't be negative number", exception.getMessage());
     }
@@ -121,8 +121,8 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Samba");
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> {
-            marketFacade.addProduct("testuser2", 123, "Adidas", "Samba", "Snickers shoes",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser2", 123, "Adidas", "Samba", "Snickers shoes",
+                    100.0, 100, 5.0, 1, keyWords);
         });
         assertEquals("Manager cannot add products", exception.getMessage());
     }
@@ -132,8 +132,8 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Samba");
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            marketFacade.addProduct("testuser2", 123, "Nike", "Samba", "Snickers shoes",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser2", 123, "Nike", "Samba", "Snickers shoes",
+                    100.0, 100, 5.0, 1, keyWords);
         });
         assertEquals("User doesn't have permission to this store", exception.getMessage());
     }
@@ -144,14 +144,14 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("testuser0", 124, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser0", 150, "Nike", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
         assertDoesNotThrow(() -> {
-            marketFacade.removeProduct("testuser0","Nike",124);
+            marketFacade.removeProduct("rtestuser0","Nike",150);
         }, "removeProduct should not throw any exceptions");
     }
 
@@ -160,14 +160,14 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("testuser0", 124, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser0", 143, "Nike", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            marketFacade.removeProduct("testuser4","Nike",124);
+            marketFacade.removeProduct("rtestuser4","Nike",143);
         });
         assertEquals("User must exist", exception.getMessage());
     }
@@ -177,14 +177,14 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("testuser0", 124, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser0", 140, "Nike", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            marketFacade.removeProduct("testuser0","Nike1",124);
+            marketFacade.removeProduct("rtestuser0","Nike1",140);
         });
         assertEquals("Store must exist", exception.getMessage());
     }
@@ -194,14 +194,14 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("testuser0", 124, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser0", 151, "Nike", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            marketFacade.removeProduct("testuser0","Nike",125);
+            marketFacade.removeProduct("rtestuser0","Nike",101);
         });
         assertEquals("Product must exist", exception.getMessage());
     }
@@ -211,14 +211,14 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("testuser0", 124, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser0", 124, "Nike", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            marketFacade.removeProduct("testuser2","Nike",124);
+            marketFacade.removeProduct("rtestuser2","Nike",124);
         });
         assertEquals("User doesn't have permission to this store", exception.getMessage());
     }
@@ -228,14 +228,14 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("testuser0", 124, "Adidas", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser0", 124, "Adidas", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> {
-            marketFacade.removeProduct("testuser2","Adidas",124);
+            marketFacade.removeProduct("rtestuser2","Adidas",124);
         });
         assertEquals("Manager cannot remove products", exception.getMessage());
     }
@@ -245,14 +245,14 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("testuser0", 124, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser0", 141, "Nike", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
         assertDoesNotThrow(() -> {
-            marketFacade.setProductName("testuser0","Nike",124,"Shirt1");
+            marketFacade.setProductName("rtestuser0","Nike",141,"Shirt1");
         }, "setProductName should not throw any exceptions");
     }
 
@@ -261,14 +261,14 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("testuser0", 124, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser0", 126, "Nike", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            marketFacade.setProductPrice("testuser0","Nike",124,-150.0);
+            marketFacade.setProductPrice("rtestuser0","Nike",126,-150.0);
         });
         assertEquals("Price can't be negative number", exception.getMessage());
     }
@@ -278,14 +278,14 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("testuser0", 124, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser0", 127, "Nike", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            marketFacade.setProductPrice("testuser4","Nike",124,100.0);
+            marketFacade.setProductPrice("rtestuser4","Nike",127,100.0);
         });
         assertEquals("User must exist", exception.getMessage());
     }
@@ -295,14 +295,14 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("testuser0", 124, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser0", 128, "Nike", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            marketFacade.setRating("testuser0","Nike",125,4.0);
+            marketFacade.setRating("rtestuser0","Nike",100,4.0);
         });
         assertEquals("Product must exist", exception.getMessage());
     }
@@ -312,14 +312,14 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("testuser0", 124, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser0", 129, "Nike", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            marketFacade.setProductQuantity("testuser0","Nike1",124,50);
+            marketFacade.setProductQuantity("rtestuser0","Nike1",129,50);
         });
         assertEquals("Store must exist", exception.getMessage());
     }
@@ -329,14 +329,14 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("testuser0", 124, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser0", 130, "Nike", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            marketFacade.setProductDescription("testuser2","Nike",124,"Sport shirt1");
+            marketFacade.setProductDescription("rtestuser2","Nike",130,"Sport shirt1");
         });
         assertEquals("User doesn't have permission to this store", exception.getMessage());
     }
@@ -346,14 +346,14 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("testuser0", 124, "Adidas", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 0, keyWords);
+            marketFacade.addProduct("rtestuser0", 142, "Adidas", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> {
-            marketFacade.setProductDescription("testuser2","Adidas",124,"Sport shirt1");
+            marketFacade.setProductDescription("rtestuser2","Adidas",142,"Sport shirt1");
         });
         assertEquals("Manager cannot edit products", exception.getMessage());
     }

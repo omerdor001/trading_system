@@ -31,6 +31,9 @@ public class ShoppingBag {
     }
 
     public synchronized void removeProduct(int productId, int quantity) {
+        if (!products_list.containsKey(productId)) {
+            throw new IllegalArgumentException("Product not found in shopping bag.");
+        }
         if (products_list.get(productId) - quantity <= 0) {
             products_list.remove(productId);
         } else

@@ -33,11 +33,15 @@ public interface UserFacade {
 
     void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException;
 
+    void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException;
+
     void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
 
     void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
 
     void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
+
+    void rejectToOwnStore(String userName, String storeName, String appoint) throws IllegalAccessException;
 
     void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException;
 
@@ -56,4 +60,8 @@ public interface UserFacade {
     String viewCart(String username);
 
     void removeFromCart(String username,int productId, String storeName, int quantity);
+
+    boolean isUserExist(String username);
+
+    User getUser(String username);
 }
