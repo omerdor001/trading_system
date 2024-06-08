@@ -138,7 +138,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Store name is null");
             throw new RuntimeException("Store name is null");
         }
-        if (marketFacade.isStoreExist(storeName)) {
+        if (marketFacade.isStoreExist(storeName)) { // todo : why its illegal?
             logger.error("Store with name " + storeName + " already exists");
             throw new RuntimeException("Store with name " + storeName + " already exists");
         }
