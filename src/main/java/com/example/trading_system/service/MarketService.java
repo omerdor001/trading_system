@@ -9,15 +9,15 @@ public interface MarketService {
 
     void deleteInstance();
 
-    String getAllStores();
+    String getAllStores(String userName);
 
     void openStoreExist(String userName, String storeName) throws IllegalArgumentException;
 
     void closeStoreExist(String userName, String storeName) throws IllegalArgumentException;
 
-    String getStoreProducts(String storeName);
+    String getStoreProducts(String userName, String storeName) throws IllegalAccessException;
 
-    String getProductInfo(String storeName, int productId);
+    String getProductInfo(String userName, String storeName, int productId) throws IllegalAccessException;
 
     String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category);
 

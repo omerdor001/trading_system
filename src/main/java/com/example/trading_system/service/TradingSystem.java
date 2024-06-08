@@ -69,11 +69,11 @@ public interface TradingSystem {
 
     ResponseEntity<String> editPermissionForManager(String username, String token, String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
-    ResponseEntity<String> getAllStores();
+    ResponseEntity<String> getAllStores(String userName, String token);
 
-    ResponseEntity<String> getStoreProducts(String store_name);
+    ResponseEntity<String> getStoreProducts(String userName, String store_name);
 
-    ResponseEntity<String> getProductInfo(String store_name, int product_Id);
+    ResponseEntity<String> getProductInfo(String userName, String store_name, int product_Id);
 
     //search in specific store
     ResponseEntity<String> searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category);

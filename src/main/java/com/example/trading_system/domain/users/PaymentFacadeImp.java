@@ -58,6 +58,15 @@ public class PaymentFacadeImp implements PaymentFacade {
             String storeId = entry.getKey();
             ShoppingBag shoppingBag = entry.getValue();
             Store store = marketFacade.getStore(storeId);
+            if (store == null) {
+                logger.error("Store is not found");
+                throw new RuntimeException("Store is not found");
+            }
+            if(!store.isOpen())
+            {
+                logger.error("Store is closed");
+                throw new RuntimeException("Store is closed");
+            }
             for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
                 Product product = store.getProducts().get(productEntry.getKey());
                 if (product == null || product.getProduct_quantity() < productEntry.getValue()) {
@@ -75,8 +84,16 @@ public class PaymentFacadeImp implements PaymentFacade {
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             String storeId = entry.getKey();
             ShoppingBag shoppingBag = entry.getValue();
-
             Store store = marketFacade.getStore(storeId);
+            if (store == null) {
+                logger.error("Store is not found");
+                throw new RuntimeException("Store is not found");
+            }
+            if(!store.isOpen())
+            {
+                logger.error("Store is closed");
+                throw new RuntimeException("Store is closed");
+            }
             for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
                 int productId = productEntry.getKey();
                 int quantity = productEntry.getValue();
@@ -104,8 +121,16 @@ public class PaymentFacadeImp implements PaymentFacade {
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             String storeId = entry.getKey();
             ShoppingBag shoppingBag = entry.getValue();
-
             Store store = marketFacade.getStore(storeId);
+            if (store == null) {
+                logger.error("Store is not found");
+                throw new RuntimeException("Store is not found");
+            }
+            if(!store.isOpen())
+            {
+                logger.error("Store is closed");
+                throw new RuntimeException("Store is closed");
+            }
             for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
                 int productId = productEntry.getKey();
                 int quantity = productEntry.getValue();
@@ -161,6 +186,15 @@ public class PaymentFacadeImp implements PaymentFacade {
             ShoppingBag shoppingBag = entry.getValue();
 
             Store store = marketFacade.getStore(storeId);
+            if (store == null) {
+                logger.error("Store is not found");
+                throw new RuntimeException("Store is not found");
+            }
+            if(!store.isOpen())
+            {
+                logger.error("Store is closed");
+                throw new RuntimeException("Store is closed");
+            }
             for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
                 int productId = productEntry.getKey();
                 int quantity = productEntry.getValue();

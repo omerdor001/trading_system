@@ -31,9 +31,9 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public String getAllStores() {
+    public String getAllStores(String userName) {
         logger.info("Trying to Gather All Stores");
-        String result = marketFacade.getAllStores();
+        String result = marketFacade.getAllStores(userName);
         logger.info("FINISHED Gather All Stores Info");
         return result;
     }
@@ -57,17 +57,17 @@ public class MarketServiceImp implements MarketService {
     }
 */
 
-    public String getStoreProducts(String store_name) {
+    public String getStoreProducts(String userName, String store_name) throws IllegalAccessException{
         logger.info("Trying to Gather ALL Store Products");
-        String result = marketFacade.getStoreProducts(store_name);
+        String result = marketFacade.getStoreProducts(userName, store_name);
         logger.info("FINISHED Gather ALL Store Products Info");
         return result;
     }
 
 
-    public String getProductInfo(String store_name, int product_Id) {
+    public String getProductInfo(String userName, String store_name, int product_Id) throws IllegalAccessException {
         logger.info("Trying to Gather Product Info with Store Id : {} and product ID: {}", store_name, product_Id);
-        String result = marketFacade.getProductInfo(store_name, product_Id);
+        String result = marketFacade.getProductInfo(userName, store_name, product_Id);
         logger.info("FINISHED Gather Product Info");
         return result;
     }

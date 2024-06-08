@@ -206,6 +206,8 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Store not found: " + storeName);
             throw new NoSuchElementException("Store not found: " + storeName);
         }
+        if (!marketFacade.getStore(storeName).isOpen())
+            throw new IllegalArgumentException("When store is closed you cant add to cart from this store");
         if (username.charAt(0) == 'r' && !userMemoryRepository.getUser(username).getLogged()) {
             logger.error("User is not logged in: " + username);
             throw new RuntimeException("User is not logged in: " + username);
@@ -220,6 +222,8 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Store not found: " + storeName);
             throw new NoSuchElementException("Store not found: " + storeName);
         }
+        if(!store.isOpen() && ! store.isRoleHolder(username))
+            throw new IllegalArgumentException("When store is closed, only role holders are allowed to check product quantity");
         Product product = store.getProducts().get(productId);
         if (product == null) {
             logger.error("Product not found: " + productId);

@@ -496,13 +496,15 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> getAllStores() {
+    public ResponseEntity<String> getAllStores(String username, String token) {
         logger.info("Trying to Gather All Stores");
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
+            if(!checkToken(username,token))
+                return invalidTokenResponse();
             logger.info("FINISHED Gather All Stores Info");
-            return new ResponseEntity<>(marketService.getAllStores(), HttpStatus.OK);
+            return new ResponseEntity<>(marketService.getAllStores(username), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed on Gathering Stores Info ", e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -510,13 +512,13 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> getStoreProducts(String store_name) {
+    public ResponseEntity<String> getStoreProducts(String userName, String store_name) {
         logger.info("Trying to Gather ALL Store Products");
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
             logger.info("FINISHED Gather ALL Store Products Info");
-            return new ResponseEntity<>(marketService.getStoreProducts(store_name), HttpStatus.OK);
+            return new ResponseEntity<>(marketService.getStoreProducts(userName, store_name), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed on Gathering Store Products Info with Store Id : {} ", e.getMessage(), store_name);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -524,13 +526,13 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> getProductInfo(String store_name, int product_Id) {
+    public ResponseEntity<String> getProductInfo(String userName, String store_name, int product_Id) {
         logger.info("Trying to Gather Product Info with Store Id : {} and product ID: {}", store_name, product_Id);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
             logger.info("FINISHED Gather Product Info");
-            return new ResponseEntity<>(marketService.getProductInfo(store_name, product_Id), HttpStatus.OK);
+            return new ResponseEntity<>(marketService.getProductInfo(userName, store_name, product_Id), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed on Gathering Product Info with Store Id : {} and product ID:{}", e.getMessage(), store_name, product_Id);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
