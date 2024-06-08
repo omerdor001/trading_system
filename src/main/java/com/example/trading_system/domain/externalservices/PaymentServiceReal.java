@@ -1,10 +1,7 @@
 package com.example.trading_system.domain.externalservices;
 
 public class PaymentServiceReal implements PaymentService{
-    @Override
-    public String getName() {
-        return "";
-    }
+
 
     @Override
     public int makePayment(double amount) {
