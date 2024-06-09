@@ -1,46 +1,79 @@
 package com.example.trading_system.UnitTests.Market;
 
-import com.example.trading_system.domain.stores.*;
+import com.example.trading_system.domain.stores.MarketFacadeImp;
+import com.example.trading_system.domain.stores.StorePolicy;
+import com.example.trading_system.domain.users.Role;
+import com.example.trading_system.domain.users.User;
 import com.example.trading_system.domain.users.UserFacadeImp;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.*;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class GetProductsInfoUnitTests {
 
-class getProductsInfo {
+    @Mock
+    User user;
+    @Mock
+    Role role;
+    @Mock
+    StorePolicy policy;
 
-    private MarketFacadeImp marketFacade;
-    private UserFacadeImp userFacadeImp;
-    LocalDate birthdate = LocalDate.of(1990, 5, 15);
+    UserFacadeImp userFacade;
+    MarketFacadeImp marketFacade;
+    String validUsername = "validUser";
+    String validStoreName = "ValidStore";
+    String validDescription = "This is a valid description.";
 
-    @BeforeAll
-    void setUpOnce() throws Exception {
-        userFacadeImp = UserFacadeImp.getInstance();
+    @BeforeEach
+    public void init() {
+        MockitoAnnotations.openMocks(this);
         marketFacade = MarketFacadeImp.getInstance();
-        userFacadeImp.enter(1);
-        userFacadeImp.register( "testuser", "testpassword", birthdate);
-        userFacadeImp.login("1", "testuser", "testpassword");
-        Store store1 = mock(Store.class);
-        Store store2 = mock(Store.class);
-        userFacadeImp.openStore("testuser", "store1", "description", new StorePolicy());
-        userFacadeImp.openStore("testuser", "store2", "description", new StorePolicy());
-        when(store1.toString()).thenReturn("Store 1");
-        when(store2.toString()).thenReturn("Store 2");
-        marketFacade.addProduct("testuser", 1, "store1", "product1", "", 5, 5, 5, 1, new ArrayList<>());
+        userFacade = UserFacadeImp.getInstance();
+        userFacade.getUsers().put(validUsername, user);
+
+        // Mock the user to return a valid role for the store
+        when(user.getRoleByStoreId(anyString())).thenReturn(role);
+    }
+
+    @AfterEach
+    public void resetMocks() {
+        userFacade.deleteInstance();
+        marketFacade.deleteInstance();
+        reset(user, role);
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {""})
+    public void givenInvalidStoreName_WhenGetStoreProducts_ThenThrowRuntimeException(String storeName) {
+        Assertions.assertThrows(RuntimeException.class, () -> marketFacade.getStoreProducts(storeName));
     }
 
     @Test
-    void testGetAllStores() throws Exception {
+    public void givenInvalidProductId_WhenGetProductInfo_ThenThrowRuntimeException() throws IllegalAccessException {
+        // Ensure store exists
+        marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null);
+        // Ensure a valid product is added
+        marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>());
+        when(user.getRoleByStoreId(validStoreName)).thenReturn(role);
+
+        // Attempting to fetch product info with an invalid product ID should throw RuntimeException
+        Assertions.assertThrows(RuntimeException.class, () -> marketFacade.getProductInfo(validStoreName, 999));
+    }
+
+    @Test
+    public void givenValidDetails_WhenGetAllStores_ThenSuccess() throws Exception {
+        // Ensure stores exist
+        userFacade.openStore(validUsername, "store1", "description", policy);
+        userFacade.openStore(validUsername, "store2", "description", policy);
 
         String expected = "[\"stores\":store1,store2]";
         String actual = marketFacade.getAllStores();
@@ -48,15 +81,24 @@ class getProductsInfo {
     }
 
     @Test
-    void testGetStoreProducts() throws Exception {
-        String expected = "{\"name_id\":\"store1\", \"description\":\"description\", \"products\":[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Art, \"keyWords\":[]}, ]}";
-        String actual = marketFacade.getStoreProducts("store1");
+    public void givenValidStoreName_WhenGetStoreProducts_ThenSuccess() throws Exception {
+        // Ensure store and product exist
+        marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null);
+        marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>());
+
+        String expected = "{\"name_id\":\"ValidStore\", \"description\":\"This is a valid description.\", \"products\":[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[]}, ]}";
+        String actual = marketFacade.getStoreProducts(validStoreName);
         assertEquals(expected, actual);
     }
-@Test
-    void testGetProductInfo() throws Exception {
-        String expected = "{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Art, \"keyWords\":[]}";
-        String actual = marketFacade.getProductInfo("store1",1);
+
+    @Test
+    public void givenValidProductId_WhenGetProductInfo_ThenSuccess() throws Exception {
+        // Ensure store and product exist
+        marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null);
+        marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>());
+
+        String expected = "{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[]}";
+        String actual = marketFacade.getProductInfo(validStoreName, 1);
         assertEquals(expected, actual);
     }
 }

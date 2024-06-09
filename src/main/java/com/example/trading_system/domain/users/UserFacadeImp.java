@@ -1,5 +1,9 @@
 package com.example.trading_system.domain.users;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.DeliveryServiceProxy;
+import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.externalservices.PaymentServiceProxy;
 import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.service.UserServiceImp;
 import org.slf4j.Logger;
@@ -16,23 +20,32 @@ public class UserFacadeImp implements UserFacade {
     private static UserFacadeImp instance = null;
     private MarketFacade marketFacade;
     private UserRepository userMemoryRepository;
+    private StoreSalesHistory storeSalesHistory;
+    private DeliveryService deliveryService;
+    private PaymentService paymentService;
 
-    private UserFacadeImp() {
+
+    private UserFacadeImp(PaymentService paymentService,DeliveryService deliveryService) {
         this.marketFacade = MarketFacadeImp.getInstance();
-        this.userMemoryRepository= UserMemoryRepository.getInstance();
+        this.userMemoryRepository = UserMemoryRepository.getInstance();
+        this.storeSalesHistory = StoreSalesHistory.getInstance();
+        this.paymentService = paymentService;
+        this.deliveryService =deliveryService;
+
         marketFacade.initialize(this);
     }
-
     public static UserFacadeImp getInstance() {
-        if (instance == null)
-            instance = new UserFacadeImp();
+        if (instance == null){
+            instance = new UserFacadeImp(new PaymentServiceProxy(),new DeliveryServiceProxy());
+            instance.marketFacade.initialize(instance);
+        }
         return instance;
     }
 
     @Override
     public void deleteInstance() {
         instance = null;
-        if(marketFacade != null)
+        if (marketFacade != null)
             marketFacade.deleteInstance();
         this.marketFacade = null;
     }
@@ -42,10 +55,10 @@ public class UserFacadeImp implements UserFacade {
         return userMemoryRepository.getAllUsers();
     }
 
-   @Override
-   public void enter(int id) {
-        userMemoryRepository.addVisitor("v"+id);
-   }
+    @Override
+    public void enter(int id) {
+        userMemoryRepository.addVisitor("v" + id);
+    }
 
     @Override
     public void exit(String username) throws Exception {
@@ -57,17 +70,17 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void logout(int id,String username) {
+    public void logout(int id, String username) {
         if (username == null || username.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
-        if(username.charAt(0)!='r'){
+        if (username.charAt(0) != 'r') {
             throw new IllegalArgumentException("User performs Not like a registered");
         }
         User u = userMemoryRepository.getUser(username);
         if (u == null)
             throw new IllegalArgumentException("No such user " + username);
-        if (username.charAt(0)=='r' && !u.getLogged())
+        if (username.charAt(0) == 'r' && !u.getLogged())
             throw new IllegalArgumentException("User " + username + "already Logged out");
         saveUserCart(username);
         u.logout();
@@ -137,29 +150,29 @@ public class UserFacadeImp implements UserFacade {
 
     private void saveUserCart(String username) {
         User user = userMemoryRepository.getUser(username);
-        if (user == null || user.getShopping_cart() == null) {
+        if (user == null || user.getCart() == null) {
             throw new IllegalArgumentException("user doesn't exist in the system");
         }
-        userMemoryRepository.getUser(username).getShopping_cart().saveCart();
+        userMemoryRepository.getUser(username).getCart().saveCart();
     }
 
     @Override
     public void register(String username, String password, LocalDate birthdate) throws Exception {
-        if (userMemoryRepository.isExist("r"+username))
+        if (userMemoryRepository.isExist("r" + username))
             throw new Exception("username already exists - " + username);
         registerChecks(username, password, birthdate);
         String encrypted_pass = encrypt(password);
-        userMemoryRepository.addRegistered("r"+username,encrypted_pass,birthdate);
-        if (checkIfRegistersEmpty())
-            userMemoryRepository.getUser("r"+username).setAdmin(true);
+        userMemoryRepository.addRegistered("r" + username, encrypted_pass, birthdate);
+        if (!checkIfRegistersEmpty())
+            userMemoryRepository.getUser("r" + username).setAdmin(true);
     }
 
-    private boolean checkIfRegistersEmpty(){
-        if(userMemoryRepository.isEmpty()){
+    private boolean checkIfRegistersEmpty() {
+        if (userMemoryRepository.isEmpty()) {
             return false;
         }
-        for(String username:userMemoryRepository.getAllUsersAsUsernames()){
-            if(username.charAt(0)=='r'){
+        for (String username : userMemoryRepository.getAllUsersAsUsernames()) {
+            if (username.charAt(0) == 'r') {
                 return false;
             }
         }
@@ -175,11 +188,11 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void login(String usernameV,String username, String password) {
-        User u = userMemoryRepository.getUser("r"+username);
+    public void login(String usernameV, String username, String password) {
+        User u = userMemoryRepository.getUser("r" + username);
         if (u == null)
             throw new RuntimeException("No such user " + username);
-        if (username.charAt(0)=='r' && u.getLogged())
+        if (username.charAt(0) == 'r' && u.getLogged())
             throw new RuntimeException("User " + username + " already logged in");
         if (checkPassword(password, u.getPass())) {
             userMemoryRepository.deleteUser(usernameV);
@@ -200,106 +213,133 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void saveUserCart(String username, int productId, String storeName, int quantity) {
-        if (storeName == null) {
+        if (storeName == null || storeName.trim().isEmpty()) {
             logger.error("Store name is null");
             throw new RuntimeException("Store name is null");
         }
-        if (marketFacade.isStoreExist(storeName)) {
+        if (marketFacade.isStoreExist(storeName)) { // todo : why its illegal?
             logger.error("Store with name " + storeName + " already exists");
             throw new RuntimeException("Store with name " + storeName + " already exists");
         }
         if (userMemoryRepository.isExist(username)) {
-            userMemoryRepository.getUser(username).getShopping_cart().addProductToCart(productId, quantity, storeName);
+            double price = marketFacade.getStore(storeName).getProduct(productId).getProduct_price();
+            userMemoryRepository.getUser(username).getCart().addProductToCart(productId, quantity, storeName, price);
         }
-        int quantityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
-        int quantityInShoppingBag = userMemoryRepository.getUser(username).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
-        if (quantity + quantityInShoppingBag > quantityInStore) {
-            logger.error("Product quantity is too low");
-            throw new RuntimeException("Product quantity is too low");
-        }
+        checkProductQuantity(username, productId, storeName, quantity);
     }
 
-   @Override
-   public synchronized String viewCart(String username) {
-       if (!userMemoryRepository.isExist(username)) {
-           logger.error("User not found");
-           throw new RuntimeException("User not found");
-       }
-       if (username.charAt(0)=='r' && !userMemoryRepository.getUser(username).getLogged()){
-           logger.error("Registered user is not logged");
-           throw new RuntimeException("Registered user is not logged");
-       }
-       Cart cart = userMemoryRepository.getUser(username).getShopping_cart();
-       StringBuilder cartDetails = new StringBuilder();
-       double totalAllStores = 0.0;
-       for (Map.Entry<String, ShoppingBag> entry : cart.getShoppingBags().entrySet()) {
-           String storeId = entry.getKey();
-           ShoppingBag shoppingBag = entry.getValue();
-           cartDetails.append("Store name: ").append(storeId).append("\n");
-           double totalStore = 0.0;
-           for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
-               Product product = marketFacade.getStores().get(storeId).getProducts().get(productEntry.getKey());
-               int quantity = productEntry.getValue();
-               double price = product.getProduct_price();
-               double totalPrice = price * quantity;
-               totalStore += totalPrice;
-               cartDetails.append("Product Id: ").append(product.getProduct_id()).append(", Name: ").append(product.getProduct_name())
-                       .append(", Quantity: ").append(quantity).append(", Price per unit: ").append(price).append(", Total Price: ").append(totalPrice).append("\n");
-           }
-           cartDetails.append("Total for Store name ").append(storeId).append(": ").append(totalStore).append("\n\n");
-           totalAllStores += totalStore;
-       }
-       cartDetails.append("Overall Total for All Stores: ").append(totalAllStores).append("\n");
-       return cartDetails.toString();
-   }
+    @Override
+    public synchronized String viewCart(String username) {
+        if (!userMemoryRepository.isExist(username)) {
+            logger.error("User not found");
+            throw new RuntimeException("User not found");
+        }
+        if (username.charAt(0) == 'r' && !userMemoryRepository.getUser(username).getLogged()) {
+            logger.error("Registered user is not logged");
+            throw new RuntimeException("Registered user is not logged");
+        }
+//       return userMemoryRepository.getUser(username).getShoppingCart_ToString();
+
+
+        Cart cart = userMemoryRepository.getUser(username).getCart();
+        StringBuilder cartDetails = new StringBuilder();
+        double totalAllStores = 0.0;
+        for (Map.Entry<String, ShoppingBag> entry : cart.getShoppingBags().entrySet()) {
+            String storeId = entry.getKey();
+            ShoppingBag shoppingBag = entry.getValue();
+            cartDetails.append("Store name: ").append(storeId).append("\n");
+            double totalStore = 0.0;
+            for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBag.getProducts_list().entrySet()) {
+                Product product = marketFacade.getStores().get(storeId).getProducts().get(productEntry.getKey());
+                int quantity = productEntry.getValue().getQuantity();
+                double price = product.getProduct_price();
+                double totalPrice = price * quantity;
+                totalStore += totalPrice;
+                cartDetails.append("Product Id: ").append(product.getProduct_id()).append(", Name: ").append(product.getProduct_name())
+                        .append(", Quantity: ").append(quantity).append(", Price per unit: ").append(price).append(", Total Price: ").append(totalPrice).append("\n");
+            }
+            cartDetails.append("Total for Store name ").append(storeId).append(": ").append(totalStore).append("\n\n");
+            totalAllStores += totalStore;
+        }
+        cartDetails.append("Overall Total for All Stores: ").append(totalAllStores).append("\n");
+        return cartDetails.toString();
+    }
 
     @Override
     public synchronized void addToCart(String username, int productId, String storeName, int quantity) {
+        if (username == null || username.trim().isEmpty()) {
+            logger.error("Username cannot be null or empty");
+            throw new IllegalArgumentException("Username cannot be null or empty");
+        }
         if (!userMemoryRepository.isExist(username)) {
-            logger.error("User not found");
-            throw new RuntimeException("User not found");
+            logger.error("User not found: " + username);
+            throw new NoSuchElementException("User not found: " + username);
         }
-        if (storeName == null) {
-            logger.error("Store name is null");
-            throw new RuntimeException("Store name is null");
+        if (storeName == null || storeName.trim().isEmpty()) {
+            logger.error("Store name cannot be null or empty");
+            throw new IllegalArgumentException("Store name cannot be null or empty");
         }
-        if (marketFacade.isStoreExist(storeName)) {
-            logger.error("Store with name " + storeName + " already exists");
-            throw new RuntimeException("Store with name " + storeName + " already exists");
+        if (!marketFacade.isStoreExist(storeName)) {
+            logger.error("Store not found: " + storeName);
+            throw new NoSuchElementException("Store not found: " + storeName);
         }
-        if (username.charAt(0)=='r' && !userMemoryRepository.getUser(username).getLogged()){
-            logger.error("User is not logged");
-            throw new RuntimeException("User is not logged");
+        if (!marketFacade.getStore(storeName).isOpen())
+            throw new IllegalArgumentException("When store is closed you cant add to cart from this store");
+        if (username.charAt(0) == 'r' && !userMemoryRepository.getUser(username).getLogged()) {
+            logger.error("User is not logged in: " + username);
+            throw new RuntimeException("User is not logged in: " + username);
         }
-        int quantityInStore = marketFacade.getStores().get(storeName).getProducts().get(productId).getProduct_quantity();
-        int quantityInShoppingBag = userMemoryRepository.getUser(username).getShopping_cart().getShoppingBags().get(storeName).getProducts_list().get(productId);
+        checkProductQuantity(username, productId, storeName, quantity);
+        userMemoryRepository.getUser(username).addProductToCart(productId, quantity, storeName, marketFacade.getStore(storeName).getProduct(productId).getProduct_price());
+    }
+
+    private void checkProductQuantity(String username, int productId, String storeName, int quantity) {
+        Store store = marketFacade.getStore(storeName);
+        if (store == null) {
+            logger.error("Store not found: " + storeName);
+            throw new NoSuchElementException("Store not found: " + storeName);
+        }
+        if(!store.isOpen())
+            throw new IllegalArgumentException("When store is closed cant to check product quantity");
+        Product product = store.getProducts().get(productId);
+        if (product == null) {
+            logger.error("Product not found: " + productId);
+            throw new NoSuchElementException("Product not found: " + productId);
+        }
+        int quantityInStore = product.getProduct_quantity();
+        int quantityInShoppingBag = userMemoryRepository.getUser(username).checkProductQuantity(productId, storeName);
+
         if (quantity + quantityInShoppingBag > quantityInStore) {
-            logger.error("Product quantity is too low");
+            logger.error("Insufficient product quantity in store for product ID: {}", productId);
             throw new RuntimeException("Product quantity is too low");
         }
-        userMemoryRepository.getUser(username).getShopping_cart().addProductToCart(productId, quantity, storeName);
     }
 
     @Override
-    public synchronized void removeFromCart(String username,int productId, String storeName, int quantity) {
+    public synchronized void removeFromCart(String username, int productId, String storeName, int quantity) {
+        if (username == null || username.trim().isEmpty()) {
+            logger.error("Username cannot be null or empty");
+            throw new IllegalArgumentException("Username cannot be null or empty");
+        }
         if (!userMemoryRepository.isExist(username)) {
-            logger.error("User not found");
-            throw new RuntimeException("User not found");
+            logger.error("User not found: " + username);
+            throw new NoSuchElementException("User not found: " + username);
         }
-        if (storeName == null) {
-            logger.error("Store name is null");
-            throw new RuntimeException("Store name is null");
+        if (storeName == null || storeName.trim().isEmpty()) {
+            logger.error("Store name cannot be null or empty");
+            throw new IllegalArgumentException("Store name cannot be null or empty");
         }
-        if (marketFacade.isStoreExist(storeName)) {
-            logger.error("Store with name " + storeName + " already exists");
-            throw new RuntimeException("Store with name " + storeName + " already exists");
+        if (!marketFacade.isStoreExist(storeName)) {
+            logger.error("Store not found: " + storeName);
+            throw new NoSuchElementException("Store not found: " + storeName);
         }
-        if (username.charAt(0)=='r' && !userMemoryRepository.getUser(username).getLogged()){
-            logger.error("User is not logged");
-            throw new RuntimeException("User is not logged");
+        if (username.charAt(0) == 'r' && !userMemoryRepository.getUser(username).getLogged()) {
+            logger.error("User is not logged in: " + username);
+            throw new RuntimeException("User is not logged in: " + username);
         }
-        userMemoryRepository.getUser(username).getShopping_cart().removeProductFromCart(productId, quantity, storeName);
+        userMemoryRepository.getUser(username).removeProductFromCart(productId, quantity, storeName);
     }
+
 
     @Override
     public void openStore(String username, String storeName, String description, StorePolicy policy) {
@@ -326,7 +366,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException {
-        if(!marketFacade.isStoreExist(storeName))
+        if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
@@ -335,10 +375,10 @@ public class UserFacadeImp implements UserFacade {
             throw new NoSuchElementException("No user called " + newOwner + " exist");
         }
 
-        if (appoint.charAt(0)!='r') {
+        if (appoint.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + appoint + " is registered");
         }
-        if (newOwner.charAt(0)!='r') {
+        if (newOwner.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + newOwner + "is registered");
         }
         User appointUser = userMemoryRepository.getUser(appoint);
@@ -357,7 +397,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
-        if(!marketFacade.isStoreExist(store_name_id))
+        if (!marketFacade.isStoreExist(store_name_id))
             throw new NoSuchElementException("No store called " + store_name_id + " exist");
         if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
@@ -365,10 +405,10 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(newManager)) {
             throw new NoSuchElementException("No user called " + newManager + " exist");
         }
-        if (appoint.charAt(0)!='r') {
+        if (appoint.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + appoint + " is registered");
         }
-        if (newManager.charAt(0)!='r') {
+        if (newManager.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + newManager + "is registered");
         }
         User appointUser = userMemoryRepository.getUser(appoint);
@@ -390,7 +430,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException {
-        if(!marketFacade.isStoreExist(store_name_id))
+        if (!marketFacade.isStoreExist(store_name_id))
             throw new NoSuchElementException("No store called " + store_name_id + " exist");
         if (!userMemoryRepository.isExist(newManager)) {
             throw new NoSuchElementException("No user called " + newManager + " exist");
@@ -398,10 +438,10 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
-        if (appoint.charAt(0)!='r') {
+        if (appoint.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + appoint + " is registered");
         }
-        if (newManager.charAt(0)!='r') {
+        if (newManager.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + newManager + "is registered");
         }
         User appointUser = userMemoryRepository.getUser(appoint);
@@ -422,7 +462,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException {
-        if(!marketFacade.isStoreExist(storeName))
+        if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userMemoryRepository.isExist(userName)) {
             throw new NoSuchElementException("No user called " + userName + " exist");
@@ -446,7 +486,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException {
-        if(!marketFacade.isStoreExist(storeName))
+        if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userMemoryRepository.isExist(newOwner)) {
             throw new NoSuchElementException("No user called " + newOwner + " exist");
@@ -454,10 +494,10 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
-        if (appoint.charAt(0)!='r') {
+        if (appoint.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + appoint + " is registered");
         }
-        if (newOwner.charAt(0)!='r') {
+        if (newOwner.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + newOwner + "is registered");
         }
         User appointUser = userMemoryRepository.getUser(appoint);
@@ -474,7 +514,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void rejectToOwnStore(String userName, String storeName, String appoint) throws IllegalAccessException {
-        if(!marketFacade.isStoreExist(storeName))
+        if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userMemoryRepository.isExist(userName)) {
             throw new NoSuchElementException("No user called " + userName + " exist");
@@ -494,7 +534,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     public void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
-        if(!marketFacade.isStoreExist(store_name_id))
+        if (!marketFacade.isStoreExist(store_name_id))
             throw new NoSuchElementException("No store called " + store_name_id + " exist");
         if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
@@ -502,10 +542,10 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(newManager)) {
             throw new NoSuchElementException("No user called " + newManager + " exist");
         }
-        if (appoint.charAt(0)!='r') {
+        if (appoint.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + appoint + " is registered");
         }
-        if (newManager.charAt(0)!='r') {
+        if (newManager.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + newManager + "is registered");
         }
         User appointUser = userMemoryRepository.getUser(appoint);
@@ -513,7 +553,7 @@ public class UserFacadeImp implements UserFacade {
         if (!appointUser.isOwner(store_name_id)) {
             throw new IllegalAccessException("User must be Owner");
         }
-        if (appoint.charAt(0)=='r' && !appointUser.getLogged()) {
+        if (appoint.charAt(0) == 'r' && !appointUser.getLogged()) {
             throw new IllegalAccessException("Appoint user is not logged");
         }
         if (newManagerUser.isManager(store_name_id)) {
@@ -529,7 +569,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException {
-        if(!marketFacade.isStoreExist(storeName))
+        if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
@@ -537,10 +577,10 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(newOwner)) {
             throw new NoSuchElementException("No user called " + newOwner + " exist");
         }
-        if (appoint.charAt(0)!='r') {
+        if (appoint.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + appoint + " is registered");
         }
-        if (newOwner.charAt(0)!='r') {
+        if (newOwner.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + newOwner + "is registered");
         }
         User appointUser = userMemoryRepository.getUser(appoint);
@@ -556,7 +596,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
-        if(!marketFacade.isStoreExist(storeNameId))
+        if (!marketFacade.isStoreExist(storeNameId))
             throw new NoSuchElementException("No store called " + storeNameId + " exist");
         if (!userMemoryRepository.isExist(userId)) {
             throw new NoSuchElementException("No user called " + userId + "exist");
@@ -564,10 +604,10 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(managerToEdit)) {
             throw new NoSuchElementException("No user called " + managerToEdit + "exist");
         }
-        if (userId.charAt(0)!='r') {
+        if (userId.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + userId + " is registered");
         }
-        if (managerToEdit.charAt(0)!='r') {
+        if (managerToEdit.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + managerToEdit + "is registered");
         }
         User appointUser = userMemoryRepository.getUser(userId);
@@ -586,7 +626,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public String getUserPassword(String username) {
-        if (username.charAt(0)!='r') {
+        if (username.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + username + " is registered");
         }
         User u = userMemoryRepository.getUser(username);
@@ -607,7 +647,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public boolean isAdmin(String username){
+    public boolean isAdmin(String username) {
         for (User r : userMemoryRepository.getAllUsersAsList())
             if (r.getUsername().equals(username.substring(1))) {
                 return r.isAdmin();
@@ -627,14 +667,109 @@ public class UserFacadeImp implements UserFacade {
         return passwordEncoder.matches(password, hashedPassword);
     }
 
-    public boolean isUserExist(String username){
+    public boolean isUserExist(String username) {
         return userMemoryRepository.isExist(username);
     }
 
-    public User getUser(String username){
+    public User getUser(String username) {
         return userMemoryRepository.getUser(username);
     }
 
+
+    ///Purchase SECTION
+    private void addPurchase(String registeredId) {
+        storeSalesHistory.addPurchase(getUser(registeredId).addPurchasedProduct());
+    }
+    @Override
+    public String getPurchaseHistory(String username, String storeName) {
+        if (!isUserExist(username) && username != null) {    //Change when Repo
+            logger.error("User not found");
+            throw new RuntimeException("User not found");
+        }
+        if (username.charAt(0) == 'r' && !getUser(username).getLogged()) {
+            logger.error("User is not logged");
+            throw new RuntimeException("User is not logged");
+        }
+        if (!isAdmin(username)) {
+            logger.error("User is not commercial manager");
+            throw new RuntimeException("User is not commercial manager");
+        }
+        return storeSalesHistory.getPurchaseHistory(username, storeName);
+    }
+
+    private synchronized boolean checkAvailabilityAndConditions(String username) {
+        if (!isUserExist(username)) {
+            logger.error("User not found");
+            throw new RuntimeException("User not found");
+        }
+        HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
+        for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
+            for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
+                if(marketFacade.getStore(shoppingBagInStore.getKey()) == null)
+                    throw new RuntimeException("store not exist");
+                checkProductQuantity(username, productEntry.getKey(), shoppingBagInStore.getKey(), 0);
+            }
+        }
+        return true;
+    }
+
+    private synchronized void releaseReservedProducts(String username) {
+        HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
+        for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
+            for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
+                marketFacade.releaseReservedProducts(productEntry.getKey(), productEntry.getValue().getQuantity(), shoppingBagInStore.getKey());
+            }
+        }
+    }
+
+    private synchronized void removeReservedProducts(String username) {
+        HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
+        for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
+            for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
+                marketFacade.removeReservedProducts(productEntry.getKey(), productEntry.getValue().getQuantity(), shoppingBagInStore.getKey());
+            }
+        }
+    }
+    @Override
+    public synchronized void approvePurchase(String username) throws Exception {
+        if (!checkAvailabilityAndConditions(username)) {
+            logger.error("Products are not available or do not meet purchase conditions.");
+            throw new RuntimeException("Products are not available or do not meet purchase conditions.");
+        }
+        removeReservedProducts(username);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                releaseReservedProducts(username);
+                throw new RuntimeException("time out !");
+            }
+        }, 10 * 60 * 1000);
+        double totalPrice = marketFacade.calculateTotalPrice(getUser(username).getCart());
+        //TODO: fix process Payment
+        int deliveryId = 0;  //For cancelling
+        String address = ""; //TODO : Need to be a parameter of this function
+        try {
+            deliveryId = deliveryService.makeDelivery(address);
+        } catch (Exception e) {
+            releaseReservedProducts(username);
+            throw new Exception("Error in Delivery");
+        }
+        int paymentId = 0;   //For cancelling
+        try {
+            paymentId = paymentService.makePayment(totalPrice);
+        } catch (Exception e) {
+            deliveryService.cancelDelivery(deliveryId);
+            releaseReservedProducts(username);
+            throw new Exception("Error in Payment");
+        }
+        addPurchase(username);
+        timer.cancel();
+        timer.purge();
+    }
+
+
 }
+
+
 
 

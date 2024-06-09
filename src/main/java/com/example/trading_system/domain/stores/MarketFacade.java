@@ -1,5 +1,6 @@
 package com.example.trading_system.domain.stores;
 
+import com.example.trading_system.domain.users.Cart;
 import com.example.trading_system.domain.users.UserFacade;
 
 import java.util.HashMap;
@@ -10,29 +11,29 @@ public interface MarketFacade {
 
     void initialize(UserFacade userFacade);
 
-    String getAllStores();
+    String getAllStores(String userName);
 
-    void openStoreExist(String storeId);
+    void openStoreExist(String userName, String storeName) throws IllegalArgumentException;
 
-    void closeStoreExist(String storeId);
+    void closeStoreExist(String userName, String storeName) throws IllegalArgumentException;
 
     void deactivateStore(String storeId);
 
-    String getStoreProducts(String storeName);
+    String getStoreProducts(String userName, String storeName) throws IllegalAccessException;
 
-    String getProductInfo(String storeName, int productId);
+    String getProductInfo(String userName, String storeName, int productId) throws IllegalAccessException;
 
-    String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category);
+    String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, int category);
 
-    String searchCategoryInStore(Category category, String storeName, Double minPrice, Double maxPrice, Double minRating);
+    String searchCategoryInStore(String userName, int category, String storeName, Double minPrice, Double maxPrice, Double minRating);
 
-    String searchKeywordsInStore(String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, Category category);
+    String searchKeywordsInStore(String userName, String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, int category);
 
-    String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
+    String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
-    String searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
+    String searchCategoryInStores(String userName, int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
 
-    String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
+    String searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
     boolean addProduct(String username,
                        int productId,
@@ -69,11 +70,17 @@ public interface MarketFacade {
 
     String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
 
-    void addStore(String storeName, String description, StorePolicy storePolicy, String founder,Double storeRating);
+    void addStore(String storeName, String description, StorePolicy storePolicy, String founder, Double storeRating);
 
     boolean isStoreExist(String store_name);
 
     HashMap<String, Store> getStores();
 
     Store getStore(String storeName);
+
+    void releaseReservedProducts(int productId, int quantity, String storeName);
+
+    void removeReservedProducts(int productId, int quantity, String storeName);
+
+    double calculateTotalPrice(Cart cart);
 }

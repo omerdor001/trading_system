@@ -73,4 +73,8 @@ public interface UserFacade {
     boolean isUserExist(String username);
 
     User getUser(String username);
+
+    String getPurchaseHistory(String username, String storeName);
+
+    void approvePurchase(String username) throws Exception;
 }

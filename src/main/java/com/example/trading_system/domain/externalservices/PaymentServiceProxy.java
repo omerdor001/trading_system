@@ -5,17 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PaymentServiceProxy implements PaymentService{
-    String serviceName;
     int id=1;
     private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
-    public PaymentServiceProxy(String serviceName) {
-        this.serviceName=serviceName;
-    }
-
-    @Override
-    public String getName() {
-        logger.info("Getting name of service : {}",serviceName);
-        return serviceName;
+    public PaymentServiceProxy() {
     }
 
     @Override

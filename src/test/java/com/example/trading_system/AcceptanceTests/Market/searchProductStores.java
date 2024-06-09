@@ -55,7 +55,7 @@ public class searchProductStores {
     public void testSearchNameInStore_Successful() {
         tradingSystem.openStore(username,token,"store1", "General Store", new StorePolicy());
         tradingSystem.addProduct(username,token,1, "store1", "product1", "desc1", 10.0, 100, 4,0,new ArrayList<>());
-        ResponseEntity<String> response = tradingSystem.searchNameInStores("product1", null, null, null, Category.Sport,null);
+        ResponseEntity<String> response = tradingSystem.searchNameInStores("product1", null, null, null, Category.Sport.getIntValue(),null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
     }
@@ -64,7 +64,7 @@ public class searchProductStores {
     public void testSearchCategoryInStore_Successful() {
         tradingSystem.openStore(username,token,"store1", "General Store", new StorePolicy());
         tradingSystem.addProduct(username,token,1, "store1", "product1", "desc1", 10.0, 100, 4,0,new ArrayList<>());
-        ResponseEntity<String> response = tradingSystem.searchCategoryInStores(Category.Sport, null, null, null,null);
+        ResponseEntity<String> response = tradingSystem.searchCategoryInStores(Category.Sport.getIntValue(), null, null, null,null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
     }
@@ -73,21 +73,21 @@ public class searchProductStores {
     public void testSearchKeywordsInStore_Successful() {
         tradingSystem.openStore(username,token,"store1", "General Store", new StorePolicy());
         tradingSystem.addProduct(username,token,1, "store1", "product1", "desc1", 10.0, 100, 4,0,new ArrayList<>());
-        ResponseEntity<String> response = tradingSystem.searchKeywordsInStores("keyword",  null, null, null, Category.Sport,null);
+        ResponseEntity<String> response = tradingSystem.searchKeywordsInStores("keyword",  null, null, null, Category.Sport.getIntValue(),null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
     }
 
     @Test
     public void testSearchNameInStore_NoNameProvided() {
-        ResponseEntity<String> response = tradingSystem.searchNameInStores(null,  null, null, null, Category.Sport,null);
+        ResponseEntity<String> response = tradingSystem.searchNameInStores(null,  null, null, null, Category.Sport.getIntValue(),null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("No name provided", response.getBody());
     }
 
     @Test
     public void testSearchCategoryInStore_NoCategoryProvided() {
-        ResponseEntity<String> response = tradingSystem.searchCategoryInStores(null,  null, null, null,null);
+        ResponseEntity<String> response = tradingSystem.searchCategoryInStores(-1,  null, null, null,null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("No category provided", response.getBody());
     }
@@ -95,7 +95,7 @@ public class searchProductStores {
 
     @Test
     public void testSearchKeywordsInStore_NoKeywordsProvided() {
-        ResponseEntity<String> response = tradingSystem.searchKeywordsInStores(null, null, null, null, Category.Sport,null);
+        ResponseEntity<String> response = tradingSystem.searchKeywordsInStores(null, null, null, null, Category.Sport.getIntValue(),null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("No keywords provided", response.getBody());
     }

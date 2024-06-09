@@ -1,123 +1,149 @@
 package com.example.trading_system.AcceptanceTests.Market;
-
 import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.service.TradingSystemImp;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.LinkedList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
 class StockManagementAcceptanceTests {
     private TradingSystemImp tradingSystem;
     String token1;
-    String token2;
-    String token3;
+    String username;
+
     @BeforeEach
     public void setUp() {
         tradingSystem = TradingSystemImp.getInstance();
-        tradingSystem.register(0, "testuser1", "password123", LocalDate.now());
+        tradingSystem.register(0,"owner1", "password123",LocalDate.now());
         tradingSystem.openSystem();
-        ResponseEntity<String> response1 = tradingSystem.enter();
-        token1 = response1.getBody();
-        tradingSystem.register(1, "testuser2", "password1232", LocalDate.now());
-        tradingSystem.register(2, "testuser3", "password1233", LocalDate.now());
-        tradingSystem.login(token1,"1","testuser1", "password123");
-        tradingSystem.appointOwner("testuser1",token1,"testuser1","testuser3","Adidas");
-        ResponseEntity<String> response2 = tradingSystem.enter();
-        token2 = response2.getBody();
-        tradingSystem.login(token2,"1","testuser2", "password1232");
-        tradingSystem.openStore("testuser2",token2,"Adidas","shoes",mock(StorePolicy.class));
-        ResponseEntity<String> response3 = tradingSystem.enter();
-        token3=response3.getBody();
+        //Enters
+        String userToken = tradingSystem.enter().getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            token1 = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract token from JSON response");
+        }
+        userToken = tradingSystem.login(token1, "0", "owner1", "password123").getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            username = rootNode.get("username").asText();
+            token1 = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract username and token from JSON response");
+        }
+        tradingSystem.openStore(username, token1, "store1", "", mock(StorePolicy.class));
+        tradingSystem.enter();
     }
 
     @AfterEach
-    public void tearDown(){
-        tradingSystem.exit(token1,"0");
-        tradingSystem.exit(token2,"1");
-        tradingSystem.exit(token3,"2");
+    public void tearDown() {
         tradingSystem.deleteInstance();
     }
 
     @Test
     void addProduct_Success() {
-        ArrayList<String> keyWords = new ArrayList<String>();
-        keyWords.add("Samba");
-        tradingSystem.appointOwner("testuser3",token3,"testuser3","testuser2","Adidas");
-        ResponseEntity<String> response=tradingSystem.addProduct("testuser2",token2,123,"Adidas","Samba",
-                "white black shoes",300.0,100,5.0,0,keyWords);
-        assertEquals(HttpStatus.OK,response.getStatusCode());
+        ResponseEntity<String> response = tradingSystem.addProduct(username, token1, 123,"store1", "product1","description", 10.0, 100, 4.5,1,new LinkedList<>());
+        assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
     }
 
     @Test
     void addProduct_StoreNotExist() {
-
+        ResponseEntity<String> response = tradingSystem.addProduct(username, token1, 123,"nonExistentStore",  "product1","description", 10.0, 100, 4.5,1,new LinkedList<>());
+        assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
     }
 
     @Test
     void addProduct_PriceLessThanZero() {
-
+        ResponseEntity<String> response = tradingSystem.addProduct(username, token1, 123,"store1",  "product1","description", -10.0, 100, 4.5,1,new LinkedList<>());
+        assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
     }
 
     @Test
     void addProduct_QuantityLessEqualThanZero() {
-
+        ResponseEntity<String> response = tradingSystem.addProduct(username, token1, 123,"store1", "product1", "description", 10, 0, 4.5,1,new LinkedList<>());
+        assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
     }
 
     @Test
     void addProduct_RatingLessThanZero() {
-
+        ResponseEntity<String> response = tradingSystem.addProduct(username, token1, 123,"store1", "product1", "description", 10, 100, -1,1,new LinkedList<>());
+        assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
     }
 
     @Test
-    void addProduct_NotManager() {
+    void addProduct_EmptyUsername() {
+        ResponseEntity<String> response = tradingSystem.addProduct("", token1, 123,"store1", "product1", "description", 10, 100, -1,1,new LinkedList<>());
+        assertEquals(HttpStatusCode.valueOf(401), response.getStatusCode());
+    }
 
+    @Test
+    void addProduct_EmptyStoreName() {
+        ResponseEntity<String> response = tradingSystem.addProduct(username, token1, 123,"", "product1", "description", 10, 100, -1,1,new LinkedList<>());
+        assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
     }
 
     @Test
     void removeProduct_success() {
-
+        tradingSystem.addProduct(username, token1,123, "store1", "product1", "description", 10, 100, 4.5,1,new LinkedList<>());
+        ResponseEntity<String> response = tradingSystem.removeProduct(username, token1, "store1", 123);
+        assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
     }
 
     @Test
     void removeProduct_UserNotExist() {
-
+        ResponseEntity<String> response = tradingSystem.removeProduct("nonExistentUser", token1, "store1", 123);
+        assertEquals(HttpStatusCode.valueOf(401), response.getStatusCode());
     }
 
     @Test
     void removeProduct_StoreNotExist() {
-
+        ResponseEntity<String> response = tradingSystem.removeProduct(username, token1, "nonExistentStore", 123);
+        assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
     }
 
     @Test
     void removeProduct_ProductNotExist() {
-
-    }
-
-    @Test
-    void removeProduct_NotManager() {
-
+        ResponseEntity<String> response = tradingSystem.removeProduct(username, token1, "store1", 124);
+        assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
     }
 
     @Test
     void setProduct_name_success() {
-
+        tradingSystem.addProduct(username, token1, 123,"store1", "product1", "description", 10, 100, 4.5,1,new LinkedList<>());
+        ResponseEntity<String> response = tradingSystem.setProductName(username, token1, "store1", 123, "newProductName");
+        assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
     }
 
     @Test
     void setProduct_Price_PriceLessThanZero() {
-
+        tradingSystem.addProduct(username, token1, 123,"store1", "product1", "description", 10, 100, 4.5,1,new LinkedList<>());
+        ResponseEntity<String> response = tradingSystem.setProductPrice(username, token1, "store1", 123, -10);
+        assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
     }
 
     @Test
     void setProduct_description_UserNotExist() {
-
+        tradingSystem.addProduct(username, token1, 123,"store1", "product1", "description", 10, 100, 4.5,1,new LinkedList<>());
+        ResponseEntity<String> response = tradingSystem.setProductDescription("nonExistentUser", token1, "store1", 123, "newDescription");
+        assertEquals(HttpStatusCode.valueOf(401), response.getStatusCode());
     }
+
+
+
+
+
 
 }

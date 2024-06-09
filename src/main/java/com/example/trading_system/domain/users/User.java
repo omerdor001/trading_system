@@ -1,5 +1,10 @@
 package com.example.trading_system.domain.users;
 
+import com.example.trading_system.domain.stores.Product;
+import com.example.trading_system.domain.stores.ProductInSale;
+import com.example.trading_system.domain.stores.Purchase;
+import com.example.trading_system.domain.stores.Store;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -11,6 +16,7 @@ public abstract class User {
     private boolean suspended;
     private LocalDateTime suspendedStart;
     private LocalDateTime suspendedEnd;
+    private Cart cart;
 
     public User(String username) {
         this.username=username;
@@ -18,6 +24,7 @@ public abstract class User {
         this.suspended=false;
         this.suspendedStart=null;
         this.suspendedEnd=null;
+        this.cart = new Cart();
     }
 
     public String getUsername() {
@@ -108,12 +115,15 @@ public abstract class User {
 
     public abstract void setAdmin(boolean value);
 
-    public Cart getShopping_cart() {
-        return shopping_cart;
+    public Cart getCart() {
+        return cart;
     }
 
-    public void setShopping_cart(Cart shopping_cart) {
-        this.shopping_cart = shopping_cart;
+    public String getShoppingCart_ToString() {
+        return cart.getShoppingBags_ToString();
+    }
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
     public abstract boolean getLogged();
@@ -129,6 +139,23 @@ public abstract class User {
     public String sendNotification(String receiverUsername, String content) {
         Notification notification = new Notification(this.username, receiverUsername, new Date(), content);
         return notification.toString();
+    }
+
+    public void addProductToCart(int productId, int quantity, String storeName,double price) {
+        this.cart.addProductToCart(productId,quantity,storeName,price);
+    }
+
+    public void removeProductFromCart(int productId, int quantity, String storeName) {
+        this.cart.removeProductFromCart(productId, quantity, storeName);
+    }
+
+    public List<Purchase> addPurchasedProduct() {
+       return  cart.purchaseProduct(this.username);
+    }
+
+
+    public int checkProductQuantity(int productId, String storeName) {
+        return cart.checkProductQuantity(productId,storeName);
     }
 
 }
