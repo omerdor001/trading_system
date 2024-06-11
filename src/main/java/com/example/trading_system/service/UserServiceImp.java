@@ -145,6 +145,17 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public void waiverOnOwnership(String userName, String storeName) throws IllegalAccessException {
+        userFacade.waiverOnOwnership(userName, storeName);
+    }
+
+    @Override
+    public void fireManager(String owner, String storeName, String manager) throws IllegalAccessException{
+        userFacade.fireManager(owner, storeName, manager);
+    }
+
+
+    @Override
     public void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
         logger.info("Trying to appoint manager : {} to store : {}", newManager, store_name_id);
         userFacade.appointManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);

@@ -265,9 +265,19 @@ public class Store {
         salesHistory.addPurchase(purchase);
     }
 
+    public void addOwner(String userName) {
+        owners.add(userName);
+    }
+    public void addManager(String userName) {
+        managers.add(userName);
+    }
 
 
+    public void removeOwner(String userName) {
+        owners.remove(userName);
+    }
 
-
-
+    public void removeManager(String userName) {
+        owners.remove(userName);
+    }
 }

@@ -434,6 +434,40 @@ public class TradingSystemImp implements TradingSystem{
         return new ResponseEntity<>("Success rejecting manage", HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<String> waiverOnOwnership(String userName, String token, String storeName) {
+        logger.info("Trying to give up to own store : {}", storeName);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            userService.waiverOnOwnership(userName, storeName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to give up own to store : {}", e.getMessage(), storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished waiver own store : {}", storeName);
+        return new ResponseEntity<>("Success waiver to own", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> fireManager(String owner, String token, String storeName, String manager) {
+        logger.info("{} Trying to fore {} from be a manager in store {}",owner, storeName, manager);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(owner,token))
+                return invalidTokenResponse();
+            userService.fireManager(owner, storeName, manager);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while {} trying to fire {} from store : {}", e.getMessage(),owner, storeName, manager);
+        }
+        logger.info("Finished fire {} from store : {}", manager, storeName);
+        return new ResponseEntity<>("Success fire manager", HttpStatus.OK);
+    }
+
+
 
     //TODO Same as suggestManager/approveManager?
     @Override

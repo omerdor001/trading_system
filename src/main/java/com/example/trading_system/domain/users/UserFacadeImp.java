@@ -391,6 +391,7 @@ public class UserFacadeImp implements UserFacade {
         List<Boolean> permissions = newManagerUser.removeWaitingAppoint_Manager(store_name_id);
         newManagerUser.addManagerRole(appoint, store_name_id);
         newManagerUser.setPermissionsToManager(store_name_id, permissions.get(0), permissions.get(1), permissions.get(2), permissions.get(3));
+        marketFacade.getStore(store_name_id).addManager(newManager);
     }
 
     @Override
@@ -402,6 +403,12 @@ public class UserFacadeImp implements UserFacade {
         }
         if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
+        }
+        if (appoint.charAt(0) != 'r') {
+            throw new NoSuchElementException("No user called " + appoint + " is registered");
+        }
+        if (userName.charAt(0) != 'r') {
+            throw new NoSuchElementException("No user called " + userName + "is registered");
         }
         User appointUser = userMemoryRepository.getUser(appoint);
         User newManagerUser = userMemoryRepository.getUser(userName);
@@ -443,6 +450,7 @@ public class UserFacadeImp implements UserFacade {
         }
         newOwnerUser.removeWaitingAppoint_Owner(storeName);
         newOwnerUser.addOwnerRole(appoint, storeName);
+        marketFacade.getStore(storeName).addOwner(newOwner);
     }
 
     @Override
@@ -455,6 +463,12 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
+        if (appoint.charAt(0) != 'r') {
+            throw new NoSuchElementException("No user called " + appoint + " is registered");
+        }
+        if (userName.charAt(0) != 'r') {
+            throw new NoSuchElementException("No user called " + userName + "is registered");
+        }
         User appointUser = userMemoryRepository.getUser(appoint);
         if (!appointUser.isOwner(storeName)) {
             throw new IllegalAccessException("User must be Owner");
@@ -465,6 +479,61 @@ public class UserFacadeImp implements UserFacade {
         }
         newOwnerUser.removeWaitingAppoint_Owner(storeName);
     }
+
+    @Override
+    public void waiverOnOwnership(String userName, String storeName) throws IllegalAccessException {
+        if (!marketFacade.isStoreExist(storeName))
+            throw new NoSuchElementException("No store called " + storeName + " exist");
+        if (!userMemoryRepository.isExist(userName)) {
+            throw new NoSuchElementException("No user called " + userName + " exist");
+        }
+        if (userName.charAt(0) != 'r') {
+            throw new NoSuchElementException("No user called " + userName + "is registered");
+        }
+        User owner = userMemoryRepository.getUser(userName);
+        if (!owner.isOwner(storeName)) {
+            throw new IllegalAccessException("User is not owner of this store");
+        }
+        owner.removeOwnerRole(storeName);
+        marketFacade.getStore(storeName).removeOwner(userName);
+
+    }
+
+    @Override
+    public void fireManager(String owner, String storeName, String manager) throws IllegalAccessException
+    {
+        if (!marketFacade.isStoreExist(storeName))
+            throw new NoSuchElementException("No store called " + storeName + " exist");
+        if (!userMemoryRepository.isExist(owner)) {
+            throw new NoSuchElementException("No user called " + owner + " exist");
+        }
+        if (!userMemoryRepository.isExist(manager)) {
+            throw new NoSuchElementException("No user called " + manager + " exist");
+        }
+        if (owner.charAt(0) != 'r') {
+            throw new NoSuchElementException("No user called " + owner + " is registered");
+        }
+        if (manager.charAt(0) != 'r') {
+            throw new NoSuchElementException("No user called " + manager + "is registered");
+        }
+        User ownerUser = userMemoryRepository.getUser(owner);
+        User managerUser = userMemoryRepository.getUser(manager);
+        if (!ownerUser.isOwner(storeName)) {
+            throw new IllegalAccessException("User must be Owner");
+        }
+        if (!managerUser.isManager(storeName)) {
+            throw new IllegalAccessException("Fired user must be Manager");
+        }
+        if (!ownerUser.getLogged()) {
+            throw new IllegalAccessException("owner user is not logged");
+        }
+        if (managerUser.getRoleByStoreId(storeName).getAppointedById().equals(owner)) {
+            throw new IllegalAccessException("Owner cant fire manager that he/she didn't appointed");
+        }
+        ownerUser.removeManagerRole(storeName);
+        marketFacade.getStore(storeName).removeManager(manager);
+    }
+
 
     public void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
         if (!marketFacade.isStoreExist(store_name_id))

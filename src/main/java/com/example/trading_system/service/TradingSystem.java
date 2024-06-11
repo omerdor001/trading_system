@@ -60,6 +60,10 @@ public interface TradingSystem {
 
     ResponseEntity<String> rejectToManageStore(String userName, String token, String store_name_id, String appoint);
 
+    ResponseEntity<String> waiverOnOwnership(String userName, String token, String storeName);
+
+    ResponseEntity<String> fireManager(String owner, String token, String storeName, String manager);
+
     //TODO Same as suggestManager/approveManager?
     ResponseEntity<String> appointManager(String username, String token, String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
