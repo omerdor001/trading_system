@@ -766,6 +766,11 @@ public class TradingSystemImp implements TradingSystem{
         }
     }
 
+    @Override
+    public ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer productBarcode) {
+        return null;
+    }
+
 
     @Override
     public ResponseEntity<String> addToCart(String username, String token, int productId, String storeName, int quantity) {

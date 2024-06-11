@@ -43,10 +43,6 @@ public abstract class User {
         return suspended;
     }
 
-    public void setSuspended(){
-        this.suspended=!suspended;
-    }
-
     public LocalDateTime getSuspendedStart() {
         return suspendedStart;
     }
@@ -60,8 +56,8 @@ public abstract class User {
     }
 
     public void suspend(LocalDateTime suspendedUntil){
-        setSuspended();
-        this.suspendedStart=LocalDateTime.now();
+        suspended=true;
+        suspendedStart=LocalDateTime.now();
         setSuspendedEnd(suspendedUntil);
     }
 
@@ -75,14 +71,14 @@ public abstract class User {
     public void finishSuspension(){
         if(suspended){
             setSuspendedUntilToDefault();
-            setSuspended();
+            suspended=false;
         }
     }
 
     public void finishSuspensionByAdmin(){
         suspendedStart=null;
         suspendedEnd=null;
-        setSuspended();
+        suspended=false;
     }
 
     public abstract void login();

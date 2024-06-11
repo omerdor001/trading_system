@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class UserFacadeImp implements UserFacade {
@@ -80,12 +81,11 @@ public class UserFacadeImp implements UserFacade {
         User u = userMemoryRepository.getUser(username);
         if (u == null)
             throw new IllegalArgumentException("No such user " + username);
-        if(isSuspended(username)){
-            throw new RuntimeException("User is suspended from the system");
-        }
         if (username.charAt(0) == 'r' && !u.getLogged())
             throw new IllegalArgumentException("User " + username + "already Logged out");
-        saveUserCart(username);
+        if(!u.isSuspended()){
+            saveUserCart(username);
+        }
         u.logout();
         enter(id);
     }
@@ -119,6 +119,9 @@ public class UserFacadeImp implements UserFacade {
         if(!userMemoryRepository.getUser(admin).isAdmin()){
             throw new IllegalArgumentException("Only admin user can suspend users");
         }
+        if(!userMemoryRepository.getUser(toSuspend).isSuspended()){
+            throw new IllegalArgumentException("User need to be suspend for ending suspend");
+        }
         User toSuspendUser=userMemoryRepository.getUser(toSuspend);
         toSuspendUser.finishSuspensionByAdmin();
     }
@@ -127,6 +130,9 @@ public class UserFacadeImp implements UserFacade {
     public void checkForEndingSuspension(String toSuspend) {
         if(!userMemoryRepository.isExist(toSuspend)){
             throw new IllegalArgumentException("User to suspend doesn't exist in the system");
+        }
+        if(!userMemoryRepository.getUser(toSuspend).isSuspended()){
+            throw new IllegalArgumentException("User need to be suspend for ending suspend");
         }
         User toSuspendUser=userMemoryRepository.getUser(toSuspend);
         toSuspendUser.finishSuspension();
@@ -142,11 +148,13 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalArgumentException("Only admin user can suspend users");
         }
         for (User user:userMemoryRepository.getAllUsersAsList()){
-            details.append("Username - "+user.getUsername() + "\n");
-            details.append("Start of suspension - "+user.getSuspendedStart().toString()+"\n");
-            details.append("Time of suspension (in days) - "+ Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toDays()+"\n");
-            details.append("Time of suspension (in hours) - "+ Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toHours()+"\n");
-            details.append("End of suspension - "+user.getSuspendedEnd().toString());
+            if(user.isSuspended()){
+                details.append("Username - "+user.getUsername() + "\n");
+                details.append("Start of suspension - "+user.getSuspendedStart().truncatedTo(ChronoUnit.SECONDS)+"\n");
+                details.append("Time of suspension (in days) - "+ Math.max(0,Math.abs(Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toDays()))+"\n");
+                details.append("Time of suspension (in hours) - "+ Math.max(0,Math.abs(Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toHours()))+"\n");
+                details.append("End of suspension - "+user.getSuspendedEnd().toString());
+            }
         }
         return details.toString();
     }
@@ -176,14 +184,19 @@ public class UserFacadeImp implements UserFacade {
             throw new Exception("username already exists - " + username);
         registerChecks(username, password, birthdate);
         String encrypted_pass = encrypt(password);
-        userMemoryRepository.addRegistered("r" + username, encrypted_pass, birthdate);
-        if (!checkIfRegistersEmpty())
+        if (checkIfRegistersEmpty()){
+            userMemoryRepository.addRegistered("r" + username, encrypted_pass, birthdate);
             userMemoryRepository.getUser("r" + username).setAdmin(true);
+        }
+        else{
+            userMemoryRepository.addRegistered("r" + username, encrypted_pass, birthdate);
+        }
+
     }
 
     private boolean checkIfRegistersEmpty() {
         if (userMemoryRepository.isEmpty()) {
-            return false;
+            return true;
         }
         for (String username : userMemoryRepository.getAllUsersAsUsernames()) {
             if (username.charAt(0) == 'r') {
