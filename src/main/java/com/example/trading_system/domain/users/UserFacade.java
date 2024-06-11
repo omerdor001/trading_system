@@ -30,6 +30,8 @@ public interface UserFacade {
 
     String watchSuspensions(String admin);
 
+    boolean isSuspended(String username);
+
     boolean sendNotification(User sender, User receiver, String content);
 
     void saveUserCart(String username, int productId, String storeName, int quantity);
