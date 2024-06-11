@@ -61,29 +61,6 @@ public class Cart {
         //TODO when connecting to database.
     }
 
-/*    public String getShoppingBags_ToString() {
-        StringBuilder cartDetails = new StringBuilder();
-        double totalAllStores = 0.0;
-        for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
-            String storeId = entry.getKey();
-            ShoppingBag shoppingBag = entry.getValue();
-            cartDetails.append("Store name: ").append(storeId).append("\n");
-            double totalStore = 0.0;
-            for (Map.Entry<Integer, Integer> productEntry : shoppingBag.getProducts_list().entrySet()) {
-                Product product = marketFacade.getStores().get(storeId).getProducts().get(productEntry.getKey());
-                int quantity = productEntry.getValue();
-                double price = product.getProduct_price();
-                double totalPrice = price * quantity;
-                totalStore += totalPrice;
-                cartDetails.append("Product Id: ").append(product.getProduct_id()).append(", Name: ").append(product.getProduct_name())
-                        .append(", Quantity: ").append(quantity).append(", Price per unit: ").append(price).append(", Total Price: ").append(totalPrice).append("\n");
-            }
-            cartDetails.append("Total for Store name ").append(storeId).append(": ").append(totalStore).append("\n\n");
-            totalAllStores += totalStore;
-        }
-        cartDetails.append("Overall Total for All Stores: ").append(totalAllStores).append("\n");
-        return cartDetails.toString();
-    }*/
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -129,6 +106,8 @@ public class Cart {
 
 
     public int checkProductQuantity(int productId, String storeName) {
+        if (shoppingBags.get(storeName) == null)
+            return 0;
         return shoppingBags.get(storeName).checkProductQuantity(productId);
     }
 
