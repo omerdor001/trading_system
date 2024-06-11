@@ -4,64 +4,136 @@ import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.domain.users.User;
 import com.example.trading_system.domain.users.UserFacadeImp;
+import com.example.trading_system.domain.users.UserMemoryRepository;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.*;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class OpenStoreUnitTests {
+@ExtendWith(MockitoExtension.class)
+public class OpenStoreUnitTests {
 
     @Mock
     User user;
-    @Mock
-    StorePolicy policy;
 
-    UserFacadeImp userFacade;
+    UserMemoryRepository userMemoryRepository;
     MarketFacadeImp marketFacade;
-    String validUsername = "validUser";
-    String validStoreName = "ValidStore";
-    String validDescription = "This is a valid description.";
+    UserFacadeImp userFacadeImp;
 
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
+
+        // Clear singleton instances
+        UserMemoryRepository.getInstance().deleteInstance();
+        MarketFacadeImp.getInstance().deleteInstance();
+        UserFacadeImp.getInstance().deleteInstance();
+
+        // Re-instantiate singletons
+        userMemoryRepository = UserMemoryRepository.getInstance();
         marketFacade = MarketFacadeImp.getInstance();
-        userFacade = UserFacadeImp.getInstance();
-        userFacade.getUsers().put(validUsername, user);
+        userFacadeImp = UserFacadeImp.getInstance();
     }
 
     @AfterEach
-    public void resetMocks() {
-        userFacade.deleteInstance();
+    public void tearDown() {
+        userFacadeImp.deleteInstance();
+        userMemoryRepository.deleteInstance();
         marketFacade.deleteInstance();
-        reset(user);
     }
 
     @Test
-    public void givenNonExistentUser_WhenOpenStore_ThenThrowRuntimeException() {
-        Assertions.assertThrows(RuntimeException.class, () -> userFacade.openStore("nonExistentUser", validStoreName, validDescription, policy));
-    }
+    public void givenValidInputs_WhenOpenStore_ThenSuccess() {
+        String username = "rValidUser";
+        String storeName = "StoreName";
+        String description = "StoreDescription";
+        StorePolicy policy = new StorePolicy();
 
-    @ParameterizedTest
-    @NullSource
-    @ValueSource(strings = {""})
-    public void givenInvalidStoreName_WhenOpenStore_ThenThrowRuntimeException(String storeName) {
-        Assertions.assertThrows(RuntimeException.class, () -> userFacade.openStore(validUsername, storeName, validDescription, policy));
+        userMemoryRepository.addRegistered(username, "encrypted_password", null);
+        userMemoryRepository.getUser(username).login();
+
+        Assertions.assertDoesNotThrow(() -> userFacadeImp.openStore(username, storeName, description, policy));
+
+        // Check if the store was added successfully (assuming a method exists to get the store by name)
+        Assertions.assertTrue(marketFacade.isStoreExist(storeName));
     }
 
     @Test
-    public void givenExistingStoreName_WhenOpenStore_ThenThrowRuntimeException() {
-        marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null); // Ensure store exists
-        Assertions.assertThrows(RuntimeException.class, () -> userFacade.openStore(validUsername, validStoreName, validDescription, policy));
+    public void givenNonExistentUser_WhenOpenStore_ThenThrowException() {
+        String username = "rNonExistentUser";
+        String storeName = "StoreName";
+        String description = "StoreDescription";
+        StorePolicy policy = new StorePolicy();
+
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description, policy));
+
+        Assertions.assertEquals("User not found", exception.getMessage());
     }
 
     @Test
-    public void givenValidDetails_WhenOpenStore_ThenSuccess() {
-        Assertions.assertDoesNotThrow(() -> userFacade.openStore(validUsername, validStoreName, validDescription, policy));
+    public void givenNullStoreName_WhenOpenStore_ThenThrowException() {
+        String username = "rValidUser";
+        String storeName = null;
+        String description = "StoreDescription";
+        StorePolicy policy = new StorePolicy();
+
+        userMemoryRepository.addRegistered(username, "encrypted_password", null);
+        userMemoryRepository.getUser(username).login();
+
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description, policy));
+
+        Assertions.assertEquals("Store name should not be null", exception.getMessage());
     }
 
+    @Test
+    public void givenEmptyStoreName_WhenOpenStore_ThenThrowException() {
+        String username = "rValidUser";
+        String storeName = "";
+        String description = "StoreDescription";
+        StorePolicy policy = new StorePolicy();
+
+        userMemoryRepository.addRegistered(username, "encrypted_password", null);
+        userMemoryRepository.getUser(username).login();
+
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description, policy));
+
+        Assertions.assertEquals("Store name should not be null", exception.getMessage());
+    }
+
+    @Test
+    public void givenExistingStoreName_WhenOpenStore_ThenThrowException() {
+        String username = "rValidUser";
+        String storeName = "ExistingStoreName";
+        String description = "StoreDescription";
+        StorePolicy policy = new StorePolicy();
+
+        userMemoryRepository.addRegistered(username, "encrypted_password", null);
+        userMemoryRepository.getUser(username).login();
+        marketFacade.addStore(storeName, description, policy, username, null); // Ensure store exists
+
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description, policy));
+
+        Assertions.assertEquals("Store with name ExistingStoreName already exists", exception.getMessage());
+    }
+
+    @Test
+    public void givenExceptionDuringStoreCreation_WhenOpenStore_ThenThrowException() {
+        String username = "rValidUser";
+        String storeName = "StoreName";
+        String description = "StoreDescription";
+        StorePolicy policy = new StorePolicy();
+
+        userMemoryRepository.addRegistered(username, "encrypted_password", null);
+        userMemoryRepository.getUser(username).login();
+
+        // Simulate exception by invalid parameters
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            userFacadeImp.openStore(username, "", description, policy);
+        });
+
+        Assertions.assertEquals("Store name should not be null", exception.getMessage());
+    }
 }
