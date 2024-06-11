@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -46,7 +47,7 @@ public class StoreSalesHistory {
         List<Purchase> filteredPurchases = purchases;
         if (username != null) {
             filteredPurchases = filteredPurchases.stream()
-                    .filter(p -> p.getCustomerUsername() == username)
+                    .filter(p -> Objects.equals(p.getCustomerUsername(), username))
                     .collect(Collectors.toList());
         }
 

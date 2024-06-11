@@ -39,7 +39,7 @@ public class AddCartUnitTests {
         userMemoryRepository.deleteInstance();
         marketFacade.deleteInstance();
     }
-//TODO FIX ME
+
     @Test
     public void givenValidDetails_WhenAddToCart_ThenSuccess() {
         String username = "rValidUser";

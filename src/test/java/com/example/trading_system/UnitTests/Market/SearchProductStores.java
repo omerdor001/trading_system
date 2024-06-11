@@ -1,8 +1,6 @@
 package com.example.trading_system.UnitTests.Market;
 
-import com.example.trading_system.domain.stores.Category;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
-import com.example.trading_system.domain.stores.Store;
 import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.domain.users.Role;
 import com.example.trading_system.domain.users.User;
@@ -21,7 +19,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class searchProductStores {
+public class SearchProductStores {
     User user;
     @Mock
     Role role;
