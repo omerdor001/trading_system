@@ -263,7 +263,7 @@ public class UserFacadeImp implements UserFacade {
 
 
     @Override
-    public void openStore(String username, String storeName, String description, StorePolicy policy) {
+    public void createStore(String username, String storeName, String description, StorePolicy policy) {
         if (!userMemoryRepository.isExist(username)) {
             logger.error("While opening store - User not found");
             throw new IllegalArgumentException("User not found");
