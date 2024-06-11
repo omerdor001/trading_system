@@ -73,13 +73,13 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
         if (username.charAt(0) != 'r') {
-            throw new IllegalArgumentException("User performs Not like a registered");
+            throw new IllegalArgumentException("User performs not like a registered");
         }
         User u = userMemoryRepository.getUser(username);
         if (u == null)
             throw new IllegalArgumentException("No such user " + username);
         if (username.charAt(0) == 'r' && !u.getLogged())
-            throw new IllegalArgumentException("User " + username + "already Logged out");
+            throw new IllegalArgumentException("User " + username + " already Logged out");
         saveUserCart(username);
         u.logout();
         enter(id);
