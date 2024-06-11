@@ -61,9 +61,9 @@ public class Cart {
         //TODO when connecting to database.
     }
 
-    public String getShoppingBags_ToString() {
+/*    public String getShoppingBags_ToString() {
         StringBuilder cartDetails = new StringBuilder();
-/*        double totalAllStores = 0.0;
+        double totalAllStores = 0.0;
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             String storeId = entry.getKey();
             ShoppingBag shoppingBag = entry.getValue();
@@ -81,9 +81,27 @@ public class Cart {
             cartDetails.append("Total for Store name ").append(storeId).append(": ").append(totalStore).append("\n\n");
             totalAllStores += totalStore;
         }
-        cartDetails.append("Overall Total for All Stores: ").append(totalAllStores).append("\n");*/
+        cartDetails.append("Overall Total for All Stores: ").append(totalAllStores).append("\n");
         return cartDetails.toString();
+    }*/
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Cart: {");
+        double totalCartPrice = 0;
+        for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
+            ShoppingBag shoppingBag = entry.getValue();
+            double bagTotalPrice = shoppingBag.getTotalPrice();
+            totalCartPrice += bagTotalPrice;
+            sb.append("\n  Store ID: ").append(entry.getKey())
+                    .append(", Shopping Bag: ").append(shoppingBag.toString())
+                    .append(", Total Price: $").append(bagTotalPrice);
+        }
+        sb.append("\n  Total Cart Price: $").append(totalCartPrice);
+        sb.append("\n}");
+        return sb.toString();
     }
+
 
     private List<ProductInSale> getProductsToList() {
         List list = new ArrayList<>();

@@ -41,6 +41,28 @@ public class ShoppingBag {
             products_list.get(productId).reduceQuantity(quantity);
     }
 
+    public double getTotalPrice() {
+        double total = 0;
+        for (ProductInSale product : products_list.values()) {
+            total += product.sumTotalPrice();
+        }
+        return total;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ShoppingBag: {storeId: ").append(storeId)
+                .append(", products_list: [");
+        for (ProductInSale product : products_list.values()) {
+            sb.append("\n    ").append(product.toString());
+        }
+        sb.append("\n  ]");
+        sb.append(", Total Price: $").append(getTotalPrice());
+        sb.append("}");
+        return sb.toString();
+    }
+
     public int checkProductQuantity(int productId) {
         return products_list.get(productId).getQuantity();
     }
