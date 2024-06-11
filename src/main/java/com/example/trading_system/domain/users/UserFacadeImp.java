@@ -46,6 +46,7 @@ public class UserFacadeImp implements UserFacade {
         if (marketFacade != null)
             marketFacade.deleteInstance();
         this.marketFacade = null;
+        this.userMemoryRepository.deleteInstance();
     }
 
     @Override
