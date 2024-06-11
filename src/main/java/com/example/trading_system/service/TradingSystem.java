@@ -78,25 +78,25 @@ public interface TradingSystem {
 
     ResponseEntity<String> editPermissionForManager(String username, String token, String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
-    ResponseEntity<String> getAllStores(String userName, String token);
+    ResponseEntity<String> getAllStores();
 
-    ResponseEntity<String> getStoreProducts(String userName, String store_name);
+    ResponseEntity<String> getStoreProducts(String store_name);
 
-    ResponseEntity<String> getProductInfo(String userName, String store_name, int product_Id);
+    ResponseEntity<String> getProductInfo(String store_name, int product_Id);
 
     //search in specific store
     ResponseEntity<String> searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, int category);
 
-    ResponseEntity<String> searchCategoryInStore(String userName, int category, String store_name, Double minPrice, Double maxPrice, Double minRating);
+    ResponseEntity<String> searchCategoryInStore(int category, String store_name, Double minPrice, Double maxPrice, Double minRating);
 
-    ResponseEntity<String> searchKeywordsInStore(String userName, String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category);
+    ResponseEntity<String> searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category);
 
     //search in stores
     ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
-    ResponseEntity<String> searchCategoryInStores(String userName, int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
+    ResponseEntity<String> searchCategoryInStores(int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
 
-    ResponseEntity<String> searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
+    ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
 
 
