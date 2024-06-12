@@ -33,7 +33,7 @@ public class GetPurchaseHistoryUnitTests {
         MockitoAnnotations.openMocks(this);
 
         // Clear singleton instances
-        UserMemoryRepository.getInstance().deleteInstance();
+//        UserMemoryRepository.getInstance().deleteInstance();
         MarketFacadeImp.getInstance().deleteInstance();
         UserFacadeImp.getInstance().deleteInstance();
         StoreSalesHistory.getInstance().deleteInstance();

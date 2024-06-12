@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class SearchAcceptanceTests {
-/* //TODO FIX ME
+ //TODO FIX ME
     private TradingSystem tradingSystem;
     private MarketService marketServiceMock;
 
@@ -21,6 +21,7 @@ public class SearchAcceptanceTests {
     public void setUp() {
         tradingSystem = TradingSystemImp.getInstance();
         marketServiceMock = mock(MarketService.class);
+        tradingSystem.openSystem();
     }
 
     @Test
@@ -228,8 +229,15 @@ public class SearchAcceptanceTests {
 
         assertEquals(expectedResponse, result);
         verify(marketServiceMock, times(1)).searchNameInStore(name, storeName, minPrice, maxPrice, minRating, category.getIntValue());
-    }*/
+    }
 /*
+
+TODO: Thees tests are not working due to an extra argument given to the function
+TODO please @lana help me solve this.
+
+
+
+
     @Test
     public void testSearchNameInStores_Success() {
         String name = "product1";

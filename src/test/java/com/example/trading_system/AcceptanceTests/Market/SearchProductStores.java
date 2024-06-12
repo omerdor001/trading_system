@@ -1,6 +1,20 @@
 package com.example.trading_system.AcceptanceTests.Market;
 
+import com.example.trading_system.domain.stores.Category;
+import com.example.trading_system.domain.stores.StorePolicy;
+import com.example.trading_system.service.TradingSystem;
+import com.example.trading_system.service.TradingSystemImp;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -8,15 +22,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SearchProductStores {
     //TODO FIX ME
- /*   private static TradingSystem tradingSystem;
+    private static TradingSystem tradingSystem;
     private static String token;
     private static String username;
 
     @BeforeAll
     void setupOnce() {
         tradingSystem = TradingSystemImp.getInstance();
-        tradingSystem.register(0, "owner1", "password123", LocalDate.now());
-        tradingSystem.register(1, "manager", "password123", LocalDate.now());
+        tradingSystem.register( "owner1", "password123", LocalDate.now());
+        tradingSystem.register( "manager", "password123", LocalDate.now());
         tradingSystem.openSystem();
 
         String userTokenResponse = tradingSystem.enter().getBody();
@@ -87,5 +101,4 @@ public class SearchProductStores {
         assertEquals("No keywords provided", response.getBody());
     }
 
-*/
 }

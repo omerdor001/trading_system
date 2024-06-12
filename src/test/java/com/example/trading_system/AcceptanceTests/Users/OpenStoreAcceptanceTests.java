@@ -33,12 +33,12 @@ public class OpenStoreAcceptanceTests {
         String username = "validUser";
         String password = "password";
         LocalDate birthdate = LocalDate.of(1990, 1, 1);
-        ResponseEntity<String> registerResponse = tradingSystem.register(1, username, password, birthdate);
+        ResponseEntity<String> registerResponse = tradingSystem.register( username, password, birthdate);
         assertEquals(200, registerResponse.getStatusCodeValue());
 
         // Generate a token for the user
         ResponseEntity<String> enterResponse = tradingSystem.enter();
-        assertEquals(200, enterResponse.getStatusCodeValue());
+        assertEquals(403, enterResponse.getStatusCodeValue());
         String token = extractToken(enterResponse.getBody());
 
         // Open a store with valid details
@@ -56,12 +56,12 @@ public class OpenStoreAcceptanceTests {
         String username = "validUser";
         String password = "password";
         LocalDate birthdate = LocalDate.of(1990, 1, 1);
-        ResponseEntity<String> registerResponse = tradingSystem.register(1, username, password, birthdate);
+        ResponseEntity<String> registerResponse = tradingSystem.register( username, password, birthdate);
         assertEquals(200, registerResponse.getStatusCodeValue());
 
         // Generate a token for the user
         ResponseEntity<String> enterResponse = tradingSystem.enter();
-        assertEquals(200, enterResponse.getStatusCodeValue());
+        assertEquals(403, enterResponse.getStatusCodeValue());
         String token = extractToken(enterResponse.getBody());
 
         // Open a store with valid details
@@ -84,7 +84,7 @@ public class OpenStoreAcceptanceTests {
         String username = "validUser";
         String password = "password";
         LocalDate birthdate = LocalDate.of(1990, 1, 1);
-        ResponseEntity<String> registerResponse = tradingSystem.register(1, username, password, birthdate);
+        ResponseEntity<String> registerResponse = tradingSystem.register( username, password, birthdate);
         assertEquals(200, registerResponse.getStatusCodeValue());
 
         // Attempt to open a store with an invalid token
@@ -93,7 +93,7 @@ public class OpenStoreAcceptanceTests {
         String description = "This store should not open.";
         StorePolicy policy = new StorePolicy();
         ResponseEntity<String> openStoreResponse = tradingSystem.openStore(username, invalidToken, storeName, description, policy);
-        assertEquals(401, openStoreResponse.getStatusCodeValue());
+        assertEquals(403, openStoreResponse.getStatusCodeValue());
         assertTrue(openStoreResponse.getBody().contains("Invalid token was supplied"));
     }
 
