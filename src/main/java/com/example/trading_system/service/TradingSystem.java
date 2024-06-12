@@ -1,6 +1,5 @@
 package com.example.trading_system.service;
 
-import com.example.trading_system.domain.stores.Category;
 import com.example.trading_system.domain.stores.StorePolicy;
 import org.springframework.http.ResponseEntity;
 
@@ -16,13 +15,13 @@ public interface TradingSystem {
 
     ResponseEntity<String> enter();
 
-    //TODO might be removed because visitor has username v+id
-
     ResponseEntity<String> exit(String token, String username);
 
-    ResponseEntity<String> register(int id, String username, String password, LocalDate birthdate);
+    ResponseEntity<String> register(String username, String password, LocalDate birthdate);
 
-    //TODO check if user is admin is external service functions?
+    ResponseEntity<String> closeStoreExist(String userName, String storeName);
+
+    ResponseEntity<String> openStoreExist(String userName, String storeName);
 
     ResponseEntity<String> addProduct(String username, String token, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords);
 
@@ -42,8 +41,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> login(String token, String usernameV, String username, String password);
 
-    //TODO why id? also create new visitor and return new token + username (maybe return result of enter?)
-    ResponseEntity<String> logout(String token, int id, String username);
+    ResponseEntity<String> logout(String token, String username);
 
     ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
@@ -72,28 +70,25 @@ public interface TradingSystem {
     ResponseEntity<String> getProductInfo(String store_name, int product_Id);
 
     //search in specific store
-    ResponseEntity<String> searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category);
+    ResponseEntity<String> searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, int category);
 
-    ResponseEntity<String> searchCategoryInStore(Category category, String store_name, Double minPrice, Double maxPrice, Double minRating);
+    ResponseEntity<String> searchCategoryInStore(int category, String store_name, Double minPrice, Double maxPrice, Double minRating);
 
-    ResponseEntity<String> searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, Category category);
+    ResponseEntity<String> searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category);
 
     //search in stores
-    ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
+    ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
-    ResponseEntity<String> searchCategoryInStores(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
+    ResponseEntity<String> searchCategoryInStores(int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
 
-    ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating);
+    ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
-    //TODO edit all visitor/registered functions to single function (all visitors have username of "v+id")
 
-    ResponseEntity<String> checkAvailabilityAndConditions(String username, String token);
 
     ResponseEntity<String> approvePurchase(String username, String token);
 
-    ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName, Integer productBarcode);
+    ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName);
 
-    ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer productBarcode);
 
     ResponseEntity<String> addToCart(String username, String token, int productId, String storeName, int quantity);
 

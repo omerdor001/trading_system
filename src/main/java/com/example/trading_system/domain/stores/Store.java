@@ -43,16 +43,16 @@ public class Store {
         this.storeRating=storeRating;
     }
 
-    public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, int category) {
         return productList.stream()
                 .filter(p -> minPrice == null || p.getProduct_price() >= minPrice)
                 .filter(p -> maxPrice == null || p.getProduct_price() <= maxPrice)
                 .filter(p -> minRating == null || p.getRating() >= minRating)
-                .filter(p -> category == null || p.getCategory() == category)
+                .filter(p -> category < 0 || p.getCategory().getIntValue() == category)
                 .collect(Collectors.toList());
     }
 
-    public List<Product> searchName(String name, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public List<Product> searchName(String name, Double minPrice, Double maxPrice, Double minRating, Integer category) {
         List<Product> list_products = new ArrayList<>();
         for (Product p : products.values()) {
             if (p.getProduct_name().equals(name))
@@ -61,16 +61,16 @@ public class Store {
         return filterProducts(list_products, minPrice, maxPrice, minRating, category);
     }
 
-    public List<Product> searchCategory(Category category, Double minPrice, Double maxPrice, Double minRating) {
+    public List<Product> searchCategory(int category, Double minPrice, Double maxPrice, Double minRating) {
         List<Product> list_products = new ArrayList<>();
         for (Product p : products.values()) {
-            if (p.getCategory().equals(category))
+            if (p.getCategory().getIntValue()==category)
                 list_products.add(p);
         }
         return filterProducts(list_products, minPrice, maxPrice, minRating, category);
     }
 
-    public List<Product> searchKeywords(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category) {
+    public List<Product> searchKeywords(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category) {
         List<Product> list_products = new ArrayList<>();
         for (Product p : products.values()) {
             if (p.getKeyWords().contains(keyWords))
@@ -78,17 +78,17 @@ public class Store {
         }
         return filterProducts(list_products, minPrice, maxPrice, minRating, category);
     }
-    public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
+    public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
         return productList.stream()
                 .filter(p -> minPrice == null || p.getProduct_price() >= minPrice)
                 .filter(p -> maxPrice == null || p.getProduct_price() <= maxPrice)
                 .filter(p -> minRating == null || p.getRating() >= minRating)
                 .filter(p -> storeRating == null || p.getRating() >= storeRating)
-                .filter(p -> category == null || p.getCategory() == category)
+                .filter(p ->category<0 ||  p.getCategory().getIntValue() == category)
                 .collect(Collectors.toList());
     }
 
-    public List<Product> searchName(String name, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
+    public List<Product> searchName(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
         List<Product> list_products = new ArrayList<>();
         for (Product p : products.values()) {
             if (p.getProduct_name().equals(name))
@@ -97,16 +97,16 @@ public class Store {
         return filterProducts(list_products, minPrice, maxPrice, minRating, category,storeRating);
     }
 
-    public List<Product> searchCategory(Category category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
+    public List<Product> searchCategory(int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
         List<Product> list_products = new ArrayList<>();
         for (Product p : products.values()) {
-            if (p.getCategory().equals(category))
+            if (p.getCategory().getIntValue()==category)
                 list_products.add(p);
         }
         return filterProducts(list_products, minPrice, maxPrice, minRating, category,storeRating);
     }
 
-    public List<Product> searchKeywords(String keyWords, Double minPrice, Double maxPrice, Double minRating, Category category,Double storeRating) {
+    public List<Product> searchKeywords(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
         List<Product> list_products = new ArrayList<>();
         for (Product p : products.values()) {
             if (p.getKeyWords().contains(keyWords))

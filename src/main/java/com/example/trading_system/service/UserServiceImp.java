@@ -64,13 +64,13 @@ public class UserServiceImp implements UserService {
 
 
     @Override
-    public boolean register(int id, String username, String password, LocalDate birthdate) throws Exception {
+    public boolean register(String username, String password, LocalDate birthdate) throws Exception {
         userFacade.register(username, password, birthdate);
         return true;
     }
 
     @Override
-    public boolean addToCart(String username,int productId, String storeName, int quantity) {
+    public boolean addToCart(String username, int productId, String storeName, int quantity) {
         logger.info("Trying adding to cart  product with id: {}", productId);
         userFacade.addToCart(username, productId, storeName, quantity);
         logger.info("Finished adding to cart product with id: {}", productId);
@@ -86,9 +86,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean openStore(String username, String storeName, String description, StorePolicy policy){
+    public boolean openStore(String username, String storeName, String description, StorePolicy policy) {
         logger.info("Trying opening store with name: {}", storeName);
-        userFacade.openStore(username, storeName, description, policy);
+        userFacade.createStore(username, storeName, description, policy);
         logger.info("Finished opening store with name: {}", storeName);
         return true;
     }
@@ -168,6 +168,22 @@ public class UserServiceImp implements UserService {
     @Override
     public boolean isAdminRegistered() {
         return userFacade.isAdminRegistered();
+    }
+
+    @Override
+    public void approvePurchase(String registeredId) throws Exception {
+        logger.info("Approving purchase for registered user with ID: {} ", registeredId);
+        userFacade.purchaseCart(registeredId);
+        logger.info("Purchase approved for registered user with ID: {}", registeredId);
+
+    }
+
+    @Override
+    public String getPurchaseHistory(String username, String storeName) {
+        String result = "";
+        logger.info("Get Purchase History");
+        result = userFacade.getPurchaseHistory(username, storeName);
+        return result;
     }
 
 

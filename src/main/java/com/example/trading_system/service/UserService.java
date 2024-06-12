@@ -11,13 +11,13 @@ public interface UserService {
 
     boolean isAdmin(String username);
 
-    boolean addToCart(String username,int productId, String storeName, int quantity);
+    boolean addToCart(String username, int productId, String storeName, int quantity);
 
     boolean removeFromCart(String username, int productId, String storeName, int quantity);
 
     boolean openStore(String username, String storeName, String description, StorePolicy policy);
 
-    boolean register(int id, String username, String password, LocalDate birthdate) throws Exception;
+    boolean register(String username, String password, LocalDate birthdate) throws Exception;
 
     boolean login(String usernameV, String username, String password);
 
@@ -46,4 +46,10 @@ public interface UserService {
     void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
 
     boolean isAdminRegistered();
+
+    void approvePurchase(String username) throws Exception;
+
+    String getPurchaseHistory(String username, String storeName);
+
+
 }

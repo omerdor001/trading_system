@@ -19,7 +19,7 @@ public class EnterUnitTests {
     void enterVisitor_Success() {
         int id = 1;
         assertDoesNotThrow(() -> userFacade.enter(id));
-        assertTrue(userFacade.getUsers().containsKey(id));
+        assertTrue(userFacade.isUserExist("v"+id));
     }
 
     @Test
@@ -40,9 +40,9 @@ public class EnterUnitTests {
         userFacade.enter(2);
         userFacade.enter(3);
 
-        assertTrue(userFacade.getUsers().containsKey(id1));
-        assertTrue(userFacade.getUsers().containsKey(id2));
-        assertTrue(userFacade.getUsers().containsKey(id3));
+        assertTrue(userFacade.isUserExist(id1));
+        assertTrue(userFacade.isUserExist(id2));
+        assertTrue(userFacade.isUserExist(id3));
         assertEquals(3, userFacade.getUsers().size());
     }
 

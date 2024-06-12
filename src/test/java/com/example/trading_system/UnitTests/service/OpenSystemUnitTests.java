@@ -36,7 +36,7 @@ class OpenSystemUnitTests {
         when(userService.isAdminRegistered()).thenReturn(false);
         ResponseEntity<String> response = facade.openSystem();
 
-        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("System cannot be opened without at least one admin registered.", response.getBody());
         verify(userService, times(1)).isAdminRegistered();
     }

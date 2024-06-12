@@ -9,12 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EnterAcceptanceTests {
 
@@ -30,7 +28,7 @@ public class EnterAcceptanceTests {
     @BeforeEach
     public void openSystemAndRegisterAdmin() {
         tradingSystem = TradingSystemImp.getInstance();
-        tradingSystem.register(0, "owner1", "password123", LocalDate.now());
+        tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem();
         String userToken = tradingSystem.enter().getBody();
         try {
@@ -53,36 +51,28 @@ public class EnterAcceptanceTests {
 
     @Test
     public void testEnterSuccessfully() {
-        // Enter the system
         ResponseEntity<String> enterResponse = tradingSystem.enter();
         assertEquals(HttpStatus.OK, enterResponse.getStatusCode());
         String token = enterResponse.getBody();
-        assertEquals(true, token.length() > 0);
+        assertNotNull(token);
     }
 
-//    @Test
-//    public void testEnterSystemClosed() {
-//        // Close the system
-//        tradingSystem.closeSystem();
-//
-//        // Attempt to enter the system
-//        ResponseEntity<String> enterResponse = tradingSystem.enter();
-//        assertEquals(HttpStatus.FORBIDDEN, enterResponse.getStatusCode());
-//        assertEquals("", enterResponse.getBody());
-//    }
-
+    @Test
+    public void testEnterSystemClosed() {
+        tradingSystem.closeSystem(username,token);
+        ResponseEntity<String> enterResponse = tradingSystem.enter();
+        assertEquals(HttpStatus.FORBIDDEN, enterResponse.getStatusCode());
+        assertEquals("", enterResponse.getBody());
+    }
 
     @Test
-    public void testEnterWithExistingToken() {
-        // Enter the system
+    public void testEnterTwoSessions() {
         ResponseEntity<String> enterResponse = tradingSystem.enter();
         assertEquals(HttpStatus.OK, enterResponse.getStatusCode());
         String token = enterResponse.getBody();
-
-        // Attempt to enter the system again with the existing token
         ResponseEntity<String> reEnterResponse = tradingSystem.enter();
         assertEquals(HttpStatus.OK, reEnterResponse.getStatusCode());
         String newToken = reEnterResponse.getBody();
-        assertEquals(false, newToken.equals(token));
+        assertNotEquals(newToken, token);
     }
 }

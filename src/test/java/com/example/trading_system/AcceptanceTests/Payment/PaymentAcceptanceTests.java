@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 
 public class PaymentAcceptanceTests {
     private TradingSystem tradingSystem;
-    private PaymentFacade paymentFacade;
+//    private PaymentFacade paymentFacade;
     private MarketFacadeImp marketFacade;
     private UserFacadeImp userFacade;
     private UserServiceImp userService;
@@ -30,7 +30,7 @@ public class PaymentAcceptanceTests {
     @BeforeEach
     void setUp() {
         tradingSystem = TradingSystemImp.getInstance();
-        tradingSystem.register(0,"owner1", "password123",LocalDate.now());
+        tradingSystem.register("owner1", "password123",LocalDate.now());
         tradingSystem.openSystem();
         String userToken = tradingSystem.enter().getBody();
         try {
@@ -51,7 +51,7 @@ public class PaymentAcceptanceTests {
         }
         tradingSystem.openStore(username,token, "store1", "", new StorePolicy());
         tradingSystem.addProduct(username,token, 0,"store1","product1", "", 1, 5, 1, 1, new LinkedList<>());
-        paymentFacade = PaymentFacadeImp.getInstance();
+//        paymentFacade = PaymentFacadeImp.getInstance();
         marketFacade = MarketFacadeImp.getInstance();
         userFacade = UserFacadeImp.getInstance();
         userService = mock(UserServiceImp.class);
