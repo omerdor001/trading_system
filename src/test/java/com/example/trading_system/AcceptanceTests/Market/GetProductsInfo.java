@@ -12,20 +12,20 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import static org.assertj.core.api.Fail.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class getProductsInfo {
+
+public class GetProductsInfo {
     private static TradingSystem tradingSystem;
     private static String token;
     private static String username;
-
-    @BeforeAll
+    @BeforeEach
     void setupOnce() {
         tradingSystem = TradingSystemImp.getInstance();
-        tradingSystem.register("owner1", "password123", LocalDate.now());
-        tradingSystem.register("manager", "password123", LocalDate.now());
+        tradingSystem.register( "owner1", "password123", LocalDate.now());
+        tradingSystem.register( "manager", "password123", LocalDate.now());
         tradingSystem.openSystem();
 
         String userTokenResponse = tradingSystem.enter().getBody();
@@ -47,6 +47,10 @@ public class getProductsInfo {
             Assertions.fail("Setup failed: Unable to extract username and token from JSON response");
         }
     }
+    @AfterEach
+    public void tearDown() {
+        tradingSystem.deleteInstance();
+    }
 
     @Test
     public void testAddStoreWithInvalidToken() {
@@ -63,7 +67,6 @@ public class getProductsInfo {
         ResponseEntity<String> response = tradingSystem.getAllStores();
         assertNotNull(response.getBody());
     }
-
     @Test
     public void testGetStoreProductsSuccessfully() {
         tradingSystem.openStore(username, token, "store1", "General Store", new StorePolicy());
