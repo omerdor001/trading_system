@@ -19,11 +19,13 @@ public class TradingSystemImp implements TradingSystem{
     public MarketService marketService;
     public int counter_user = 0;
     private boolean systemOpen;
+    private final ScheduledExecutorService executorService;
 
     private TradingSystemImp() {
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance();
         this.marketService = MarketServiceImp.getInstance();
+        this.executorService = Executors.newScheduledThreadPool(1);
     }
 
     public static TradingSystemImp getInstance() {
@@ -374,12 +376,11 @@ public class TradingSystemImp implements TradingSystem{
     public ResponseEntity<String> checkForEndingSuspension(String toSuspend) {
         logger.info("Checking to end suspension of user: {}", toSuspend);
         try {
-            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
             Runnable task = () -> {
                 userService.checkForEndingSuspension(toSuspend);
                 logger.info("Checking to end suspension of user: {}", toSuspend);
             };
-            executor.scheduleAtFixedRate(task, 0, 1, TimeUnit.SECONDS);
+            executorService.scheduleAtFixedRate(task, 0, 1, TimeUnit.SECONDS);
             return new ResponseEntity<>("Ending checking suspension successful.", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while checking suspending user: {}: {}", toSuspend, e.getMessage());
