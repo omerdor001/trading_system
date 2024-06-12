@@ -24,7 +24,14 @@ public class StoreSalesHistory {
             instance = new StoreSalesHistory();
         return instance;
     }
-
+    public void deleteInstance() {
+/*        for (Purchase purchase:purchases){
+            purchases.remove(purchase);
+        }*/
+//        this.purchases.clear();
+        this.purchases = null;
+        instance = null;
+    }
 
     public void addPurchase(List<Purchase> purchases1) {
         purchases.addAll(purchases1);
@@ -60,6 +67,7 @@ public class StoreSalesHistory {
                 .map(Purchase::toString)
                 .collect(Collectors.joining("\n"));
     }
+
 
 }
 

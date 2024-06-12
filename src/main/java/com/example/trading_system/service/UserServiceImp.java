@@ -173,7 +173,7 @@ public class UserServiceImp implements UserService {
     @Override
     public void approvePurchase(String registeredId) throws Exception {
         logger.info("Approving purchase for registered user with ID: {} ", registeredId);
-        userFacade.approvePurchase(registeredId);
+        userFacade.purchaseCart(registeredId);
         logger.info("Purchase approved for registered user with ID: {}", registeredId);
 
     }

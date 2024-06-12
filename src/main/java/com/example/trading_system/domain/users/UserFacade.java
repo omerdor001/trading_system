@@ -67,5 +67,5 @@ public interface UserFacade {
 
     String getPurchaseHistory(String username, String storeName);
 
-    void approvePurchase(String username) throws Exception;
+    void purchaseCart(String username) throws Exception;
 }
