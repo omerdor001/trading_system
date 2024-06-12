@@ -103,6 +103,8 @@ public class MarketFacadeImp implements MarketFacade {
         if(!storeMemoryRepository.isExist(storeName)) {
             throw new IllegalArgumentException("Store must exist");
         }
+        if(!userFacade.getUsers().containsKey(userName))
+            throw new IllegalAccessException("User does not exist");
         Store store = storeMemoryRepository.getStore(storeName);
         if(!store.isOpen() && !(store.isRoleHolder(userName)|| userFacade.isAdmin(userName)))
             throw new IllegalAccessException("When the store is closed only role holders can get products");
@@ -116,6 +118,8 @@ public class MarketFacadeImp implements MarketFacade {
         if(!storeMemoryRepository.isExist(storeName)) {
             throw new IllegalArgumentException("Store must exist");
         }
+        if(!userFacade.getUsers().containsKey(userName))
+            throw new IllegalAccessException("User does not exist");
         Store store = storeMemoryRepository.getStore(storeName);
         if(!store.isOpen() && ! (store.isRoleHolder(userName) || userFacade.isAdmin(userName)))
             throw new IllegalAccessException("When the store is closed only role holder can get product info");
@@ -127,8 +131,9 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) {
-        if (name == null) {
+    public String searchNameInStore(String userName, String productName, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) {
+
+        if (productName == null) {
             logger.error("No name provided");
             throw new IllegalArgumentException("No name provided");
         }
@@ -137,7 +142,7 @@ public class MarketFacadeImp implements MarketFacade {
             throw new IllegalArgumentException("No store name provided");
         }
 
-        if(!userFacade.getUsers().containsKey(name))
+        if(!userFacade.getUsers().containsKey(userName))
         {
             logger.error("User does not exist");
             throw new IllegalArgumentException("User does not exist");
@@ -157,7 +162,7 @@ public class MarketFacadeImp implements MarketFacade {
             logger.warn("No products Available");
             return "{}";
         }
-        return store.searchName(name, minPrice, maxPrice, minRating, category).toString();
+        return store.searchName(productName, minPrice, maxPrice, minRating, category).toString();
     }
 
     @Override
@@ -231,12 +236,12 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
-        if (name == null) {
+    public String searchNameInStores(String userName, String productName, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
+        if (productName == null) {
             logger.error("No name provided");
             throw new IllegalArgumentException("No name provided");
         }
-        if(!userFacade.getUsers().containsKey(name))
+        if(!userFacade.getUsers().containsKey(userName))
         {
             logger.error("User does not exist");
             throw new IllegalArgumentException("User does not exist");
@@ -245,8 +250,8 @@ public class MarketFacadeImp implements MarketFacade {
         for (Store store : storeMemoryRepository.getAllStoresByStores()) {
             if (!store.isOpen())
                 continue;
-            if (!store.searchName(name, minPrice, maxPrice, minRating, category, storeRating).isEmpty())//Change to Repo
-                sb.append(store.searchName(name, minPrice, maxPrice, minRating, category, storeRating).toString());
+            if (!store.searchName(productName, minPrice, maxPrice, minRating, category, storeRating).isEmpty())//Change to Repo
+                sb.append(store.searchName(productName, minPrice, maxPrice, minRating, category, storeRating).toString());
 
         }
         if (sb.isEmpty())

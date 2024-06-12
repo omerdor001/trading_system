@@ -41,6 +41,7 @@ public class Store {
         this.managers = new LinkedList<>();
         this.owners = new LinkedList<>();
         this.storeRating=storeRating;
+        this.isOpen = true;
     }
 
     public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, int category) {

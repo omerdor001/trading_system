@@ -70,9 +70,9 @@ public class MarketServiceImp implements MarketService {
         return result;
     }
 
-    public String searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
-        logger.info("Trying to search products in store : {} with name : {}", store_name, name);
-        String result = marketFacade.searchNameInStore(name, store_name, minPrice, maxPrice, minRating, category);
+    public String searchNameInStore(String userName, String productName, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
+        logger.info("Trying to search products in store : {} with name : {}", store_name, productName);
+        String result = marketFacade.searchNameInStore(userName, productName, store_name, minPrice, maxPrice, minRating, category);
         logger.info("FINISHED Searching products in store ");
         return result;
     }
@@ -91,9 +91,9 @@ public class MarketServiceImp implements MarketService {
         return result;
     }
 
-    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
-        logger.info("Trying to search products in stores with name : {}", name);
-        String result = marketFacade.searchNameInStores(name, minPrice, maxPrice, minRating, category,storeRating);
+    public String searchNameInStores(String userName, String productName, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
+        logger.info("Trying to search products in stores with name : {}", productName);
+        String result = marketFacade.searchNameInStores(userName, productName, minPrice, maxPrice, minRating, category,storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }

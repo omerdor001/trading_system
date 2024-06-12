@@ -571,11 +571,13 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> closeStoreExist(String userName, String storeName) {
+    public ResponseEntity<String> closeStoreExist(String userName, String token, String storeName) {
         logger.info("{} Trying to Close Store Exist : {}", userName, storeName);
         try{
             if(!checkSystemOpen())
                 return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
             marketService.closeStoreExist(userName, storeName);
         }
         catch(Exception e) {
@@ -590,11 +592,13 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> openStoreExist(String userName, String storeName) {
+    public ResponseEntity<String> openStoreExist(String userName, String token, String storeName) {
         logger.info("{} Trying to Open Store Exist : {}", userName, storeName);
         try {
             if(!checkSystemOpen())
                 return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
             marketService.openStoreExist(userName, storeName);
         }
         catch(Exception e) {
@@ -610,14 +614,16 @@ public class TradingSystemImp implements TradingSystem{
 
     //search in specific store
     @Override
-    public ResponseEntity<String> searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
-        logger.info("Trying to search products in store : {} with name : {}", store_name, name);
+    public ResponseEntity<String> searchNameInStore(String userName, String productName, String token, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
+        logger.info("Trying to search products in store : {} with name : {}", store_name, productName);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            marketService.searchNameInStore(name, store_name, minPrice, maxPrice, minRating, category);
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            marketService.searchNameInStore(userName, productName, store_name, minPrice, maxPrice, minRating, category);
         } catch (Exception e) {
-            logger.error("Error occurred : {} ,  to search products in store : {} with name : {}}", e.getMessage(), store_name, name);
+            logger.error("Error occurred : {} ,  to search products in store : {} with name : {}}", e.getMessage(), store_name, productName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         logger.info("FINISHED Searching products in store ");
@@ -625,11 +631,13 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> searchCategoryInStore(String userName, int category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
+    public ResponseEntity<String> searchCategoryInStore(String userName, String token, int category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
         logger.info("Trying to search products in store : {} with category, : {}", store_name, category);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
             marketService.searchCategoryInStore(userName, category, store_name, minPrice, maxPrice, minRating);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in store : {} with category : {}}", e.getMessage(), store_name, category);
@@ -640,11 +648,13 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> searchKeywordsInStore(String userName, String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
+    public ResponseEntity<String> searchKeywordsInStore(String userName, String token, String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
         logger.info("Trying to search products in store : {} with keyWords,  : {}", store_name, keyWords);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
             marketService.searchKeywordsInStore(userName, keyWords, store_name, minPrice, maxPrice, minRating, category);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in store : {} with keyWords,  : {}}", e.getMessage(), store_name, keyWords);
@@ -656,14 +666,16 @@ public class TradingSystemImp implements TradingSystem{
 
     //search in stores
     @Override
-    public ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
-        logger.info("Trying to search products in stores with name : {}", name);
+    public ResponseEntity<String> searchNameInStores(String userName, String productName, String token, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
+        logger.info("Trying to search products in stores with name : {}", productName);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            marketService.searchNameInStores(name, minPrice, maxPrice, minRating, category,storeRating);
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            marketService.searchNameInStores(userName, productName, minPrice, maxPrice, minRating, category,storeRating);
         } catch (Exception e) {
-            logger.error("Error occurred : {} ,  to search products in stores: {}}", e.getMessage(), name);
+            logger.error("Error occurred : {} ,  to search products in stores: {}}", e.getMessage(), productName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         logger.info("FINISHED Searching products in store ");
@@ -671,11 +683,13 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> searchCategoryInStores(String userName, int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
+    public ResponseEntity<String> searchCategoryInStores(String userName, String token, int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
         logger.info("Trying to search products in stores with category, : {}", category);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
             marketService.searchCategoryInStores(userName, category, minPrice, maxPrice, minRating,storeRating);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in stores with category : {}}", e.getMessage(), category);
@@ -686,11 +700,13 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
+    public ResponseEntity<String> searchKeywordsInStores(String userName, String token, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
         logger.info("Trying to search products in stores with keyWords,  : {}", keyWords);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
             marketService.searchKeywordsInStores(userName, keyWords, minPrice, maxPrice, minRating, category,storeRating);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in stores with keyWords,  : {}}", e.getMessage(), keyWords);
