@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 
-public class getProductsInfo {
+public class GetProductsInfo {
     private static TradingSystem tradingSystem;
     private static String token;
     private static String username;

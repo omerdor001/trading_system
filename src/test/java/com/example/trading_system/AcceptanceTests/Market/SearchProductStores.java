@@ -1,26 +1,12 @@
 package com.example.trading_system.AcceptanceTests.Market;
 
-import com.example.trading_system.domain.stores.Category;
-import com.example.trading_system.domain.stores.StorePolicy;
-import com.example.trading_system.service.TradingSystem;
-import com.example.trading_system.service.TradingSystemImp;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class searchProductStores {
+public class SearchProductStores {
     //TODO FIX ME
  /*   private static TradingSystem tradingSystem;
     private static String token;
