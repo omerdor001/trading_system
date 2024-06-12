@@ -64,7 +64,7 @@ public class UserServiceImp implements UserService {
 
 
     @Override
-    public boolean register(int id, String username, String password, LocalDate birthdate) throws Exception {
+    public boolean register(String username, String password, LocalDate birthdate) throws Exception {
         userFacade.register(username, password, birthdate);
         return true;
     }
@@ -88,7 +88,7 @@ public class UserServiceImp implements UserService {
     @Override
     public boolean openStore(String username, String storeName, String description, StorePolicy policy) {
         logger.info("Trying opening store with name: {}", storeName);
-        userFacade.openStore(username, storeName, description, policy);
+        userFacade.createStore(username, storeName, description, policy);
         logger.info("Finished opening store with name: {}", storeName);
         return true;
     }
@@ -184,7 +184,7 @@ public class UserServiceImp implements UserService {
     @Override
     public void approvePurchase(String registeredId) throws Exception {
         logger.info("Approving purchase for registered user with ID: {} ", registeredId);
-        userFacade.approvePurchase(registeredId);
+        userFacade.purchaseCart(registeredId);
         logger.info("Purchase approved for registered user with ID: {}", registeredId);
 
     }

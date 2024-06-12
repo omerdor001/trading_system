@@ -13,12 +13,6 @@ import java.util.NoSuchElementException;
 
 @ExtendWith(MockitoExtension.class)
 public class AddCartUnitTests {
-    @Mock
-    User user;
-    @Mock
-    Cart shoppingCart;
-    @Mock
-    Product product;
 
     UserMemoryRepository userMemoryRepository;
     MarketFacadeImp marketFacade;
@@ -42,11 +36,9 @@ public class AddCartUnitTests {
     @AfterEach
     public void tearDown() {
         userFacadeImp.deleteInstance();
-        userMemoryRepository.deleteInstance();
         marketFacade.deleteInstance();
     }
-//TODO FIX ME
-/*
+
     @Test
     public void givenValidDetails_WhenAddToCart_ThenSuccess() {
         String username = "rValidUser";
@@ -67,9 +59,8 @@ public class AddCartUnitTests {
 
         Assertions.assertDoesNotThrow(() -> userFacadeImp.addToCart(username, productId, storeName, quantity));
 
-        Assertions.assertEquals(quantity, shoppingCart.getShoppingBags().get(storeName).getProducts_list().get(productId));
+        Assertions.assertEquals(quantity, shoppingCart.getShoppingBags().get(storeName).getProducts_list().get(productId).getQuantity());
     }
-*/
 
     @Test
     public void givenNullUsername_WhenAddToCart_ThenThrowException() {

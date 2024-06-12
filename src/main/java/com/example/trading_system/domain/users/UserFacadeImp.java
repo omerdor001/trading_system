@@ -46,6 +46,7 @@ public class UserFacadeImp implements UserFacade {
         if (marketFacade != null)
             marketFacade.deleteInstance();
         this.marketFacade = null;
+        this.userMemoryRepository.deleteInstance();
     }
 
     @Override
@@ -73,13 +74,13 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
         if (username.charAt(0) != 'r') {
-            throw new IllegalArgumentException("User performs Not like a registered");
+            throw new IllegalArgumentException("User performs not like a registered");
         }
         User u = userMemoryRepository.getUser(username);
         if (u == null)
             throw new IllegalArgumentException("No such user " + username);
         if (username.charAt(0) == 'r' && !u.getLogged())
-            throw new IllegalArgumentException("User " + username + "already Logged out");
+            throw new IllegalArgumentException("User " + username + " already Logged out");
         saveUserCart(username);
         u.logout();
         enter(id);
@@ -167,40 +168,28 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public synchronized String viewCart(String username) {
+        if (username == null) {
+            logger.error("View Cart - Username is null");
+            throw new IllegalArgumentException("Username cannot be null");
+        }
+        if (username.isEmpty()) {
+            logger.error("View Cart - Username is empty");
+            throw new IllegalArgumentException("Username cannot be empty");
+        }
         if (!userMemoryRepository.isExist(username)) {
-            logger.error("User not found");
+            logger.error("View Cart - User not found");
             throw new RuntimeException("User not found");
         }
-        if (username.charAt(0) == 'r' && !userMemoryRepository.getUser(username).getLogged()) {
-            logger.error("Registered user is not logged");
+        User user = userMemoryRepository.getUser(username);
+        if (username.charAt(0) == 'r' && !user.getLogged()) {
+            logger.error("View Cart - Registered user is not logged");
             throw new RuntimeException("Registered user is not logged");
         }
-//       return userMemoryRepository.getUser(username).getShoppingCart_ToString();
-
-
-        Cart cart = userMemoryRepository.getUser(username).getCart();
-        StringBuilder cartDetails = new StringBuilder();
-        double totalAllStores = 0.0;
-        for (Map.Entry<String, ShoppingBag> entry : cart.getShoppingBags().entrySet()) {
-            String storeId = entry.getKey();
-            ShoppingBag shoppingBag = entry.getValue();
-            cartDetails.append("Store name: ").append(storeId).append("\n");
-            double totalStore = 0.0;
-            for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBag.getProducts_list().entrySet()) {
-                Product product = marketFacade.getStores().get(storeId).getProducts().get(productEntry.getKey());
-                int quantity = productEntry.getValue().getQuantity();
-                double price = product.getProduct_price();
-                double totalPrice = price * quantity;
-                totalStore += totalPrice;
-                cartDetails.append("Product Id: ").append(product.getProduct_id()).append(", Name: ").append(product.getProduct_name())
-                        .append(", Quantity: ").append(quantity).append(", Price per unit: ").append(price).append(", Total Price: ").append(totalPrice).append("\n");
-            }
-            cartDetails.append("Total for Store name ").append(storeId).append(": ").append(totalStore).append("\n\n");
-            totalAllStores += totalStore;
-        }
-        cartDetails.append("Overall Total for All Stores: ").append(totalAllStores).append("\n");
-        return cartDetails.toString();
+        //Maybe before getting the information from the user cart,
+        // we should check if the products information are up-to-date and correct
+        return user.getShoppingCart_ToString();
     }
+
 
     @Override
     public synchronized void addToCart(String username, int productId, String storeName, int quantity) {
@@ -279,7 +268,7 @@ public class UserFacadeImp implements UserFacade {
 
 
     @Override
-    public void openStore(String username, String storeName, String description, StorePolicy policy) {
+    public void createStore(String username, String storeName, String description, StorePolicy policy) {
         if (!userMemoryRepository.isExist(username)) {
             logger.error("While opening store - User not found");
             throw new IllegalArgumentException("User not found");
@@ -708,6 +697,16 @@ public class UserFacadeImp implements UserFacade {
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
+        if (!getUser(username).getLogged()) {
+            logger.error("User is not logged in");
+            throw new RuntimeException("User is not logged in");
+        }
+        User user = getUser(username);
+        Cart cart = user.getCart();
+        if (cart == null || cart.getShoppingBags().isEmpty()) {
+            logger.error("Cart is empty or null");
+            throw new RuntimeException("Cart is empty or null");
+        }
         HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
         for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
             for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
@@ -737,11 +736,12 @@ public class UserFacadeImp implements UserFacade {
         }
     }
     @Override
-    public synchronized void approvePurchase(String username) throws Exception {
+    public synchronized void purchaseCart(String username) throws Exception {
         if (!checkAvailabilityAndConditions(username)) {
             logger.error("Products are not available or do not meet purchase conditions.");
             throw new RuntimeException("Products are not available or do not meet purchase conditions.");
         }
+
         removeReservedProducts(username);
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -750,17 +750,18 @@ public class UserFacadeImp implements UserFacade {
                 throw new RuntimeException("time out !");
             }
         }, 10 * 60 * 1000);
+
         double totalPrice = marketFacade.calculateTotalPrice(getUser(username).getCart());
-        //TODO: fix process Payment
-        int deliveryId = 0;  //For cancelling
-        String address = ""; //TODO : Need to be a parameter of this function
+        int deliveryId = 0;
+        String address = ""; // TODO : Need to be a parameter of this function
         try {
             deliveryId = deliveryService.makeDelivery(address);
         } catch (Exception e) {
             releaseReservedProducts(username);
             throw new Exception("Error in Delivery");
         }
-        int paymentId = 0;   //For cancelling
+
+        int paymentId = 0;
         try {
             paymentId = paymentService.makePayment(totalPrice);
         } catch (Exception e) {
@@ -768,6 +769,7 @@ public class UserFacadeImp implements UserFacade {
             releaseReservedProducts(username);
             throw new Exception("Error in Payment");
         }
+
         addPurchase(username);
         timer.cancel();
         timer.purge();

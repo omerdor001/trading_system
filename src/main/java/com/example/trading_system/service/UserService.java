@@ -17,7 +17,7 @@ public interface UserService {
 
     boolean openStore(String username, String storeName, String description, StorePolicy policy);
 
-    boolean register(int id, String username, String password, LocalDate birthdate) throws Exception;
+    boolean register(String username, String password, LocalDate birthdate) throws Exception;
 
     boolean login(String usernameV, String username, String password);
 

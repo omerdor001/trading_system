@@ -58,6 +58,10 @@ public class TradingSystemImp implements TradingSystem{
     @Override
     public ResponseEntity<String> openSystem() {
         logger.info("Attempting to open system");
+        if(systemOpen) {
+            logger.warn("System attempted to open twice");
+            return new ResponseEntity<>("System is already open.", HttpStatus.BAD_REQUEST);
+        }
         try {
             if (userService.isAdminRegistered()) {
                 marketService = MarketServiceImp.getInstance();
@@ -105,8 +109,8 @@ public class TradingSystemImp implements TradingSystem{
             }
             logger.info("Trying enter to system as a visitor , with id : {}", counter_user);
             String username = userService.enter(counter_user);
-            String token = Security.generateToken(username);
             counter_user++;
+            String token = Security.generateToken(username);
             String userToken = "{\"username\": \"" + username + "\", \"token\": \"" + token + "\"}";
             logger.info("User entered successfully with token: {} and username: {}", token, username);
             return new ResponseEntity<>(userToken, HttpStatus.OK);
@@ -136,10 +140,10 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> register(int id, String username, String password, LocalDate birthdate) {
+    public ResponseEntity<String> register(String username, String password, LocalDate birthdate) {
         logger.info("Attempting to register user: {} with password : {} and birthdate : {} ", username,password,birthdate);
         try {
-            userService.register(id, username, password, birthdate);
+            userService.register(username, password, birthdate);
             logger.info("User registered successfully : {} with password : {} and birthdate : {}", username,password,birthdate);
             return new ResponseEntity<>("User registered successfully.", HttpStatus.OK);
         } catch (Exception e) {
@@ -313,21 +317,21 @@ public class TradingSystemImp implements TradingSystem{
         }
     }
 
-    //TODO why id? also create new visitor and return new token + username (maybe return result of enter?)
     @Override
-    public ResponseEntity<String> logout(String token, int id, String username) {
+    public ResponseEntity<String> logout(String token, String username) {
         logger.info("Attempting to logout user: {}", username);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
             if(!checkToken(username,token))
                 return invalidTokenResponse();
-            userService.logout(id, username);
+            userService.logout(counter_user, username);
+            counter_user++;
             logger.info("User: {} logged out successfully", username);
             return new ResponseEntity<>("Logout successful.", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while logging out user: {}: {}", username, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -728,7 +732,7 @@ public class TradingSystemImp implements TradingSystem{
             this.userService.approvePurchase(username);
             return new ResponseEntity<>("FINISHED Registered Approve Purchase ", HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred while approving purchase for registered user with ID: {}", username,e.getMessage());
+            logger.error("Error approving purchase for registered user with ID: {}, error: {}", username,e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

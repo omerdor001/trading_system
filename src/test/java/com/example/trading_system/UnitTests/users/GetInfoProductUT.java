@@ -1,6 +1,5 @@
 package com.example.trading_system.UnitTests.users;
 
-import com.example.trading_system.domain.stores.Category;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.Store;
 import com.example.trading_system.domain.stores.StorePolicy;
@@ -14,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class getInfoProductUT {
+public class GetInfoProductUT {
     private MarketFacadeImp marketFacade;
     private UserFacadeImp userFacade;
     private String validUserName;

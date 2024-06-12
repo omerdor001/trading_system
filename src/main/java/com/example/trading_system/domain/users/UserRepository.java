@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface UserRepository {
+    void deleteInstance();
     User getUser(String username);
 
     boolean isExist(String username);

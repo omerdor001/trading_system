@@ -68,9 +68,6 @@ public abstract class User {
         return cart;
     }
 
-    public String getShoppingCart_ToString() {
-        return cart.getShoppingBags_ToString();
-    }
     public void setCart(Cart cart) {
         this.cart = cart;
     }
@@ -102,6 +99,9 @@ public abstract class User {
        return  cart.purchaseProduct(this.username);
     }
 
+    public String getShoppingCart_ToString() {
+        return cart.toString();
+    }
 
     public int checkProductQuantity(int productId, String storeName) {
         return cart.checkProductQuantity(productId,storeName);
