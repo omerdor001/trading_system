@@ -682,7 +682,7 @@ public class UserFacadeImp implements UserFacade {
             deliveryId = deliveryService.makeDelivery(address);
         } catch (Exception e) {
             releaseReservedProducts(username);
-            throw new Exception("Error in Delivery", e);
+            throw new Exception("Error in Delivery");
         }
 
         int paymentId = 0;
@@ -691,7 +691,7 @@ public class UserFacadeImp implements UserFacade {
         } catch (Exception e) {
             deliveryService.cancelDelivery(deliveryId);
             releaseReservedProducts(username);
-            throw new Exception("Error in Payment", e);
+            throw new Exception("Error in Payment");
         }
 
         addPurchase(username);
