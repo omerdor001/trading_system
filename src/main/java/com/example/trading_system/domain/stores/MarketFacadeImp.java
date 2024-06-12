@@ -268,11 +268,14 @@ public class MarketFacadeImp implements MarketFacade {
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).addProduct(username, productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
             storeMemoryRepository.getStore(storeName).addProduct(productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
-        }
-        finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
             return true;
+        }
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
         }
 
     }
@@ -297,13 +300,15 @@ public class MarketFacadeImp implements MarketFacade {
                 throw new IllegalArgumentException("Product must exist");
             }
             storeMemoryRepository.getStore(storeName).removeProduct(productId);
-        }
-        finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
             return true;
         }
-
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
+        }
     }
 
     @Override
@@ -326,11 +331,14 @@ public class MarketFacadeImp implements MarketFacade {
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).setProduct_name(username, storeName,productId, productName);
             storeMemoryRepository.getStore(storeName).setProductName(productId, productName);
-        }
-        finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
             return true;
+        }
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
         }
     }
 
@@ -354,11 +362,14 @@ public class MarketFacadeImp implements MarketFacade {
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).setProduct_description(username, storeName,productId, productDescription);
             storeMemoryRepository.getStore(storeName).setProductDescription(productId, productDescription);
-        }
-        finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
             return true;
+        }
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
         }
     }
 
@@ -384,11 +395,14 @@ public class MarketFacadeImp implements MarketFacade {
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).setProduct_price(username, storeName,productId, productPrice);
             storeMemoryRepository.getStore(storeName).setProductPrice(productId, productPrice);
-        }
-        finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
             return true;
+        }
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
         }
     }
 
@@ -414,11 +428,14 @@ public class MarketFacadeImp implements MarketFacade {
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).setProduct_quantity(username, storeName,productId, productQuantity);
             storeMemoryRepository.getStore(storeName).setProductQuantity(productId, productQuantity);
-        }
-        finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
             return true;
+        }
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
         }
 
     }
@@ -445,11 +462,14 @@ public class MarketFacadeImp implements MarketFacade {
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).setRating(username, storeName,productId,rating);
             storeMemoryRepository.getStore(storeName).setRating(productId,rating);
-        }
-        finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
             return true;
+        }
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
         }
     }
 
@@ -473,12 +493,14 @@ public class MarketFacadeImp implements MarketFacade {
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).setCategory(username, storeName,productId,category);
             storeMemoryRepository.getStore(storeName).setCategory(productId,category);
-
-        }
-        finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
             return true;
+        }
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
         }
     }
 
