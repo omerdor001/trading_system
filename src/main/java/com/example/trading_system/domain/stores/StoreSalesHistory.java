@@ -25,10 +25,6 @@ public class StoreSalesHistory {
         return instance;
     }
     public void deleteInstance() {
-/*        for (Purchase purchase:purchases){
-            purchases.remove(purchase);
-        }*/
-//        this.purchases.clear();
         this.purchases = null;
         instance = null;
     }
