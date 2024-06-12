@@ -21,11 +21,11 @@ public class GetProductsInfo {
     private static TradingSystem tradingSystem;
     private static String token;
     private static String username;
-    @BeforeAll
+    @BeforeEach
     void setupOnce() {
         tradingSystem = TradingSystemImp.getInstance();
-        tradingSystem.register(0, "owner1", "password123", LocalDate.now());
-        tradingSystem.register(1, "manager", "password123", LocalDate.now());
+        tradingSystem.register( "owner1", "password123", LocalDate.now());
+        tradingSystem.register( "manager", "password123", LocalDate.now());
         tradingSystem.openSystem();
 
         String userTokenResponse = tradingSystem.enter().getBody();
@@ -47,6 +47,11 @@ public class GetProductsInfo {
             Assertions.fail("Setup failed: Unable to extract username and token from JSON response");
         }
     }
+    @AfterEach
+    public void tearDown() {
+        tradingSystem.deleteInstance();
+    }
+
     @Test
     public void testAddStoreWithInvalidToken() {
         // Attempt to add a store with an invalid token

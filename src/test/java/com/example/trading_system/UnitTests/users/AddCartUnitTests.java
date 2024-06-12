@@ -36,7 +36,6 @@ public class AddCartUnitTests {
     @AfterEach
     public void tearDown() {
         userFacadeImp.deleteInstance();
-        userMemoryRepository.deleteInstance();
         marketFacade.deleteInstance();
     }
 

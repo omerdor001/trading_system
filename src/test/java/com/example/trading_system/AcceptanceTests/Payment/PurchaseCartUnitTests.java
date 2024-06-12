@@ -37,7 +37,7 @@ public class PurchaseCartUnitTests {
         MockitoAnnotations.openMocks(this);
 
         // Clear singleton instances
-        UserMemoryRepository.getInstance().deleteInstance();
+//        UserMemoryRepository.getInstance().deleteInstance();
         MarketFacadeImp.getInstance().deleteInstance();
         UserFacadeImp.getInstance().deleteInstance();
         StoreSalesHistory.getInstance().deleteInstance();
@@ -52,7 +52,6 @@ public class PurchaseCartUnitTests {
     @AfterEach
     public void tearDown() {
         userFacadeImp.deleteInstance();
-        userMemoryRepository.deleteInstance();
         marketFacade.deleteInstance();
         storeSalesHistory.deleteInstance();
     }

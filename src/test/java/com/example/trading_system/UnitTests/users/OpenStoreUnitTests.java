@@ -39,7 +39,6 @@ public class OpenStoreUnitTests {
     @AfterEach
     public void tearDown() {
         userFacadeImp.deleteInstance();
-        userMemoryRepository.deleteInstance();
         marketFacade.deleteInstance();
     }
 
