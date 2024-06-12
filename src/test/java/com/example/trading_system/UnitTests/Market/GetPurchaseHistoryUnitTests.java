@@ -91,7 +91,13 @@ public class GetPurchaseHistoryUnitTests {
     public void givenValidInputs_WhenGetPurchaseHistory_ThenReturnHistory() {
         String username = "rValidUser";
         String storeName = "StoreName";
-        String expectedHistory = "PurchaseHistoryData";
+        String expectedHistory = "Client Username: rValidUser, Total Price: $100.0\n" +
+                "Products:\n" +
+                "Product: 1, Quantity: 2, Price: $100.0, Store: StoreName\n" +
+                "\n" +
+                "Client Username: rValidUser, Total Price: $100.0\n" +
+                "Products:\n" +
+                "Product: 2, Quantity: 2, Price: $100.0, Store: StoreName\n";
 
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         // Ensure user is logged in and is an admin
@@ -100,11 +106,11 @@ public class GetPurchaseHistoryUnitTests {
         user.setAdmin(true);
 
         // Add a purchase to the storeSalesHistory
-        ProductInSale productInSale = new ProductInSale("store1",1, 100.0, 2);
-        ProductInSale productInSale2 = new ProductInSale("store1",2, 100.0, 2);
+        ProductInSale productInSale = new ProductInSale(storeName,1, 100.0, 2);
+        ProductInSale productInSale2 = new ProductInSale(storeName,2, 100.0, 2);
 
-        Purchase purchase1 = new Purchase("testuser", List.of(productInSale), 100.0, "store1");
-        Purchase purchase2 = new Purchase("testuser", List.of(productInSale2), 100.0, "store1");
+        Purchase purchase1 = new Purchase(username, List.of(productInSale), 100.0, storeName);
+        Purchase purchase2 = new Purchase(username, List.of(productInSale2), 100.0, storeName);
 
         storeSalesHistory.addPurchase(purchase1);
         storeSalesHistory.addPurchase(purchase2);
