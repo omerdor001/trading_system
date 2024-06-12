@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 
-public class searchProductSpecificStore {
+public class SearchProductSpecificStore {
     User user;
     @Mock
     Role role;

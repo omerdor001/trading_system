@@ -72,8 +72,8 @@ class GetProductsInfoUnitTests {
     @Test
     public void givenValidDetails_WhenGetAllStores_ThenSuccess() throws Exception {
         // Ensure stores exist
-        userFacade.openStore(validUsername, "store1", "description", policy);
-        userFacade.openStore(validUsername, "store2", "description", policy);
+        userFacade.createStore(validUsername, "store1", "description", policy);
+        userFacade.createStore(validUsername, "store2", "description", policy);
 
         String expected = "[\"stores\":store1,store2]";
         String actual = marketFacade.getAllStores();

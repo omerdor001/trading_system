@@ -38,7 +38,7 @@ public interface UserFacade {
 
     void addToCart(String username, int productId, String storeName, int quantity);
 
-    void openStore(String username, String storeName, String description, StorePolicy policy) throws IllegalAccessException;
+    void createStore(String username, String storeName, String description, StorePolicy policy) throws IllegalAccessException;
 
     void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
 
@@ -78,5 +78,5 @@ public interface UserFacade {
 
     String getPurchaseHistory(String username, String storeName);
 
-    void approvePurchase(String username) throws Exception;
+    void purchaseCart(String username) throws Exception;
 }

@@ -11,8 +11,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 public class OpenStoreUnitTests {
 
@@ -41,7 +39,6 @@ public class OpenStoreUnitTests {
     @AfterEach
     public void tearDown() {
         userFacadeImp.deleteInstance();
-        userMemoryRepository.deleteInstance();
         marketFacade.deleteInstance();
     }
 
@@ -55,7 +52,7 @@ public class OpenStoreUnitTests {
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         userMemoryRepository.getUser(username).login();
 
-        Assertions.assertDoesNotThrow(() -> userFacadeImp.openStore(username, storeName, description, policy));
+        Assertions.assertDoesNotThrow(() -> userFacadeImp.createStore(username, storeName, description, policy));
 
         // Check if the store was added successfully (assuming a method exists to get the store by name)
         Assertions.assertTrue(marketFacade.isStoreExist(storeName));
@@ -68,7 +65,7 @@ public class OpenStoreUnitTests {
         String description = "StoreDescription";
         StorePolicy policy = new StorePolicy();
 
-        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description, policy));
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.createStore(username, storeName, description, policy));
 
         Assertions.assertEquals("User not found", exception.getMessage());
     }
@@ -83,7 +80,7 @@ public class OpenStoreUnitTests {
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         userMemoryRepository.getUser(username).login();
 
-        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description, policy));
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.createStore(username, storeName, description, policy));
 
         Assertions.assertEquals("Store name should not be null", exception.getMessage());
     }
@@ -98,7 +95,7 @@ public class OpenStoreUnitTests {
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         userMemoryRepository.getUser(username).login();
 
-        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description, policy));
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.createStore(username, storeName, description, policy));
 
         Assertions.assertEquals("Store name should not be null", exception.getMessage());
     }
@@ -114,7 +111,7 @@ public class OpenStoreUnitTests {
         userMemoryRepository.getUser(username).login();
         marketFacade.addStore(storeName, description, policy, username, null); // Ensure store exists
 
-        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description, policy));
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.createStore(username, storeName, description, policy));
 
         Assertions.assertEquals("Store with name ExistingStoreName already exists", exception.getMessage());
     }
@@ -131,7 +128,7 @@ public class OpenStoreUnitTests {
 
         // Simulate exception by invalid parameters
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            userFacadeImp.openStore(username, "", description, policy);
+            userFacadeImp.createStore(username, "", description, policy);
         });
 
         Assertions.assertEquals("Store name should not be null", exception.getMessage());

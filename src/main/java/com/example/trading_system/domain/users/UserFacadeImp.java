@@ -376,7 +376,7 @@ public class UserFacadeImp implements UserFacade {
 
 
     @Override
-    public void openStore(String username, String storeName, String description, StorePolicy policy) {
+    public void createStore(String username, String storeName, String description, StorePolicy policy) {
         if (!userMemoryRepository.isExist(username)) {
             logger.error("While opening store - User not found");
             throw new IllegalArgumentException("User not found");
@@ -798,11 +798,12 @@ public class UserFacadeImp implements UserFacade {
         }
     }
     @Override
-    public synchronized void approvePurchase(String username) throws Exception {
+    public synchronized void purchaseCart(String username) throws Exception {
         if (!checkAvailabilityAndConditions(username)) {
             logger.error("Products are not available or do not meet purchase conditions.");
             throw new RuntimeException("Products are not available or do not meet purchase conditions.");
         }
+
         removeReservedProducts(username);
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -811,17 +812,18 @@ public class UserFacadeImp implements UserFacade {
                 throw new RuntimeException("time out !");
             }
         }, 10 * 60 * 1000);
+
         double totalPrice = marketFacade.calculateTotalPrice(getUser(username).getCart());
-        //TODO: fix process Payment
-        int deliveryId = 0;  //For cancelling
-        String address = ""; //TODO : Need to be a parameter of this function
+        int deliveryId = 0;
+        String address = ""; // TODO : Need to be a parameter of this function
         try {
             deliveryId = deliveryService.makeDelivery(address);
         } catch (Exception e) {
             releaseReservedProducts(username);
             throw new Exception("Error in Delivery");
         }
-        int paymentId = 0;   //For cancelling
+
+        int paymentId = 0;
         try {
             paymentId = paymentService.makePayment(totalPrice);
         } catch (Exception e) {
@@ -829,6 +831,7 @@ public class UserFacadeImp implements UserFacade {
             releaseReservedProducts(username);
             throw new Exception("Error in Payment");
         }
+
         addPurchase(username);
         timer.cancel();
         timer.purge();
