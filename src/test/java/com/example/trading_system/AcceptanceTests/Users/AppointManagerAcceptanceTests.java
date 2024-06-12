@@ -20,8 +20,8 @@ class AppointManagerAcceptanceTests {
     @BeforeEach
     void setup() {
         tradingSystem = TradingSystemImp.getInstance();
-        tradingSystem.register(0, "owner1", "password123", LocalDate.now());
-        tradingSystem.register(1, "manager", "password123", LocalDate.now());
+        tradingSystem.register("owner1", "password123", LocalDate.now());
+        tradingSystem.register("manager", "password123", LocalDate.now());
         tradingSystem.openSystem();
         String userToken = tradingSystem.enter().getBody();
         try {
