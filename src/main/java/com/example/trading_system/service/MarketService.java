@@ -6,27 +6,27 @@ public interface MarketService {
 
     void deleteInstance();
 
-    String getAllStores();
+    String getAllStores(String userName);
 
-    void openStoreExist(String storeName);
+    void openStoreExist(String userName, String storeName) throws IllegalAccessException;
 
-    void closeStoreExist(String storeName);
+    void closeStoreExist(String userName, String storeName) throws IllegalAccessException;
 
-    String getStoreProducts(String storeName);
+    String getStoreProducts(String userName, String storeName) throws IllegalAccessException;
 
-    String getProductInfo(String storeName, int productId);
+    String getProductInfo(String userName, String storeName, int productId) throws IllegalAccessException;
 
     String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, int category);
 
-    String searchCategoryInStore(int category, String storeName, Double minPrice, Double maxPrice, Double minRating);
+    String searchCategoryInStore(String userName, int category, String storeName, Double minPrice, Double maxPrice, Double minRating);
 
-    String searchKeywordsInStore(String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, int category);
+    String searchKeywordsInStore(String userName, String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, int category);
 
     String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
-    String searchCategoryInStores(int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
+    String searchCategoryInStores(String userName, int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
 
-    String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
+    String searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
     void addProduct(String username, int product_id, String store_name, String product_name, String product_description,
                     double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException;

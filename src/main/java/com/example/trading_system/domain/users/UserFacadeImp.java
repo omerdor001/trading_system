@@ -155,7 +155,7 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("Store name is null");
         }
         if (marketFacade.isStoreExist(storeName)) {
-            logger.error("Store with name " + storeName + " already exists");
+            logger.error("Store with name " + storeName + " already exists");  // todo : why its illegal?
             throw new RuntimeException("Store with name " + storeName + " already exists");
         }
         if (userMemoryRepository.isExist(username)) {
@@ -220,6 +220,8 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Store not found: " + storeName);
             throw new NoSuchElementException("Store not found: " + storeName);
         }
+        if (!marketFacade.getStore(storeName).isOpen())
+            throw new IllegalArgumentException("When store is closed you cant add to cart from this store");
         if (username.charAt(0) == 'r' && !userMemoryRepository.getUser(username).getLogged()) {
             logger.error("User is not logged in: " + username);
             throw new RuntimeException("User is not logged in: " + username);
@@ -234,6 +236,8 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Store not found: " + storeName);
             throw new NoSuchElementException("Store not found: " + storeName);
         }
+        if(!store.isOpen())
+            throw new IllegalArgumentException("When store is closed cant to check product quantity");
         Product product = store.getProducts().get(productId);
         if (product == null) {
             logger.error("Product not found: " + productId);
@@ -707,6 +711,8 @@ public class UserFacadeImp implements UserFacade {
         HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
         for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
             for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
+                if(marketFacade.getStore(shoppingBagInStore.getKey()) == null)
+                    throw new RuntimeException("store not exist");
                 checkProductQuantity(username, productEntry.getKey(), shoppingBagInStore.getKey(), 0);
             }
         }

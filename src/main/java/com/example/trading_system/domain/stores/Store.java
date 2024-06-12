@@ -31,7 +31,7 @@ public class Store {
     private Double storeRating;
 
     public Store(String nameId, String description, StorePolicy storePolicy, String founder,Double storeRating) {
-        this.nameId = nameId;
+        this.nameId = nameId; // todo add founder to owners. + minuim maagalim
         this.description = description;
         this.storePolicy = storePolicy;
         this.products = new HashMap<>();
@@ -263,6 +263,10 @@ public class Store {
 
     public void addPurchase(Purchase purchase){
         salesHistory.addPurchase(purchase);
+    }
+
+    public boolean isRoleHolder(String userName) {
+        return managers.contains(userName) || owners.contains(userName);
     }
 
     public void addOwner(String userName) {
