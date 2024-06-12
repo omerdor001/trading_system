@@ -17,13 +17,9 @@ public interface TradingSystem {
 
     ResponseEntity<String> enter();
 
-    //TODO might be removed because visitor has username v+id
-
     ResponseEntity<String> exit(String token, String username);
 
-    ResponseEntity<String> register(int id, String username, String password, LocalDate birthdate);
-
-    //TODO check if user is admin is external service functions?
+    ResponseEntity<String> register(String username, String password, LocalDate birthdate);
 
     ResponseEntity<String> closeStoreExist(String userName, String storeName);
 
@@ -47,8 +43,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> login(String token, String usernameV, String username, String password);
 
-    //TODO why id? also create new visitor and return new token + username (maybe return result of enter?)
-    ResponseEntity<String> logout(String token, int id, String username);
+    ResponseEntity<String> logout(String token, String username);
 
     ResponseEntity<String> suspendUser(String token, String admin, String toSuspend, LocalDateTime endSuspention);
 

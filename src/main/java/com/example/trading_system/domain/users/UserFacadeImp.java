@@ -49,6 +49,7 @@ public class UserFacadeImp implements UserFacade {
         if (marketFacade != null)
             marketFacade.deleteInstance();
         this.marketFacade = null;
+        this.userMemoryRepository.deleteInstance();
     }
 
     @Override
@@ -76,7 +77,7 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
         if (username.charAt(0) != 'r') {
-            throw new IllegalArgumentException("User performs Not like a registered");
+            throw new IllegalArgumentException("User performs not like a registered");
         }
         User u = userMemoryRepository.getUser(username);
         if (u == null)
