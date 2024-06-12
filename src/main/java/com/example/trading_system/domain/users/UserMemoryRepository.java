@@ -17,11 +17,13 @@ public class UserMemoryRepository implements UserRepository{
         return instance;
     }
 
+    @Override
     public void deleteInstance() {
         instance = null;
         this.users.clear();
         this.users = null;
     }
+
     @Override
     public User getUser(String username) {
         return users.get(username);

@@ -24,8 +24,8 @@ class AppointManagerUnitTests {
     @Test
     void appointManager_Success() {
         try {
-            userService.register(2, "appointTest", "encryption1", LocalDate.of(2000, 1, 1));
-            userService.register(3, "newManagerTest", "encryption2", LocalDate.of(2000, 1, 1));
+            userService.register("appointTest", "encryption1", LocalDate.of(2000, 1, 1));
+            userService.register("newManagerTest", "encryption2", LocalDate.of(2000, 1, 1));
             //TODO owner appointTest
             userService.login("2", "appointTest", "encryption1");
         }

@@ -64,7 +64,7 @@ public class UserServiceImp implements UserService {
 
 
     @Override
-    public boolean register(int id, String username, String password, LocalDate birthdate) throws Exception {
+    public boolean register(String username, String password, LocalDate birthdate) throws Exception {
         userFacade.register(username, password, birthdate);
         return true;
     }
