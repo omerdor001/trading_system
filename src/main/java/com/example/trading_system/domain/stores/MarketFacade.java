@@ -11,29 +11,29 @@ public interface MarketFacade {
 
     void initialize(UserFacade userFacade);
 
-    String getAllStores();
+    String getAllStores(String userName);
 
-    void openStoreExist(String storeId);
+    void openStoreExist(String userName, String storeId);
 
-    void closeStoreExist(String storeId);
+    void closeStoreExist(String userName, String storeId);
 
     void deactivateStore(String storeId);
 
-    String getStoreProducts(String storeName);
+    String getStoreProducts(String userName, String storeName) throws IllegalAccessException;
 
-    String getProductInfo(String storeName, int productId);
+    String getProductInfo(String userName, String storeName, int productId) throws IllegalAccessException;
 
-    String searchNameInStore(String name, String storeName, Double minPrice, Double maxPrice, Double minRating, int category);
+    String searchNameInStore(String userName, String productName, String storeName, Double minPrice, Double maxPrice, Double minRating, int category);
 
-    String searchCategoryInStore(int category, String storeName, Double minPrice, Double maxPrice, Double minRating);
+    String searchCategoryInStore(String userName, int category, String storeName, Double minPrice, Double maxPrice, Double minRating);
 
-    String searchKeywordsInStore(String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, int category);
+    String searchKeywordsInStore(String userName, String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, int category);
 
-    String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
+    String searchNameInStores(String userName, String productName, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
-    String searchCategoryInStores(int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
+    String searchCategoryInStores(String userName, int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
 
-    String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
+    String searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
     boolean addProduct(String username,
                        int productId,

@@ -43,6 +43,15 @@ public class Registered extends User {
     }
 
     @Override
+    public void removeOwnerRole(String storeName) {
+         roles.remove(getRoleByStoreId(storeName)); }
+
+    @Override
+    public void removeManagerRole(String storeName) {
+        roles.remove(getRoleByStoreId(storeName)); }
+
+
+    @Override
     public String getPass() {
         return this.encrypted_pass;
     }
