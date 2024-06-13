@@ -16,8 +16,7 @@ public interface StoreRepository {
 
     boolean isEmpty();
 
-    void addStore(String storeName, String description, StorePolicy storePolicy, String founder, Double storeRating);
+    void addStore(String storeName, String description, String founder, Double storeRating);
 
     void deleteInstance();
-
 }

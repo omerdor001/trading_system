@@ -1,4 +1,5 @@
 package com.example.trading_system.service;
+
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import org.slf4j.Logger;
@@ -16,8 +17,7 @@ public class MarketServiceImp implements MarketService {
     }
 
     public static MarketServiceImp getInstance() {
-        if (instance == null)
-            instance = new MarketServiceImp();
+        if (instance == null) instance = new MarketServiceImp();
         return instance;
     }
 
@@ -96,29 +96,28 @@ public class MarketServiceImp implements MarketService {
         return result;
     }
 
-    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
+    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
         logger.info("Trying to search products in stores with name : {}", name);
-        String result = marketFacade.searchNameInStores(name, minPrice, maxPrice, minRating, category,storeRating);
+        String result = marketFacade.searchNameInStores(name, minPrice, maxPrice, minRating, category, storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }
 
-    public String searchCategoryInStores(int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
+    public String searchCategoryInStores(int category, Double minPrice, Double maxPrice, Double minRating, Double storeRating) {
         logger.info("Trying to search products in stores with category, : {}", category);
-        String result = marketFacade.searchCategoryInStores(category, minPrice, maxPrice, minRating,storeRating);
+        String result = marketFacade.searchCategoryInStores(category, minPrice, maxPrice, minRating, storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }
 
-    public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
+    public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
         logger.info("Trying to search products in stores with keyWords,  : {}", keyWords);
-        String result = marketFacade.searchKeywordsInStores(keyWords, minPrice, maxPrice, minRating, category,storeRating);
+        String result = marketFacade.searchKeywordsInStores(keyWords, minPrice, maxPrice, minRating, category, storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }
 
-    public void addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                           double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
+    public void addProduct(String username, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
         marketFacade.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
     }
 
@@ -148,6 +147,126 @@ public class MarketServiceImp implements MarketService {
 
     public void setCategory(String username, String store_name, int productId, int category) throws IllegalAccessException {
         marketFacade.setCategory(username, store_name, productId, category);
+    }
+
+    @Override
+    public void addCategoryPercentageDiscount(String username, String storeName, int category, double discountPercent) throws IllegalAccessException {
+        marketFacade.addCategoryPercentageDiscount(username, storeName, category, discountPercent);
+    }
+
+    @Override
+    public void addProductPercentageDiscount(String username, String storeName, int productId, double discountPercent) throws IllegalAccessException {
+        marketFacade.addProductPercentageDiscount(username, storeName, productId, discountPercent);
+    }
+
+    @Override
+    public void addStoreDiscount(String username, String storeName, double discountPercent) throws IllegalAccessException {
+        marketFacade.addStoreDiscount(username, storeName, discountPercent);
+    }
+
+    @Override
+    public void addConditionalDiscount(String username, String storeName) throws IllegalAccessException {
+        marketFacade.addConditionalDiscount(username, storeName);
+    }
+
+    @Override
+    public void addAdditiveDiscount(String username, String storeName) throws IllegalAccessException {
+        marketFacade.addAdditiveDiscount(username, storeName);
+    }
+
+    @Override
+    public void addMaxDiscount(String username, String storeName) throws IllegalAccessException {
+        marketFacade.addMaxDiscount(username, storeName);
+    }
+
+    @Override
+    public void addCategoryCountCondition(String username, String storeName, int category, int count) throws IllegalAccessException {
+        marketFacade.addCategoryCountCondition(username, storeName, category, count);
+    }
+
+    @Override
+    public void addTotalSumCondition(String username, String storeName, int requiredSum) throws IllegalAccessException {
+        marketFacade.addTotalSumCondition(username, storeName, requiredSum);
+    }
+
+    @Override
+    public void addProductCountCondition(String username, String storeName, int productId, int count) throws IllegalAccessException {
+        marketFacade.addProductCountCondition(username, storeName, productId, count);
+    }
+
+    @Override
+    public void addAndDiscount(String username, String storeName) throws IllegalAccessException {
+        marketFacade.addAndDiscount(username, storeName);
+    }
+
+    @Override
+    public void addOrDiscount(String username, String storeName) throws IllegalAccessException {
+        marketFacade.addOrDiscount(username, storeName);
+    }
+
+    @Override
+    public void addXorDiscount(String username, String storeName) throws IllegalAccessException {
+        marketFacade.addXorDiscount(username, storeName);
+    }
+
+    @Override
+    public void setFirstDiscount(String username, String storeName, int selectedDiscountIndex, int selectedFirstIndex) throws IllegalAccessException {
+        marketFacade.setFirstDiscount(username, storeName, selectedDiscountIndex, selectedFirstIndex);
+    }
+
+    @Override
+    public void setSecondDiscount(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException {
+        marketFacade.setSecondDiscount(username, storeName, selectedDiscountIndex, selectedSecondIndex);
+    }
+
+    @Override
+    public void setFirstCondition(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException {
+        marketFacade.setFirstCondition(username, storeName, selectedDiscountIndex, selectedSecondIndex);
+    }
+
+    @Override
+    public void setSecondCondition(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException {
+        marketFacade.setSecondCondition(username, storeName, selectedDiscountIndex, selectedSecondIndex);
+    }
+
+    @Override
+    public void setThenDiscount(String username, String storeName, int selectedDiscountIndex, int selectedThenIndex) throws IllegalAccessException {
+        marketFacade.setThenDiscount(username, storeName, selectedDiscountIndex, selectedThenIndex);
+    }
+
+    @Override
+    public void setCategoryDiscount(String username, String storeName, int selectedDiscountIndex, int category) throws IllegalAccessException {
+        marketFacade.setCategoryDiscount(username, storeName, selectedDiscountIndex, category);
+    }
+
+    @Override
+    public void setProductIdDiscount(String username, String storeName, int selectedDiscountIndex, int productId) throws IllegalAccessException {
+        marketFacade.setProductIdDiscount(username, storeName, selectedDiscountIndex, productId);
+    }
+
+    @Override
+    public void setPercentDiscount(String username, String storeName, int selectedDiscountIndex, double discountPercent) throws IllegalAccessException {
+        marketFacade.setPercentDiscount(username, storeName, selectedDiscountIndex, discountPercent);
+    }
+
+    @Override
+    public void setDeciderDiscount(String username, String storeName, int selectedDiscountIndex, int selectedDeciderIndex) throws IllegalAccessException {
+        marketFacade.setDeciderDiscount(username, storeName, selectedDiscountIndex, selectedDeciderIndex);
+    }
+
+    @Override
+    public void setTotalSum(String username, String storeName, int selectedConditionIndex, int newSum) throws IllegalAccessException {
+        marketFacade.setTotalSum(username, storeName, selectedConditionIndex, newSum);
+    }
+
+    @Override
+    public void setCountCondition(String username, String storeName, int selectedConditionIndex, int newCount) throws IllegalAccessException {
+        marketFacade.setCountCondition(username, storeName, selectedConditionIndex, newCount);
+    }
+
+    @Override
+    public void setCategoryCondition(String username, String storeName, int selectedConditionIndex, int newCategory) throws IllegalAccessException {
+        marketFacade.setCategoryCondition(username, storeName, selectedConditionIndex, newCategory);
     }
 
     @Override

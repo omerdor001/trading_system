@@ -23,21 +23,34 @@ public class UserFacadeImp implements UserFacade {
     private PaymentService paymentService;
 
 
-    private UserFacadeImp(PaymentService paymentService,DeliveryService deliveryService) {
+    private UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService) {
         this.marketFacade = MarketFacadeImp.getInstance();
         this.userMemoryRepository = UserMemoryRepository.getInstance();
         this.storeSalesHistory = StoreSalesHistory.getInstance();
         this.paymentService = paymentService;
-        this.deliveryService =deliveryService;
+        this.deliveryService = deliveryService;
 
         marketFacade.initialize(this);
     }
+
     public static UserFacadeImp getInstance() {
-        if (instance == null){
-            instance = new UserFacadeImp(new PaymentServiceProxy(),new DeliveryServiceProxy());
+        if (instance == null) {
+            instance = new UserFacadeImp(new PaymentServiceProxy(), new DeliveryServiceProxy());
             instance.marketFacade.initialize(instance);
         }
         return instance;
+    }
+
+    // Method to encrypt a given password
+    private static String encrypt(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
+    }
+
+    // Method to check if a password matches its hashed version
+    private static boolean checkPassword(String password, String hashedPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.matches(password, hashedPassword);
     }
 
     @Override
@@ -160,8 +173,10 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("Store with name " + storeName + " already exists");
         }
         if (userMemoryRepository.isExist(username)) {
-            double price = marketFacade.getStore(storeName).getProduct(productId).getProduct_price();
-            userMemoryRepository.getUser(username).getCart().addProductToCart(productId, quantity, storeName, price);
+            Product p = marketFacade.getStore(storeName).getProduct(productId);
+            double price = p.getProduct_price();
+            int category = p.getCategory().getIntValue();
+            userMemoryRepository.getUser(username).getCart().addProductToCart(productId, quantity, storeName, price, category);
         }
         checkProductQuantity(username, productId, storeName, quantity);
     }
@@ -190,7 +205,6 @@ public class UserFacadeImp implements UserFacade {
         return user.getShoppingCart_ToString();
     }
 
-
     @Override
     public synchronized void addToCart(String username, int productId, String storeName, int quantity) {
         if (username == null || username.trim().isEmpty()) {
@@ -214,7 +228,8 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("User is not logged in: " + username);
         }
         checkProductQuantity(username, productId, storeName, quantity);
-        userMemoryRepository.getUser(username).addProductToCart(productId, quantity, storeName, marketFacade.getStore(storeName).getProduct(productId).getProduct_price());
+        Product p = marketFacade.getStore(storeName).getProduct(productId);
+        userMemoryRepository.getUser(username).addProductToCart(productId, quantity, storeName, p.getProduct_price(), p.getCategory().getIntValue());
     }
 
     private void checkProductQuantity(String username, int productId, String storeName, int quantity) {
@@ -262,9 +277,8 @@ public class UserFacadeImp implements UserFacade {
         userMemoryRepository.getUser(username).removeProductFromCart(productId, quantity, storeName);
     }
 
-
     @Override
-    public void openStore(String username, String storeName, String description, StorePolicy policy) {
+    public void openStore(String username, String storeName, String description) {
         if (!userMemoryRepository.isExist(username)) {
             logger.error("While opening store - User not found");
             throw new IllegalArgumentException("User not found");
@@ -278,7 +292,7 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalArgumentException("Store with name " + storeName + " already exists");
         }
         try {
-            marketFacade.addStore(storeName, description, policy, username, null);
+            marketFacade.addStore(storeName, description, username, null);
             userMemoryRepository.getUser(username).openStore(storeName);
         } catch (Exception e) {
             logger.error("Failed to open store: {}", e.getMessage());
@@ -577,18 +591,6 @@ public class UserFacadeImp implements UserFacade {
         return false;
     }
 
-    // Method to encrypt a given password
-    private static String encrypt(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.encode(password);
-    }
-
-    // Method to check if a password matches its hashed version
-    private static boolean checkPassword(String password, String hashedPassword) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.matches(password, hashedPassword);
-    }
-
     public boolean isUserExist(String username) {
         return userMemoryRepository.isExist(username);
     }
@@ -602,13 +604,14 @@ public class UserFacadeImp implements UserFacade {
     private void addPurchase(String registeredId) {
         storeSalesHistory.addPurchase(getUser(registeredId).addPurchasedProduct());
     }
+
     @Override
     public String getPurchaseHistory(String username, String storeName) {
         if (!isUserExist(username) && username != null) {    //Change when Repo
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        if (username.charAt(0) == 'r' && !getUser(username).getLogged()) {
+        if (username != null && username.charAt(0) == 'r' && !getUser(username).getLogged()) {
             logger.error("User is not logged");
             throw new RuntimeException("User is not logged");
         }
@@ -650,6 +653,7 @@ public class UserFacadeImp implements UserFacade {
             }
         }
     }
+
     @Override
     public synchronized void approvePurchase(String username) throws Exception {
         if (!checkAvailabilityAndConditions(username)) {
@@ -664,7 +668,7 @@ public class UserFacadeImp implements UserFacade {
                 throw new RuntimeException("time out !");
             }
         }, 10 * 60 * 1000);
-        double totalPrice = marketFacade.calculateTotalPrice(getUser(username).getCart());
+        double totalPrice = marketFacade.calculateTotalPrice(getUser(username).getCart().toJson());
         //TODO: fix process Payment
         int deliveryId = 0;  //For cancelling
         String address = ""; //TODO : Need to be a parameter of this function

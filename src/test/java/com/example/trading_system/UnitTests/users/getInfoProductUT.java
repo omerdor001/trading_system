@@ -1,14 +1,10 @@
 package com.example.trading_system.UnitTests.users;
 
-import com.example.trading_system.domain.stores.Category;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.Store;
-import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -41,8 +37,8 @@ public class getInfoProductUT {
 
     @Test
     void getStoreProducts_Success() {
-        marketFacade.addStore("store1", "desc1",new StorePolicy(),"FOUNDER",null);
-        Store store = new Store("store1", "desc1",new StorePolicy(),"FOUNDER",null);
+        marketFacade.addStore("store1", "desc1","FOUNDER",null);
+        Store store = new Store("store1", "desc1","FOUNDER",null);
         store.setActive(true);
 
         String expected = store.toString();

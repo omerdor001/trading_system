@@ -1,6 +1,5 @@
 package com.example.trading_system.AcceptanceTests.Market;
 
-import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -51,22 +50,22 @@ public class getProductsInfo {
     @Test
     public void testAddStoreWithInvalidToken() {
         // Attempt to add a store with an invalid token
-        ResponseEntity<String> response = tradingSystem.openStore(username, "invalidToken", "existingStore", "General Store", new StorePolicy());
+        ResponseEntity<String> response = tradingSystem.openStore(username, "invalidToken", "existingStore", "General Store");
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Error occurred in opening store", response.getBody());
     }
 
     @Test
     public void testGetAllStoresSuccessfully() {
-        tradingSystem.openStore(username, token, "existingStore", "General Store", new StorePolicy());
-        tradingSystem.openStore(username, token, "existingStore2", "General Store", new StorePolicy());
+        tradingSystem.openStore(username, token, "existingStore", "General Store");
+        tradingSystem.openStore(username, token, "existingStore2", "General Store");
         ResponseEntity<String> response = tradingSystem.getAllStores();
         assertNotNull(response.getBody());
     }
 
     @Test
     public void testGetStoreProductsSuccessfully() {
-        tradingSystem.openStore(username, token, "store1", "General Store", new StorePolicy());
+        tradingSystem.openStore(username, token, "store1", "General Store");
         tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 0, new ArrayList<>());
         tradingSystem.addProduct(username, token, 2, "store1", "product1", "desc1", 10.0, 100, 4, 0, new ArrayList<>());
         ResponseEntity<String> response = tradingSystem.getStoreProducts("store1");
@@ -93,7 +92,7 @@ public class getProductsInfo {
     @Test
     public void testGetProductInfoNonExistentProduct() {
         // Add store
-        tradingSystem.openStore(username, token, "store1", "General Store", new StorePolicy());
+        tradingSystem.openStore(username, token, "store1", "General Store");
         ResponseEntity<String> response = tradingSystem.getProductInfo("store1", 999);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Can't find product with id 999", response.getBody());

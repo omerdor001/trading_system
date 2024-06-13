@@ -1,7 +1,5 @@
 package com.example.trading_system.service;
 
-import com.example.trading_system.domain.stores.StorePolicy;
-
 import java.time.LocalDate;
 
 public interface UserService {
@@ -11,11 +9,11 @@ public interface UserService {
 
     boolean isAdmin(String username);
 
-    boolean addToCart(String username, int productId, String storeName, int quantity);
+    void addToCart(String username, int productId, String storeName, int quantity);
 
-    boolean removeFromCart(String username, int productId, String storeName, int quantity);
+    void removeFromCart(String username, int productId, String storeName, int quantity);
 
-    boolean openStore(String username, String storeName, String description, StorePolicy policy);
+    boolean openStore(String username, String storeName, String description);
 
     boolean register(String username, String password, LocalDate birthdate) throws Exception;
 

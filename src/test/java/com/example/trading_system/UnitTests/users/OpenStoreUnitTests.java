@@ -1,7 +1,6 @@
 package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.stores.MarketFacadeImp;
-import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.domain.users.User;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.UserMemoryRepository;
@@ -10,8 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class OpenStoreUnitTests {
@@ -50,12 +47,11 @@ public class OpenStoreUnitTests {
         String username = "rValidUser";
         String storeName = "StoreName";
         String description = "StoreDescription";
-        StorePolicy policy = new StorePolicy();
 
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         userMemoryRepository.getUser(username).login();
 
-        Assertions.assertDoesNotThrow(() -> userFacadeImp.openStore(username, storeName, description, policy));
+        Assertions.assertDoesNotThrow(() -> userFacadeImp.openStore(username, storeName, description));
 
         // Check if the store was added successfully (assuming a method exists to get the store by name)
         Assertions.assertTrue(marketFacade.isStoreExist(storeName));
@@ -66,9 +62,8 @@ public class OpenStoreUnitTests {
         String username = "rNonExistentUser";
         String storeName = "StoreName";
         String description = "StoreDescription";
-        StorePolicy policy = new StorePolicy();
 
-        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description, policy));
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description));
 
         Assertions.assertEquals("User not found", exception.getMessage());
     }
@@ -78,12 +73,11 @@ public class OpenStoreUnitTests {
         String username = "rValidUser";
         String storeName = null;
         String description = "StoreDescription";
-        StorePolicy policy = new StorePolicy();
 
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         userMemoryRepository.getUser(username).login();
 
-        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description, policy));
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description));
 
         Assertions.assertEquals("Store name should not be null", exception.getMessage());
     }
@@ -93,12 +87,11 @@ public class OpenStoreUnitTests {
         String username = "rValidUser";
         String storeName = "";
         String description = "StoreDescription";
-        StorePolicy policy = new StorePolicy();
 
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         userMemoryRepository.getUser(username).login();
 
-        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description, policy));
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description));
 
         Assertions.assertEquals("Store name should not be null", exception.getMessage());
     }
@@ -108,13 +101,12 @@ public class OpenStoreUnitTests {
         String username = "rValidUser";
         String storeName = "ExistingStoreName";
         String description = "StoreDescription";
-        StorePolicy policy = new StorePolicy();
 
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         userMemoryRepository.getUser(username).login();
-        marketFacade.addStore(storeName, description, policy, username, null); // Ensure store exists
+        marketFacade.addStore(storeName, description, username, null); // Ensure store exists
 
-        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description, policy));
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.openStore(username, storeName, description));
 
         Assertions.assertEquals("Store with name ExistingStoreName already exists", exception.getMessage());
     }
@@ -124,14 +116,13 @@ public class OpenStoreUnitTests {
         String username = "rValidUser";
         String storeName = "StoreName";
         String description = "StoreDescription";
-        StorePolicy policy = new StorePolicy();
 
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         userMemoryRepository.getUser(username).login();
 
         // Simulate exception by invalid parameters
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            userFacadeImp.openStore(username, "", description, policy);
+            userFacadeImp.openStore(username, "", description);
         });
 
         Assertions.assertEquals("Store name should not be null", exception.getMessage());

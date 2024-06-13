@@ -1,7 +1,6 @@
 package com.example.trading_system.UnitTests.Market;
 
 import com.example.trading_system.domain.stores.MarketFacadeImp;
-import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.domain.users.Role;
 import com.example.trading_system.domain.users.User;
 import com.example.trading_system.domain.users.UserFacadeImp;
@@ -23,9 +22,6 @@ class GetProductsInfoUnitTests {
     User user;
     @Mock
     Role role;
-    @Mock
-    StorePolicy policy;
-
     UserFacadeImp userFacade;
     MarketFacadeImp marketFacade;
     String validUsername = "validUser";
@@ -60,7 +56,7 @@ class GetProductsInfoUnitTests {
     @Test
     public void givenInvalidProductId_WhenGetProductInfo_ThenThrowRuntimeException() throws IllegalAccessException {
         // Ensure store exists
-        marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null);
+        marketFacade.addStore(validStoreName, validDescription, validUsername, null);
         // Ensure a valid product is added
         marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>());
         when(user.getRoleByStoreId(validStoreName)).thenReturn(role);
@@ -70,10 +66,10 @@ class GetProductsInfoUnitTests {
     }
 
     @Test
-    public void givenValidDetails_WhenGetAllStores_ThenSuccess() throws Exception {
+    public void givenValidDetails_WhenGetAllStores_ThenSuccess() {
         // Ensure stores exist
-        userFacade.openStore(validUsername, "store1", "description", policy);
-        userFacade.openStore(validUsername, "store2", "description", policy);
+        userFacade.openStore(validUsername, "store1", "description");
+        userFacade.openStore(validUsername, "store2", "description");
 
         String expected = "[\"stores\":store1,store2]";
         String actual = marketFacade.getAllStores();
@@ -83,7 +79,7 @@ class GetProductsInfoUnitTests {
     @Test
     public void givenValidStoreName_WhenGetStoreProducts_ThenSuccess() throws Exception {
         // Ensure store and product exist
-        marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null);
+        marketFacade.addStore(validStoreName, validDescription, validUsername, null);
         marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>());
 
         String expected = "{\"name_id\":\"ValidStore\", \"description\":\"This is a valid description.\", \"products\":[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[]}, ]}";
@@ -94,7 +90,7 @@ class GetProductsInfoUnitTests {
     @Test
     public void givenValidProductId_WhenGetProductInfo_ThenSuccess() throws Exception {
         // Ensure store and product exist
-        marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null);
+        marketFacade.addStore(validStoreName, validDescription, validUsername, null);
         marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>());
 
         String expected = "{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[]}";
