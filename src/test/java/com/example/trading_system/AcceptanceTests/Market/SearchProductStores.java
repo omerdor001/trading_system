@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SearchProductStores {
-    //TODO FIX ME
+
     private static TradingSystem tradingSystem;
     private static String token;
     private static String username;
