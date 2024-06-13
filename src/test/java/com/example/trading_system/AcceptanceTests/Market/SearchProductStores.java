@@ -22,9 +22,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SearchProductStores {
 
-    private static TradingSystem tradingSystem;
-    private static String token;
-    private static String username;
+    private TradingSystem tradingSystem;
+    private String token;
+    private String username;
 
     @BeforeAll
     void setupOnce() {
