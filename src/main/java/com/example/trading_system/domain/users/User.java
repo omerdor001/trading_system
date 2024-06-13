@@ -91,6 +91,11 @@ public abstract class User {
 
     public abstract void addOwnerRole(String appoint, String storeName);
 
+    public void removeOwnerRole(String storeName) { throw new RuntimeException("Only registered users can be owners."); }
+
+    public void removeManagerRole(String storeName) { throw new RuntimeException("Only registered users can be managers."); }
+
+
     public abstract Role getRoleByStoreId(String store_name_id);
 
     public abstract boolean isAdmin();

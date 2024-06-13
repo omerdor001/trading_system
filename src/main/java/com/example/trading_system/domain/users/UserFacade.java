@@ -54,6 +54,10 @@ public interface UserFacade {
 
     void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException;
 
+    void waiverOnOwnership(String userName, String storeName) throws IllegalAccessException;
+
+    void fireManager(String owner, String storeName, String manager) throws IllegalAccessException;
+
     /**
      * @param userId        is the current user that do the update
      * @param managerToEdit is the manager that the update will affect

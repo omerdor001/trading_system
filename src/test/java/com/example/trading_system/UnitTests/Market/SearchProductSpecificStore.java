@@ -63,14 +63,14 @@ public class SearchProductSpecificStore {
         marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null);
         marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>(List.of("keyword")));
         String expected = "[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[keyword]}]";
-        String actual = marketFacade.searchNameInStore("product1",validStoreName, null, null, null, -1);
+        String actual = marketFacade.searchNameInStore(validUsername, "product1",validStoreName, null, null, null, -1);
         assertEquals(expected, actual);
     }
 
     @Test
     void testSearchNameInStore_NoNameProvided() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-                marketFacade.searchNameInStore(null, null, null, null, null, -1));
+                marketFacade.searchNameInStore(validUsername, null, null, null, null, null, -1));
         assertEquals("No name provided", exception.getMessage());
     }
 
@@ -80,7 +80,7 @@ public class SearchProductSpecificStore {
         marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null);
         marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>(List.of("keyword")));
         marketFacade.addProduct(validUsername, 2, validStoreName, "product2", "", 8, 5, 5, 1, new ArrayList<>());
-        String result = marketFacade.searchCategoryInStore(1, validStoreName, null, null, null);
+        String result = marketFacade.searchCategoryInStore(validUsername,1, validStoreName, null, null, null);
         assertEquals("[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[keyword]}, {\"product_id\":2, \"store_name\":\"\", \"product_name\":\"product2\", \"product_description\":\"\", \"product_price\":8.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[]}]",
                 result);
     }
@@ -88,7 +88,7 @@ public class SearchProductSpecificStore {
     @Test
     void testSearchCategoryInStore_NoCategoryProvided() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-                marketFacade.searchCategoryInStore(-1,validStoreName, null, null, null));
+                marketFacade.searchCategoryInStore(validUsername,-1,validStoreName, null, null, null));
         assertEquals("No category provided", exception.getMessage());
     }
 
@@ -98,7 +98,7 @@ public class SearchProductSpecificStore {
     void testSearchKeywordsInStore_ValidInput() throws IllegalAccessException {
         marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null);
         marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>(List.of("keyword")));
-        String result = marketFacade.searchKeywordsInStore("keyword",validStoreName, null, null, null, -1);
+        String result = marketFacade.searchKeywordsInStore(validUsername,"keyword",validStoreName, null, null, null, -1);
         assertEquals("[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[keyword]}]",
                 result);
 
@@ -107,7 +107,7 @@ public class SearchProductSpecificStore {
     @Test
     void testSearchKeywordsInStore_NoKeywordsProvided() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-                marketFacade.searchKeywordsInStore(null,validStoreName, null, null, null, -1));
+                marketFacade.searchKeywordsInStore(validUsername,null,validStoreName, null, null, null, -1));
         assertEquals("No keywords provided", exception.getMessage());
     }
 
@@ -117,7 +117,7 @@ public class SearchProductSpecificStore {
         marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null);
         marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>(List.of("keyword")));
         String expected = "[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[keyword]}]";
-        String actual = marketFacade.searchNameInStore("product1", validStoreName,null, null, null, -1);
+        String actual = marketFacade.searchNameInStore(validUsername,"product1", validStoreName,null, null, null, -1);
         assertEquals(expected, actual);
     }
 
@@ -126,7 +126,7 @@ public class SearchProductSpecificStore {
         marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null);
         marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>(List.of("keyword")));
         marketFacade.addProduct(validUsername, 2, validStoreName, "product2", "", 8, 5, 5, 1, new ArrayList<>());
-        String actual = marketFacade.searchCategoryInStore(1, validStoreName,3.0, null, null);
+        String actual = marketFacade.searchCategoryInStore(validUsername, 1, validStoreName,3.0, null, null);
         assertEquals("[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[keyword]}, {\"product_id\":2, \"store_name\":\"\", \"product_name\":\"product2\", \"product_description\":\"\", \"product_price\":8.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[]}]",
                 actual);
     }
@@ -136,7 +136,7 @@ public class SearchProductSpecificStore {
         marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null);
         marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1,new ArrayList<>(List.of("keyword")));
         String expected = "[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[keyword]}]";
-        String actual = marketFacade.searchNameInStore("product1", validStoreName,null, 6.0, null, -1);
+        String actual = marketFacade.searchNameInStore(validUsername,"product1", validStoreName,null, 6.0, null, -1);
         assertEquals(expected, actual);
     }
 
@@ -145,7 +145,7 @@ public class SearchProductSpecificStore {
         marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null);
         marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>(List.of("keyword")));
         marketFacade.addProduct(validUsername, 2, validStoreName, "product2", "", 8, 5, 5, 1, new ArrayList<>());
-        String actual = marketFacade.searchCategoryInStore(1, validStoreName,null, null, 3.0);
+        String actual = marketFacade.searchCategoryInStore(validUsername, 1, validStoreName,null, null, 3.0);
         assertEquals("[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[keyword]}, {\"product_id\":2, \"store_name\":\"\", \"product_name\":\"product2\", \"product_description\":\"\", \"product_price\":8.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[]}]",
                 actual);
     }
@@ -155,7 +155,7 @@ public class SearchProductSpecificStore {
         marketFacade.addStore(validStoreName, validDescription, policy, validUsername, null);
         marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>(List.of("keyword")));
         String expected = "[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[keyword]}]";
-        String actual = marketFacade.searchNameInStore("product1",validStoreName, 2.0, 6.0, null, -1);
+        String actual = marketFacade.searchNameInStore(validUsername, "product1",validStoreName, 2.0, 6.0, null, -1);
         assertEquals(expected, actual);
     }
 
