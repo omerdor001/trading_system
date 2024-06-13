@@ -438,6 +438,40 @@ public class TradingSystemImp implements TradingSystem{
         return new ResponseEntity<>("Success rejecting manage", HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<String> waiverOnOwnership(String userName, String token, String storeName) {
+        logger.info("Trying to give up to own store : {}", storeName);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            userService.waiverOnOwnership(userName, storeName);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to give up own to store : {}", e.getMessage(), storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished waiver own store : {}", storeName);
+        return new ResponseEntity<>("Success waiver to own", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> fireManager(String owner, String token, String storeName, String manager) {
+        logger.info("{} Trying to fore {} from be a manager in store {}",owner, storeName, manager);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(owner,token))
+                return invalidTokenResponse();
+            userService.fireManager(owner, storeName, manager);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while {} trying to fire {} from store : {}", e.getMessage(),owner, storeName, manager);
+        }
+        logger.info("Finished fire {} from store : {}", manager, storeName);
+        return new ResponseEntity<>("Success fire manager", HttpStatus.OK);
+    }
+
+
 
     //TODO Same as suggestManager/approveManager?
     @Override
@@ -493,13 +527,15 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> getAllStores() {
+    public ResponseEntity<String> getAllStores(String userName, String token) {
         logger.info("Trying to Gather All Stores");
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
             logger.info("FINISHED Gather All Stores Info");
-            return new ResponseEntity<>(marketService.getAllStores(), HttpStatus.OK);
+            return new ResponseEntity<>(marketService.getAllStores(userName), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed on Gathering Stores Info ", e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -507,13 +543,15 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> getStoreProducts(String store_name) {
+    public ResponseEntity<String> getStoreProducts(String userName, String token, String store_name) {
         logger.info("Trying to Gather ALL Store Products");
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
             logger.info("FINISHED Gather ALL Store Products Info");
-            return new ResponseEntity<>(marketService.getStoreProducts(store_name), HttpStatus.OK);
+            return new ResponseEntity<>(marketService.getStoreProducts(userName, store_name), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed on Gathering Store Products Info with Store Id : {} ", e.getMessage(), store_name);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -521,13 +559,15 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> getProductInfo(String store_name, int product_Id) {
+    public ResponseEntity<String> getProductInfo(String userName, String token, String store_name, int product_Id) {
         logger.info("Trying to Gather Product Info with Store Id : {} and product ID: {}", store_name, product_Id);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
             logger.info("FINISHED Gather Product Info");
-            return new ResponseEntity<>(marketService.getProductInfo(store_name, product_Id), HttpStatus.OK);
+            return new ResponseEntity<>(marketService.getProductInfo(userName, store_name, product_Id), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed on Gathering Product Info with Store Id : {} and product ID:{}", e.getMessage(), store_name, product_Id);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -535,12 +575,14 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> closeStoreExist(String userName, String storeName) {
+    public ResponseEntity<String> closeStoreExist(String userName, String token, String storeName) {
         logger.info("{} Trying to Close Store Exist : {}", userName, storeName);
         try{
             if(!checkSystemOpen())
                 return systemClosedResponse();
-            marketService.closeStoreExist(storeName);
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            marketService.closeStoreExist(userName, storeName);
         }
         catch(Exception e) {
             logger.error("Error occurred : {} , when {} trying to close store exist : {}", e.getMessage(), userName, storeName);
@@ -554,12 +596,14 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> openStoreExist(String userName, String storeName) {
+    public ResponseEntity<String> openStoreExist(String userName, String token, String storeName) {
         logger.info("{} Trying to Open Store Exist : {}", userName, storeName);
         try {
             if(!checkSystemOpen())
                 return systemClosedResponse();
-            marketService.openStoreExist(storeName);
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            marketService.openStoreExist(userName, storeName);
         }
         catch(Exception e) {
             logger.error("Error occurred : {} , when {} trying to open store exist : {}", e.getMessage(), userName, storeName);
@@ -574,14 +618,16 @@ public class TradingSystemImp implements TradingSystem{
 
     //search in specific store
     @Override
-    public ResponseEntity<String> searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
-        logger.info("Trying to search products in store : {} with name : {}", store_name, name);
+    public ResponseEntity<String> searchNameInStore(String userName, String productName, String token, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
+        logger.info("Trying to search products in store : {} with name : {}", store_name, productName);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            marketService.searchNameInStore(name, store_name, minPrice, maxPrice, minRating, category);
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            marketService.searchNameInStore(userName, productName, store_name, minPrice, maxPrice, minRating, category);
         } catch (Exception e) {
-            logger.error("Error occurred : {} ,  to search products in store : {} with name : {}}", e.getMessage(), store_name, name);
+            logger.error("Error occurred : {} ,  to search products in store : {} with name : {}}", e.getMessage(), store_name, productName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         logger.info("FINISHED Searching products in store ");
@@ -589,12 +635,14 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> searchCategoryInStore(int category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
+    public ResponseEntity<String> searchCategoryInStore(String userName, String token, int category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
         logger.info("Trying to search products in store : {} with category, : {}", store_name, category);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            marketService.searchCategoryInStore(category, store_name, minPrice, maxPrice, minRating);
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            marketService.searchCategoryInStore(userName, category, store_name, minPrice, maxPrice, minRating);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in store : {} with category : {}}", e.getMessage(), store_name, category);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -604,12 +652,14 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
+    public ResponseEntity<String> searchKeywordsInStore(String userName, String token, String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
         logger.info("Trying to search products in store : {} with keyWords,  : {}", store_name, keyWords);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            marketService.searchKeywordsInStore(keyWords, store_name, minPrice, maxPrice, minRating, category);
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            marketService.searchKeywordsInStore(userName, keyWords, store_name, minPrice, maxPrice, minRating, category);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in store : {} with keyWords,  : {}}", e.getMessage(), store_name, keyWords);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -620,14 +670,16 @@ public class TradingSystemImp implements TradingSystem{
 
     //search in stores
     @Override
-    public ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
-        logger.info("Trying to search products in stores with name : {}", name);
+    public ResponseEntity<String> searchNameInStores(String userName, String productName, String token, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
+        logger.info("Trying to search products in stores with name : {}", productName);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            marketService.searchNameInStores(name, minPrice, maxPrice, minRating, category,storeRating);
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            marketService.searchNameInStores(userName, productName, minPrice, maxPrice, minRating, category,storeRating);
         } catch (Exception e) {
-            logger.error("Error occurred : {} ,  to search products in stores: {}}", e.getMessage(), name);
+            logger.error("Error occurred : {} ,  to search products in stores: {}}", e.getMessage(), productName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         logger.info("FINISHED Searching products in store ");
@@ -635,12 +687,14 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> searchCategoryInStores(int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
+    public ResponseEntity<String> searchCategoryInStores(String userName, String token, int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
         logger.info("Trying to search products in stores with category, : {}", category);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            marketService.searchCategoryInStores(category, minPrice, maxPrice, minRating,storeRating);
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            marketService.searchCategoryInStores(userName, category, minPrice, maxPrice, minRating,storeRating);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in stores with category : {}}", e.getMessage(), category);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -650,12 +704,14 @@ public class TradingSystemImp implements TradingSystem{
     }
 
     @Override
-    public ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
+    public ResponseEntity<String> searchKeywordsInStores(String userName, String token, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
         logger.info("Trying to search products in stores with keyWords,  : {}", keyWords);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            marketService.searchKeywordsInStores(keyWords, minPrice, maxPrice, minRating, category,storeRating);
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            marketService.searchKeywordsInStores(userName, keyWords, minPrice, maxPrice, minRating, category,storeRating);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in stores with keyWords,  : {}}", e.getMessage(), keyWords);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

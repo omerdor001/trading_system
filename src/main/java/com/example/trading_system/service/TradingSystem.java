@@ -19,9 +19,9 @@ public interface TradingSystem {
 
     ResponseEntity<String> register(String username, String password, LocalDate birthdate);
 
-    ResponseEntity<String> closeStoreExist(String userName, String storeName);
+    ResponseEntity<String> closeStoreExist(String userName, String token, String storeName);
 
-    ResponseEntity<String> openStoreExist(String userName, String storeName);
+    ResponseEntity<String> openStoreExist(String userName, String token, String storeName);
 
     ResponseEntity<String> addProduct(String username, String token, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords);
 
@@ -55,6 +55,10 @@ public interface TradingSystem {
 
     ResponseEntity<String> rejectToManageStore(String userName, String token, String store_name_id, String appoint);
 
+    ResponseEntity<String> waiverOnOwnership(String userName, String token, String storeName);
+
+    ResponseEntity<String> fireManager(String owner, String token, String storeName, String manager);
+
     //TODO Same as suggestManager/approveManager?
     ResponseEntity<String> appointManager(String username, String token, String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
@@ -63,25 +67,25 @@ public interface TradingSystem {
 
     ResponseEntity<String> editPermissionForManager(String username, String token, String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
-    ResponseEntity<String> getAllStores();
+    ResponseEntity<String> getAllStores(String userName, String token);
 
-    ResponseEntity<String> getStoreProducts(String store_name);
+    ResponseEntity<String> getStoreProducts(String userName, String token, String store_name);
 
-    ResponseEntity<String> getProductInfo(String store_name, int product_Id);
+    ResponseEntity<String> getProductInfo(String userName, String token, String store_name, int product_Id);
 
     //search in specific store
-    ResponseEntity<String> searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, int category);
+    ResponseEntity<String> searchNameInStore(String userName, String productName, String token, String store_name, Double minPrice, Double maxPrice, Double minRating, int category);
 
-    ResponseEntity<String> searchCategoryInStore(int category, String store_name, Double minPrice, Double maxPrice, Double minRating);
+    ResponseEntity<String> searchCategoryInStore(String userName, String token, int category, String store_name, Double minPrice, Double maxPrice, Double minRating);
 
-    ResponseEntity<String> searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category);
+    ResponseEntity<String> searchKeywordsInStore(String userName, String token, String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category);
 
     //search in stores
-    ResponseEntity<String> searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
+    ResponseEntity<String> searchNameInStores(String userName, String productName, String token, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
-    ResponseEntity<String> searchCategoryInStores(int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
+    ResponseEntity<String> searchCategoryInStores(String userName, String token, int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
 
-    ResponseEntity<String> searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
+    ResponseEntity<String> searchKeywordsInStores(String userName, String token, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
 
 

@@ -31,7 +31,7 @@ public class Store {
     private Double storeRating;
 
     public Store(String nameId, String description, StorePolicy storePolicy, String founder,Double storeRating) {
-        this.nameId = nameId;
+        this.nameId = nameId; // todo add founder to owners. + minuim maagalim
         this.description = description;
         this.storePolicy = storePolicy;
         this.products = new HashMap<>();
@@ -41,6 +41,7 @@ public class Store {
         this.managers = new LinkedList<>();
         this.owners = new LinkedList<>();
         this.storeRating=storeRating;
+        this.isOpen = true;
     }
 
     public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, int category) {
@@ -265,9 +266,23 @@ public class Store {
         salesHistory.addPurchase(purchase);
     }
 
+    public boolean isRoleHolder(String userName) {
+        return managers.contains(userName) || owners.contains(userName);
+    }
+
+    public void addOwner(String userName) {
+        owners.add(userName);
+    }
+    public void addManager(String userName) {
+        managers.add(userName);
+    }
 
 
+    public void removeOwner(String userName) {
+        owners.remove(userName);
+    }
 
-
-
+    public void removeManager(String userName) {
+        owners.remove(userName);
+    }
 }

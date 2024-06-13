@@ -63,34 +63,35 @@ public class GetProductsInfo {
 
     @Test
     public void testGetAllStoresSuccessfully() {
-        tradingSystem.openStore(username, token, "existingStore", "General Store", new StorePolicy());
-        tradingSystem.openStore(username, token, "existingStore2", "General Store", new StorePolicy());
-        ResponseEntity<String> response = tradingSystem.getAllStores();
+        tradingSystem.openStore(username,token,"existingStore", "General Store", new StorePolicy());
+        tradingSystem.openStore(username,token,"existingStore2", "General Store", new StorePolicy());
+        ResponseEntity<String> response = tradingSystem.getAllStores(username, token);
         assertNotNull(response.getBody());
     }
 
     @Test
     public void testGetStoreProductsSuccessfully() {
-        tradingSystem.openStore(username, token, "store1", "General Store", new StorePolicy());
-        tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 0, new ArrayList<>());
-        tradingSystem.addProduct(username, token, 2, "store1", "product1", "desc1", 10.0, 100, 4, 0, new ArrayList<>());
-        ResponseEntity<String> response = tradingSystem.getStoreProducts("store1");
+        tradingSystem.openStore(username,token,"store1", "General Store", new StorePolicy());
+        tradingSystem.addProduct(username,token,1, "store1", "product1", "desc1", 10.0, 100, 4,0,new ArrayList<>());
+        tradingSystem.addProduct(username,token,2, "store1", "product1", "desc1", 10.0, 100, 4,0,new ArrayList<>());
+        ResponseEntity<String> response = tradingSystem.getStoreProducts(username, token,"store1");
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
     }
 
     @Test
     public void testGetStoreProductsNonExistentStore() {
-        ResponseEntity<String> response = tradingSystem.getStoreProducts("nonExistentStore");
+        ResponseEntity<String> response = tradingSystem.getStoreProducts(username, token,"nonExistentStore");
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Can't find store with name nonExistentStore", response.getBody());
+        assertEquals("Store must exist", response.getBody());
     }
 
     @Test
     public void testGetProductInfoNonExistentProduct() {
         // Add store
-        tradingSystem.openStore(username, token, "store1", "General Store", new StorePolicy());
-        ResponseEntity<String> response = tradingSystem.getProductInfo("store1", 999);
+        tradingSystem.openStore(username,token,"store1", "General Store", new StorePolicy());
+        ResponseEntity<String> response = tradingSystem.getProductInfo(username, token,"store1", 999);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Can't find product with id 999", response.getBody());
     }
