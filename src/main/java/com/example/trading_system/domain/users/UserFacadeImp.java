@@ -607,6 +607,9 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(userName)) {
             throw new NoSuchElementException("No user called " + userName + " exist");
         }
+        if(isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         if (userName.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + userName + "is registered");
         }
@@ -626,6 +629,9 @@ public class UserFacadeImp implements UserFacade {
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userMemoryRepository.isExist(owner)) {
             throw new NoSuchElementException("No user called " + owner + " exist");
+        }
+        if(isSuspended(owner)){
+            throw new RuntimeException("Owner is suspended from the system");
         }
         if (!userMemoryRepository.isExist(manager)) {
             throw new NoSuchElementException("No user called " + manager + " exist");

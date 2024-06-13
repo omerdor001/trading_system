@@ -285,4 +285,8 @@ public class Store {
     public void removeManager(String userName) {
         owners.remove(userName);
     }
+
+    public String getFounder() {
+        return founder;
+    }
 }
