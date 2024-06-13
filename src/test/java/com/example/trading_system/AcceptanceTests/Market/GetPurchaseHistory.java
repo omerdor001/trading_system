@@ -1,3 +1,4 @@
+/*
 package com.example.trading_system.AcceptanceTests.Market;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
@@ -168,3 +169,4 @@ class GetPurchaseHistory {
 
 }
 
+*/

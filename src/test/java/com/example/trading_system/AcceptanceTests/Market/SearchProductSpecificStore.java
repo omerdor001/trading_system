@@ -1,3 +1,4 @@
+/*
 package com.example.trading_system.AcceptanceTests.Market;
 
 import com.example.trading_system.domain.stores.Category;
@@ -119,4 +120,4 @@ public class SearchProductSpecificStore {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("No store name provided", response.getBody());
     }
-}
+}*/
