@@ -124,18 +124,6 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalArgumentException("User need to be suspend for ending suspend");
         }
         User toSuspendUser=userMemoryRepository.getUser(toSuspend);
-        toSuspendUser.finishSuspensionByAdmin();
-    }
-
-    @Override
-    public void checkForEndingSuspension(String toSuspend) {
-        if(!userMemoryRepository.isExist(toSuspend)){
-            throw new IllegalArgumentException("User to suspend doesn't exist in the system");
-        }
-        if(!userMemoryRepository.getUser(toSuspend).isSuspended()){
-            throw new IllegalArgumentException("User need to be suspend for ending suspend");
-        }
-        User toSuspendUser=userMemoryRepository.getUser(toSuspend);
         toSuspendUser.finishSuspension();
     }
 
@@ -165,7 +153,14 @@ public class UserFacadeImp implements UserFacade {
         if(!userMemoryRepository.isExist(username)){
             throw new IllegalArgumentException("User doesn't exist in the system");
         }
-        return userMemoryRepository.getUser(username).isSuspended();
+        User user=userMemoryRepository.getUser(username);
+        if(user.getSuspendedEnd()==null){
+            return false;
+        }
+        if(user.getSuspendedEnd().compareTo(LocalDateTime.now())==0){
+            user.finishSuspension();
+        }
+        return user.isSuspended();
     }
 
     private void saveUserCart(String username) {

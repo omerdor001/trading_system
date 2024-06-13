@@ -1,7 +1,5 @@
 package com.example.trading_system.domain.users;
 
-import lombok.Getter;
-
 import java.time.LocalDate;
 import java.util.*;
 

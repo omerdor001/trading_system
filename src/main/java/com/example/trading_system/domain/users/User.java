@@ -61,21 +61,7 @@ public abstract class User {
         setSuspendedEnd(suspendedUntil);
     }
 
-    public void setSuspendedUntilToDefault(){
-        if(suspendedEnd.compareTo(LocalDateTime.now())==0){
-            suspendedStart=null;
-            suspendedEnd=null;
-        }
-    }
-
     public void finishSuspension(){
-        if(suspended){
-            setSuspendedUntilToDefault();
-            suspended=false;
-        }
-    }
-
-    public void finishSuspensionByAdmin(){
         suspendedStart=null;
         suspendedEnd=null;
         suspended=false;

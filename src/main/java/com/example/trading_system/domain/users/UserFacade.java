@@ -26,8 +26,6 @@ public interface UserFacade {
 
     void endSuspendUser(String admin, String toSuspend);
 
-    void checkForEndingSuspension(String toSuspend);
-
     String watchSuspensions(String admin);
 
     boolean isSuspended(String username);

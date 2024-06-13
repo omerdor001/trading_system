@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -28,8 +27,8 @@ class SuspensionAcceptanceTests {
     @BeforeEach
     public void setUp() {
         tradingSystem = TradingSystemImp.getInstance();
-        tradingSystem.register(0,"owner1", "password123", LocalDate.now());
-        tradingSystem.register(1,"emp1", "password123", LocalDate.now());
+        tradingSystem.register("owner1", "password123", LocalDate.now());
+        tradingSystem.register("emp1", "password123", LocalDate.now());
         tradingSystem.openSystem();
         //Enters
         String userToken = tradingSystem.enter().getBody();
@@ -103,6 +102,7 @@ class SuspensionAcceptanceTests {
 
     @Test
     void endSuspendUser_Success() {
+        tradingSystem.suspendUser(token1,username,username1,LocalDateTime.now());
         ResponseEntity<String> response =tradingSystem.endSuspendUser(token1,username,username1);
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
     }
@@ -116,19 +116,6 @@ class SuspensionAcceptanceTests {
     @Test
     void endSuspendUser_ToSuspendNotExist() {
         ResponseEntity<String> response =tradingSystem.endSuspendUser(token1,username,"");
-        assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
-    }
-
-    @Test
-    void checkForEndingSuspension_Success() {
-        ResponseEntity<String> response =tradingSystem.checkForEndingSuspension(username1);
-        assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
-    }
-
-    //TODO fix this test
-    @Test
-    void checkForEndingSuspension_ToSuspendNotExist() {
-        ResponseEntity<String> response =tradingSystem.checkForEndingSuspension("");
         assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
     }
 

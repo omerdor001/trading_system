@@ -74,11 +74,6 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void checkForEndingSuspension(String toSuspend) {
-        userFacade.checkForEndingSuspension(toSuspend);
-    }
-
-    @Override
     public String watchSuspensions(String admin) {
         return userFacade.watchSuspensions(admin);
     }

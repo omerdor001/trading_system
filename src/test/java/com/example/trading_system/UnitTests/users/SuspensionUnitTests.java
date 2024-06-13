@@ -7,6 +7,7 @@ import com.example.trading_system.domain.users.UserFacade;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import org.junit.jupiter.api.*;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -33,35 +34,17 @@ class UserFacadeImpTest {
             userFacade.login("v0","testuser0","1pA22w0rd");
             userFacade.login("v1","testuser1","pA22w0rd1");
             userFacade.login("v2","testuser2","pA22w0rd2");
-            userFacade.openStore("rtestuser0","Adidas","sport shop",mock(StorePolicy.class));
-            userFacade.openStore("rtestuser0","Nike","sport shop",mock(StorePolicy.class));
+            userFacade.createStore("rtestuser0","Adidas","sport shop",mock(StorePolicy.class));
+            userFacade.createStore("rtestuser0","Nike","sport shop",mock(StorePolicy.class));
             userFacade.appointOwner("rtestuser0","rtestuser1","Adidas");
             userFacade.appointManager("rtestuser0","rtestuser2","Adidas",false,false,false,false);
-            tearDown();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    @BeforeEach
-    void setUpBE() {
-        marketFacade= MarketFacadeImp.getInstance();
-        userFacade= UserFacadeImp.getInstance();
-        try {
-            userFacade.enter(0);
-            userFacade.enter(1);
-            userFacade.enter(2);
-            userFacade.login("v0","testuser0","1pA22w0rd");
-            userFacade.login("v1","testuser1","pA22w0rd1");
-            userFacade.login("v2","testuser2","pA22w0rd2");
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @AfterEach
+    @AfterAll
     public void tearDown(){
         userFacade.logout(0,"rtestuser0");
         userFacade.logout(1,"rtestuser1");
@@ -86,7 +69,7 @@ class UserFacadeImpTest {
         }, "suspendUser should not throw any exceptions");
         assertEquals(suspended,userFacade.isSuspended("rtestuser2"));
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userFacade.approvePurchase("rtestuser2");
+            userFacade.purchaseCart("rtestuser2");
         });
         assertEquals("User is suspended from the system", exception.getMessage());
     }
@@ -138,7 +121,7 @@ class UserFacadeImpTest {
         }, "endSuspendUser should not throw any exceptions");
         assertEquals(!suspended,userFacade.isSuspended("rtestuser2"));
         Exception exception = assertThrows(Exception.class, () -> {
-            userFacade.approvePurchase("rtestuser2");
+            userFacade.purchaseCart("rtestuser2");
         });
         assertNotEquals("User is suspended from the system", exception.getMessage());
     }
@@ -184,12 +167,6 @@ class UserFacadeImpTest {
         assertEquals(suspended,userFacade.isSuspended("rtestuser2"));
     }
 
-
-    @Test
-    void checkForEndingSuspension_success() {
-        //TODO make this test
-    }
-
     @Test
     void watchSuspensions_success() {
         userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,8,1,1,1));
@@ -197,10 +174,12 @@ class UserFacadeImpTest {
             userFacade.watchSuspensions("rtestuser0");
         }, "watchSuspensions should not throw any exceptions");
         String result=userFacade.watchSuspensions("rtestuser0");
+        Long duration_hours=Math.abs(Duration.between(LocalDateTime.now(), LocalDateTime.of(2024,8,1,1,1)).toHours());
+        Long duration_days=Math.abs(Duration.between(LocalDateTime.now(), LocalDateTime.of(2024,8,1,1,1)).toDays());
         assertEquals(result,"Username - testuser2\n" +
                 "Start of suspension - "+ LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS) +"\n" +
-                "Time of suspension (in days) - 50\n" +
-                "Time of suspension (in hours) - 1201\n" +
+                "Time of suspension (in days) - "+duration_days+"\n"+
+                "Time of suspension (in hours) - "+ duration_hours+"\n" +
                 "End of suspension - 2024-08-01T01:01");
     }
 

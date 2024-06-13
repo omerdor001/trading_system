@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class TradingSystemImp implements TradingSystem{
     private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
@@ -19,13 +18,11 @@ public class TradingSystemImp implements TradingSystem{
     public MarketService marketService;
     public int counter_user = 0;
     private boolean systemOpen;
-    private final ScheduledExecutorService executorService;
 
     private TradingSystemImp() {
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance();
         this.marketService = MarketServiceImp.getInstance();
-        this.executorService = Executors.newScheduledThreadPool(1);
     }
 
     public static TradingSystemImp getInstance() {
@@ -371,23 +368,6 @@ public class TradingSystemImp implements TradingSystem{
             return new ResponseEntity<>("Ending suspension successful.", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while ending suspended user: {}: {}", toSuspend, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    //TODO fix this function if needed
-    @Override
-    public ResponseEntity<String> checkForEndingSuspension(String toSuspend) {
-        logger.info("Checking to end suspension of user: {}", toSuspend);
-        try {
-            Runnable task = () -> {
-                userService.checkForEndingSuspension(toSuspend);
-                logger.info("Checking to end suspension of user: {}", toSuspend);
-            };
-            executorService.scheduleAtFixedRate(task, 0, 1, TimeUnit.SECONDS);
-            return new ResponseEntity<>("Ending checking suspension successful.", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while checking suspending user: {}: {}", toSuspend, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
