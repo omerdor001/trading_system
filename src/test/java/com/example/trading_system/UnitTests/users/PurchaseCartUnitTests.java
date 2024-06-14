@@ -1,4 +1,4 @@
-package com.example.trading_system.AcceptanceTests.Payment;
+package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.domain.users.*;
@@ -9,11 +9,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
 import java.util.Timer;
-import java.util.TimerTask;
-
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PurchaseCartUnitTests {
