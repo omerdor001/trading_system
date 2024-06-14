@@ -96,8 +96,8 @@ public class UserFacadeImp implements UserFacade {
         if (u == null)
             throw new IllegalArgumentException("No such user " + username);
         if (username.charAt(0) == 'r' && !u.getLogged())
-            throw new IllegalArgumentException("User " + username + "already Logged out");
-        if(!u.isSuspended()){
+            throw new IllegalArgumentException("User " + username + " already Logged out");
+        if (!u.isSuspended()) {
             saveUserCart(username);
         }
         u.logout();
@@ -106,56 +106,56 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void suspendUser(String admin, String toSuspend, LocalDateTime endSuspention) {
-        if(!userMemoryRepository.isExist(admin)){
+        if (!userMemoryRepository.isExist(admin)) {
             throw new IllegalArgumentException("Admin user doesn't exist in the system");
         }
-        if(!userMemoryRepository.isExist(toSuspend)){
+        if (!userMemoryRepository.isExist(toSuspend)) {
             throw new IllegalArgumentException("User to suspend doesn't exist in the system");
         }
-        if(!userMemoryRepository.getUser(admin).isAdmin()){
+        if (!userMemoryRepository.getUser(admin).isAdmin()) {
             throw new IllegalArgumentException("Only admin user can suspend users");
         }
-        if(endSuspention.compareTo(LocalDateTime.now())<0){
+        if (endSuspention.compareTo(LocalDateTime.now()) < 0) {
             throw new IllegalArgumentException("Date of suspension cannot be before now");
         }
-        User toSuspendUser=userMemoryRepository.getUser(toSuspend);
+        User toSuspendUser = userMemoryRepository.getUser(toSuspend);
         toSuspendUser.suspend(endSuspention);
     }
 
     @Override
     public void endSuspendUser(String admin, String toSuspend) {
-        if(!userMemoryRepository.isExist(admin)){
+        if (!userMemoryRepository.isExist(admin)) {
             throw new IllegalArgumentException("Admin user doesn't exist in the system");
         }
-        if(!userMemoryRepository.isExist(toSuspend)){
+        if (!userMemoryRepository.isExist(toSuspend)) {
             throw new IllegalArgumentException("User to suspend doesn't exist in the system");
         }
-        if(!userMemoryRepository.getUser(admin).isAdmin()){
+        if (!userMemoryRepository.getUser(admin).isAdmin()) {
             throw new IllegalArgumentException("Only admin user can suspend users");
         }
-        if(!userMemoryRepository.getUser(toSuspend).isSuspended()){
+        if (!userMemoryRepository.getUser(toSuspend).isSuspended()) {
             throw new IllegalArgumentException("User need to be suspend for ending suspend");
         }
-        User toSuspendUser=userMemoryRepository.getUser(toSuspend);
+        User toSuspendUser = userMemoryRepository.getUser(toSuspend);
         toSuspendUser.finishSuspension();
     }
 
     @Override
     public String watchSuspensions(String admin) {
         StringBuilder details = new StringBuilder();
-        if(!userMemoryRepository.isExist(admin)){
+        if (!userMemoryRepository.isExist(admin)) {
             throw new IllegalArgumentException("Admin user doesn't exist in the system");
         }
-        if(!userMemoryRepository.getUser(admin).isAdmin()){
+        if (!userMemoryRepository.getUser(admin).isAdmin()) {
             throw new IllegalArgumentException("Only admin user can suspend users");
         }
-        for (User user:userMemoryRepository.getAllUsersAsList()){
-            if(user.isSuspended()){
-                details.append("Username - "+user.getUsername() + "\n");
-                details.append("Start of suspension - "+user.getSuspendedStart().truncatedTo(ChronoUnit.SECONDS)+"\n");
-                details.append("Time of suspension (in days) - "+ Math.max(0,Math.abs(Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toDays()))+"\n");
-                details.append("Time of suspension (in hours) - "+ Math.max(0,Math.abs(Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toHours()))+"\n");
-                details.append("End of suspension - "+user.getSuspendedEnd().toString());
+        for (User user : userMemoryRepository.getAllUsersAsList()) {
+            if (user.isSuspended()) {
+                details.append("Username - ").append(user.getUsername()).append("\n");
+                details.append("Start of suspension - ").append(user.getSuspendedStart().truncatedTo(ChronoUnit.SECONDS)).append("\n");
+                details.append("Time of suspension (in days) - ").append(Math.max(0, Math.abs(Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toDays()))).append("\n");
+                details.append("Time of suspension (in hours) - ").append(Math.max(0, Math.abs(Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toHours()))).append("\n");
+                details.append("End of suspension - ").append(user.getSuspendedEnd().toString());
             }
         }
         return details.toString();
@@ -163,14 +163,14 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public boolean isSuspended(String username) {
-        if(!userMemoryRepository.isExist(username)){
+        if (!userMemoryRepository.isExist(username)) {
             throw new IllegalArgumentException("User doesn't exist in the system");
         }
-        User user=userMemoryRepository.getUser(username);
-        if(user.getSuspendedEnd()==null){
+        User user = userMemoryRepository.getUser(username);
+        if (user.getSuspendedEnd() == null) {
             return false;
         }
-        if(user.getSuspendedEnd().compareTo(LocalDateTime.now())==0){
+        if (user.getSuspendedEnd().compareTo(LocalDateTime.now()) == 0) {
             user.finishSuspension();
         }
         return user.isSuspended();
@@ -181,7 +181,7 @@ public class UserFacadeImp implements UserFacade {
         if (user == null || user.getCart() == null) {
             throw new IllegalArgumentException("user doesn't exist in the system");
         }
-        if(isSuspended(username)){
+        if (isSuspended(username)) {
             throw new RuntimeException("User is suspended from the system");
         }
         userMemoryRepository.getUser(username).getCart().saveCart();
@@ -193,11 +193,10 @@ public class UserFacadeImp implements UserFacade {
             throw new Exception("username already exists - " + username);
         registerChecks(username, password, birthdate);
         String encrypted_pass = encrypt(password);
-        if (checkIfRegistersEmpty()){
+        if (checkIfRegistersEmpty()) {
             userMemoryRepository.addRegistered("r" + username, encrypted_pass, birthdate);
             userMemoryRepository.getUser("r" + username).setAdmin(true);
-        }
-        else{
+        } else {
             userMemoryRepository.addRegistered("r" + username, encrypted_pass, birthdate);
         }
 
@@ -225,7 +224,7 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void login(String usernameV, String username, String password) {
-        if(isSuspended(usernameV)){
+        if (isSuspended(usernameV)) {
             throw new RuntimeException("User is suspended from the system");
         }
         User u = userMemoryRepository.getUser("r" + username);
@@ -261,7 +260,7 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("Store with name " + storeName + " already exists");
         }
         if (userMemoryRepository.isExist(username)) {
-            if(isSuspended(username)){
+            if (isSuspended(username)) {
                 throw new RuntimeException("User is suspended from the system");
             }
             Product p = marketFacade.getStore(storeName).getProduct(productId);
@@ -286,7 +285,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("View Cart - User not found");
             throw new RuntimeException("User not found");
         }
-        if(isSuspended(username)){
+        if (isSuspended(username)) {
             throw new RuntimeException("User is suspended from the system");
         }
         User user = userMemoryRepository.getUser(username);
@@ -309,7 +308,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("User not found: " + username);
             throw new NoSuchElementException("User not found: " + username);
         }
-        if(isSuspended(username)){
+        if (isSuspended(username)) {
             throw new RuntimeException("User is suspended from the system");
         }
         if (storeName == null || storeName.trim().isEmpty()) {
@@ -336,7 +335,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("User not found: " + username);
             throw new NoSuchElementException("User not found: " + username);
         }
-        if(isSuspended(username)){
+        if (isSuspended(username)) {
             throw new RuntimeException("User is suspended from the system");
         }
         Store store = marketFacade.getStore(storeName);
@@ -344,7 +343,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Store not found: " + storeName);
             throw new NoSuchElementException("Store not found: " + storeName);
         }
-        if(!store.isOpen())
+        if (!store.isOpen())
             throw new IllegalArgumentException("When store is closed cant to check product quantity");
         Product product = store.getProducts().get(productId);
         if (product == null) {
@@ -370,7 +369,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("User not found: " + username);
             throw new NoSuchElementException("User not found: " + username);
         }
-        if(isSuspended(username)){
+        if (isSuspended(username)) {
             throw new RuntimeException("User is suspended from the system");
         }
         if (storeName == null || storeName.trim().isEmpty()) {
@@ -394,7 +393,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("While opening store - User not found");
             throw new IllegalArgumentException("User not found");
         }
-        if(isSuspended(username)){
+        if (isSuspended(username)) {
             throw new RuntimeException("User is suspended from the system");
         }
         if (storeName == null || storeName.trim().isEmpty()) {
@@ -424,7 +423,7 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(newOwner)) {
             throw new NoSuchElementException("No user called " + newOwner + " exist");
         }
-        if(isSuspended(appoint)){
+        if (isSuspended(appoint)) {
             throw new RuntimeException("User is suspended from the system");
         }
         if (appoint.charAt(0) != 'r') {
@@ -454,7 +453,7 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
-        if(isSuspended(appoint)){
+        if (isSuspended(appoint)) {
             throw new RuntimeException("User is suspended from the system");
         }
         if (!userMemoryRepository.isExist(newManager)) {
@@ -493,7 +492,7 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
-        if(isSuspended(appoint)){
+        if (isSuspended(appoint)) {
             throw new RuntimeException("User is suspended from the system");
         }
         if (appoint.charAt(0) != 'r') {
@@ -535,7 +534,7 @@ public class UserFacadeImp implements UserFacade {
         if (userName.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + userName + "is registered");
         }
-        if(isSuspended(appoint)){
+        if (isSuspended(appoint)) {
             throw new RuntimeException("User is suspended from the system");
         }
         User appointUser = userMemoryRepository.getUser(appoint);
@@ -562,7 +561,7 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
-        if(isSuspended(appoint)){
+        if (isSuspended(appoint)) {
             throw new RuntimeException("User is suspended from the system");
         }
         if (appoint.charAt(0) != 'r') {
@@ -600,7 +599,7 @@ public class UserFacadeImp implements UserFacade {
         if (userName.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + userName + "is registered");
         }
-        if(isSuspended(appoint)){
+        if (isSuspended(appoint)) {
             throw new RuntimeException("User is suspended from the system");
         }
         User appointUser = userMemoryRepository.getUser(appoint);
@@ -621,7 +620,7 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(userName)) {
             throw new NoSuchElementException("No user called " + userName + " exist");
         }
-        if(isSuspended(userName)){
+        if (isSuspended(userName)) {
             throw new RuntimeException("User is suspended from the system");
         }
         if (userName.charAt(0) != 'r') {
@@ -637,14 +636,13 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void fireManager(String owner, String storeName, String manager) throws IllegalAccessException
-    {
+    public void fireManager(String owner, String storeName, String manager) throws IllegalAccessException {
         if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userMemoryRepository.isExist(owner)) {
             throw new NoSuchElementException("No user called " + owner + " exist");
         }
-        if(isSuspended(owner)){
+        if (isSuspended(owner)) {
             throw new RuntimeException("Owner is suspended from the system");
         }
         if (!userMemoryRepository.isExist(manager)) {
@@ -681,7 +679,7 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
-        if(isSuspended(appoint)){
+        if (isSuspended(appoint)) {
             throw new RuntimeException("User is suspended from the system");
         }
         if (!userMemoryRepository.isExist(newManager)) {
@@ -719,7 +717,7 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
-        if(isSuspended(appoint)){
+        if (isSuspended(appoint)) {
             throw new RuntimeException("User is suspended from the system");
         }
         if (!userMemoryRepository.isExist(newOwner)) {
@@ -752,7 +750,7 @@ public class UserFacadeImp implements UserFacade {
         if (!userMemoryRepository.isExist(managerToEdit)) {
             throw new NoSuchElementException("No user called " + managerToEdit + "exist");
         }
-        if(isSuspended(userId)){
+        if (isSuspended(userId)) {
             throw new RuntimeException("User is suspended from the system");
         }
         if (userId.charAt(0) != 'r') {
@@ -822,14 +820,14 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public String getPurchaseHistory(String username, String storeName) {
-        if (!isUserExist(username) && username != null) {    //Change when Repo
+        if (!isUserExist(username) && username != null) {
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        if(isSuspended(username)){
+        if (isSuspended(username)) {
             throw new RuntimeException("User is suspended from the system");
         }
-        if (username.charAt(0) == 'r' && !getUser(username).getLogged()) {
+        if (username != null && username.charAt(0) == 'r' && !getUser(username).getLogged()) {
             logger.error("User is not logged");
             throw new RuntimeException("User is not logged");
         }
@@ -845,7 +843,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("User not found");
             throw new RuntimeException("User not found");
         }
-        if(isSuspended(username)){
+        if (isSuspended(username)) {
             throw new RuntimeException("User is suspended from the system");
         }
         if (!getUser(username).getLogged()) {
@@ -861,7 +859,7 @@ public class UserFacadeImp implements UserFacade {
         HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
         for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
             for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
-                if(marketFacade.getStore(shoppingBagInStore.getKey()) == null)
+                if (marketFacade.getStore(shoppingBagInStore.getKey()) == null)
                     throw new RuntimeException("store not exist");
                 checkProductQuantity(username, productEntry.getKey(), shoppingBagInStore.getKey(), 0);
             }
@@ -927,9 +925,9 @@ public class UserFacadeImp implements UserFacade {
         timer.purge();
     }
 
-
+    @Override
+    public String calculatePrice(String username) throws Exception {
+        double result = marketFacade.calculateTotalPrice(getUser(username).getCart().toJson());
+        return Double.toString(Math.round(result * 100.0) / 100.0); // round to 2 decimal points
+    }
 }
-
-
-
-

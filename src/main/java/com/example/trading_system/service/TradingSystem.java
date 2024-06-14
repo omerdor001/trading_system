@@ -108,6 +108,8 @@ public interface TradingSystem {
 
     ResponseEntity<String> viewCart(String username, String token);
 
+    ResponseEntity<String> calculatePrice(String username, String token);
+
     //region Discount creation
     ResponseEntity<String> addCategoryPercentageDiscount(String username, String token, String storeName, int category, double discountPercent) throws IllegalAccessException;
 

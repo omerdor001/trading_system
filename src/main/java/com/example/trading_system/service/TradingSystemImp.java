@@ -317,9 +317,9 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(admin,token))
+            if (!checkToken(admin, token))
                 return invalidTokenResponse();
-            userService.suspendUser(admin,toSuspend,endSuspention);
+            userService.suspendUser(admin, toSuspend, endSuspention);
             logger.info("User: {} is suspended successfully", toSuspend);
             return new ResponseEntity<>("Suspension successful.", HttpStatus.OK);
         } catch (Exception e) {
@@ -334,9 +334,9 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(admin,token))
+            if (!checkToken(admin, token))
                 return invalidTokenResponse();
-            userService.endSuspendUser(admin,toSuspend);
+            userService.endSuspendUser(admin, toSuspend);
             logger.info("Suspending user: {} is finished successfully", toSuspend);
             return new ResponseEntity<>("Ending suspension successful.", HttpStatus.OK);
         } catch (Exception e) {
@@ -351,9 +351,9 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(admin,token))
+            if (!checkToken(admin, token))
                 return invalidTokenResponse();
-            String details=userService.watchSuspensions(admin);
+            String details = userService.watchSuspensions(admin);
             logger.info("Getting details of suspension successfully");
             return new ResponseEntity<>(details, HttpStatus.OK);
         } catch (Exception e) {
@@ -459,7 +459,7 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(userName,token))
+            if (!checkToken(userName, token))
                 return invalidTokenResponse();
             userService.waiverOnOwnership(userName, storeName);
         } catch (Exception e) {
@@ -472,20 +472,19 @@ public class TradingSystemImp implements TradingSystem {
 
     @Override
     public ResponseEntity<String> fireManager(String owner, String token, String storeName, String manager) {
-        logger.info("{} Trying to fore {} from be a manager in store {}",owner, storeName, manager);
+        logger.info("{} Trying to fore {} from be a manager in store {}", owner, storeName, manager);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(owner,token))
+            if (!checkToken(owner, token))
                 return invalidTokenResponse();
             userService.fireManager(owner, storeName, manager);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , while {} trying to fire {} from store : {}", e.getMessage(),owner, storeName, manager);
+            logger.error("Error occurred : {} , while {} trying to fire {} from store : {}", e.getMessage(), owner, storeName, manager);
         }
         logger.info("Finished fire {} from store : {}", manager, storeName);
         return new ResponseEntity<>("Success fire manager", HttpStatus.OK);
     }
-
 
 
     //TODO Same as suggestManager/approveManager?
@@ -541,7 +540,7 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(userName,token))
+            if (!checkToken(userName, token))
                 return invalidTokenResponse();
             logger.info("FINISHED Gather All Stores Info");
             return new ResponseEntity<>(marketService.getAllStores(userName), HttpStatus.OK);
@@ -557,7 +556,7 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(userName,token))
+            if (!checkToken(userName, token))
                 return invalidTokenResponse();
             logger.info("FINISHED Gather ALL Store Products Info");
             return new ResponseEntity<>(marketService.getStoreProducts(userName, store_name), HttpStatus.OK);
@@ -573,7 +572,7 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(userName,token))
+            if (!checkToken(userName, token))
                 return invalidTokenResponse();
             logger.info("FINISHED Gather Product Info");
             return new ResponseEntity<>(marketService.getProductInfo(userName, store_name, product_Id), HttpStatus.OK);
@@ -586,14 +585,13 @@ public class TradingSystemImp implements TradingSystem {
     @Override
     public ResponseEntity<String> closeStoreExist(String userName, String token, String storeName) {
         logger.info("{} Trying to Close Store Exist : {}", userName, storeName);
-        try{
-            if(!checkSystemOpen())
+        try {
+            if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(userName,token))
+            if (!checkToken(userName, token))
                 return invalidTokenResponse();
             marketService.closeStoreExist(userName, storeName);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             logger.error("Error occurred : {} , when {} trying to close store exist : {}", e.getMessage(), userName, storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
@@ -608,13 +606,12 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> openStoreExist(String userName, String token, String storeName) {
         logger.info("{} Trying to Open Store Exist : {}", userName, storeName);
         try {
-            if(!checkSystemOpen())
+            if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(userName,token))
+            if (!checkToken(userName, token))
                 return invalidTokenResponse();
             marketService.openStoreExist(userName, storeName);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             logger.error("Error occurred : {} , when {} trying to open store exist : {}", e.getMessage(), userName, storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
@@ -632,7 +629,7 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(userName,token))
+            if (!checkToken(userName, token))
                 return invalidTokenResponse();
             marketService.searchNameInStore(userName, productName, store_name, minPrice, maxPrice, minRating, category);
         } catch (Exception e) {
@@ -649,7 +646,7 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(userName,token))
+            if (!checkToken(userName, token))
                 return invalidTokenResponse();
             marketService.searchCategoryInStore(userName, category, store_name, minPrice, maxPrice, minRating);
         } catch (Exception e) {
@@ -666,7 +663,7 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(userName,token))
+            if (!checkToken(userName, token))
                 return invalidTokenResponse();
             marketService.searchKeywordsInStore(userName, keyWords, store_name, minPrice, maxPrice, minRating, category);
         } catch (Exception e) {
@@ -679,14 +676,14 @@ public class TradingSystemImp implements TradingSystem {
 
     //search in stores
     @Override
-    public ResponseEntity<String> searchNameInStores(String userName, String productName, String token, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
+    public ResponseEntity<String> searchNameInStores(String userName, String productName, String token, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
         logger.info("Trying to search products in stores with name : {}", productName);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(userName,token))
+            if (!checkToken(userName, token))
                 return invalidTokenResponse();
-            marketService.searchNameInStores(userName, productName, minPrice, maxPrice, minRating, category,storeRating);
+            marketService.searchNameInStores(userName, productName, minPrice, maxPrice, minRating, category, storeRating);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in stores: {}}", e.getMessage(), productName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -696,14 +693,14 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> searchCategoryInStores(String userName, String token, int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
+    public ResponseEntity<String> searchCategoryInStores(String userName, String token, int category, Double minPrice, Double maxPrice, Double minRating, Double storeRating) {
         logger.info("Trying to search products in stores with category, : {}", category);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(userName,token))
+            if (!checkToken(userName, token))
                 return invalidTokenResponse();
-            marketService.searchCategoryInStores(userName, category, minPrice, maxPrice, minRating,storeRating);
+            marketService.searchCategoryInStores(userName, category, minPrice, maxPrice, minRating, storeRating);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in stores with category : {}}", e.getMessage(), category);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -713,14 +710,14 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> searchKeywordsInStores(String userName, String token, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
+    public ResponseEntity<String> searchKeywordsInStores(String userName, String token, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
         logger.info("Trying to search products in stores with keyWords,  : {}", keyWords);
         try {
             if (!checkSystemOpen())
                 return systemClosedResponse();
-            if(!checkToken(userName,token))
+            if (!checkToken(userName, token))
                 return invalidTokenResponse();
-            marketService.searchKeywordsInStores(userName, keyWords, minPrice, maxPrice, minRating, category,storeRating);
+            marketService.searchKeywordsInStores(userName, keyWords, minPrice, maxPrice, minRating, category, storeRating);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in stores with keyWords,  : {}}", e.getMessage(), keyWords);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -811,15 +808,29 @@ public class TradingSystemImp implements TradingSystem {
 
     @Override
     public ResponseEntity<String> viewCart(String username, String token) {
-        logger.info("Trying registered : {} view cart ", username);
+        logger.info("Trying user : {} view cart ", username);
         try {
             if (!checkSystemOpen()) return systemClosedResponse();
             if (!checkToken(username, token)) return invalidTokenResponse();
             String result = userService.viewCart(username);
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed registered view cart ", username);
-            return new ResponseEntity<>("Finished registered view cart ", HttpStatus.OK);
+            logger.error("Error occurred : {} , Failed user view cart ", username);
+            return new ResponseEntity<>("Finished user view cart ", HttpStatus.OK);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> calculatePrice(String username, String token) {
+        logger.info("Trying user : {} calculate price ", username);
+        try {
+            if (!checkSystemOpen()) return systemClosedResponse();
+            if (!checkToken(username, token)) return invalidTokenResponse();
+            String result = userService.calculatePrice(username);
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed user calculate price ", username);
+            return new ResponseEntity<>("Finished user calculate price ", HttpStatus.OK);
         }
     }
 

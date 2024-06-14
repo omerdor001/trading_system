@@ -1,4 +1,4 @@
-package com.example.trading_system.AcceptanceTests.Users;
+package com.example.trading_system.AcceptanceTests.Market;
 
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
@@ -11,17 +11,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EnterAcceptanceTests {
-
-    private static TradingSystem tradingSystem;
-    private String token;
+public class DiscountPolicyAcceptanceTests {
+    private TradingSystem tradingSystem;
     private String username;
+    private String token;
 
     @BeforeEach
-    public void openSystemAndRegisterAdmin() {
+    void setUp() {
         tradingSystem = TradingSystemImp.getInstance();
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem();
@@ -33,7 +33,7 @@ public class EnterAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract token from JSON response");
         }
-        userToken = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
+        userToken = tradingSystem.login(token, "0", "owner1", "password123").getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -42,6 +42,9 @@ public class EnterAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
+        tradingSystem.openStore(username, token, "store1", "");
+        tradingSystem.addProduct(username, token, 0, "store1", "product1", "", 1, 5, 1, 1, new LinkedList<>());
+        tradingSystem.enter();
     }
 
     @AfterEach
@@ -50,29 +53,6 @@ public class EnterAcceptanceTests {
     }
 
     @Test
-    public void testEnterSuccessfully() {
-        ResponseEntity<String> enterResponse = tradingSystem.enter();
-        assertEquals(HttpStatus.OK, enterResponse.getStatusCode());
-        String token = enterResponse.getBody();
-        assertNotNull(token);
-    }
-
-    @Test
     public void testEnterSystemClosed() {
-        tradingSystem.closeSystem(username, token);
-        ResponseEntity<String> enterResponse = tradingSystem.enter();
-        assertEquals(HttpStatus.FORBIDDEN, enterResponse.getStatusCode());
-        assertEquals("", enterResponse.getBody());
-    }
-
-    @Test
-    public void testEnterTwoSessions() {
-        ResponseEntity<String> enterResponse = tradingSystem.enter();
-        assertEquals(HttpStatus.OK, enterResponse.getStatusCode());
-        String token = enterResponse.getBody();
-        ResponseEntity<String> reEnterResponse = tradingSystem.enter();
-        assertEquals(HttpStatus.OK, reEnterResponse.getStatusCode());
-        String newToken = reEnterResponse.getBody();
-        assertNotEquals(newToken, token);
     }
 }

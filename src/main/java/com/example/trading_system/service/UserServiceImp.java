@@ -198,7 +198,6 @@ public class UserServiceImp implements UserService {
         logger.info("Approving purchase for registered user with ID: {} ", registeredId);
         userFacade.purchaseCart(registeredId);
         logger.info("Purchase approved for registered user with ID: {}", registeredId);
-
     }
 
     @Override
@@ -209,5 +208,11 @@ public class UserServiceImp implements UserService {
         return result;
     }
 
-
+    @Override
+    public String calculatePrice(String username) throws Exception {
+        logger.info("Calculating price for user with ID: {} ", username);
+        String result = userFacade.calculatePrice(username);
+        logger.info("Finished calculating price for user with ID: {}", username);
+        return result;
+    }
 }
