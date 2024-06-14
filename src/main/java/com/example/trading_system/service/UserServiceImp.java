@@ -154,6 +154,11 @@ public class UserServiceImp implements UserService {
         userFacade.fireManager(owner, storeName, manager);
     }
 
+    @Override
+    public void fireOwner(String ownerAppoint, String storeName, String owner) throws IllegalAccessException {
+        userFacade.fireOwner(ownerAppoint, storeName, owner);
+    }
+
 
     @Override
     public void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {

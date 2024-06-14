@@ -57,9 +57,10 @@ public abstract class RoleState {
 
     public abstract void getAllHistoryPurchases() throws IllegalAccessException;
 
-    public abstract void requestInformationAboutOfficialsInStore() throws IllegalAccessException;
+    public void requestInformationAboutOfficialsInStore() throws IllegalAccessException {
+        throw new IllegalArgumentException("only owners can request information about officials in store");}
 
-     public void requestManagersPermissions() throws IllegalArgumentException { throw new IllegalArgumentException("only owners can request manager permissions"); }
+    public void requestManagersPermissions() throws IllegalArgumentException { throw new IllegalArgumentException("only owners can request manager permissions"); }
 
     public void requestInformationAboutSpecificOfficialInStore() throws IllegalArgumentException { throw new IllegalArgumentException("only owners can request information about specific employee"); }
 

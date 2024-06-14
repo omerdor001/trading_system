@@ -147,9 +147,32 @@ public class MarketServiceImp implements MarketService {
 
     @Override
     public void closeStoreExist(String userName, String storeName)  throws IllegalArgumentException {
-        logger.info("Trying to close store with name : {}", storeName);
         marketFacade.closeStoreExist(userName, storeName);
-        logger.error("Failed on closing Store with name : {}", storeName);
+    }
+
+    @Override
+    public String getAllHistoryPurchases(String userName, String storeName) throws IllegalAccessException{
+        return marketFacade.getAllHistoryPurchases(userName, storeName);
+    }
+
+    @Override
+    public String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) throws IllegalAccessException {
+        return marketFacade.getHistoryPurchasesByCustomer(userName, storeName, customerUserName);
+    }
+
+    @Override
+    public String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException {
+        return marketFacade.requestInformationAboutOfficialsInStore(userName, storeName);
+    }
+
+    @Override
+    public String requestManagersPermissions(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException {
+        return marketFacade.requestManagersPermissions(userName, storeName);
+    }
+
+    @Override
+    public String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException {
+        return marketFacade.requestInformationAboutSpecificOfficialInStore(userName, storeName, officialUserName);
     }
 }
 

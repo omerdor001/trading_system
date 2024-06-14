@@ -46,4 +46,13 @@ public interface MarketService {
 
     void setCategory(String username, String store_name_id, int productId, int category) throws IllegalAccessException;
 
+    String getAllHistoryPurchases(String userName, String storeName) throws IllegalAccessException;
+
+    String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) throws IllegalAccessException;
+
+    String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
+
+    String requestManagersPermissions(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
+
+    String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
 }

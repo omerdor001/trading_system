@@ -30,6 +30,8 @@ public class Registered extends User {
         this.isLogged = false;
         this.notifications = new LinkedList<>();
         this.roles=new ArrayList<>();
+        this.managerToApprove = new HashMap<>();
+        this.ownerToApprove = new ArrayList<>();
     }
 
     public void openStore(String storeName) {

@@ -116,12 +116,6 @@ public class Manager extends RoleState {
     }
 
     @Override
-    public void requestInformationAboutOfficialsInStore() throws IllegalAccessException {
-        if (!this.watch)
-            throw new IllegalAccessException("Manager cannot request information about officials in store.");
-    }
-
-    @Override
     public boolean isManager() {
         return true;
     }

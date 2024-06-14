@@ -59,13 +59,15 @@ public interface TradingSystem {
 
     ResponseEntity<String> fireManager(String owner, String token, String storeName, String manager);
 
+    ResponseEntity<String> fireOwner(String ownerAppoint, String token, String storeName, String ownerToFire);
+
     //TODO Same as suggestManager/approveManager?
     ResponseEntity<String> appointManager(String username, String token, String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
     //TODO same as suggestOwner/approveOwner?
     ResponseEntity<String> appointOwner(String username, String token, String appoint, String newOwner, String storeName);
 
-    ResponseEntity<String> editPermissionForManager(String username, String token, String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+    ResponseEntity<String> editPermissionForManager(String username, String token, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
     ResponseEntity<String> getAllStores(String userName, String token);
 
@@ -101,4 +103,14 @@ public interface TradingSystem {
     ResponseEntity<String> openStore(String username, String token, String storeName, String description, StorePolicy policy);
 
     ResponseEntity<String> viewCart(String username, String token);
+
+    ResponseEntity<String> getAllHistoryPurchases(String userName, String token, String storeName);
+
+    ResponseEntity<String> getHistoryPurchasesByCustomer(String userName, String token, String storeName, String customerUserName);
+
+    ResponseEntity<String> requestInformationAboutOfficialsInStore(String userName, String token, String storeName);
+
+    ResponseEntity<String> requestManagersPermissions(String userName, String token, String storeName);
+
+    ResponseEntity<String> requestInformationAboutSpecificOfficialInStore(String userName, String token, String storeName, String officialUserName);
 }

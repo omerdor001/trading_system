@@ -31,7 +31,7 @@ public class Store {
     private Double storeRating;
 
     public Store(String nameId, String description, StorePolicy storePolicy, String founder,Double storeRating) {
-        this.nameId = nameId; // todo add founder to owners. + minuim maagalim
+        this.nameId = nameId;
         this.description = description;
         this.storePolicy = storePolicy;
         this.products = new HashMap<>();
@@ -250,8 +250,8 @@ public class Store {
         return isActive;
     }
 
-    public Boolean setOpen(Boolean open){            //Added because missing
-        return isOpen;
+    public void setOpen(Boolean open){            //Added because missing
+        isOpen = open;
     }
 
     public List<String> getOwners(){                //Added because missing
@@ -285,4 +285,9 @@ public class Store {
     public void removeManager(String userName) {
         owners.remove(userName);
     }
+    public boolean isOpen()
+    {
+        return isOpen;
+    }
+
 }

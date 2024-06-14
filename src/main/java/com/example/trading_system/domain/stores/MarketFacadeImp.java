@@ -321,7 +321,7 @@ public class MarketFacadeImp implements MarketFacade {
         }
         Store store = storeMemoryRepository.getStore(storeName);    //Change to Repo
         if (!store.getFounder().equals(userName)) {
-            throw new IllegalArgumentException("Only founder can close store exist");
+            throw new IllegalArgumentException("Only founder can open store exist");
         }
         if(store.isOpen()){
             throw new IllegalArgumentException("Store is already active");
@@ -637,11 +637,11 @@ public class MarketFacadeImp implements MarketFacade {
         result.append("Role id username address birthdate").append("\n");
         for (String owner : storeOwners) {
             User user2 = userFacade.getUser(userName);
-            result.append("Owner ").append(user2.getUsername()).append(owner).append(user2.getAddress()).append(user2.getBirthdate()).append("\n");
+            result.append("Owner ").append(user2.getUsername()).append(" ").append(owner).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append("\n");
         }
         for (String manager : storeManagers) {
             User user2 = userFacade.getUser(manager);
-            result.append("Manager ").append(user2.getUsername()).append(manager).append(user2.getAddress()).append(user2.getBirthdate()).append("\n");
+            result.append("Manager ").append(user2.getUsername()).append(" ").append(manager).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append("\n");
         }
         return result.toString();
     }
@@ -673,7 +673,7 @@ public class MarketFacadeImp implements MarketFacade {
         for (String manager : storeManagers) {
             User user2 = userFacade.getUser(manager);
             RoleState managerRole = user2.getRoleByStoreId(storeName).getRoleState();
-            result.append(user2.getUsername()).append(manager).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append('\n');
+            result.append(user2.getUsername()).append(" ").append(manager).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditBuyPolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append('\n');
         }
         return result.toString();
     }
@@ -710,14 +710,14 @@ public class MarketFacadeImp implements MarketFacade {
         if (storeOwners.contains(officialUserName)) {
             User user2 = userFacade.getUser(officialUserName);
             result.append("Role id username address birthdate").append('\n');
-            result.append("Owner ").append(user2.getUsername()).append(officialUserName).append(user2.getAddress()).append(user2.getBirthdate()).append('\n');
+            result.append("Owner ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append('\n');
         } else {
             List<String> storeManagers = store.getManagers();
             if (storeManagers.contains(officialUserName)) {
-                User user2 = userFacade.getUser(userName);
+                User user2 = userFacade.getUser(officialUserName);
                 RoleState managerRole = user2.getRoleByStoreId(storeName).getRoleState();
                 result.append("Role id username address birthdate watch editSupply editBuyPolicy editDiscountPolicy").append("\n");
-                result.append("Manager ").append(user2.getUsername()).append(officialUserName).append(user2.getAddress()).append(user2.getBirthdate()).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append("\n");
+                result.append("Manager ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditBuyPolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append("\n");
             } else
                 throw new IllegalArgumentException("User is not employeed in this store.");
         }
