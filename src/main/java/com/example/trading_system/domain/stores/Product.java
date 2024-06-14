@@ -13,8 +13,7 @@ public class Product {
     private Category category;
     private List<String> keyWords;
 
-    public Product(int product_id, String product_name, String product_description,
-                   double product_price, int product_quantity, double rating, Category category, List<String> keyWords) {
+    public Product(int product_id, String product_name, String product_description, double product_price, int product_quantity, double rating, Category category, List<String> keyWords) {
         this.product_id = product_id;
         this.product_name = product_name;
         this.product_description = product_description;
@@ -99,17 +98,7 @@ public class Product {
     }
 
     public String toString() {
-        return "{" +
-                "\"product_id\":" + product_id +
-                ", \"store_name\":\"" + store_name + "\"" +
-                ", \"product_name\":\"" + product_name + "\"" +
-                ", \"product_description\":\"" + product_description + "\"" +
-                ", \"product_price\":" + product_price +
-                ", \"product_quantity\":" + product_quantity +
-                ", \"rating\":" + rating +
-                ", \"category\":" + (category != null ? category.toString() : "null") +
-                ", \"keyWords\":" + keyWords +
-                '}';
+        return "{" + "\"product_id\":" + product_id + ", \"store_name\":\"" + store_name + "\"" + ", \"product_name\":\"" + product_name + "\"" + ", \"product_description\":\"" + product_description + "\"" + ", \"product_price\":" + product_price + ", \"product_quantity\":" + product_quantity + ", \"rating\":" + rating + ", \"category\":" + (category != null ? category.toString() : "null") + ", \"keyWords\":" + keyWords + '}';
     }
 
 }

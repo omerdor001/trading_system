@@ -11,7 +11,6 @@ public class Purchase {
     @Getter
     private String customerUsername;
     private double totalPrice;
-
     @Getter
     private String storeName;
 
@@ -22,7 +21,6 @@ public class Purchase {
         this.totalPrice = totalPrice;
         this.storeName = storeName;
     }
-
 
     public void addProduct(ProductInSale product) {
         productInSaleList.add(product);
@@ -39,5 +37,4 @@ public class Purchase {
         }
         return builder.toString();
     }
-
 }

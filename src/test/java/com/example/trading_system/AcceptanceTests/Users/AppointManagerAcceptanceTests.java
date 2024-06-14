@@ -1,6 +1,5 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
-import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -40,7 +39,7 @@ class AppointManagerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystem.openStore(username,token,"existingStore", "General Store", new StorePolicy());
+        tradingSystem.openStore(username,token,"existingStore", "General Store");
     }
 
 //    @Test

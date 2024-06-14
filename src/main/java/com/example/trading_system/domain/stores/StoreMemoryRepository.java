@@ -3,23 +3,22 @@ package com.example.trading_system.domain.stores;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class StoreMemoryRepository implements StoreRepository{
-    private HashMap<String, Store> stores;
+public class StoreMemoryRepository implements StoreRepository {
     private static StoreMemoryRepository instance = null;
+    private HashMap<String, Store> stores;
 
-    private StoreMemoryRepository(){
-        stores=new HashMap<>();
+    private StoreMemoryRepository() {
+        stores = new HashMap<>();
     }
 
     public static StoreMemoryRepository getInstance() {
-        if (instance == null)
-            instance = new StoreMemoryRepository();
+        if (instance == null) instance = new StoreMemoryRepository();
         return instance;
     }
 
     public void deleteInstance() {
         instance = null;
-        for (Store store:stores.values()){
+        for (Store store : stores.values()) {
             store.getProducts().clear();
         }
         this.stores.clear();
@@ -63,6 +62,5 @@ public class StoreMemoryRepository implements StoreRepository{
         stores.put(storeName, store);
         store.addOwner(founder);
     }
-
 
 }

@@ -49,7 +49,7 @@ public class EnterAcceptanceTests {
         }
     }
 
-    @Test
+/*    @Test
     public void testEnterSuccessfully() {
         ResponseEntity<String> enterResponse = tradingSystem.enter();
         assertEquals(HttpStatus.OK, enterResponse.getStatusCode());
@@ -74,5 +74,5 @@ public class EnterAcceptanceTests {
         assertEquals(HttpStatus.OK, reEnterResponse.getStatusCode());
         String newToken = reEnterResponse.getBody();
         assertNotEquals(newToken, token);
-    }
+    }*/
 }

@@ -37,8 +37,7 @@ public class Role {
         this.roleState.setRole(this); // Set the role context in the state
     }
 
-    public void addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                           double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
+    public void addProduct(String username, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
         roleState.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
     }
 
@@ -74,7 +73,9 @@ public class Role {
         roleState.setCategory(username, store_name_id, productId, category);
     }
 
-
+    public void editDiscounts() throws IllegalAccessException {
+        roleState.isEditDiscountPolicy();
+    }
 }
 
 

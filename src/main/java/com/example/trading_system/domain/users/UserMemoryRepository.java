@@ -4,11 +4,12 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class UserMemoryRepository implements UserRepository{
-    private HashMap<String,User> users;
+public class UserMemoryRepository implements UserRepository {
     private static UserMemoryRepository instance = null;
-    private UserMemoryRepository(){
-        users=new HashMap<>();
+    private HashMap<String, User> users;
+
+    private UserMemoryRepository() {
+        users = new HashMap<>();
     }
 
     public static UserMemoryRepository getInstance() {
@@ -19,9 +20,9 @@ public class UserMemoryRepository implements UserRepository{
 
     @Override
     public void deleteInstance() {
-        instance = null;
         this.users.clear();
         this.users = null;
+        instance = null;
     }
 
     @Override
@@ -51,7 +52,7 @@ public class UserMemoryRepository implements UserRepository{
 
     @Override
     public void deleteUser(String username) {
-       users.remove(username);
+        users.remove(username);
     }
 
     @Override
@@ -61,11 +62,11 @@ public class UserMemoryRepository implements UserRepository{
 
     @Override
     public void addVisitor(String username) {
-        users.put(username,new Visitor(username.substring(1)));
+        users.put(username, new Visitor(username.substring(1)));
     }
 
     @Override
     public void addRegistered(String userName, String encryption, LocalDate birthdate) {
-        users.put(userName,new Registered(userName.substring(1),encryption,birthdate));
+        users.put(userName, new Registered(userName.substring(1), encryption, birthdate));
     }
 }

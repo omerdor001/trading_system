@@ -20,21 +20,25 @@ public class ProductInSale {
     @Getter
     @Setter
     private int quantity;
+    @Getter
+    @Setter
+    private int category;
 
     @Override
     public String toString() {
-        return "Product: " + id + ", Quantity: " + quantity + ", Price: $" + price + ", Store: " + storeId;
+        return "Product: " + id + ", Category: " + category + ", Quantity: " + quantity + ", Price: $" + price + ", Store: " + storeId;
     }
-    public void addQuantity(int newQuantity){
+
+    public void addQuantity(int newQuantity) {
         this.quantity += newQuantity;
-
     }
-    public void reduceQuantity(int newQuantity){
+
+    public void reduceQuantity(int newQuantity) {
         this.quantity -= newQuantity;
-
     }
-    public double sumTotalPrice(){
-        return quantity*price;
+
+    public double sumTotalPrice() {
+        return quantity * price;
     }
 
 }

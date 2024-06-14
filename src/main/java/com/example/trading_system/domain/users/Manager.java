@@ -56,63 +56,53 @@ public class Manager extends RoleState {
 
     @Override
     public void addProduct(String username, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException {
-        if (!this.editSupply)
-            throw new IllegalAccessException("Manager cannot add products");
+        if (!this.editSupply) throw new IllegalAccessException("Manager cannot add products");
     }
 
     @Override
     public void removeProduct(String username, String store_name_id, int product_id) throws IllegalAccessException {
-        if (!this.editSupply)
-            throw new IllegalAccessException("Manager cannot remove products");
+        if (!this.editSupply) throw new IllegalAccessException("Manager cannot remove products");
     }
 
     @Override
     public void setProduct_name(String username, String store_name_id, int productId, String product_name) throws IllegalAccessException {
-        if (!this.editSupply)
-            throw new IllegalAccessException("Manager cannot edit products");
+        if (!this.editSupply) throw new IllegalAccessException("Manager cannot edit products");
     }
 
     @Override
     public void setProduct_description(String username, String store_name_id, int productId, String product_description) throws IllegalAccessException {
-        if (!this.editSupply)
-            throw new IllegalAccessException("Manager cannot edit products");
+        if (!this.editSupply) throw new IllegalAccessException("Manager cannot edit products");
     }
 
     @Override
     public void setProduct_price(String username, String store_name_id, int productId, double product_price) throws IllegalAccessException {
-        if (!this.editSupply)
-            throw new IllegalAccessException("Manager cannot edit products");
+        if (!this.editSupply) throw new IllegalAccessException("Manager cannot edit products");
     }
 
     @Override
     public void setProduct_quantity(String username, String store_name_id, int productId, int product_quantity) throws IllegalAccessException {
-        if (!this.editSupply)
-            throw new IllegalAccessException("Manager cannot edit products");
+        if (!this.editSupply) throw new IllegalAccessException("Manager cannot edit products");
     }
 
     @Override
     public void setRating(String username, String store_name_id, int productId, double rating) throws IllegalAccessException {
-        if (!this.editSupply)
-            throw new IllegalAccessException("Manager cannot edit products");
+        if (!this.editSupply) throw new IllegalAccessException("Manager cannot edit products");
     }
 
     @Override
     public void setCategory(String username, String store_name_id, int productId, int category) throws IllegalAccessException {
-        if (!this.editSupply)
-            throw new IllegalAccessException("Manager cannot edit products");
+        if (!this.editSupply) throw new IllegalAccessException("Manager cannot edit products");
     }
 
     @Override
     public void getHistoryPurchasesByCustomer() throws IllegalAccessException {
-        if (!this.watch)
-            throw new IllegalAccessException("Manager cannot get history purchases by customer");
+        if (!this.watch) throw new IllegalAccessException("Manager cannot get history purchases by customer");
 
     }
 
     @Override
     public void getAllHistoryPurchases() throws IllegalAccessException {
-        if (!this.watch)
-            throw new IllegalAccessException("Manager cannot get all history purchases");
+        if (!this.watch) throw new IllegalAccessException("Manager cannot get all history purchases");
     }
 
     @Override

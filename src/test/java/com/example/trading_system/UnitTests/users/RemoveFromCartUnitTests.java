@@ -3,7 +3,6 @@ package com.example.trading_system.UnitTests.users;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.Product;
 import com.example.trading_system.domain.stores.Store;
-import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,8 +31,6 @@ public class RemoveFromCartUnitTests {
         MockitoAnnotations.openMocks(this);
 
         // Clear singleton instances
-        UserMemoryRepository.getInstance().deleteInstance();
-        MarketFacadeImp.getInstance().deleteInstance();
         UserFacadeImp.getInstance().deleteInstance();
 
         // Re-instantiate singletons
@@ -45,7 +42,6 @@ public class RemoveFromCartUnitTests {
     @AfterEach
     public void tearDown() {
         userFacadeImp.deleteInstance();
-        marketFacade.deleteInstance();
     }
 
     @Test
@@ -58,14 +54,14 @@ public class RemoveFromCartUnitTests {
 
         userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
         userMemoryRepository.getUser(username).login();
-        marketFacade.addStore(storeName, "description", new StorePolicy(), username, 4.5);
+        marketFacade.addStore(storeName, "description", username, 4.5);
 
         Store store = marketFacade.getStore(storeName);
-        store.addProduct(productId, storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
+        store.addProduct(productId, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
 
         Cart shoppingCart = new Cart();
         userMemoryRepository.getUser(username).setCart(shoppingCart);
-        shoppingCart.addProductToCart(productId, quantity, storeName, 10.0);
+        shoppingCart.addProductToCart(productId, quantity, storeName, 10.0, 1);
 
         Assertions.assertDoesNotThrow(() -> userFacadeImp.removeFromCart(username, productId, storeName, quantity));
 
@@ -145,7 +141,7 @@ public class RemoveFromCartUnitTests {
         int quantity = 5;
 
         userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
-        marketFacade.addStore(storeName, "description", new StorePolicy(), username, 4.5);
+        marketFacade.addStore(storeName, "description", username, 4.5);
 
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.removeFromCart(username, productId, storeName, quantity));
     }
