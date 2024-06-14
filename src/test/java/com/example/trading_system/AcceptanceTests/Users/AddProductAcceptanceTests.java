@@ -39,7 +39,7 @@ class AddProductAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystem.openStore(username,token,"existingStore", "General Store", new StorePolicy());
+        tradingSystem.openStore(username,token,"existingStore", "General Store");
     }
     //TODO fix tests
 /*

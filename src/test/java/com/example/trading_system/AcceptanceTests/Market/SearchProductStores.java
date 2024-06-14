@@ -1,7 +1,6 @@
 package com.example.trading_system.AcceptanceTests.Market;
 
 import com.example.trading_system.domain.stores.Category;
-import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -65,16 +64,16 @@ public class SearchProductStores {
 
     @Test
     public void testSearchCategoryInStore_Successful() {
-        tradingSystem.openStore(username,token,"store1", "General Store", new StorePolicy());
+        tradingSystem.openStore(username,token,"store1", "General Store");
         tradingSystem.addProduct(username,token,1, "store1", "product1", "desc1", 10.0, 100, 4,0,new ArrayList<>());
-        ResponseEntity<String> response = tradingSystem.searchCategoryInStores(username,token,Category.Sport.getIntValue(), null, null, null,null);
+        ResponseEntity<String> response = tradingSystem.searchCategoryInStores(username,token, Category.Sport.getIntValue(), null, null, null,null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
     }
 
     @Test
     public void testSearchKeywordsInStore_Successful() {
-        tradingSystem.openStore(username,token,"store1", "General Store", new StorePolicy());
+        tradingSystem.openStore(username,token,"store1", "General Store");
         tradingSystem.addProduct(username,token,1, "store1", "product1", "desc1", 10.0, 100, 4,0,new ArrayList<>());
         ResponseEntity<String> response = tradingSystem.searchKeywordsInStores(username,token,"keyword",  null, null, null, Category.Sport.getIntValue(),null);
         assertEquals(HttpStatus.OK, response.getStatusCode());

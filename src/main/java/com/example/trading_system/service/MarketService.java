@@ -28,9 +28,7 @@ public interface MarketService {
 
     String searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
-    void addProduct(String username, int product_id, String store_name, String product_name, String product_description,
-                    double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException;
-
+    void addProduct(String username, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException;
 
     void removeProduct(String username, String store_name, int product_id) throws IllegalAccessException;
 
@@ -46,4 +44,56 @@ public interface MarketService {
 
     void setCategory(String username, String store_name_id, int productId, int category) throws IllegalAccessException;
 
+    //region Discount creation
+    void addCategoryPercentageDiscount(String username, String storeName, int category, double discountPercent) throws IllegalAccessException;
+
+    void addProductPercentageDiscount(String username, String storeName, int productId, double discountPercent) throws IllegalAccessException;
+
+    void addStoreDiscount(String username, String storeName, double discountPercent) throws IllegalAccessException;
+
+    void addConditionalDiscount(String username, String storeName) throws IllegalAccessException;
+
+    void addAdditiveDiscount(String username, String storeName) throws IllegalAccessException;
+
+    void addMaxDiscount(String username, String storeName) throws IllegalAccessException;
+
+    void addCategoryCountCondition(String username, String storeName, int category, int count) throws IllegalAccessException;
+
+    void addTotalSumCondition(String username, String storeName, int requiredSum) throws IllegalAccessException;
+
+    void addProductCountCondition(String username, String storeName, int productId, int count) throws IllegalAccessException;
+
+    void addAndDiscount(String username, String storeName) throws IllegalAccessException;
+
+    void addOrDiscount(String username, String storeName) throws IllegalAccessException;
+
+    void addXorDiscount(String username, String storeName) throws IllegalAccessException;
+
+    //endregion
+
+    //region Discount/Condition editing/manipulation
+    void setFirstDiscount(String username, String storeName, int selectedDiscountIndex, int selectedFirstIndex) throws IllegalAccessException;
+
+    void setSecondDiscount(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
+
+    void setFirstCondition(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
+
+    void setSecondCondition(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
+
+    void setThenDiscount(String username, String storeName, int selectedDiscountIndex, int selectedThenIndex) throws IllegalAccessException;
+
+    void setCategoryDiscount(String username, String storeName, int selectedDiscountIndex, int category) throws IllegalAccessException;
+
+    void setProductIdDiscount(String username, String storeName, int selectedDiscountIndex, int productId) throws IllegalAccessException;
+
+    void setPercentDiscount(String username, String storeName, int selectedDiscountIndex, double discountPercent) throws IllegalAccessException;
+
+    void setDeciderDiscount(String username, String storeName, int selectedDiscountIndex, int selectedDeciderIndex) throws IllegalAccessException;
+
+    void setTotalSum(String username, String storeName, int selectedConditionIndex, int newSum) throws IllegalAccessException;
+
+    void setCountCondition(String username, String storeName, int selectedConditionIndex, int newCount) throws IllegalAccessException;
+
+    void setCategoryCondition(String username, String storeName, int selectedConditionIndex, int newCategory) throws IllegalAccessException;
+    //endregion
 }

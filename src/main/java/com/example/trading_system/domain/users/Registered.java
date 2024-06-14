@@ -32,7 +32,7 @@ public class Registered extends User {
         this.isAdmin = false;
         this.isLogged = false;
         this.notifications = new LinkedList<>();
-        this.roles=new ArrayList<>();
+        this.roles = new ArrayList<>();
     }
 
     public void openStore(String storeName) {
@@ -109,8 +109,7 @@ public class Registered extends User {
             throw new NoSuchElementException("User doesn't have roles");
         }
         for (Role role : roles) {
-            if (role.getStoreId().equals(store_name_id))
-                return role;
+            if (role.getStoreId().equals(store_name_id)) return role;
         }
         throw new NoSuchElementException("User doesn't have permission to this store");
     }
@@ -124,25 +123,15 @@ public class Registered extends User {
     }
 
     public boolean isOwner(String store_name_id) {
-        if(roles.isEmpty()){
+        if (roles.isEmpty()) {
             return false;
-        }
-        else if (getRoleByStoreId(store_name_id).getRoleState().isOwner()) {
-            return true;
-        } else {
-            return false;
-        }
+        } else return getRoleByStoreId(store_name_id).getRoleState().isOwner();
     }
 
     public boolean isManager(String store_name_id) {
-        if(roles.isEmpty()){
+        if (roles.isEmpty()) {
             return false;
-        }
-        else if (getRoleByStoreId(store_name_id).getRoleState().isManager()) {
-            return true;
-        } else {
-            return false;
-        }
+        } else return getRoleByStoreId(store_name_id).getRoleState().isManager();
     }
 
     public void addWaitingAppoint_Manager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
@@ -161,15 +150,15 @@ public class Registered extends User {
         ownerToApprove.remove(storeName);
     }
 
-    public List<Role> getRoles(){
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public String getAddress(){
+    public String getAddress() {
         return address;
     }
 
-    public LocalDate getBirthdate(){
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 

@@ -1,8 +1,8 @@
 package com.example.trading_system.domain.stores;
 
-import com.example.trading_system.domain.users.Cart;
 import com.example.trading_system.domain.users.UserFacade;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,16 +35,7 @@ public interface MarketFacade {
 
     String searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
 
-    boolean addProduct(String username,
-                       int productId,
-                       String storeName,
-                       String productName,
-                       String productDescription,
-                       double productPrice,
-                       int productQuantity,
-                       double rating,
-                       int category,
-                       List<String> keyWords) throws IllegalAccessException;
+    boolean addProduct(String username, int productId, String storeName, String productName, String productDescription, double productPrice, int productQuantity, double rating, int category, List<String> keyWords) throws IllegalAccessException;
 
     boolean removeProduct(String username, String storeName, int productId) throws IllegalAccessException;
 
@@ -70,7 +61,7 @@ public interface MarketFacade {
 
     String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
 
-    void addStore(String storeName, String description, StorePolicy storePolicy, String founder, Double storeRating);
+    void addStore(String storeName, String description, String founder, Double storeRating);
 
     boolean isStoreExist(String store_name);
 
@@ -82,5 +73,58 @@ public interface MarketFacade {
 
     void removeReservedProducts(int productId, int quantity, String storeName);
 
-    double calculateTotalPrice(Cart cart);
+    double calculateTotalPrice(String cart) throws IOException;
+
+    //region Discount creation
+    void addCategoryPercentageDiscount(String username, String storeName, int category, double discountPercent) throws IllegalAccessException;
+
+    void addProductPercentageDiscount(String username, String storeName, int productId, double discountPercent) throws IllegalAccessException;
+
+    void addStoreDiscount(String username, String storeName, double discountPercent) throws IllegalAccessException;
+
+    void addConditionalDiscount(String username, String storeName) throws IllegalAccessException;
+
+    void addAdditiveDiscount(String username, String storeName) throws IllegalAccessException;
+
+    void addMaxDiscount(String username, String storeName) throws IllegalAccessException;
+
+    void addCategoryCountCondition(String username, String storeName, int category, int count) throws IllegalAccessException;
+
+    void addTotalSumCondition(String username, String storeName, int requiredSum) throws IllegalAccessException;
+
+    void addProductCountCondition(String username, String storeName, int productId, int count) throws IllegalAccessException;
+
+    void addAndDiscount(String username, String storeName) throws IllegalAccessException;
+
+    void addOrDiscount(String username, String storeName) throws IllegalAccessException;
+
+    void addXorDiscount(String username, String storeName) throws IllegalAccessException;
+
+    //endregion
+
+    //region Discount/Condition editing/manipulation
+    void setFirstDiscount(String username, String storeName, int selectedDiscountIndex, int selectedFirstIndex) throws IllegalAccessException;
+
+    void setSecondDiscount(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
+
+    void setFirstCondition(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
+
+    void setSecondCondition(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
+
+    void setThenDiscount(String username, String storeName, int selectedDiscountIndex, int selectedThenIndex) throws IllegalAccessException;
+
+    void setCategoryDiscount(String username, String storeName, int selectedDiscountIndex, int category) throws IllegalAccessException;
+
+    void setProductIdDiscount(String username, String storeName, int selectedDiscountIndex, int productId) throws IllegalAccessException;
+
+    void setPercentDiscount(String username, String storeName, int selectedDiscountIndex, double discountPercent) throws IllegalAccessException;
+
+    void setDeciderDiscount(String username, String storeName, int selectedDiscountIndex, int selectedDeciderIndex) throws IllegalAccessException;
+
+    void setTotalSum(String username, String storeName, int selectedConditionIndex, int newSum) throws IllegalAccessException;
+
+    void setCountCondition(String username, String storeName, int selectedConditionIndex, int newCount) throws IllegalAccessException;
+
+    void setCategoryCondition(String username, String storeName, int selectedConditionIndex, int newCategory) throws IllegalAccessException;
+    //endregion
 }

@@ -24,9 +24,9 @@ public class SearchUnitTests {
     void setUp() {
         marketFacade = MarketFacadeImp.getInstance();
         userFacade = UserFacadeImp.getInstance();
-        Store store = new Store("store1", "description",new StorePolicy(),"robert",null);
+        Store store = new Store("store1", "description","robert",null);
         Product product = new Product(1, "p1", "", 5, 5, 5, Category.Food, new ArrayList<>());
-        store.addProduct(1, "smartwatch","p1", "", 5, 5, 5, 3, new ArrayList<>());
+        store.addProduct(1,"p1", "", 5, 5, 5, 3, new ArrayList<>());
         marketFacade.getStores().put(store.getNameId(), store);
         // Mock user object
         user = mock(User.class);

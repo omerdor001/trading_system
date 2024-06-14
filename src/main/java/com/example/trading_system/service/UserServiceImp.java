@@ -1,6 +1,5 @@
 package com.example.trading_system.service;
 
-import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +17,7 @@ public class UserServiceImp implements UserService {
     }
 
     public static UserServiceImp getInstance() {
-        if (instance == null)
-            instance = new UserServiceImp();
+        if (instance == null) instance = new UserServiceImp();
         return instance;
     }
 
@@ -70,25 +68,23 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean addToCart(String username, int productId, String storeName, int quantity) {
+    public void addToCart(String username, int productId, String storeName, int quantity) {
         logger.info("Trying adding to cart  product with id: {}", productId);
         userFacade.addToCart(username, productId, storeName, quantity);
         logger.info("Finished adding to cart product with id: {}", productId);
-        return true;
     }
 
     @Override
-    public boolean removeFromCart(String username, int productId, String storeName, int quantity) {
+    public void removeFromCart(String username, int productId, String storeName, int quantity) {
         logger.info("Trying removing from cart product with id: {}", productId);
         userFacade.removeFromCart(username, productId, storeName, quantity);
         logger.info("Finished removing from cart product with id: {}", productId);
-        return true;
     }
 
     @Override
-    public boolean openStore(String username, String storeName, String description, StorePolicy policy) {
+    public boolean openStore(String username, String storeName, String description) {
         logger.info("Trying opening store with name: {}", storeName);
-        userFacade.createStore(username, storeName, description, policy);
+        userFacade.createStore(username, storeName, description);
         logger.info("Finished opening store with name: {}", storeName);
         return true;
     }
@@ -191,7 +187,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public String getPurchaseHistory(String username, String storeName) {
-        String result = "";
+        String result;
         logger.info("Get Purchase History");
         result = userFacade.getPurchaseHistory(username, storeName);
         return result;

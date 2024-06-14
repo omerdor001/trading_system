@@ -1,7 +1,6 @@
 package com.example.trading_system.AcceptanceTests.Market;
 
 import com.example.trading_system.domain.stores.Category;
-import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -72,7 +71,7 @@ public class SearchProductSpecificStore {
 
     @Test
     public void testSearchNameInStore_Successful() {
-        tradingSystem.openStore(username, token, "store1", "General Store", new StorePolicy());
+        tradingSystem.openStore(username, token, "store1", "General Store");
         tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 0, new ArrayList<>());
         ResponseEntity<String> response = tradingSystem.searchNameInStore(username,"product1",token, "store1", null, null, null, Category.Sport.getIntValue());
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -81,7 +80,7 @@ public class SearchProductSpecificStore {
 
     @Test
     public void testSearchCategoryInStore_Successful() {
-        tradingSystem.openStore(username, token, "store1", "General Store", new StorePolicy());
+        tradingSystem.openStore(username, token, "store1", "General Store");
         tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 0, new ArrayList<>());
         ResponseEntity<String> response = tradingSystem.searchCategoryInStore(username,token,Category.Sport.getIntValue(), "store1", null, null, null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -90,7 +89,7 @@ public class SearchProductSpecificStore {
 
     @Test
     public void testSearchKeywordsInStore_Successful() {
-        tradingSystem.openStore(username, token, "store1", "General Store", new StorePolicy());
+        tradingSystem.openStore(username, token, "store1", "General Store");
         tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 0, new ArrayList<>());
         ResponseEntity<String> response = tradingSystem.searchKeywordsInStore(username,token,"keyword", "store1", null, null, null, Category.Sport.getIntValue());
         assertEquals(HttpStatus.OK, response.getStatusCode());

@@ -127,12 +127,12 @@ public class PurchaseCartUnitTests {
 
         userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
         userMemoryRepository.getUser(username).login();
-        marketFacade.addStore(storeName, "description", new StorePolicy(), username, 4.5);
+        marketFacade.addStore(storeName, "description", username, 4.5);
         Store store = marketFacade.getStore(storeName);
-        store.addProduct(productId, storeName, "ProductName", "ProductDescription", 10.0, 5, 4.5, 1, null);
+        store.addProduct(productId, "ProductName", "ProductDescription", 10.0, 5, 4.5, 1, null);
         Cart shoppingCart = new Cart();
         userMemoryRepository.getUser(username).setCart(shoppingCart);
-        userMemoryRepository.getUser(username).addProductToCart(productId, quantity, storeName, marketFacade.getStore(storeName).getProduct(productId).getProduct_price());
+        userMemoryRepository.getUser(username).addProductToCart(productId, quantity, storeName, marketFacade.getStore(storeName).getProduct(productId).getProduct_price(),3);
 
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.purchaseCart(username));
     }

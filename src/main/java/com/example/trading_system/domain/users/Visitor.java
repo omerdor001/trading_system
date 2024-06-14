@@ -54,7 +54,8 @@ public class Visitor extends User {
     }
 
     @Override
-    public void addWaitingAppoint_Owner(String storeName) {}
+    public void addWaitingAppoint_Owner(String storeName) {
+    }
 
     @Override
     public boolean isManager(String store_name_id) {
@@ -62,10 +63,12 @@ public class Visitor extends User {
     }
 
     @Override
-    public void addWaitingAppoint_Manager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {}
+    public void addWaitingAppoint_Manager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+    }
 
     @Override
-    public void removeWaitingAppoint_Owner(String storeName) {}
+    public void removeWaitingAppoint_Owner(String storeName) {
+    }
 
     @Override
     public List<Boolean> removeWaitingAppoint_Manager(String store_name_id) {
@@ -73,13 +76,16 @@ public class Visitor extends User {
     }
 
     @Override
-    public void addManagerRole(String appoint, String store_name_id) {}
+    public void addManagerRole(String appoint, String store_name_id) {
+    }
 
     @Override
-    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {}
+    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+    }
 
     @Override
-    public void addOwnerRole(String appoint, String storeName) {}
+    public void addOwnerRole(String appoint, String storeName) {
+    }
 
     @Override
     public Role getRoleByStoreId(String store_name_id) {

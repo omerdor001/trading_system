@@ -6,7 +6,8 @@ import java.util.HashMap;
 
 public class ShoppingBag {
     private String storeId;
-    private HashMap< Integer, ProductInSale> products_list;
+    private HashMap<Integer, ProductInSale> products_list;
+
     public ShoppingBag(String storeId) {
         this.storeId = storeId;
         products_list = new HashMap<>();
@@ -20,15 +21,14 @@ public class ShoppingBag {
         this.storeId = storeId;
     }
 
-    public HashMap< Integer , ProductInSale> getProducts_list() {
+    public HashMap<Integer, ProductInSale> getProducts_list() {
         return products_list;
     }
 
-    public synchronized void addProduct(int productId, int quantity,double price) {
+    public synchronized void addProduct(int productId, int quantity, double price, int category) {
         if (products_list.containsKey(productId)) {
             products_list.get(productId).addQuantity(quantity);
-        } else
-            products_list.put(productId, new ProductInSale(storeId, productId,price, quantity));
+        } else products_list.put(productId, new ProductInSale(storeId, productId, price, quantity, category));
     }
 
     public synchronized void removeProduct(int productId, int quantity) {
@@ -37,8 +37,7 @@ public class ShoppingBag {
         }
         if (products_list.get(productId).getQuantity() - quantity <= 0) {
             products_list.remove(productId);
-        } else
-            products_list.get(productId).reduceQuantity(quantity);
+        } else products_list.get(productId).reduceQuantity(quantity);
     }
 
     public double getTotalPrice() {
@@ -52,8 +51,7 @@ public class ShoppingBag {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("ShoppingBag: {storeId: ").append(storeId)
-                .append(", products_list: [");
+        sb.append("ShoppingBag: {storeId: ").append(storeId).append(", products_list: [");
         for (ProductInSale product : products_list.values()) {
             sb.append("\n    ").append(product.toString());
         }
