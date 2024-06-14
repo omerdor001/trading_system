@@ -254,6 +254,10 @@ public class Store {
         owners.remove(userName);
     }
 
+    public String getFounder() {
+        return founder;
+    }
+
     public double calculatePrice(Collection<ProductInSaleDTO> items) {
         double price = 0;
         for (ProductInSaleDTO item : items)

@@ -3,6 +3,7 @@ package com.example.trading_system.service;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TradingSystem {
@@ -41,6 +42,12 @@ public interface TradingSystem {
     ResponseEntity<String> login(String token, String usernameV, String username, String password);
 
     ResponseEntity<String> logout(String token, String username);
+
+    ResponseEntity<String> suspendUser(String token, String admin, String toSuspend, LocalDateTime endSuspention);
+
+    ResponseEntity<String> endSuspendUser(String token, String admin, String toSuspend);
+
+    ResponseEntity<String> watchSuspensions(String token,String admin);
 
     ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
@@ -91,6 +98,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName);
 
+    ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer productBarcode);
 
     ResponseEntity<String> addToCart(String username, String token, int productId, String storeName, int quantity);
 

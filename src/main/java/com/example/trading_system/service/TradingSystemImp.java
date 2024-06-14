@@ -6,7 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class TradingSystemImp implements TradingSystem {
     private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
@@ -305,6 +308,57 @@ public class TradingSystemImp implements TradingSystem {
         } catch (Exception e) {
             logger.error("Error occurred while logging out user: {}: {}", username, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> suspendUser(String token, String admin, String toSuspend, LocalDateTime endSuspention) {
+        logger.info("Attempting to suspend user: {}", toSuspend);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(admin,token))
+                return invalidTokenResponse();
+            userService.suspendUser(admin,toSuspend,endSuspention);
+            logger.info("User: {} is suspended successfully", toSuspend);
+            return new ResponseEntity<>("Suspension successful.", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while suspending user: {}: {}", toSuspend, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> endSuspendUser(String token, String admin, String toSuspend) {
+        logger.info("Attempting to end suspension of user: {}", toSuspend);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(admin,token))
+                return invalidTokenResponse();
+            userService.endSuspendUser(admin,toSuspend);
+            logger.info("Suspending user: {} is finished successfully", toSuspend);
+            return new ResponseEntity<>("Ending suspension successful.", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while ending suspended user: {}: {}", toSuspend, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> watchSuspensions(String token, String admin) {
+        logger.info("Attempting to get suspension details");
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(admin,token))
+                return invalidTokenResponse();
+            String details=userService.watchSuspensions(admin);
+            logger.info("Getting details of suspension successfully");
+            return new ResponseEntity<>(details, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while getting information of suspensions : {}", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -702,6 +756,11 @@ public class TradingSystemImp implements TradingSystem {
             logger.error("Error occurred while Getting Purchase History");
             return new ResponseEntity<>("Error occurred while Getting Purchase History", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    public ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer productBarcode) {
+        return null;
     }
 
 

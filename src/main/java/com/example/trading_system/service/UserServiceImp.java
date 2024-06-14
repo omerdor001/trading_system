@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class UserServiceImp implements UserService {
 
@@ -58,6 +59,21 @@ public class UserServiceImp implements UserService {
         userFacade.logout(id, username);
         logger.info("User: {} logged out", username);
         return true;
+    }
+
+    @Override
+    public void suspendUser(String admin, String toSuspend, LocalDateTime endSuspention) {
+        userFacade.suspendUser(admin,toSuspend,endSuspention);
+    }
+
+    @Override
+    public void endSuspendUser(String admin, String toSuspend) {
+        userFacade.endSuspendUser(admin,toSuspend);
+    }
+
+    @Override
+    public String watchSuspensions(String admin) {
+        return userFacade.watchSuspensions(admin);
     }
 
 

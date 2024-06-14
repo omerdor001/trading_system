@@ -85,7 +85,9 @@ public class MarketFacadeImp implements MarketFacade {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
         sb.append("\"stores\":");
-
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         for (Store store : storeMemoryRepository.getAllStoresByStores()) {
             if(!store.isOpen() && !(userFacade.isAdmin(userName)||store.isRoleHolder(userName)))
                 continue;
@@ -104,6 +106,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if(!userFacade.getUsers().containsKey(userName))
             throw new IllegalAccessException("User does not exist");
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         Store store = storeMemoryRepository.getStore(storeName);
         if(!store.isOpen() && !(store.isRoleHolder(userName)|| userFacade.isAdmin(userName)))
             throw new IllegalAccessException("When the store is closed only role holders can get products");
@@ -119,6 +124,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if(!userFacade.getUsers().containsKey(userName))
             throw new IllegalAccessException("User does not exist");
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         Store store = storeMemoryRepository.getStore(storeName);
         if(!store.isOpen() && ! (store.isRoleHolder(userName) || userFacade.isAdmin(userName)))
             throw new IllegalAccessException("When the store is closed only role holder can get product info");
@@ -145,6 +153,9 @@ public class MarketFacadeImp implements MarketFacade {
         {
             logger.error("User does not exist");
             throw new IllegalArgumentException("User does not exist");
+        }
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
         }
         if (!storeMemoryRepository.isExist(storeName))
         {
@@ -178,6 +189,9 @@ public class MarketFacadeImp implements MarketFacade {
         {
             logger.error("User does not exist");
             throw new IllegalArgumentException("User does not exist");
+        }
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
         }
         if (!storeMemoryRepository.isExist(storeName))
         {
@@ -216,6 +230,9 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("User does not exist");
             throw new IllegalArgumentException("User does not exist");
         }
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         if (!storeMemoryRepository.isExist(storeName))
         {
             logger.error("Store does not exist");
@@ -245,6 +262,9 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("User does not exist");
             throw new IllegalArgumentException("User does not exist");
         }
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         StringBuilder sb = new StringBuilder();
         for (Store store : storeMemoryRepository.getAllStoresByStores()) {
             if (!store.isOpen())
@@ -272,6 +292,9 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("User does not exist");
             throw new IllegalArgumentException("User does not exist");
         }
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         StringBuilder sb = new StringBuilder();
         for (Store store : storeMemoryRepository.getAllStoresByStores()) {    //Change to Repo
             if (!store.isOpen())
@@ -295,6 +318,9 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("User does not exist");
             throw new IllegalArgumentException("User does not exist");
         }
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         StringBuilder sb = new StringBuilder();
         for (Store store : storeMemoryRepository.getAllStores().values()) {      //Change to Repo
             if (!store.isOpen())
@@ -312,10 +338,13 @@ public class MarketFacadeImp implements MarketFacade {
         {
             throw new IllegalArgumentException("User does not exist");
         }
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         if (!storeMemoryRepository.isExist(storeName)) {
             throw new IllegalArgumentException("Store must exist to close");
         }
-        Store store = storeMemoryRepository.getStore(storeName);    //Change to Repo
+        Store store = storeMemoryRepository.getStore(storeName);
         if (!store.getFounder().equals(userName)) {
             throw new IllegalArgumentException("Only founder can close store exist");
         }
@@ -334,6 +363,9 @@ public class MarketFacadeImp implements MarketFacade {
         if(!userFacade.getUsers().containsKey(userName))
         {
             throw new IllegalArgumentException("User does not exist");
+        }
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
         }
         if (!storeMemoryRepository.isExist(storeName)) {
             throw new IllegalArgumentException("Store must exist to close");
@@ -367,17 +399,22 @@ public class MarketFacadeImp implements MarketFacade {
             if (!userFacade.isUserExist(username)) {
                 throw new IllegalArgumentException("User must exist");
             }
+            if(userFacade.isSuspended(username)){
+                throw new RuntimeException("User is suspended from the system");
+            }
             Store store = storeMemoryRepository.getStore(storeName);
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).addProduct(username, productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
-            store.addProduct(productId,productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
-        }
-        finally {
+            store.addProduct(productId, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            return true;
         }
-        return true;
-
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
+        }
 
     }
 
@@ -392,19 +429,25 @@ public class MarketFacadeImp implements MarketFacade {
             if (!userFacade.isUserExist(username)) {
                 throw new IllegalArgumentException("User must exist");
             }
+            if(userFacade.isSuspended(username)){
+                throw new RuntimeException("User is suspended from the system");
+            }
+            Store store=storeMemoryRepository.getStore(storeName);
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).removeProduct(username, storeName, productId);
             if(!storeMemoryRepository.getStore(storeName).getProducts().containsKey(productId)) {
                 throw new IllegalArgumentException("Product must exist");
             }
-            storeMemoryRepository.getStore(storeName).removeProduct(productId);
-            return true;
-        }
-        finally {
+            store.removeProduct(productId);
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            return true;
         }
-
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
+        }
     }
 
     @Override
@@ -422,15 +465,21 @@ public class MarketFacadeImp implements MarketFacade {
             if (!userFacade.isUserExist(username)) {
                 throw new IllegalArgumentException("User must exist");
             }
+            if(userFacade.isSuspended(username)){
+                throw new RuntimeException("User is suspended from the system");
+            }
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).setProduct_name(username, storeName,productId, productName);
             store.setProductName(productId, productName);
-        }
-        finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            return true;
         }
-        return true;
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
+        }
     }
 
     @Override
@@ -448,16 +497,21 @@ public class MarketFacadeImp implements MarketFacade {
             if (!userFacade.isUserExist(username)) {
                 throw new IllegalArgumentException("User must exist");
             }
+            if(userFacade.isSuspended(username)){
+                throw new RuntimeException("User is suspended from the system");
+            }
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).setProduct_description(username, storeName,productId, productDescription);
             store.setProductDescription(productId, productDescription);
-        }
-        finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            return true;
         }
-        return true;
-
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
+        }
     }
 
     @Override
@@ -476,15 +530,21 @@ public class MarketFacadeImp implements MarketFacade {
             if (!userFacade.isUserExist(username)) {
                 throw new IllegalArgumentException("User must exist");
             }
+            if(userFacade.isSuspended(username)){
+                throw new RuntimeException("User is suspended from the system");
+            }
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).setProduct_price(username, storeName,productId, productPrice);
             store.setProductPrice(productId, productPrice);
-        }
-        finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            return true;
         }
-        return true;
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
+        }
     }
 
     @Override
@@ -503,15 +563,21 @@ public class MarketFacadeImp implements MarketFacade {
             if (!userFacade.isUserExist(username)) {
                 throw new IllegalArgumentException("User must exist");
             }
+            if(userFacade.isSuspended(username)){
+                throw new RuntimeException("User is suspended from the system");
+            }
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).setProduct_quantity(username, storeName,productId, productQuantity);
             store.setProductQuantity(productId, productQuantity);
-        }
-        finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            return true;
         }
-        return true;
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
+        }
 
     }
 
@@ -531,15 +597,21 @@ public class MarketFacadeImp implements MarketFacade {
             if (!userFacade.isUserExist(username)) {
                 throw new IllegalArgumentException("User must exist");
             }
+            if(userFacade.isSuspended(username)){
+                throw new RuntimeException("User is suspended from the system");
+            }
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).setRating(username, storeName,productId,rating);
             store.setRating(productId,rating);
-        }
-        finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            return true;
         }
-        return true;
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
+        }
     }
 
     @Override
@@ -557,15 +629,21 @@ public class MarketFacadeImp implements MarketFacade {
             if (!userFacade.isUserExist(username)) {
                 throw new IllegalArgumentException("User must exist");
             }
+            if(userFacade.isSuspended(username)){
+                throw new RuntimeException("User is suspended from the system");
+            }
             User user=userFacade.getUser(username);
             user.getRoleByStoreId(storeName).setCategory(username, storeName,productId,category);
             store.setCategory(productId,category);
-        }
-        finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            return true;
         }
-        return true;
+        catch (Exception e){
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
+        }
     }
 
     @Override
@@ -576,6 +654,9 @@ public class MarketFacadeImp implements MarketFacade {
         Store store = storeMemoryRepository.getStore(storeName);
         if (!userFacade.isUserExist(userName)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
         }
         if (!userFacade.isUserExist(customerUserName)) {
             throw new IllegalArgumentException("Customer must exist");
@@ -597,6 +678,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.getUsers().containsKey(userName)) {
             throw new IllegalArgumentException("User must exist");
         }
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         Store store = storeMemoryRepository.getStore(storeName);
         User user = userFacade.getUsers().get(userName);
         if(user.isAdmin())
@@ -614,6 +698,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (!userFacade.isUserExist(userName)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
         }
         User user = userFacade.getUser(userName);
         Store store = storeMemoryRepository.getStore(storeName);
@@ -651,6 +738,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(userName)) {
             throw new IllegalArgumentException("User must exist");
         }
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         User user = userFacade.getUser(userName);
         user.getRoleByStoreId(storeName).getRoleState().requestManagersPermissions();
 
@@ -682,6 +772,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (!userFacade.isUserExist(userName)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(userName)){
+            throw new RuntimeException("User is suspended from the system");
         }
         if (!userFacade.isUserExist(officialUserName)) {
             throw new IllegalArgumentException("User must exist");
@@ -757,6 +850,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
         storeMemoryRepository.getStore(storeName).addCategoryPercentageDiscount(category, discountPercent);
@@ -769,6 +865,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
         }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
@@ -783,6 +882,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
         storeMemoryRepository.getStore(storeName).addStoreDiscount(discountPercent);
@@ -795,6 +897,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
         }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
@@ -809,6 +914,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
         storeMemoryRepository.getStore(storeName).addAdditiveDiscount();
@@ -821,6 +929,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
         }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
@@ -835,6 +946,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
         storeMemoryRepository.getStore(storeName).addCategoryCountCondition(category, count);
@@ -847,6 +961,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
         }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
@@ -861,6 +978,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
         storeMemoryRepository.getStore(storeName).addProductCountCondition(productId, count);
@@ -873,6 +993,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
         }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
@@ -887,6 +1010,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
         storeMemoryRepository.getStore(storeName).addOrDiscount();
@@ -899,6 +1025,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
         }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
@@ -913,6 +1042,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
         storeMemoryRepository.getStore(storeName).setFirstDiscount(selectedDiscountIndex, selectedFirstIndex);
@@ -925,6 +1057,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
         }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
@@ -939,6 +1074,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
         storeMemoryRepository.getStore(storeName).setFirstCondition(selectedDiscountIndex, selectedSecondIndex);
@@ -951,6 +1089,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
         }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
@@ -965,6 +1106,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
         storeMemoryRepository.getStore(storeName).setThenDiscount(selectedDiscountIndex, selectedThenIndex);
@@ -977,6 +1121,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
         }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
@@ -991,6 +1138,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
         storeMemoryRepository.getStore(storeName).setProductIdDiscount(selectedDiscountIndex, productId);
@@ -1003,6 +1153,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
         }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
@@ -1017,6 +1170,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
         storeMemoryRepository.getStore(storeName).setDeciderDiscount(selectedDiscountIndex, selectedDeciderIndex);
@@ -1029,6 +1185,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
         }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
@@ -1043,6 +1202,9 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
         }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
+        }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
         storeMemoryRepository.getStore(storeName).setCountCondition(selectedConditionIndex, newCount);
@@ -1055,6 +1217,9 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
+        }
+        if(userFacade.isSuspended(username)){
+            throw new RuntimeException("User is suspended from the system");
         }
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();

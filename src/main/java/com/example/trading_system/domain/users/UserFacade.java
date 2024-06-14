@@ -1,6 +1,7 @@
 package com.example.trading_system.domain.users;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
@@ -18,6 +19,14 @@ public interface UserFacade {
     void login(String usernameV, String username, String password);
 
     void logout(int id, String username);
+
+    void suspendUser(String admin, String toSuspend, LocalDateTime endSuspention);
+
+    void endSuspendUser(String admin, String toSuspend);
+
+    String watchSuspensions(String admin);
+
+    boolean isSuspended(String username);
 
     boolean sendNotification(User sender, User receiver, String content);
 
