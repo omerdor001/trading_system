@@ -1,6 +1,5 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
-import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class CloseStoreExistAcceptanceTests {
 
-    private TradingSystemImp tradingSystemImp = TradingSystemImp.getInstance();
+    private TradingSystemImp tradingSystemImp ;
     private String token;
     private String userName;
     private String password = "123456";
@@ -28,6 +27,7 @@ public class CloseStoreExistAcceptanceTests {
 
     @BeforeEach
     public void setUp() {
+        tradingSystemImp = TradingSystemImp.getInstance();
         tradingSystemImp.register("admin",password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response = tradingSystemImp.enter();
@@ -49,7 +49,7 @@ public class CloseStoreExistAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemImp.openStore(userName,token,storeName,"My Store is the best",new StorePolicy());
+        tradingSystemImp.openStore(userName,token,storeName,"My Store is the best");
         String[] keyWords = {"CarPlay", "iPhone"};
         tradingSystemImp.addProduct(userName,token,111,storeName,"CarPlay","CarPlay for iPhones",15,5,6,1, new ArrayList<>(Arrays.asList(keyWords)));
     }
@@ -123,5 +123,6 @@ public class CloseStoreExistAcceptanceTests {
         catch (Exception e){
             System.out.println("Store is already Open");
         }
+        tradingSystemImp.deleteInstance();
     }
 }

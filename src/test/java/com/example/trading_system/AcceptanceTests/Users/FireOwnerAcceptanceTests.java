@@ -1,11 +1,11 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
 import com.example.trading_system.domain.stores.Store;
-import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.domain.users.User;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class FireOwnerAcceptanceTests {
 
-    private TradingSystemImp tradingSystemImp = TradingSystemImp.getInstance();
+    private TradingSystemImp tradingSystemImp;
     private String password = "123456";
     private String userName ="";
     private String token ="";
@@ -36,6 +36,7 @@ public class FireOwnerAcceptanceTests {
 
     @BeforeEach
     public void setUp() {
+        tradingSystemImp = TradingSystemImp.getInstance();
         tradingSystemImp.register("admin",password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response = tradingSystemImp.enter();
@@ -123,7 +124,7 @@ public class FireOwnerAcceptanceTests {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
 
-        tradingSystemImp.openStore(userName,token,storeName,"My Store is the best",new StorePolicy());
+        tradingSystemImp.openStore(userName,token,storeName,"My Store is the best");
         tradingSystemImp.suggestOwner(userName,token,ownerUserName,storeName);
         tradingSystemImp.approveOwner(ownerUserName,ownerToken,storeName,userName);
         tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,false,false,false,false);
@@ -186,5 +187,10 @@ public class FireOwnerAcceptanceTests {
         assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName,ownerUserName).getBody());
 
         assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName,ownerUserName2).getBody());
+    }
+
+    @AfterEach
+    public void tearDown(){
+        tradingSystemImp.deleteInstance();
     }
 }

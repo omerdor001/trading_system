@@ -1,6 +1,5 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
-import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.domain.users.User;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -99,7 +98,7 @@ public class FireManagerAcceptanceTests {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
 
-        tradingSystemImp.openStore(userName,token,storeName,"My Store is the best",new StorePolicy());
+        tradingSystemImp.openStore(userName,token,storeName,"My Store is the best");
         tradingSystemImp.suggestOwner(userName,token,ownerUserName,storeName);
         tradingSystemImp.approveOwner(ownerUserName,ownerToken,storeName,userName);
         tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,false,false,false,false);
