@@ -1,21 +1,15 @@
 package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.stores.MarketFacadeImp;
-import com.example.trading_system.domain.users.User;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class OpenStoreUnitTests {
-
-    @Mock
-    User user;
-
     UserMemoryRepository userMemoryRepository;
     MarketFacadeImp marketFacade;
     UserFacadeImp userFacadeImp;
@@ -70,13 +64,13 @@ public class OpenStoreUnitTests {
     @Test
     public void givenNullStoreName_WhenOpenStore_ThenThrowException() {
         String username = "rValidUser";
-        String storeName = null;
+        //String storeName = null;
         String description = "StoreDescription";
 
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         userMemoryRepository.getUser(username).login();
 
-        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.createStore(username, storeName, description));
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.createStore(username, null, description));
 
         Assertions.assertEquals("Store name should not be null", exception.getMessage());
     }
@@ -113,17 +107,14 @@ public class OpenStoreUnitTests {
     @Test
     public void givenExceptionDuringStoreCreation_WhenOpenStore_ThenThrowException() {
         String username = "rValidUser";
-        String storeName = "StoreName";
         String description = "StoreDescription";
 
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         userMemoryRepository.getUser(username).login();
 
         // Simulate exception by invalid parameters
-        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            userFacadeImp.createStore(username, "", description);
-        });
-
+        IllegalArgumentException exception;
+        exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.createStore(username, "", description));
         Assertions.assertEquals("Store name should not be null", exception.getMessage());
     }
 }

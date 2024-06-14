@@ -1,12 +1,10 @@
 package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.stores.MarketFacadeImp;
-import com.example.trading_system.domain.stores.Product;
 import com.example.trading_system.domain.stores.Store;
 import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -15,13 +13,6 @@ import java.util.NoSuchElementException;
 
 @ExtendWith(MockitoExtension.class)
 public class RemoveFromCartUnitTests {
-    @Mock
-    User user;
-    @Mock
-    Cart shoppingCart;
-    @Mock
-    Product product;
-
     UserMemoryRepository userMemoryRepository;
     MarketFacadeImp marketFacade;
     UserFacadeImp userFacadeImp;
@@ -69,12 +60,12 @@ public class RemoveFromCartUnitTests {
 
     @Test
     public void givenNullUsername_WhenRemoveFromCart_ThenThrowException() {
-        String username = null;
+        //String username = null;
         int productId = 1;
         String storeName = "StoreName";
         int quantity = 5;
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.removeFromCart(username, productId, storeName, quantity));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.removeFromCart(null, productId, storeName, quantity));
     }
 
     @Test
@@ -101,12 +92,12 @@ public class RemoveFromCartUnitTests {
     public void givenNullStoreName_WhenRemoveFromCart_ThenThrowException() {
         String username = "rValidUser";
         int productId = 1;
-        String storeName = null;
+        //String storeName = null;
         int quantity = 5;
 
         userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.removeFromCart(username, productId, storeName, quantity));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.removeFromCart(username, productId, null, quantity));
     }
 
     @Test

@@ -2,16 +2,13 @@ package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.users.Registered;
 import com.example.trading_system.domain.users.UserFacade;
+import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.Visitor;
-import com.example.trading_system.service.Security;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class LoginUnitTests {
 
@@ -19,53 +16,51 @@ class LoginUnitTests {
 
     @BeforeEach
     void setUp() {
-        userFacade = Mockito.mock(UserFacade.class);
+        userFacade = UserFacadeImp.getInstance();
+        try{
+            userFacade.register("testvisitor","password123",LocalDate.now());
+        }
+        catch (Exception _){
+
+        }
     }
 
-//    @Test
-//    void login_Success() {
-//        // Given
-//        String username = "testvisitor";
-//        String password = "password123";
-//        String encryptedPassword = "encryptedPassword";
-//
-//        // Mocking userFacade behavior
-//        when(userFacade.getUserPassword(username)).thenReturn(encryptedPassword);
-//        when(Security.checkPassword(password, encryptedPassword)).thenReturn(true);
-//
-//        // When
-//        userFacade.login(username);
-//
-//        verify(userFacade, times(1)).login(username);
-//    }
-//
-//    @Test
-//    void login_Wrong_User() {
-//        // Given
-//        String username = "nonExistingUser";
-//
-//        // Mocking userFacade behavior
-//        when(userFacade.getUserPassword(username)).thenThrow(new RuntimeException("No such registered user " + username));
-//
-//        // When & Then
-//        assertThrows(RuntimeException.class, () -> userFacade.login(username));
-//        verify(userFacade, never()).login(username);
-//    }
-//
-//    @Test
-//    void login_Wrong_Password() {
-//        // Given
-//        String username = "testuser";
-//        String password = "wrongPassword";
-//        String encryptedPassword = "encryptedPassword";
-//
-//        // Mocking userFacade behavior
-//        when(userFacade.getUserPassword(username)).thenReturn(encryptedPassword);
-//        when(Security.checkPassword(password, encryptedPassword)).thenReturn(false);
-//
-//        userFacade.login(username);
-//        verify(userFacade, never()).login(username);
-//    }
+    @AfterEach
+    void tearDown(){
+        if(userFacade.getUser("rtestvisitor").getLogged()){
+            userFacade.logout(0,"rtestvisitor");
+        }
+        try{
+            userFacade.exit("v0");
+        }
+        catch (Exception _){
+
+        }
+
+    }
+
+    @Test
+    void login_Success() {
+        userFacade.enter(0);
+        boolean isLoggedB=userFacade.getUser("rtestvisitor").getLogged();
+        assertDoesNotThrow(() -> userFacade.login("v0","testvisitor","password123"), "Login should not throw any exceptions");
+        boolean isLoggedA=userFacade.getUser("rtestvisitor").getLogged();
+        assertEquals(isLoggedB,!isLoggedA);
+    }
+
+    @Test
+    void login_Wrong_User() {
+        userFacade.enter(0);
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userFacade.login("v0","nonExistingUser","password123"));
+        assertEquals(exception.getMessage(),"No such user nonExistingUser");
+    }
+
+    @Test
+    void login_Wrong_Password() {
+        userFacade.enter(0);
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userFacade.login("v0","testvisitor","wrongPassword"));
+        assertEquals(exception.getMessage(),"Wrong password");
+    }
 
     @Test
     void registeredLogin_Success() {

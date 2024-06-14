@@ -1,7 +1,5 @@
 package com.example.trading_system.UnitTests.users;
 
-import com.example.trading_system.domain.users.UserFacade;
-import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.service.UserService;
 import com.example.trading_system.service.UserServiceImp;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,12 +10,10 @@ import java.time.LocalDate;
 
 class AppointManagerUnitTests {
 
-    private UserFacade userFacade;
     private UserService userService;
 
     @BeforeEach
     public void setUp() {
-        userFacade = UserFacadeImp.getInstance();
         userService = UserServiceImp.getInstance();
     }
 
@@ -29,7 +25,7 @@ class AppointManagerUnitTests {
             //TODO owner appointTest
             userService.login("2", "appointTest", "encryption1");
         }
-        catch (Exception e){
+        catch (Exception _){
         }
     }
 }

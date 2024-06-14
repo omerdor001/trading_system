@@ -3,7 +3,6 @@ package com.example.trading_system.UnitTests.users;
 import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -70,9 +69,9 @@ public class ViewCartUnitTests {
 
     @Test
     public void givenNullUsername_WhenViewCart_ThenThrowException() {
-        String username = null;
+        //String username = null;
 
-        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.viewCart(username));
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.viewCart(null));
 
         Assertions.assertEquals("Username cannot be null", exception.getMessage());
     }

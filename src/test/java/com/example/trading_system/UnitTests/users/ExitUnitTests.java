@@ -1,8 +1,6 @@
 package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.users.UserFacadeImp;
-import com.example.trading_system.domain.users.Visitor;
-import com.example.trading_system.domain.users.Registered;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
@@ -23,7 +21,7 @@ class ExitUnitTests {
             userFacade.register("user1", "password1", LocalDate.of(1990, 5, 15));
             userFacade.register("user2", "password2", LocalDate.of(1991, 6, 20));
         }
-        catch (Exception e){
+        catch (Exception _){
 
         }
     }

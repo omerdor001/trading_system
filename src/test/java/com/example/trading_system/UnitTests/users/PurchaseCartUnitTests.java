@@ -2,26 +2,14 @@ package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.domain.users.*;
-import com.example.trading_system.domain.externalservices.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.LocalDate;
-import java.util.Timer;
 
 @ExtendWith(MockitoExtension.class)
 public class PurchaseCartUnitTests {
-
-    @Mock
-    DeliveryService deliveryService;
-    @Mock
-    DeliveryServiceProxy deliveryServiceProxy;
-    @Mock
-    PaymentService paymentService;
-    @Mock
-    Timer timer;
 
     UserMemoryRepository userMemoryRepository;
     MarketFacadeImp marketFacade;

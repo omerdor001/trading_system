@@ -52,7 +52,7 @@ class UserFacadeImpTest {
             userFacade.exit("v1");
             userFacade.exit("v0");
         }
-        catch (Exception e){
+        catch (Exception _){
 
         }
         marketFacade.deleteInstance();
@@ -62,30 +62,22 @@ class UserFacadeImpTest {
     @Test
     void suspendUser_Success() {
         boolean suspended=userFacade.isSuspended("rtestuser2");
-        assertDoesNotThrow(() -> {
-            userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,8,1,1,1));
-        }, "suspendUser should not throw any exceptions");
+        assertDoesNotThrow(() -> userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,8,1,1,1)), "suspendUser should not throw any exceptions");
         assertEquals(suspended,userFacade.isSuspended("rtestuser2"));
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userFacade.purchaseCart("rtestuser2");
-        });
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("rtestuser2"));
         assertEquals("User is suspended from the system", exception.getMessage());
     }
 
     @Test
     void suspendUser_UserToSuspendNotExist() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userFacade.suspendUser("rtestuser0","rtestuser4", LocalDateTime.of(2024,8,1,1,1));
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userFacade.suspendUser("rtestuser0","rtestuser4", LocalDateTime.of(2024,8,1,1,1)));
         assertEquals("User to suspend doesn't exist in the system", exception.getMessage());
     }
 
     @Test
     void suspendUser_SuspenderNotExist() {
         boolean suspended=userFacade.isSuspended("rtestuser2");
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userFacade.suspendUser("rtestuser4","rtestuser2", LocalDateTime.of(2024,8,1,1,1));
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userFacade.suspendUser("rtestuser4","rtestuser2", LocalDateTime.of(2024,8,1,1,1)));
         assertEquals("Admin user doesn't exist in the system", exception.getMessage());
         assertEquals(suspended,userFacade.isSuspended("rtestuser2"));
     }
@@ -93,9 +85,7 @@ class UserFacadeImpTest {
     @Test
     void suspendUser_SuspenderNotAdmin() {
         boolean suspended=userFacade.isSuspended("rtestuser2");
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userFacade.suspendUser("rtestuser1","rtestuser2", LocalDateTime.of(2024,8,1,1,1));
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userFacade.suspendUser("rtestuser1","rtestuser2", LocalDateTime.of(2024,8,1,1,1)));
         assertEquals("Only admin user can suspend users", exception.getMessage());
         assertEquals(suspended,userFacade.isSuspended("rtestuser2"));
     }
@@ -103,9 +93,7 @@ class UserFacadeImpTest {
     @Test
     void suspendUser_EarlyDate() {
         boolean suspended=userFacade.isSuspended("rtestuser2");
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,6,1,1,1));
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,6,1,1,1)));
         assertEquals("Date of suspension cannot be before now", exception.getMessage());
         assertEquals(suspended,userFacade.isSuspended("rtestuser2"));
     }
@@ -114,22 +102,16 @@ class UserFacadeImpTest {
     void endSuspendUser_Success() {
         userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,8,1,1,1));
         boolean suspended=userFacade.isSuspended("rtestuser2");
-        assertDoesNotThrow(() -> {
-            userFacade.endSuspendUser("rtestuser0","rtestuser2");
-        }, "endSuspendUser should not throw any exceptions");
+        assertDoesNotThrow(() -> userFacade.endSuspendUser("rtestuser0","rtestuser2"), "endSuspendUser should not throw any exceptions");
         assertEquals(!suspended,userFacade.isSuspended("rtestuser2"));
-        Exception exception = assertThrows(Exception.class, () -> {
-            userFacade.purchaseCart("rtestuser2");
-        });
+        Exception exception = assertThrows(Exception.class, () -> userFacade.purchaseCart("rtestuser2"));
         assertNotEquals("User is suspended from the system", exception.getMessage());
     }
 
     @Test
     void endSuspendUser_UserToSuspendNotExist() {
         userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,8,1,1,1));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userFacade.endSuspendUser("rtestuser0","rtestuser4");
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userFacade.endSuspendUser("rtestuser0","rtestuser4"));
         assertEquals("User to suspend doesn't exist in the system", exception.getMessage());
     }
 
@@ -137,9 +119,7 @@ class UserFacadeImpTest {
     void endSuspendUser_AdminNotExist() {
         boolean suspended=userFacade.isSuspended("rtestuser2");
         userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,8,1,1,1));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userFacade.endSuspendUser("rtestuser4","rtestuser2");
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userFacade.endSuspendUser("rtestuser4","rtestuser2"));
         assertEquals("Admin user doesn't exist in the system", exception.getMessage());
         assertEquals(suspended,userFacade.isSuspended("rtestuser2"));
     }
@@ -148,9 +128,7 @@ class UserFacadeImpTest {
     void endSuspendUser_SuspenderNotAdmin() {
         boolean suspended=userFacade.isSuspended("rtestuser2");
         userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,8,1,1,1));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userFacade.endSuspendUser("rtestuser1","rtestuser2");
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userFacade.endSuspendUser("rtestuser1","rtestuser2"));
         assertEquals("Only admin user can suspend users", exception.getMessage());
         assertEquals(suspended,userFacade.isSuspended("rtestuser2"));
     }
@@ -158,9 +136,7 @@ class UserFacadeImpTest {
     @Test
     void endSuspendUser_UserNotSuspended() {
         boolean suspended=userFacade.isSuspended("rtestuser2");
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userFacade.endSuspendUser("rtestuser0","rtestuser2");
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userFacade.endSuspendUser("rtestuser0","rtestuser2"));
         assertEquals("User need to be suspend for ending suspend", exception.getMessage());
         assertEquals(suspended,userFacade.isSuspended("rtestuser2"));
     }
@@ -172,8 +148,8 @@ class UserFacadeImpTest {
             userFacade.watchSuspensions("rtestuser0");
         }, "watchSuspensions should not throw any exceptions");
         String result=userFacade.watchSuspensions("rtestuser0");
-        Long duration_hours=Math.abs(Duration.between(LocalDateTime.now(), LocalDateTime.of(2024,8,1,1,1)).toHours());
-        Long duration_days=Math.abs(Duration.between(LocalDateTime.now(), LocalDateTime.of(2024,8,1,1,1)).toDays());
+        long duration_hours=Math.abs(Duration.between(LocalDateTime.now(), LocalDateTime.of(2024,8,1,1,1)).toHours());
+        long duration_days=Math.abs(Duration.between(LocalDateTime.now(), LocalDateTime.of(2024,8,1,1,1)).toDays());
         assertEquals(result,"Username - testuser2\n" +
                 "Start of suspension - "+ LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS) +"\n" +
                 "Time of suspension (in days) - "+duration_days+"\n"+
@@ -184,18 +160,14 @@ class UserFacadeImpTest {
     @Test
     void watchSuspensions_AdminNotExist() {
         userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,8,1,1,1));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userFacade.watchSuspensions("rtestuser4");
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userFacade.watchSuspensions("rtestuser4"));
         assertEquals("Admin user doesn't exist in the system", exception.getMessage());
     }
 
     @Test
     void watchSuspensions_SuspenderNotAdmin() {
         userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,8,1,1,1));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userFacade.watchSuspensions("rtestuser2");
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userFacade.watchSuspensions("rtestuser2"));
         assertEquals("Only admin user can suspend users", exception.getMessage());
     }
 
