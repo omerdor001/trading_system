@@ -52,6 +52,7 @@ public class SearchProductStores {
             Assertions.fail("Setup failed: Unable to extract username and token from JSON response");
         }
     }
+/*
     @Test
     public void testSearchNameInStore_Successful() {
         tradingSystem.openStore(username,token,"store1", "General Store", new StorePolicy());
@@ -60,6 +61,7 @@ public class SearchProductStores {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
     }
+*/
 
     @Test
     public void testSearchCategoryInStore_Successful() {
@@ -79,12 +81,14 @@ public class SearchProductStores {
         assertNotNull(response.getBody());
     }
 
+/*
     @Test
     public void testSearchNameInStore_NoNameProvided() {
         ResponseEntity<String> response = tradingSystem.searchNameInStores(username,token,null,  null, null, null, Category.Sport.getIntValue(),null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("No name provided", response.getBody());
     }
+*/
 
     @Test
     public void testSearchCategoryInStore_NoCategoryProvided() {

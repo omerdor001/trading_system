@@ -22,28 +22,32 @@ class GetPurchaseHistory {
     private UserFacadeImp userFacadeImp;
     LocalDate birthdate = LocalDate.of(1990, 5, 15);
 
-    @BeforeAll
+    @BeforeEach
+    void setUp() {
+        if (!userFacadeImp.getUsers().get("testuser").getLogged())
+            userFacadeImp.login("v0", "testuser", "testpassword");
+        userFacadeImp.getUsers().get("testuser").setAdmin(true);
+    }
+    @BeforeEach
     void setUpOnce() throws Exception {
-        PaymentService paymentServiceMock = mock(PaymentService.class);
-        DeliveryService deliveryServiceMock = mock(DeliveryService.class);
         userFacadeImp = UserFacadeImp.getInstance();
 
         userFacadeImp.enter(1);
         userFacadeImp.enter(2);
-        userFacadeImp.register( "testuser", "testpassword", birthdate);
-        userFacadeImp.register( "testuser2", "testpassword2", birthdate);
+        userFacadeImp.register("testuser", "testpassword", birthdate);
+        userFacadeImp.register("testuser2", "testpassword2", birthdate);
         userFacadeImp.login("v0", "testuser", "testpassword");
         userFacadeImp.login("v1", "testuser2", "testpassword2");
 
-        Store store1 = mock(Store.class);
+        Store store1 = new Store("store1", "description", new StorePolicy(), "testuser", 10.0);
         userFacadeImp.createStore("testuser", "store1", "description", new StorePolicy());
         when(store1.toString()).thenReturn("Store 1");
 
         MarketFacadeImp marketFacade = MarketFacadeImp.getInstance();
         marketFacade.addProduct("testuser", 1, "store1", "product1", "", 5, 50, 5, 1, new ArrayList<>());
         marketFacade.addProduct("testuser", 2, "store1", "product2", "", 5, 50, 5, 1, new ArrayList<>());
-        ProductInSale productInSale = new ProductInSale("store1",1, 100.0, 2);
-        ProductInSale productInSale2 = new ProductInSale("store1",2, 100.0, 2);
+        ProductInSale productInSale = new ProductInSale("store1", 1, 100.0, 2);
+        ProductInSale productInSale2 = new ProductInSale("store1", 2, 100.0, 2);
         Purchase purchase1 = new Purchase("testuser", List.of(productInSale), 100.0, "store1");
         Purchase purchase2 = new Purchase("testuser", List.of(productInSale2), 100.0, "store1");
         userFacadeImp.purchaseCart("testuser");
@@ -51,12 +55,7 @@ class GetPurchaseHistory {
 //        userFacadeImp.getPurchases().add(purchase2);
     }
 
-    @BeforeEach
-    void setUp() {
-        if (!userFacadeImp.getUsers().get("testuser").getLogged())
-            userFacadeImp.login("v0", "testuser", "testpassword");
-        userFacadeImp.getUsers().get("testuser").setAdmin(true);
-    }
+
 
     @Test
     void testGetPurchaseHistory_ValidInput() {
@@ -76,14 +75,12 @@ class GetPurchaseHistory {
         assertFalse(result.contains("store2"));
     }
 
-
     @Test
     void testGetStoresPurchaseHistory_ValidInput() {
         String result = userFacadeImp.getPurchaseHistory("testuser", "store1");
         assertNotNull(result);
         assertFalse(result.isEmpty());
     }
-
 
     @Test
     void testGetPurchaseHistory_NotAdmin() {
@@ -92,7 +89,6 @@ class GetPurchaseHistory {
             userFacadeImp.getPurchaseHistory("testuser", "store1");
         });
     }
-
 
     @Test
     void testGetStoresPurchaseHistory_NotAdmin() {
@@ -164,9 +160,5 @@ class GetPurchaseHistory {
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
-
-
-
 }
-
 */

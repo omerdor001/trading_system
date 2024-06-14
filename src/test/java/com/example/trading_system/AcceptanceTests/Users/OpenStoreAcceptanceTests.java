@@ -4,22 +4,50 @@ package com.example.trading_system.AcceptanceTests.Users;
 
 import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.service.TradingSystemImp;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 
+import static org.assertj.core.api.Fail.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //TODO FIX ME
 public class OpenStoreAcceptanceTests {
     private TradingSystemImp tradingSystem;
+    private String token;
+    private String username;
+
 
     @BeforeEach
     public void setUp() {
         tradingSystem = TradingSystemImp.getInstance();
+        tradingSystem.register("owner1", "password123", LocalDate.now());
+        tradingSystem.register("manager", "password123", LocalDate.now());
         tradingSystem.openSystem();
+
+        String userTokenResponse = tradingSystem.enter().getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userTokenResponse);
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract token from JSON response");
+        }
+
+        String loginResponse = tradingSystem.login(token, "0", "owner1", "password123").getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(loginResponse);
+            username = rootNode.get("username").asText();
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract username and token from JSON response");
+        }
+        tradingSystem.enter();
     }
 
     @AfterEach
@@ -39,7 +67,6 @@ public class OpenStoreAcceptanceTests {
         // Generate a token for the user
         ResponseEntity<String> enterResponse = tradingSystem.enter();
         assertEquals(403, enterResponse.getStatusCodeValue());
-        String token = extractToken(enterResponse.getBody());
 
         // Open a store with valid details
         String storeName = "Valid Store";
@@ -62,7 +89,6 @@ public class OpenStoreAcceptanceTests {
         // Generate a token for the user
         ResponseEntity<String> enterResponse = tradingSystem.enter();
         assertEquals(403, enterResponse.getStatusCodeValue());
-        String token = extractToken(enterResponse.getBody());
 
         // Open a store with valid details
         String storeName = "Valid Store";
@@ -113,11 +139,5 @@ public class OpenStoreAcceptanceTests {
         assertTrue(openStoreResponse.getBody().contains("System is not open. Only registration is allowed."));
     }
 
-    private String extractToken(String responseBody) {
-        // Assuming the response body contains a JSON with "token"
-        int startIndex = responseBody.indexOf("token") + 8;
-        int endIndex = responseBody.indexOf("\"", startIndex);
-        return responseBody.substring(startIndex, endIndex);
-    }
 }
 */

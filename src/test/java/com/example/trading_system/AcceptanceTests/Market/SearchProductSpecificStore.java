@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SearchProductSpecificStore {
     private TradingSystem tradingSystem;
     private String token;
@@ -74,7 +74,7 @@ public class SearchProductSpecificStore {
     public void testSearchNameInStore_Successful() {
         tradingSystem.openStore(username, token, "store1", "General Store", new StorePolicy());
         tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 0, new ArrayList<>());
-        ResponseEntity<String> response = tradingSystem.searchNameInStore(username,token,"product1", "store1", null, null, null, Category.Sport.getIntValue());
+        ResponseEntity<String> response = tradingSystem.searchNameInStore(username,"product1",token, "store1", null, null, null, Category.Sport.getIntValue());
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
     }
@@ -99,14 +99,14 @@ public class SearchProductSpecificStore {
 
     @Test
     public void testSearchNameInStore_NoNameProvided() {
-        ResponseEntity<String> response = tradingSystem.searchNameInStore(username,token,null, "store1", null, null, null, Category.Sport.getIntValue());
+        ResponseEntity<String> response = tradingSystem.searchNameInStore(username,null,token, "store1", null, null, null, Category.Sport.getIntValue());
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("No name provided", response.getBody());
     }
 
     @Test
     public void testSearchNameInStore_NoStoreNameProvided() {
-        ResponseEntity<String> response = tradingSystem.searchNameInStore(username,token,"product1", null, null, null, null, Category.Sport.getIntValue());
+        ResponseEntity<String> response = tradingSystem.searchNameInStore(username,"product1",token, null, null, null, null, Category.Sport.getIntValue());
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("No store name provided", response.getBody());
     }

@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import static org.assertj.core.api.Fail.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class GetProductsInfo {
     private TradingSystem tradingSystem;
     private String token;
@@ -46,6 +48,7 @@ public class GetProductsInfo {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
+        tradingSystem.enter();
     }
 
     @AfterEach
