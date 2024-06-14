@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -21,7 +22,10 @@ public class StoreSalesHistory {
             instance = new StoreSalesHistory();
         return instance;
     }
-
+    public void deleteInstance() {
+        this.purchases = null;
+        instance = null;
+    }
 
     public void addPurchase(List<Purchase> purchases1) {
         purchases.addAll(purchases1);
@@ -58,6 +62,7 @@ public class StoreSalesHistory {
                 .map(Purchase::toString)
                 .collect(Collectors.joining("\n"));
     }
+
 
 }
 

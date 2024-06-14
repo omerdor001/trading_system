@@ -22,8 +22,6 @@ public class AddCartUnitTests {
         MockitoAnnotations.openMocks(this);
 
         // Clear singleton instances
-        UserMemoryRepository.getInstance().deleteInstance();
-        MarketFacadeImp.getInstance().deleteInstance();
         UserFacadeImp.getInstance().deleteInstance();
 
         // Re-instantiate singletons
@@ -35,10 +33,8 @@ public class AddCartUnitTests {
     @AfterEach
     public void tearDown() {
         userFacadeImp.deleteInstance();
-        userMemoryRepository.deleteInstance();
-        marketFacade.deleteInstance();
     }
-//TODO FIX ME
+
     @Test
     public void givenValidDetails_WhenAddToCart_ThenSuccess() {
         String username = "rValidUser";

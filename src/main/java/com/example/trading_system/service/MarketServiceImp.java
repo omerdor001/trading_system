@@ -29,21 +29,16 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public String getAllStores() {
+    public String getAllStores(String userName) {
         logger.info("Trying to Gather All Stores");
-        String result = marketFacade.getAllStores();
+        String result = marketFacade.getAllStores(userName);
         logger.info("FINISHED Gather All Stores Info");
         return result;
     }
 
     @Override
-    public void openStoreExist(String storeName) {
-        logger.info("Trying to open store with name : {}", storeName);
-        try {
-            marketFacade.openStoreExist(storeName);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed on opening Store with name : {}", e.getMessage(), storeName);
-        }
+    public void openStoreExist(String userName, String storeName) throws IllegalArgumentException {
+        marketFacade.openStoreExist(userName, storeName);
     }
 
 /*
@@ -60,59 +55,59 @@ public class MarketServiceImp implements MarketService {
     }
 */
 
-    public String getStoreProducts(String store_name) {
+    public String getStoreProducts(String userName, String store_name) throws IllegalAccessException {
         logger.info("Trying to Gather ALL Store Products");
-        String result = marketFacade.getStoreProducts(store_name);
+        String result = marketFacade.getStoreProducts(userName, store_name);
         logger.info("FINISHED Gather ALL Store Products Info");
         return result;
     }
 
 
-    public String getProductInfo(String store_name, int product_Id) {
+    public String getProductInfo(String userName, String store_name, int product_Id) throws IllegalAccessException {
         logger.info("Trying to Gather Product Info with Store Id : {} and product ID: {}", store_name, product_Id);
-        String result = marketFacade.getProductInfo(store_name, product_Id);
+        String result = marketFacade.getProductInfo(userName, store_name, product_Id);
         logger.info("FINISHED Gather Product Info");
         return result;
     }
 
-    public String searchNameInStore(String name, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
-        logger.info("Trying to search products in store : {} with name : {}", store_name, name);
-        String result = marketFacade.searchNameInStore(name, store_name, minPrice, maxPrice, minRating, category);
+    public String searchNameInStore(String userName, String productName, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
+        logger.info("Trying to search products in store : {} with name : {}", store_name, productName);
+        String result = marketFacade.searchNameInStore(userName, productName, store_name, minPrice, maxPrice, minRating, category);
         logger.info("FINISHED Searching products in store ");
         return result;
     }
 
-    public String searchCategoryInStore(int category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
+    public String searchCategoryInStore(String userName, int category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
         logger.info("Trying to search products in store : {} with category, : {}", store_name, category);
-        String result = marketFacade.searchCategoryInStore(category, store_name, minPrice, maxPrice, minRating);
+        String result = marketFacade.searchCategoryInStore(userName, category, store_name, minPrice, maxPrice, minRating);
         logger.info("FINISHED Searching products in store ");
         return result;
     }
 
-    public String searchKeywordsInStore(String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
+    public String searchKeywordsInStore(String userName, String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
         logger.info("Trying to search products in store : {} with keyWords,  : {}", store_name, keyWords);
-        String result = marketFacade.searchKeywordsInStore(keyWords, store_name, minPrice, maxPrice, minRating, category);
+        String result = marketFacade.searchKeywordsInStore(userName, keyWords, store_name, minPrice, maxPrice, minRating, category);
         logger.info("FINISHED Searching products in store ");
         return result;
     }
 
-    public String searchNameInStores(String name, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
-        logger.info("Trying to search products in stores with name : {}", name);
-        String result = marketFacade.searchNameInStores(name, minPrice, maxPrice, minRating, category, storeRating);
+    public String searchNameInStores(String userName, String productName, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
+        logger.info("Trying to search products in stores with name : {}", productName);
+        String result = marketFacade.searchNameInStores(userName, productName, minPrice, maxPrice, minRating, category,storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }
 
-    public String searchCategoryInStores(int category, Double minPrice, Double maxPrice, Double minRating, Double storeRating) {
+    public String searchCategoryInStores(String userName, int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
         logger.info("Trying to search products in stores with category, : {}", category);
-        String result = marketFacade.searchCategoryInStores(category, minPrice, maxPrice, minRating, storeRating);
+        String result = marketFacade.searchCategoryInStores(userName, category, minPrice, maxPrice, minRating,storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }
 
-    public String searchKeywordsInStores(String keyWords, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
+    public String searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
         logger.info("Trying to search products in stores with keyWords,  : {}", keyWords);
-        String result = marketFacade.searchKeywordsInStores(keyWords, minPrice, maxPrice, minRating, category, storeRating);
+        String result = marketFacade.searchKeywordsInStores(userName, keyWords, minPrice, maxPrice, minRating, category,storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }
@@ -270,9 +265,9 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public void closeStoreExist(String storeName) {
+    public void closeStoreExist(String userName, String storeName)  throws IllegalArgumentException {
         logger.info("Trying to close store with name : {}", storeName);
-        marketFacade.openStoreExist(storeName);
+        marketFacade.closeStoreExist(userName, storeName);
         logger.error("Failed on closing Store with name : {}", storeName);
     }
 }

@@ -1,5 +1,8 @@
 package com.example.trading_system.domain.users;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -11,7 +14,9 @@ public class Registered extends User {
 
     private LocalDate birthdate;
     private boolean isAdmin;
-    private boolean isLogged;
+    @Getter
+    @Setter
+    private boolean isLogged = false;
 
     private List<Role> roles;
     private List<Notification> notifications;
@@ -39,6 +44,15 @@ public class Registered extends User {
         owner.setRoleState(new Owner(owner));
         getRoles().add(owner);
     }
+
+    @Override
+    public void removeOwnerRole(String storeName) {
+         roles.remove(getRoleByStoreId(storeName)); }
+
+    @Override
+    public void removeManagerRole(String storeName) {
+        roles.remove(getRoleByStoreId(storeName)); }
+
 
     @Override
     public String getPass() {

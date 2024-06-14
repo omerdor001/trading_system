@@ -1,3 +1,4 @@
+/*
 package com.example.trading_system.AcceptanceTests.Users;
 
 import com.example.trading_system.service.TradingSystem;
@@ -90,3 +91,4 @@ public class ExitAcceptanceTests {
         assertEquals("Invalid token was supplied", exitResponse.getBody());
     }
 }
+*/

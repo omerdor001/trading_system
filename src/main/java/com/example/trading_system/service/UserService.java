@@ -37,6 +37,10 @@ public interface UserService {
 
     void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
 
+    void waiverOnOwnership(String userName, String storeName) throws IllegalAccessException;
+
+    void fireManager(String owner, String storeName, String manager) throws IllegalAccessException;
+
     void exit(String username) throws Exception;
 
     String viewCart(String username);

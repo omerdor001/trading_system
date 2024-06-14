@@ -25,7 +25,7 @@ public interface UserFacade {
 
     void addToCart(String username, int productId, String storeName, int quantity);
 
-    void openStore(String username, String storeName, String description) throws IllegalAccessException;
+    void createStore(String username, String storeName, String description) throws IllegalAccessException;
 
     void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
 
@@ -42,6 +42,10 @@ public interface UserFacade {
     void rejectToOwnStore(String userName, String storeName, String appoint) throws IllegalAccessException;
 
     void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException;
+
+    void waiverOnOwnership(String userName, String storeName) throws IllegalAccessException;
+
+    void fireManager(String owner, String storeName, String manager) throws IllegalAccessException;
 
     /**
      * @param userId        is the current user that do the update
@@ -65,5 +69,5 @@ public interface UserFacade {
 
     String getPurchaseHistory(String username, String storeName);
 
-    void approvePurchase(String username) throws Exception;
+    void purchaseCart(String username) throws Exception;
 }

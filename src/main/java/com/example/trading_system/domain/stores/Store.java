@@ -44,6 +44,7 @@ public class Store {
         this.storeRating = storeRating;
         this.discountPolicies = new LinkedList<>();
         this.discountConditions = new LinkedList<>();
+        this.isOpen = true;
     }
 
     public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, int category) {
@@ -231,6 +232,26 @@ public class Store {
 
     public void addPurchase(Purchase purchase) {
         salesHistory.addPurchase(purchase);
+    }
+
+    public boolean isRoleHolder(String userName) {
+        return managers.contains(userName) || owners.contains(userName);
+    }
+
+    public void addOwner(String userName) {
+        owners.add(userName);
+    }
+    public void addManager(String userName) {
+        managers.add(userName);
+    }
+
+
+    public void removeOwner(String userName) {
+        owners.remove(userName);
+    }
+
+    public void removeManager(String userName) {
+        owners.remove(userName);
     }
 
     public double calculatePrice(Collection<ProductInSaleDTO> items) {

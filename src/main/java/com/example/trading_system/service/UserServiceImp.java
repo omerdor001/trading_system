@@ -84,7 +84,7 @@ public class UserServiceImp implements UserService {
     @Override
     public boolean openStore(String username, String storeName, String description) {
         logger.info("Trying opening store with name: {}", storeName);
-        userFacade.openStore(username, storeName, description);
+        userFacade.createStore(username, storeName, description);
         logger.info("Finished opening store with name: {}", storeName);
         return true;
     }
@@ -141,6 +141,17 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public void waiverOnOwnership(String userName, String storeName) throws IllegalAccessException {
+        userFacade.waiverOnOwnership(userName, storeName);
+    }
+
+    @Override
+    public void fireManager(String owner, String storeName, String manager) throws IllegalAccessException{
+        userFacade.fireManager(owner, storeName, manager);
+    }
+
+
+    @Override
     public void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
         logger.info("Trying to appoint manager : {} to store : {}", newManager, store_name_id);
         userFacade.appointManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
@@ -169,7 +180,7 @@ public class UserServiceImp implements UserService {
     @Override
     public void approvePurchase(String registeredId) throws Exception {
         logger.info("Approving purchase for registered user with ID: {} ", registeredId);
-        userFacade.approvePurchase(registeredId);
+        userFacade.purchaseCart(registeredId);
         logger.info("Purchase approved for registered user with ID: {}", registeredId);
 
     }

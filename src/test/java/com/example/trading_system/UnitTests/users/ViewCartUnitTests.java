@@ -31,7 +31,6 @@ public class ViewCartUnitTests {
     @AfterEach
     public void tearDown() {
         userFacadeImp.deleteInstance();
-        userMemoryRepository.deleteInstance();
     }
 
     @Test
