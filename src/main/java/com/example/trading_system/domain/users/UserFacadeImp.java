@@ -268,7 +268,6 @@ public class UserFacadeImp implements UserFacade {
             double price = p.getProduct_price();
             int category = p.getCategory().getIntValue();
             userMemoryRepository.getUser(username).getCart().addProductToCart(productId, quantity, storeName, price, category);
-            userMemoryRepository.getUser(username).getCart().addProductToCart(productId, quantity, storeName, price);
         }
         checkProductQuantity(username, productId, storeName, quantity);
     }

@@ -1,6 +1,4 @@
 package com.example.trading_system.AcceptanceTests.Users;
-
-import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,7 +46,7 @@ class SuspensionAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystem.openStore(username, token1, "store1", "", mock(StorePolicy.class));
+        tradingSystem.openStore(username, token1, "store1", "");
 
         String userToken1 = tradingSystem.enter().getBody();
         try {
@@ -67,7 +65,7 @@ class SuspensionAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystem.openStore(username, token1, "store1", "", mock(StorePolicy.class));
+        tradingSystem.openStore(username, token1, "store1", "");
 
     }
 

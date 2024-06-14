@@ -1,5 +1,6 @@
 package com.example.trading_system.domain.stores;
 
+import com.example.trading_system.domain.discountPolicies.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
