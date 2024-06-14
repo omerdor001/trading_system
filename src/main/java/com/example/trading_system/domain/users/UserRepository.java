@@ -3,7 +3,6 @@ package com.example.trading_system.domain.users;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 public interface UserRepository {
     void deleteInstance();

@@ -41,7 +41,7 @@ public class ViewCartUnitTests {
         userMemoryRepository.getUser(username).login();
         userMemoryRepository.getUser(username).setCart(new Cart());
 
-        userMemoryRepository.getUser(username).getCart().addProductToCart(1, 1, "Store", 10.0);
+        userMemoryRepository.getUser(username).getCart().addProductToCart(1, 1, "Store", 10.0, 1);
 
         String result = userFacadeImp.viewCart(username);
 

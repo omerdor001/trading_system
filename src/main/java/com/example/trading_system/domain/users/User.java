@@ -1,9 +1,6 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.Product;
-import com.example.trading_system.domain.stores.ProductInSale;
 import com.example.trading_system.domain.stores.Purchase;
-import com.example.trading_system.domain.stores.Store;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,19 +9,17 @@ import java.util.List;
 
 public abstract class User {
     public String username;
-    private Cart shopping_cart;
+    private Cart cart;
     private boolean suspended;
     private LocalDateTime suspendedStart;
     private LocalDateTime suspendedEnd;
-    private Cart cart;
 
     public User(String username) {
-        this.username=username;
-        this.shopping_cart = new Cart();
+        this.username = username;
+        this.cart = new Cart();
         this.suspended=false;
         this.suspendedStart=null;
         this.suspendedEnd=null;
-        this.cart = new Cart();
     }
 
     public String getUsername() {
@@ -125,8 +120,8 @@ public abstract class User {
         return notification.toString();
     }
 
-    public void addProductToCart(int productId, int quantity, String storeName,double price) {
-        this.cart.addProductToCart(productId,quantity,storeName,price);
+    public void addProductToCart(int productId, int quantity, String storeName, double price, int category) {
+        this.cart.addProductToCart(productId, quantity, storeName, price, category);
     }
 
     public void removeProductFromCart(int productId, int quantity, String storeName) {
@@ -134,7 +129,7 @@ public abstract class User {
     }
 
     public List<Purchase> addPurchasedProduct() {
-       return  cart.purchaseProduct(this.username);
+        return cart.purchaseProduct(this.username);
     }
 
     public String getShoppingCart_ToString() {
@@ -142,7 +137,7 @@ public abstract class User {
     }
 
     public int checkProductQuantity(int productId, String storeName) {
-        return cart.checkProductQuantity(productId,storeName);
+        return cart.checkProductQuantity(productId, storeName);
     }
 
 }

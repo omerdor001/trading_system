@@ -1,7 +1,5 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.StorePolicy;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -18,9 +16,9 @@ public interface UserFacade {
 
     void register(String username, String token, LocalDate birthdate) throws Exception;    //Complete with what to register
 
-    void login(String usernameV,String username, String password);
+    void login(String usernameV, String username, String password);
 
-    void logout(int id,String username);
+    void logout(int id, String username);
 
     void suspendUser(String admin, String toSuspend, LocalDateTime endSuspention);
 
@@ -36,7 +34,7 @@ public interface UserFacade {
 
     void addToCart(String username, int productId, String storeName, int quantity);
 
-    void createStore(String username, String storeName, String description, StorePolicy policy) throws IllegalAccessException;
+    void createStore(String username, String storeName, String description) throws IllegalAccessException;
 
     void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
 
@@ -72,7 +70,7 @@ public interface UserFacade {
 
     String viewCart(String username);
 
-    void removeFromCart(String username,int productId, String storeName, int quantity);
+    void removeFromCart(String username, int productId, String storeName, int quantity);
 
     boolean isUserExist(String username);
 

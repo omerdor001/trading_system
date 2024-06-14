@@ -2,7 +2,6 @@ package com.example.trading_system.UnitTests.Market;
 
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
-import com.example.trading_system.domain.stores.StorePolicy;
 import com.example.trading_system.domain.users.UserFacade;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import org.junit.jupiter.api.*;
@@ -33,8 +32,8 @@ class StockManagementUnitTests {
             userFacade.login("v0","testuser0","1pA22w0rd");
             userFacade.login("v1","testuser1","pA22w0rd1");
             userFacade.login("v2","testuser2","pA22w0rd2");
-            userFacade.createStore("rtestuser0","Adidas","sport shop",mock(StorePolicy.class));
-            userFacade.createStore("rtestuser0","Nike","sport shop",mock(StorePolicy.class));
+            userFacade.createStore("rtestuser0","Adidas","sport shop");
+            userFacade.createStore("rtestuser0","Nike","sport shop");
             userFacade.appointOwner("rtestuser0","rtestuser1","Adidas");
             userFacade.appointManager("rtestuser0","rtestuser2","Adidas",false,false,false,false);
 

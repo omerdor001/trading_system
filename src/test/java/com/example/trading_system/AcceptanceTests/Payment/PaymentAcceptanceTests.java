@@ -8,7 +8,6 @@ import com.example.trading_system.service.TradingSystemImp;
 import com.example.trading_system.service.UserServiceImp;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
@@ -49,7 +48,7 @@ public class PaymentAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystem.openStore(username,token, "store1", "", new StorePolicy());
+        tradingSystem.openStore(username,token, "store1", "");
         tradingSystem.addProduct(username,token, 0,"store1","product1", "", 1, 5, 1, 1, new LinkedList<>());
 //        paymentFacade = PaymentFacadeImp.getInstance();
         marketFacade = MarketFacadeImp.getInstance();

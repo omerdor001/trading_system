@@ -4,7 +4,6 @@ import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -23,8 +22,6 @@ public class AddCartUnitTests {
         MockitoAnnotations.openMocks(this);
 
         // Clear singleton instances
-        UserMemoryRepository.getInstance().deleteInstance();
-        MarketFacadeImp.getInstance().deleteInstance();
         UserFacadeImp.getInstance().deleteInstance();
 
         // Re-instantiate singletons
@@ -36,7 +33,6 @@ public class AddCartUnitTests {
     @AfterEach
     public void tearDown() {
         userFacadeImp.deleteInstance();
-        marketFacade.deleteInstance();
     }
 
     @Test
@@ -49,10 +45,10 @@ public class AddCartUnitTests {
         // Setup data in singletons
         userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
         userMemoryRepository.getUser(username).login();
-        marketFacade.addStore(storeName, "description", new StorePolicy(), username, 4.5);
+        marketFacade.addStore(storeName, "description", username, 4.5);
 
         Store store = marketFacade.getStore(storeName);
-        store.addProduct(productId, storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
+        store.addProduct(productId, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
 
         Cart shoppingCart = new Cart();
         userMemoryRepository.getUser(username).setCart(shoppingCart);
@@ -136,7 +132,7 @@ public class AddCartUnitTests {
         int quantity = 5;
 
         userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
-        marketFacade.addStore(storeName, "description", new StorePolicy(), username, 4.5);
+        marketFacade.addStore(storeName, "description", username, 4.5);
 
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity));
     }
@@ -150,10 +146,10 @@ public class AddCartUnitTests {
 
         userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
         userMemoryRepository.getUser(username).login();
-        marketFacade.addStore(storeName, "description", new StorePolicy(), username, 4.5);
+        marketFacade.addStore(storeName, "description", username, 4.5);
 
         Store store = marketFacade.getStore(storeName);
-        store.addProduct(productId, storeName, "ProductName", "ProductDescription", 10.0, 5, 4.5, 1, null);
+        store.addProduct(productId, "ProductName", "ProductDescription", 10.0, 5, 4.5, 1, null);
 
         Cart shoppingCart = new Cart();
         userMemoryRepository.getUser(username).setCart(shoppingCart);

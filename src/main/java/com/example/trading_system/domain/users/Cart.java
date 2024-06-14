@@ -1,9 +1,9 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.Product;
 import com.example.trading_system.domain.stores.ProductInSale;
 import com.example.trading_system.domain.stores.Purchase;
-import com.example.trading_system.domain.stores.Store;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +17,11 @@ public class Cart {
         shoppingBags = new HashMap<>();
     }
 
+    public static Cart fromJson(String json) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(json, Cart.class);
+    }
+
     public HashMap<String, ShoppingBag> getShoppingBags() {
         return shoppingBags;
     }
@@ -25,13 +30,13 @@ public class Cart {
         shoppingBags.put(storeId, shoppingBag);
     }
 
-    public void addProductToCart(int productId, int quantity, String storeId, double price) {
+    public void addProductToCart(int productId, int quantity, String storeId, double price, int category) {
         ShoppingBag shoppingBag = shoppingBags.get(storeId);
         if (shoppingBag == null) {
             shoppingBag = new ShoppingBag(storeId);
             shoppingBags.put(storeId, shoppingBag);
         }
-        shoppingBag.addProduct(productId, quantity, price);
+        shoppingBag.addProduct(productId, quantity, price, category);
     }
 
     public void removeProductFromCart(int productId, int quantity, String storeId) {
@@ -55,8 +60,9 @@ public class Cart {
     }
 
     public void removeShoppingBagFromCartByStore(String storeName) {
-            shoppingBags.remove(storeName);
+        shoppingBags.remove(storeName);
     }
+
     public void saveCart() {
         //TODO when connecting to database.
     }
@@ -71,14 +77,13 @@ public class Cart {
             double bagTotalPrice = shoppingBag.getTotalPrice();
             totalCartPrice += bagTotalPrice;
             sb.append("\n  Store ID: ").append(entry.getKey())
-                    .append(", Shopping Bag: ").append(shoppingBag.toString())
+                    .append(", Shopping Bag: ").append(shoppingBag)
                     .append(", Total Price: $").append(bagTotalPrice);
         }
         sb.append("\n  Total Cart Price: $").append(totalCartPrice);
         sb.append("\n}");
         return sb.toString();
     }
-
 
     private List<ProductInSale> getProductsToList() {
         List list = new ArrayList<>();
@@ -104,6 +109,10 @@ public class Cart {
 
     }
 
+    public String toJson() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(this);
+    }
 
     public int checkProductQuantity(int productId, String storeName) {
         if (shoppingBags.get(storeName) == null)

@@ -14,12 +14,8 @@ public class Security {
 
     // Generate a token based on the username
     public static String generateToken(String username) {
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours expiration
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
+        return Jwts.builder().setSubject(username).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours expiration
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
     // Extract the username from the token
@@ -58,9 +54,6 @@ public class Security {
     public static void makeTokenExpire(String token) {
         Claims claims = extractAllClaims(token);
         claims.setExpiration(new Date(System.currentTimeMillis())); // Set expiration to current time
-        Jwts.builder()
-                .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
+        Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 }

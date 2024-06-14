@@ -13,9 +13,6 @@ public enum Category {
         this.intValue = intValue;
     }
 
-    public int getIntValue() {
-        return intValue;
-    }
     public static Category getCategoryFromInt(int categoryInt) {
         switch (categoryInt) {
             case 1:
@@ -31,5 +28,9 @@ public enum Category {
             default:
                 throw new IllegalArgumentException("Invalid category integer: " + categoryInt);
         }
+    }
+
+    public int getIntValue() {
+        return intValue;
     }
 }
