@@ -8,10 +8,10 @@ import java.util.HashMap;
 
 public class ShoppingBagDTO {
     private String storeId;
-    private HashMap<Integer, ProductInSaleDTO> productsList;
+    private HashMap<Integer, ProductInSaleDTO> products_list;
 
     public ShoppingBagDTO() {
-        productsList = new HashMap<>();
+        products_list = new HashMap<>();
     }
 
     public static ShoppingBagDTO fromJson(String json) throws IOException {
@@ -27,12 +27,12 @@ public class ShoppingBagDTO {
         this.storeId = storeId;
     }
 
-    public HashMap<Integer, ProductInSaleDTO> getProductsList() {
-        return productsList;
+    public HashMap<Integer, ProductInSaleDTO> getProducts_list() {
+        return products_list;
     }
 
-    public void setProductsList(HashMap<Integer, ProductInSaleDTO> productsList) {
-        this.productsList = productsList;
+    public void setProducts_list(HashMap<Integer, ProductInSaleDTO> products_list) {
+        this.products_list = products_list;
     }
 
     public String toJson() throws JsonProcessingException {

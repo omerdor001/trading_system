@@ -4,7 +4,7 @@ import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -19,11 +19,6 @@ public class EnterAcceptanceTests {
     private static TradingSystem tradingSystem;
     private String token;
     private String username;
-
-    @BeforeAll
-    public static void setup() {
-        tradingSystem = TradingSystemImp.getInstance();
-    }
 
     @BeforeEach
     public void openSystemAndRegisterAdmin() {
@@ -49,7 +44,12 @@ public class EnterAcceptanceTests {
         }
     }
 
-/*    @Test
+    @AfterEach
+    void setDown() {
+        tradingSystem.deleteInstance();
+    }
+
+    @Test
     public void testEnterSuccessfully() {
         ResponseEntity<String> enterResponse = tradingSystem.enter();
         assertEquals(HttpStatus.OK, enterResponse.getStatusCode());
@@ -59,7 +59,7 @@ public class EnterAcceptanceTests {
 
     @Test
     public void testEnterSystemClosed() {
-        tradingSystem.closeSystem(username,token);
+        tradingSystem.closeSystem(username, token);
         ResponseEntity<String> enterResponse = tradingSystem.enter();
         assertEquals(HttpStatus.FORBIDDEN, enterResponse.getStatusCode());
         assertEquals("", enterResponse.getBody());
@@ -74,5 +74,5 @@ public class EnterAcceptanceTests {
         assertEquals(HttpStatus.OK, reEnterResponse.getStatusCode());
         String newToken = reEnterResponse.getBody();
         assertNotEquals(newToken, token);
-    }*/
+    }
 }

@@ -40,7 +40,7 @@ public class ShoppingBag {
         } else products_list.get(productId).reduceQuantity(quantity);
     }
 
-    public double getTotalPrice() {
+    public double calculateTotalPrice() {
         double total = 0;
         for (ProductInSale product : products_list.values()) {
             total += product.sumTotalPrice();
@@ -56,7 +56,7 @@ public class ShoppingBag {
             sb.append("\n    ").append(product.toString());
         }
         sb.append("\n  ]");
-        sb.append(", Total Price: $").append(getTotalPrice());
+        sb.append(", Total Price: $").append(calculateTotalPrice());
         sb.append("}");
         return sb.toString();
     }

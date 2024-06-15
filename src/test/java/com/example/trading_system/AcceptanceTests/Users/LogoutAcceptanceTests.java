@@ -1,10 +1,10 @@
-/*
 package com.example.trading_system.AcceptanceTests.Users;
 
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -37,9 +37,14 @@ class LogoutAcceptanceTests {
         }
     }
 
+    @AfterEach
+    void setDown() {
+        tradingSystem.deleteInstance();
+    }
+
     @Test
     void logout_Success() {
-        String userToken = tradingSystem.login(token,"v0","owner1","password123").getBody();
+        String userToken = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -56,7 +61,7 @@ class LogoutAcceptanceTests {
 
     @Test
     void logout_NotLoggedIn() {
-        String userToken = tradingSystem.login(token,"v0","owner1","password123").getBody();
+        String userToken = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -77,4 +82,4 @@ class LogoutAcceptanceTests {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("User performs not like a registered", response.getBody());
     }
-}*/
+}

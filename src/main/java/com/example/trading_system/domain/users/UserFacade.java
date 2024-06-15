@@ -79,4 +79,6 @@ public interface UserFacade {
     String getPurchaseHistory(String username, String storeName);
 
     void purchaseCart(String username) throws Exception;
+
+    String calculatePrice(String username) throws Exception;
 }
