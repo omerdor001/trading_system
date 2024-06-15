@@ -562,8 +562,6 @@ public class UserFacadeImp implements UserFacade {
             newOwnerUser.removeManagerRole(storeName);
             marketFacade.getStore(storeName).removeManager(newOwner);
         }
-        newOwnerUser.addOwnerRole(appoint, storeName);
-        marketFacade.getStore(storeName).addOwner(newOwner);
     }
 
     @Override
@@ -613,7 +611,7 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("User is not owner of this store");
         }
         if (store.getFounder().equals(userName))
-            throw new IllegalAccessException("founder cant waive on ownership");
+            throw new IllegalAccessException("Founder cant waive on ownership");
 
         List<String> storeOwners = store.getOwners();
         List<String> storeManagers = store.getManagers();
@@ -661,12 +659,6 @@ public class UserFacadeImp implements UserFacade {
         }
         if (!userMemoryRepository.isExist(manager)) {
             throw new NoSuchElementException("No user called " + manager + " exist");
-        }
-        if (owner.charAt(0) != 'r') {
-            throw new NoSuchElementException("No user called " + owner + " is registered");
-        }
-        if (manager.charAt(0) != 'r') {
-            throw new NoSuchElementException("No user called " + manager + "is registered");
         }
         User ownerUser = userMemoryRepository.getUser(owner);
         User managerUser = userMemoryRepository.getUser(manager);
@@ -770,8 +762,8 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("User cannot be owner of this store");
         }
         newManagerUser.addManagerRole(appoint, store_name_id);
+        marketFacade.getStore(store_name_id).addManager(newManager);
         newManagerUser.setPermissionsToManager(store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
-
     }
 
     @Override

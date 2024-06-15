@@ -137,6 +137,15 @@ class rejectsOrGiveUpOwnershipUnitTests {
     }
 
     @Test
+    void rejectToManageStore_UserNotForStoreList() {
+        int sizeB=userFacade.getUser("r"+username3).getManagerToApprove().size();
+        IllegalAccessException exception = assertThrows(IllegalAccessException.class, () ->  userFacade.rejectToManageStore("r"+username3,"Nike","r"+username2));
+        assertEquals("No one suggest this user to be a manager", exception.getMessage());
+        int sizeA=userFacade.getUser("r"+username3).getManagerToApprove().size();
+        assertEquals(sizeB,sizeA);
+    }
+
+    @Test
     void rejectToManageStore_UserAppointIsManager() {
         try {
             userFacade.suggestManage("r"+username2,"r"+username3,"Nike",true,false,true,false);
@@ -229,6 +238,15 @@ class rejectsOrGiveUpOwnershipUnitTests {
     }
 
     @Test
+    void rejectToOwnStore_UserNotForStoreList() {
+        int sizeB=userFacade.getUser("r"+username3).getOwnerToApprove().size();
+        IllegalAccessException exception = assertThrows(IllegalAccessException.class, () ->  userFacade.rejectToOwnStore("r"+username3,"Nike","r"+username2));
+        assertEquals("No one suggest this user to be a owner", exception.getMessage());
+        int sizeA=userFacade.getUser("r"+username3).getOwnerToApprove().size();
+        assertEquals(sizeB,sizeA);
+    }
+
+    @Test
     void rejectToOwnStore_UserToManageNotLogged() {
         try {
             userFacade.suggestOwner("r"+username1,"r"+username2,"Adidas");
@@ -307,6 +325,17 @@ class rejectsOrGiveUpOwnershipUnitTests {
         boolean isOwnerA=userFacade.getUser("r"+username2).isOwner("Adidas");
         assertEquals(isOwnerB,isOwnerA);
     }
+
+    @Test
+    void waiverOnOwnership_IsFounder() {
+        boolean isOwnerB=userFacade.getUser("r"+username1).isOwner("Adidas");
+        IllegalAccessException exception = assertThrows(IllegalAccessException.class, () ->  userFacade.waiverOnOwnership("r"+username1,"Adidas"));
+        assertEquals("Founder cant waive on ownership", exception.getMessage());
+        boolean isOwnerA=userFacade.getUser("r"+username1).isOwner("Adidas");
+        assertEquals(isOwnerB,isOwnerA);
+    }
+
+
 
 
 
