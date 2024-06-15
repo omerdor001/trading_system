@@ -44,7 +44,7 @@ public class WaiveOnOwnershipAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(token, "0", "admin", password).getBody();
+        userToken = tradingSystemImp.login(token, "v0", "admin", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -65,7 +65,7 @@ public class WaiveOnOwnershipAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken2 = tradingSystemImp.login(ownerToken, "1", "owner", password).getBody();
+        userToken2 = tradingSystemImp.login(ownerToken, "v1", "owner", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken2);
@@ -87,7 +87,7 @@ public class WaiveOnOwnershipAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken3 = tradingSystemImp.login(tokenManager,"1","manager", password).getBody();
+        userToken3 = tradingSystemImp.login(tokenManager,"v2","manager", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken3);
@@ -153,7 +153,7 @@ public class WaiveOnOwnershipAcceptanceTests {
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp3.getStatusCode());
 
         ResponseEntity<String> resp4 = tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName, userNameManager);
-        Assertions.assertEquals("User doesn't have roles",resp4.getBody());
+        Assertions.assertEquals("User is not employeed in this store.",resp4.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp4.getStatusCode());
 
     }

@@ -5,6 +5,7 @@ import com.example.trading_system.domain.users.User;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class RemoveProductAcceptanceTests {
 
-    private TradingSystemImp tradingSystemImp = TradingSystemImp.getInstance();
+    private TradingSystemImp tradingSystemImp ;
     private String password = "123456";
     private String userName ="";
     private String token ="";
@@ -30,6 +31,7 @@ public class RemoveProductAcceptanceTests {
 
     @BeforeEach
     public void setUp() {
+        tradingSystemImp = TradingSystemImp.getInstance();
         tradingSystemImp.register("admin",password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response = tradingSystemImp.enter();
@@ -42,7 +44,7 @@ public class RemoveProductAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(token,"0","admin", password).getBody();
+        userToken = tradingSystemImp.login(token,"v0","admin", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -90,7 +92,7 @@ public class RemoveProductAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(regularToken,"1","regularUser", password).getBody();
+        userToken = tradingSystemImp.login(regularToken,"v1","regularUser", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -121,7 +123,7 @@ public class RemoveProductAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(tokenManager,"1","managerWithoutPermissions", password).getBody();
+        userToken = tradingSystemImp.login(tokenManager,"v1","managerWithoutPermissions", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -153,7 +155,7 @@ public class RemoveProductAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(tokenManager,"1","managerWithPermissions", password).getBody();
+        userToken = tradingSystemImp.login(tokenManager,"v1","managerWithPermissions", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -177,5 +179,10 @@ public class RemoveProductAcceptanceTests {
         ResponseEntity<String> response = tradingSystemImp.removeProduct(userName,token,storeName,productID);
         Assertions.assertEquals("Product was removed successfully.",response.getBody());
         Assertions.assertEquals(HttpStatus.OK,response.getStatusCode());
+    }
+
+    @AfterEach
+    public void tearDown(){
+        tradingSystemImp.deleteInstance();
     }
 }

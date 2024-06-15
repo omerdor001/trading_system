@@ -41,7 +41,7 @@ public class OfficialAndPermissionRequestsAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(token,"0","adminUser", password).getBody();
+        userToken = tradingSystemImp.login(token,"v0","adminUser", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -64,7 +64,7 @@ public class OfficialAndPermissionRequestsAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken2 = tradingSystemImp.login(tokenManager,"1","managerUser", password).getBody();
+        userToken2 = tradingSystemImp.login(tokenManager,"v1","managerUser", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken2);
@@ -85,7 +85,7 @@ public class OfficialAndPermissionRequestsAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken3 = tradingSystemImp.login(ownerToken,"2","ownerUser", password).getBody();
+        userToken3 = tradingSystemImp.login(ownerToken,"v2","ownerUser", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken3);

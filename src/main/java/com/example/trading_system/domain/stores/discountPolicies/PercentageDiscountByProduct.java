@@ -1,4 +1,4 @@
-package com.example.trading_system.domain.discountPolicies;
+package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
 
@@ -17,7 +17,7 @@ public class PercentageDiscountByProduct implements DiscountPolicy, Condition {
     public double calculateDiscount(Collection<ProductInSaleDTO> items) {
         double discount = 0;
         for (ProductInSaleDTO p : items) {
-            if (p.getProductId() == productId) discount += p.getPrice() * discountPercent * p.getQuantity();
+            if (p.getId() == productId) discount += p.getPrice() * discountPercent * p.getQuantity();
         }
         return discount;
     }

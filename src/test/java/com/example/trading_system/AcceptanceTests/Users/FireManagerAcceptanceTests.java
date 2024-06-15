@@ -4,6 +4,7 @@ import com.example.trading_system.domain.users.User;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class FireManagerAcceptanceTests {
-    private TradingSystemImp tradingSystemImp = TradingSystemImp.getInstance();
+    private TradingSystemImp tradingSystemImp ;
     private String password = "123456";
     private String userName ="";
     private String token ="";
@@ -33,6 +34,7 @@ public class FireManagerAcceptanceTests {
 
     @BeforeEach
     public void setUp() {
+        tradingSystemImp = TradingSystemImp.getInstance();
         tradingSystemImp.register("admin",password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response = tradingSystemImp.enter();
@@ -45,7 +47,7 @@ public class FireManagerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(token,"0","admin", password).getBody();
+        userToken = tradingSystemImp.login(token,"v0","admin", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -66,7 +68,7 @@ public class FireManagerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken2 = tradingSystemImp.login(ownerToken,"1","owner", password).getBody();
+        userToken2 = tradingSystemImp.login(ownerToken,"v1","owner", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken2);
@@ -88,7 +90,7 @@ public class FireManagerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken3 = tradingSystemImp.login(tokenManager,"2","manager", password).getBody();
+        userToken3 = tradingSystemImp.login(tokenManager,"v2","manager", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken3);
@@ -149,6 +151,11 @@ public class FireManagerAcceptanceTests {
         assertEquals("Success fire manager",res.getBody());
         assertEquals(HttpStatus.OK,res.getStatusCode());
 
-        assertEquals("User doesn't have roles", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(ownerUserName,ownerToken,storeName,userNameManager).getBody());
+        assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(ownerUserName,ownerToken,storeName,userNameManager).getBody());
+    }
+
+    @AfterEach
+    public void tearDown(){
+        tradingSystemImp.deleteInstance();
     }
 }

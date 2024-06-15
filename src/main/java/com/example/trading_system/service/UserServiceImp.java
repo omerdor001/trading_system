@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class UserServiceImp implements UserService {
 
@@ -58,6 +59,21 @@ public class UserServiceImp implements UserService {
         userFacade.logout(id, username);
         logger.info("User: {} logged out", username);
         return true;
+    }
+
+    @Override
+    public void suspendUser(String admin, String toSuspend, LocalDateTime endSuspention) {
+        userFacade.suspendUser(admin,toSuspend,endSuspention);
+    }
+
+    @Override
+    public void endSuspendUser(String admin, String toSuspend) {
+        userFacade.endSuspendUser(admin,toSuspend);
+    }
+
+    @Override
+    public String watchSuspensions(String admin) {
+        return userFacade.watchSuspensions(admin);
     }
 
 
@@ -187,7 +203,6 @@ public class UserServiceImp implements UserService {
         logger.info("Approving purchase for registered user with ID: {} ", registeredId);
         userFacade.purchaseCart(registeredId);
         logger.info("Purchase approved for registered user with ID: {}", registeredId);
-
     }
 
     @Override
@@ -198,5 +213,11 @@ public class UserServiceImp implements UserService {
         return result;
     }
 
-
+    @Override
+    public String calculatePrice(String username) throws Exception {
+        logger.info("Calculating price for user with ID: {} ", username);
+        String result = userFacade.calculatePrice(username);
+        logger.info("Finished calculating price for user with ID: {}", username);
+        return result;
+    }
 }

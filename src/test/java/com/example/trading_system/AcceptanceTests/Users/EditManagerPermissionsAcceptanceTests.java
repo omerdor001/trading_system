@@ -48,10 +48,11 @@ public class EditManagerPermissionsAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(token,"0","admin", password).getBody();
+        userToken = tradingSystemImp.login(token,"v0","admin", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
+            System.out.println("step2");
             userName = rootNode.get("username").asText();
             token = rootNode.get("token").asText();
         } catch (Exception e) {
@@ -70,7 +71,7 @@ public class EditManagerPermissionsAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken2 = tradingSystemImp.login(tokenManager,"1","manager", password).getBody();
+        userToken2 = tradingSystemImp.login(tokenManager,"v1","manager", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken2);
@@ -91,7 +92,7 @@ public class EditManagerPermissionsAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken3 = tradingSystemImp.login(regularUserToken,"2","regularUser", password).getBody();
+        userToken3 = tradingSystemImp.login(regularUserToken,"v2","regularUser", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken3);
@@ -145,7 +146,7 @@ public void GivenBadUserName_WhenEditPermissionsForManager_ThenThrowException(){
             } catch (Exception e) {
                 fail("Setup failed: Unable to extract username and token from JSON response");
             }
-            userToken3 = tradingSystemImp.login(tokenManager,"1","secondOwner", password).getBody();
+            userToken3 = tradingSystemImp.login(tokenManager,"v3","secondOwner", password).getBody();
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode rootNode = objectMapper.readTree(userToken3);
@@ -184,7 +185,7 @@ public void GivenBadUserName_WhenEditPermissionsForManager_ThenThrowException(){
         Assertions.assertEquals(HttpStatus.OK,resp.getStatusCode());
         Assertions.assertEquals("Success edit permission for manager ",resp.getBody());
 
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST,tradingSystemImp.getAllHistoryPurchases(userName,token,storeName).getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST,tradingSystemImp.getAllHistoryPurchases(userNameManager,tokenManager,storeName).getStatusCode());
 
     }
 

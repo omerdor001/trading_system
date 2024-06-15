@@ -23,8 +23,6 @@ public class ManagerAppointmentAcceptanceTests {
     private String userName ="";
     private String token ="";
     private String storeName = "Store1";
-    private String productName = "Product1";
-    private String[] keyWords = {"CarPlay", "iPhone"};
     private String tokenManager ="";
     private String userNameManager ="";
     private String regularUser = "";
@@ -45,7 +43,7 @@ public class ManagerAppointmentAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(token, "0", "admin", password).getBody();
+        userToken = tradingSystemImp.login(token, "v0", "admin", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -68,7 +66,7 @@ public class ManagerAppointmentAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken2 = tradingSystemImp.login(tokenManager, "1", "manager", password).getBody();
+        userToken2 = tradingSystemImp.login(tokenManager, "v1", "manager", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken2);

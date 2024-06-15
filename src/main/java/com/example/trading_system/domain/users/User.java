@@ -3,15 +3,23 @@ package com.example.trading_system.domain.users;
 import com.example.trading_system.domain.stores.Purchase;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 public abstract class User {
     public String username;
     private Cart cart;
+    private boolean suspended;
+    private LocalDateTime suspendedStart;
+    private LocalDateTime suspendedEnd;
 
     public User(String username) {
         this.username = username;
         this.cart = new Cart();
+        this.suspended=false;
+        this.suspendedStart=null;
+        this.suspendedEnd=null;
     }
 
     public String getUsername() {
@@ -24,6 +32,34 @@ public abstract class User {
 
     public String getPass() {
         throw new RuntimeException("Only registered users have a password");
+    }
+
+    public boolean isSuspended(){
+        return suspended;
+    }
+
+    public LocalDateTime getSuspendedStart() {
+        return suspendedStart;
+    }
+
+    public LocalDateTime getSuspendedEnd() {
+        return suspendedEnd;
+    }
+
+    public void setSuspendedEnd(LocalDateTime suspendedEnd) {
+        this.suspendedEnd = suspendedEnd;
+    }
+
+    public void suspend(LocalDateTime suspendedUntil){
+        suspended=true;
+        suspendedStart=LocalDateTime.now();
+        setSuspendedEnd(suspendedUntil);
+    }
+
+    public void finishSuspension(){
+        suspendedStart=null;
+        suspendedEnd=null;
+        suspended=false;
     }
 
     public abstract void login();

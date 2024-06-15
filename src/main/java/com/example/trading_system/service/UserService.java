@@ -1,6 +1,7 @@
 package com.example.trading_system.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public interface UserService {
     void deleteInstance();
@@ -20,6 +21,12 @@ public interface UserService {
     boolean login(String usernameV, String username, String password);
 
     boolean logout(int id, String username);
+
+    void suspendUser(String admin, String toSuspend, LocalDateTime endSuspention);
+
+    void endSuspendUser(String admin, String toSuspend);
+
+    String watchSuspensions(String admin);
 
     void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
 
@@ -55,5 +62,5 @@ public interface UserService {
 
     String getPurchaseHistory(String username, String storeName);
 
-
+    String calculatePrice(String username) throws Exception;
 }

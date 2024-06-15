@@ -1,11 +1,10 @@
-/*
 package com.example.trading_system.AcceptanceTests.Users;
 
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -20,11 +19,6 @@ public class ExitAcceptanceTests {
     private static TradingSystem tradingSystem;
     private String token;
     private String username;
-
-    @BeforeAll
-    public static void setup() {
-        tradingSystem = TradingSystemImp.getInstance();
-    }
 
     @BeforeEach
     public void openSystemAndRegisterAdmin() {
@@ -50,6 +44,11 @@ public class ExitAcceptanceTests {
         }
     }
 
+    @AfterEach
+    void setDown() {
+        tradingSystem.deleteInstance();
+    }
+
     @Test
     public void testExitSuccess() {
         ResponseEntity<String> enterResponse = tradingSystem.enter();
@@ -71,13 +70,13 @@ public class ExitAcceptanceTests {
     public void testExitSystemClosed() {
         ResponseEntity<String> enterResponse = tradingSystem.enter();
         String userToken = enterResponse.getBody();
-        tradingSystem.closeSystem(username,token);
+        tradingSystem.closeSystem(username, token);
         ResponseEntity<String> exitResponse = tradingSystem.exit(userToken, "owner1");
         assertEquals(HttpStatus.FORBIDDEN, exitResponse.getStatusCode());
         assertEquals("System is not open. Only registration is allowed.", exitResponse.getBody());
     }
 
-   @Test
+    @Test
     public void testExitInvalidToken() {
         ResponseEntity<String> exitResponse = tradingSystem.exit(token, "owner1");
         assertEquals(HttpStatus.UNAUTHORIZED, exitResponse.getStatusCode());
@@ -91,4 +90,3 @@ public class ExitAcceptanceTests {
         assertEquals("Invalid token was supplied", exitResponse.getBody());
     }
 }
-*/

@@ -70,7 +70,7 @@ public class SuggestManagerAcceptanceTest {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(token,"0","admin","123456").getBody();
+        userToken = tradingSystemImp.login(token,"v0","admin","123456").getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);

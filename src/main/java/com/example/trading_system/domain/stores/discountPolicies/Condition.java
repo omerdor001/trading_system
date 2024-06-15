@@ -1,4 +1,4 @@
-package com.example.trading_system.domain.discountPolicies;
+package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
 

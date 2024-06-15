@@ -49,7 +49,7 @@ public class FireOwnerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(token,"0","admin", password).getBody();
+        userToken = tradingSystemImp.login(token,"v0","admin", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -70,7 +70,7 @@ public class FireOwnerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken2 = tradingSystemImp.login(ownerToken,"1","owner", password).getBody();
+        userToken2 = tradingSystemImp.login(ownerToken,"v1","owner", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken2);
@@ -92,7 +92,7 @@ public class FireOwnerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken3 = tradingSystemImp.login(tokenManager,"2","manager", password).getBody();
+        userToken3 = tradingSystemImp.login(tokenManager,"v2","manager", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken3);
@@ -114,7 +114,7 @@ public class FireOwnerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken4 = tradingSystemImp.login(ownerToken,"3","owner2", password).getBody();
+        userToken4 = tradingSystemImp.login(ownerToken,"v3","owner2", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken4);
@@ -182,7 +182,7 @@ public class FireOwnerAcceptanceTests {
         assertEquals("Success fire owner",res.getBody());
         assertEquals(HttpStatus.OK,res.getStatusCode());
 
-        assertEquals("User doesn't have roles", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName,userNameManager).getBody());
+        assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName,userNameManager).getBody());
 
         assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName,ownerUserName).getBody());
 

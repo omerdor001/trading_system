@@ -1,4 +1,3 @@
-/*
 package com.example.trading_system.AcceptanceTests.Users;
 
 import com.example.trading_system.service.TradingSystem;
@@ -22,9 +21,9 @@ class LoginAcceptanceTests {
     private String username;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         tradingSystem = TradingSystemImp.getInstance();
-        tradingSystem.register( "owner1", "password123", LocalDate.now());
+        tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem();
         String userToken = tradingSystem.enter().getBody();
         try {
@@ -38,7 +37,7 @@ class LoginAcceptanceTests {
     }
 
     @AfterEach
-    void setDown(){
+    void setDown() {
         tradingSystem.logout(token, username);
     }
 
@@ -60,7 +59,7 @@ class LoginAcceptanceTests {
     void login_Wrong_Password() {
         ResponseEntity<String> response = tradingSystem.login(token, "v0", "owner1", "password12");
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals(response.getBody(),"Wrong password");
+        assertEquals(response.getBody(), "Wrong password");
     }
 
     @Test
@@ -69,4 +68,3 @@ class LoginAcceptanceTests {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 }
-*/

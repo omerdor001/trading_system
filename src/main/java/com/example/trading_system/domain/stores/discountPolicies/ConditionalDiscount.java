@@ -1,4 +1,4 @@
-package com.example.trading_system.domain.discountPolicies;
+package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
 
@@ -31,7 +31,7 @@ public class ConditionalDiscount implements DiscountPolicy, Condition {
 
     @Override
     public void setFirst(Condition first) {
-        throw new RuntimeException("Action not allowed for conditional discount");
+        this.condition = first;
     }
 
     @Override
@@ -54,10 +54,7 @@ public class ConditionalDiscount implements DiscountPolicy, Condition {
         throw new RuntimeException("Action not allowed for conditional discount");
     }
 
-    public void setCondition(Condition condition) {
-        this.condition = condition;
-    }
-
+    @Override
     public void setThen(DiscountPolicy then) {
         this.then = then;
     }
