@@ -36,7 +36,7 @@ class AppointmentManagerUnitTests {
             userFacade.createStore("r"+username1,"Adidas","");
             userFacade.createStore("r"+username2,"Nike","");
         }
-        catch (Exception e){}
+        catch (Exception _){}
     }
 
     @AfterEach
@@ -50,7 +50,7 @@ class AppointmentManagerUnitTests {
             userFacade.exit("v2");
             userFacade.deleteInstance();
         }
-        catch (Exception e){}
+        catch (Exception _){}
     }
 
     //SuggestManage
@@ -58,9 +58,7 @@ class AppointmentManagerUnitTests {
     @Test
     void suggestManager_Success() {
         int sizeB=userFacade.getUser("r"+username2).getManagerToApprove().size();
-        assertDoesNotThrow(() -> {
-            userFacade.suggestManage("r"+username1,"r"+username2,"Adidas",true,false,true,false);
-        }, "suggestManage should not throw any exceptions");
+        assertDoesNotThrow(() -> userFacade.suggestManage("r"+username1,"r"+username2,"Adidas",true,false,true,false), "suggestManage should not throw any exceptions");
         int sizeA=userFacade.getUser("r"+username2).getManagerToApprove().size();
         assertEquals(sizeB,sizeA-1);
     }
@@ -141,11 +139,9 @@ class AppointmentManagerUnitTests {
         try {
             userFacade.suggestManage("r"+username1,"r"+username2,"Adidas",true,false,true,false);
         }
-        catch (Exception e){}
+        catch (Exception _){}
         int sizeB=userFacade.getUser("r"+username2).getManagerToApprove().size();
-        assertDoesNotThrow(() -> {
-            userFacade.approveManage("r"+username2,"Adidas","r"+username1);
-        }, "approveManage should not throw any exceptions");
+        assertDoesNotThrow(() -> userFacade.approveManage("r"+username2,"Adidas","r"+username1), "approveManage should not throw any exceptions");
         int sizeA=userFacade.getUser("r"+username2).getManagerToApprove().size();
         assertEquals(sizeB,sizeA+1);
     }
@@ -155,7 +151,7 @@ class AppointmentManagerUnitTests {
         try {
             userFacade.suggestManage("r"+username1,"r"+username2,"Adidas",true,false,true,false);
         }
-        catch (Exception e){}
+        catch (Exception _){}
         int sizeB=userFacade.getUser("r"+username2).getManagerToApprove().size();
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () ->  userFacade.approveManage("r"+username2,"Adidas1","r"+username1));
         assertEquals("No store called Adidas1 exist", exception.getMessage());
@@ -168,7 +164,7 @@ class AppointmentManagerUnitTests {
         try {
             userFacade.suggestManage("r"+username1,"r"+username2,"Adidas",true,false,true,false);
         }
-        catch (Exception e){}
+        catch (Exception _){}
         int sizeB=userFacade.getUser("r"+username2).getManagerToApprove().size();
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () ->  userFacade.approveManage("r"+"username2","Adidas","r"+username1));
         assertEquals("No user called rusername2 exist", exception.getMessage());
@@ -181,7 +177,7 @@ class AppointmentManagerUnitTests {
         try {
             userFacade.suggestManage("r"+username3,"r"+username2,"Nike",true,false,true,false);
         }
-        catch (Exception e){}
+        catch (Exception _){}
         int sizeB=userFacade.getUser("r"+username3).getManagerToApprove().size();
         userFacade.suspendUser("r"+username1,"r"+username3, LocalDateTime.of(2025,1,1,1,1));
         RuntimeException exception = assertThrows(RuntimeException.class, () ->  userFacade.approveManage("r"+username3,"Nike","r"+username2));
@@ -196,7 +192,7 @@ class AppointmentManagerUnitTests {
         try {
             userFacade.suggestManage("r"+username1,"r"+username2,"Adidas",true,false,true,false);
         }
-        catch (Exception e){}
+        catch (Exception _){}
         int sizeB=userFacade.getUser("r"+username3).getManagerToApprove().size();
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () ->  userFacade.approveManage("r"+username3,"Adidas","r"+username2));
         assertEquals("User must be Owner", exception.getMessage());
@@ -209,7 +205,7 @@ class AppointmentManagerUnitTests {
         try {
             userFacade.suggestManage("r"+username1,"r"+username2,"Adidas",true,false,true,false);
         }
-        catch (Exception e){}
+        catch (Exception _){}
         int sizeB=userFacade.getUser("r"+username2).getManagerToApprove().size();
         userFacade.logout(1,"r"+username2);
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () ->  userFacade.approveManage("r"+username2,"Adidas","r"+username1));
@@ -225,7 +221,7 @@ class AppointmentManagerUnitTests {
             userFacade.suggestManage("r"+username2,"r"+username3,"Nike",true,false,true,false);
             userFacade.getUser("r"+username3).addManagerRole("r"+username2,"Nike");
         }
-        catch (Exception e){}
+        catch (Exception _){}
         int sizeB=userFacade.getUser("r"+username2).getManagerToApprove().size();
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () ->  userFacade.approveManage("r"+username3,"Nike","r"+username2));
         assertEquals("User already Manager of this store", exception.getMessage());
@@ -238,7 +234,7 @@ class AppointmentManagerUnitTests {
         try {
             userFacade.suggestManage("r"+username1,"r"+username2,"Adidas",true,false,true,false);
         }
-        catch (Exception e){}
+        catch (Exception _){}
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () ->  userFacade.approveManage("r"+username1,"Adidas","r"+username1));
         assertEquals("User cannot be owner of this store", exception.getMessage());
     }
@@ -251,11 +247,9 @@ class AppointmentManagerUnitTests {
             userFacade.suggestManage("r"+username1,"r"+username2,"Adidas",true,false,true,false);
             userFacade.approveManage("r"+username2,"Adidas","r"+username1);
         }
-        catch (Exception e){}
+        catch (Exception _){}
         boolean isManagerB=userFacade.getUser("r"+username2).isManager("Adidas");
-        assertDoesNotThrow(() -> {
-            userFacade.appointManager("r"+username1,"r"+username2,"Adidas",true,false,true,false);
-        }, "appointManager should not throw any exceptions");
+        assertDoesNotThrow(() -> userFacade.appointManager("r"+username1,"r"+username2,"Adidas",true,false,true,false), "appointManager should not throw any exceptions");
         boolean isManagerA=userFacade.getUser("r"+username2).isManager("Adidas");
         assertEquals(isManagerB,!isManagerA);
     }
@@ -267,7 +261,7 @@ class AppointmentManagerUnitTests {
             userFacade.suggestManage("r"+username1,"r"+username2,"Adidas",true,false,true,false);
             userFacade.approveManage("r"+username2,"Adidas","r"+username1);
         }
-        catch (Exception e){}
+        catch (Exception _){}
         boolean isManagerB=userFacade.getUser("r"+username2).isManager("Adidas");
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () ->  userFacade.appointManager("r"+username1,"r"+username2,"Adidas1",true,false,true,false));
         assertEquals("No store called Adidas1 exist", exception.getMessage());
@@ -281,7 +275,7 @@ class AppointmentManagerUnitTests {
             userFacade.suggestManage("r"+username1,"r"+username2,"Adidas",true,false,true,false);
             userFacade.approveManage("r"+username2,"Adidas","r"+username1);
         }
-        catch (Exception e){}
+        catch (Exception _){}
         boolean isManagerB=userFacade.getUser("r"+username2).isManager("Adidas");
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () ->  userFacade.appointManager("r"+username1,"r"+"username2","Adidas",true,false,true,false));
         assertEquals("No user called rusername2 exist", exception.getMessage());
@@ -295,7 +289,7 @@ class AppointmentManagerUnitTests {
             userFacade.suggestManage("r"+username2,"r"+username3,"Nike",true,false,true,false);
             userFacade.approveManage("r"+username3,"Nike","r"+username2);
         }
-        catch (Exception e){}
+        catch (Exception _){}
         boolean isManagerB=userFacade.getUser("r"+username3).isManager("Adidas");
         userFacade.suspendUser("r"+username1,"r"+username2, LocalDateTime.of(2025,1,1,1,1));
         RuntimeException exception = assertThrows(RuntimeException.class, () ->  userFacade.appointManager("r"+username2,"r"+username3,"Nike",true,false,true,false));
@@ -311,7 +305,7 @@ class AppointmentManagerUnitTests {
             userFacade.suggestManage("r"+username2,"r"+username3,"Nike",true,false,true,false);
             userFacade.approveManage("r"+username3,"Nike","r"+username2);
         }
-        catch (Exception e){}
+        catch (Exception _){}
         boolean isManagerB=userFacade.getUser("r"+username3).isManager("Nike");
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () ->  userFacade.appointManager("r"+username2,"r"+username3,"Adidas",true,false,true,false));
         assertEquals("Appoint user must be Owner", exception.getMessage());
@@ -325,7 +319,7 @@ class AppointmentManagerUnitTests {
             userFacade.suggestManage("r"+username1,"r"+username2,"Adidas",true,false,true,false);
             userFacade.approveManage("r"+username2,"Adidas","r"+username1);
         }
-        catch (Exception e){}
+        catch (Exception _){}
         boolean isManagerB=userFacade.getUser("r"+username2).isManager("Adidas");
         userFacade.logout(0,"r"+username1);
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () ->  userFacade.appointManager("r"+username1,"r"+username2,"Adidas",true,false,true,false));
@@ -342,7 +336,7 @@ class AppointmentManagerUnitTests {
             userFacade.approveManage("r"+username3,"Nike","r"+username2);
             userFacade.getUser("r"+username3).addManagerRole("r"+username2,"Nike");
         }
-        catch (Exception e){}
+        catch (Exception _){}
         boolean isManagerB=userFacade.getUser("r"+username3).isManager("Nike");
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () ->  userFacade.appointManager("r"+username2,"r"+username3,"Nike",true,false,true,false));
         assertEquals("User already Manager of this store", exception.getMessage());
@@ -356,7 +350,7 @@ class AppointmentManagerUnitTests {
             userFacade.suggestManage("r"+username1,"r"+username2,"Adidas",true,false,true,false);
             userFacade.approveManage("r"+username2,"Adidas","r"+username1);
         }
-        catch (Exception e){}
+        catch (Exception _){}
         boolean isManagerB=userFacade.getUser("r"+username1).isManager("Adidas");
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () ->  userFacade.appointManager("r"+username1,"r"+username1,"Adidas",true,false,true,false));
         assertEquals("User cannot be owner of this store", exception.getMessage());
