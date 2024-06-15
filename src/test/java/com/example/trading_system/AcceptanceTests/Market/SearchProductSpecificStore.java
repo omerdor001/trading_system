@@ -31,7 +31,7 @@ public class SearchProductSpecificStore {
         String userTokenResponse = tradingSystem.enter().getBody();
         extractToken(userTokenResponse);
 
-        String loginResponse = tradingSystem.login(token, "0", "owner1", "password123").getBody();
+        String loginResponse = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
         extractUsernameAndToken(loginResponse);
     }
 

@@ -218,8 +218,8 @@ public class Store {
         return isActive;
     }
 
-    public Boolean setOpen(Boolean open) {            //Added because missing
-        return isOpen;
+    public void setOpen(Boolean open){            //Added because missing
+        isOpen = open;
     }
 
     public List<String> getOwners() {                //Added because missing
@@ -252,8 +252,13 @@ public class Store {
     }
 
     public void removeManager(String userName) {
-        owners.remove(userName);
+        managers.remove(userName);
     }
+    public boolean isOpen()
+    {
+        return isOpen;
+    }
+
 
     public String getFounder() {
         return founder;
@@ -426,6 +431,10 @@ public class Store {
     public void setCategoryCondition(int selectedConditionIndex, int newCategory) {
         Condition setCondition = discountConditions.get(selectedConditionIndex);
         setCondition.setCategory(newCategory);
+    }
+
+    public String getPurchaseHistoryString(String username) {
+        return salesHistory.getPurchaseHistory(username);
     }
     //endregion
 }

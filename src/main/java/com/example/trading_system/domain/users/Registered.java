@@ -32,7 +32,9 @@ public class Registered extends User {
         this.isAdmin = false;
         this.isLogged = false;
         this.notifications = new LinkedList<>();
-        this.roles = new ArrayList<>();
+        this.roles=new ArrayList<>();
+        this.managerToApprove = new HashMap<>();
+        this.ownerToApprove = new ArrayList<>();
     }
 
     public void openStore(String storeName) {
@@ -146,8 +148,8 @@ public class Registered extends User {
         return managerToApprove.remove(store_name_id);
     }
 
-    public void removeWaitingAppoint_Owner(String storeName) {
-        ownerToApprove.remove(storeName);
+    public boolean removeWaitingAppoint_Owner(String storeName) {
+        return ownerToApprove.remove(storeName);
     }
 
     public List<Role> getRoles() {
