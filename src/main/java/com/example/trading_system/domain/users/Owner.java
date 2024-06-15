@@ -84,4 +84,24 @@ public class Owner extends RoleState {
     @Override
     public void requestInformationAboutSpecificOfficialInStore() {
     }
+
+    @Override
+    public boolean isWatch(){
+        return true;
+    }
+
+    @Override
+    public boolean isEditSupply(){
+        return true;
+    }
+
+    @Override
+    public boolean isEditBuyPolicy(){
+        return true;
+    }
+
+    @Override
+    public boolean isEditDiscountPolicy(){
+        return true;
+    }
 }

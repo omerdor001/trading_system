@@ -40,4 +40,5 @@ class OpenSystemUnitTests {
         assertEquals("System is already open.", response.getBody());
 //        verify(userService, times(1)).isAdminRegistered();
     }
+
 }

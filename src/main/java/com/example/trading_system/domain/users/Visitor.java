@@ -78,7 +78,8 @@ public class Visitor extends User {
     }
 
     @Override
-    public void removeWaitingAppoint_Owner(String storeName) {
+    public boolean removeWaitingAppoint_Owner(String storeName) {
+        return false;
     }
 
     @Override

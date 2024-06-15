@@ -56,6 +56,7 @@ public interface UserFacade {
 
     void fireManager(String owner, String storeName, String manager) throws IllegalAccessException;
 
+    void fireOwner(String ownerAppoint, String storeName, String owner) throws IllegalAccessException;
     /**
      * @param userId        is the current user that do the update
      * @param managerToEdit is the manager that the update will affect
@@ -79,4 +80,6 @@ public interface UserFacade {
     String getPurchaseHistory(String username, String storeName);
 
     void purchaseCart(String username) throws Exception;
+
+    String calculatePrice(String username) throws Exception;
 }

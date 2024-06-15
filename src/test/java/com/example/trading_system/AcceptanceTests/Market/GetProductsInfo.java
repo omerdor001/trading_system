@@ -38,7 +38,7 @@ public class GetProductsInfo {
             fail("Setup failed: Unable to extract token from JSON response");
         }
 
-        String loginResponse = tradingSystem.login(token, "0", "owner1", "password123").getBody();
+        String loginResponse = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(loginResponse);

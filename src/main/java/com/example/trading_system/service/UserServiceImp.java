@@ -166,6 +166,11 @@ public class UserServiceImp implements UserService {
         userFacade.fireManager(owner, storeName, manager);
     }
 
+    @Override
+    public void fireOwner(String ownerAppoint, String storeName, String owner) throws IllegalAccessException {
+        userFacade.fireOwner(ownerAppoint, storeName, owner);
+    }
+
 
     @Override
     public void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
@@ -198,7 +203,6 @@ public class UserServiceImp implements UserService {
         logger.info("Approving purchase for registered user with ID: {} ", registeredId);
         userFacade.purchaseCart(registeredId);
         logger.info("Purchase approved for registered user with ID: {}", registeredId);
-
     }
 
     @Override
@@ -209,5 +213,11 @@ public class UserServiceImp implements UserService {
         return result;
     }
 
-
+    @Override
+    public String calculatePrice(String username) throws Exception {
+        logger.info("Calculating price for user with ID: {} ", username);
+        String result = userFacade.calculatePrice(username);
+        logger.info("Finished calculating price for user with ID: {}", username);
+        return result;
+    }
 }

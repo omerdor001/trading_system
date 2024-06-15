@@ -14,7 +14,6 @@ public class PurchaseCartUnitTests {
     UserMemoryRepository userMemoryRepository;
     MarketFacadeImp marketFacade;
     UserFacadeImp userFacadeImp;
-    StoreSalesHistory storeSalesHistory;
 
     @BeforeEach
     public void init() {
@@ -24,12 +23,10 @@ public class PurchaseCartUnitTests {
 //        UserMemoryRepository.getInstance().deleteInstance();
         MarketFacadeImp.getInstance().deleteInstance();
         UserFacadeImp.getInstance().deleteInstance();
-        StoreSalesHistory.getInstance().deleteInstance();
 
         // Re-instantiate singletons
         userMemoryRepository = UserMemoryRepository.getInstance();
         marketFacade = MarketFacadeImp.getInstance();
-        storeSalesHistory = StoreSalesHistory.getInstance();
         userFacadeImp = UserFacadeImp.getInstance();
     }
 
@@ -37,7 +34,6 @@ public class PurchaseCartUnitTests {
     public void tearDown() {
         userFacadeImp.deleteInstance();
         marketFacade.deleteInstance();
-        storeSalesHistory.deleteInstance();
     }
     //TODO : Interaction with Delivery Service is not working properly - uncomment to see and try to find the problem
  /*   @Test
