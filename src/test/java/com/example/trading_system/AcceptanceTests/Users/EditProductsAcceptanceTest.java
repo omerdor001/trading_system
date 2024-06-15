@@ -188,7 +188,6 @@ public class EditProductsAcceptanceTest {
     public void GivenOwner_WhenSetProductPrice_ThenSuccess(){
 
         ResponseEntity<String> resp = tradingSystemImp.getStoreProducts(userName, token, storeName);
-        System.out.println(resp.getBody());
         Assertions.assertTrue(resp.getBody().contains("\"product_id\":111"));
         Assertions.assertTrue(resp.getBody().contains("\"product_price\":15.0"));
 
@@ -207,7 +206,6 @@ public class EditProductsAcceptanceTest {
     public void GivenOwner_WhenSetProductQuantity_ThenSuccess(){
 
         ResponseEntity<String> resp = tradingSystemImp.getStoreProducts(userName, token, storeName);
-        System.out.println(resp.getBody());
         Assertions.assertTrue(resp.getBody().contains("\"product_id\":111"));
         Assertions.assertTrue(resp.getBody().contains("\"product_quantity\":6"));
 

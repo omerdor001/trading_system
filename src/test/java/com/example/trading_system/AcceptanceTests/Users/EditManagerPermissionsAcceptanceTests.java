@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class EditManagerPermissionsAcceptanceTests {
 
 
-    private TradingSystemImp tradingSystemImp = TradingSystemImp.getInstance();
+    private TradingSystemImp tradingSystemImp ;
     private String password = "123456";
     private String userName ="";
     private String token ="";
@@ -35,6 +35,7 @@ public class EditManagerPermissionsAcceptanceTests {
 
     @BeforeEach
     public void setUp() {
+        tradingSystemImp = TradingSystemImp.getInstance();
         tradingSystemImp.register("admin",password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response = tradingSystemImp.enter();
@@ -59,7 +60,6 @@ public class EditManagerPermissionsAcceptanceTests {
         tradingSystemImp.openStore(userName,token,storeName,"My Store is the best");
 
         tradingSystemImp.register("manager",password, LocalDate.now());
-        tradingSystemImp.openSystem();
         ResponseEntity<String> response2 = tradingSystemImp.enter();
         String userToken2 = response2.getBody();
         try {
@@ -174,23 +174,23 @@ public void GivenBadUserName_WhenEditPermissionsForManager_ThenThrowException(){
 
         } // Test Permission Before and then Test Permission After
 
-//    @Test
-//    public void GivenGoodManagerAndOwner_WhenEditPermissionToManager_ThenSuccesss2() //testing Watch Permission
-//    {
-//        //TODO why store sales is Singelton
-//        Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.getAllHistoryPurchases(userNameManager,tokenManager,storeName).getStatusCode());
-//
-//        ResponseEntity<String> resp = tradingSystemImp.editPermissionForManager(userName,token,userNameManager,storeName,false,true,true,true);
-//        Assertions.assertEquals(HttpStatus.OK,resp.getStatusCode());
-//        Assertions.assertEquals("Success edit permission for manager ",resp.getBody());
-//
-//        Assertions.assertEquals(HttpStatus.BAD_REQUEST,tradingSystemImp.getAllHistoryPurchases(userNameManager,tokenManager,storeName).getStatusCode());
-//
-//    }
+    @Test
+    public void GivenGoodManagerAndOwner_WhenEditPermissionToManager_ThenSuccesss2() //testing Watch Permission
+    {
+        //TODO why store sales is Singelton
+        Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.getAllHistoryPurchases(userNameManager,tokenManager,storeName).getStatusCode());
+
+        ResponseEntity<String> resp = tradingSystemImp.editPermissionForManager(userName,token,userNameManager,storeName,false,true,true,true);
+        Assertions.assertEquals(HttpStatus.OK,resp.getStatusCode());
+        Assertions.assertEquals("Success edit permission for manager ",resp.getBody());
+
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST,tradingSystemImp.getAllHistoryPurchases(userName,token,storeName).getStatusCode());
+
+    }
 
     @AfterEach
     public void tearDown(){
-        tradingSystemImp.logout(regularUserToken,regularUser);
+        tradingSystemImp.deleteInstance();
     }
 
 

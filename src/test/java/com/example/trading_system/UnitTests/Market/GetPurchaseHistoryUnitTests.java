@@ -26,7 +26,6 @@ public class GetPurchaseHistoryUnitTests {
     UserMemoryRepository userMemoryRepository;
     MarketFacadeImp marketFacade;
     UserFacadeImp userFacadeImp;
-    StoreSalesHistory storeSalesHistory;
 
     @BeforeEach
     public void init() {
@@ -36,15 +35,11 @@ public class GetPurchaseHistoryUnitTests {
 //        UserMemoryRepository.getInstance().deleteInstance();
         MarketFacadeImp.getInstance().deleteInstance();
         UserFacadeImp.getInstance().deleteInstance();
-        StoreSalesHistory.getInstance().deleteInstance();
 
         // Re-instantiate singletons
         userMemoryRepository = UserMemoryRepository.getInstance();
         marketFacade = MarketFacadeImp.getInstance();
         userFacadeImp = UserFacadeImp.getInstance();
-        storeSalesHistory = StoreSalesHistory.getInstance();
-
-        storeSalesHistory.setPurchases(new ArrayList<>());
     }
 
     @AfterEach
@@ -57,7 +52,8 @@ public class GetPurchaseHistoryUnitTests {
     public void givenNonExistentUser_WhenGetPurchaseHistory_ThenThrowException() {
         String username = "rNonExistentUser";
         String storeName = "StoreName";
-        storeSalesHistory.addPurchase(purchase);
+        marketFacade.addStore(storeName,"Description","founder",6.0);
+        marketFacade.getStore(storeName).addPurchase(purchase);
 
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.getPurchaseHistory(username, storeName), "User not found");
     }
@@ -66,7 +62,9 @@ public class GetPurchaseHistoryUnitTests {
     public void givenUserNotLoggedIn_WhenGetPurchaseHistory_ThenThrowException() {
         String username = "rValidUser";
         String storeName = "StoreName";
-        storeSalesHistory.addPurchase(purchase);
+        marketFacade.addStore(storeName,"Description","founder",6.0);
+
+        marketFacade.getStore(storeName).addPurchase(purchase);
 
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         // Ensure user is added but not logged in
@@ -77,7 +75,8 @@ public class GetPurchaseHistoryUnitTests {
     public void givenUserNotCommercialManager_WhenGetPurchaseHistory_ThenThrowException() {
         String username = "rValidUser";
         String storeName = "StoreName";
-        storeSalesHistory.addPurchase(purchase);
+        marketFacade.addStore(storeName,"Description","founder",6.0);
+        marketFacade.getStore(storeName).addPurchase(purchase);
 
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         // Ensure user is logged in

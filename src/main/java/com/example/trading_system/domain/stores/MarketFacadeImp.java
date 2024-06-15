@@ -626,8 +626,11 @@ public class MarketFacadeImp implements MarketFacade {
         result.append(storeName).append("\n");
         result.append("Role id username address birthdate").append("\n");
         for (String owner : storeOwners) {
-            User user2 = userFacade.getUser(userName);
-            result.append("Owner ").append(user2.getUsername()).append(" ").append(owner).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append("\n");
+            User user2 = userFacade.getUser(owner);
+            if (store.getFounder().equals(owner))
+                result.append("Founder ").append(user2.getUsername()).append(" ").append(owner).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append("\n");
+            else
+                result.append("Owner ").append(user2.getUsername()).append(" ").append(owner).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append("\n");
         }
         for (String manager : storeManagers) {
             User user2 = userFacade.getUser(manager);
@@ -652,10 +655,11 @@ public class MarketFacadeImp implements MarketFacade {
             throw new IllegalArgumentException("User must exist");
         }
         User user = userFacade.getUser(userName);
+        Store store = storeMemoryRepository.getStore(storeName);
+
         user.getRoleByStoreId(storeName).getRoleState().requestManagersPermissions();
 
-        List<String> storeManagers = storeMemoryRepository.getStore(storeName).getManagers();
-
+        List<String> storeManagers = store.getManagers();
         StringBuilder result = new StringBuilder();
         result.append(storeName).append("\n\n");
         result.append("Managers :").append("\n");
@@ -693,6 +697,7 @@ public class MarketFacadeImp implements MarketFacade {
 
         Store store = storeMemoryRepository.getStore(storeName);
         List<String> storeOwners = store.getOwners();
+        List<String> storeManagers = store.getManagers();
 
         StringBuilder result = new StringBuilder();
         result.append(storeName).append('\n');
@@ -700,17 +705,18 @@ public class MarketFacadeImp implements MarketFacade {
         if (storeOwners.contains(officialUserName)) {
             User user2 = userFacade.getUser(officialUserName);
             result.append("Role id username address birthdate").append('\n');
-            result.append("Owner ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append('\n');
-        } else {
-            List<String> storeManagers = store.getManagers();
-            if (storeManagers.contains(officialUserName)) {
+            if (store.getFounder().equals(officialUserName))
+                result.append("Founder ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append('\n');
+            else
+                result.append("Owner ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append('\n');
+        } else if (storeManagers.contains(officialUserName)) {
                 User user2 = userFacade.getUser(officialUserName);
                 RoleState managerRole = user2.getRoleByStoreId(storeName).getRoleState();
                 result.append("Role id username address birthdate watch editSupply editBuyPolicy editDiscountPolicy").append("\n");
                 result.append("Manager ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditBuyPolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append("\n");
             } else
                 throw new IllegalArgumentException("User is not employeed in this store.");
-        }
+
         return result.toString();
     }
 

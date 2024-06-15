@@ -148,8 +148,8 @@ public class Registered extends User {
         return managerToApprove.remove(store_name_id);
     }
 
-    public void removeWaitingAppoint_Owner(String storeName) {
-        ownerToApprove.remove(storeName);
+    public boolean removeWaitingAppoint_Owner(String storeName) {
+        return ownerToApprove.remove(storeName);
     }
 
     public List<Role> getRoles() {

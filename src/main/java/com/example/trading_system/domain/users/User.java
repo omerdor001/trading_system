@@ -40,7 +40,7 @@ public abstract class User {
 
     public abstract void addWaitingAppoint_Manager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
-    public abstract void removeWaitingAppoint_Owner(String storeName);
+    public abstract boolean removeWaitingAppoint_Owner(String storeName);
 
     public abstract List<Boolean> removeWaitingAppoint_Manager(String store_name_id);
 

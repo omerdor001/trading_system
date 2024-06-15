@@ -19,7 +19,6 @@ public class UserFacadeImp implements UserFacade {
     private static UserFacadeImp instance = null;
     private MarketFacade marketFacade;
     private UserRepository userMemoryRepository;
-    private StoreSalesHistory storeSalesHistory;
     private DeliveryService deliveryService;
     private PaymentService paymentService;
 
@@ -27,7 +26,6 @@ public class UserFacadeImp implements UserFacade {
     private UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService) {
         this.marketFacade = MarketFacadeImp.getInstance();
         this.userMemoryRepository = UserMemoryRepository.getInstance();
-        this.storeSalesHistory = StoreSalesHistory.getInstance();
         this.paymentService = paymentService;
         this.deliveryService = deliveryService;
 
@@ -397,6 +395,8 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("User cannot be owner of this store");
         }
         List<Boolean> permissions = newManagerUser.removeWaitingAppoint_Manager(store_name_id);
+        if( permissions == null)
+            throw new IllegalAccessException("No one suggest manager to this user");
         newManagerUser.addManagerRole(appoint, store_name_id);
         newManagerUser.setPermissionsToManager(store_name_id, permissions.get(0), permissions.get(1), permissions.get(2), permissions.get(3));
         marketFacade.getStore(store_name_id).addManager(newManager);
@@ -429,7 +429,9 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User cannot be owner of this store");
         }
-        newManagerUser.removeWaitingAppoint_Manager(storeName);
+        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName);
+        if (perm == null)
+            throw new IllegalAccessException("No one suggest this user to be a manager");
     }
 
     @Override
@@ -456,7 +458,13 @@ public class UserFacadeImp implements UserFacade {
         if (newOwnerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User already Owner of this store");
         }
-        newOwnerUser.removeWaitingAppoint_Owner(storeName);
+        if(!newOwnerUser.removeWaitingAppoint_Owner(storeName))
+            throw new IllegalAccessException("No one suggest this user to be a owner");
+
+        if(marketFacade.getStore(storeName).getManagers().contains(newOwner)) {
+            newOwnerUser.removeManagerRole(storeName);
+            marketFacade.getStore(storeName).removeManager(newOwner);
+        }
         newOwnerUser.addOwnerRole(appoint, storeName);
         marketFacade.getStore(storeName).addOwner(newOwner);
     }
@@ -485,7 +493,8 @@ public class UserFacadeImp implements UserFacade {
         if (newOwnerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User already Owner of this store");
         }
-        newOwnerUser.removeWaitingAppoint_Owner(storeName);
+        if(!newOwnerUser.removeWaitingAppoint_Owner(storeName))
+            throw new IllegalAccessException("No one suggest this user to be a owner");
     }
 
     @Override
@@ -534,6 +543,7 @@ public class UserFacadeImp implements UserFacade {
                 store.removeManager(storeManager);
             }
         }
+
         owner.removeOwnerRole(storeName);
         marketFacade.getStore(storeName).removeOwner(userName);
 
@@ -570,7 +580,7 @@ public class UserFacadeImp implements UserFacade {
         if (!managerUser.getRoleByStoreId(storeName).getAppointedById().equals(owner)) {
             throw new IllegalAccessException("Owner cant fire manager that he/she didn't appointed");
         }
-        ownerUser.removeManagerRole(storeName);
+        managerUser.removeManagerRole(storeName);
         marketFacade.getStore(storeName).removeManager(manager);
     }
 
@@ -762,9 +772,9 @@ public class UserFacadeImp implements UserFacade {
     }
 
 
-    ///Purchase SECTION
+    ///Purchase SECTION - already added to store history
     private void addPurchase(String registeredId) {
-        storeSalesHistory.addPurchase(getUser(registeredId).addPurchasedProduct());
+        getUser(registeredId).addPurchasedProduct();
     }
 
     @Override
@@ -781,7 +791,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("User is not commercial manager");
             throw new RuntimeException("User is not commercial manager");
         }
-        return storeSalesHistory.getPurchaseHistory(username, storeName);
+        return marketFacade.getStore(storeName).getPurchaseHistoryString(username);
     }
 
     private synchronized boolean checkAvailabilityAndConditions(String username) {
@@ -834,6 +844,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Products are not available or do not meet purchase conditions.");
             throw new RuntimeException("Products are not available or do not meet purchase conditions.");
         }
+        HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
 
         removeReservedProducts(username);
         Timer timer = new Timer();
@@ -863,6 +874,11 @@ public class UserFacadeImp implements UserFacade {
             throw new Exception("Error in Payment");
         }
 
+        for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
+            Store store = marketFacade.getStore(shoppingBagInStore.getValue().getStoreId());
+            Purchase purchase = new Purchase(username,shoppingBagInStore.getValue().getProducts_list().values().stream().toList(),shoppingBagInStore.getValue().getTotalPrice(),shoppingBagInStore.getValue().getStoreId());
+            store.addPurchase(purchase);
+        }
         addPurchase(username);
         timer.cancel();
         timer.purge();

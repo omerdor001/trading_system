@@ -251,7 +251,7 @@ public class Store {
     }
 
     public void removeManager(String userName) {
-        owners.remove(userName);
+        managers.remove(userName);
     }
     public boolean isOpen()
     {
@@ -402,6 +402,10 @@ public class Store {
     public void setCategoryCondition(int selectedConditionIndex, int newCategory) {
         Condition setCondition = discountConditions.get(selectedConditionIndex);
         setCondition.setCategory(newCategory);
+    }
+
+    public String getPurchaseHistoryString(String username) {
+        return salesHistory.getPurchaseHistory(username);
     }
     //endregion
 }

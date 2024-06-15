@@ -107,7 +107,6 @@ public class CloseStoreExistAcceptanceTests {
     public void givenValidStoreToClose_WhenCloseStoreExist_ThenSuccess(){
         ResponseEntity<String> response2 = tradingSystemImp.searchNameInStore(userName,"CarPlay", token,storeName,1.0,1000.0,1.0,1);
         Assertions.assertEquals(HttpStatus.OK,response2.getStatusCode());
-        System.out.println(response2.getBody());
         HttpStatusCode statusCode =tradingSystemImp.closeStoreExist(userName,token,storeName).getStatusCode();
         Assertions.assertEquals(statusCode, HttpStatus.OK);
 
