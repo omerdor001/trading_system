@@ -836,7 +836,7 @@ public class MarketFacadeImp implements MarketFacade {
         CartDTO cart = CartDTO.fromJson(cartJSON);
         double price = 0;
         for (ShoppingBagDTO bag : cart.getShoppingBags().values()) {
-            price += storeMemoryRepository.getStore(bag.getStoreId()).calculatePrice(bag.getProductsList().values());
+            price += storeMemoryRepository.getStore(bag.getStoreId()).calculatePrice(bag.getProducts_list().values());
         }
         return price;
     }

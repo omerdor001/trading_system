@@ -17,7 +17,7 @@ public class ProductCountCondition implements Condition {
     public boolean isSatisfied(Collection<ProductInSaleDTO> items) {
         int amount = 0;
         for (ProductInSaleDTO p : items) {
-            if (p.getProductId() == productId) {
+            if (p.getId() == productId) {
                 amount += p.getQuantity();
                 break;
             }

@@ -74,7 +74,7 @@ public class Cart {
         double totalCartPrice = 0;
         for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
             ShoppingBag shoppingBag = entry.getValue();
-            double bagTotalPrice = shoppingBag.getTotalPrice();
+            double bagTotalPrice = shoppingBag.calculateTotalPrice();
             totalCartPrice += bagTotalPrice;
             sb.append("\n  Store ID: ").append(entry.getKey())
                     .append(", Shopping Bag: ").append(shoppingBag)

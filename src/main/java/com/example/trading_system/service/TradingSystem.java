@@ -111,55 +111,55 @@ public interface TradingSystem {
     ResponseEntity<String> calculatePrice(String username, String token);
 
     //region Discount creation
-    ResponseEntity<String> addCategoryPercentageDiscount(String username, String token, String storeName, int category, double discountPercent) throws IllegalAccessException;
+    ResponseEntity<String> addCategoryPercentageDiscount(String username, String token, String storeName, int category, double discountPercent);
 
-    ResponseEntity<String> addProductPercentageDiscount(String username, String token, String storeName, int productId, double discountPercent) throws IllegalAccessException;
+    ResponseEntity<String> addProductPercentageDiscount(String username, String token, String storeName, int productId, double discountPercent);
 
-    ResponseEntity<String> addStoreDiscount(String username, String token, String storeName, double discountPercent) throws IllegalAccessException;
+    ResponseEntity<String> addStoreDiscount(String username, String token, String storeName, double discountPercent);
 
-    ResponseEntity<String> addConditionalDiscount(String username, String token, String storeName) throws IllegalAccessException;
+    ResponseEntity<String> addConditionalDiscount(String username, String token, String storeName);
 
-    ResponseEntity<String> addAdditiveDiscount(String username, String token, String storeName) throws IllegalAccessException;
+    ResponseEntity<String> addAdditiveDiscount(String username, String token, String storeName);
 
-    ResponseEntity<String> addMaxDiscount(String username, String token, String storeName) throws IllegalAccessException;
+    ResponseEntity<String> addMaxDiscount(String username, String token, String storeName);
 
-    ResponseEntity<String> addCategoryCountCondition(String username, String token, String storeName, int category, int count) throws IllegalAccessException;
+    ResponseEntity<String> addCategoryCountCondition(String username, String token, String storeName, int category, int count);
 
-    ResponseEntity<String> addTotalSumCondition(String username, String token, String storeName, int requiredSum) throws IllegalAccessException;
+    ResponseEntity<String> addTotalSumCondition(String username, String token, String storeName, int requiredSum);
 
-    ResponseEntity<String> addProductCountCondition(String username, String token, String storeName, int productId, int count) throws IllegalAccessException;
+    ResponseEntity<String> addProductCountCondition(String username, String token, String storeName, int productId, int count);
 
-    ResponseEntity<String> addAndDiscount(String username, String token, String storeName) throws IllegalAccessException;
+    ResponseEntity<String> addAndDiscount(String username, String token, String storeName);
 
-    ResponseEntity<String> addOrDiscount(String username, String token, String storeName) throws IllegalAccessException;
+    ResponseEntity<String> addOrDiscount(String username, String token, String storeName);
 
-    ResponseEntity<String> addXorDiscount(String username, String token, String storeName) throws IllegalAccessException;
+    ResponseEntity<String> addXorDiscount(String username, String token, String storeName);
 
     //endregion
 
     //region Discount/Condition editing/manipulation
-    ResponseEntity<String> setFirstDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedFirstIndex) throws IllegalAccessException;
+    ResponseEntity<String> setFirstDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedFirstIndex);
 
-    ResponseEntity<String> setSecondDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
+    ResponseEntity<String> setSecondDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex);
 
-    ResponseEntity<String> setFirstCondition(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
+    ResponseEntity<String> setFirstCondition(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex);
 
-    ResponseEntity<String> setSecondCondition(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
+    ResponseEntity<String> setSecondCondition(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex);
 
-    ResponseEntity<String> setThenDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedThenIndex) throws IllegalAccessException;
+    ResponseEntity<String> setThenDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedThenIndex);
 
-    ResponseEntity<String> setCategoryDiscount(String username, String token, String storeName, int selectedDiscountIndex, int category) throws IllegalAccessException;
+    ResponseEntity<String> setCategoryDiscount(String username, String token, String storeName, int selectedDiscountIndex, int category);
 
-    ResponseEntity<String> setProductIdDiscount(String username, String token, String storeName, int selectedDiscountIndex, int productId) throws IllegalAccessException;
+    ResponseEntity<String> setProductIdDiscount(String username, String token, String storeName, int selectedDiscountIndex, int productId);
 
-    ResponseEntity<String> setPercentDiscount(String username, String token, String storeName, int selectedDiscountIndex, double discountPercent) throws IllegalAccessException;
+    ResponseEntity<String> setPercentDiscount(String username, String token, String storeName, int selectedDiscountIndex, double discountPercent);
 
-    ResponseEntity<String> setDeciderDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedDeciderIndex) throws IllegalAccessException;
+    ResponseEntity<String> setDeciderDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedDeciderIndex);
 
-    ResponseEntity<String> setTotalSum(String username, String token, String storeName, int selectedConditionIndex, int newSum) throws IllegalAccessException;
+    ResponseEntity<String> setTotalSum(String username, String token, String storeName, int selectedConditionIndex, int newSum);
 
-    ResponseEntity<String> setCountCondition(String username, String token, String storeName, int selectedConditionIndex, int newCount) throws IllegalAccessException;
+    ResponseEntity<String> setCountCondition(String username, String token, String storeName, int selectedConditionIndex, int newCount);
 
-    ResponseEntity<String> setCategoryCondition(String username, String token, String storeName, int selectedConditionIndex, int newCategory) throws IllegalAccessException;
+    ResponseEntity<String> setCategoryCondition(String username, String token, String storeName, int selectedConditionIndex, int newCategory);
     //endregion
 }

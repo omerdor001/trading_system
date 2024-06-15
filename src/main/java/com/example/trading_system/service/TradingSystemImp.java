@@ -813,10 +813,10 @@ public class TradingSystemImp implements TradingSystem {
             if (!checkSystemOpen()) return systemClosedResponse();
             if (!checkToken(username, token)) return invalidTokenResponse();
             String result = userService.viewCart(username);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed user view cart ", username);
-            return new ResponseEntity<>("Finished user view cart ", HttpStatus.OK);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -827,10 +827,10 @@ public class TradingSystemImp implements TradingSystem {
             if (!checkSystemOpen()) return systemClosedResponse();
             if (!checkToken(username, token)) return invalidTokenResponse();
             String result = userService.calculatePrice(username);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed user calculate price ", username);
-            return new ResponseEntity<>("Finished user calculate price ", HttpStatus.OK);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -844,7 +844,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Category percentage discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while adding category percentage discount for user: {} ,store: {}, category: {}, value: {}", username, storeName, category, discountPercent);
-            return new ResponseEntity<>("Failed to add category percentage discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -857,7 +857,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Product percentage discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while adding product percentage discount for for user: {} ,store: {}, productId: {}, discountPercent: {}", username, storeName, productId, discountPercent);
-            return new ResponseEntity<>("Failed to add product percentage discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -870,7 +870,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Store discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while adding store discount for user: {} ,store: {}, discountPercent: {}", username, storeName, discountPercent);
-            return new ResponseEntity<>("Failed to add store discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -883,7 +883,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Conditional discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while adding conditional discount for user: {} ,store: {}", username, storeName);
-            return new ResponseEntity<>("Failed to add conditional discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -896,7 +896,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Additive discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while adding additive discount for user: {} ,store: {}", username, storeName);
-            return new ResponseEntity<>("Failed to add additive discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -909,7 +909,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Max discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while adding max discount for user: {} ,store: {}", username, storeName);
-            return new ResponseEntity<>("Failed to add max discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -922,7 +922,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Category count condition added successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while adding category count condition for user: {} ,store: {}, category: {}, count: {}", username, storeName, category, count);
-            return new ResponseEntity<>("Failed to add category count condition", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -935,7 +935,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Total sum condition added successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while adding total sum condition for user: {} ,store: {}, sum: {}", username, storeName, requiredSum);
-            return new ResponseEntity<>("Failed to add total sum condition", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -948,7 +948,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Product count condition added successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while adding product count condition for user: {} ,store: {}, productId: {}, count: {}", username, storeName, productId, count);
-            return new ResponseEntity<>("Failed to add product count condition", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -961,7 +961,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("AND discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while adding AND discount for user: {} ,store: {}", username, storeName);
-            return new ResponseEntity<>("Failed to add AND discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -974,7 +974,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("OR discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while adding OR discount for user: {} ,store: {}", username, storeName);
-            return new ResponseEntity<>("Failed to add OR discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -987,7 +987,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("XOR discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while adding XOR discount for user: {} ,store: {}", username, storeName);
-            return new ResponseEntity<>("Failed to add XOR discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -1000,7 +1000,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("First discount set successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while setting first discount for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedFirstIndex);
-            return new ResponseEntity<>("Failed to set first discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -1013,7 +1013,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Second discount set successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while setting second discount for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedSecondIndex);
-            return new ResponseEntity<>("Failed to set second discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -1026,7 +1026,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("First condition set successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while setting first condition for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedSecondIndex);
-            return new ResponseEntity<>("Failed to set first condition", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -1039,7 +1039,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Second condition set successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while setting second condition for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedSecondIndex);
-            return new ResponseEntity<>("Failed to set second condition", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -1052,7 +1052,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Then discount set successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while setting then discount for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedThenIndex);
-            return new ResponseEntity<>("Failed to set then discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -1065,7 +1065,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Category discount set successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while setting category discount for user: {} ,store: {}, discountIndex: {}, category: {}", username, storeName, selectedDiscountIndex, category);
-            return new ResponseEntity<>("Failed to set category discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -1078,7 +1078,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Product ID discount set successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while setting product ID discount for user: {} ,store: {}, discountIndex: {}, productId: {}", username, storeName, selectedDiscountIndex, productId);
-            return new ResponseEntity<>("Failed to set product ID discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -1091,7 +1091,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Percent discount set successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while setting percent discount for user: {} ,store: {}, discountIndex: {}, percent: {}", username, storeName, selectedDiscountIndex, discountPercent);
-            return new ResponseEntity<>("Failed to set percent discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -1104,7 +1104,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Decider discount set successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while setting decider discount for user: {} ,store: {}, discountIndex: {}, deciderIndex: {}", username, storeName, selectedDiscountIndex, selectedDeciderIndex);
-            return new ResponseEntity<>("Failed to set decider discount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -1117,7 +1117,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Total sum set successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while setting total sum for user: {} ,store: {}, conditionIndex: {}, newSum: {}", username, storeName, selectedConditionIndex, newSum);
-            return new ResponseEntity<>("Failed to set total sum", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -1130,7 +1130,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Count condition set successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while setting count condition for user: {} ,store: {}, conditionIndex: {}, newCount: {}", username, storeName, selectedConditionIndex, newCount);
-            return new ResponseEntity<>("Failed to set count condition", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -1143,7 +1143,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Category condition set successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while setting category condition for user: {} ,store: {}, conditionIndex: {}, category: {}", username, storeName, selectedConditionIndex, newCategory);
-            return new ResponseEntity<>("Failed to set category condition", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
     //endregion

@@ -241,6 +241,7 @@ public class Store {
     public void addOwner(String userName) {
         owners.add(userName);
     }
+
     public void addManager(String userName) {
         managers.add(userName);
     }
@@ -327,38 +328,56 @@ public class Store {
 
     //region Discount/Condition editing/manipulation
     public void setFirstDiscount(int selectedDiscountIndex, int selectedFirstIndex) {
+        if (selectedDiscountIndex == selectedFirstIndex)
+            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
-        DiscountPolicy setDiscount = discountPolicies.get(selectedFirstIndex);
+        DiscountPolicy setDiscount = discountPolicies.remove(selectedFirstIndex);
         editedDiscount.setFirst(setDiscount);
     }
 
     public void setSecondDiscount(int selectedDiscountIndex, int selectedSecondIndex) {
+        if (selectedDiscountIndex == selectedSecondIndex)
+            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
-        DiscountPolicy setDiscount = discountPolicies.get(selectedSecondIndex);
+        DiscountPolicy setDiscount = discountPolicies.remove(selectedSecondIndex);
         editedDiscount.setSecond(setDiscount);
     }
 
     public void setFirstCondition(int selectedDiscountIndex, int selectedSecondIndex) {
+        if (selectedDiscountIndex == selectedSecondIndex)
+            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         Condition setDiscount;
-        if (selectedSecondIndex > discountConditions.size())
-            setDiscount = discountConditions.get(selectedSecondIndex - discountConditions.size());
-        else setDiscount = discountPolicies.get(selectedSecondIndex);
-        editedDiscount.setSecond(setDiscount);
+        if (selectedSecondIndex >= discountPolicies.size())
+            setDiscount = discountConditions.remove(selectedSecondIndex - discountPolicies.size());
+        else {
+            if (selectedDiscountIndex < selectedSecondIndex)
+                selectedSecondIndex -= 1;
+            setDiscount = discountPolicies.remove(selectedSecondIndex);
+        }
+        editedDiscount.setFirst(setDiscount);
     }
 
     public void setSecondCondition(int selectedDiscountIndex, int selectedSecondIndex) {
+        if (selectedDiscountIndex == selectedSecondIndex)
+            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         Condition setDiscount;
-        if (selectedSecondIndex > discountPolicies.size())
-            setDiscount = discountConditions.get(selectedSecondIndex - discountPolicies.size());
-        else setDiscount = discountPolicies.get(selectedSecondIndex);
+        if (selectedSecondIndex >= discountPolicies.size())
+            setDiscount = discountConditions.remove(selectedSecondIndex - discountPolicies.size());
+        else {
+            if (selectedDiscountIndex < selectedSecondIndex)
+                selectedSecondIndex -= 1;
+            setDiscount = discountPolicies.remove(selectedSecondIndex);
+        }
         editedDiscount.setSecond(setDiscount);
     }
 
     public void setThenDiscount(int selectedDiscountIndex, int selectedThenIndex) {
+        if (selectedDiscountIndex == selectedThenIndex)
+            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
-        DiscountPolicy setDiscount = discountPolicies.get(selectedThenIndex);
+        DiscountPolicy setDiscount = discountPolicies.remove(selectedThenIndex);
         editedDiscount.setThen(setDiscount);
     }
 
@@ -380,11 +399,17 @@ public class Store {
     }
 
     public void setDeciderDiscount(int selectedDiscountIndex, int selectedDeciderIndex) {
+        if (selectedDiscountIndex == selectedDeciderIndex)
+            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         Condition setDiscount;
-        if (selectedDeciderIndex > discountPolicies.size())
-            setDiscount = discountConditions.get(selectedDeciderIndex - discountPolicies.size());
-        else setDiscount = discountPolicies.get(selectedDeciderIndex);
+        if (selectedDeciderIndex >= discountPolicies.size())
+            setDiscount = discountConditions.remove(selectedDeciderIndex - discountPolicies.size());
+        else {
+            if(selectedDiscountIndex < selectedDeciderIndex)
+                selectedDeciderIndex -= 1;
+            setDiscount = discountPolicies.remove(selectedDeciderIndex);
+        }
         editedDiscount.setSecond(setDiscount);
     }
 

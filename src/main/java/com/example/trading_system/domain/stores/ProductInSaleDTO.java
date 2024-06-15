@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class ProductInSaleDTO {
     private String storeId;
-    private int productId;
+    private int id;
     private double price;
     private int quantity;
     private int category;
@@ -28,12 +28,12 @@ public class ProductInSaleDTO {
         this.storeId = storeId;
     }
 
-    public int getProductId() {
-        return productId;
+    public int getId() {
+        return id;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public double getPrice() {
