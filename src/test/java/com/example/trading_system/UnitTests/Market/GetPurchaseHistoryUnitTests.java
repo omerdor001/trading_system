@@ -9,17 +9,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class GetPurchaseHistoryUnitTests {
-
-    @Mock
-    User user;
     @Mock
     Purchase purchase;
 
@@ -31,14 +24,9 @@ public class GetPurchaseHistoryUnitTests {
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
-
-        // Clear singleton instances
-//        UserMemoryRepository.getInstance().deleteInstance();
         MarketFacadeImp.getInstance().deleteInstance();
         UserFacadeImp.getInstance().deleteInstance();
         StoreSalesHistory.getInstance().deleteInstance();
-
-        // Re-instantiate singletons
         userMemoryRepository = UserMemoryRepository.getInstance();
         marketFacade = MarketFacadeImp.getInstance();
         userFacadeImp = UserFacadeImp.getInstance();
