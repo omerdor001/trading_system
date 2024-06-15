@@ -729,7 +729,6 @@ public class UserFacadeImp implements UserFacade {
                 store.removeManager(storeManager);
             }
         }
-
         ownerUser.removeOwnerRole(storeName);
         marketFacade.getStore(storeName).removeOwner(owner);
     }
@@ -946,7 +945,7 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("Products are not available or do not meet purchase conditions.");
         }
         HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
-
+        User user=userMemoryRepository.getUser(username);
         removeReservedProducts(username);
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -956,9 +955,8 @@ public class UserFacadeImp implements UserFacade {
             }
         }, 10 * 60 * 1000);
         double totalPrice = marketFacade.calculateTotalPrice(getUser(username).getCart().toJson());
-        //TODO: fix process Payment
         int deliveryId = 0;  //For cancelling
-        String address = ""; //TODO : Need to be a parameter of this function
+        String address =user.getAddress() ;
         try {
             deliveryId = deliveryService.makeDelivery(address);
         } catch (Exception e) {

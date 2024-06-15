@@ -2,12 +2,9 @@ package com.example.trading_system.domain.stores;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -15,7 +12,6 @@ import java.util.stream.Collectors;
 @Setter
 public class StoreSalesHistory {
     private List<Purchase> purchases;
-
 
     public StoreSalesHistory(){
         purchases = new ArrayList<>();
@@ -35,7 +31,6 @@ public class StoreSalesHistory {
     }
 
     public List<Purchase> getAllPurchases() {
-
         return purchases;
     }
 
@@ -46,7 +41,6 @@ public class StoreSalesHistory {
                     .filter(p -> p.getCustomerUsername().equals(username))
                     .collect(Collectors.toList());
         }
-
         return filteredPurchases.stream()
                 .map(Purchase::toString)
                 .collect(Collectors.joining("\n"));

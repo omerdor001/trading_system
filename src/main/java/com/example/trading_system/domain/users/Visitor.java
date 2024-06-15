@@ -40,6 +40,9 @@ public class Visitor extends User {
     }
 
     @Override
+    public void setAddress(String address) {}
+
+    @Override
     public LocalDate getBirthdate() {
         return null;
     }

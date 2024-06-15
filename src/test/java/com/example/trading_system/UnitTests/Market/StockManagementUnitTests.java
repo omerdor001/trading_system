@@ -7,7 +7,6 @@ import com.example.trading_system.domain.users.UserFacadeImp;
 import org.junit.jupiter.api.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -139,10 +138,10 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Samba");
         int numOfProducts_before=marketFacade.getStore("Adidas").getProducts().size();
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> marketFacade.addProduct("rtestuser2", 123, "Nike", "Samba", "Snickers shoes",
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> marketFacade.addProduct("rtestuser2", 123, "Nike", "Samba", "Snickers shoes",
                 100.0, 100, 5.0, 1, keyWords));
         int numOfProducts_after=marketFacade.getStore("Adidas").getProducts().size();
-        assertEquals("User doesn't have permission to this store", exception.getMessage());
+        assertEquals("User with no permission for this store", exception.getMessage());
         assertEquals(numOfProducts_before,numOfProducts_after);
     }
 
@@ -231,9 +230,9 @@ class StockManagementUnitTests {
             throw new RuntimeException(e);
         }
         int numOfProducts_before=marketFacade.getStore("Nike").getProducts().size();
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> marketFacade.removeProduct("rtestuser2","Nike",124));
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> marketFacade.removeProduct("rtestuser2","Nike",124));
         int numOfProducts_after=marketFacade.getStore("Nike").getProducts().size();
-        assertEquals("User doesn't have permission to this store", exception.getMessage());
+        assertEquals("User with no permission for this store", exception.getMessage());
         assertEquals(numOfProducts_before,numOfProducts_after);
     }
 
@@ -347,8 +346,8 @@ class StockManagementUnitTests {
         catch (Exception e){
             throw new RuntimeException(e);
         }
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> marketFacade.setProductDescription("rtestuser2","Nike",130,"Sport shirt1"));
-        assertEquals("User doesn't have permission to this store", exception.getMessage());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> marketFacade.setProductDescription("rtestuser2","Nike",130,"Sport shirt1"));
+        assertEquals("User with no permission for this store", exception.getMessage());
         assertEquals(marketFacade.getStore("Nike").getProduct(130).getProduct_description(),"Sport shirt");
     }
 

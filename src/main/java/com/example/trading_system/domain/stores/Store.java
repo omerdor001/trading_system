@@ -246,7 +246,6 @@ public class Store {
         managers.add(userName);
     }
 
-
     public void removeOwner(String userName) {
         owners.remove(userName);
     }

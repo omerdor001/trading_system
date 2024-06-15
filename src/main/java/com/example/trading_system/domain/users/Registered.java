@@ -178,6 +178,11 @@ public class Registered extends User {
         return address;
     }
 
+    @Override
+    public void setAddress(String address) {
+        this.address=address;
+    }
+
     public LocalDate getBirthdate() {
         return birthdate;
     }

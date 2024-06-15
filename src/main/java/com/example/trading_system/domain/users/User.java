@@ -118,6 +118,8 @@ public abstract class User {
 
     public abstract String getAddress();
 
+    public abstract void setAddress(String address);
+
     public abstract LocalDate getBirthdate();
 
     public String sendNotification(String receiverUsername, String content) {
