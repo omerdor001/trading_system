@@ -33,6 +33,8 @@ public class Registered extends User {
         this.isLogged = false;
         this.notifications = new LinkedList<>();
         this.roles = new ArrayList<>();
+        this.ownerToApprove=new ArrayList<>();
+        this.managerToApprove=new HashMap<>();
     }
 
     public void openStore(String storeName) {
@@ -79,6 +81,14 @@ public class Registered extends User {
         return notifications;
     }
 
+    public List<String> getOwnerToApprove() {
+        return ownerToApprove;
+    }
+
+    public HashMap<String, List<Boolean>> getManagerToApprove() {
+        return managerToApprove;
+    }
+
     @Override
     public void receiveNotification(String notificationString) {
         if (!isLogged) {
@@ -111,7 +121,7 @@ public class Registered extends User {
         for (Role role : roles) {
             if (role.getStoreId().equals(store_name_id)) return role;
         }
-        throw new NoSuchElementException("User doesn't have permission to this store");
+        return null;
     }
 
     public boolean isAdmin() {
@@ -125,13 +135,23 @@ public class Registered extends User {
     public boolean isOwner(String store_name_id) {
         if (roles.isEmpty()) {
             return false;
-        } else return getRoleByStoreId(store_name_id).getRoleState().isOwner();
+        } else {
+            Role role=getRoleByStoreId(store_name_id);
+            if(role==null)
+                return false;
+            else return role.getRoleState().isOwner();
+        }
     }
 
     public boolean isManager(String store_name_id) {
         if (roles.isEmpty()) {
             return false;
-        } else return getRoleByStoreId(store_name_id).getRoleState().isManager();
+        } else {
+            Role role=getRoleByStoreId(store_name_id);
+            if(role==null)
+                return false;
+            else return role.getRoleState().isManager();
+        }
     }
 
     public void addWaitingAppoint_Manager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
