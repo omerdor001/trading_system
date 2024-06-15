@@ -49,7 +49,6 @@ public class SuggestManagerAcceptanceTest {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        System.out.println(token);
         tradingSystemImp.suggestManage(userName, token, "newManager", "Store1",true,true,true,true);
     }
 

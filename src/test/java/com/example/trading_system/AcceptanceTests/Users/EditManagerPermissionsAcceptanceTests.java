@@ -52,7 +52,6 @@ public class EditManagerPermissionsAcceptanceTests {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
-            System.out.println("step2");
             userName = rootNode.get("username").asText();
             token = rootNode.get("token").asText();
         } catch (Exception e) {
