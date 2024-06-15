@@ -47,6 +47,7 @@
 <script>
 import SiteHeader from '@/components/SiteHeader.vue';
 import AboutSection from '@/components/AboutSection.vue';
+import UserViewModel from '@/ViewModel/UserViewModel';
 
 export default {
   name: 'HomePage',
@@ -141,13 +142,9 @@ export default {
       console.log('Viewing All Purchases');
     },
     logout() {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('roles');
-      localStorage.removeItem('username');
+      UserViewModel.actions.logout();
       this.isLoggedIn = false;
-      if (this.$router.currentRoute.path !== '/login') {
-        this.$router.push('/login');
-      }
+      this.$router.push('/login');
     }
   }
 }

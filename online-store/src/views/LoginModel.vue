@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import UserViewModel from '@/ViewModel/UserViewModel';
+
 export default {
   name: 'LoginModal',
   data() {
@@ -43,10 +45,10 @@ export default {
     };
   },
   methods: {
-    handleLogin() {
+    async handleLogin() {
       let roles = [];
       if (this.username === 'admin' && this.password === 'admin') {
-        roles.push('storeManager','commercialManager','storeOwner','systemManager');
+        roles.push('storeManager', 'commercialManager', 'storeOwner', 'systemManager');
       }
       if (this.username === 'manager' && this.password === 'manager') {
         roles.push('storeManager');
@@ -58,21 +60,21 @@ export default {
         roles.push('commercialManager');
       }
       if (this.username === 'lana' && this.password === 'lana') {
-        roles.push('commercialManager','systemManager','storeOwner');
+        roles.push('commercialManager', 'systemManager', 'storeOwner');
       }
       if (this.username === 'user' && this.password === 'user') {
-        // Registered user without roles
         roles = [];
       }
 
-      if (roles.length > 0 || this.username == 'user') {
-        localStorage.setItem('isLoggedIn', 'true');
+      try {
+        await UserViewModel.actions.login('', this.username, this.username, this.password);
         localStorage.setItem('roles', JSON.stringify(roles));
+        localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('username', this.username);
+        this.errorMessage = '';
         this.$router.push('/');
-      } 
-      else {
-        this.errorMessage = 'Incorrect username or password';
+      } catch (error) {
+        this.errorMessage = error.message;
       }
     },
     closeModal() {
@@ -83,6 +85,10 @@ export default {
     },
     viewCart() {
       // handle viewing cart
+    },
+    setTestUser(user) {
+      this.username = user.username;
+      this.password = user.password;
     }
   }
 }
@@ -210,5 +216,29 @@ export default {
 .error {
   color: red;
   margin-top: 10px;
+}
+
+.predefined-users {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.predefined-users h3 {
+  margin-bottom: 10px;
+}
+
+.predefined-users ul {
+  list-style: none;
+  padding: 0;
+}
+
+.predefined-users li {
+  cursor: pointer;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.predefined-users li:hover {
+  text-decoration: underline;
 }
 </style>
