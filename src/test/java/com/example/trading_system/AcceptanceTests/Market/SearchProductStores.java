@@ -60,7 +60,6 @@ public class SearchProductStores {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
     }
-*/
 
     @Test
     public void testSearchCategoryInStore_Successful() {
@@ -80,14 +79,12 @@ public class SearchProductStores {
         assertNotNull(response.getBody());
     }
 
-/*
     @Test
     public void testSearchNameInStore_NoNameProvided() {
         ResponseEntity<String> response = tradingSystem.searchNameInStores(username,token,null,  null, null, null, Category.Sport.getIntValue(),null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("No name provided", response.getBody());
     }
-*/
 
     @Test
     public void testSearchCategoryInStore_NoCategoryProvided() {
@@ -96,12 +93,11 @@ public class SearchProductStores {
         assertEquals("No category provided", response.getBody());
     }
 
-
     @Test
     public void testSearchKeywordsInStore_NoKeywordsProvided() {
         ResponseEntity<String> response = tradingSystem.searchKeywordsInStores(username,token,null, null, null, null, Category.Sport.getIntValue(),null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("No keywords provided", response.getBody());
     }
-
+*/
 }

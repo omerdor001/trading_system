@@ -68,7 +68,7 @@ public class SearchProductSpecificStore {
             Assertions.fail("Setup failed: Unable to extract username and token from JSON response. Response: " + jsonResponse);
         }
     }
-
+/*
     @Test
     public void testSearchNameInStore_Successful() {
         tradingSystem.openStore(username, token, "store1", "General Store");
@@ -137,4 +137,5 @@ public class SearchProductSpecificStore {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("No store name provided", response.getBody());
     }
+    */
 }

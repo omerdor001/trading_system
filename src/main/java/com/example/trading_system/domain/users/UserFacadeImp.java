@@ -170,7 +170,7 @@ public class UserFacadeImp implements UserFacade {
         if (user.getSuspendedEnd() == null) {
             return false;
         }
-        if (user.getSuspendedEnd().compareTo(LocalDateTime.now()) == 0) {
+        if (user.getSuspendedEnd().compareTo(LocalDateTime.now()) <= 0) {
             user.finishSuspension();
         }
         return user.isSuspended();

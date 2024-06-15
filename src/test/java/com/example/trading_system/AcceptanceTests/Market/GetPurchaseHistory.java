@@ -1,4 +1,3 @@
-/*
 package com.example.trading_system.AcceptanceTests.Market;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
@@ -28,6 +27,7 @@ class GetPurchaseHistory {
             userFacadeImp.login("v0", "testuser", "testpassword");
         userFacadeImp.getUsers().get("testuser").setAdmin(true);
     }
+
     @BeforeEach
     void setUpOnce() throws Exception {
         userFacadeImp = UserFacadeImp.getInstance();
@@ -39,15 +39,15 @@ class GetPurchaseHistory {
         userFacadeImp.login("v0", "testuser", "testpassword");
         userFacadeImp.login("v1", "testuser2", "testpassword2");
 
-        Store store1 = new Store("store1", "description", new StorePolicy(), "testuser", 10.0);
-        userFacadeImp.createStore("testuser", "store1", "description", new StorePolicy());
+        Store store1 = new Store("store1", "description", "testuser", 10.0);
+        userFacadeImp.createStore("testuser", "store1", "description");
         when(store1.toString()).thenReturn("Store 1");
 
         MarketFacadeImp marketFacade = MarketFacadeImp.getInstance();
         marketFacade.addProduct("testuser", 1, "store1", "product1", "", 5, 50, 5, 1, new ArrayList<>());
         marketFacade.addProduct("testuser", 2, "store1", "product2", "", 5, 50, 5, 1, new ArrayList<>());
-        ProductInSale productInSale = new ProductInSale("store1", 1, 100.0, 2);
-        ProductInSale productInSale2 = new ProductInSale("store1", 2, 100.0, 2);
+        ProductInSale productInSale = new ProductInSale("store1", 1, 100.0, 2, 1);
+        ProductInSale productInSale2 = new ProductInSale("store1", 2, 100.0, 2, 1);
         Purchase purchase1 = new Purchase("testuser", List.of(productInSale), 100.0, "store1");
         Purchase purchase2 = new Purchase("testuser", List.of(productInSale2), 100.0, "store1");
         userFacadeImp.purchaseCart("testuser");
@@ -56,7 +56,7 @@ class GetPurchaseHistory {
     }
 
 
-
+/*
     @Test
     void testGetPurchaseHistory_ValidInput() {
         String result = userFacadeImp.getPurchaseHistory("testuser", "store1");
@@ -160,5 +160,6 @@ class GetPurchaseHistory {
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
+ */
 }
-*/
+

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import static org.assertj.core.api.Fail.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class GetProductsInfo {
@@ -38,7 +37,7 @@ public class GetProductsInfo {
             fail("Setup failed: Unable to extract token from JSON response");
         }
 
-        String loginResponse = tradingSystem.login(token, "0", "owner1", "password123").getBody();
+        String loginResponse = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(loginResponse);
@@ -57,10 +56,9 @@ public class GetProductsInfo {
 
     @Test
     public void testAddStoreWithInvalidToken() {
-        // Attempt to add a store with an invalid token
         ResponseEntity<String> response = tradingSystem.openStore(username, "invalidToken", "existingStore", "General Store");
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Error occurred in opening store", response.getBody());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertEquals("Invalid token was supplied", response.getBody());
     }
 
     @Test
