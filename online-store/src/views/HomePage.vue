@@ -105,14 +105,17 @@ export default {
     permissionsToManager() {
       console.log('Setting Permissions to Manager');
     },
-    yieldOwnership() {
-      console.log('Yielding Ownership');
-    },
     purchasesHistoryAsOwner() {
       console.log('Viewing Purchases History as Owner');
     },
     closeStore() {
       console.log('Closing Store');
+      this.$router.push({ path: '/close-store' });
+
+    },
+    yieldOwnership() {
+      console.log('Yield Ownership');
+      this.$router.push({ path: '/yield-ownership'});
     },
     myStoresIManage() {
       console.log('My Stores I Manage');

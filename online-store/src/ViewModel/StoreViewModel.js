@@ -18,6 +18,17 @@ const actions = {
             state.error = error.message;
             state.openStatus = 'Failed to open store';
         }
+    },
+    async closeStoreExist(userName, token, storeName){
+        try {
+            await StoreModel.closeStoreExist(userName, token, storeName);
+            state.storeName = storeName;
+            state.openStatus = 'Store closed successfully';
+            this.error = null
+        } catch(error) {
+            state.error = error.message
+            state.openStatus = 'Failed to close store';
+        }
     }
 };
 
