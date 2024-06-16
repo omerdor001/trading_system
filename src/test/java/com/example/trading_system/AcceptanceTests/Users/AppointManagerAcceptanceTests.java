@@ -39,7 +39,7 @@ class AppointManagerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystem.openStore(username,token,"existingStore", "General Store");
+        tradingSystem.openStore(username, token, "existingStore", "General Store");
     }
 
 //    @Test

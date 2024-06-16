@@ -130,10 +130,10 @@ export default defineComponent({
         default:
           return false;
       }
-      
+
       // Simulate async delay
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       // Simulate successful login
       return true;
     };

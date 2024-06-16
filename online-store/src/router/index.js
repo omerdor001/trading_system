@@ -2,28 +2,40 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '@/views/HomePage.vue';
 import LoginModel from '@/views/LoginModel.vue';
 import OpenStore from '@/views/OpenStore.vue';
+import CloseStore from '@/views/CloseStore.vue'
+import YieldOwnership from '@/views/YieldOwnership.vue'
 
 const routes = [
-  {
-    path: '/',
-    name: 'HomePage',
-    component: HomePage
-  },
-  {
-    path: '/open-store',
-    name: 'OpenStore',
-    component: OpenStore
-  },
-  {
-    path: '/login',
-    name: 'LoginModel',
-    component: LoginModel
-  }
+    {
+        path: '/',
+        name: 'HomePage',
+        component: HomePage
+    },
+    {
+      path: '/open-store',
+      name: 'OpenStore',
+      component: OpenStore
+    },
+    {
+      path: '/close-store',
+      name: 'CloseStore',
+      component: CloseStore
+    },
+    {
+      path: '/yield-ownership',
+      name: 'YieldOwnership',
+      component: YieldOwnership
+    },
+    {
+        path: '/login',
+        name: 'LoginModel',
+        component: LoginModel
+    }
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+    history: createWebHistory(process.env.BASE_URL),
+    routes
 });
 
 router.beforeEach((to, from, next) => {

@@ -831,7 +831,7 @@ public class MarketFacadeImp implements MarketFacade {
                 result.append("Role id username address birthdate watch editSupply editBuyPolicy editDiscountPolicy").append("\n");
                 result.append("Manager ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditBuyPolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append("\n");
             } else
-                throw new IllegalArgumentException("User is not employeed in this store.");
+                throw new IllegalArgumentException("User is not employed in this store.");
 
         return result.toString();
     }
