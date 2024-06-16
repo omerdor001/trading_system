@@ -36,12 +36,11 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
-import StoreViewModel from '@/ViewModel/StoreViewModel';
-import UserViewModel from '@/ViewModel/UserViewModel';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import CreateButton from 'primevue/button';
 import BackButton from 'primevue/button';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'OpenStore',
@@ -53,13 +52,13 @@ export default defineComponent({
     BackButton,
   },
   setup() {
+    const router = useRouter();
     const name = ref('');
     const description = ref('');
-    const username = ref(UserViewModel.getters.getUsername() || '');
+    const username = ref('');  //TODO fix
 
     const handleCreateStore = async () => {
       try {
-        await StoreViewModel.actions.openStoreExist(username.value, '', name.value);
         console.log('Store created with name:', name.value, 'and description:', description.value);
       } catch (error) {
         console.error('Failed to create store:', error.message);
@@ -67,14 +66,11 @@ export default defineComponent({
     };
 
     const goBack = () => {
-      // Assuming this.$router is available in setup()
-      // You may need to provide the router instance if not available directly
-      this.$router.push('/');
+      router.push('/');
     };
 
     const logout = () => {
-      UserViewModel.actions.logout();
-      this.$router.push('/login');
+      router.push('/login');
     };
 
     return {

@@ -13,30 +13,30 @@
 
     <!-- Login form container -->
     <div class="login-container">
-      <Card class="login-form">
-        <template #title>
-          <h2>Login</h2>
-        </template>
-        <form @submit.prevent="handleLogin">
-          <!-- Username input -->
-          <div class="form-group">
-            <label for="username">Username</label>
-            <InputText v-model="username" id="username" required />
-          </div>
-          <!-- Password input -->
-          <div class="form-group">
-            <label for="password">Password</label>
-            <Password v-model="password" id="password" toggleMask required />
-          </div>
-          <!-- Button group -->
-          <div class="button-group">
-            <PrimeButton label="Login" icon="pi pi-check" type="submit" class="login-button" />
-            <PrimeButton label="Close" icon="pi pi-times" type="button" @click="closeModal" class="close-button" />
-          </div>
-        </form>
-        <!-- Error message -->
-        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-      </Card>
+    <PrimeCard class="login-form">
+      <template #title>
+      <h2>Login</h2>
+       </template>
+    <form @submit.prevent="handleLogin">
+      <!-- Username input -->
+      <div class="form-group">
+        <label for="username">Username</label>
+        <InputText v-model="username" id="username" />
+      </div>
+      <!-- Password input -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <PasswordText v-model="password" id="password" />
+      </div>
+      <!-- Button group -->
+      <div class="button-group">
+        <PrimeButton label="Login" icon="pi pi-check" type="submit" class="login-button" />
+        <PrimeButton label="Close" icon="pi pi-times" type="button" @click="closeModal" class="close-button" />
+      </div>
+    </form>
+    <!-- Error message -->
+    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+  </PrimeCard>
     </div>
   </div>
 </template>
@@ -46,16 +46,16 @@ import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Button as PrimeButton } from 'primevue/button';
 import { InputText } from 'primevue/inputtext';
-import { Password } from 'primevue/password';
-import { Card } from 'primevue/card';
+import { PasswordText } from 'primevue/password';
+import { PrimeCard } from 'primevue/card';
 
 export default defineComponent({
   name: 'LoginModel',
   components: {
     PrimeButton,
     InputText,
-    Password,
-    Card
+    PasswordText,
+    PrimeCard
   },
   setup() {
     const router = useRouter();
@@ -212,12 +212,27 @@ export default defineComponent({
 
 .form-group .p-inputtext {
   width: 100%;
-  max-width: 300px; 
 }
 
 .form-group .p-password {
   width: 100%;
-  max-width: 300px; 
+}
+
+.custom-card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  padding: 1rem;
+  display: block;
+}
+
+.card-footer {
+  background-color: #f0f0f0;
+  padding: 0.5rem;
+  text-align: center;
 }
 
 .button-group {

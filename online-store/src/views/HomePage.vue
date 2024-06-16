@@ -49,6 +49,7 @@ import { defineComponent, ref } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import AboutSection from '@/components/AboutSection.vue';
 import { Button as PrimeButton } from 'primevue/button';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'HomePage',
@@ -58,6 +59,7 @@ export default defineComponent({
     PrimeButton
   },
   setup() {
+    const router = useRouter();
     const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
     const roles = JSON.parse(localStorage.getItem('roles') || '[]');
 
@@ -74,9 +76,7 @@ export default defineComponent({
 
     const openStore = () => {
       console.log('Opening Store');
-      // Assuming you have Vue Router set up
-      // Replace with your actual route path
-      // Example: router.push('/open-store');
+      router.push('/open-store');
     };
 
     const searchProduct = () => {
@@ -160,9 +160,7 @@ export default defineComponent({
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('roles');
       localStorage.removeItem('username');
-      // Assuming you have Vue Router set up
-      // Replace with your actual route path
-      // Example: router.push('/login');
+      router.push('/login');
     };
 
     return {
