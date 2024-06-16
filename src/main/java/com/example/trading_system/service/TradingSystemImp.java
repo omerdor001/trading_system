@@ -482,10 +482,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> fireOwner(String ownerAppoint, String token, String storeName, String ownerToFire) {
         logger.info("{} Trying to fire {} from be a owner in store {}",ownerAppoint, storeName, ownerToFire);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(ownerAppoint,token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(ownerAppoint, token)) return invalidTokenResponse();
             userService.fireOwner(ownerAppoint, storeName, ownerToFire);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while {} trying to fire {} from store : {}", e.getMessage(),ownerAppoint, ownerToFire, storeName);
@@ -547,10 +545,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> getAllHistoryPurchases(String userName, String token, String storeName){
         logger.info("{} is Trying to get all history purchases from store {}", userName, storeName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(userName,token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             String result = marketService.getAllHistoryPurchases(userName, storeName);
             logger.info("{} Finished to get all history purchases from store {}", userName, storeName);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -565,10 +561,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> getHistoryPurchasesByCustomer(String userName, String token, String storeName, String customerUserName){
         logger.info("{} is Trying to get history purchases by customer {} from store {}", userName, customerUserName, storeName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(userName,token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             String result = marketService.getHistoryPurchasesByCustomer(userName, storeName, customerUserName);
             logger.info("{} Finished to get history purchases by {} from store {}", userName, customerUserName, storeName);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -583,10 +577,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> requestInformationAboutOfficialsInStore(String userName, String token, String storeName){
         logger.info("{} is Trying to request Information about officials in store {}", userName, storeName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(userName,token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             String result = marketService.requestInformationAboutOfficialsInStore(userName, storeName);
             logger.info("{} Finished to request information about officials in store {}", userName, storeName);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -601,10 +593,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> requestManagersPermissions(String userName, String token, String storeName){
         logger.info("{} is Trying to request manager permissions in store {}", userName, storeName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(userName,token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             String result = marketService.requestManagersPermissions(userName, storeName);
             logger.info("{} Finished to request manager permissions in store {}", userName, storeName);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -619,10 +609,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> requestInformationAboutSpecificOfficialInStore(String userName, String token, String storeName, String officialUserName){
         logger.info("{} is Trying to request Information about official {} in store {}", userName,officialUserName,storeName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(userName,token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             String result = marketService.requestInformationAboutSpecificOfficialInStore(userName, storeName, officialUserName);
             logger.info("{} Finished to request information about official {} in store {}", userName, officialUserName, storeName);
             return new ResponseEntity<>(result, HttpStatus.OK);
