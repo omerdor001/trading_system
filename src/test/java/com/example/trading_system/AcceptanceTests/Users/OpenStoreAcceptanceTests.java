@@ -31,7 +31,6 @@ public class OpenStoreAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract token from JSON response");
         }
-
         String loginResponse = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -66,7 +65,6 @@ public class OpenStoreAcceptanceTests {
         ResponseEntity<String> openStoreResponse = tradingSystem.openStore(username, token, storeName, description);
         assertEquals(HttpStatus.OK, openStoreResponse.getStatusCode());
         assertEquals("Store opened successfully", openStoreResponse.getBody());
-
         // Attempt to open another store with the same name
         ResponseEntity<String> duplicateStoreResponse = tradingSystem.openStore(username, token, storeName, description);
         assertEquals(HttpStatus.BAD_REQUEST, duplicateStoreResponse.getStatusCode());
@@ -81,7 +79,6 @@ public class OpenStoreAcceptanceTests {
         LocalDate birthdate = LocalDate.of(1990, 1, 1);
         ResponseEntity<String> registerResponse = tradingSystem.register(username, password, birthdate);
         assertEquals(HttpStatus.OK, registerResponse.getStatusCode());
-
         // Attempt to open a store with an invalid token
         String invalidToken = "invalidToken";
         String storeName = "Invalid Store";

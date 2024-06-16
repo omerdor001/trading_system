@@ -496,7 +496,8 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(store_name_id)) {
             throw new IllegalAccessException("User cannot be owner of this store");
         }
-        newManagerUser.removeWaitingAppoint_Manager(store_name_id);
+        if(newManagerUser.removeWaitingAppoint_Manager(store_name_id) == null)
+            throw new RuntimeException("No appointment requests in this store.");
     }
 
     @Override

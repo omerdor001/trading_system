@@ -1,6 +1,5 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
-import com.example.trading_system.domain.users.User;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,18 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class WaiveOnOwnershipAcceptanceTests {
-
-
     private TradingSystemImp tradingSystemImp;
-    private String password = "123456";
     private String userName = "";
     private String token = "";
-    private String storeName = "Store1";
+    private final String storeName = "Store1";
     private String ownerUserName = "";
     private String ownerToken = "";
     private String userNameManager = "";
@@ -32,6 +27,7 @@ public class WaiveOnOwnershipAcceptanceTests {
     @BeforeEach
     public void setUp() {
         tradingSystemImp = TradingSystemImp.getInstance();
+        String password = "123456";
         tradingSystemImp.register("admin", password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response = tradingSystemImp.enter();
@@ -74,8 +70,7 @@ public class WaiveOnOwnershipAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-
-        tradingSystemImp.register("manager",password, LocalDate.now());
+        tradingSystemImp.register("manager", password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response3 = tradingSystemImp.enter();
         String userToken3 = response3.getBody();
@@ -96,21 +91,23 @@ public class WaiveOnOwnershipAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-
         tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
         tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName);
         tradingSystemImp.approveOwner(ownerUserName, ownerToken, storeName, userName);
+        tradingSystemImp.appointOwner(userName, token, userName, ownerUserName, storeName);
     }
 
+    @AfterEach
+    public void tearDown() {
+        tradingSystemImp.deleteInstance();
+    }
 
     @Test
     public void GivenStoreNotExist_WhenWaiveOnOwnerShip_ThenThrowException()
     {
-
         ResponseEntity<String> res = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,"BadStoreName");
         Assertions.assertEquals("No store called BadStoreName exist",res.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
-
     }
 
     @Test
@@ -118,48 +115,34 @@ public class WaiveOnOwnershipAcceptanceTests {
     {
         Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,true,true,true,true).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName).getStatusCode());
-
         ResponseEntity<String> resp = tradingSystemImp.waiverOnOwnership(userNameManager,tokenManager,storeName);
         Assertions.assertEquals("User is not owner of this store",resp.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
-
-
     }
 
     @Test
     public void GivenFounder_WhenWaiveOnOwnership_ThenThrowException()
     {
         ResponseEntity<String> resp = tradingSystemImp.waiverOnOwnership(userName,token,storeName);
-        Assertions.assertEquals("founder cant waive on ownership",resp.getBody());
+        Assertions.assertEquals("Founder cant waive on ownership",resp.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
     }
 
     @Test
-    public void GivenValidOwner_WhenWaiveOnOwnerShip_ThenSuccess(){ //check that manager minui also deleted
-
+    public void GivenValidOwner_WhenWaiveOnOwnerShip_ThenSuccess(){ //check that manager appointment also deleted
         Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,true,true,true,true).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName).getStatusCode());
-
         ResponseEntity<String> resp = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,storeName);
         Assertions.assertEquals("Success waiver to own",resp.getBody());
         Assertions.assertEquals(HttpStatus.OK, resp.getStatusCode());
-
         ResponseEntity<String> resp2 = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,storeName);
         Assertions.assertEquals("User is not owner of this store",resp2.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp2.getStatusCode());
-
         ResponseEntity<String> resp3 = tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName, ownerUserName);
-        Assertions.assertEquals("User is not employeed in this store.",resp3.getBody());
+        Assertions.assertEquals("User is not employed in this store.",resp3.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp3.getStatusCode());
-
         ResponseEntity<String> resp4 = tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName, userNameManager);
-        Assertions.assertEquals("User is not employeed in this store.",resp4.getBody());
+        Assertions.assertEquals("User is not employed in this store.",resp4.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp4.getStatusCode());
-
-    }
-
-    @AfterEach
-    public void tearDown() {
-        tradingSystemImp.deleteInstance();
     }
 }

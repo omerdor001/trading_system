@@ -58,7 +58,6 @@ class LogoutAcceptanceTests {
         assertEquals("Logout successful.", response.getBody(), "Logout message should be 'Logout successful.'");
     }
 
-
     @Test
     void logout_NotLoggedIn() {
         String userToken = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
@@ -82,6 +81,4 @@ class LogoutAcceptanceTests {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("User performs not like a registered", response.getBody());
     }
-
-
 }

@@ -1,7 +1,5 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
-import com.example.trading_system.domain.stores.Store;
-import com.example.trading_system.domain.users.User;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,10 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -23,10 +17,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class FireOwnerAcceptanceTests {
 
     private TradingSystemImp tradingSystemImp;
-    private String password = "123456";
-    private String userName ="";
-    private String token ="";
-    private String storeName = "Store1";
+    private String userName = "";
+    private String token = "";
+    private final String storeName = "Store1";
     private String ownerUserName = "";
     private String ownerToken = "";
     private String userNameManager = "";
@@ -37,7 +30,8 @@ public class FireOwnerAcceptanceTests {
     @BeforeEach
     public void setUp() {
         tradingSystemImp = TradingSystemImp.getInstance();
-        tradingSystemImp.register("admin",password, LocalDate.now());
+        String password = "123456";
+        tradingSystemImp.register("admin", password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response = tradingSystemImp.enter();
         String userToken = response.getBody();
@@ -49,7 +43,7 @@ public class FireOwnerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(token,"v0","admin", password).getBody();
+        userToken = tradingSystemImp.login(token, "v0", "admin", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -58,7 +52,7 @@ public class FireOwnerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemImp.register("owner",password, LocalDate.now());
+        tradingSystemImp.register("owner", password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response2 = tradingSystemImp.enter();
         String userToken2 = response2.getBody();
@@ -70,7 +64,7 @@ public class FireOwnerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken2 = tradingSystemImp.login(ownerToken,"v1","owner", password).getBody();
+        userToken2 = tradingSystemImp.login(ownerToken, "v1", "owner", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken2);
@@ -80,7 +74,7 @@ public class FireOwnerAcceptanceTests {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
 
-        tradingSystemImp.register("manager",password, LocalDate.now());
+        tradingSystemImp.register("manager", password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response3 = tradingSystemImp.enter();
         String userToken3 = response3.getBody();
@@ -92,7 +86,7 @@ public class FireOwnerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken3 = tradingSystemImp.login(tokenManager,"v2","manager", password).getBody();
+        userToken3 = tradingSystemImp.login(tokenManager, "v2", "manager", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken3);
@@ -101,8 +95,7 @@ public class FireOwnerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-
-        tradingSystemImp.register("owner2",password, LocalDate.now());
+        tradingSystemImp.register("owner2", password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response4 = tradingSystemImp.enter();
         String userToken4 = response4.getBody();
@@ -114,7 +107,7 @@ public class FireOwnerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken4 = tradingSystemImp.login(ownerToken,"v3","owner2", password).getBody();
+        userToken4 = tradingSystemImp.login(ownerToken, "v3", "owner2", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken4);
@@ -123,74 +116,66 @@ public class FireOwnerAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-
-        tradingSystemImp.openStore(userName,token,storeName,"My Store is the best");
-        tradingSystemImp.suggestOwner(userName,token,ownerUserName,storeName);
-        tradingSystemImp.approveOwner(ownerUserName,ownerToken,storeName,userName);
-        tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,false,false,false,false);
-        tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName);
-        tradingSystemImp.suggestOwner(ownerUserName,ownerToken,ownerUserName2,storeName);
-        tradingSystemImp.approveOwner(ownerUserName2,ownerToken2,storeName,ownerUserName);
-    }
-
-
-
-
-
-    @Test
-    public void GivenNotExistStore_WhenFireOwner_ThenThrowException(){
-        ResponseEntity<String> res =tradingSystemImp.fireOwner(userName,token,"BadStoreName",ownerUserName);
-        assertEquals("No store called BadStoreName exist",res.getBody());
-        assertEquals(HttpStatus.BAD_REQUEST,res.getStatusCode());
-    }
-
-    @Test
-    public void GivenOwnerNotExistUser_WhenFireOwner_ThenThrowException(){
-        ResponseEntity<String> res =tradingSystemImp.fireOwner(userName,token,storeName,"BadUserName");
-        assertEquals("No user called BadUserName exist",res.getBody());
-        assertEquals(HttpStatus.BAD_REQUEST,res.getStatusCode());
-    }
-
-    @Test
-    public void GivenNotOwnerUser_WhenFireOwner_ThenThrowException(){
-        ResponseEntity<String> res =tradingSystemImp.fireOwner(userNameManager,tokenManager,storeName,ownerUserName2);
-        assertEquals("The user that fire owner must be Owner",res.getBody());
-        assertEquals(HttpStatus.BAD_REQUEST,res.getStatusCode());
-    }
-
-
-
-    @Test
-    public void GivenNotOwnerFired_WhenFireOwner_ThenThrowException(){
-        ResponseEntity<String> res = tradingSystemImp.fireOwner(userName,token,storeName,userNameManager);
-        assertEquals("The user that will be fired must be Owner",res.getBody());
-        assertEquals(HttpStatus.BAD_REQUEST,res.getStatusCode());
-    }
-
-    @Test
-    public void GivenOwnerNotAppointedByThisOwner_WhenFireOwner_ThenThrowException(){
-
-        ResponseEntity<String> res =tradingSystemImp.fireOwner(userName,token,storeName,ownerUserName2);
-        assertEquals("Owner cant fire owner that he/she didn't appointed",res.getBody());
-        assertEquals(HttpStatus.BAD_REQUEST,res.getStatusCode());
-
-    }
-
-    @Test
-    public void GivenValidInput_WhenFireOwner_ThenSuccess(){
-        ResponseEntity<String> res = tradingSystemImp.fireOwner(userName,token,storeName,ownerUserName);
-        assertEquals("Success fire owner",res.getBody());
-        assertEquals(HttpStatus.OK,res.getStatusCode());
-
-        assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName,userNameManager).getBody());
-
-        assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName,ownerUserName).getBody());
-
-        assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName,ownerUserName2).getBody());
+        tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
+        tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName);
+        tradingSystemImp.approveOwner(ownerUserName, ownerToken, storeName, userName);
+        tradingSystemImp.appointOwner(userName, token, userName, ownerUserName, storeName);
+        tradingSystemImp.suggestManage(ownerUserName, ownerToken, userNameManager, storeName, false, false, false, false);
+        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, ownerUserName);
+        tradingSystemImp.appointManager(ownerUserName, ownerToken, ownerUserName, userNameManager, storeName, false, false, false, false);
+        tradingSystemImp.suggestOwner(ownerUserName, ownerToken, ownerUserName2, storeName);
+        tradingSystemImp.approveOwner(ownerUserName2, ownerToken2, storeName, ownerUserName);
+        tradingSystemImp.appointOwner(ownerUserName, ownerToken, ownerUserName, ownerUserName2, storeName);
     }
 
     @AfterEach
-    public void tearDown(){
+    public void tearDown() {
         tradingSystemImp.deleteInstance();
+    }
+
+    @Test
+    public void GivenNotExistStore_WhenFireOwner_ThenThrowException() {
+        ResponseEntity<String> res = tradingSystemImp.fireOwner(userName, token, "BadStoreName", ownerUserName);
+        assertEquals("No store called BadStoreName exist", res.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
+    }
+
+    @Test
+    public void GivenOwnerNotExistUser_WhenFireOwner_ThenThrowException() {
+        ResponseEntity<String> res = tradingSystemImp.fireOwner(userName, token, storeName, "BadUserName");
+        assertEquals("No user called BadUserName exist", res.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
+    }
+
+    @Test
+    public void GivenNotOwnerUser_WhenFireOwner_ThenThrowException() {
+        ResponseEntity<String> res = tradingSystemImp.fireOwner(userNameManager, tokenManager, storeName, ownerUserName2);
+        assertEquals("The user that fire owner must be Owner", res.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
+    }
+
+
+    @Test
+    public void GivenNotOwnerFired_WhenFireOwner_ThenThrowException() {
+        ResponseEntity<String> res = tradingSystemImp.fireOwner(userName, token, storeName, userNameManager);
+        assertEquals("The user that will be fired must be Owner", res.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
+    }
+
+    @Test
+    public void GivenOwnerNotAppointedByThisOwner_WhenFireOwner_ThenThrowException() {
+        ResponseEntity<String> res = tradingSystemImp.fireOwner(userName, token, storeName, ownerUserName2);
+        assertEquals("Owner cant fire owner that he/she didn't appointed", res.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
+    }
+
+    @Test
+    public void GivenValidInput_WhenFireOwner_ThenSuccess() {
+        ResponseEntity<String> res = tradingSystemImp.fireOwner(userName, token, storeName, ownerUserName);
+        assertEquals("Success fire owner", res.getBody());
+        assertEquals(HttpStatus.OK, res.getStatusCode());
+        assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName, token, storeName, userNameManager).getBody());
+        assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName, token, storeName, ownerUserName).getBody());
+        assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName, token, storeName, ownerUserName2).getBody());
     }
 }

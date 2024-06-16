@@ -128,6 +128,4 @@ class SuspensionAcceptanceTests {
         ResponseEntity<String> response = tradingSystem.watchSuspensions(token1, "");
         assertEquals(HttpStatusCode.valueOf(401), response.getStatusCode());
     }
-
-
 }

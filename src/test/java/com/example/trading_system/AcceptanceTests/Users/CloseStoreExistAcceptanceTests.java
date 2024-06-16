@@ -19,16 +19,16 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class CloseStoreExistAcceptanceTests {
 
-    private TradingSystemImp tradingSystemImp ;
+    private TradingSystemImp tradingSystemImp;
     private String token;
     private String userName;
-    private String password = "123456";
-    private String storeName = "Store1";
+    private final String password = "123456";
+    private final String storeName = "Store1";
 
     @BeforeEach
     public void setUp() {
         tradingSystemImp = TradingSystemImp.getInstance();
-        tradingSystemImp.register("admin",password, LocalDate.now());
+        tradingSystemImp.register("admin", password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response = tradingSystemImp.enter();
         String userToken = response.getBody();
@@ -40,7 +40,7 @@ public class CloseStoreExistAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(token,"v0","admin", password).getBody();
+        userToken = tradingSystemImp.login(token, "v0", "admin", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -49,27 +49,27 @@ public class CloseStoreExistAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemImp.openStore(userName,token,storeName,"My Store is the best");
+        tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
         String[] keyWords = {"CarPlay", "iPhone"};
-        tradingSystemImp.addProduct(userName,token,111,storeName,"CarPlay","CarPlay for iPhones",15,5,6,1, new ArrayList<>(Arrays.asList(keyWords)));
+        tradingSystemImp.addProduct(userName, token, 111, storeName, "CarPlay", "CarPlay for iPhones", 15, 5, 6, 1, new ArrayList<>(Arrays.asList(keyWords)));
     }
 
 
     @Test
-    public void givenNotExistStore_WhenCloseStoreExist_ThenThrowException(){
-       String response =tradingSystemImp.closeStoreExist(userName,token,"Store2").getBody();
-        Assertions.assertEquals("Store must exist to close",response);
+    public void givenNotExistStore_WhenCloseStoreExist_ThenThrowException() {
+        String response = tradingSystemImp.closeStoreExist(userName, token, "Store2").getBody();
+        Assertions.assertEquals("Store must exist to close", response);
 
     }
 
 
     @Test
-    public void givenNotFounderTryCloseStore_WhenCloseStoreExist_ThenThrowException(){
-        tradingSystemImp.register("owner",password, LocalDate.now());
+    public void givenNotFounderTryCloseStore_WhenCloseStoreExist_ThenThrowException() {
+        tradingSystemImp.register("owner", password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response = tradingSystemImp.enter();
         String userToken = response.getBody();
-        String userNameOwner ="";
+        String userNameOwner = "";
         String tokenOwner = "";
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -79,7 +79,7 @@ public class CloseStoreExistAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(tokenOwner,"v1","owner", password).getBody();
+        userToken = tradingSystemImp.login(tokenOwner, "v1", "owner", password).getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -88,38 +88,38 @@ public class CloseStoreExistAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemImp.suggestManage(userName,token,userNameOwner,storeName,true,true,true,true);
-        tradingSystemImp.approveManage(userNameOwner,tokenOwner,storeName,userName);
-        String response2 = tradingSystemImp.closeStoreExist(userNameOwner,tokenOwner,storeName).getBody();
+        tradingSystemImp.suggestManage(userName, token, userNameOwner, storeName, true, true, true, true);
+        tradingSystemImp.approveManage(userNameOwner, tokenOwner, storeName, userName);
+        String response2 = tradingSystemImp.closeStoreExist(userNameOwner, tokenOwner, storeName).getBody();
 
-        Assertions.assertEquals("Only founder can close store exist",response2);
+        Assertions.assertEquals("Only founder can close store exist", response2);
 
     }
 
     @Test
-    public void givenAlreadyClosedStore_WhenCloseStoreExist_ThenThrowException(){
+    public void givenAlreadyClosedStore_WhenCloseStoreExist_ThenThrowException() {
         HttpStatusCode statusCode = tradingSystemImp.closeStoreExist(userName, token, storeName).getStatusCode();
         Assertions.assertEquals(statusCode, HttpStatus.OK);
-        String response = tradingSystemImp.closeStoreExist(userName,token,storeName).getBody();
-        Assertions.assertEquals("Store is not active",response);
+        String response = tradingSystemImp.closeStoreExist(userName, token, storeName).getBody();
+        Assertions.assertEquals("Store is not active", response);
     }
+
     @Test
-    public void givenValidStoreToClose_WhenCloseStoreExist_ThenSuccess(){
-        ResponseEntity<String> response2 = tradingSystemImp.searchNameInStore(userName,"CarPlay", token,storeName,1.0,1000.0,1.0,1);
-        Assertions.assertEquals(HttpStatus.OK,response2.getStatusCode());
-        HttpStatusCode statusCode =tradingSystemImp.closeStoreExist(userName,token,storeName).getStatusCode();
+    public void givenValidStoreToClose_WhenCloseStoreExist_ThenSuccess() {
+        ResponseEntity<String> response2 = tradingSystemImp.searchNameInStore(userName, "CarPlay", token, storeName, 1.0, 1000.0, 1.0, 1);
+        Assertions.assertEquals(HttpStatus.OK, response2.getStatusCode());
+        HttpStatusCode statusCode = tradingSystemImp.closeStoreExist(userName, token, storeName).getStatusCode();
         Assertions.assertEquals(statusCode, HttpStatus.OK);
 
-        ResponseEntity<String> response3 = tradingSystemImp.searchNameInStore(userName,"CarPlay", token,storeName,1.0,1000.0,1.0,1);
-        Assertions.assertEquals("Store is not open, can't search",response3.getBody());
+        ResponseEntity<String> response3 = tradingSystemImp.searchNameInStore(userName, "CarPlay", token, storeName, 1.0, 1000.0, 1.0, 1);
+        Assertions.assertEquals("Store is not open, can't search", response3.getBody());
     } //, also valid notification
 
     @AfterEach
-    public void tearDown(){
+    public void tearDown() {
         try {
-            tradingSystemImp.openStoreExist(userName,token,storeName);
-        }
-        catch (Exception e){
+            tradingSystemImp.openStoreExist(userName, token, storeName);
+        } catch (Exception e) {
             System.out.println("Store is already Open");
         }
         tradingSystemImp.deleteInstance();

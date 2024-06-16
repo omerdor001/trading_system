@@ -20,46 +20,25 @@ public class SuggestManagerAcceptanceTest {
     }
 
     @Test
-    void testSuggestManager_WhenSystemIsClosed_GetError(){
-        ResponseEntity<String> response = tradingSystemImp.suggestManage("appointer", "123", "newManager", "Store1",true,true,true,true);
+    void testSuggestManager_WhenSystemIsClosed_GetError() {
+        ResponseEntity<String> response = tradingSystemImp.suggestManage("appointer", "123", "newManager", "Store1", true, true, true, true);
         Assertions.assertEquals("System is not open. Only registration is allowed.", response.getBody());
-        }
-
-        @Test
-    void testSuggestManager_WhenInvalidToken_GetError(){
-        tradingSystemImp.register("admin","123456", LocalDate.now());
-        tradingSystemImp.openSystem();
-        tradingSystemImp.suggestManage("admin", "123", "newManager", "Store1",true,true,true,true);
-        }
-
-
-    @Test
-    void testSuggestManager_WhenStoreNotExist_GetError(){
-        tradingSystemImp.register("admin","123456", LocalDate.now());
-        tradingSystemImp.openSystem();
-        ResponseEntity<String> response = tradingSystemImp.enter();
-        String userToken = response.getBody();
-        String userName ="";
-        String token = "";
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode rootNode = objectMapper.readTree(userToken);
-            userName = rootNode.get("username").asText();
-            token = rootNode.get("token").asText();
-        } catch (Exception e) {
-            fail("Setup failed: Unable to extract username and token from JSON response");
-        }
-        tradingSystemImp.suggestManage(userName, token, "newManager", "Store1",true,true,true,true);
     }
 
     @Test
-    void testSuggestManager_Success(){
-        tradingSystemImp.register("admin","123456", LocalDate.now());
-        tradingSystemImp.register("user1","123456", LocalDate.now());
+    void testSuggestManager_WhenInvalidToken_GetError() {
+        tradingSystemImp.register("admin", "123456", LocalDate.now());
+        tradingSystemImp.openSystem();
+        tradingSystemImp.suggestManage("admin", "123", "newManager", "Store1", true, true, true, true);
+    }
+
+    @Test
+    void testSuggestManager_WhenStoreNotExist_GetError() {
+        tradingSystemImp.register("admin", "123456", LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response = tradingSystemImp.enter();
         String userToken = response.getBody();
-        String userName ="";
+        String userName = "";
         String token = "";
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -69,7 +48,18 @@ public class SuggestManagerAcceptanceTest {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        userToken = tradingSystemImp.login(token,"v0","admin","123456").getBody();
+        tradingSystemImp.suggestManage(userName, token, "newManager", "Store1", true, true, true, true);
+    }
+
+    @Test
+    void testSuggestManager_Success() {
+        tradingSystemImp.register("admin", "123456", LocalDate.now());
+        tradingSystemImp.register("user1", "123456", LocalDate.now());
+        tradingSystemImp.openSystem();
+        ResponseEntity<String> response = tradingSystemImp.enter();
+        String userToken = response.getBody();
+        String userName = "";
+        String token = "";
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -78,7 +68,15 @@ public class SuggestManagerAcceptanceTest {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemImp.openStore(userName,token,"Store1", "myBestStore");
-
+        userToken = tradingSystemImp.login(token, "v0", "admin", "123456").getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            userName = rootNode.get("username").asText();
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract username and token from JSON response");
+        }
+        tradingSystemImp.openStore(userName, token, "Store1", "myBestStore");
     }
 }
