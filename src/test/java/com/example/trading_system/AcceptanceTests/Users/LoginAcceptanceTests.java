@@ -18,7 +18,6 @@ class LoginAcceptanceTests {
 
     private static TradingSystem tradingSystem;
     private String token;
-    private String username;
 
     @BeforeEach
     void setUp() {
@@ -29,7 +28,6 @@ class LoginAcceptanceTests {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
-            username = rootNode.get("username").asText();
             token = rootNode.get("token").asText();
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
@@ -55,7 +53,6 @@ class LoginAcceptanceTests {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
-            username = rootNode.get("username").asText();
             token = rootNode.get("token").asText();
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
