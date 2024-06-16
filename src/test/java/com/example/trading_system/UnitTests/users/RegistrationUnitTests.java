@@ -27,7 +27,6 @@ class RegistrationUnitTests {
 
     @Test
     void registration_Success(){
-        int id = 1;
         String username = "testuser";
         String encryption = "testpassword";
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
@@ -38,18 +37,16 @@ class RegistrationUnitTests {
 
     @Test
     void registration_NullUsername() {
-        int id = 1;
-        String username = null;
+       // String username = null;
         String encryption = "testpassword";
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
 
-        Exception exception = assertThrows(Exception.class, () -> userFacade.register(username, encryption, birthdate));
+        Exception exception = assertThrows(Exception.class, () -> userFacade.register(null, encryption, birthdate));
         assertEquals("Username is null", exception.getMessage());
     }
 
     @Test
     void registration_EmptyUsername() {
-        int id = 1;
         String username = "";
         String encryption = "testpassword";
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
@@ -60,18 +57,16 @@ class RegistrationUnitTests {
 
     @Test
     void registration_NullEncryption() {
-        int id = 1;
         String username = "testuser";
-        String encryption = null;
+        //String encryption = null;
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
 
-        Exception exception = assertThrows(Exception.class, () -> userFacade.register( username, encryption, birthdate));
+        Exception exception = assertThrows(Exception.class, () -> userFacade.register( username, null, birthdate));
         assertEquals("Encrypted password is null", exception.getMessage());
     }
 
     @Test
     void registration_EmptyEncryption() {
-        int id = 1;
         String username = "testuser";
         String encryption = "";
         LocalDate birthdate = LocalDate.of(1990, 5, 15);
@@ -82,18 +77,16 @@ class RegistrationUnitTests {
 
     @Test
     void registration_NullBirthdate() {
-        int id = 1;
         String username = "testuser";
         String encryption = "testpassword";
-        LocalDate birthdate = null;
+        //LocalDate birthdate = null;
 
-        Exception exception = assertThrows(Exception.class, () -> userFacade.register( username, encryption, birthdate));
+        Exception exception = assertThrows(Exception.class, () -> userFacade.register( username, encryption, null));
         assertEquals("Birthdate password is null", exception.getMessage());
     }
 
     @Test
     void registration_DuplicateUsername() throws Exception {
-        int id = 2;
         String username = "testuser";
         String encryption = "testpassword";
         LocalDate birthdate = LocalDate.of(1990, 5, 15);

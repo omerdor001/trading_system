@@ -472,9 +472,27 @@ public class TradingSystemImp implements TradingSystem {
             logger.info("Finished fire {} from store : {}", manager, storeName);
             return new ResponseEntity<>("Success fire manager", HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , while {} trying to fire {} from store : {}", e.getMessage(), owner, storeName, manager);
+            logger.error("Error occurred : {} , while {} trying to fire {} from store : {}", e.getMessage(),owner, manager, storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+
+    @Override
+    public ResponseEntity<String> fireOwner(String ownerAppoint, String token, String storeName, String ownerToFire) {
+        logger.info("{} Trying to fire {} from be a owner in store {}",ownerAppoint, storeName, ownerToFire);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(ownerAppoint,token))
+                return invalidTokenResponse();
+            userService.fireOwner(ownerAppoint, storeName, ownerToFire);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while {} trying to fire {} from store : {}", e.getMessage(),ownerAppoint, ownerToFire, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Finished fire {} from store : {}", ownerToFire, storeName);
+        return new ResponseEntity<>("Success fire owner", HttpStatus.OK);
     }
 
 
@@ -511,16 +529,106 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> editPermissionForManager(String username, String token, String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
-        logger.info("{} is Trying to edit permission for manager : {} in store : {}", userId, managerToEdit, storeNameId);
+    public ResponseEntity<String> editPermissionForManager(String username, String token, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+        logger.info("{} is Trying to edit permission for manager : {} in store : {}", username, managerToEdit, storeNameId);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            userService.editPermissionForManager(userId, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+            userService.editPermissionForManager(username, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy);
             logger.info("Finished edit permission to manager : {}  in store : {}", managerToEdit, storeNameId);
             return new ResponseEntity<>("Success edit permission for manager ", HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , while {} is trying to edit permission for manager : {} : in store : {}", e.getMessage(), userId, managerToEdit, storeNameId);
+            logger.error("Error occurred : {} , while {} is trying to edit permission for manager : {} : in store : {}", e.getMessage(), username, managerToEdit, storeNameId);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getAllHistoryPurchases(String userName, String token, String storeName){
+        logger.info("{} is Trying to get all history purchases from store {}", userName, storeName);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            String result = marketService.getAllHistoryPurchases(userName, storeName);
+            logger.info("{} Finished to get all history purchases from store {}", userName, storeName);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while {} trying to get all history purchases from store : {}", e.getMessage(), userName, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getHistoryPurchasesByCustomer(String userName, String token, String storeName, String customerUserName){
+        logger.info("{} is Trying to get history purchases by customer {} from store {}", userName, customerUserName, storeName);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            String result = marketService.getHistoryPurchasesByCustomer(userName, storeName, customerUserName);
+            logger.info("{} Finished to get history purchases by {} from store {}", userName, customerUserName, storeName);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while {} trying to get history purchases by client {} from store : {}", e.getMessage(), userName, customerUserName, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> requestInformationAboutOfficialsInStore(String userName, String token, String storeName){
+        logger.info("{} is Trying to request Information about officials in store {}", userName, storeName);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            String result = marketService.requestInformationAboutOfficialsInStore(userName, storeName);
+            logger.info("{} Finished to request information about officials in store {}", userName, storeName);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while {} trying to request information about officials in store : {}", e.getMessage(), userName, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> requestManagersPermissions(String userName, String token, String storeName){
+        logger.info("{} is Trying to request manager permissions in store {}", userName, storeName);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            String result = marketService.requestManagersPermissions(userName, storeName);
+            logger.info("{} Finished to request manager permissions in store {}", userName, storeName);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while {} trying to request managers permissions in store : {}", e.getMessage(), userName, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> requestInformationAboutSpecificOfficialInStore(String userName, String token, String storeName, String officialUserName){
+        logger.info("{} is Trying to request Information about official {} in store {}", userName,officialUserName,storeName);
+        try {
+            if (!checkSystemOpen())
+                return systemClosedResponse();
+            if(!checkToken(userName,token))
+                return invalidTokenResponse();
+            String result = marketService.requestInformationAboutSpecificOfficialInStore(userName, storeName, officialUserName);
+            logger.info("{} Finished to request information about official {} in store {}", userName, officialUserName, storeName);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while {} trying to request information about official in store : {}", e.getMessage(), userName, storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

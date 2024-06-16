@@ -346,7 +346,7 @@ public class MarketFacadeImp implements MarketFacade {
         }
         Store store = storeMemoryRepository.getStore(storeName);
         if (!store.getFounder().equals(userName)) {
-            throw new IllegalArgumentException("Only founder can close store exist");
+            throw new IllegalArgumentException("Only founder can open store exist");
         }
         if(store.isOpen()){
             throw new IllegalArgumentException("Store is already active");
@@ -404,6 +404,9 @@ public class MarketFacadeImp implements MarketFacade {
             }
             Store store = storeMemoryRepository.getStore(storeName);
             User user=userFacade.getUser(username);
+            if(user.getRoleByStoreId(storeName)==null){
+                throw new RuntimeException("User with no permission for this store");
+            }
             user.getRoleByStoreId(storeName).addProduct(username, productId, storeName, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
             store.addProduct(productId, productName, productDescription, productPrice, productQuantity,rating,category,keyWords);
             lock.unlock();
@@ -434,6 +437,9 @@ public class MarketFacadeImp implements MarketFacade {
             }
             Store store=storeMemoryRepository.getStore(storeName);
             User user=userFacade.getUser(username);
+            if(user.getRoleByStoreId(storeName)==null){
+                throw new RuntimeException("User with no permission for this store");
+            }
             user.getRoleByStoreId(storeName).removeProduct(username, storeName, productId);
             if(!storeMemoryRepository.getStore(storeName).getProducts().containsKey(productId)) {
                 throw new IllegalArgumentException("Product must exist");
@@ -469,6 +475,9 @@ public class MarketFacadeImp implements MarketFacade {
                 throw new RuntimeException("User is suspended from the system");
             }
             User user=userFacade.getUser(username);
+            if(user.getRoleByStoreId(storeName)==null){
+                throw new RuntimeException("User with no permission for this store");
+            }
             user.getRoleByStoreId(storeName).setProduct_name(username, storeName,productId, productName);
             store.setProductName(productId, productName);
             lock.unlock();
@@ -501,6 +510,9 @@ public class MarketFacadeImp implements MarketFacade {
                 throw new RuntimeException("User is suspended from the system");
             }
             User user=userFacade.getUser(username);
+            if(user.getRoleByStoreId(storeName)==null){
+                throw new RuntimeException("User with no permission for this store");
+            }
             user.getRoleByStoreId(storeName).setProduct_description(username, storeName,productId, productDescription);
             store.setProductDescription(productId, productDescription);
             lock.unlock();
@@ -534,6 +546,9 @@ public class MarketFacadeImp implements MarketFacade {
                 throw new RuntimeException("User is suspended from the system");
             }
             User user=userFacade.getUser(username);
+            if(user.getRoleByStoreId(storeName)==null){
+                throw new RuntimeException("User with no permission for this store");
+            }
             user.getRoleByStoreId(storeName).setProduct_price(username, storeName,productId, productPrice);
             store.setProductPrice(productId, productPrice);
             lock.unlock();
@@ -567,6 +582,9 @@ public class MarketFacadeImp implements MarketFacade {
                 throw new RuntimeException("User is suspended from the system");
             }
             User user=userFacade.getUser(username);
+            if(user.getRoleByStoreId(storeName)==null){
+                throw new RuntimeException("User with no permission for this store");
+            }
             user.getRoleByStoreId(storeName).setProduct_quantity(username, storeName,productId, productQuantity);
             store.setProductQuantity(productId, productQuantity);
             lock.unlock();
@@ -578,7 +596,6 @@ public class MarketFacadeImp implements MarketFacade {
             storeLocks.remove(storeName, lock);
             throw e;
         }
-
     }
 
     @Override
@@ -601,6 +618,9 @@ public class MarketFacadeImp implements MarketFacade {
                 throw new RuntimeException("User is suspended from the system");
             }
             User user=userFacade.getUser(username);
+            if(user.getRoleByStoreId(storeName)==null){
+                throw new RuntimeException("User with no permission for this store");
+            }
             user.getRoleByStoreId(storeName).setRating(username, storeName,productId,rating);
             store.setRating(productId,rating);
             lock.unlock();
@@ -633,6 +653,9 @@ public class MarketFacadeImp implements MarketFacade {
                 throw new RuntimeException("User is suspended from the system");
             }
             User user=userFacade.getUser(username);
+            if(user.getRoleByStoreId(storeName)==null){
+                throw new RuntimeException("User with no permission for this store");
+            }
             user.getRoleByStoreId(storeName).setCategory(username, storeName,productId,category);
             store.setCategory(productId,category);
             lock.unlock();
@@ -713,12 +736,15 @@ public class MarketFacadeImp implements MarketFacade {
         result.append(storeName).append("\n");
         result.append("Role id username address birthdate").append("\n");
         for (String owner : storeOwners) {
-            User user2 = userFacade.getUser(userName);
-            result.append("Owner ").append(user2.getUsername()).append(owner).append(user2.getAddress()).append(user2.getBirthdate()).append("\n");
+            User user2 = userFacade.getUser(owner);
+            if (store.getFounder().equals(owner))
+                result.append("Founder ").append(user2.getUsername()).append(" ").append(owner).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append("\n");
+            else
+                result.append("Owner ").append(user2.getUsername()).append(" ").append(owner).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append("\n");
         }
         for (String manager : storeManagers) {
             User user2 = userFacade.getUser(manager);
-            result.append("Manager ").append(user2.getUsername()).append(manager).append(user2.getAddress()).append(user2.getBirthdate()).append("\n");
+            result.append("Manager ").append(user2.getUsername()).append(" ").append(manager).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append("\n");
         }
         return result.toString();
     }
@@ -742,10 +768,11 @@ public class MarketFacadeImp implements MarketFacade {
             throw new RuntimeException("User is suspended from the system");
         }
         User user = userFacade.getUser(userName);
+        Store store = storeMemoryRepository.getStore(storeName);
+
         user.getRoleByStoreId(storeName).getRoleState().requestManagersPermissions();
 
-        List<String> storeManagers = storeMemoryRepository.getStore(storeName).getManagers();
-
+        List<String> storeManagers = store.getManagers();
         StringBuilder result = new StringBuilder();
         result.append(storeName).append("\n\n");
         result.append("Managers :").append("\n");
@@ -753,7 +780,7 @@ public class MarketFacadeImp implements MarketFacade {
         for (String manager : storeManagers) {
             User user2 = userFacade.getUser(manager);
             RoleState managerRole = user2.getRoleByStoreId(storeName).getRoleState();
-            result.append(user2.getUsername()).append(manager).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append('\n');
+            result.append(user2.getUsername()).append(" ").append(manager).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditBuyPolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append('\n');
         }
         return result.toString();
     }
@@ -786,6 +813,7 @@ public class MarketFacadeImp implements MarketFacade {
 
         Store store = storeMemoryRepository.getStore(storeName);
         List<String> storeOwners = store.getOwners();
+        List<String> storeManagers = store.getManagers();
 
         StringBuilder result = new StringBuilder();
         result.append(storeName).append('\n');
@@ -793,16 +821,18 @@ public class MarketFacadeImp implements MarketFacade {
         if (storeOwners.contains(officialUserName)) {
             User user2 = userFacade.getUser(officialUserName);
             result.append("Role id username address birthdate").append('\n');
-            result.append("Owner ").append(user2.getUsername()).append(officialUserName).append(user2.getAddress()).append(user2.getBirthdate()).append('\n');
-        } else {
-            List<String> storeManagers = store.getManagers();
-            if (storeManagers.contains(officialUserName)) {
-                User user2 = userFacade.getUser(userName);
+            if (store.getFounder().equals(officialUserName))
+                result.append("Founder ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append('\n');
+            else
+                result.append("Owner ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append('\n');
+        } else if (storeManagers.contains(officialUserName)) {
+                User user2 = userFacade.getUser(officialUserName);
                 RoleState managerRole = user2.getRoleByStoreId(storeName).getRoleState();
                 result.append("Role id username address birthdate watch editSupply editBuyPolicy editDiscountPolicy").append("\n");
-                result.append("Manager ").append(user2.getUsername()).append(officialUserName).append(user2.getAddress()).append(user2.getBirthdate()).append(managerRole.isWatch()).append(managerRole.isEditSupply()).append(managerRole.isEditBuyPolicy()).append(managerRole.isEditDiscountPolicy()).append("\n");
-            } else throw new IllegalArgumentException("User is not employeed in this store.");
-        }
+                result.append("Manager ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditBuyPolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append("\n");
+            } else
+                throw new IllegalArgumentException("User is not employeed in this store.");
+
         return result.toString();
     }
 
@@ -828,7 +858,6 @@ public class MarketFacadeImp implements MarketFacade {
     public synchronized void removeReservedProducts(int productId, int quantity, String storeName) {
         int productQuantity = getStore(storeName).getProduct(productId).getProduct_quantity();
         getStore(storeName).getProduct(productId).setProduct_quantity(productQuantity - quantity);
-
     }
 
     @Override
@@ -839,6 +868,11 @@ public class MarketFacadeImp implements MarketFacade {
             price += storeMemoryRepository.getStore(bag.getStoreId()).calculatePrice(bag.getProducts_list().values());
         }
         return price;
+    }
+
+    @Override
+    public void addPurchase(String customerUsername, List<ProductInSale> productInSaleList, double totalPrice, String storeName){
+        storeMemoryRepository.getStore(storeName).addPurchase(new Purchase(customerUsername,productInSaleList,totalPrice,storeName));
     }
 
     //region Discount management

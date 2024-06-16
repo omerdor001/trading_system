@@ -106,8 +106,8 @@ public class Cart {
             purchases.add(new Purchase(username, getProductsToList(), totalcount, entry.getKey()));
         }
         return purchases;
-
     }
+
 
     public String toJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();

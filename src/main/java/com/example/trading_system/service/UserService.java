@@ -48,6 +48,8 @@ public interface UserService {
 
     void fireManager(String owner, String storeName, String manager) throws IllegalAccessException;
 
+    void fireOwner(String ownerAppoint, String storeName, String owner) throws IllegalAccessException;
+
     void exit(String username) throws Exception;
 
     String viewCart(String username);

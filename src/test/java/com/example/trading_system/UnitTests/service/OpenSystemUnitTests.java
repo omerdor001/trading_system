@@ -2,7 +2,6 @@ package com.example.trading_system.UnitTests.service;
 
 import com.example.trading_system.service.TradingSystemImp;
 import com.example.trading_system.service.UserService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -41,4 +40,5 @@ class OpenSystemUnitTests {
         assertEquals("System is already open.", response.getBody());
 //        verify(userService, times(1)).isAdminRegistered();
     }
+
 }

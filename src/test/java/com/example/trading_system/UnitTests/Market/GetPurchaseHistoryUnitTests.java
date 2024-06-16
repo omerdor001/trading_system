@@ -10,23 +10,17 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
-
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class GetPurchaseHistoryUnitTests {
-
-    @Mock
-    User user;
     @Mock
     Purchase purchase;
 
     UserMemoryRepository userMemoryRepository;
     MarketFacadeImp marketFacade;
     UserFacadeImp userFacadeImp;
-    StoreSalesHistory storeSalesHistory;
 
     @BeforeEach
     public void init() {
@@ -36,15 +30,11 @@ public class GetPurchaseHistoryUnitTests {
 //        UserMemoryRepository.getInstance().deleteInstance();
         MarketFacadeImp.getInstance().deleteInstance();
         UserFacadeImp.getInstance().deleteInstance();
-        StoreSalesHistory.getInstance().deleteInstance();
 
         // Re-instantiate singletons
         userMemoryRepository = UserMemoryRepository.getInstance();
         marketFacade = MarketFacadeImp.getInstance();
         userFacadeImp = UserFacadeImp.getInstance();
-        storeSalesHistory = StoreSalesHistory.getInstance();
-
-        storeSalesHistory.setPurchases(new ArrayList<>());
     }
 
     @AfterEach
@@ -57,7 +47,8 @@ public class GetPurchaseHistoryUnitTests {
     public void givenNonExistentUser_WhenGetPurchaseHistory_ThenThrowException() {
         String username = "rNonExistentUser";
         String storeName = "StoreName";
-        storeSalesHistory.addPurchase(purchase);
+        marketFacade.addStore(storeName,"Description","founder",6.0);
+        marketFacade.getStore(storeName).addPurchase(purchase);
 
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.getPurchaseHistory(username, storeName), "User not found");
     }
@@ -66,7 +57,9 @@ public class GetPurchaseHistoryUnitTests {
     public void givenUserNotLoggedIn_WhenGetPurchaseHistory_ThenThrowException() {
         String username = "rValidUser";
         String storeName = "StoreName";
-        storeSalesHistory.addPurchase(purchase);
+        marketFacade.addStore(storeName,"Description","founder",6.0);
+
+        marketFacade.getStore(storeName).addPurchase(purchase);
 
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         // Ensure user is added but not logged in
@@ -77,7 +70,8 @@ public class GetPurchaseHistoryUnitTests {
     public void givenUserNotCommercialManager_WhenGetPurchaseHistory_ThenThrowException() {
         String username = "rValidUser";
         String storeName = "StoreName";
-        storeSalesHistory.addPurchase(purchase);
+        marketFacade.addStore(storeName,"Description","founder",6.0);
+        marketFacade.getStore(storeName).addPurchase(purchase);
 
         userMemoryRepository.addRegistered(username, "encrypted_password", null);
         // Ensure user is logged in
@@ -87,38 +81,32 @@ public class GetPurchaseHistoryUnitTests {
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.getPurchaseHistory(username, storeName), "User is not commercial manager");
     }
 
-/*    TODO: needs some modification, maybe in the function itself since we removed policy
-
-@Test
-    public void givenValidInputs_WhenGetPurchaseHistory_ThenReturnHistory() {
-        String username = "rValidUser";
-        String storeName = "StoreName";
-        String expectedHistory = "Client Username: rValidUser, Total Price: $100.0\n" +
-                "Products:\n" +
-                "Product: 1, Quantity: 2, Price: $100.0, Store: StoreName\n" +
-                "\n" +
-                "Client Username: rValidUser, Total Price: $100.0\n" +
-                "Products:\n" +
-                "Product: 2, Quantity: 2, Price: $100.0, Store: StoreName\n";
-
-        userMemoryRepository.addRegistered(username, "encrypted_password", null);
-        // Ensure user is logged in and is an admin
-        User user = userMemoryRepository.getUser(username);
-        user.login();
-        user.setAdmin(true);
-
-        // Add a purchase to the storeSalesHistory
-        ProductInSale productInSale = new ProductInSale(storeName,1, 100.0, 2,3);
-        ProductInSale productInSale2 = new ProductInSale(storeName,2, 100.0, 2,3);
-
-        Purchase purchase1 = new Purchase(username, List.of(productInSale), 100.0, storeName);
-        Purchase purchase2 = new Purchase(username, List.of(productInSale2), 100.0, storeName);
-
-        storeSalesHistory.addPurchase(purchase1);
-        storeSalesHistory.addPurchase(purchase2);
-
-        String purchaseHistory = userFacadeImp.getPurchaseHistory(username, storeName);
-
-        Assertions.assertEquals(expectedHistory, purchaseHistory);
-    }*/
+    //TODO fix this test as soon as possible
+//@Test
+//    public void givenValidInputs_WhenGetPurchaseHistory_ThenReturnHistory() {
+//        String username = "ValidUser";
+//        String storeName = "StoreName";
+//        String expectedHistory = """
+//                Client Username: rValidUser, Total Price: $100.0
+//                Products:
+//                Product: 1, Quantity: 2, Price: $100.0, Store: StoreName
+//
+//                Client Username: rValidUser, Total Price: $100.0
+//                Products:
+//                Product: 2, Quantity: 2, Price: $100.0, Store: StoreName
+//                """;
+//        try{
+//            userFacadeImp.register(username, "encrypted_password", LocalDate.now());
+//            userFacadeImp.enter(0);
+//            userFacadeImp.login("v0",username,"encrypted_password");
+//        }
+//        catch (Exception _) {}
+//        userFacadeImp.createStore("r"+username,storeName,"");
+//        ProductInSale productInSale = new ProductInSale(storeName,1, 100.0, 2,3);
+//        ProductInSale productInSale2 = new ProductInSale(storeName,2, 100.0, 2,3);
+//        marketFacade.addPurchase(username, List.of(productInSale), 100.0, storeName);
+//        marketFacade.addPurchase(username, List.of(productInSale2), 100.0, storeName);
+//        String purchaseHistory = userFacadeImp.getPurchaseHistory("r"+username, storeName);
+//        Assertions.assertEquals(expectedHistory, purchaseHistory);
+//    }
 }

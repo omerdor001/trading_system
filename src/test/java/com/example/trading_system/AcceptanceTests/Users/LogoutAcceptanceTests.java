@@ -82,4 +82,6 @@ class LogoutAcceptanceTests {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("User performs not like a registered", response.getBody());
     }
+
+
 }
