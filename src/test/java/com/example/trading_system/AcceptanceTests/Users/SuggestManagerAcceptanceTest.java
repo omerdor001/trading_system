@@ -3,6 +3,7 @@ package com.example.trading_system.AcceptanceTests.Users;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,12 @@ public class SuggestManagerAcceptanceTest {
 
     @BeforeEach
     void setUp() {
+        tradingSystemImp = TradingSystemImp.getInstance();
+    }
+
+    @AfterEach
+    void tearDown(){
+        tradingSystemImp.deleteInstance();
     }
 
     @Test
