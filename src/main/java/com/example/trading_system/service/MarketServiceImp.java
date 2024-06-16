@@ -91,23 +91,23 @@ public class MarketServiceImp implements MarketService {
         return result;
     }
 
-    public String searchNameInStores(String userName, String productName, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
+    public String searchNameInStores(String userName, String productName, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
         logger.info("Trying to search products in stores with name : {}", productName);
-        String result = marketFacade.searchNameInStores(userName, productName, minPrice, maxPrice, minRating, category,storeRating);
+        String result = marketFacade.searchNameInStores(userName, productName, minPrice, maxPrice, minRating, category, storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }
 
-    public String searchCategoryInStores(String userName, int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating) {
+    public String searchCategoryInStores(String userName, int category, Double minPrice, Double maxPrice, Double minRating, Double storeRating) {
         logger.info("Trying to search products in stores with category, : {}", category);
-        String result = marketFacade.searchCategoryInStores(userName, category, minPrice, maxPrice, minRating,storeRating);
+        String result = marketFacade.searchCategoryInStores(userName, category, minPrice, maxPrice, minRating, storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }
 
-    public String searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating) {
+    public String searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
         logger.info("Trying to search products in stores with keyWords,  : {}", keyWords);
-        String result = marketFacade.searchKeywordsInStores(userName, keyWords, minPrice, maxPrice, minRating, category,storeRating);
+        String result = marketFacade.searchKeywordsInStores(userName, keyWords, minPrice, maxPrice, minRating, category, storeRating);
         logger.info("FINISHED Searching products in stores ");
         return result;
     }
@@ -142,6 +142,16 @@ public class MarketServiceImp implements MarketService {
 
     public void setCategory(String username, String store_name, int productId, int category) throws IllegalAccessException {
         marketFacade.setCategory(username, store_name, productId, category);
+    }
+
+    @Override
+    public String getDiscountPolicies(String username, String storeName) throws IllegalAccessException {
+        return marketFacade.getDiscountPolicies(username, storeName);
+    }
+
+    @Override
+    public String getDiscountConditions(String username, String storeName) throws IllegalAccessException {
+        return marketFacade.getDiscountConditions(username, storeName);
     }
 
     @Override
@@ -180,7 +190,7 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public void addTotalSumCondition(String username, String storeName, int requiredSum) throws IllegalAccessException {
+    public void addTotalSumCondition(String username, String storeName, double requiredSum) throws IllegalAccessException {
         marketFacade.addTotalSumCondition(username, storeName, requiredSum);
     }
 
@@ -202,6 +212,11 @@ public class MarketServiceImp implements MarketService {
     @Override
     public void addXorDiscount(String username, String storeName) throws IllegalAccessException {
         marketFacade.addXorDiscount(username, storeName);
+    }
+
+    @Override
+    public void removeDiscount(String username, String storeName, int selectedIndex) throws IllegalAccessException {
+        marketFacade.removeDiscount(username, storeName, selectedIndex);
     }
 
     @Override
@@ -250,7 +265,7 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public void setTotalSum(String username, String storeName, int selectedConditionIndex, int newSum) throws IllegalAccessException {
+    public void setTotalSum(String username, String storeName, int selectedConditionIndex, double newSum) throws IllegalAccessException {
         marketFacade.setTotalSum(username, storeName, selectedConditionIndex, newSum);
     }
 
@@ -265,12 +280,12 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public void closeStoreExist(String userName, String storeName)  throws IllegalArgumentException {
+    public void closeStoreExist(String userName, String storeName) throws IllegalArgumentException {
         marketFacade.closeStoreExist(userName, storeName);
     }
 
     @Override
-    public String getAllHistoryPurchases(String userName, String storeName) throws IllegalAccessException{
+    public String getAllHistoryPurchases(String userName, String storeName) throws IllegalAccessException {
         return marketFacade.getAllHistoryPurchases(userName, storeName);
     }
 

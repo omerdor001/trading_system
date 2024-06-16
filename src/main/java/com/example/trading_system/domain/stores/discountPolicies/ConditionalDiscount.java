@@ -50,7 +50,7 @@ public class ConditionalDiscount implements DiscountPolicy, Condition {
     }
 
     @Override
-    public void setSum(int requiredSum) {
+    public void setSum(double requiredSum) {
         throw new RuntimeException("Action not allowed for conditional discount");
     }
 
@@ -77,5 +77,12 @@ public class ConditionalDiscount implements DiscountPolicy, Condition {
     @Override
     public void setDecider(Condition decider) {
         throw new RuntimeException("Action not allowed for conditional discount");
+    }
+
+    @Override
+    public String getInfo() {
+        String conditionInfo = condition.getInfo();
+        String thenInfo = then.getInfo();
+        return "{ \"type\": \"conditional\", \"condition\": " + conditionInfo + ", \"then\": " + thenInfo + " }";
     }
 }

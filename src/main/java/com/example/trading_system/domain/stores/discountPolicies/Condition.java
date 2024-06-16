@@ -11,5 +11,7 @@ public interface Condition {
 
     void setCount(int count);
 
-    void setSum(int requiredSum);
+    void setSum(double requiredSum);
+
+    String getInfo();
 }

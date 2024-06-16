@@ -72,7 +72,14 @@ public class MaxDiscount implements DiscountPolicy, Condition {
     }
 
     @Override
-    public void setSum(int requiredSum) {
+    public void setSum(double requiredSum) {
         throw new RuntimeException("Action not allowed for max discount");
+    }
+
+    @Override
+    public String getInfo() {
+        String firstInfo = first.getInfo();
+        String secondInfo = second.getInfo();
+        return "{ \"type\": \"max\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + " }";
     }
 }

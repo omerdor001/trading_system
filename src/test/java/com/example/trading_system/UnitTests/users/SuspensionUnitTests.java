@@ -14,7 +14,7 @@ import java.time.temporal.ChronoUnit;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class UserFacadeImpTest {
+class SuspensionUnitTests {
     MarketFacade marketFacade;
     UserFacade userFacade;
 
@@ -52,7 +52,7 @@ class UserFacadeImpTest {
             userFacade.exit("v1");
             userFacade.exit("v0");
         }
-        catch (Exception _){
+        catch (Exception e){
 
         }
         marketFacade.deleteInstance();
@@ -170,10 +170,4 @@ class UserFacadeImpTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userFacade.watchSuspensions("rtestuser2"));
         assertEquals("Only admin user can suspend users", exception.getMessage());
     }
-
-
-
-
-
-
 }

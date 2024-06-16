@@ -63,7 +63,7 @@ public class PercentageDiscountByProduct implements DiscountPolicy, Condition {
     }
 
     @Override
-    public void setSum(int requiredSum) {
+    public void setSum(double requiredSum) {
         throw new RuntimeException("Action not allowed for product percentage discount");
     }
 
@@ -78,5 +78,10 @@ public class PercentageDiscountByProduct implements DiscountPolicy, Condition {
 
     public void setProductId(int productId) {
         this.productId = productId;
+    }
+
+    @Override
+    public String getInfo() {
+        return "{ \"type\": \"percentageProduct\", \"productId\": " + productId + ", \"percent\": " + discountPercent + " }";
     }
 }

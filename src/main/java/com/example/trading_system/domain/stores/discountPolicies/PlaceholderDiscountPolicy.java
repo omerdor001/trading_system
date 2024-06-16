@@ -55,7 +55,7 @@ public class PlaceholderDiscountPolicy implements DiscountPolicy, Condition {
     }
 
     @Override
-    public void setSum(int requiredSum) {
+    public void setSum(double requiredSum) {
         throw new RuntimeException("Action not allowed for placeholder discount");
     }
 
@@ -72,5 +72,10 @@ public class PlaceholderDiscountPolicy implements DiscountPolicy, Condition {
     @Override
     public void setDecider(Condition decider) {
         throw new RuntimeException("Action not allowed for placeholder discount");
+    }
+
+    @Override
+    public String getInfo() {
+        return "{ \"type\": \"placeholderDiscount\" }";
     }
 }

@@ -123,6 +123,10 @@ public interface TradingSystem {
     ResponseEntity<String> calculatePrice(String username, String token);
 
     //region Discount creation
+    ResponseEntity<String> getDiscountPolicies(String username, String token, String storeName);
+
+    ResponseEntity<String> getDiscountConditions(String username, String token, String storeName);
+
     ResponseEntity<String> addCategoryPercentageDiscount(String username, String token, String storeName, int category, double discountPercent);
 
     ResponseEntity<String> addProductPercentageDiscount(String username, String token, String storeName, int productId, double discountPercent);
@@ -137,7 +141,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> addCategoryCountCondition(String username, String token, String storeName, int category, int count);
 
-    ResponseEntity<String> addTotalSumCondition(String username, String token, String storeName, int requiredSum);
+    ResponseEntity<String> addTotalSumCondition(String username, String token, String storeName, double requiredSum);
 
     ResponseEntity<String> addProductCountCondition(String username, String token, String storeName, int productId, int count);
 
@@ -146,6 +150,8 @@ public interface TradingSystem {
     ResponseEntity<String> addOrDiscount(String username, String token, String storeName);
 
     ResponseEntity<String> addXorDiscount(String username, String token, String storeName);
+
+    ResponseEntity<String> removeDiscount(String username, String token, String storeName, int selectedIndex);
 
     //endregion
 
@@ -168,7 +174,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> setDeciderDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedDeciderIndex);
 
-    ResponseEntity<String> setTotalSum(String username, String token, String storeName, int selectedConditionIndex, int newSum);
+    ResponseEntity<String> setTotalSum(String username, String token, String storeName, int selectedConditionIndex, double newSum);
 
     ResponseEntity<String> setCountCondition(String username, String token, String storeName, int selectedConditionIndex, int newCount);
 

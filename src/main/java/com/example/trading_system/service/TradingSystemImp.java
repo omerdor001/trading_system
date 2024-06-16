@@ -895,6 +895,36 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     //region Discount management
+
+    @Override
+    public ResponseEntity<String> getDiscountPolicies(String username, String token, String storeName) {
+        logger.info("Trying to get discount policies for user: {} ,store: {}", username, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            String result = marketService.getDiscountPolicies(username, storeName);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while getting discount policies for user: {} ,store: {}", username, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getDiscountConditions(String username, String token, String storeName) {
+        logger.info("Trying to get discount conditions for user: {} ,store: {}", username, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            String result = marketService.getDiscountConditions(username, storeName);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while getting discount conditions for user: {} ,store: {}", username, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public ResponseEntity<String> addCategoryPercentageDiscount(String username, String token, String storeName, int category, double discountPercent) {
         logger.info("Trying to add category percentage discount for user: {} ,store: {}, category: {}, value: {}", username, storeName, category, discountPercent);
         try {
@@ -908,6 +938,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> addProductPercentageDiscount(String username, String token, String storeName, int productId, double discountPercent) {
         logger.info("Trying to add product percentage discount for user: {} ,store: {}, productId: {}, discountPercent: {}", username, storeName, productId, discountPercent);
         try {
@@ -921,6 +952,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> addStoreDiscount(String username, String token, String storeName, double discountPercent) {
         logger.info("Trying to add store discount for for user: {} ,store: {}, discountPercent: {}", username, storeName, discountPercent);
         try {
@@ -934,6 +966,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> addConditionalDiscount(String username, String token, String storeName) {
         logger.info("Trying to add conditional discount for user: {} ,store: {}", username, storeName);
         try {
@@ -947,6 +980,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> addAdditiveDiscount(String username, String token, String storeName) {
         logger.info("Trying to add additive discount for user: {} ,store: {}", username, storeName);
         try {
@@ -960,6 +994,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> addMaxDiscount(String username, String token, String storeName) {
         logger.info("Trying to add max discount for user: {} ,store: {}", username, storeName);
         try {
@@ -973,6 +1008,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> addCategoryCountCondition(String username, String token, String storeName, int category, int count) {
         logger.info("Trying to add category count condition for user: {} ,store: {}, category: {}, count: {}", username, storeName, category, count);
         try {
@@ -986,7 +1022,8 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
-    public ResponseEntity<String> addTotalSumCondition(String username, String token, String storeName, int requiredSum) {
+    @Override
+    public ResponseEntity<String> addTotalSumCondition(String username, String token, String storeName, double requiredSum) {
         logger.info("Trying to add total sum condition for user: {} ,store: {}, sum: {}", username, storeName, requiredSum);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
@@ -999,6 +1036,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> addProductCountCondition(String username, String token, String storeName, int productId, int count) {
         logger.info("Trying to add product count condition for user: {} ,store: {}, productId: {}, count: {}", username, storeName, productId, count);
         try {
@@ -1012,6 +1050,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> addAndDiscount(String username, String token, String storeName) {
         logger.info("Trying to add AND discount for for user: {} ,store: {}", username, storeName);
         try {
@@ -1025,6 +1064,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> addOrDiscount(String username, String token, String storeName) {
         logger.info("Trying to add OR discount for user: {} ,store: {}", username, storeName);
         try {
@@ -1038,6 +1078,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> addXorDiscount(String username, String token, String storeName) {
         logger.info("Trying to add XOR discount for user: {} ,store: {}", username, storeName);
         try {
@@ -1051,6 +1092,21 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
+    public ResponseEntity<String> removeDiscount(String username, String token, String storeName, int selectedIndex){
+        logger.info("Trying to remove discount for user: {} ,store: {}, index: {}", username, storeName, selectedIndex);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.removeDiscount(username, storeName, selectedIndex);
+            return new ResponseEntity<>("Discount removed successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while removing discount for user: {} ,store: {}, index: {}", username, storeName, selectedIndex);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public ResponseEntity<String> setFirstDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedFirstIndex) {
         logger.info("Trying to set first discount for for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedFirstIndex);
         try {
@@ -1064,6 +1120,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> setSecondDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex) {
         logger.info("Trying to set second discount for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedSecondIndex);
         try {
@@ -1077,6 +1134,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> setFirstCondition(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex) {
         logger.info("Trying to set first condition for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedSecondIndex);
         try {
@@ -1090,6 +1148,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> setSecondCondition(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex) {
         logger.info("Trying to set second condition for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedSecondIndex);
         try {
@@ -1103,6 +1162,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> setThenDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedThenIndex) {
         logger.info("Trying to set then discount for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedThenIndex);
         try {
@@ -1116,6 +1176,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> setCategoryDiscount(String username, String token, String storeName, int selectedDiscountIndex, int category) {
         logger.info("Trying to set category discount for user: {} ,store: {}, discountIndex: {}, category: {}", username, storeName, selectedDiscountIndex, category);
         try {
@@ -1129,6 +1190,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> setProductIdDiscount(String username, String token, String storeName, int selectedDiscountIndex, int productId) {
         logger.info("Trying to set product ID discount for user: {} ,store: {}, discountIndex: {}, productId: {}", username, storeName, selectedDiscountIndex, productId);
         try {
@@ -1142,6 +1204,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> setPercentDiscount(String username, String token, String storeName, int selectedDiscountIndex, double discountPercent) {
         logger.info("Trying to set percent discount for user: {} ,store: {}, discountIndex: {}, percent: {}", username, storeName, selectedDiscountIndex, discountPercent);
         try {
@@ -1155,6 +1218,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> setDeciderDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedDeciderIndex) {
         logger.info("Trying to set decider discount for user: {} ,store: {}, discountIndex: {}, deciderIndex: {}", username, storeName, selectedDiscountIndex, selectedDeciderIndex);
         try {
@@ -1168,7 +1232,8 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
-    public ResponseEntity<String> setTotalSum(String username, String token, String storeName, int selectedConditionIndex, int newSum) {
+    @Override
+    public ResponseEntity<String> setTotalSum(String username, String token, String storeName, int selectedConditionIndex, double newSum) {
         logger.info("Trying to set total sum for user: {} ,store: {}, conditionIndex: {}, newSum: {}", username, storeName, selectedConditionIndex, newSum);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
@@ -1181,6 +1246,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> setCountCondition(String username, String token, String storeName, int selectedConditionIndex, int newCount) {
         logger.info("Trying to set count condition for user: {} ,store: {}, conditionIndex: {}, newCount: {}", username, storeName, selectedConditionIndex, newCount);
         try {
@@ -1194,6 +1260,7 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
     public ResponseEntity<String> setCategoryCondition(String username, String token, String storeName, int selectedConditionIndex, int newCategory) {
         logger.info("Trying to set category condition for user: {} ,store: {}, conditionIndex: {}, category: {}", username, storeName, selectedConditionIndex, newCategory);
         try {

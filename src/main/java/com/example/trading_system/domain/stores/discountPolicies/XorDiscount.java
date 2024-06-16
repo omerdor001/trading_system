@@ -82,7 +82,15 @@ public class XorDiscount implements DiscountPolicy, Condition {
     }
 
     @Override
-    public void setSum(int requiredSum) {
+    public void setSum(double requiredSum) {
         throw new RuntimeException("Action not allowed for xor discount");
+    }
+
+    @Override
+    public String getInfo() {
+        String firstInfo = first.getInfo();
+        String secondInfo = second.getInfo();
+        String deciderInfo = decider.getInfo();
+        return "{ \"type\": \"xor\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + ", \"decider\": " + deciderInfo + " }";
     }
 }
