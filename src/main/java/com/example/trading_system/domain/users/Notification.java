@@ -25,18 +25,18 @@ public class Notification {
     private Date dateOfCreation;
     private String textContent;
 
-    @JsonCreator
-    public Notification(
-            @JsonProperty("senderUsername") String senderUsername,
-            @JsonProperty("receiverUsername") String receiverUsername,
-            @JsonProperty("dateOfCreation") Date dateOfCreation,
-            @JsonProperty("textContent") String textContent
-    ) {
-        this.senderUsername = senderUsername;
-        this.receiverUsername = receiverUsername;
-        this.dateOfCreation = dateOfCreation;
-        this.textContent = textContent;
-    }
+//    @JsonCreator
+//    public Notification(
+//            @JsonProperty("senderUsername") String senderUsername,
+//            @JsonProperty("receiverUsername") String receiverUsername,
+//            @JsonProperty("dateOfCreation") Date dateOfCreation,
+//            @JsonProperty("textContent") String textContent
+//    ) {
+//        this.senderUsername = senderUsername;
+//        this.receiverUsername = receiverUsername;
+//        this.dateOfCreation = dateOfCreation;
+//        this.textContent = textContent;
+//    }
 
     public static Notification fromString(String str) {
         try {

@@ -122,10 +122,10 @@ public abstract class User {
 
     public abstract LocalDate getBirthdate();
 
-    public String sendNotification(String receiverUsername, String content) {
-        Notification notification = new Notification(this.username, receiverUsername, new Date(), content);
-        return notification.toString();
-    }
+//    public String sendNotification(String receiverUsername, String content) {
+//        Notification notification = new Notification(this.username, receiverUsername, new Date(), content);
+//        return notification.toString();
+//    }
 
     public void addProductToCart(int productId, int quantity, String storeName, double price, int category) {
         this.cart.addProductToCart(productId, quantity, storeName, price, category);
