@@ -165,7 +165,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addStoreDiscount(username,token,storeName,0.5);
         tradingSystem.addTotalSumCondition(username,token,storeName,1);
         tradingSystem.addTotalSumCondition(username,token,storeName,2);
-        tradingSystem.addAndDiscount(username,token,storeName);
+        tradingSystem.addOrDiscount(username,token,storeName);
         tradingSystem.setFirstCondition(username,token,storeName,1,2);
         tradingSystem.setSecondCondition(username,token,storeName,1,2);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
@@ -218,5 +218,21 @@ public class DiscountPolicyAcceptanceTests {
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("0.5", result.getBody());
+    }
+
+    @Test
+    public void testGetDiscounts() {
+        tradingSystem.addStoreDiscount(username, token, storeName, 0.5);
+        ResponseEntity<String> result = tradingSystem.getDiscountPolicies(username, token, storeName);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals("[ { \"type\": \"percentageStore\", \"percent\": 0.5 } ]", result.getBody());
+    }
+
+    @Test
+    public void testGetConditions() {
+        tradingSystem.addTotalSumCondition(username, token, storeName, 100);
+        ResponseEntity<String> result = tradingSystem.getDiscountConditions(username, token, storeName);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals("[ { \"type\": \"totalSum\", \"requiredSum\": 100.0 } ]", result.getBody());
     }
 }

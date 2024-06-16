@@ -5,9 +5,9 @@ import com.example.trading_system.domain.stores.ProductInSaleDTO;
 import java.util.Collection;
 
 public class TotalSumCondition implements Condition {
-    private int requiredSum;
+    private double requiredSum;
 
-    public TotalSumCondition(int requiredSum) {
+    public TotalSumCondition(double requiredSum) {
         this.requiredSum = requiredSum;
     }
 
@@ -30,7 +30,12 @@ public class TotalSumCondition implements Condition {
         throw new RuntimeException("Action not allowed for total sum condition");
     }
 
-    public void setSum(int requiredSum) {
+    public void setSum(double requiredSum) {
         this.requiredSum = requiredSum;
+    }
+
+    @Override
+    public String getInfo() {
+        return "{ \"type\": \"totalSum\", \"requiredSum\": " + requiredSum + " }";
     }
 }

@@ -3,6 +3,7 @@ package com.example.trading_system.UnitTests.users;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,11 +18,10 @@ class ExitUnitTests {
         userFacade.enter(1);
         userFacade.enter(2);
         userFacade.enter(3);
-        try{
+        try {
             userFacade.register("user1", "password1", LocalDate.of(1990, 5, 15));
             userFacade.register("user2", "password2", LocalDate.of(1991, 6, 20));
-        }
-        catch (Exception _){
+        } catch (Exception e) {
 
         }
     }
@@ -29,28 +29,28 @@ class ExitUnitTests {
     @Test
     void exitVisitor_Success() {
         int id = 1;
-        assertDoesNotThrow(() -> userFacade.exit("v"+id));
-        assertFalse(userFacade.isUserExist("v"+id));
+        assertDoesNotThrow(() -> userFacade.exit("v" + id));
+        assertFalse(userFacade.isUserExist("v" + id));
     }
 
     @Test
     void exitVisitor_NoSuchVisitor() {
         int id = 4; // Assuming visitor with id 4 doesn't exist
-        Exception exception = assertThrows(Exception.class, () -> userFacade.exit("v"+id));
-        assertEquals("No such user with username- " + "v"+id, exception.getMessage());
+        Exception exception = assertThrows(Exception.class, () -> userFacade.exit("v" + id));
+        assertEquals("No such user with username- " + "v" + id, exception.getMessage());
     }
 
     @Test
     void exitRegisteredUser_Success() {
         String username = "user1";
-        assertDoesNotThrow(() -> userFacade.exit("r"+username));
-        assertFalse(userFacade.isUserExist("r"+username));
+        assertDoesNotThrow(() -> userFacade.exit("r" + username));
+        assertFalse(userFacade.isUserExist("r" + username));
     }
 
     @Test
     void exitRegisteredUser_NoSuchUser() {
         String username = "nonexistent"; // Assuming this user doesn't exist
-        Exception exception = assertThrows(Exception.class, () -> userFacade.exit("r"+username));
-        assertEquals("No such user with username- " + "r"+username, exception.getMessage());
+        Exception exception = assertThrows(Exception.class, () -> userFacade.exit("r" + username));
+        assertEquals("No such user with username- " + "r" + username, exception.getMessage());
     }
 }

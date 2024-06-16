@@ -72,7 +72,14 @@ public class AdditiveDiscount implements DiscountPolicy, Condition {
     }
 
     @Override
-    public void setSum(int requiredSum) {
+    public void setSum(double requiredSum) {
         throw new RuntimeException("Action not allowed for additive discount");
+    }
+
+    @Override
+    public String getInfo() {
+        String firstInfo = first.getInfo();
+        String secondInfo = second.getInfo();
+        return "{ \"type\": \"additive\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + " }";
     }
 }

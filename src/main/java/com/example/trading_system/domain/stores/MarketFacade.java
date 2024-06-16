@@ -29,11 +29,11 @@ public interface MarketFacade {
 
     String searchKeywordsInStore(String userName, String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, int category);
 
-    String searchNameInStores(String userName, String productName, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
+    String searchNameInStores(String userName, String productName, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating);
 
-    String searchCategoryInStores(String userName, int category, Double minPrice, Double maxPrice, Double minRating,Double storeRating);
+    String searchCategoryInStores(String userName, int category, Double minPrice, Double maxPrice, Double minRating, Double storeRating);
 
-    String searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category,Double storeRating);
+    String searchKeywordsInStores(String userName, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating);
 
     boolean addProduct(String username, int productId, String storeName, String productName, String productDescription, double productPrice, int productQuantity, double rating, int category, List<String> keyWords) throws IllegalAccessException;
 
@@ -78,6 +78,10 @@ public interface MarketFacade {
     void addPurchase(String customerUsername, List<ProductInSale> productInSaleList, double totalPrice, String storeName);
 
     //region Discount creation
+    String getDiscountPolicies(String username, String storeName) throws IllegalAccessException;
+
+    String getDiscountConditions(String username, String storeName) throws IllegalAccessException;
+
     void addCategoryPercentageDiscount(String username, String storeName, int category, double discountPercent) throws IllegalAccessException;
 
     void addProductPercentageDiscount(String username, String storeName, int productId, double discountPercent) throws IllegalAccessException;
@@ -92,7 +96,7 @@ public interface MarketFacade {
 
     void addCategoryCountCondition(String username, String storeName, int category, int count) throws IllegalAccessException;
 
-    void addTotalSumCondition(String username, String storeName, int requiredSum) throws IllegalAccessException;
+    void addTotalSumCondition(String username, String storeName, double requiredSum) throws IllegalAccessException;
 
     void addProductCountCondition(String username, String storeName, int productId, int count) throws IllegalAccessException;
 
@@ -102,9 +106,12 @@ public interface MarketFacade {
 
     void addXorDiscount(String username, String storeName) throws IllegalAccessException;
 
+    void removeDiscount(String username, String storeName, int selectedIndex) throws IllegalAccessException;
+
     //endregion
 
     //region Discount/Condition editing/manipulation
+
     void setFirstDiscount(String username, String storeName, int selectedDiscountIndex, int selectedFirstIndex) throws IllegalAccessException;
 
     void setSecondDiscount(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
@@ -123,7 +130,7 @@ public interface MarketFacade {
 
     void setDeciderDiscount(String username, String storeName, int selectedDiscountIndex, int selectedDeciderIndex) throws IllegalAccessException;
 
-    void setTotalSum(String username, String storeName, int selectedConditionIndex, int newSum) throws IllegalAccessException;
+    void setTotalSum(String username, String storeName, int selectedConditionIndex, double newSum) throws IllegalAccessException;
 
     void setCountCondition(String username, String storeName, int selectedConditionIndex, int newCount) throws IllegalAccessException;
 

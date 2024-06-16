@@ -7,7 +7,9 @@ import com.example.trading_system.domain.users.Visitor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class LoginUnitTests {
@@ -17,23 +19,21 @@ class LoginUnitTests {
     @BeforeEach
     void setUp() {
         userFacade = UserFacadeImp.getInstance();
-        try{
-            userFacade.register("testvisitor","password123",LocalDate.now());
-        }
-        catch (Exception _){
+        try {
+            userFacade.register("testvisitor", "password123", LocalDate.now());
+        } catch (Exception e) {
 
         }
     }
 
     @AfterEach
-    void tearDown(){
-        if(userFacade.getUser("rtestvisitor").getLogged()){
-            userFacade.logout(0,"rtestvisitor");
+    void tearDown() {
+        if (userFacade.getUser("rtestvisitor").getLogged()) {
+            userFacade.logout(0, "rtestvisitor");
         }
-        try{
+        try {
             userFacade.exit("v0");
-        }
-        catch (Exception _){
+        } catch (Exception e) {
 
         }
 
@@ -42,30 +42,30 @@ class LoginUnitTests {
     @Test
     void login_Success() {
         userFacade.enter(0);
-        boolean isLoggedB=userFacade.getUser("rtestvisitor").getLogged();
-        assertDoesNotThrow(() -> userFacade.login("v0","testvisitor","password123"), "Login should not throw any exceptions");
-        boolean isLoggedA=userFacade.getUser("rtestvisitor").getLogged();
-        assertEquals(isLoggedB,!isLoggedA);
+        boolean isLoggedB = userFacade.getUser("rtestvisitor").getLogged();
+        assertDoesNotThrow(() -> userFacade.login("v0", "testvisitor", "password123"), "Login should not throw any exceptions");
+        boolean isLoggedA = userFacade.getUser("rtestvisitor").getLogged();
+        assertEquals(isLoggedB, !isLoggedA);
     }
 
     @Test
     void login_Wrong_User() {
         userFacade.enter(0);
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> userFacade.login("v0","nonExistingUser","password123"));
-        assertEquals(exception.getMessage(),"No such user nonExistingUser");
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userFacade.login("v0", "nonExistingUser", "password123"));
+        assertEquals(exception.getMessage(), "No such user nonExistingUser");
     }
 
     @Test
     void login_Wrong_Password() {
         userFacade.enter(0);
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> userFacade.login("v0","testvisitor","wrongPassword"));
-        assertEquals(exception.getMessage(),"Wrong password");
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userFacade.login("v0", "testvisitor", "wrongPassword"));
+        assertEquals(exception.getMessage(), "Wrong password");
     }
 
     @Test
     void registeredLogin_Success() {
         String username = "testuser";
-        Registered registered = new Registered( username, "encryptedPassword", LocalDate.now());
+        Registered registered = new Registered(username, "encryptedPassword", LocalDate.now());
         registered.login();
         assertTrue(registered.getLogged(), "User should be logged in");
     }

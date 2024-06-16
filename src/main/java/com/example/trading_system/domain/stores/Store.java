@@ -218,10 +218,6 @@ public class Store {
         return isActive;
     }
 
-    public void setOpen(Boolean open){            //Added because missing
-        isOpen = open;
-    }
-
     public List<String> getOwners() {                //Added because missing
         return owners;
     }
@@ -253,11 +249,14 @@ public class Store {
     public void removeManager(String userName) {
         managers.remove(userName);
     }
-    public boolean isOpen()
-    {
+
+    public boolean isOpen() {
         return isOpen;
     }
 
+    public void setOpen(Boolean open) {            //Added because missing
+        isOpen = open;
+    }
 
     public String getFounder() {
         return founder;
@@ -273,6 +272,40 @@ public class Store {
     }
 
     //region Discount creation
+    public String getDiscountPoliciesInfo() {
+        StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.append("[ ");
+
+        boolean firstElement = true;
+        for (DiscountPolicy policy : discountPolicies) {
+            if (!firstElement) {
+                jsonBuilder.append(", ");
+            }
+            jsonBuilder.append(policy.getInfo());
+            firstElement = false;
+        }
+
+        jsonBuilder.append(" ]");
+        return jsonBuilder.toString();
+    }
+
+    public String getConditionInfo() {
+        StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.append("[ ");
+
+        boolean firstElement = true;
+        for (Condition condition : discountConditions) {
+            if (!firstElement) {
+                jsonBuilder.append(", ");
+            }
+            jsonBuilder.append(condition.getInfo());
+            firstElement = false;
+        }
+
+        jsonBuilder.append(" ]");
+        return jsonBuilder.toString();
+    }
+
     public void addCategoryPercentageDiscount(int category, double discountPercent) {
         if (discountPercent < 0 || discountPercent > 1)
             throw new IllegalArgumentException("Discount percent must be between 0 and 1");
@@ -306,7 +339,7 @@ public class Store {
         discountConditions.add(new CategoryCountCondition(category, count));
     }
 
-    public void addTotalSumCondition(int requiredSum) {
+    public void addTotalSumCondition(double requiredSum) {
         if (requiredSum < 0) throw new IllegalArgumentException("required sum cannot be less than 0");
         discountConditions.add(new TotalSumCondition(requiredSum));
     }
@@ -326,6 +359,13 @@ public class Store {
 
     public void addXorDiscount() {
         discountPolicies.add(new XorDiscount());
+    }
+
+    public void removeDiscount(int selectedIndex) {
+        if (selectedIndex >= discountPolicies.size())
+            discountConditions.remove(selectedIndex - discountPolicies.size());
+        else
+            discountPolicies.remove(selectedIndex);
     }
 
     //endregion
@@ -410,14 +450,14 @@ public class Store {
         if (selectedDeciderIndex >= discountPolicies.size())
             setDiscount = discountConditions.remove(selectedDeciderIndex - discountPolicies.size());
         else {
-            if(selectedDiscountIndex < selectedDeciderIndex)
+            if (selectedDiscountIndex < selectedDeciderIndex)
                 selectedDeciderIndex -= 1;
             setDiscount = discountPolicies.remove(selectedDeciderIndex);
         }
         editedDiscount.setDecider(setDiscount);
     }
 
-    public void setTotalSum(int selectedConditionIndex, int newSum) {
+    public void setTotalSum(int selectedConditionIndex, double newSum) {
         Condition setCondition = discountConditions.get(selectedConditionIndex);
         setCondition.setSum(newSum);
     }

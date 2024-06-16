@@ -68,7 +68,7 @@ public class PercentageDiscountByCategory implements DiscountPolicy, Condition {
     }
 
     @Override
-    public void setSum(int requiredSum) {
+    public void setSum(double requiredSum) {
         throw new RuntimeException("Action not allowed for category percentage discount");
     }
 
@@ -80,5 +80,10 @@ public class PercentageDiscountByCategory implements DiscountPolicy, Condition {
     @Override
     public void setDecider(Condition decider) {
         throw new RuntimeException("Action not allowed for category percentage discount");
+    }
+
+    @Override
+    public String getInfo() {
+        return "{ \"type\": \"percentageCategory\", \"category\": " + discountedCategory + ", \"percent\": " + discountPercent + " }";
     }
 }

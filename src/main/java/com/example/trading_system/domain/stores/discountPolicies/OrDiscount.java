@@ -43,7 +43,7 @@ public class OrDiscount implements DiscountPolicy, Condition {
 
 
     @Override
-    public void setSum(int requiredSum) {
+    public void setSum(double requiredSum) {
         throw new RuntimeException("Action not allowed for or discount");
     }
 
@@ -77,5 +77,12 @@ public class OrDiscount implements DiscountPolicy, Condition {
     @Override
     public void setDecider(Condition decider) {
         throw new RuntimeException("Action not allowed for or discount");
+    }
+
+    public String getInfo() {
+        String firstInfo = first.getInfo();
+        String secondInfo = second.getInfo();
+        String thenInfo = then.getInfo();
+        return "{ \"type\": \"and\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + ", \"then\": " + thenInfo + " }";
     }
 }
