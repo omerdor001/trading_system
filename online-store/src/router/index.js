@@ -1,20 +1,15 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '@/views/HomePage.vue';
-import LoginModel from '@/views/LoginModel.vue'; // Import the login component
+import LoginModel from '@/views/LoginModel.vue';
 import OpenStore from '@/views/OpenStore.vue';
 import CloseStore from '@/views/CloseStore.vue'
 import YieldOwnership from '@/views/YieldOwnership.vue'
 
-Vue.use(Router);
-
-const router = new Router({
-  mode: 'history',
-  routes: [
+const routes = [
     {
-      path: '/',
-      name: 'HomePage',
-      component: HomePage
+        path: '/',
+        name: 'HomePage',
+        component: HomePage
     },
     {
       path: '/open-store',
@@ -32,19 +27,29 @@ const router = new Router({
       component: YieldOwnership
     },
     {
-      path: '/login',
-      name: 'LoginModel',
-      component: LoginModel
+        path: '/login',
+        name: 'LoginModel',
+        component: LoginModel
     }
-  ]
+];
+
+const router = createRouter({
+    history: createWebHistory(process.env.BASE_URL),
+    routes
 });
 
-// Redirect to home if logged in
 router.beforeEach((to, from, next) => {
-  const loggedIn = localStorage.getItem('loggedIn');
-  if (to.path === '/login' && loggedIn) {
-    next('/');
+  const loggedIn = localStorage.getItem('isLoggedIn'); // Adjusted localStorage key
+  if (to.name !== 'LoginModel' && !loggedIn) {
+    // If navigating to any route other than 'LoginModel' and not logged in,
+    // redirect to login page
+    next({ name: 'LoginModel' });
+  } else if (to.name === 'LoginModel' && loggedIn) {
+    // If navigating to 'LoginModel' route and already logged in,
+    // redirect to home page
+    next({ name: 'HomePage' });
   } else {
+    // Continue navigation as usual
     next();
   }
 });

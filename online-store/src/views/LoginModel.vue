@@ -1,100 +1,154 @@
 <template>
   <div>
+    <!-- Header and logo section (unchanged) -->
     <header>
       <div class="header-content">
         <img src="@/assets/logo.png" alt="LASMONY" class="logo">
         <div class="right-buttons">
-          <button @click="notifications">Notifications</button>
-          <button @click="viewCart">Cart</button>
+          <PrimeButton label="Notifications" icon="pi pi-bell" @click="notifications" />
+          <PrimeButton label="Cart" icon="pi pi-shopping-cart" @click="viewCart" />
         </div>
       </div>
     </header>
+
+    <!-- Login form container -->
     <div class="login-container">
-      <div class="login-form">
-        <h2>Login</h2>
-        <form @submit.prevent="handleLogin">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" v-model="username" id="username" required>
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" v-model="password" id="password" required>
-          </div>
-          <div class="button-group">
-            <button type="submit" class="approve-button">Approve</button>
-            <button type="button" @click="closeModal" class="close-button">Back</button>
-          </div>
-        </form>
-        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+    <PrimeCard class="login-form">
+      <template #title>
+      <h2>Login</h2>
+       </template>
+    <form @submit.prevent="handleLogin">
+      <!-- Username input -->
+      <div class="form-group">
+        <label for="username">Username</label>
+        <InputText v-model="username" id="username" />
       </div>
+      <!-- Password input -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <PasswordText v-model="password" id="password" />
+      </div>
+      <!-- Button group -->
+      <div class="button-group">
+        <PrimeButton label="Login" icon="pi pi-check" type="submit" class="login-button" />
+        <PrimeButton label="Close" icon="pi pi-times" type="button" @click="closeModal" class="close-button" />
+      </div>
+    </form>
+    <!-- Error message -->
+    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+  </PrimeCard>
     </div>
   </div>
 </template>
 
 <script>
-import UserViewModel from '@/ViewModel/UserViewModel';
+import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { Button as PrimeButton } from 'primevue/button';
+import { InputText } from 'primevue/inputtext';
+import { PasswordText } from 'primevue/password';
+import { PrimeCard } from 'primevue/card';
 
-export default {
-  name: 'LoginModal',
-  data() {
-    return {
-      username: '',
-      password: '',
-      errorMessage: ''
-    };
+export default defineComponent({
+  name: 'LoginModel',
+  components: {
+    PrimeButton,
+    InputText,
+    PasswordText,
+    PrimeCard
   },
-  methods: {
-    async handleLogin() {
+  setup() {
+    const router = useRouter();
+    const username = ref('');
+    const password = ref('');
+    const errorMessage = ref('');
+
+    const handleLogin = async () => {
+      try {
+        // Perform authentication logic here
+        const loggedIn = await authenticate(username.value, password.value);
+        if (loggedIn) {
+          // Successful login
+          router.push('/'); // Redirect to home page
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('username', username.value);
+        } else {
+          // Authentication failed
+          errorMessage.value = 'Invalid username or password';
+        }
+      } catch (error) {
+        errorMessage.value = error.message;
+      }
+    };
+
+    const closeModal = () => {
+      router.push('/');
+    };
+
+    const notifications = () => {
+      // Handle notifications
+    };
+
+    const viewCart = () => {
+      // Handle viewing cart
+    };
+
+    // Simulated authentication function (replace with actual logic)
+    const authenticate = async (username, password) => {
       let roles = [];
-      if (this.username === 'admin' && this.password === 'admin') {
-        roles.push('storeManager', 'commercialManager', 'storeOwner', 'systemManager');
-      }
-      if (this.username === 'manager' && this.password === 'manager') {
-        roles.push('storeManager');
-      }
-      if (this.username === 'system' && this.password === 'system') {
-        roles.push('systemManager');
-      }
-      if (this.username === 'commercial' && this.password === 'commercial') {
-        roles.push('commercialManager');
-      }
-      if (this.username === 'lana' && this.password === 'lana') {
-        roles.push('commercialManager', 'systemManager', 'storeOwner');
-      }
-      if(this.username === 'nir' && this.password === 'nir'){
-        roles.push('storeOwner')
-      } 
-      if (this.username === 'user' && this.password === 'user') {
-        roles = [];
+      switch (username) {
+        case 'admin':
+          if (password === 'admin') {
+            roles.push('storeManager', 'commercialManager', 'storeOwner', 'systemManager');
+          }
+          break;
+        case 'manager':
+          if (password === 'manager') {
+            roles.push('storeManager');
+          }
+          break;
+        case 'system':
+          if (password === 'system') {
+            roles.push('systemManager');
+          }
+          break;
+        case 'commercial':
+          if (password === 'commercial') {
+            roles.push('commercialManager');
+          }
+          break;
+        case 'lana':
+          if (password === 'lana') {
+            roles.push('commercialManager', 'systemManager', 'storeOwner');
+          }
+          break;
+        case 'user':
+          if (password === 'user') {
+            roles = [];
+          }
+          break;
+        default:
+          return false;
       }
 
-      try {
-        await UserViewModel.actions.login('', this.username, this.username, this.password);
-        localStorage.setItem('roles', JSON.stringify(roles));
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', this.username);
-        this.errorMessage = '';
-        this.$router.push('/');
-      } catch (error) {
-        this.errorMessage = error.message;
-      }
-    },
-    closeModal() {
-      this.$router.push('/');
-    },
-    notifications() {
-      // handle notifications
-    },
-    viewCart() {
-      // handle viewing cart
-    },
-    setTestUser(user) {
-      this.username = user.username;
-      this.password = user.password;
-    }
+      // Simulate async delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Simulate successful login
+      return true;
+    };
+
+    return {
+      username,
+      password,
+      errorMessage,
+      handleLogin,
+      closeModal,
+      notifications,
+      viewCart
+    };
   }
-}
+});
 </script>
 
 <style scoped>
@@ -120,21 +174,6 @@ export default {
   gap: 10px;
 }
 
-.right-buttons button {
-  background-color: #e67e22;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-  color: white;
-  border-radius: 5px;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-
-.right-buttons button:hover {
-  background-color: #d35400;
-}
-
 .login-container {
   display: flex;
   justify-content: center;
@@ -150,9 +189,6 @@ export default {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 300px;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .login-form h2 {
@@ -174,11 +210,29 @@ export default {
   color: #333;
 }
 
-.form-group input {
-  width: calc(100% - 16px);
-  padding: 8px;
+.form-group .p-inputtext {
+  width: 100%;
+}
+
+.form-group .p-password {
+  width: 100%;
+}
+
+.custom-card {
   border: 1px solid #ccc;
   border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  padding: 1rem;
+  display: block;
+}
+
+.card-footer {
+  background-color: #f0f0f0;
+  padding: 0.5rem;
+  text-align: center;
 }
 
 .button-group {
@@ -186,62 +240,21 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
 }
 
-.button-group button {
-  width: calc(100% - 16px);
-  padding: 10px;
-  margin: 5px 0;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
+.login-button .p-button {
+  width: 100%;
 }
 
-.approve-button {
-  background-color: #e67e22;
-  color: white;
-}
-
-.approve-button:hover {
-  background-color: #d35400;
-}
-
-.close-button {
-  background-color: #d35400;
-  color: white;
-}
-
-.close-button:hover {
-  background-color: #e67e22;
+.close-button .p-button {
+  width: 100%;
 }
 
 .error {
   color: red;
   margin-top: 10px;
-}
-
-.predefined-users {
-  margin-top: 20px;
-  text-align: left;
-}
-
-.predefined-users h3 {
-  margin-bottom: 10px;
-}
-
-.predefined-users ul {
-  list-style: none;
-  padding: 0;
-}
-
-.predefined-users li {
-  cursor: pointer;
-  margin-bottom: 5px;
-  color: #333;
-}
-
-.predefined-users li:hover {
-  text-decoration: underline;
+  font-size: 14px;
 }
 </style>
+

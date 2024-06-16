@@ -7,15 +7,15 @@
         <form @submit.prevent="handleCreateStore">
           <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" v-model="name" id="name" required />
+            <InputText v-model="name" id="name" required />
           </div>
           <div class="form-group">
             <label for="description">Description</label>
-            <textarea v-model="description" id="description" required></textarea>
+            <Textarea v-model="description" id="description" required />
           </div>
           <div class="button-group">
-            <button type="submit" class="create-button">Create</button>
-            <button type="button" @click="goBack" class="back-button">Back</button>
+            <CreateButton type="submit" label="Create" class="create-button" />
+            <BackButton type="button" label="Back" class="back-button" @click="goBack" />
           </div>
         </form>
       </div>
@@ -34,40 +34,55 @@
 </template>
 
 <script>
+import { defineComponent, ref } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
-import StoreViewModel from '@/ViewModel/StoreViewModel';
-import UserViewModel from '@/ViewModel/UserViewModel';
+import InputText from 'primevue/inputtext';
+import Textarea from 'primevue/textarea';
+import CreateButton from 'primevue/button';
+import BackButton from 'primevue/button';
+import { useRouter } from 'vue-router';
 
-export default {
+export default defineComponent({
   name: 'OpenStore',
   components: {
     SiteHeader,
+    InputText,
+    Textarea,
+    CreateButton,
+    BackButton,
   },
-  data() {
-    return {
-      name: '',
-      description: '',
-      username: UserViewModel.getters.getUsername() || '',
-    };
-  },
-  methods: {
-    async handleCreateStore() {
+  setup() {
+    const router = useRouter();
+    const name = ref('');
+    const description = ref('');
+    const username = ref('');  //TODO fix
+
+    const handleCreateStore = async () => {
       try {
-        await StoreViewModel.actions.openStoreExist(this.username, '', this.name);
-        console.log('Store created with name:', this.name, 'and description:', this.description);
+        console.log('Store created with name:', name.value, 'and description:', description.value);
       } catch (error) {
         console.error('Failed to create store:', error.message);
       }
-    },
-    goBack() {
-      this.$router.push('/');
-    },
-    logout() {
-      UserViewModel.actions.logout();
-      this.$router.push('/login');
-    }
+    };
+
+    const goBack = () => {
+      router.push('/');
+    };
+
+    const logout = () => {
+      router.push('/login');
+    };
+
+    return {
+      name,
+      description,
+      username,
+      handleCreateStore,
+      goBack,
+      logout,
+    };
   }
-}
+});
 </script>
 
 <style scoped>
@@ -146,26 +161,32 @@ export default {
 .back-button:hover {
   background-color: #7f8c8d;
 }
+
 footer {
   background-color: #425965;
   color: white;
   padding: 20px;
   text-align: center;
 }
+
 .external-links h3 {
   margin-bottom: 10px;
 }
+
 .external-links ul {
   list-style: none;
   padding: 0;
 }
+
 .external-links li {
   margin-bottom: 5px;
 }
+
 .external-links a {
   color: white;
   text-decoration: none;
 }
+
 .external-links a:hover {
   text-decoration: underline;
 }

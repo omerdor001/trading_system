@@ -4,22 +4,28 @@
       <img src="@/assets/logo.png" alt="LASMONY" class="logo">
       <div class="right-buttons">
         <template v-if="isLoggedIn">
-          <button @click="logout">Logout</button>
+          <PrimeButton label="Logout" @click="logout" class="p-button-danger" />
         </template>
         <template v-else>
-          <button @click="$router.push('/register')">Register</button>
-          <button @click="$router.push('/login')">Login</button>
+          <PrimeButton label="Register" @click="$router.push('/register')" />
+          <PrimeButton label="Login" @click="$router.push('/login')" />
         </template>
-        <button @click="notifications">Notifications</button>
-        <button @click="viewCart">Cart</button>
+        <PrimeButton label="Notifications" @click="notifications" icon="pi pi-bell" />
+        <PrimeButton label="Cart" @click="viewCart" icon="pi pi-shopping-cart" />
       </div>
     </div>
   </header>
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+import PrimeButton from 'primevue/button';
+
+export default defineComponent({
   name: 'SiteHeader',
+  components: {
+    PrimeButton
+  },
   props: {
     isLoggedIn: {
       type: Boolean,
@@ -41,7 +47,7 @@ export default {
       this.$emit('logout');
     }
   }
-}
+});
 </script>
 
 <style scoped>
@@ -68,18 +74,18 @@ export default {
   align-items: center;
 }
 
-.right-buttons button {
-  background-color: #e67e22;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-  color: white;
-  border-radius: 5px;
-  font-weight: bold;
-  transition: background-color 0.3s;
+.p-button {
+  background-color: #e67e22 !important;
+  border: none !important;
+  padding: 10px 15px !important;
+  cursor: pointer !important;
+  color: white !important;
+  border-radius: 5px !important;
+  font-weight: bold !important;
+  transition: background-color 0.3s !important;
 }
 
-.right-buttons button:hover {
-  background-color: #d35400;
+.p-button:hover {
+  background-color: #d35400 !important;
 }
 </style>
