@@ -153,6 +153,6 @@ public class FireManagerAcceptanceTests {
         ResponseEntity<String> res = tradingSystemImp.fireManager(ownerUserName, ownerToken, storeName, userNameManager);
         assertEquals("Success fire manager", res.getBody());
         assertEquals(HttpStatus.OK, res.getStatusCode());
-        assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(ownerUserName, ownerToken, storeName, userNameManager).getBody());
+        assertEquals("User is not employed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(ownerUserName, ownerToken, storeName, userNameManager).getBody());
     }
 }

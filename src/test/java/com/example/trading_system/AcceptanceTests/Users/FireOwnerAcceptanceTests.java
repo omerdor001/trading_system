@@ -174,8 +174,8 @@ public class FireOwnerAcceptanceTests {
         ResponseEntity<String> res = tradingSystemImp.fireOwner(userName, token, storeName, ownerUserName);
         assertEquals("Success fire owner", res.getBody());
         assertEquals(HttpStatus.OK, res.getStatusCode());
-        assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName, token, storeName, userNameManager).getBody());
-        assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName, token, storeName, ownerUserName).getBody());
-        assertEquals("User is not employeed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName, token, storeName, ownerUserName2).getBody());
+        assertEquals("User is not employed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName, token, storeName, userNameManager).getBody());
+        assertEquals("User is not employed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName, token, storeName, ownerUserName).getBody());
+        assertEquals("User is not employed in this store.", tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName, token, storeName, ownerUserName2).getBody());
     }
 }
