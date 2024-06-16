@@ -3,32 +3,32 @@
     <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
     <div class="main-content">
       <div class="sidebar">
-        <button @click="enterStores">Enter to Stores</button>
-        <button v-if="isLoggedIn" @click="openStore">Open Store</button>
-        <button @click="searchProduct">Search Product</button>
-        <button v-if="isStoreOwner" @click="approveAppointment">Approve Appointment</button>
-        <button v-if="isStoreOwner" @click="myStoresIOwn">My Stores I Own</button>
-        <button v-if="isStoreOwner" @click="manageProductsAsOwner">Manage Products</button>
-        <button v-if="isStoreOwner" @click="appointOwner">Appoint Owner</button>
-        <button v-if="isStoreOwner" @click="appointManager">Appoint Manager</button>
-        <button v-if="isStoreOwner" @click="permissionsToManager">Permissions to Manager</button>
-        <button v-if="isStoreOwner" @click="yieldOwnership">Yield Ownership</button>
-        <button v-if="isStoreOwner" @click="purchasesHistoryAsOwner">Purchases History</button>
-        <button v-if="isStoreOwner" @click="closeStore">Close Store</button>
+        <PrimeButton label="Enter to Stores" @click="enterStores" />
+        <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" />
+        <PrimeButton label="Search Product" @click="searchProduct" />
+        <PrimeButton v-if="isStoreOwner" label="Approve Appointment" @click="approveAppointment" />
+        <PrimeButton v-if="isStoreOwner" label="My Stores I Own" @click="myStoresIOwn" />
+        <PrimeButton v-if="isStoreOwner" label="Manage Products" @click="manageProductsAsOwner" />
+        <PrimeButton v-if="isStoreOwner" label="Appoint Owner" @click="appointOwner" />
+        <PrimeButton v-if="isStoreOwner" label="Appoint Manager" @click="appointManager" />
+        <PrimeButton v-if="isStoreOwner" label="Permissions to Manager" @click="permissionsToManager" />
+        <PrimeButton v-if="isStoreOwner" label="Yield Ownership" @click="yieldOwnership" />
+        <PrimeButton v-if="isStoreOwner" label="Purchases History" @click="purchasesHistoryAsOwner" />
+        <PrimeButton v-if="isStoreOwner" label="Close Store" @click="closeStore" />
       </div>
       <div class="content">
         <AboutSection />
       </div>
       <div class="sidebar2">
-        <button v-if="isStoreManager" @click="myStoresIManage">My Stores I Manage</button>
-        <button v-if="isStoreManager" @click="manageProductsAsManager">Manage Products</button>
-        <button v-if="isStoreManager" @click="addPolicy">Add Policy</button>
-        <button v-if="isStoreManager" @click="editPolicy">Edit Policy</button>
-        <button v-if="isSystemManager" @click="suspension">Suspension</button>
-        <button v-if="isSystemManager" @click="createSuspension">Create Suspension</button>
-        <button v-if="isSystemManager" @click="endSuspension">End Suspension</button>
-        <button v-if="isSystemManager" @click="purchasesHistoryAsSystemManager">Purchases History</button>
-        <button v-if="isCommercialManager" @click="allPurchases">All Purchases</button>
+        <PrimeButton v-if="isStoreManager" label="My Stores I Manage" @click="myStoresIManage" />
+        <PrimeButton v-if="isStoreManager" label="Manage Products" @click="manageProductsAsManager" />
+        <PrimeButton v-if="isStoreManager" label="Add Policy" @click="addPolicy" />
+        <PrimeButton v-if="isStoreManager" label="Edit Policy" @click="editPolicy" />
+        <PrimeButton v-if="isSystemManager" label="Suspension" @click="suspension" />
+        <PrimeButton v-if="isSystemManager" label="Create Suspension" @click="createSuspension" />
+        <PrimeButton v-if="isSystemManager" label="End Suspension" @click="endSuspension" />
+        <PrimeButton v-if="isSystemManager" label="Purchases History" @click="purchasesHistoryAsSystemManager" />
+        <PrimeButton v-if="isCommercialManager" label="All Purchases" @click="allPurchases" />
       </div>
     </div>
     <footer>
@@ -45,109 +45,158 @@
 </template>
 
 <script>
+import { defineComponent, ref } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import AboutSection from '@/components/AboutSection.vue';
-import UserViewModel from '@/ViewModel/UserViewModel';
+import { Button as PrimeButton } from 'primevue/button';
 
-export default {
+export default defineComponent({
   name: 'HomePage',
   components: {
     SiteHeader,
-    AboutSection
+    AboutSection,
+    PrimeButton
   },
-  data() {
-    return {
-      isLoggedIn: localStorage.getItem('isLoggedIn') === 'true',
-      roles: JSON.parse(localStorage.getItem('roles') || '[]'),
-      username: localStorage.getItem('username') || ''
-    };
-  },
-  computed: {
-    isStoreOwner() {
-      return this.roles.includes('storeOwner');
-    },
-    isStoreManager() {
-      return this.roles.includes('storeManager');
-    },
-    isSystemManager() {
-      return this.roles.includes('systemManager');
-    },
-    isCommercialManager() {
-      return this.roles.includes('commercialManager');
-    }
-  },
-  methods: {
-    enterStores() {
+  setup() {
+    const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
+    const roles = JSON.parse(localStorage.getItem('roles') || '[]');
+
+    const isStoreOwner = ref(roles.includes('storeOwner'));
+    const isStoreManager = ref(roles.includes('storeManager'));
+    const isSystemManager = ref(roles.includes('systemManager'));
+    const isCommercialManager = ref(roles.includes('commercialManager'));
+
+    const username = ref(localStorage.getItem('username') || '');
+
+    const enterStores = () => {
       console.log('Entering Stores');
-    },
-    openStore() {
+    };
+
+    const openStore = () => {
       console.log('Opening Store');
-      this.$router.push({ path: '/open-store' });
-    },
-    searchProduct() {
+      // Assuming you have Vue Router set up
+      // Replace with your actual route path
+      // Example: router.push('/open-store');
+    };
+
+    const searchProduct = () => {
       console.log('Searching Product');
-    },
-    approveAppointment() {
+    };
+
+    const approveAppointment = () => {
       console.log('Approving Appointment');
-    },
-    myStoresIOwn() {
+    };
+
+    const myStoresIOwn = () => {
       console.log('My Stores I Own');
-    },
-    manageProductsAsOwner() {
+    };
+
+    const manageProductsAsOwner = () => {
       console.log('Managing Products as Owner');
-    },
-    appointOwner() {
+    };
+
+    const appointOwner = () => {
       console.log('Appointing Owner');
-    },
-    appointManager() {
+    };
+
+    const appointManager = () => {
       console.log('Appointing Manager');
-    },
-    permissionsToManager() {
+    };
+
+    const permissionsToManager = () => {
       console.log('Setting Permissions to Manager');
-    },
-    yieldOwnership() {
+    };
+
+    const yieldOwnership = () => {
       console.log('Yielding Ownership');
-    },
-    purchasesHistoryAsOwner() {
+    };
+
+    const purchasesHistoryAsOwner = () => {
       console.log('Viewing Purchases History as Owner');
-    },
-    closeStore() {
+    };
+
+    const closeStore = () => {
       console.log('Closing Store');
-    },
-    myStoresIManage() {
+    };
+
+    const myStoresIManage = () => {
       console.log('My Stores I Manage');
-    },
-    manageProductsAsManager() {
+    };
+
+    const manageProductsAsManager = () => {
       console.log('Managing Products as Manager');
-    },
-    addPolicy() {
+    };
+
+    const addPolicy = () => {
       console.log('Adding Policy');
-    },
-    editPolicy() {
+    };
+
+    const editPolicy = () => {
       console.log('Editing Policy');
-    },
-    suspension() {
+    };
+
+    const suspension = () => {
       console.log('Suspension');
-    },
-    createSuspension() {
+    };
+
+    const createSuspension = () => {
       console.log('Creating Suspension');
-    },
-    endSuspension() {
+    };
+
+    const endSuspension = () => {
       console.log('Ending Suspension');
-    },
-    purchasesHistoryAsSystemManager() {
+    };
+
+    const purchasesHistoryAsSystemManager = () => {
       console.log('Viewing Purchases History as System Manager');
-    },
-    allPurchases() {
+    };
+
+    const allPurchases = () => {
       console.log('Viewing All Purchases');
-    },
-    logout() {
-      UserViewModel.actions.logout();
-      this.isLoggedIn = false;
-      this.$router.push('/login');
-    }
+    };
+
+    const logout = () => {
+      isLoggedIn.value = false;
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('roles');
+      localStorage.removeItem('username');
+      // Assuming you have Vue Router set up
+      // Replace with your actual route path
+      // Example: router.push('/login');
+    };
+
+    return {
+      isLoggedIn,
+      isStoreOwner,
+      isStoreManager,
+      isSystemManager,
+      isCommercialManager,
+      username,
+      enterStores,
+      openStore,
+      searchProduct,
+      approveAppointment,
+      myStoresIOwn,
+      manageProductsAsOwner,
+      appointOwner,
+      appointManager,
+      permissionsToManager,
+      yieldOwnership,
+      purchasesHistoryAsOwner,
+      closeStore,
+      myStoresIManage,
+      manageProductsAsManager,
+      addPolicy,
+      editPolicy,
+      suspension,
+      createSuspension,
+      endSuspension,
+      purchasesHistoryAsSystemManager,
+      allPurchases,
+      logout
+    };
   }
-}
+});
 </script>
 
 <style scoped>
@@ -161,19 +210,6 @@ export default {
   flex-direction: column;
   gap: 10px;
   flex: 1;
-}
-.sidebar button, .sidebar2 button {
-  background-color: #e67e22;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-  color: white;
-  border-radius: 5px;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-.sidebar button:hover, .sidebar2 button:hover {
-  background-color: #d35400;
 }
 .content {
   flex: 2;
