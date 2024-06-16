@@ -242,8 +242,8 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public boolean sendNotification(User sender, User receiver, String content) {
-        String notification = sender.sendNotification(receiver.getUsername(), content);
-        receiver.receiveNotification(notification);
+//        String notification = sender.sendNotification(receiver.getUsername(), content);
+//        receiver.receiveNotification(notification);
         return receiver.getLogged();
         //TODO return something to show the notification if receiver is logged in - maybe boolean if logged in
     }
