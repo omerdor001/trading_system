@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class TradingSystemImp implements TradingSystem {
     private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
@@ -40,12 +38,16 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
-    private boolean checkSystemOpen() {
-        return systemOpen;
+    private boolean checkSystemClosed() {
+        return !systemOpen;
     }
 
-    private boolean checkToken(String username, String token) {
-        return Security.validateToken(username, token);
+    private boolean checkInvalidToken(String username, String token) {
+        try {
+            return !Security.validateToken(username, token);
+        } catch (Exception e) {
+            return true;
+        }
     }
 
     private ResponseEntity<String> systemClosedResponse() {
@@ -85,7 +87,7 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> closeSystem(String username, String token) {
         logger.info("Attempting to close system");
         try {
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             if (userService.isAdmin(username)) {
                 //TODO call close method in deeper classes? (maybe logout all users)
                 marketService.deleteInstance();
@@ -105,7 +107,7 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> enter() {
         logger.info("Attempting to enter system");
         try {
-            if (!checkSystemOpen()) {
+            if (checkSystemClosed()) {
                 logger.warn("System is not open, entry forbidden");
                 return new ResponseEntity<>("", HttpStatus.FORBIDDEN);
             }
@@ -126,8 +128,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> exit(String token, String username) {
         logger.info("Attempting to exit user: {}", username);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             logger.info("Trying exit to system as a user , with username: {}", username);
             userService.exit(username);
             Security.makeTokenExpire(token);
@@ -152,18 +154,16 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
-    //TODO check if user is admin is external service functions?
-
     @Override
     public ResponseEntity<String> addProduct(String username, String token, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords) {
         logger.info("User {} is trying to add products to store : {} with product Id : {} , product name : {}, product description : {} , product price : {} ," + "product quantity : {} , rating : {} , category : {} , key words : {} ", username, store_name, product_id, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
         } catch (Exception e) {
             logger.error("Error occurred while adding product: {} to store: {}: {}", product_name, store_name, e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         logger.info("User {} finished to add products to store : {} with product Id : {} , product name : {}, product description : {} , product price : {} ," + "product quantity : {} , rating : {} , category : {} , key words : {} ", username, store_name, product_id, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
         return new ResponseEntity<>("Product was added successfully.", HttpStatus.OK);
@@ -173,8 +173,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> removeProduct(String username, String token, String store_name, int product_id) {
         logger.info("User {} is trying to remove product with Id : {} to store : {} ", username, product_id, store_name);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.removeProduct(username, store_name, product_id);
         } catch (Exception e) {
             logger.error("Error occurred while removing product with id: {} from store: {}: {}", product_id, store_name, e.getMessage());
@@ -188,8 +188,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setProductName(String username, String token, String store_name, int product_id, String product_name) {
         logger.info("User {} is trying to edit the name : {} to product : {} from store : {}", username, product_name, product_id, store_name);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setProductName(username, store_name, product_id, product_name);
         } catch (Exception e) {
             logger.error("Error occurred while setting product name for product id: {} in store: {}: {}", product_id, store_name, e.getMessage());
@@ -203,8 +203,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setProductDescription(String username, String token, String store_name, int product_id, String product_description) {
         logger.info("User {} is trying to edit the description : {} to product : {} from store : {}", username, product_description, product_id, store_name);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setProductDescription(username, store_name, product_id, product_description);
         } catch (Exception e) {
             logger.error("Error occurred while setting product description for product id: {} in store: {}: {}", product_id, store_name, e.getMessage());
@@ -218,8 +218,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setProductPrice(String username, String token, String store_name, int product_id, double product_price) {
         logger.info("User {} is trying to edit the price : {} to product : {} from store : {}", username, product_price, product_id, store_name);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setProductPrice(username, store_name, product_id, product_price);
         } catch (Exception e) {
             logger.error("Error occurred while setting product price for product id: {} in store: {}: {}", product_id, store_name, e.getMessage());
@@ -233,8 +233,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setProductQuantity(String username, String token, String store_name, int product_id, int product_quantity) {
         logger.info("User {} is trying to edit the quantity : {} to product : {} from store : {}", username, product_quantity, product_id, store_name);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setProductQuantity(username, store_name, product_id, product_quantity);
         } catch (Exception e) {
             logger.error("Error occurred while setting product quantity for product id: {} in store: {}: {}", product_id, store_name, e.getMessage());
@@ -248,8 +248,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setRating(String username, String token, String store_name, int product_id, double rating) {
         logger.info("User {} is trying to edit the rating : {} to product : {} from store : {}", username, rating, product_id, store_name);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setRating(username, store_name, product_id, rating);
         } catch (Exception e) {
             logger.error("Error occurred while setting rating for product id: {} in store: {}: {}", product_id, store_name, e.getMessage());
@@ -263,8 +263,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setCategory(String username, String token, String store_name, int product_id, int category) {
         logger.info("User {} is trying to edit the category : {} to product : {} from store : {}", username, category, product_id, store_name);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setCategory(username, store_name, product_id, category);
         } catch (Exception e) {
             logger.error("Error occurred while setting category for product id: {} in store: {}: {}", product_id, store_name, e.getMessage());
@@ -278,7 +278,7 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> login(String token, String usernameV, String username, String password) {
         logger.info("Attempting to login user: {}", username);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
             if (userService.login(usernameV, username, password)) {
                 if (!token.isEmpty()) Security.makeTokenExpire(token);
                 String newToken = Security.generateToken("r" + username);
@@ -299,8 +299,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> logout(String token, String username) {
         logger.info("Attempting to logout user: {}", username);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             userService.logout(counter_user, username);
             counter_user++;
             logger.info("User: {} logged out successfully", username);
@@ -312,14 +312,12 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> suspendUser(String token, String admin, String toSuspend, LocalDateTime endSuspention) {
+    public ResponseEntity<String> suspendUser(String token, String admin, String toSuspend, LocalDateTime endSuspension) {
         logger.info("Attempting to suspend user: {}", toSuspend);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(admin, token))
-                return invalidTokenResponse();
-            userService.suspendUser(admin, toSuspend, endSuspention);
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(admin, token)) return invalidTokenResponse();
+            userService.suspendUser(admin, toSuspend, endSuspension);
             logger.info("User: {} is suspended successfully", toSuspend);
             return new ResponseEntity<>("Suspension successful.", HttpStatus.OK);
         } catch (Exception e) {
@@ -332,10 +330,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> endSuspendUser(String token, String admin, String toSuspend) {
         logger.info("Attempting to end suspension of user: {}", toSuspend);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(admin, token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(admin, token)) return invalidTokenResponse();
             userService.endSuspendUser(admin, toSuspend);
             logger.info("Suspending user: {} is finished successfully", toSuspend);
             return new ResponseEntity<>("Ending suspension successful.", HttpStatus.OK);
@@ -349,10 +345,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> watchSuspensions(String token, String admin) {
         logger.info("Attempting to get suspension details");
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(admin, token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(admin, token)) return invalidTokenResponse();
             String details = userService.watchSuspensions(admin);
             logger.info("Getting details of suspension successfully");
             return new ResponseEntity<>(details, HttpStatus.OK);
@@ -366,75 +360,75 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
         logger.info("Trying to suggest user : {} to be a manager in store : {}", newManager, store_name_id);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(appoint, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(appoint, token)) return invalidTokenResponse();
             userService.suggestManage(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+            logger.info("Finished suggesting manager : {} to be a manager in store : {}", newManager, store_name_id);
+            return new ResponseEntity<>("Success suggesting manager", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while trying to suggest the user : {} to be a manager in store : {}", e.getMessage(), appoint, store_name_id);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished suggesting manager : {} to be a manager in store : {}", newManager, store_name_id);
-        return new ResponseEntity<>("Success suggesting manager", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> suggestOwner(String appoint, String token, String newOwner, String storeName) {
         logger.info("{} trying to suggest user : {} to be a owner in store : {}", appoint, newOwner, storeName);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(appoint, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(appoint, token)) return invalidTokenResponse();
             userService.suggestOwner(appoint, newOwner, storeName);
+            logger.info("Finished suggesting  : {} to be a owner in store : {}", newOwner, storeName);
+            return new ResponseEntity<>("Success suggesting owner", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while trying to suggest the user : {} to be a owner in store : {}", e.getMessage(), appoint, storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished suggesting  : {} to be a owner in store : {}", newOwner, storeName);
-        return new ResponseEntity<>("Success suggesting owner", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint) {
         logger.info("Trying to approve manage to store : {}", store_name_id);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(newManager, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(newManager, token)) return invalidTokenResponse();
             userService.approveManage(newManager, store_name_id, appoint);
+            logger.info("Finished approving manage to store : {}", store_name_id);
+            return new ResponseEntity<>("Success approving manage", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while trying to approve management to store : {}", e.getMessage(), store_name_id);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished approving manage to store : {}", store_name_id);
-        return new ResponseEntity<>("Success approving manage", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> approveOwner(String newOwner, String token, String storeName, String appoint) {
         logger.info("{} trying to approve owner to store : {}", newOwner, storeName);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(newOwner, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(newOwner, token)) return invalidTokenResponse();
             userService.approveOwner(newOwner, storeName, appoint);
+            logger.info("Finished approving owner to store : {}", storeName);
+            return new ResponseEntity<>("Success approving owner", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while trying to approve owner to store : {}", e.getMessage(), storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished approving owner to store : {}", storeName);
-        return new ResponseEntity<>("Success approving owner", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> rejectToOwnStore(String username, String token, String storeName, String appoint) {
         logger.info("{} trying to reject owner to store : {}", username, storeName);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             userService.rejectToOwnStore(username, storeName, appoint);
+            logger.info("Finished reject owner to store : {}", storeName);
+            return new ResponseEntity<>("Success reject to be owner", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while trying to reject owner to store : {}", e.getMessage(), storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished reject owner to store : {}", storeName);
-        return new ResponseEntity<>("Success reject to be owner", HttpStatus.OK);
     }
 
 
@@ -442,49 +436,45 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> rejectToManageStore(String userName, String token, String store_name_id, String appoint) {
         logger.info("Trying to reject to manage to store : {}", store_name_id);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(userName, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             userService.rejectToManageStore(userName, store_name_id, appoint);
+            logger.info("Finished reject manage to store : {}", store_name_id);
+            return new ResponseEntity<>("Success rejecting manage", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while trying to reject management to store : {}", e.getMessage(), store_name_id);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished reject manage to store : {}", store_name_id);
-        return new ResponseEntity<>("Success rejecting manage", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> waiverOnOwnership(String userName, String token, String storeName) {
         logger.info("Trying to give up to own store : {}", storeName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(userName, token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             userService.waiverOnOwnership(userName, storeName);
+            logger.info("Finished waiver own store : {}", storeName);
+            return new ResponseEntity<>("Success waiver to own", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while trying to give up own to store : {}", e.getMessage(), storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished waiver own store : {}", storeName);
-        return new ResponseEntity<>("Success waiver to own", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> fireManager(String owner, String token, String storeName, String manager) {
         logger.info("{} Trying to fore {} from be a manager in store {}", owner, storeName, manager);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(owner, token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(owner, token)) return invalidTokenResponse();
             userService.fireManager(owner, storeName, manager);
+            logger.info("Finished fire {} from store : {}", manager, storeName);
+            return new ResponseEntity<>("Success fire manager", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while {} trying to fire {} from store : {}", e.getMessage(),owner, manager, storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished fire {} from store : {}", manager, storeName);
-        return new ResponseEntity<>("Success fire manager", HttpStatus.OK);
     }
 
 
@@ -492,10 +482,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> fireOwner(String ownerAppoint, String token, String storeName, String ownerToFire) {
         logger.info("{} Trying to fire {} from be a owner in store {}",ownerAppoint, storeName, ownerToFire);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(ownerAppoint,token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(ownerAppoint, token)) return invalidTokenResponse();
             userService.fireOwner(ownerAppoint, storeName, ownerToFire);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while {} trying to fire {} from store : {}", e.getMessage(),ownerAppoint, ownerToFire, storeName);
@@ -511,15 +499,15 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> appointManager(String username, String token, String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
         logger.info("Trying to appoint manager : {} to store : {}", newManager, store_name_id);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             userService.appointManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+            logger.info("Finished appointing manager : {} to store : {}", newManager, store_name_id);
+            return new ResponseEntity<>("Success appointing manager", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while trying to appoint the user : {} to store : {}", e.getMessage(), appoint, store_name_id);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished appointing manager : {} to store : {}", newManager, store_name_id);
-        return new ResponseEntity<>("Success appointing manager", HttpStatus.OK);
     }
 
     //TODO same as suggestOwner/approveOwner?
@@ -527,42 +515,38 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> appointOwner(String username, String token, String appoint, String newOwner, String storeName) {
         logger.info("Trying to appoint owner : {} to store : {}", newOwner, storeName);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             userService.appointOwner(appoint, newOwner, storeName);
+            logger.info("Finished appointing owner : {} to store : {}", newOwner, storeName);
+            return new ResponseEntity<>("Success appointing owner", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while trying to appoint the user : {} to be owner in store : {}", e.getMessage(), appoint, storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished appointing owner : {} to store : {}", newOwner, storeName);
-        return new ResponseEntity<>("Success appointing owner", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> editPermissionForManager(String username, String token, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
         logger.info("{} is Trying to edit permission for manager : {} in store : {}", username, managerToEdit, storeNameId);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(username,token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             userService.editPermissionForManager(username, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+            logger.info("Finished edit permission to manager : {}  in store : {}", managerToEdit, storeNameId);
+            return new ResponseEntity<>("Success edit permission for manager ", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while {} is trying to edit permission for manager : {} : in store : {}", e.getMessage(), username, managerToEdit, storeNameId);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished edit permission to manager : {}  in store : {}", managerToEdit, storeNameId);
-        return new ResponseEntity<>("Success edit permission for manager ", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> getAllHistoryPurchases(String userName, String token, String storeName){
         logger.info("{} is Trying to get all history purchases from store {}", userName, storeName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(userName,token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             String result = marketService.getAllHistoryPurchases(userName, storeName);
             logger.info("{} Finished to get all history purchases from store {}", userName, storeName);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -577,10 +561,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> getHistoryPurchasesByCustomer(String userName, String token, String storeName, String customerUserName){
         logger.info("{} is Trying to get history purchases by customer {} from store {}", userName, customerUserName, storeName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(userName,token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             String result = marketService.getHistoryPurchasesByCustomer(userName, storeName, customerUserName);
             logger.info("{} Finished to get history purchases by {} from store {}", userName, customerUserName, storeName);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -595,10 +577,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> requestInformationAboutOfficialsInStore(String userName, String token, String storeName){
         logger.info("{} is Trying to request Information about officials in store {}", userName, storeName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(userName,token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             String result = marketService.requestInformationAboutOfficialsInStore(userName, storeName);
             logger.info("{} Finished to request information about officials in store {}", userName, storeName);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -613,10 +593,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> requestManagersPermissions(String userName, String token, String storeName){
         logger.info("{} is Trying to request manager permissions in store {}", userName, storeName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(userName,token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             String result = marketService.requestManagersPermissions(userName, storeName);
             logger.info("{} Finished to request manager permissions in store {}", userName, storeName);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -631,10 +609,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> requestInformationAboutSpecificOfficialInStore(String userName, String token, String storeName, String officialUserName){
         logger.info("{} is Trying to request Information about official {} in store {}", userName,officialUserName,storeName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if(!checkToken(userName,token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             String result = marketService.requestInformationAboutSpecificOfficialInStore(userName, storeName, officialUserName);
             logger.info("{} Finished to request information about official {} in store {}", userName, officialUserName, storeName);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -649,10 +625,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> getAllStores(String userName, String token) {
         logger.info("Trying to Gather All Stores");
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(userName, token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             logger.info("FINISHED Gather All Stores Info");
             return new ResponseEntity<>(marketService.getAllStores(userName), HttpStatus.OK);
         } catch (Exception e) {
@@ -665,10 +639,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> getStoreProducts(String userName, String token, String store_name) {
         logger.info("Trying to Gather ALL Store Products");
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(userName, token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             logger.info("FINISHED Gather ALL Store Products Info");
             return new ResponseEntity<>(marketService.getStoreProducts(userName, store_name), HttpStatus.OK);
         } catch (Exception e) {
@@ -681,10 +653,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> getProductInfo(String userName, String token, String store_name, int product_Id) {
         logger.info("Trying to Gather Product Info with Store Id : {} and product ID: {}", store_name, product_Id);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(userName, token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             logger.info("FINISHED Gather Product Info");
             return new ResponseEntity<>(marketService.getProductInfo(userName, store_name, product_Id), HttpStatus.OK);
         } catch (Exception e) {
@@ -697,153 +667,132 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> closeStoreExist(String userName, String token, String storeName) {
         logger.info("{} Trying to Close Store Exist : {}", userName, storeName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(userName, token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             marketService.closeStoreExist(userName, storeName);
+            logger.info("Finished close store exist successfully");
+            return new ResponseEntity<>("Store closed successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , when {} trying to close store exist : {}", e.getMessage(), userName, storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
         }
-        logger.info("FINISHED close store exist successfully");
-        return new ResponseEntity<>("FINISHED Close store exist successfully", HttpStatus.OK);
-
-
     }
 
     @Override
     public ResponseEntity<String> openStoreExist(String userName, String token, String storeName) {
         logger.info("{} Trying to Open Store Exist : {}", userName, storeName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(userName, token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             marketService.openStoreExist(userName, storeName);
+            logger.info("Finished open store exist successfully");
+            return new ResponseEntity<>("Store opened successfully", HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , when {} trying to open store exist : {}", e.getMessage(), userName, storeName);
+            logger.error("Error occurred : {}, when {} trying to open store exist : {}", e.getMessage(), userName, storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
         }
-        logger.info("FINISHED open store exist successfully");
-        return new ResponseEntity<>("FINISHED open store exist successfully", HttpStatus.OK);
-
-
     }
 
-    //search in specific store
+    //region Search functions
+    // search in specific store
     @Override
     public ResponseEntity<String> searchNameInStore(String userName, String productName, String token, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
         logger.info("Trying to search products in store : {} with name : {}", store_name, productName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(userName, token))
-                return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             String result = marketService.searchNameInStore(userName, productName, store_name, minPrice, maxPrice, minRating, category);
-            return new ResponseEntity<>(result,HttpStatus.OK);
+            logger.info("Finished Searching products in store");
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} ,  to search products in store : {} with name : {}}", e.getMessage(), store_name, productName);
+            logger.error("Error occurred : {}, to search products in store: {} with name : {}", e.getMessage(), store_name, productName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-//        logger.info("FINISHED Searching products in store ");
-//        return new ResponseEntity<>("FINISHED Searching products in store ", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> searchCategoryInStore(String userName, String token, int category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
         logger.info("Trying to search products in store : {} with category, : {}", store_name, category);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(userName, token))
-                return invalidTokenResponse();
-            marketService.searchCategoryInStore(userName, category, store_name, minPrice, maxPrice, minRating);
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
+            String result = marketService.searchCategoryInStore(userName, category, store_name, minPrice, maxPrice, minRating);
+            logger.info("Finished Searching products in store");
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} ,  to search products in store : {} with category : {}}", e.getMessage(), store_name, category);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("FINISHED Searching products in store ");
-        return new ResponseEntity<>("FINISHED Searching products in store ", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> searchKeywordsInStore(String userName, String token, String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
         logger.info("Trying to search products in store : {} with keyWords,  : {}", store_name, keyWords);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(userName, token))
-                return invalidTokenResponse();
-            marketService.searchKeywordsInStore(userName, keyWords, store_name, minPrice, maxPrice, minRating, category);
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
+            String result = marketService.searchKeywordsInStore(userName, keyWords, store_name, minPrice, maxPrice, minRating, category);
+            logger.info("Finished Searching products in store");
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} ,  to search products in store : {} with keyWords,  : {}}", e.getMessage(), store_name, keyWords);
+            logger.error("Error occurred : {}, while trying to search products in store: {} with keyWords: {}", e.getMessage(), store_name, keyWords);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("FINISHED Searching products in store ");
-        return new ResponseEntity<>("FINISHED Searching products in store ", HttpStatus.OK);
     }
 
     //search in stores
     @Override
-    public ResponseEntity<String> searchNameInStores(String userName, String productName, String token, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
+    public ResponseEntity<String> searchNameInStores(String userName, String token, String productName, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
         logger.info("Trying to search products in stores with name : {}", productName);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(userName, token))
-                return invalidTokenResponse();
-            marketService.searchNameInStores(userName, productName, minPrice, maxPrice, minRating, category, storeRating);
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
+            String result = marketService.searchNameInStores(userName, productName, minPrice, maxPrice, minRating, category, storeRating);
+            logger.info("Finished Searching products in store");
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} ,  to search products in stores: {}}", e.getMessage(), productName);
+            logger.error("Error occurred : {}, to search products in stores: {}", e.getMessage(), productName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("FINISHED Searching products in store ");
-        return new ResponseEntity<>("FINISHED Searching products in store ", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> searchCategoryInStores(String userName, String token, int category, Double minPrice, Double maxPrice, Double minRating, Double storeRating) {
         logger.info("Trying to search products in stores with category, : {}", category);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(userName, token))
-                return invalidTokenResponse();
-            marketService.searchCategoryInStores(userName, category, minPrice, maxPrice, minRating, storeRating);
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
+            String result = marketService.searchCategoryInStores(userName, category, minPrice, maxPrice, minRating, storeRating);
+            logger.info("Finished Searching products in store");
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} ,  to search products in stores with category : {}}", e.getMessage(), category);
+            logger.error("Error occurred : {}, to search products in stores with category: {}", e.getMessage(), category);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("FINISHED Searching products in store ");
-        return new ResponseEntity<>("FINISHED Searching products in store ", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> searchKeywordsInStores(String userName, String token, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating) {
         logger.info("Trying to search products in stores with keyWords,  : {}", keyWords);
         try {
-            if (!checkSystemOpen())
-                return systemClosedResponse();
-            if (!checkToken(userName, token))
-                return invalidTokenResponse();
-            String result =marketService.searchKeywordsInStores(userName, keyWords, minPrice, maxPrice, minRating, category,storeRating);
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
+            String result = marketService.searchKeywordsInStores(userName, keyWords, minPrice, maxPrice, minRating, category, storeRating);
+            logger.info("Finished searching products in stores ");
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} ,  to search products in stores with keyWords,  : {}}", e.getMessage(), keyWords);
+            logger.error("Error occurred : {} , to search products in stores with keyWords: {}", e.getMessage(), keyWords);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
+    //endregion
 
     @Override
     public ResponseEntity<String> approvePurchase(String username, String token) {
         logger.info("Approving purchase for registered user with ID: {} ", username);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             this.userService.approvePurchase(username);
             return new ResponseEntity<>("FINISHED Registered Approve Purchase ", HttpStatus.OK);
         } catch (Exception e) {
@@ -856,13 +805,13 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName) {
         logger.info("Get Purchase History");
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             String result = userService.getPurchaseHistory(username, storeName);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while Getting Purchase History");
-            return new ResponseEntity<>("Error occurred while Getting Purchase History", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -876,53 +825,53 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> addToCart(String username, String token, int productId, String storeName, int quantity) {
         logger.info("Trying adding to cart  product with id: {}", productId);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             userService.addToCart(username, productId, storeName, quantity);
+            logger.info("Finished adding to cart product with id: {}", productId);
+            return new ResponseEntity<>("Product added to cart successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed Trying adding to cart  product with id: {}", e.getMessage(), productId);
-            return new ResponseEntity<>("Error occurred : {} , Failed Trying adding to cart  product with id: {}", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished adding to cart product with id: {}", productId);
-        return new ResponseEntity<>("Finished adding to cart product with id: {}", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> removeFromCart(String username, String token, int productId, String storeName, int quantity) {
         logger.info("Trying removing from cart product with id: {}", productId);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             userService.removeFromCart(username, productId, storeName, quantity);
+            logger.info("Finished removing from cart product with id: {}", productId);
+            return new ResponseEntity<>("Product removed from cart successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed Trying removing to cart  product with id: {}", e.getMessage(), productId);
-            return new ResponseEntity<>("Error occurred : {} , Failed Trying removing to cart  product with id: {}", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished removing from cart product with id: {}", productId);
-        return new ResponseEntity<>("Finished removing from cart product with id: {}", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> openStore(String username, String token, String storeName, String description) {
         logger.info("Trying opening store with name: {}", storeName);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             userService.openStore(username, storeName, description);
+            logger.info("Finished opening store with name: {}", storeName);
+            return new ResponseEntity<>("Store opened successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed opening store with name: {}", e.getMessage(), storeName);
-            return new ResponseEntity<>("Error occurred in opening store", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        logger.info("Finished opening store with name: {}", storeName);
-        return new ResponseEntity<>("Finished opening store with name: {}", HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> viewCart(String username, String token) {
         logger.info("Trying user : {} view cart ", username);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             String result = userService.viewCart(username);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
@@ -935,8 +884,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> calculatePrice(String username, String token) {
         logger.info("Trying user : {} calculate price ", username);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             String result = userService.calculatePrice(username);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
@@ -949,8 +898,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> addCategoryPercentageDiscount(String username, String token, String storeName, int category, double discountPercent) {
         logger.info("Trying to add category percentage discount for user: {} ,store: {}, category: {}, value: {}", username, storeName, category, discountPercent);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.addCategoryPercentageDiscount(username, storeName, category, discountPercent);
             return new ResponseEntity<>("Category percentage discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -962,8 +911,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> addProductPercentageDiscount(String username, String token, String storeName, int productId, double discountPercent) {
         logger.info("Trying to add product percentage discount for user: {} ,store: {}, productId: {}, discountPercent: {}", username, storeName, productId, discountPercent);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.addProductPercentageDiscount(username, storeName, productId, discountPercent);
             return new ResponseEntity<>("Product percentage discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -975,8 +924,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> addStoreDiscount(String username, String token, String storeName, double discountPercent) {
         logger.info("Trying to add store discount for for user: {} ,store: {}, discountPercent: {}", username, storeName, discountPercent);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.addStoreDiscount(username, storeName, discountPercent);
             return new ResponseEntity<>("Store discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -988,8 +937,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> addConditionalDiscount(String username, String token, String storeName) {
         logger.info("Trying to add conditional discount for user: {} ,store: {}", username, storeName);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.addConditionalDiscount(username, storeName);
             return new ResponseEntity<>("Conditional discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1001,8 +950,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> addAdditiveDiscount(String username, String token, String storeName) {
         logger.info("Trying to add additive discount for user: {} ,store: {}", username, storeName);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.addAdditiveDiscount(username, storeName);
             return new ResponseEntity<>("Additive discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1014,8 +963,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> addMaxDiscount(String username, String token, String storeName) {
         logger.info("Trying to add max discount for user: {} ,store: {}", username, storeName);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.addMaxDiscount(username, storeName);
             return new ResponseEntity<>("Max discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1027,8 +976,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> addCategoryCountCondition(String username, String token, String storeName, int category, int count) {
         logger.info("Trying to add category count condition for user: {} ,store: {}, category: {}, count: {}", username, storeName, category, count);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.addCategoryCountCondition(username, storeName, category, count);
             return new ResponseEntity<>("Category count condition added successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1040,8 +989,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> addTotalSumCondition(String username, String token, String storeName, int requiredSum) {
         logger.info("Trying to add total sum condition for user: {} ,store: {}, sum: {}", username, storeName, requiredSum);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.addTotalSumCondition(username, storeName, requiredSum);
             return new ResponseEntity<>("Total sum condition added successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1053,8 +1002,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> addProductCountCondition(String username, String token, String storeName, int productId, int count) {
         logger.info("Trying to add product count condition for user: {} ,store: {}, productId: {}, count: {}", username, storeName, productId, count);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.addProductCountCondition(username, storeName, productId, count);
             return new ResponseEntity<>("Product count condition added successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1066,8 +1015,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> addAndDiscount(String username, String token, String storeName) {
         logger.info("Trying to add AND discount for for user: {} ,store: {}", username, storeName);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.addAndDiscount(username, storeName);
             return new ResponseEntity<>("AND discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1079,8 +1028,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> addOrDiscount(String username, String token, String storeName) {
         logger.info("Trying to add OR discount for user: {} ,store: {}", username, storeName);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.addOrDiscount(username, storeName);
             return new ResponseEntity<>("OR discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1092,8 +1041,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> addXorDiscount(String username, String token, String storeName) {
         logger.info("Trying to add XOR discount for user: {} ,store: {}", username, storeName);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.addXorDiscount(username, storeName);
             return new ResponseEntity<>("XOR discount added successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1105,8 +1054,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setFirstDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedFirstIndex) {
         logger.info("Trying to set first discount for for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedFirstIndex);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setFirstDiscount(username, storeName, selectedDiscountIndex, selectedFirstIndex);
             return new ResponseEntity<>("First discount set successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1118,8 +1067,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setSecondDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex) {
         logger.info("Trying to set second discount for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedSecondIndex);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setSecondDiscount(username, storeName, selectedDiscountIndex, selectedSecondIndex);
             return new ResponseEntity<>("Second discount set successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1131,8 +1080,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setFirstCondition(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex) {
         logger.info("Trying to set first condition for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedSecondIndex);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setFirstCondition(username, storeName, selectedDiscountIndex, selectedSecondIndex);
             return new ResponseEntity<>("First condition set successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1144,8 +1093,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setSecondCondition(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex) {
         logger.info("Trying to set second condition for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedSecondIndex);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setSecondCondition(username, storeName, selectedDiscountIndex, selectedSecondIndex);
             return new ResponseEntity<>("Second condition set successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1157,8 +1106,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setThenDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedThenIndex) {
         logger.info("Trying to set then discount for user: {} ,store: {}, discountIndex: {}, selectedIndex: {}", username, storeName, selectedDiscountIndex, selectedThenIndex);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setThenDiscount(username, storeName, selectedDiscountIndex, selectedThenIndex);
             return new ResponseEntity<>("Then discount set successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1170,8 +1119,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setCategoryDiscount(String username, String token, String storeName, int selectedDiscountIndex, int category) {
         logger.info("Trying to set category discount for user: {} ,store: {}, discountIndex: {}, category: {}", username, storeName, selectedDiscountIndex, category);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setCategoryDiscount(username, storeName, selectedDiscountIndex, category);
             return new ResponseEntity<>("Category discount set successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1183,8 +1132,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setProductIdDiscount(String username, String token, String storeName, int selectedDiscountIndex, int productId) {
         logger.info("Trying to set product ID discount for user: {} ,store: {}, discountIndex: {}, productId: {}", username, storeName, selectedDiscountIndex, productId);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setProductIdDiscount(username, storeName, selectedDiscountIndex, productId);
             return new ResponseEntity<>("Product ID discount set successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1196,8 +1145,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setPercentDiscount(String username, String token, String storeName, int selectedDiscountIndex, double discountPercent) {
         logger.info("Trying to set percent discount for user: {} ,store: {}, discountIndex: {}, percent: {}", username, storeName, selectedDiscountIndex, discountPercent);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setPercentDiscount(username, storeName, selectedDiscountIndex, discountPercent);
             return new ResponseEntity<>("Percent discount set successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1209,8 +1158,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setDeciderDiscount(String username, String token, String storeName, int selectedDiscountIndex, int selectedDeciderIndex) {
         logger.info("Trying to set decider discount for user: {} ,store: {}, discountIndex: {}, deciderIndex: {}", username, storeName, selectedDiscountIndex, selectedDeciderIndex);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setDeciderDiscount(username, storeName, selectedDiscountIndex, selectedDeciderIndex);
             return new ResponseEntity<>("Decider discount set successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1222,8 +1171,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setTotalSum(String username, String token, String storeName, int selectedConditionIndex, int newSum) {
         logger.info("Trying to set total sum for user: {} ,store: {}, conditionIndex: {}, newSum: {}", username, storeName, selectedConditionIndex, newSum);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setTotalSum(username, storeName, selectedConditionIndex, newSum);
             return new ResponseEntity<>("Total sum set successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1235,8 +1184,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setCountCondition(String username, String token, String storeName, int selectedConditionIndex, int newCount) {
         logger.info("Trying to set count condition for user: {} ,store: {}, conditionIndex: {}, newCount: {}", username, storeName, selectedConditionIndex, newCount);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setCountCondition(username, storeName, selectedConditionIndex, newCount);
             return new ResponseEntity<>("Count condition set successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -1248,8 +1197,8 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> setCategoryCondition(String username, String token, String storeName, int selectedConditionIndex, int newCategory) {
         logger.info("Trying to set category condition for user: {} ,store: {}, conditionIndex: {}, category: {}", username, storeName, selectedConditionIndex, newCategory);
         try {
-            if (!checkSystemOpen()) return systemClosedResponse();
-            if (!checkToken(username, token)) return invalidTokenResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
             marketService.setCategoryCondition(username, storeName, selectedConditionIndex, newCategory);
             return new ResponseEntity<>("Category condition set successfully", HttpStatus.OK);
         } catch (Exception e) {

@@ -26,11 +26,11 @@ public class RegistrationAcceptanceTests {
         assertEquals("User registered successfully.", response.getBody());
     }
 
-/*    @Test
-    void registration_Failure() {
+    @Test
+    void registration_Failure_User_Exists() {
         tradingSystem.register("owner1", "password123", LocalDate.now());
         ResponseEntity<String> response = tradingSystem.register("owner1", "password123", LocalDate.now());
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("username already exists - owner1", response.getBody());
-    }*/
+    }
 }

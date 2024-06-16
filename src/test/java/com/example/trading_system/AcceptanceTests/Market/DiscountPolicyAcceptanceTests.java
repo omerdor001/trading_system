@@ -177,5 +177,46 @@ public class DiscountPolicyAcceptanceTests {
 
     @Test
     public void testXorDiscount() {
+        tradingSystem.addStoreDiscount(username,token,storeName,0.5);
+        tradingSystem.addProductPercentageDiscount(username, token, storeName, 1, 0.25);
+        tradingSystem.addProductCountCondition(username,token,storeName,1,1);
+        tradingSystem.addXorDiscount(username,token,storeName);
+        tradingSystem.setFirstDiscount(username,token,storeName,2,0);
+        tradingSystem.setSecondDiscount(username,token,storeName,1,0);
+        tradingSystem.setDeciderDiscount(username,token,storeName,0,1);
+        tradingSystem.addToCart(username,token,0,storeName,1);
+        ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals("0.5", result.getBody());
+    }
+
+    @Test
+    public void testXorDiscount_firstDecider() {
+        tradingSystem.addStoreDiscount(username,token,storeName,0.5);
+        tradingSystem.addProductPercentageDiscount(username, token, storeName, 0, 0.25);
+        tradingSystem.addProductCountCondition(username,token,storeName,0,1);
+        tradingSystem.addXorDiscount(username,token,storeName);
+        tradingSystem.setFirstDiscount(username,token,storeName,2,0);
+        tradingSystem.setSecondDiscount(username,token,storeName,1,0);
+        tradingSystem.setDeciderDiscount(username,token,storeName,0,1);
+        tradingSystem.addToCart(username,token,0,storeName,2);
+        ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals("1.0", result.getBody());
+    }
+
+    @Test
+    public void testXorDiscount_secondDecider() {
+        tradingSystem.addStoreDiscount(username,token,storeName,0.5);
+        tradingSystem.addProductPercentageDiscount(username, token, storeName, 1, 0.25);
+        tradingSystem.addProductCountCondition(username,token,storeName,0,1);
+        tradingSystem.addXorDiscount(username,token,storeName);
+        tradingSystem.setFirstDiscount(username,token,storeName,2,0);
+        tradingSystem.setSecondDiscount(username,token,storeName,1,0);
+        tradingSystem.setDeciderDiscount(username,token,storeName,0,1);
+        tradingSystem.addToCart(username,token,0,storeName,1);
+        ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals("0.5", result.getBody());
     }
 }

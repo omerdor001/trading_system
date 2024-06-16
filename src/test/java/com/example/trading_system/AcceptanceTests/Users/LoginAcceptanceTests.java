@@ -38,7 +38,7 @@ class LoginAcceptanceTests {
 
     @AfterEach
     void setDown() {
-        tradingSystem.logout(token, username);
+        tradingSystem.deleteInstance();
     }
 
     @Test
@@ -51,7 +51,16 @@ class LoginAcceptanceTests {
     @Test
     void login_User_Logged_In() {
         tradingSystem.login(token, "v0", "owner1", "password123");
-        ResponseEntity<String> response = tradingSystem.login(token, "v0", "owner1", "password123");
+        String userToken = tradingSystem.enter().getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            username = rootNode.get("username").asText();
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract username and token from JSON response");
+        }
+        ResponseEntity<String> response = tradingSystem.login(token, "v1", "owner1", "password123");
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 

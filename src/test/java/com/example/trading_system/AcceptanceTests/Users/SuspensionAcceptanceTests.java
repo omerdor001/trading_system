@@ -1,4 +1,5 @@
 package com.example.trading_system.AcceptanceTests.Users;
+
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,14 +14,13 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.mock;
 
 class SuspensionAcceptanceTests {
-    private TradingSystemImp tradingSystem;
     String token1;
     String username;
     String token2;
     String username1;
+    private TradingSystemImp tradingSystem;
 
     @BeforeEach
     public void setUp() {
@@ -76,56 +76,56 @@ class SuspensionAcceptanceTests {
 
     @Test
     void suspendUser_Success() {
-        ResponseEntity<String> response =tradingSystem.suspendUser(token1,username,username1, LocalDateTime.of(2024,8,1,10,0));
+        ResponseEntity<String> response = tradingSystem.suspendUser(token1, username, username1, LocalDateTime.of(2024, 8, 1, 10, 0));
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
     }
 
     @Test
     void suspendUser_AdminNotExist() {
-        ResponseEntity<String> response = tradingSystem.suspendUser(token1,"",username1,LocalDateTime.of(2024,8,1,10,0));
+        ResponseEntity<String> response = tradingSystem.suspendUser(token1, "", username1, LocalDateTime.of(2024, 8, 1, 10, 0));
         assertEquals(HttpStatusCode.valueOf(401), response.getStatusCode());
     }
 
     @Test
     void suspendUser_ToSuspendNotExist() {
-        ResponseEntity<String> response =tradingSystem.suspendUser(token1,username,"", LocalDateTime.of(2024,8,1,10,0));
+        ResponseEntity<String> response = tradingSystem.suspendUser(token1, username, "", LocalDateTime.of(2024, 8, 1, 10, 0));
         assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
     }
 
     @Test
     void suspendUser_DateNull() {
-        ResponseEntity<String> response =tradingSystem.suspendUser(token1,username,username1, null);
+        ResponseEntity<String> response = tradingSystem.suspendUser(token1, username, username1, null);
         assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
     }
 
     @Test
     void endSuspendUser_Success() {
-        tradingSystem.suspendUser(token1,username,username1,LocalDateTime.now());
-        ResponseEntity<String> response =tradingSystem.endSuspendUser(token1,username,username1);
+        tradingSystem.suspendUser(token1, username, username1, LocalDateTime.now().plusDays(1));
+        ResponseEntity<String> response = tradingSystem.endSuspendUser(token1, username, username1);
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
     }
 
     @Test
     void endSuspendUser_AdminNotExist() {
-        ResponseEntity<String> response = tradingSystem.endSuspendUser(token1,"",username1);
+        ResponseEntity<String> response = tradingSystem.endSuspendUser(token1, "", username1);
         assertEquals(HttpStatusCode.valueOf(401), response.getStatusCode());
     }
 
     @Test
     void endSuspendUser_ToSuspendNotExist() {
-        ResponseEntity<String> response =tradingSystem.endSuspendUser(token1,username,"");
+        ResponseEntity<String> response = tradingSystem.endSuspendUser(token1, username, "");
         assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
     }
 
     @Test
     void watchSuspensions_Success() {
-        ResponseEntity<String> response =tradingSystem.watchSuspensions(token1,username);
+        ResponseEntity<String> response = tradingSystem.watchSuspensions(token1, username);
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
     }
 
     @Test
     void watchSuspensions_AdminNotExist() {
-        ResponseEntity<String> response =tradingSystem.watchSuspensions(token1,"");
+        ResponseEntity<String> response = tradingSystem.watchSuspensions(token1, "");
         assertEquals(HttpStatusCode.valueOf(401), response.getStatusCode());
     }
 

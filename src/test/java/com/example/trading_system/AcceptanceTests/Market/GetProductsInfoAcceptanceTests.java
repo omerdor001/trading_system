@@ -13,11 +13,8 @@ import java.util.ArrayList;
 
 import static org.assertj.core.api.Fail.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class GetProductsInfo {
+public class GetProductsInfoAcceptanceTests {
     private TradingSystem tradingSystem;
     private String token;
     private String username;
@@ -57,10 +54,9 @@ public class GetProductsInfo {
 
     @Test
     public void testAddStoreWithInvalidToken() {
-        // Attempt to add a store with an invalid token
         ResponseEntity<String> response = tradingSystem.openStore(username, "invalidToken", "existingStore", "General Store");
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Error occurred in opening store", response.getBody());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertEquals("Invalid token was supplied", response.getBody());
     }
 
     @Test
@@ -68,17 +64,17 @@ public class GetProductsInfo {
         tradingSystem.openStore(username, token, "existingStore", "General Store");
         tradingSystem.openStore(username, token, "existingStore2", "General Store");
         ResponseEntity<String> response = tradingSystem.getAllStores(username, token);
-        assertNotNull(response.getBody());
+        assertEquals("[\"stores\":existingStore2,existingStore]",response.getBody());
     }
 
     @Test
     public void testGetStoreProductsSuccessfully() {
         tradingSystem.openStore(username, token, "store1", "General Store");
-        tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 0, new ArrayList<>());
-        tradingSystem.addProduct(username, token, 2, "store1", "product1", "desc1", 10.0, 100, 4, 0, new ArrayList<>());
+        tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 1, new ArrayList<>());
+        tradingSystem.addProduct(username, token, 2, "store1", "product1", "desc1", 10.0, 100, 4, 10, new ArrayList<>());
         ResponseEntity<String> response = tradingSystem.getStoreProducts(username, token,"store1");
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
+        assertEquals("{\"name_id\":\"store1\", \"description\":\"General Store\", \"products\":[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":Sport, \"keyWords\":[]}, ]}",response.getBody());
     }
 
 
@@ -92,7 +88,6 @@ public class GetProductsInfo {
 
     @Test
     public void testGetProductInfoNonExistentProduct() {
-        // Add store
         tradingSystem.openStore(username, token, "store1", "General Store");
         ResponseEntity<String> response = tradingSystem.getProductInfo(username, token,"store1", 999);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());

@@ -66,6 +66,7 @@ public class XorDiscount implements DiscountPolicy, Condition {
         throw new RuntimeException("Action not allowed for xor discount");
     }
 
+    @Override
     public void setDecider(Condition decider) {
         this.decider = decider;
     }
