@@ -60,12 +60,12 @@ public class AddCartUnitTests {
 
     @Test
     public void givenNullUsername_WhenAddToCart_ThenThrowException() {
-        String username = null;
+        //String username = null;
         int productId = 1;
         String storeName = "StoreName";
         int quantity = 5;
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.addToCart(null, productId, storeName, quantity));
     }
 
     @Test
@@ -92,12 +92,12 @@ public class AddCartUnitTests {
     public void givenNullStoreName_WhenAddToCart_ThenThrowException() {
         String username = "rValidUser";
         int productId = 1;
-        String storeName = null;
+        //String storeName = null;
         int quantity = 5;
 
         userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.addToCart(username, productId, null, quantity));
     }
 
     @Test

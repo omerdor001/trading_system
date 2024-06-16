@@ -5,6 +5,7 @@ import com.example.trading_system.domain.stores.Purchase;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class User {
@@ -107,11 +108,17 @@ public abstract class User {
 
     public abstract boolean getLogged();
 
+    public abstract List<String> getOwnerToApprove();
+
+    public abstract HashMap<String, List<Boolean>> getManagerToApprove();
+
     public abstract List<Notification> getNotifications();
 
     public abstract void receiveNotification(String notification);
 
     public abstract String getAddress();
+
+    public abstract void setAddress(String address);
 
     public abstract LocalDate getBirthdate();
 

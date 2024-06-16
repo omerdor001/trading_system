@@ -7,6 +7,7 @@ import org.junit.jupiter.api.*;
 import org.mockito.*;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 class LogoutUnitTests {
 
@@ -19,7 +20,7 @@ class LogoutUnitTests {
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.initMocks(this);
+        initMocks(this);
         userFacadeImp = UserFacadeImp.getInstance();
     }
 
@@ -47,9 +48,9 @@ class LogoutUnitTests {
     @Test
     public void givenNullUsername_WhenLogout_ThenThrowException() {
         int id = 123;
-        String username = null;
+        //String username = null;
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.logout(id, username));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.logout(id, null));
 
         verify(user, never()).getLogged();
     }

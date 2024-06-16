@@ -1,6 +1,7 @@
 package com.example.trading_system.domain.users;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 
 public class Visitor extends User {
@@ -11,6 +12,16 @@ public class Visitor extends User {
     @Override
     public boolean getLogged() {
         return false;
+    }
+
+    @Override
+    public List<String> getOwnerToApprove() {
+        return List.of();
+    }
+
+    @Override
+    public HashMap<String, List<Boolean>> getManagerToApprove() {
+        return null;
     }
 
     @Override
@@ -27,6 +38,9 @@ public class Visitor extends User {
     public String getAddress() {
         return "";
     }
+
+    @Override
+    public void setAddress(String address) {}
 
     @Override
     public LocalDate getBirthdate() {
