@@ -3,7 +3,8 @@ import Router from 'vue-router';
 import HomePage from '@/views/HomePage.vue';
 import LoginModel from '@/views/LoginModel.vue'; // Import the login component
 import OpenStore from '@/views/OpenStore.vue';
-
+import CloseStore from '@/views/CloseStore.vue'
+import YieldOwnership from '@/views/YieldOwnership.vue'
 
 Vue.use(Router);
 
@@ -19,6 +20,16 @@ const router = new Router({
       path: '/open-store',
       name: 'OpenStore',
       component: OpenStore
+    },
+    {
+      path: '/close-store',
+      name: 'CloseStore',
+      component: CloseStore
+    },
+    {
+      path: '/yield-ownership',
+      name: 'YieldOwnership',
+      component: YieldOwnership
     },
     {
       path: '/login',

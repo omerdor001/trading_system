@@ -62,6 +62,9 @@ export default {
       if (this.username === 'lana' && this.password === 'lana') {
         roles.push('commercialManager', 'systemManager', 'storeOwner');
       }
+      if(this.username === 'nir' && this.password === 'nir'){
+        roles.push('storeOwner')
+      } 
       if (this.username === 'user' && this.password === 'user') {
         roles = [];
       }

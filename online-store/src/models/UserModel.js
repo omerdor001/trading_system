@@ -14,6 +14,18 @@ class UserModel {
             throw new Error(error.response.data || 'Login failed.');
         }
     }
+    static async yieldOwnership(userName, token, storeName) {
+        try {
+            const response = await axios.post('/api/yieldOwnership', {
+                userName,
+                token,
+                storeName
+            });
+            return response.data;
+        } catch (error) {
+            throw new Error(error.response.data || 'Failed to YieldOwnership.');
+        }
+    }
 }
 
 export default UserModel;

@@ -29,6 +29,15 @@ const actions = {
         state.token = '';
         state.loginStatus = '';
         state.error = null;
+    },
+    async yieldOwnership(userName, token, storeName){
+        try {
+            await UserModel.yieldOwnership(userName, token, storeName);
+            this.error = null
+        } catch(error) {
+            state.error = error.message
+            state.openStatus = 'Failed to yield ownership';
+        }
     }
 };
 
