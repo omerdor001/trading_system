@@ -7,7 +7,7 @@
         <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" />
         <PrimeButton label="Search Product" @click="searchProduct" />
         <PrimeButton v-if="isStoreOwner" label="Approve Appointment" @click="approveAppointment" />
-        <PrimeButton v-if="isStoreOwner" label="My Stores I Own" @click="myStoresIOwn" />
+        <PrimeButton label="My Stores" @click="myStoresIOwn" />
         <PrimeButton v-if="isStoreOwner" label="Manage Products" @click="manageProductsAsOwner" />
         <PrimeButton v-if="isStoreOwner" label="Appoint Owner" @click="appointOwner" />
         <PrimeButton v-if="isStoreOwner" label="Appoint Manager" @click="appointManager" />
@@ -88,7 +88,7 @@ export default defineComponent({
     };
 
     const myStoresIOwn = () => {
-      console.log('My Stores I Own');
+      router.push('/my-stores-i-own');
     };
 
     const manageProductsAsOwner = () => {

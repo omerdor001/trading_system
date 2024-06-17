@@ -11,13 +11,13 @@
       </div>
     </header>
 
-    <!-- Login form container -->
-    <div class="login-container">
-      <PrimeCard class="login-form">
+    <!-- Registration form container -->
+    <div class="registration-container">
+      <PrimeCard class="registration-form">
         <template #title>
-          <h2>Login</h2>
+          <h2>Register</h2>
         </template>
-        <form @submit.prevent="handleLogin">
+        <form @submit.prevent="register">
           <!-- Username input -->
           <div class="form-group">
             <label for="username">Username</label>
@@ -28,11 +28,15 @@
             <label for="password">Password</label>
             <PasswordText v-model="password" id="password" />
           </div>
+          <!-- Birthdate input -->
+          <div class="form-group">
+            <label for="birthdate">Birthdate</label>
+            <input type="date" id="birthdate" v-model="birthdate" />
+          </div>
           <!-- Button group -->
           <div class="button-group">
-            <PrimeButton label="Login" icon="pi pi-check" type="submit" class="login-button" />
+            <PrimeButton label="Register" icon="pi pi-check" type="submit" class="register-button" />
             <PrimeButton label="Close" icon="pi pi-times" type="button" @click="closeModal" class="close-button" />
-            <PrimeButton label="Register" icon="pi pi-user-plus" type="button" @click="goToRegister" class="register-button" />
           </div>
         </form>
         <!-- Error message -->
@@ -51,7 +55,7 @@ import { PasswordText } from 'primevue/password';
 import { PrimeCard } from 'primevue/card';
 
 export default defineComponent({
-  name: 'LoginModel',
+  name: 'UserRegistration',
   components: {
     PrimeButton,
     InputText,
@@ -62,32 +66,63 @@ export default defineComponent({
     const router = useRouter();
     const username = ref('');
     const password = ref('');
+    const birthdate = ref('');
     const errorMessage = ref('');
 
-    const handleLogin = async () => {
-      try {
-        // Perform authentication logic here
-        const loggedIn = await authenticate(username.value, password.value);
-        if (loggedIn) {
-          // Successful login
-          router.push('/'); // Redirect to home page
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('username', username.value);
-        } else {
-          // Authentication failed
-          errorMessage.value = 'Invalid username or password';
-        }
-      } catch (error) {
-        errorMessage.value = error.message;
+    const validateInputs = () => {
+      if (!username.value) {
+        errorMessage.value = 'Username cannot be empty';
+        return false;
+      }
+      if (username.value.length < 3) {
+        errorMessage.value = 'Username must be at least 3 characters long';
+        return false;
+      }
+      if (!/^[a-zA-Z0-9]+$/.test(username.value)) {
+        errorMessage.value = 'Username can only contain letters and numbers';
+        return false;
+      }
+      if (!password.value) {
+        errorMessage.value = 'Password cannot be empty';
+        return false;
+      }
+      if (password.value.length < 6) {
+        errorMessage.value = 'Password must be at least 6 characters long';
+        return false;
+      }
+      if (!/[A-Z]/.test(password.value) || !/[a-z]/.test(password.value) || !/[0-9]/.test(password.value)) {
+        errorMessage.value = 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
+        return false;
+      }
+      if (!birthdate.value) {
+        errorMessage.value = 'Birthdate cannot be empty';
+        return false;
+      }
+      if (new Date(birthdate.value) > new Date()) {
+        errorMessage.value = 'Birthdate cannot be in the future';
+        return false;
+      }
+      return true;
+    };
+
+    const register = () => {
+      if (validateInputs()) {
+        const userData = {
+          username: username.value,
+          password: password.value,
+          birthdate: birthdate.value,
+        };
+
+        localStorage.setItem('userData', JSON.stringify(userData));
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('username', userData.username);
+
+        router.push('/');
       }
     };
 
     const closeModal = () => {
       router.push('/');
-    };
-
-    const goToRegister = () => {
-      router.push('/register');
     };
 
     const notifications = () => {
@@ -98,58 +133,13 @@ export default defineComponent({
       // Handle viewing cart
     };
 
-    // Simulated authentication function (replace with actual logic)
-    const authenticate = async (username, password) => {
-      let roles = [];
-      switch (username) {
-        case 'admin':
-          if (password === 'admin') {
-            roles.push('storeManager', 'commercialManager', 'storeOwner', 'systemManager');
-          }
-          break;
-        case 'manager':
-          if (password === 'manager') {
-            roles.push('storeManager');
-          }
-          break;
-        case 'system':
-          if (password === 'system') {
-            roles.push('systemManager');
-          }
-          break;
-        case 'commercial':
-          if (password === 'commercial') {
-            roles.push('commercialManager');
-          }
-          break;
-        case 'lana':
-          if (password === 'lana') {
-            roles.push('commercialManager', 'systemManager', 'storeOwner');
-          }
-          break;
-        case 'user':
-          if (password === 'user') {
-            roles = [];
-          }
-          break;
-        default:
-          return false;
-      }
-
-      // Simulate async delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Simulate successful login
-      return true;
-    };
-
     return {
       username,
       password,
+      birthdate,
       errorMessage,
-      handleLogin,
+      register,
       closeModal,
-      goToRegister,
       notifications,
       viewCart
     };
@@ -180,7 +170,7 @@ export default defineComponent({
   gap: 10px;
 }
 
-.login-container {
+.registration-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -188,7 +178,7 @@ export default defineComponent({
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.login-form {
+.registration-form {
   background: white;
   padding: 20px;
   border-radius: 8px;
@@ -197,7 +187,7 @@ export default defineComponent({
   text-align: center;
 }
 
-.login-form h2 {
+.registration-form h2 {
   margin-bottom: 20px;
   color: #425965;
 }
@@ -249,15 +239,11 @@ export default defineComponent({
   gap: 10px;
 }
 
-.login-button .p-button {
+.register-button .p-button {
   width: 100%;
 }
 
 .close-button .p-button {
-  width: 100%;
-}
-
-.register-button .p-button {
   width: 100%;
 }
 
