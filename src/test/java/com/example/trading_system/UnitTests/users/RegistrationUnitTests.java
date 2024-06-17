@@ -22,7 +22,7 @@ class RegistrationUnitTests {
 
     @AfterEach
     void reset() {
-        userFacade.getUsers().clear();
+        userFacade.deleteInstance();
     }
 
     @Test

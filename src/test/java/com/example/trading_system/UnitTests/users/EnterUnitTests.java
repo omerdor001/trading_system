@@ -1,6 +1,7 @@
 package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.users.UserFacadeImp;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,11 @@ public class EnterUnitTests {
         userFacade = UserFacadeImp.getInstance();
         // Ensure the visitors map is cleared before each test
         userFacade.getUsers().clear();
+    }
+
+    @AfterEach
+    void setDown(){
+        userFacade.deleteInstance();
     }
 
     @Test

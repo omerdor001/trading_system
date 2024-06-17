@@ -1,6 +1,7 @@
 package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.users.UserFacadeImp;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +25,11 @@ class ExitUnitTests {
         } catch (Exception e) {
 
         }
+    }
+
+    @AfterEach
+    void setDown(){
+        userFacade.deleteInstance();
     }
 
     @Test

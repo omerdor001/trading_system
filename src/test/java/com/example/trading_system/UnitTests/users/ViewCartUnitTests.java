@@ -17,11 +17,6 @@ public class ViewCartUnitTests {
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
-
-        // Clear singleton instances
-        UserMemoryRepository.getInstance().deleteInstance();
-        UserFacadeImp.getInstance().deleteInstance();
-
         // Re-instantiate singletons
         userMemoryRepository = UserMemoryRepository.getInstance();
         userFacadeImp = UserFacadeImp.getInstance();
