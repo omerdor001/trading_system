@@ -4,7 +4,8 @@ import LoginModel from '@/views/LoginModel.vue';
 import OpenStore from '@/views/OpenStore.vue';
 import CloseStore from '@/views/CloseStore.vue';
 import YieldOwnership from '@/views/YieldOwnership.vue';
-import UserRegistration from '@/views/UserRegistration.vue'; // Import the UserRegistration component
+import UserRegistration from '@/views/UserRegistration.vue';
+import MyStoresIOwn from '@/views/MyStoresIOwn.vue'; // Import the new component
 
 const routes = [
     {
@@ -36,6 +37,11 @@ const routes = [
         path: '/register',
         name: 'UserRegistration',
         component: UserRegistration
+    },
+    {
+        path: '/my-stores-i-own',
+        name: 'MyStoresIOwn',
+        component: MyStoresIOwn // Ensure the route is correctly defined
     }
 ];
 
