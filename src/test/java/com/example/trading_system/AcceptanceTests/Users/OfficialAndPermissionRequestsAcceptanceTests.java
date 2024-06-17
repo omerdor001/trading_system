@@ -224,6 +224,7 @@ public class OfficialAndPermissionRequestsAcceptanceTests {
 
     @Test
     public void GivenValidFounder_WhenRequestManagerPermission_ThenSuccess() {
+        //TODO - check why these 2 lines are required for build to succeed (probably other test class has bad cleanup after tests)
         tearDown();
         setUp();
         ResponseEntity<String> response = tradingSystemImp.requestManagersPermissions(userName, token, storeName);
