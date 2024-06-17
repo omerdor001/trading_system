@@ -7,17 +7,12 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Registered extends User {
-    private String userName;      //May be removed
     private String encrypted_pass;
-
-    private String address;
-
     private LocalDate birthdate;
     private boolean isAdmin;
     @Getter
     @Setter
     private boolean isLogged = false;
-
     private List<Role> roles;
     private List<Notification> notifications;
     private HashMap<String, List<Boolean>> managerToApprove;
@@ -25,14 +20,12 @@ public class Registered extends User {
 
     public Registered(String userName, String encryption, LocalDate birthdate) {
         super(userName);
-        this.userName = userName;
         this.encrypted_pass = encryption;
-        this.address = "No address";
         this.birthdate = birthdate;
         this.isAdmin = false;
         this.isLogged = false;
         this.notifications = new LinkedList<>();
-        this.roles=new ArrayList<>();
+        this.roles = new ArrayList<>();
         this.managerToApprove = new HashMap<>();
         this.ownerToApprove = new ArrayList<>();
     }
@@ -49,11 +42,13 @@ public class Registered extends User {
 
     @Override
     public void removeOwnerRole(String storeName) {
-         roles.remove(getRoleByStoreId(storeName)); }
+        roles.remove(getRoleByStoreId(storeName));
+    }
 
     @Override
     public void removeManagerRole(String storeName) {
-        roles.remove(getRoleByStoreId(storeName)); }
+        roles.remove(getRoleByStoreId(storeName));
+    }
 
 
     @Override
@@ -136,9 +131,8 @@ public class Registered extends User {
         if (roles.isEmpty()) {
             return false;
         } else {
-            Role role=getRoleByStoreId(store_name_id);
-            if(role==null)
-                return false;
+            Role role = getRoleByStoreId(store_name_id);
+            if (role == null) return false;
             else return role.getRoleState().isOwner();
         }
     }
@@ -147,9 +141,8 @@ public class Registered extends User {
         if (roles.isEmpty()) {
             return false;
         } else {
-            Role role=getRoleByStoreId(store_name_id);
-            if(role==null)
-                return false;
+            Role role = getRoleByStoreId(store_name_id);
+            if (role == null) return false;
             else return role.getRoleState().isManager();
         }
     }
@@ -172,15 +165,6 @@ public class Registered extends User {
 
     public List<Role> getRoles() {
         return roles;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    @Override
-    public void setAddress(String address) {
-        this.address=address;
     }
 
     public LocalDate getBirthdate() {

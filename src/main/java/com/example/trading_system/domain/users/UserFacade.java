@@ -14,7 +14,7 @@ public interface UserFacade {
 
     HashMap<String, User> getUsers();
 
-    void register(String username, String token, LocalDate birthdate) throws Exception;    //Complete with what to register
+    void register(String username, String token, LocalDate birthdate) throws Exception;
 
     void login(String usernameV, String username, String password);
 
@@ -23,6 +23,8 @@ public interface UserFacade {
     void suspendUser(String admin, String toSuspend, LocalDateTime endSuspention);
 
     void endSuspendUser(String admin, String toSuspend);
+
+    void setAddress(String username, String address);
 
     String watchSuspensions(String admin);
 
