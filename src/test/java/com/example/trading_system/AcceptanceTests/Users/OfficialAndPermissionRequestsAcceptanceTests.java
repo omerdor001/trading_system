@@ -224,8 +224,6 @@ public class OfficialAndPermissionRequestsAcceptanceTests {
 
     @Test
     public void GivenValidFounder_WhenRequestManagerPermission_ThenSuccess() {
-        tearDown();
-        setUp();
         ResponseEntity<String> response = tradingSystemImp.requestManagersPermissions(userName, token, storeName);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertTrue(Objects.requireNonNull(response.getBody()).contains("managerUser " + userNameManager + " true true true true"));
