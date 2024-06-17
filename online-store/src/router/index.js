@@ -6,6 +6,7 @@ import CloseStore from '@/views/CloseStore.vue';
 import YieldOwnership from '@/views/YieldOwnership.vue';
 import UserRegistration from '@/views/UserRegistration.vue';
 import MyStoresIOwn from '@/views/MyStoresIOwn.vue'; // Import the new component
+import StoreDetails from '@/views/StoreDetails.vue'; // Import the store details component
 
 const routes = [
     {
@@ -42,6 +43,12 @@ const routes = [
         path: '/my-stores-i-own',
         name: 'MyStoresIOwn',
         component: MyStoresIOwn // Ensure the route is correctly defined
+    },
+    {
+        path: '/store/:storeId',
+        name: 'StoreDetails',
+        component: StoreDetails,
+        props: true // Pass route params as props
     }
 ];
 

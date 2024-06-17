@@ -11,6 +11,7 @@
         <h2>Stores I Own</h2>
         <div v-for="store in stores" :key="store.id" class="store">
           <h3 @click="enterStore(store.id)">Store: {{ store.name }}</h3>
+          <PrimeButton label="Enter Store" @click="enterStore(store.id)" />
 
           <div v-if="editingWorkers === store.id">
             <h4>Edit Workers</h4>
@@ -150,6 +151,9 @@ export default defineComponent({
         {
           id: 1,
           name: 'Store 1',
+          description: 'Description for Store 1',
+          products: [],
+          purchaseHistory: [],
           workers: [
             { username: 'user1', role: 'Manager', birthdate: '01-01-1990', address: 'Address 1', permissions: { watch: true, editSupply: true, editStorePolicy: false, editDiscountPolicy: false } },
             { username: 'user2', role: 'Worker', birthdate: '02-02-1991', address: 'Address 2', permissions: { watch: true, editSupply: false, editStorePolicy: true, editDiscountPolicy: false } }
@@ -159,6 +163,9 @@ export default defineComponent({
         {
           id: 2,
           name: 'Store 2',
+          description: 'Description for Store 2',
+          products: [],
+          purchaseHistory: [],
           workers: [
             { username: 'user3', role: 'Manager', birthdate: '03-03-1992', address: 'Address 3', permissions: { watch: true, editSupply: true, editStorePolicy: true, editDiscountPolicy: true } },
             { username: 'user4', role: 'Worker', birthdate: '04-04-1993', address: 'Address 4', permissions: { watch: false, editSupply: true, editStorePolicy: false, editDiscountPolicy: true } }
@@ -169,8 +176,7 @@ export default defineComponent({
     });
 
     const enterStore = (storeId) => {
-      console.log('Entering Store', storeId);
-      // Navigate to store details page (implement as needed)
+      router.push({ name: 'StoreDetails', params: { storeId } });
     };
 
     const addStore = () => {
