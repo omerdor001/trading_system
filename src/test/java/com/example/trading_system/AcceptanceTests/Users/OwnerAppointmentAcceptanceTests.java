@@ -51,7 +51,6 @@ public class OwnerAppointmentAcceptanceTests {
         }
         tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
         tradingSystemImp.register("owner", password, LocalDate.now());
-        tradingSystemImp.openSystem();
         ResponseEntity<String> response2 = tradingSystemImp.enter();
         String userToken2 = response2.getBody();
         try {
