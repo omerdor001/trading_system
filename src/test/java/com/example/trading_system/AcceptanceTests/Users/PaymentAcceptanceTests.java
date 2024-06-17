@@ -19,7 +19,7 @@ public class PaymentAcceptanceTests {
     private TradingSystem tradingSystem;
     private String username;
     private String token;
-    private String storeName = "store1";
+    private String storeName = "Store1";
 
     @BeforeEach
     void setUp() {

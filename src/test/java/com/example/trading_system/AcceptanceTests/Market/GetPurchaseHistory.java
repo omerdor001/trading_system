@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GetPurchaseHistory {
-
+/*
     private UserFacadeImp userFacadeImp;
     LocalDate birthdate = LocalDate.of(1990, 5, 15);
 
@@ -51,8 +51,6 @@ class GetPurchaseHistory {
 //        userFacadeImp.getPurchases().add(purchase2);
     }
 
-
-/*
     @Test
     void testGetPurchaseHistory_ValidInput() {
         String result = userFacadeImp.getPurchaseHistory("testuser", "store1");

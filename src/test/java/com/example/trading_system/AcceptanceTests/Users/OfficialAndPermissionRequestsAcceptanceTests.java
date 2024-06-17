@@ -223,15 +223,14 @@ public class OfficialAndPermissionRequestsAcceptanceTests {
         Assertions.assertTrue(Objects.requireNonNull(response2.getBody()).contains("managerUser " + userNameManager + " true false true false"));
     }
 
-    //TODO Check why this test fails during PR tests run
-//    @Test
-//    public void GivenValidFounder_WhenRequestManagerPermission_ThenSuccess() {
-//        ResponseEntity<String> response = tradingSystemImp.requestManagersPermissions(userName, token, storeName);
-//        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-//        Assertions.assertTrue(Objects.requireNonNull(response.getBody()).contains("managerUser " + userNameManager + " true true true true"));
-//        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.editPermissionForManager(ownerUser, ownerToken, userNameManager, storeName, true, false, true, false).getStatusCode());
-//        ResponseEntity<String> response2 = tradingSystemImp.requestManagersPermissions(userName, token, storeName);
-//        Assertions.assertEquals(HttpStatus.OK, response2.getStatusCode());
-//        Assertions.assertTrue(Objects.requireNonNull(response2.getBody()).contains("managerUser " + userNameManager + " true false true false"));
-//    }
+    @Test
+    public void GivenValidFounder_WhenRequestManagerPermission_ThenSuccess() {
+        ResponseEntity<String> response = tradingSystemImp.requestManagersPermissions(userName, token, storeName);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(Objects.requireNonNull(response.getBody()).contains("managerUser " + userNameManager + " true true true true"));
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.editPermissionForManager(ownerUser, ownerToken, userNameManager, storeName, true, false, true, false).getStatusCode());
+        ResponseEntity<String> response2 = tradingSystemImp.requestManagersPermissions(userName, token, storeName);
+        Assertions.assertEquals(HttpStatus.OK, response2.getStatusCode());
+        Assertions.assertTrue(Objects.requireNonNull(response2.getBody()).contains("managerUser " + userNameManager + " true false true false"));
+    }
 }
