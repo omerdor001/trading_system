@@ -3,6 +3,7 @@ package com.example.trading_system.UnitTests.Market;
 import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.domain.users.User;
 import com.example.trading_system.domain.users.UserFacadeImp;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -32,6 +33,12 @@ public class SearchUnitTests {
 
         // Mock the user to return a valid role for the store
         //marketFacade.getStores().put("store2", new Store("store2","description"));
+    }
+
+    @AfterEach
+    void setDown(){
+        marketFacade.deleteInstance();
+        userFacade.deleteInstance();
     }
 
     @Test
