@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -1307,6 +1308,127 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         storeMemoryRepository.getStore(storeName).setCategoryCondition(selectedConditionIndex, newCategory);
     }
+
+    @Override
+    public String getPurchasePoliciesInfo(String username, String storeName) {
+        return "";
+    }
+
+    @Override
+    public void addPurchasePolicyByAge(String username, String storeName, int ageToCheck, int category) {
+
+    }
+
+    @Override
+    public void addPurchasePolicyByCategory(String username, String storeName, int category) {
+
+    }
+
+    @Override
+    public void addPurchasePolicyByCategoryAndDate(String username, String storeName, int category, LocalDateTime dateTime) {
+
+    }
+
+    @Override
+    public void addPurchasePolicyByDate(String username, String storeName, LocalDateTime dateTime) {
+
+    }
+
+    @Override
+    public void addPurchasePolicyByProduct(String username, String storeName, int productId) {
+
+    }
+
+    @Override
+    public void addPurchasePolicyByProductAndDate(String username, String storeName, int productId, LocalDateTime dateTime) {
+
+    }
+
+    @Override
+    public void addPurchasePolicyByShoppingBagAndDate(String username, String storeName, LocalDateTime dateTime) {
+
+    }
+
+    @Override
+    public void addPurchasePolicyByShoppingCartMaxProducts(String username, String storeName, int sumOfProducts) {
+
+    }
+
+    @Override
+    public void addPurchasePolicyByShoppingCartMaxProductsUnit(String username, String storeName, int productId, int numOfQuantity) {
+
+    }
+
+    @Override
+    public void addPurchasePolicyByShoppingCartMinProducts(String username, String storeName, int weight) {
+
+    }
+
+    @Override
+    public void addPurchasePolicyByShoppingCartMinProductsUnit(String username, String storeName, int productId, int numOfQuantity) {
+
+    }
+
+    @Override
+    public void addAndPolicy(String username, String storeName) {
+
+    }
+
+    @Override
+    public void addOrPolicy(String username, String storeName) {
+
+    }
+
+    @Override
+    public void addConditioningPolicy(String username) {
+
+    }
+
+    @Override
+    public void setProductIdPurchase(String username, String storeName, int selectedIndex, int productId) {
+
+    }
+
+    @Override
+    public void setNumOfQuantityPurchase(String username, String storeName, int selectedIndex, int numOfQuantity) {
+
+    }
+
+    @Override
+    public void setSumOfProductsPurchase(String username, String storeName, int selectedIndex, int sumOfProducts) {
+
+    }
+
+    @Override
+    public void setDateTime(String username, String storeName, int selectedIndex, LocalDateTime dateTime) {
+
+    }
+
+    @Override
+    public void setWeight(String username, String storeName, int selectedIndex, int weight) {
+
+    }
+
+    @Override
+    public void setAge(String username, String storeName, int selectedIndex, int age) {
+
+    }
+
+    @Override
+    public void setFirstPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedFirstIndex) {
+
+    }
+
+    @Override
+    public void setSecondPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) {
+
+    }
+
+    @Override
+    public void removePurchasePolicy(String username, String storeName, int selectedIndex) {
+
+    }
+
     //endregion
 
 }
