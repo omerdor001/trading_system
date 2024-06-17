@@ -11,32 +11,37 @@
       </div>
     </header>
 
-    <!-- Login form container -->
+    <!-- Login and Registration form container -->
     <div class="login-container">
-    <PrimeCard class="login-form">
-      <template #title>
-      <h2>Login</h2>
-       </template>
-    <form @submit.prevent="handleLogin">
-      <!-- Username input -->
-      <div class="form-group">
-        <label for="username">Username</label>
-        <InputText v-model="username" id="username" />
+      <PrimeCard class="login-form">
+        <template #title>
+          <h2>Login</h2>
+        </template>
+        <form @submit.prevent="handleLogin">
+          <!-- Username input -->
+          <div class="form-group">
+            <label for="username">Username</label>
+            <InputText v-model="username" id="username" />
+          </div>
+          <!-- Password input -->
+          <div class="form-group">
+            <label for="password">Password</label>
+            <PasswordText v-model="password" id="password" />
+          </div>
+          <!-- Button group -->
+          <div class="button-group">
+            <PrimeButton label="Login" icon="pi pi-check" type="submit" class="login-button" />
+            <PrimeButton label="Close" icon="pi pi-times" type="button" @click="closeModal" class="close-button" />
+          </div>
+          <!-- Error message -->
+          <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+        </form>
+      </PrimeCard>
+      
+      <!-- Registration button -->
+      <div class="register-link">
+        <PrimeButton label="Don't have an account? Register here."  @click="handleRegister" class="p-button-link" />
       </div>
-      <!-- Password input -->
-      <div class="form-group">
-        <label for="password">Password</label>
-        <PasswordText v-model="password" id="password" />
-      </div>
-      <!-- Button group -->
-      <div class="button-group">
-        <PrimeButton label="Login" icon="pi pi-check" type="submit" class="login-button" />
-        <PrimeButton label="Close" icon="pi pi-times" type="button" @click="closeModal" class="close-button" />
-      </div>
-    </form>
-    <!-- Error message -->
-    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-  </PrimeCard>
     </div>
   </div>
 </template>
@@ -93,50 +98,73 @@ export default defineComponent({
       // Handle viewing cart
     };
 
-    // Simulated authentication function (replace with actual logic)
-    const authenticate = async (username, password) => {
-      let roles = [];
-      switch (username) {
-        case 'admin':
-          if (password === 'admin') {
-            roles.push('storeManager', 'commercialManager', 'storeOwner', 'systemManager');
-          }
-          break;
-        case 'manager':
-          if (password === 'manager') {
-            roles.push('storeManager');
-          }
-          break;
-        case 'system':
-          if (password === 'system') {
-            roles.push('systemManager');
-          }
-          break;
-        case 'commercial':
-          if (password === 'commercial') {
-            roles.push('commercialManager');
-          }
-          break;
-        case 'lana':
-          if (password === 'lana') {
-            roles.push('commercialManager', 'systemManager', 'storeOwner');
-          }
-          break;
-        case 'user':
-          if (password === 'user') {
-            roles = [];
-          }
-          break;
-        default:
-          return false;
-      }
-
-      // Simulate async delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Simulate successful login
-      return true;
+    const handleRegister = () => {
+      // Handle registeration
     };
+
+     // Simulated authentication function (replace with actual logic)
+const authenticate = async (username, password) => {
+  let roles = [];
+  let isAuthenticated = false;
+
+  switch (username) {
+    case 'admin':
+      if (password === 'admin') {
+        roles.push('storeManager', 'commercialManager', 'storeOwner', 'systemManager');
+        isAuthenticated = true;
+      }
+      break;
+    case 'manager':
+      if (password === 'manager') {
+        roles.push('storeManager');
+        isAuthenticated = true;
+      }
+      break;
+    case 'system':
+      if (password === 'system') {
+        roles.push('systemManager');
+        isAuthenticated = true;
+      }
+      break;
+    case 'commercial':
+      if (password === 'commercial') {
+        roles.push('commercialManager');
+        isAuthenticated = true;
+      }
+      break;
+    case 'lana':
+      if (password === 'lana') {
+        roles.push('commercialManager', 'systemManager', 'storeOwner');
+        isAuthenticated = true;
+      }
+      break;
+    case 'user':
+      if (password === 'user') {
+        roles = [];  // No roles for regular user
+        isAuthenticated = true;
+      }
+      break;
+    default:
+      isAuthenticated = false;
+  }
+
+  // Simulate async delay
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  if (isAuthenticated) {
+    // Store authentication details in localStorage
+    localStorage.setItem('roles', JSON.stringify(roles));
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('username', username);
+    return true;
+  } else {
+    // Clear any existing authentication details if login fails
+    localStorage.removeItem('roles');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username');
+    return false;
+  }
+};
 
     return {
       username,
@@ -145,7 +173,8 @@ export default defineComponent({
       handleLogin,
       closeModal,
       notifications,
-      viewCart
+      viewCart,
+      handleRegister
     };
   }
 });
@@ -176,6 +205,7 @@ export default defineComponent({
 
 .login-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 80vh;
@@ -256,5 +286,19 @@ export default defineComponent({
   margin-top: 10px;
   font-size: 14px;
 }
-</style>
 
+.register-link {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.p-button-link {
+  background: none;
+  border: none;
+  color: #000000;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+}
+</style>

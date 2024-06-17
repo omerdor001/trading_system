@@ -8,11 +8,13 @@ import 'primeicons/primeicons.css';
 import PrimeVueButton from 'primevue/button'; 
 import InputText from 'primevue/inputtext';
 import PasswordText from 'primevue/password';
+import PrimeCalendar from 'primevue/calendar';
 
 const app = createApp(App);
 app.use(PrimeVue);
 app.component('PrimeButton', PrimeVueButton);
 app.component('InputText', InputText);
 app.component('PasswordText', PasswordText);
+app.component('PrimeCalendar', PrimeCalendar);
 app.use(router);
 app.mount('#app');

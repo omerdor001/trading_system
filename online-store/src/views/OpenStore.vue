@@ -55,7 +55,7 @@ export default defineComponent({
     const router = useRouter();
     const name = ref('');
     const description = ref('');
-    const username = ref('');  //TODO fix
+    const username = ref(localStorage.getItem('username') || '');
 
     const handleCreateStore = async () => {
       try {
@@ -167,27 +167,5 @@ footer {
   color: white;
   padding: 20px;
   text-align: center;
-}
-
-.external-links h3 {
-  margin-bottom: 10px;
-}
-
-.external-links ul {
-  list-style: none;
-  padding: 0;
-}
-
-.external-links li {
-  margin-bottom: 5px;
-}
-
-.external-links a {
-  color: white;
-  text-decoration: none;
-}
-
-.external-links a:hover {
-  text-decoration: underline;
 }
 </style>
