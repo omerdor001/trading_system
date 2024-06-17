@@ -19,12 +19,13 @@ public class PaymentAcceptanceTests {
     private TradingSystem tradingSystem;
     private String username;
     private String token;
-    private String storeName = "Store1";
+    private final String storeName = "Store1";
+    private final String address = "1234 Main Street, Springfield, IL, 62704-1234";
 
     @BeforeEach
     void setUp() {
         tradingSystem = TradingSystemImp.getInstance();
-        tradingSystem.register("owner1", "password123",LocalDate.now());
+        tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem();
         String userToken = tradingSystem.enter().getBody();
         try {
@@ -43,174 +44,68 @@ public class PaymentAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystem.openStore(username,token, storeName, "");
-        tradingSystem.addProduct(username,token, 0, storeName,"product1", "", 1, 5, 1, 1, new LinkedList<>());
+        tradingSystem.setAddress(username, token, address);
+        tradingSystem.openStore(username, token, storeName, "");
+        tradingSystem.addProduct(username, token, 0, storeName, "product1", "", 1, 5, 1, 1, new LinkedList<>());
     }
 
     @AfterEach
-    void setDown(){
+    void setDown() {
         tradingSystem.deleteInstance();
     }
 
     @Test
-    void testVisitorCheckAvailabilityAndConditions_Success() {
-//        tradingSystem.addToCart(username, token,0, storeName,1);
-//        ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
-//        assertEquals(HttpStatus.OK, result.getStatusCode());
+    void testRegistered_Success() {
+        tradingSystem.addToCart(username, token, 0, storeName, 1);
+        ResponseEntity<String> result = tradingSystem.approvePurchase(username, token);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals("Purchase approved", result.getBody());
     }
 
     @Test
-    void testVisitorCheckAvailabilityAndConditions_ProductNotAvailable() {
-//        int visitorId = 1;
-//        Visitor visitor = new Visitor(visitorId);
-//        Cart cart = new Cart();
-//        ShoppingBag shoppingBag = new ShoppingBag("store1");
-//        shoppingBag.addProduct(1, 2);
-//        cart.addShoppingBag("store1", shoppingBag);
-//        visitor.setShopping_cart(cart);
-//        userFacade.getVisitors().put(visitorId, visitor);
-//
-//        Store store = new Store("store1", "owner1");
-//        Product product = new Product(1, "product1", 100, 1);  // Less quantity
-//        store.addProduct(product);
-//        marketFacade.getStores().put("store1", store);
-//
-//        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-//            paymentFacade.VisitorCheckAvailabilityAndConditions(visitorId);
-//        });
-//        assertEquals("Product doesn't exist or not enough quantity", thrown.getMessage());
+    void testVisitor_Success() {
+        String userToken = tradingSystem.enter().getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            username = rootNode.get("username").asText();
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract username and token from JSON response");
+        }
+        tradingSystem.setAddress(username, token, address);
+        tradingSystem.addToCart(username, token, 0, storeName, 1);
+        ResponseEntity<String> result = tradingSystem.approvePurchase(username, token);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals("Purchase approved", result.getBody());
     }
 
     @Test
-    void testRegisteredCheckAvailabilityAndConditions_Success() {
-//        String registeredId = "user1";
-//        Registered registered = new Registered(1, registeredId, "encryptedPass", LocalDate.of(1990, 1, 1));
-//        Cart cart = new Cart();
-//        ShoppingBag shoppingBag = new ShoppingBag("store1");
-//        shoppingBag.addProduct(1, 2);
-//        cart.addShoppingBag("store1", shoppingBag);
-//        registered.setShopping_cart(cart);
-//        userFacade.getRegistered().put(registeredId, registered);
-//
-//        Store store = new Store("store1", "owner1");
-//        Product product = new Product(1, "product1", 100, 5);
-//        store.addProduct(product);
-//        marketFacade.getStores().put("store1", store);
-//
-//        assertTrue(paymentFacade.registeredCheckAvailabilityAndConditions(registeredId));
+    void testVisitor_ProductNotAvailable() {
+        String visitorToken = "";
+        String visitorUsername = "";
+        String userToken = tradingSystem.enter().getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            visitorUsername = rootNode.get("username").asText();
+            visitorToken = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract username and token from JSON response");
+        }
+        tradingSystem.addToCart(visitorUsername, visitorToken, 0, storeName, 2);
+        tradingSystem.setProductQuantity(username, token, storeName, 0, 1);
+        ResponseEntity<String> result = tradingSystem.approvePurchase(visitorUsername, visitorToken);
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals("Product quantity is too low", result.getBody());
     }
 
     @Test
-    void testRegisteredCheckAvailabilityAndConditions_ProductNotAvailable() {
-//        String registeredId = "user1";
-//        Registered registered = new Registered(1, registeredId, "encryptedPass", LocalDate.of(1990, 1, 1));
-//        Cart cart = new Cart();
-//        ShoppingBag shoppingBag = new ShoppingBag("store1");
-//        shoppingBag.addProduct(1, 2);
-//        cart.addShoppingBag("store1", shoppingBag);
-//        registered.setShopping_cart(cart);
-//        userFacade.getRegistered().put(registeredId, registered);
-//
-//        Store store = new Store("store1", "owner1");
-//        Product product = new Product(1, "product1", 100, 1);  // Less quantity
-//        store.addProduct(product);
-//        marketFacade.getStores().put("store1", store);
-//
-//        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-//            paymentFacade.registeredCheckAvailabilityAndConditions(registeredId);
-//        });
-//        assertEquals("Product doesn't exist or not enough quantity", thrown.getMessage());
-    }
-
-    @Test
-    void testVisitorApprovePurchase_Success() {
-//        int visitorId = 1;
-//        Visitor visitor = new Visitor(visitorId);
-//        Cart cart = new Cart();
-//        ShoppingBag shoppingBag = new ShoppingBag("store1");
-//        shoppingBag.addProduct(1, 2);
-//        cart.addShoppingBag("store1", shoppingBag);
-//        visitor.setShopping_cart(cart);
-//        userFacade.getVisitors().put(visitorId, visitor);
-//
-//        Store store = new Store("store1", "owner1");
-//        Product product = new Product(1, "product1", 100, 5);
-//        store.addProduct(product);
-//        marketFacade.getStores().put("store1", store);
-//
-//        when(paymentServiceProxy.processPayment(anyDouble())).thenReturn(true);
-//
-//        // Simulate method to inject the mocked PaymentServiceProxy
-//        paymentFacade.VisitorApprovePurchase(visitorId, "mockPaymentService");
-//
-//        assertEquals(3, store.getProducts().get(1).getProduct_quantity());
-    }
-
-    @Test
-    void testRegisteredApprovePurchase_Success() {
-//        String registeredId = "user1";
-//        Registered registered = new Registered(1, registeredId, "encryptedPass", LocalDate.of(1990, 1, 1));
-//        Cart cart = new Cart();
-//        ShoppingBag shoppingBag = new ShoppingBag("store1");
-//        shoppingBag.addProduct(1, 2);
-//        cart.addShoppingBag("store1", shoppingBag);
-//        registered.setShopping_cart(cart);
-//        userFacade.getRegistered().put(registeredId, registered);
-//
-//        Store store = new Store("store1", "owner1");
-//        Product product = new Product(1, "product1", 100, 5);
-//        store.addProduct(product);
-//        marketFacade.getStores().put("store1", store);
-//
-//        when(paymentServiceProxy.processPayment(anyDouble())).thenReturn(true);
-//
-//        // Simulate method to inject the mocked PaymentServiceProxy
-//        paymentFacade.RegisteredApprovePurchase(registeredId, "mockPaymentService");
-//
-//        assertEquals(3, store.getProducts().get(1).getProduct_quantity());
-    }
-
-    @Test
-    void testVisitorApprovePurchase_FailedDueToAvailability() {
-//        int visitorId = 1;
-//        Visitor visitor = new Visitor(visitorId);
-//        Cart cart = new Cart();
-//        ShoppingBag shoppingBag = new ShoppingBag("store1");
-//        shoppingBag.addProduct(1, 2);
-//        cart.addShoppingBag("store1", shoppingBag);
-//        visitor.setShopping_cart(cart);
-//        userFacade.getVisitors().put(visitorId, visitor);
-//
-//        Store store = new Store("store1", "owner1");
-//        Product product = new Product(1, "product1", 100, 1);  // Less quantity
-//        store.addProduct(product);
-//        marketFacade.getStores().put("store1", store);
-//
-//        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-//            paymentFacade.VisitorApprovePurchase(visitorId, "mockPaymentService");
-//        });
-//        assertEquals("Products are not available or do not meet purchase conditions.", thrown.getMessage());
-    }
-
-    @Test
-    void testRegisteredApprovePurchase_FailedDueToAvailability() {
-//        String registeredId = "user1";
-//        Registered registered = new Registered(1, registeredId, "encryptedPass", LocalDate.of(1990, 1, 1));
-//        Cart cart = new Cart();
-//        ShoppingBag shoppingBag = new ShoppingBag("store1");
-//        shoppingBag.addProduct(1, 2);
-//        cart.addShoppingBag("store1", shoppingBag);
-//        registered.setShopping_cart(cart);
-//        userFacade.getRegistered().put(registeredId, registered);
-//
-//        Store store = new Store("store1", "owner1");
-//        Product product = new Product(1, "product1", 100, 1);  // Less quantity
-//        store.addProduct(product);
-//        marketFacade.getStores().put("store1", store);
-//
-//        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-//            paymentFacade.RegisteredApprovePurchase(registeredId, "mockPaymentService");
-//        });
-//        assertEquals("Products are not available or do not meet purchase conditions.", thrown.getMessage());
+    void testRegistered_ProductNotAvailable() {
+        tradingSystem.addToCart(username, token, 0, storeName, 2);
+        tradingSystem.setProductQuantity(username, token, storeName, 0, 1);
+        ResponseEntity<String> result = tradingSystem.approvePurchase(username, token);
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals("Product quantity is too low", result.getBody());
     }
 }
