@@ -3,6 +3,7 @@
     <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
     <div class="main-content">
       <div class="sidebar">
+        <PrimeButton label="Register" @click="goToRegister" />
         <PrimeButton label="Enter to Stores" @click="enterStores" />
         <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" />
         <PrimeButton label="Search Product" @click="searchProduct" />
@@ -69,6 +70,10 @@ export default defineComponent({
     const isCommercialManager = ref(roles.includes('commercialManager'));
 
     const username = ref(localStorage.getItem('username') || '');
+
+    const goToRegister = () => {
+      router.push('/register');
+    };
 
     const enterStores = () => {
       console.log('Entering Stores');
@@ -170,6 +175,7 @@ export default defineComponent({
       isSystemManager,
       isCommercialManager,
       username,
+      goToRegister,
       enterStores,
       openStore,
       searchProduct,
@@ -196,44 +202,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style scoped>
-.main-content {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-}
-.sidebar, .sidebar2 {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 1;
-}
-.content {
-  flex: 2;
-  padding: 0 20px;
-}
-footer {
-  background-color: #425965;
-  color: white;
-  padding: 20px;
-  text-align: center;
-}
-.external-links h3 {
-  margin-bottom: 10px;
-}
-.external-links ul {
-  list-style: none;
-  padding: 0;
-}
-.external-links li {
-  margin-bottom: 5px;
-}
-.external-links a {
-  color: white;
-  text-decoration: none;
-}
-.external-links a:hover {
-  text-decoration: underline;
-}
-</style>
