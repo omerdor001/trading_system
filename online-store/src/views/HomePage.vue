@@ -7,7 +7,7 @@
         <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" />
         <PrimeButton label="Search Product" @click="searchProduct" />
         <PrimeButton v-if="isStoreOwner" label="Approve Appointment" @click="approveAppointment" />
-        <PrimeButton label="My Stores" @click="myStoresIOwn" />
+        <PrimeButton v-if="isStoreOwner" label="My Stores" @click="myStoresIOwn" />
         <PrimeButton v-if="isStoreOwner" label="Manage Products" @click="manageProductsAsOwner" />
         <PrimeButton v-if="isStoreOwner" label="Appoint Owner" @click="appointOwner" />
         <PrimeButton v-if="isStoreOwner" label="Appoint Manager" @click="appointManager" />
@@ -61,8 +61,8 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
-    const roles = JSON.parse(localStorage.getItem('roles') || '[]');
-
+    //const roles = JSON.parse(localStorage.getItem('roles') || '[]');
+    const roles = ['storeManager'];
     const isStoreOwner = ref(roles.includes('storeOwner'));
     const isStoreManager = ref(roles.includes('storeManager'));
     const isSystemManager = ref(roles.includes('systemManager'));
@@ -120,7 +120,7 @@ export default defineComponent({
     };
 
     const myStoresIManage = () => {
-      console.log('My Stores I Manage');
+      router.push('/stores-i-manage');
     };
 
     const manageProductsAsManager = () => {
