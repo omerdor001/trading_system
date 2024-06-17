@@ -225,6 +225,7 @@ public class OfficialAndPermissionRequestsAcceptanceTests {
 
     @Test
     public void GivenValidFounder_WhenRequestManagerPermission_ThenSuccess() {
+        tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
         ResponseEntity<String> response = tradingSystemImp.requestManagersPermissions(userName, token, storeName);
         //Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals("", response.getBody());
