@@ -24,9 +24,9 @@
         <PrimeButton v-if="isStoreManager" label="Manage Products" @click="manageProductsAsManager" />
         <PrimeButton v-if="isStoreManager" label="Add Policy" @click="addPolicy" />
         <PrimeButton v-if="isStoreManager" label="Edit Policy" @click="editPolicy" />
-        <PrimeButton v-if="isSystemManager" label="Suspension" @click="suspension" />
         <PrimeButton v-if="isSystemManager" label="Create Suspension" @click="createSuspension" />
         <PrimeButton v-if="isSystemManager" label="End Suspension" @click="endSuspension" />
+        <PrimeButton v-if="isSystemManager" label="Watch Suspensions" @click="watchSuspensions" />
         <PrimeButton v-if="isSystemManager" label="Purchases History" @click="purchasesHistoryAsSystemManager" />
         <PrimeButton v-if="isCommercialManager" label="All Purchases" @click="allPurchases" />
       </div>
@@ -75,7 +75,6 @@ export default defineComponent({
     };
 
     const openStore = () => {
-      console.log('Opening Store');
       router.push('/open-store');
     };
 
@@ -135,16 +134,28 @@ export default defineComponent({
       console.log('Editing Policy');
     };
 
-    const suspension = () => {
-      console.log('Suspension');
-    };
-
     const createSuspension = () => {
-      console.log('Creating Suspension');
+      if (isSystemManager.value) {
+        router.push('/create-suspension');
+      } else{
+        console.error("Unauthorize");
+      }
     };
 
     const endSuspension = () => {
-      console.log('Ending Suspension');
+      if (isSystemManager.value) {
+        router.push('/end-suspension');
+      } else{
+        console.error("Unauthorize");
+      }
+    };
+
+    const watchSuspensions = () => {
+      if (isSystemManager.value) {
+        router.push('/watch-suspensions');
+      } else{
+        console.error("Unauthorize");
+      }
     };
 
     const purchasesHistoryAsSystemManager = () => {
@@ -186,9 +197,9 @@ export default defineComponent({
       manageProductsAsManager,
       addPolicy,
       editPolicy,
-      suspension,
       createSuspension,
       endSuspension,
+      watchSuspensions,
       purchasesHistoryAsSystemManager,
       allPurchases,
       logout
