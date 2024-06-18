@@ -11,7 +11,7 @@
       </div>
     </header>
 
-    <!-- Login and Registration form container -->
+    <!-- Login form container -->
     <div class="login-container">
       <PrimeCard class="login-form">
         <template #title>
@@ -32,16 +32,12 @@
           <div class="button-group">
             <PrimeButton label="Login" icon="pi pi-check" type="submit" class="login-button" />
             <PrimeButton label="Close" icon="pi pi-times" type="button" @click="closeModal" class="close-button" />
+            <PrimeButton label="Register" icon="pi pi-user-plus" type="button" @click="goToRegister" class="register-button" />
           </div>
-          <!-- Error message -->
-          <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
         </form>
+        <!-- Error message -->
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       </PrimeCard>
-      
-      <!-- Registration button -->
-      <div class="register-link">
-        <PrimeButton label="Don't have an account? Register here."  @click="handleRegister" class="p-button-link" />
-      </div>
     </div>
   </div>
 </template>
@@ -68,17 +64,72 @@ export default defineComponent({
     const password = ref('');
     const errorMessage = ref('');
 
+    const authenticate = async (username, password) => {
+      let roles = [];
+      let isAuthenticated = false;
+
+      switch (username) {
+        case 'admin':
+          if (password === 'admin') {
+            roles = ['storeManager', 'commercialManager', 'storeOwner', 'systemManager'];
+            isAuthenticated = true;
+          }
+          break;
+        case 'manager':
+          if (password === 'manager') {
+            roles = ['storeManager'];
+            isAuthenticated = true;
+          }
+          break;
+        case 'system':
+          if (password === 'system') {
+            roles = ['systemManager'];
+            isAuthenticated = true;
+          }
+          break;
+        case 'commercial':
+          if (password === 'commercial') {
+            roles = ['commercialManager'];
+            isAuthenticated = true;
+          }
+          break;
+        case 'lana':
+          if (password === 'lana') {
+            roles = ['commercialManager', 'systemManager', 'storeOwner'];
+            isAuthenticated = true;
+          }
+          break;
+        case 'user':
+          if (password === 'user') {
+            roles = [];  // No roles for regular user
+            isAuthenticated = true;
+          }
+          break;
+        default:
+          isAuthenticated = false;
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      if (isAuthenticated) {
+        localStorage.setItem('roles', JSON.stringify(roles));
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('username', username);
+        return true;
+      } else {
+        localStorage.removeItem('roles');
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('username');
+        return false;
+      }
+    };
+
     const handleLogin = async () => {
       try {
-        // Perform authentication logic here
         const loggedIn = await authenticate(username.value, password.value);
         if (loggedIn) {
-          // Successful login
-          router.push('/'); // Redirect to home page
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('username', username.value);
+          router.push('/');
         } else {
-          // Authentication failed
           errorMessage.value = 'Invalid username or password';
         }
       } catch (error) {
@@ -90,6 +141,10 @@ export default defineComponent({
       router.push('/');
     };
 
+    const goToRegister = () => {
+      router.push('/register');
+    };
+
     const notifications = () => {
       // Handle notifications
     };
@@ -98,83 +153,15 @@ export default defineComponent({
       // Handle viewing cart
     };
 
-    const handleRegister = () => {
-      // Handle registeration
-    };
-
-     // Simulated authentication function (replace with actual logic)
-const authenticate = async (username, password) => {
-  let roles = [];
-  let isAuthenticated = false;
-
-  switch (username) {
-    case 'admin':
-      if (password === 'admin') {
-        roles.push('storeManager', 'commercialManager', 'storeOwner', 'systemManager');
-        isAuthenticated = true;
-      }
-      break;
-    case 'manager':
-      if (password === 'manager') {
-        roles.push('storeManager');
-        isAuthenticated = true;
-      }
-      break;
-    case 'system':
-      if (password === 'system') {
-        roles.push('systemManager');
-        isAuthenticated = true;
-      }
-      break;
-    case 'commercial':
-      if (password === 'commercial') {
-        roles.push('commercialManager');
-        isAuthenticated = true;
-      }
-      break;
-    case 'lana':
-      if (password === 'lana') {
-        roles.push('commercialManager', 'systemManager', 'storeOwner');
-        isAuthenticated = true;
-      }
-      break;
-    case 'user':
-      if (password === 'user') {
-        roles = [];  // No roles for regular user
-        isAuthenticated = true;
-      }
-      break;
-    default:
-      isAuthenticated = false;
-  }
-
-  // Simulate async delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-
-  if (isAuthenticated) {
-    // Store authentication details in localStorage
-    localStorage.setItem('roles', JSON.stringify(roles));
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('username', username);
-    return true;
-  } else {
-    // Clear any existing authentication details if login fails
-    localStorage.removeItem('roles');
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('username');
-    return false;
-  }
-};
-
     return {
       username,
       password,
       errorMessage,
       handleLogin,
       closeModal,
+      goToRegister,
       notifications,
-      viewCart,
-      handleRegister
+      viewCart
     };
   }
 });
@@ -205,7 +192,6 @@ const authenticate = async (username, password) => {
 
 .login-container {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 80vh;
@@ -281,24 +267,13 @@ const authenticate = async (username, password) => {
   width: 100%;
 }
 
+.register-button .p-button {
+  width: 100%;
+}
+
 .error {
   color: red;
   margin-top: 10px;
   font-size: 14px;
-}
-
-.register-link {
-  margin-top: 10px;
-  text-align: center;
-}
-
-.p-button-link {
-  background: none;
-  border: none;
-  color: #000000;
-  text-decoration: underline;
-  cursor: pointer;
-  font-size: 14px;
-  padding: 0;
 }
 </style>
