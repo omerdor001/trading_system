@@ -62,13 +62,13 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void suspendUser(String admin, String toSuspend, LocalDateTime endSuspention) {
-        userFacade.suspendUser(admin,toSuspend,endSuspention);
+    public void suspendUser(String admin, String toSuspend, LocalDateTime endSuspension) {
+        userFacade.suspendUser(admin, toSuspend, endSuspension);
     }
 
     @Override
     public void endSuspendUser(String admin, String toSuspend) {
-        userFacade.endSuspendUser(admin,toSuspend);
+        userFacade.endSuspendUser(admin, toSuspend);
     }
 
     @Override
@@ -76,6 +76,9 @@ public class UserServiceImp implements UserService {
         return userFacade.watchSuspensions(admin);
     }
 
+    public void setAddress(String username, String address) {
+        userFacade.setAddress(username, address);
+    }
 
     @Override
     public boolean register(String username, String password, LocalDate birthdate) throws Exception {
@@ -162,7 +165,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void fireManager(String owner, String storeName, String manager) throws IllegalAccessException{
+    public void fireManager(String owner, String storeName, String manager) throws IllegalAccessException {
         userFacade.fireManager(owner, storeName, manager);
     }
 

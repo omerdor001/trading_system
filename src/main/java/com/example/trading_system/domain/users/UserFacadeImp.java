@@ -140,6 +140,15 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
+    public void setAddress(String username, String address){
+        if (!userMemoryRepository.isExist(username)) {
+            throw new IllegalArgumentException("User doesn't exist in the system");
+        }
+        User user = userMemoryRepository.getUser(username);
+        user.setAddress(address);
+    }
+
+    @Override
     public String watchSuspensions(String admin) {
         StringBuilder details = new StringBuilder();
         if (!userMemoryRepository.isExist(admin)) {
@@ -889,6 +898,10 @@ public class UserFacadeImp implements UserFacade {
             logger.error("User is not commercial manager");
             throw new RuntimeException("User is not commercial manager");
         }
+        if(!marketFacade.isStoreExist(storeName)){
+            logger.error("Store {} does not exist", storeName);
+            throw new RuntimeException("Store does not exist");
+        }
         return marketFacade.getStore(storeName).getPurchaseHistoryString(username);
     }
 
@@ -957,7 +970,7 @@ public class UserFacadeImp implements UserFacade {
         }, 10 * 60 * 1000);
         double totalPrice = marketFacade.calculateTotalPrice(getUser(username).getCart().toJson());
         int deliveryId = 0;  //For cancelling
-        String address =user.getAddress() ;
+        String address =user.getAddress();
         try {
             deliveryId = deliveryService.makeDelivery(address);
         } catch (Exception e) {
@@ -973,7 +986,6 @@ public class UserFacadeImp implements UserFacade {
             releaseReservedProducts(username);
             throw new Exception("Error in Payment");
         }
-
         for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
             Store store = marketFacade.getStore(shoppingBagInStore.getValue().getStoreId());
             Purchase purchase = new Purchase(username,shoppingBagInStore.getValue().getProducts_list().values().stream().toList(),shoppingBagInStore.getValue().calculateTotalPrice(),shoppingBagInStore.getValue().getStoreId());

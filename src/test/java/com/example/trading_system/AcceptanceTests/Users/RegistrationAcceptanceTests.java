@@ -2,6 +2,7 @@ package com.example.trading_system.AcceptanceTests.Users;
 
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,11 @@ public class RegistrationAcceptanceTests {
     @BeforeEach
     void setUp() {
         tradingSystem = TradingSystemImp.getInstance();
+    }
+
+    @AfterEach
+    void setDown(){
+        tradingSystem.deleteInstance();
     }
 
     @Test

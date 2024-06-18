@@ -28,15 +28,7 @@ class LoginUnitTests {
 
     @AfterEach
     void tearDown() {
-        if (userFacade.getUser("rtestvisitor").getLogged()) {
-            userFacade.logout(0, "rtestvisitor");
-        }
-        try {
-            userFacade.exit("v0");
-        } catch (Exception e) {
-
-        }
-
+        userFacade.deleteInstance();
     }
 
     @Test

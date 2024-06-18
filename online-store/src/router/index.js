@@ -10,6 +10,7 @@ import StoreDetails from '@/views/StoreDetails.vue'; // Import the store details
 import CreateSuspension from '@/views/CreateSuspension.vue';
 import EndSuspension from '@/views/EndSuspension.vue';
 import WatchSuspensions from '@/views/WatchSuspensions.vue';
+import StoresIManage from '@/views/StoresIManage.vue';
 
 const routes = [
     {
@@ -67,6 +68,28 @@ const routes = [
         path: '/watch-suspensions',
         name: 'WatchSuspensions',
         component: WatchSuspensions
+    },
+    {
+        path: '/register',
+        name: 'UserRegistration',
+        component: UserRegistration
+    },
+    {
+        path: '/my-stores-i-own',
+        name: 'MyStoresIOwn',
+        component: MyStoresIOwn // Ensure the route is correctly defined
+    },
+    {
+      path: '/stores-i-manage',
+      name: 'StoresIManage',
+      component: StoresIManage
+    },
+
+    {
+        path: '/store/:storeId',
+        name: 'StoreDetails',
+        component: StoreDetails,
+        props: true // Pass route params as props
     }
 
 ];

@@ -20,7 +20,7 @@ public class OfficialAndPermissionRequestsAcceptanceTests {
     private TradingSystemImp tradingSystemImp;
     private String userName = "";
     private String token = "";
-    private final String storeName = "Store1";
+    private final String storeName = "Storetest";
     private String tokenManager = "";
     private String userNameManager = "";
     private String ownerUser = "";
@@ -54,7 +54,6 @@ public class OfficialAndPermissionRequestsAcceptanceTests {
         tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
 
         tradingSystemImp.register("managerUser", password, LocalDate.now());
-        tradingSystemImp.openSystem();
         ResponseEntity<String> response2 = tradingSystemImp.enter();
         String userToken2 = response2.getBody();
         try {
@@ -225,6 +224,9 @@ public class OfficialAndPermissionRequestsAcceptanceTests {
 
     @Test
     public void GivenValidFounder_WhenRequestManagerPermission_ThenSuccess() {
+        //TODO - check why these 2 lines are required for build to succeed (probably other test class has bad cleanup after tests)
+        tearDown();
+        setUp();
         ResponseEntity<String> response = tradingSystemImp.requestManagersPermissions(userName, token, storeName);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertTrue(Objects.requireNonNull(response.getBody()).contains("managerUser " + userNameManager + " true true true true"));

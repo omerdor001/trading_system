@@ -26,6 +26,8 @@ public interface UserService {
 
     void endSuspendUser(String admin, String toSuspend);
 
+    void setAddress(String username, String address);
+
     String watchSuspensions(String admin);
 
     void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
