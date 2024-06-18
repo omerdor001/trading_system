@@ -1,6 +1,5 @@
 package com.example.trading_system.service;
 
-import com.example.trading_system.domain.users.Notification;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -170,23 +169,18 @@ public class UserServiceImp implements UserService {
     @Override
     public void fireManager(String owner, String storeName, String manager) throws IllegalAccessException {
         userFacade.fireManager(owner, storeName, manager);
-        String notificationJson = Notification.createNotificationJson(manager, owner, "Fired you from being a manager in store: " + storeName);
-        notificationService.sendNotification(owner, notificationJson);
     }
 
     @Override
     public void fireOwner(String ownerAppoint, String storeName, String owner) throws IllegalAccessException {
         userFacade.fireOwner(ownerAppoint, storeName, owner);
-        String notificationJson = Notification.createNotificationJson(ownerAppoint, owner, "Fired you from being an owner in store: " + storeName);
-        notificationService.sendNotification(owner, notificationJson);
     }
+
 
     @Override
     public void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
         logger.info("Trying to appoint manager : {} to store : {}", newManager, store_name_id);
         userFacade.appointManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
-        String notificationJson = Notification.createNotificationJson(appoint, newManager,  newManager + "appointed you as a manager in store: " + store_name_id);
-        notificationService.sendNotification(newManager, notificationJson);
         logger.info("Finished appointing manager : {} to store : {}", newManager, store_name_id);
     }
 

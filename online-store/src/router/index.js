@@ -10,7 +10,7 @@ import CreateSuspension from '@/views/CreateSuspension.vue';
 import EndSuspension from '@/views/EndSuspension.vue';
 import WatchSuspensions from '@/views/WatchSuspensions.vue';
 import StoreNameInput from '@/views/StoreNameInput.vue';
-import ProductList from '@/views/ProductList.vue';
+import ProductList from '@/views/ProductListEditor.vue';
 import ProductManagement from '@/views/ProductManagement.vue';
 import StoresIManage from '@/views/StoresIManage.vue';
 import StoreDetailsEditor from "@/views/StoreDetailsEditor.vue";
@@ -18,7 +18,11 @@ import StoreDetails from '@/views/StoreDetails.vue';
 import ProductDetails from '@/views/ProductDetails.vue';
 import ShoppingCart from '@/views/ShoppingCart.vue';
 import Checkout from '@/views/Checkout.vue';
-
+import PurchaseHistory from '@/views/PurchaseHistory.vue';
+import SearchPage from '@/views/SearchPage.vue';
+import SearchResults from '@/views/SearchResults.vue';
+import StoreSearchPage from '@/views/StoreSearchPage.vue';
+import StoreSearchResults from '@/views/StoreSearchResults.vue';
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },
@@ -37,26 +41,20 @@ const routes = [
     { path: '/product/:productId', name: 'ProductDetails', component: ProductDetails, props: true },
     { path: '/cart', name: 'ShoppingCart', component: ShoppingCart },
     { path: '/checkout', name: 'Checkout', component: Checkout },
-    {path: '/store-name-input', name: 'StoreNameInput', component: StoreNameInput},
-    {path: '/product-list/:storeName', name: 'ProductList', component: ProductList, props: true},
-    {path: '/product-management/:storeName/:productId', name: 'ProductManagement', component: ProductManagement, props: true},
-];
+    { path: '/store-name-input', name: 'StoreNameInput', component: StoreNameInput },
+    { path: '/product-list/:storeName', name: 'ProductList', component: ProductList, props: true },
+    { path: '/product-management/:storeName/:productId', name: 'ProductManagement', component: ProductManagement, props: true },
+    { path: '/purchase-history', name: 'PurchaseHistory', component: PurchaseHistory },
+    { path: '/search', name: 'SearchPage', component: SearchPage },
+    { path: '/search-results', name: 'SearchResults', component: SearchResults },
+    { path: '/search-store', name: 'StoreSearchPage', component: StoreSearchPage },
+    { path: '/store-search-results', name: 'StoreSearchResults', component: StoreSearchResults },
 
+];
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
-    routes
-});
-
-router.beforeEach((to, from, next) => {
-    const loggedIn = localStorage.getItem('isLoggedIn');
-    if (to.name !== 'LoginModel' && to.name !== 'UserRegistration' && !loggedIn) {
-        next({ name: 'LoginModel' });
-    } else if ((to.name === 'LoginModel' || to.name === 'UserRegistration') && loggedIn) {
-        next({ name: 'HomePage' });
-    } else {
-        next();
-    }
+    routes,
 });
 
 export default router;

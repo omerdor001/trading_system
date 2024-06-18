@@ -5,12 +5,12 @@ import java.util.List;
 public class Manager extends RoleState {
     private boolean watch;
     private boolean editSupply;
-    private boolean editBuyPolicy;
+    private boolean editPurchasePolicy;
     private boolean editDiscountPolicy;
 
     public Manager() {
         this.watch = false;
-        this.editBuyPolicy = false;
+        this.editPurchasePolicy = false;
         this.editDiscountPolicy = false;
         this.editSupply = false;
     }
@@ -35,13 +35,13 @@ public class Manager extends RoleState {
         this.editSupply = editSupply;
     }
 
-    public boolean isEditBuyPolicy() {
-        return editBuyPolicy;
+    public boolean isEditPurchasePolicy() {
+        return editPurchasePolicy;
     }
 
     @Override
-    public void setEditBuyPolicy(boolean editBuyPolicy) {
-        this.editBuyPolicy = editBuyPolicy;
+    public void setEditPurchasePolicy(boolean editPurchasePolicy) {
+        this.editPurchasePolicy = editPurchasePolicy;
     }
 
     public boolean isEditDiscountPolicy() {

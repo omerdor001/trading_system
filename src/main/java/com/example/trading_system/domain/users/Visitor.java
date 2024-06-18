@@ -40,6 +40,11 @@ public class Visitor extends User {
     }
 
     @Override
+    public int getAge() {
+        return 0;
+    }
+
+    @Override
     public void login() {
         throw new RuntimeException("Only registered users can login");
     }

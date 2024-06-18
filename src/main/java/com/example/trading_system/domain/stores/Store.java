@@ -1,11 +1,13 @@
 package com.example.trading_system.domain.stores;
 
 import com.example.trading_system.domain.stores.discountPolicies.*;
+import com.example.trading_system.domain.stores.purchasePolicies.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,7 @@ public class Store {
     private Double storeRating;
     private LinkedList<DiscountPolicy> discountPolicies;
     private LinkedList<Condition> discountConditions;
+    private LinkedList<PurchasePolicy> purchasePolicies;
 
     public Store(String nameId, String description, String founder, Double storeRating) {
         this.nameId = nameId;
@@ -44,6 +47,7 @@ public class Store {
         this.storeRating = storeRating;
         this.discountPolicies = new LinkedList<>();
         this.discountConditions = new LinkedList<>();
+        this.purchasePolicies = new LinkedList<>();
         this.isOpen = true;
     }
 
@@ -271,6 +275,15 @@ public class Store {
         return price;
     }
 
+    public boolean validatePurchasePolicies(Collection<ProductInSaleDTO> items,int age) {
+        for (PurchasePolicy policy :purchasePolicies) {
+            if (!policy.isPurchasePolicySatisfied(items, age)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     //region Discount creation
     public String getDiscountPoliciesInfo() {
         StringBuilder jsonBuilder = new StringBuilder();
@@ -475,5 +488,138 @@ public class Store {
     public String getPurchaseHistoryString(String username) {
         return salesHistory.getPurchaseHistory(username);
     }
+    //endregion
+
+    //region Discount creation
+    public String getPurchasePoliciesInfo() {
+        StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.append("[ ");
+
+        boolean firstElement = true;
+        for (PurchasePolicy policy : purchasePolicies) {
+            if (!firstElement) {
+                jsonBuilder.append(", ");
+            }
+            jsonBuilder.append(policy.getPurchasePolicyInfo());
+            firstElement = false;
+        }
+
+        jsonBuilder.append(" ]");
+        return jsonBuilder.toString();
+    }
+
+    public void addPurchasePolicyByAge(int ageToCheck, int category) {
+       if(ageToCheck<=0 )
+           throw new IllegalArgumentException("Parameter "+ageToCheck+" cannot be negative or zero");
+        if(category<=0)
+            throw new IllegalArgumentException("Parameter "+category+" cannot be negative or zero");
+        purchasePolicies.add(new PurchasePolicyByAge(ageToCheck,category));
+    }
+
+    public void addPurchasePolicyByCategory(int category, int productId) {
+        if(category<=0 )
+            throw new IllegalArgumentException("Parameter "+category+" cannot be negative or zero");
+        purchasePolicies.add(new PurchasePolicyByCategory(category,productId));
+    }
+
+    public void addPurchasePolicyByCategoryAndDate(int category, LocalDateTime dateTime) {
+        if(category<=0 )
+            throw new IllegalArgumentException("Parameter "+category+" cannot be negative or zero");
+        if(dateTime==null)
+            throw new IllegalArgumentException("Parameter "+dateTime+" cannot be null");
+        purchasePolicies.add(new PurchasePolicyByCategoryAndDate(category,dateTime));
+    }
+
+    public void addPurchasePolicyByDate(LocalDateTime dateTime) {
+        if(dateTime==null)
+            throw new IllegalArgumentException("Parameter "+dateTime+" cannot be null");
+        purchasePolicies.add(new PurchasePolicyByDate(dateTime));
+    }
+
+    public void addPurchasePolicyByProductAndDate(int productId,LocalDateTime dateTime) {
+        if(productId<0)
+            throw new IllegalArgumentException("Parameter "+productId+" cannot be negative");
+        if(dateTime==null)
+            throw new IllegalArgumentException("Parameter "+dateTime+" cannot be null");
+        purchasePolicies.add(new PurchasePolicyByProductAndDate(productId,dateTime));
+    }
+
+    public void addPurchasePolicyByShoppingCartMaxProductsUnit(int productId,int numOfQuantity) {
+        if(productId<0)
+            throw new IllegalArgumentException("Parameter "+productId+" cannot be negative");
+        if(numOfQuantity<=0)
+            throw new IllegalArgumentException("Parameter "+numOfQuantity+" cannot be negative and equal");
+        purchasePolicies.add(new PurchasePolicyByShoppingCartMaxProductsUnit(productId,numOfQuantity));
+    }
+
+    public void addPurchasePolicyByShoppingCartMinProducts(int numOfQuantity) {
+        if(numOfQuantity<=0)
+            throw new IllegalArgumentException("Parameter "+numOfQuantity+" cannot be negative and equal");
+        purchasePolicies.add(new PurchasePolicyByShoppingCartMinProducts(numOfQuantity));
+    }
+
+    public void addPurchasePolicyByShoppingCartMinProductsUnit(int productId,int numOfQuantity) {
+        if(productId<0)
+            throw new IllegalArgumentException("Parameter "+productId+" cannot be negative");
+        if(numOfQuantity<=0)
+            throw new IllegalArgumentException("Parameter "+numOfQuantity+" cannot be negative and equal");
+        purchasePolicies.add(new PurchasePolicyByShoppingCartMinProductsUnit(productId,numOfQuantity));
+    }
+
+    public void addAndPurchasePolicy() {
+        purchasePolicies.add(new AndPolicy());
+    }
+
+    public void addOrPurchasePolicy() {
+        purchasePolicies.add(new OrPolicy());
+    }
+
+    public void addConditioningPurchasePolicy() {
+        purchasePolicies.add(new ConditioningPolicy());
+    }
+
+    public void setPurchasePolicyProductId(int selectedIndex, int productId) {
+        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
+        purchasePolicy.setPurchasePolicyProduct(productId);
+    }
+
+    public void setPurchasePolicyNumOfQuantity(int selectedIndex, int numOfQuantity) {
+        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
+        purchasePolicy.setPurchasePolicyNumOfQuantity(numOfQuantity);
+    }
+
+    public void setPurchasePolicyDateTime(int selectedIndex, LocalDateTime dateTime) {
+        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
+        purchasePolicy.setPurchasePolicyDateTime(dateTime);
+    }
+
+    public void setPurchasePolicyAge(int selectedIndex, int age) {
+        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
+        purchasePolicy.setPurchasePolicyAge(age);
+    }
+
+    public void setFirstPurchasePolicy(int selectedDiscountIndex, int selectedFirstIndex) {
+        if (selectedDiscountIndex == selectedFirstIndex)
+            throw new IllegalArgumentException("Indexes cannot be the same");
+        PurchasePolicy editedDiscount = purchasePolicies.get(selectedDiscountIndex);
+        PurchasePolicy setDiscount = purchasePolicies.remove(selectedFirstIndex);
+        editedDiscount.setPurchasePolicyFirst(setDiscount);
+    }
+
+    public void setSecondPurchasePolicy(int selectedDiscountIndex, int selectedSecondIndex) {
+        if (selectedDiscountIndex == selectedSecondIndex)
+            throw new IllegalArgumentException("Indexes cannot be the same");
+        PurchasePolicy editedDiscount = purchasePolicies.get(selectedDiscountIndex);
+        PurchasePolicy setDiscount = purchasePolicies.remove(selectedSecondIndex);
+        editedDiscount.setPurchasePolicySecond(setDiscount);
+    }
+
+    public void removePurchasePolicy(int selectedIndex) {
+        if (selectedIndex >= purchasePolicies.size())
+            purchasePolicies.remove(selectedIndex - purchasePolicies.size());
+        else
+            purchasePolicies.remove(selectedIndex);
+    }
+
     //endregion
 }

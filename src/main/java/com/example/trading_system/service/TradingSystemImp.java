@@ -1286,5 +1286,273 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    //endregion
+
+    @Override
+    public ResponseEntity<String> getPurchasePoliciesInfo(String username, String token, String storeName) {
+        logger.info("Fetching purchase policies info for user: {}, store: {}", username, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            String result = marketService.getPurchasePoliciesInfo(username, storeName);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while fetching purchase policies info for user: {}, store: {}", username, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> addPurchasePolicyByAge(String username, String token, String storeName, int ageToCheck, int category){
+        logger.info("Adding age-based purchase policy for user: {}, store: {}, ageToCheck: {}, category: {}", username, storeName, ageToCheck, category);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.addPurchasePolicyByAge(username, storeName, ageToCheck, category);
+            return new ResponseEntity<>("Age-based purchase policy added successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while adding age-based purchase policy for user: {}, store: {}, ageToCheck: {}, category: {}", username, storeName, ageToCheck, category);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> addPurchasePolicyByCategory(String username, String token, String storeName, int category, int productId) {
+        logger.info("Adding category-based purchase policy for user: {}, store: {}, category: {}", username, storeName, category);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.addPurchasePolicyByCategory(username, storeName, category, productId);
+            return new ResponseEntity<>("Category-based purchase policy added successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while adding category-based purchase policy for user: {}, store: {}, category: {}", username, storeName, category);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> addPurchasePolicyByCategoryAndDate(String username, String token, String storeName, int category, LocalDateTime dateTime){
+        logger.info("Adding category and date-based purchase policy for user: {}, store: {}, category: {}, dateTime: {}", username, storeName, category, dateTime);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.addPurchasePolicyByCategoryAndDate(username, storeName, category, dateTime);
+            return new ResponseEntity<>("Category and date-based purchase policy added successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while adding category and date-based purchase policy for user: {}, store: {}, category: {}, dateTime: {}", username, storeName, category, dateTime);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> addPurchasePolicyByDate(String username, String token, String storeName, LocalDateTime dateTime) {
+        logger.info("Adding date-based purchase policy for user: {}, store: {}, dateTime: {}", username, storeName, dateTime);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.addPurchasePolicyByDate(username, storeName, dateTime);
+            return new ResponseEntity<>("Date-based purchase policy added successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while adding date-based purchase policy for user: {}, store: {}, dateTime: {}", username, storeName, dateTime);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> addPurchasePolicyByProductAndDate(String username, String token, String storeName, int productId, LocalDateTime dateTime){
+        logger.info("Adding product and date-based purchase policy for user: {}, store: {}, productId: {}, dateTime: {}", username, storeName, productId, dateTime);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.addPurchasePolicyByProductAndDate(username, storeName, productId, dateTime);
+            return new ResponseEntity<>("Product and date-based purchase policy added successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while adding product and date-based purchase policy for user: {}, store: {}, productId: {}, dateTime: {}", username, storeName, productId, dateTime);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> addPurchasePolicyByShoppingCartMaxProductsUnit(String username, String token, String storeName, int productId, int numOfQuantity) {
+        logger.info("Adding shopping cart max products unit purchase policy for user: {}, store: {}, productId: {}, numOfQuantity: {}", username, storeName, productId, numOfQuantity);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.addPurchasePolicyByShoppingCartMaxProductsUnit(username, storeName, productId, numOfQuantity);
+            return new ResponseEntity<>("Shopping cart max products unit purchase policy added successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while adding shopping cart max products unit purchase policy for user: {}, store: {}, productId: {}, numOfQuantity: {}", username, storeName, productId, numOfQuantity);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> addPurchasePolicyByShoppingCartMinProducts(String username, String token, String storeName, int numOfQuantity){
+        logger.info("Adding shopping cart min products purchase policy for user: {}, store: {}, weight: {}", username, storeName, numOfQuantity);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.addPurchasePolicyByShoppingCartMinProducts(username, storeName, numOfQuantity);
+            return new ResponseEntity<>("Shopping cart min products purchase policy added successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while adding shopping cart min products purchase policy for user: {}, store: {}, weight: {}", username, storeName, numOfQuantity);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> addPurchasePolicyByShoppingCartMinProductsUnit(String username, String token, String storeName, int productId, int numOfQuantity) {
+        logger.info("Adding shopping cart min products unit purchase policy for user: {}, store: {}, productId: {}, numOfQuantity: {}", username, storeName, productId, numOfQuantity);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.addPurchasePolicyByShoppingCartMinProductsUnit(username, storeName, productId, numOfQuantity);
+            return new ResponseEntity<>("Shopping cart min products unit purchase policy added successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while adding shopping cart min products unit purchase policy for user: {}, store: {}, productId: {}, numOfQuantity: {}", username, storeName, productId, numOfQuantity);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> addAndPurchasePolicy(String username, String token, String storeName){
+        logger.info("Adding AND purchase policy for user: {}, store: {}", username, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.addAndPurchasePolicy(username, storeName);
+            return new ResponseEntity<>("AND purchase policy added successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while adding AND purchase policy for user: {}, store: {}", username, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> addOrPurchasePolicy(String username, String token, String storeName) {
+        logger.info("Adding OR purchase policy for user: {}, store: {}", username, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.addOrPurchasePolicy(username, storeName);
+            return new ResponseEntity<>("OR purchase policy added successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while adding OR purchase policy for user: {}, store: {}", username, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> addConditioningPurchasePolicy(String username, String token, String storeName) {
+        logger.info("Adding conditioning purchase policy for user: {}, store: {}", username, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.addConditioningPurchasePolicy(username, storeName);
+            return new ResponseEntity<>("Conditioning purchase policy added successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while adding conditioning purchase policy for user: {}, store: {}", username, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> setPurchasePolicyProductId(String username, String token, String storeName, int selectedIndex, int productId){
+        logger.info("Setting product ID for purchase policy for user: {}, store: {}, selectedIndex: {}, productId: {}", username, storeName, selectedIndex, productId);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.setPurchasePolicyProductId(username, storeName, selectedIndex, productId);
+            return new ResponseEntity<>("Product ID set for purchase policy successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while setting product ID for purchase policy for user: {}, store: {}, selectedIndex: {}, productId: {}", username, storeName, selectedIndex, productId);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> setPurchasePolicyNumOfQuantity(String username, String token, String storeName, int selectedIndex, int numOfQuantity) {
+        logger.info("Setting number of quantity for purchase policy for user: {}, store: {}, selectedIndex: {}, numOfQuantity: {}", username, storeName, selectedIndex, numOfQuantity);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.setPurchasePolicyNumOfQuantity(username, storeName, selectedIndex, numOfQuantity);
+            return new ResponseEntity<>("Number of quantity set for purchase policy successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while setting number of quantity for purchase policy for user: {}, store: {}, selectedIndex: {}, numOfQuantity: {}", username, storeName, selectedIndex, numOfQuantity);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> setPurchasePolicyDateTime(String username, String token, String storeName, int selectedIndex, LocalDateTime dateTime){
+        logger.info("Setting date time for purchase policy for user: {}, store: {}, selectedIndex: {}, dateTime: {}", username, storeName, selectedIndex, dateTime);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.setPurchasePolicyDateTime(username, storeName, selectedIndex, dateTime);
+            return new ResponseEntity<>("Date time set for purchase policy successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while setting date time for purchase policy for user: {}, store: {}, selectedIndex: {}, dateTime: {}", username, storeName, selectedIndex, dateTime);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> setPurchasePolicyAge(String username, String token, String storeName, int selectedIndex, int age){
+        logger.info("Setting age for purchase policy for user: {}, store: {}, selectedIndex: {}, age: {}", username, storeName, selectedIndex, age);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            // Call service method to set age for purchase policy
+            // Example: marketService.setPurchasePolicyAge(username, storeName, selectedIndex, age);
+            return new ResponseEntity<>("Age set for purchase policy successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while setting age for purchase policy for user: {}, store: {}, selectedIndex: {}, age: {}", username, storeName, selectedIndex, age);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> setFirstPurchasePolicy(String username, String token, String storeName, int selectedDiscountIndex, int selectedFirstIndex){
+        logger.info("Setting first purchase policy for user: {}, store: {}, discountIndex: {}, firstIndex: {}", username, storeName, selectedDiscountIndex, selectedFirstIndex);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.setFirstPurchasePolicy(username, storeName, selectedDiscountIndex, selectedFirstIndex);
+            return new ResponseEntity<>("First purchase policy set successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while setting first purchase policy for user: {}, store: {}, discountIndex: {}, firstIndex: {}", username, storeName, selectedDiscountIndex, selectedFirstIndex);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> setSecondPurchasePolicy(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex) {
+        logger.info("Setting second purchase policy for user: {}, store: {}, discountIndex: {}, secondIndex: {}", username, storeName, selectedDiscountIndex, selectedSecondIndex);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.setSecondPurchasePolicy(username, storeName, selectedDiscountIndex, selectedSecondIndex);
+            return new ResponseEntity<>("Second purchase policy set successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while setting second purchase policy for user: {}, store: {}, discountIndex: {}, secondIndex: {}", username, storeName, selectedDiscountIndex, selectedSecondIndex);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> removePurchasePolicy(String username, String token, String storeName, int selectedIndex) {
+        logger.info("Removing purchase policy for user: {}, store: {}, selectedIndex: {}", username, storeName, selectedIndex);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.removePurchasePolicy(username, storeName, selectedIndex);
+            return new ResponseEntity<>("Purchase policy removed successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while removing purchase policy for user: {}, store: {}, selectedIndex: {}", username, storeName, selectedIndex);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //end region
 }

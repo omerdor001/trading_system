@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 
 public class Registered extends User {
@@ -101,11 +102,11 @@ public class Registered extends User {
     }
 
 
-    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editPurchasePolicy, boolean editDiscountPolicy) {
         Role manager = getRoleByStoreId(store_name_id);
         manager.getRoleState().setWatch(watch);
         manager.getRoleState().setEditSupply(editSupply);
-        manager.getRoleState().setEditBuyPolicy(editBuyPolicy);
+        manager.getRoleState().setEditPurchasePolicy(editPurchasePolicy);
         manager.getRoleState().setEditDiscountPolicy(editDiscountPolicy);
     }
 
@@ -169,6 +170,12 @@ public class Registered extends User {
 
     public LocalDate getBirthdate() {
         return birthdate;
+    }
+
+    @Override
+    public int getAge() {
+        LocalDate currentDate = LocalDate.now();
+        return Period.between(birthdate, currentDate).getYears();
     }
 
 }
