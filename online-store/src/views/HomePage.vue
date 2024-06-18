@@ -107,7 +107,7 @@ export default defineComponent({
       console.log('Closing Store');
     };
     const myStoresIManage = () => {
-      console.log('My Stores I Manage');
+      router.push('/stores-i-manage');
     };
     const manageProductsAsManager = () => {
       console.log('Managing Products as Manager');

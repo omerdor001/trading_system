@@ -13,6 +13,8 @@ import WatchSuspensions from '@/views/WatchSuspensions.vue';
 import StoreNameInput from '@/views/StoreNameInput.vue';
 import ProductList from '@/views/ProductList.vue';
 import ProductManagement from '@/views/ProductManagement.vue';
+import StoresIManage from '@/views/StoresIManage.vue';
+
 
 const routes = [
     {
@@ -87,6 +89,23 @@ const routes = [
         name: 'ProductManagement',
         component: ProductManagement,
         props: true
+    },
+    {
+        path: '/my-stores-i-own',
+        name: 'MyStoresIOwn',
+        component: MyStoresIOwn // Ensure the route is correctly defined
+    },
+    {
+      path: '/stores-i-manage',
+      name: 'StoresIManage',
+      component: StoresIManage
+    },
+
+    {
+        path: '/store/:storeId',
+        name: 'StoreDetails',
+        component: StoreDetails,
+        props: true // Pass route params as props
     }
 ];
 
