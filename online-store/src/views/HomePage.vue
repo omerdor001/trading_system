@@ -3,7 +3,6 @@
     <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
     <div class="main-content">
       <div class="sidebar">
-        <PrimeButton label="Enter to All Stores" @click="enterStores" class="sidebar-button"/>
         <PrimeButton label="Search Store" @click="navigateToSearchStore" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Approve Appointment" @click="approveAppointment" class="sidebar-button"/>
@@ -107,9 +106,6 @@ export default defineComponent({
       router.push({ name: 'StoreDetails', params: { storeId } });
     };
 
-    const enterStores = () => {
-      console.log('Entering Stores');
-    };
     const openStore = () => {
       console.log('Opening Store');
       router.push('/open-store');
@@ -141,7 +137,7 @@ export default defineComponent({
       console.log('Yielding Ownership');
     };
     const purchasesHistoryAsOwner = () => {
-      router.push({name: 'PurchaseHistory'}); // Navigate to PurchaseHistory
+      router.push({ name: 'PurchaseHistory' }); // Navigate to PurchaseHistory
     };
     const closeStore = () => {
       console.log('Closing Store');
@@ -187,7 +183,7 @@ export default defineComponent({
     };
     const purchasesHistoryAsSystemManager = () => {
       console.log('Viewing Purchases History as System Manager');
-      router.push({name: 'PurchaseHistory'});
+      router.push({ name: 'PurchaseHistory' });
     };
     const allPurchases = () => {
       console.log('Viewing All Purchases');
@@ -200,7 +196,7 @@ export default defineComponent({
       router.push('/');
     };
     const navigateToPurchaseHistory = () => {
-      router.push({name: 'PurchaseHistory'});
+      router.push({ name: 'PurchaseHistory' });
     };
     return {
       isLoggedIn,
@@ -211,7 +207,6 @@ export default defineComponent({
       username,
       activeStores,
       viewProducts,
-      enterStores,
       openStore,
       navigateToSearchStore,
       approveAppointment,
