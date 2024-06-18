@@ -37,7 +37,6 @@ public class PurchaseCartUnitTests {
         String address = "1234 El Street, Springfield, IL, 62704-5678";  // Valid address format
         try {
             userFacade.register(username, "encrypted_password", LocalDate.now());
-            userFacade.enter(0);
             userFacade.login("v0", username, "encrypted_password");
         } catch (Exception e) {
         }
@@ -50,6 +49,32 @@ public class PurchaseCartUnitTests {
         userFacade.addToCart("r" + username, productId, storeName, quantity);
 
         Assertions.assertDoesNotThrow(() -> userFacade.purchaseCart("r" + username));
+    }
+
+    @Test
+    public void givenTwoProcessesWithDelayedDelivery_WhenPurchaseCart_ThenThrowException() throws IllegalAccessException {
+        String username1 = "ValidUser1";
+        String username2 = "ValidUser2";
+        int productId = 1;
+        String storeName = "StoreName";
+        int quantity = 5;
+        String address = "1234 El Street, Springfield, IL, 62704-5678";  // Valid address format
+        try {
+            userFacade.register(username1, "encrypted_password", LocalDate.now());
+            userFacade.register(username2, "encrypted_password", LocalDate.now());
+            userFacade.login("v1", username1, "encrypted_password");
+            userFacade.login("v2", username2, "encrypted_password");
+        } catch (Exception e) {
+        }
+        userFacade.setAddress("r" + username1,address);
+        userFacade.setAddress("r" +username2,address);
+        marketFacade.addStore(storeName, "description", username1, 4.5);
+        Store store = marketFacade.getStore(storeName);
+        store.addProduct(productId, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
+
+        userFacade.addToCart("r" + username1, productId, storeName, quantity);
+
+        Assertions.assertDoesNotThrow(() -> userFacade.purchaseCart("r" + username1));
     }
 
     @Test
@@ -123,7 +148,6 @@ public class PurchaseCartUnitTests {
         String address = "SomeAddress";
         try {
             userFacade.register(username, "encrypted_password", LocalDate.now());
-            userFacade.enter(0);
             userFacade.login("v0", username, "encrypted_password");
         } catch (Exception e) {
         }
@@ -147,7 +171,6 @@ public class PurchaseCartUnitTests {
         String address = "SomeAddress";
         try {
             userFacade.register(username, "encrypted_password", LocalDate.now());
-            userFacade.enter(0);
             userFacade.login("v0", username, "encrypted_password");
         } catch (Exception e) {
         }
