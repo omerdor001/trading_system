@@ -4,7 +4,7 @@
       <div class="left-buttons">
         <img src="@/assets/logo.png" alt="LASMONY" class="logo">
         <PrimeButton label="Home" @click="goHome" class="p-button-primary" />
-        <PrimeButton label="Search" @click="goToSearch" class="p-button-primary" />
+        <PrimeButton label="Search Product" @click="goToSearch" class="p-button-primary" />
       </div>
       <div class="right-buttons">
         <template v-if="isLoggedIn">

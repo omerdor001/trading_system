@@ -4,7 +4,7 @@
     <div class="main-content">
       <h1>Explore and discover stores</h1>
       <div class="search-bar">
-        <input type="text" placeholder="Search products or Store" v-model="searchQuery" />
+        <input type="text" placeholder="Search products" v-model="searchQuery" />
         <button @click="search">Search</button>
       </div>
       <div class="price-range">
