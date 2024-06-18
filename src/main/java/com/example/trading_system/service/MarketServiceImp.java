@@ -11,9 +11,11 @@ public class MarketServiceImp implements MarketService {
     private static final Logger logger = LoggerFactory.getLogger(MarketServiceImp.class);
     private static MarketServiceImp instance = null;
     private MarketFacade marketFacade;
+    private NotificationService notificationService;
 
     private MarketServiceImp() {
         marketFacade = MarketFacadeImp.getInstance();
+        notificationService = ApplicationContextProvider.getBean(NotificationService.class);
     }
 
     public static MarketServiceImp getInstance() {

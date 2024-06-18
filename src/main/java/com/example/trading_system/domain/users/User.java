@@ -105,7 +105,6 @@ public abstract class User {
         throw new RuntimeException("Only registered users can be managers.");
     }
 
-
     public abstract Role getRoleByStoreId(String store_name_id);
 
     public abstract boolean isAdmin();
