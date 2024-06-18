@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Header and logo section (unchanged) -->
     <header>
       <div class="header-content">
         <div class="left-buttons">
@@ -14,30 +13,25 @@
       </div>
     </header>
 
-    <!-- Login form container -->
     <div class="login-container">
       <PrimeCard class="login-form">
         <template #title>
           <h2>Login</h2>
         </template>
         <form @submit.prevent="handleLogin">
-          <!-- Username input -->
           <div class="form-group">
             <label for="username">Username</label>
             <InputText v-model="username" id="username" />
           </div>
-          <!-- Password input -->
           <div class="form-group">
             <label for="password">Password</label>
             <PasswordText v-model="password" id="password" />
           </div>
-          <!-- Button group -->
           <div class="button-group">
             <PrimeButton label="Login" icon="pi pi-check" type="submit" class="login-button" />
             <PrimeButton label="Register" icon="pi pi-user-plus" type="button" @click="goToRegister" class="register-button" />
           </div>
         </form>
-        <!-- Error message -->
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       </PrimeCard>
     </div>
@@ -142,7 +136,12 @@ export default defineComponent({
     const goBack = () => {
       router.go(-1);
     };
-
+/*    const closeModal = () => {
+      localStorage.setItem('roles', JSON.stringify([]));
+      localStorage.setItem('isLoggedIn', 'false');
+      localStorage.setItem('username', 'Guest');
+      router.push('/');
+    };*/
     const goToRegister = () => {
       router.push('/register');
     };
@@ -155,6 +154,10 @@ export default defineComponent({
       // Handle viewing cart
     };
 
+    const goHome = () => {
+      router.push({ name: 'HomePage' });
+    };
+
     return {
       username,
       password,
@@ -163,7 +166,8 @@ export default defineComponent({
       goBack,
       goToRegister,
       notifications,
-      viewCart
+      viewCart,
+      goHome
     };
   }
 });
