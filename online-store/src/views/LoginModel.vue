@@ -1,9 +1,11 @@
 <template>
   <div>
-    <!-- Header and logo section (unchanged) -->
     <header>
       <div class="header-content">
-        <img src="@/assets/logo.png" alt="LASMONY" class="logo">
+        <div class="left-buttons">
+          <img src="@/assets/logo.png" alt="LASMONY" class="logo">
+          <PrimeButton label="Home" @click="goHome" class="p-button-primary" />
+        </div>
         <div class="right-buttons">
           <PrimeButton label="Notifications" icon="pi pi-bell" @click="notifications" />
           <PrimeButton label="Cart" icon="pi pi-shopping-cart" @click="viewCart" />
@@ -11,31 +13,26 @@
       </div>
     </header>
 
-    <!-- Login form container -->
     <div class="login-container">
       <PrimeCard class="login-form">
         <template #title>
           <h2>Login</h2>
         </template>
         <form @submit.prevent="handleLogin">
-          <!-- Username input -->
           <div class="form-group">
             <label for="username">Username</label>
             <InputText v-model="username" id="username" />
           </div>
-          <!-- Password input -->
           <div class="form-group">
             <label for="password">Password</label>
             <PasswordText v-model="password" id="password" />
           </div>
-          <!-- Button group -->
           <div class="button-group">
             <PrimeButton label="Login" icon="pi pi-check" type="submit" class="login-button" />
             <PrimeButton label="Close" icon="pi pi-times" type="button" @click="closeModal" class="close-button" />
             <PrimeButton label="Register" icon="pi pi-user-plus" type="button" @click="goToRegister" class="register-button" />
           </div>
         </form>
-        <!-- Error message -->
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       </PrimeCard>
     </div>
@@ -138,6 +135,9 @@ export default defineComponent({
     };
 
     const closeModal = () => {
+      localStorage.setItem('roles', JSON.stringify([]));
+      localStorage.setItem('isLoggedIn', 'false');
+      localStorage.setItem('username', 'Guest');
       router.push('/');
     };
 
@@ -153,6 +153,10 @@ export default defineComponent({
       // Handle viewing cart
     };
 
+    const goHome = () => {
+      router.push({ name: 'HomePage' });
+    };
+
     return {
       username,
       password,
@@ -161,7 +165,8 @@ export default defineComponent({
       closeModal,
       goToRegister,
       notifications,
-      viewCart
+      viewCart,
+      goHome
     };
   }
 });
@@ -183,6 +188,12 @@ export default defineComponent({
 .logo {
   height: 80px;
   width: auto;
+}
+
+.left-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .right-buttons {

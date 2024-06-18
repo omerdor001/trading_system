@@ -3,32 +3,47 @@
     <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
     <div class="main-content">
       <div class="sidebar">
-        <PrimeButton label="Enter to Stores" @click="enterStores" />
-        <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" />
-        <PrimeButton label="Search Product" @click="searchProduct" />
-        <PrimeButton v-if="isStoreOwner" label="Approve Appointment" @click="approveAppointment" />
-        <PrimeButton v-if="isStoreOwner" label="My Stores" @click="myStoresIOwn" />
-        <PrimeButton v-if="isStoreOwner" label="Manage Products" @click="manageProductsAsOwner" />
-        <PrimeButton v-if="isStoreOwner" label="Appoint Owner" @click="appointOwner" />
-        <PrimeButton v-if="isStoreOwner" label="Appoint Manager" @click="appointManager" />
-        <PrimeButton v-if="isStoreOwner" label="Permissions to Manager" @click="permissionsToManager" />
-        <PrimeButton v-if="isStoreOwner" label="Yield Ownership" @click="yieldOwnership" />
-        <PrimeButton v-if="isStoreOwner" label="Purchases History" @click="purchasesHistoryAsOwner" />
-        <PrimeButton v-if="isStoreOwner" label="Close Store" @click="closeStore" />
+        <PrimeButton label="Enter to Stores" @click="enterStores" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" class="sidebar-button"/>
+        <PrimeButton label="Search Product" @click="searchProduct" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner" label="Approve Appointment" @click="approveAppointment" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner" label="My Stores" @click="myStoresIOwn" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner" label="Manage Products" @click="manageProductsAsOwner" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner" label="Appoint Owner" @click="appointOwner" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner" label="Appoint Manager" @click="appointManager" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner" label="Permissions to Manager" @click="permissionsToManager" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner" label="Yield Ownership" @click="yieldOwnership" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner" label="Purchases History" @click="purchasesHistoryAsOwner" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner" label="Close Store" @click="closeStore" class="sidebar-button"/>
       </div>
       <div class="content">
         <AboutSection />
+        <div v-if="activeStores.length" class="active-stores">
+          <h2>Active Stores</h2>
+          <ul>
+            <li v-for="store in activeStores" :key="store.id" class="store-item">
+              <img :src="store.image" alt="Store Image" class="store-image">
+              <div class="store-details">
+                <h3>{{ store.name }}</h3>
+                <PrimeButton label="View Products" @click="viewProducts(store.id)" class="view-products-button"/>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div v-else>
+          <p>No active stores available.</p>
+        </div>
       </div>
       <div class="sidebar2">
-        <PrimeButton v-if="isStoreManager" label="My Stores I Manage" @click="myStoresIManage" />
-        <PrimeButton v-if="isStoreManager" label="Manage Products" @click="manageProductsAsManager" />
-        <PrimeButton v-if="isStoreManager" label="Add Policy" @click="addPolicy" />
-        <PrimeButton v-if="isStoreManager" label="Edit Policy" @click="editPolicy" />
-        <PrimeButton v-if="isSystemManager" label="Create Suspension" @click="createSuspension" />
-        <PrimeButton v-if="isSystemManager" label="End Suspension" @click="endSuspension" />
-        <PrimeButton v-if="isSystemManager" label="Watch Suspensions" @click="watchSuspensions" />
-        <PrimeButton v-if="isSystemManager" label="Purchases History" @click="purchasesHistoryAsSystemManager" />
-        <PrimeButton v-if="isCommercialManager" label="All Purchases" @click="allPurchases" />
+        <PrimeButton v-if="isStoreManager" label="My Stores I Manage" @click="myStoresIManage" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreManager" label="Manage Products" @click="manageProductsAsManager" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreManager" label="Add Policy" @click="addPolicy" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreManager" label="Edit Policy" @click="editPolicy" class="sidebar-button"/>
+        <PrimeButton v-if="isSystemManager" label="Create Suspension" @click="createSuspension" class="sidebar-button"/>
+        <PrimeButton v-if="isSystemManager" label="End Suspension" @click="endSuspension" class="sidebar-button"/>
+        <PrimeButton v-if="isSystemManager" label="Watch Suspensions" @click="watchSuspensions" class="sidebar-button"/>
+        <PrimeButton v-if="isSystemManager" label="Purchases History" @click="purchasesHistoryAsSystemManager" class="sidebar-button"/>
+        <PrimeButton v-if="isCommercialManager" label="All Purchases" @click="allPurchases" class="sidebar-button"/>
       </div>
     </div>
     <footer>
@@ -45,11 +60,12 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import AboutSection from '@/components/AboutSection.vue';
 import { Button as PrimeButton } from 'primevue/button';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'HomePage',
@@ -61,14 +77,35 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
-    //const roles = JSON.parse(localStorage.getItem('roles') || '[]');
-    const roles = ['storeManager'];
+    const roles = JSON.parse(localStorage.getItem('roles') || '[]');
     const isStoreOwner = ref(roles.includes('storeOwner'));
     const isStoreManager = ref(roles.includes('storeManager'));
     const isSystemManager = ref(roles.includes('systemManager'));
     const isCommercialManager = ref(roles.includes('commercialManager'));
 
     const username = ref(localStorage.getItem('username') || '');
+    const activeStores = ref([
+      { id: 1, name: 'Colors Store', image: 'https://via.placeholder.com/150', rating: 8.5 },
+      { id: 2, name: 'SmartWatch Store', image: 'https://via.placeholder.com/150', rating: 8.5 },
+      { id: 3, name: 'Laptops Store', image: 'https://via.placeholder.com/150', rating: 8.5 }
+    ]);
+
+    const fetchActiveStores = async () => {
+      try {
+        const response = await axios.get('/api/active-stores');
+        activeStores.value = response.data;
+      } catch (error) {
+        console.error('Error fetching active stores:', error);
+      }
+    };
+
+    onMounted(() => {
+      fetchActiveStores();
+    });
+
+    const viewProducts = (storeId) => {
+      router.push({ name: 'StoreDetails', params: { storeId } });
+    };
 
     const enterStores = () => {
       console.log('Entering Stores');
@@ -138,7 +175,7 @@ export default defineComponent({
       if (isSystemManager.value) {
         router.push('/create-suspension');
       } else{
-        console.error("Unauthorize");
+        console.error("Unauthorized");
       }
     };
 
@@ -146,7 +183,7 @@ export default defineComponent({
       if (isSystemManager.value) {
         router.push('/end-suspension');
       } else{
-        console.error("Unauthorize");
+        console.error("Unauthorized");
       }
     };
 
@@ -154,7 +191,7 @@ export default defineComponent({
       if (isSystemManager.value) {
         router.push('/watch-suspensions');
       } else{
-        console.error("Unauthorize");
+        console.error("Unauthorized");
       }
     };
 
@@ -181,6 +218,8 @@ export default defineComponent({
       isSystemManager,
       isCommercialManager,
       username,
+      activeStores,
+      viewProducts,
       enterStores,
       openStore,
       searchProduct,
@@ -220,9 +259,31 @@ export default defineComponent({
   gap: 10px;
   flex: 1;
 }
+.sidebar-button {
+  width: 100%;
+  max-width: 150px;
+}
 .content {
   flex: 2;
   padding: 0 20px;
+}
+.active-stores {
+  margin-top: 20px;
+}
+.store-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.store-image {
+  width: 150px;
+  height: 150px;
+  margin-right: 10px;
+}
+.store-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 footer {
   background-color: #425965;

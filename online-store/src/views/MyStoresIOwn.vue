@@ -176,7 +176,7 @@ export default defineComponent({
     });
 
     const enterStore = (storeId) => {
-      router.push({ name: 'StoreDetails', params: { storeId } });
+      router.push({ name: 'StoreDetailsEditor', params: { storeId } });
     };
 
     const addStore = () => {
