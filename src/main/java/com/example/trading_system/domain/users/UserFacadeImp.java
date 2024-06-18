@@ -898,6 +898,10 @@ public class UserFacadeImp implements UserFacade {
             logger.error("User is not commercial manager");
             throw new RuntimeException("User is not commercial manager");
         }
+        if(!marketFacade.isStoreExist(storeName)){
+            logger.error("Store {} does not exist", storeName);
+            throw new RuntimeException("Store does not exist");
+        }
         return marketFacade.getStore(storeName).getPurchaseHistoryString(username);
     }
 
