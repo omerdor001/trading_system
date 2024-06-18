@@ -70,11 +70,6 @@ const routes = [
         component: WatchSuspensions
     },
     {
-        path: '/register',
-        name: 'UserRegistration',
-        component: UserRegistration
-    },
-    {
         path: '/my-stores-i-own',
         name: 'MyStoresIOwn',
         component: MyStoresIOwn // Ensure the route is correctly defined
