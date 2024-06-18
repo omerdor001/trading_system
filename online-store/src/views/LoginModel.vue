@@ -1,8 +1,10 @@
 <template>
   <div>
-    <!-- Header and logo section (unchanged) -->
     <header>
       <div class="header-content">
+        <div class="left-buttons">
+          <PrimeButton icon="pi pi-arrow-left" @click="goBack" />
+        </div>
         <img src="@/assets/logo.png" alt="LASMONY" class="logo">
         <div class="right-buttons">
           <PrimeButton label="Notifications" icon="pi pi-bell" @click="notifications" />
@@ -11,31 +13,25 @@
       </div>
     </header>
 
-    <!-- Login form container -->
     <div class="login-container">
       <PrimeCard class="login-form">
         <template #title>
           <h2>Login</h2>
         </template>
         <form @submit.prevent="handleLogin">
-          <!-- Username input -->
           <div class="form-group">
             <label for="username">Username</label>
             <InputText v-model="username" id="username" />
           </div>
-          <!-- Password input -->
           <div class="form-group">
             <label for="password">Password</label>
             <PasswordText v-model="password" id="password" />
           </div>
-          <!-- Button group -->
           <div class="button-group">
             <PrimeButton label="Login" icon="pi pi-check" type="submit" class="login-button" />
-            <PrimeButton label="Close" icon="pi pi-times" type="button" @click="closeModal" class="close-button" />
             <PrimeButton label="Register" icon="pi pi-user-plus" type="button" @click="goToRegister" class="register-button" />
           </div>
         </form>
-        <!-- Error message -->
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       </PrimeCard>
     </div>
@@ -137,8 +133,8 @@ export default defineComponent({
       }
     };
 
-    const closeModal = () => {
-      router.push('/');
+    const goBack = () => {
+      router.go(-1);
     };
 
     const goToRegister = () => {
@@ -153,15 +149,20 @@ export default defineComponent({
       // Handle viewing cart
     };
 
+    const goHome = () => {
+      router.push({ name: 'HomePage' });
+    };
+
     return {
       username,
       password,
       errorMessage,
       handleLogin,
-      closeModal,
+      goBack,
       goToRegister,
       notifications,
-      viewCart
+      viewCart,
+      goHome
     };
   }
 });
@@ -185,7 +186,7 @@ export default defineComponent({
   width: auto;
 }
 
-.right-buttons {
+.right-buttons, .left-buttons {
   display: flex;
   gap: 10px;
 }
@@ -226,14 +227,6 @@ export default defineComponent({
   color: #333;
 }
 
-.form-group .p-inputtext {
-  width: 100%;
-}
-
-.form-group .p-password {
-  width: 100%;
-}
-
 .custom-card {
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -260,10 +253,6 @@ export default defineComponent({
 }
 
 .login-button .p-button {
-  width: 100%;
-}
-
-.close-button .p-button {
   width: 100%;
 }
 
