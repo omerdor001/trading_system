@@ -625,10 +625,10 @@ public class MarketFacadeImp implements MarketFacade {
         User user = userFacade.getUsers().get(userName);
         if(user.isAdmin())
             return store.getAllHistoryPurchases().stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
-
+        if(user.getRoleByStoreId(storeName) == null)
+            throw new RuntimeException("Not allowed to view store history");
         user.getRoleByStoreId(storeName).getRoleState().getAllHistoryPurchases();
         return store.getAllHistoryPurchases().stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
-
     }
 
     @Override

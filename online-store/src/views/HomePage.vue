@@ -7,7 +7,7 @@
         <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" />
         <PrimeButton label="Search Product" @click="searchProduct" />
         <PrimeButton v-if="isStoreOwner" label="Approve Appointment" @click="approveAppointment" />
-        <PrimeButton label="My Stores" @click="myStoresIOwn" />
+        <PrimeButton v-if="isStoreOwner" label="My Stores" @click="myStoresIOwn" />
         <PrimeButton v-if="isStoreOwner" label="Manage Products" @click="manageProductsAsOwner" />
         <PrimeButton v-if="isStoreOwner" label="Appoint Owner" @click="appointOwner" />
         <PrimeButton v-if="isStoreOwner" label="Appoint Manager" @click="appointManager" />
@@ -24,9 +24,9 @@
         <PrimeButton v-if="isStoreManager" label="Manage Products" @click="manageProductsAsManager" />
         <PrimeButton v-if="isStoreManager" label="Add Policy" @click="addPolicy" />
         <PrimeButton v-if="isStoreManager" label="Edit Policy" @click="editPolicy" />
-        <PrimeButton v-if="isSystemManager" label="Suspension" @click="suspension" />
         <PrimeButton v-if="isSystemManager" label="Create Suspension" @click="createSuspension" />
         <PrimeButton v-if="isSystemManager" label="End Suspension" @click="endSuspension" />
+        <PrimeButton v-if="isSystemManager" label="Watch Suspensions" @click="watchSuspensions" />
         <PrimeButton v-if="isSystemManager" label="Purchases History" @click="purchasesHistoryAsSystemManager" />
         <PrimeButton v-if="isCommercialManager" label="All Purchases" @click="allPurchases" />
       </div>
@@ -61,8 +61,8 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
-    const roles = JSON.parse(localStorage.getItem('roles') || '[]');
-
+    //const roles = JSON.parse(localStorage.getItem('roles') || '[]');
+    const roles = ['storeManager'];
     const isStoreOwner = ref(roles.includes('storeOwner'));
     const isStoreManager = ref(roles.includes('storeManager'));
     const isSystemManager = ref(roles.includes('systemManager'));
@@ -75,7 +75,6 @@ export default defineComponent({
     };
 
     const openStore = () => {
-      console.log('Opening Store');
       router.push('/open-store');
     };
 
@@ -120,7 +119,7 @@ export default defineComponent({
     };
 
     const myStoresIManage = () => {
-      console.log('My Stores I Manage');
+      router.push('/stores-i-manage');
     };
 
     const manageProductsAsManager = () => {
@@ -135,16 +134,28 @@ export default defineComponent({
       console.log('Editing Policy');
     };
 
-    const suspension = () => {
-      console.log('Suspension');
-    };
-
     const createSuspension = () => {
-      console.log('Creating Suspension');
+      if (isSystemManager.value) {
+        router.push('/create-suspension');
+      } else{
+        console.error("Unauthorize");
+      }
     };
 
     const endSuspension = () => {
-      console.log('Ending Suspension');
+      if (isSystemManager.value) {
+        router.push('/end-suspension');
+      } else{
+        console.error("Unauthorize");
+      }
+    };
+
+    const watchSuspensions = () => {
+      if (isSystemManager.value) {
+        router.push('/watch-suspensions');
+      } else{
+        console.error("Unauthorize");
+      }
     };
 
     const purchasesHistoryAsSystemManager = () => {
@@ -186,9 +197,9 @@ export default defineComponent({
       manageProductsAsManager,
       addPolicy,
       editPolicy,
-      suspension,
       createSuspension,
       endSuspension,
+      watchSuspensions,
       purchasesHistoryAsSystemManager,
       allPurchases,
       logout

@@ -14,13 +14,15 @@ public abstract class User {
     private boolean suspended;
     private LocalDateTime suspendedStart;
     private LocalDateTime suspendedEnd;
+    private String address;
 
     public User(String username) {
         this.username = username;
         this.cart = new Cart();
-        this.suspended=false;
-        this.suspendedStart=null;
-        this.suspendedEnd=null;
+        this.suspended = false;
+        this.suspendedStart = null;
+        this.suspendedEnd = null;
+        this.address = "";
     }
 
     public String getUsername() {
@@ -35,7 +37,7 @@ public abstract class User {
         throw new RuntimeException("Only registered users have a password");
     }
 
-    public boolean isSuspended(){
+    public boolean isSuspended() {
         return suspended;
     }
 
@@ -51,16 +53,24 @@ public abstract class User {
         this.suspendedEnd = suspendedEnd;
     }
 
-    public void suspend(LocalDateTime suspendedUntil){
-        suspended=true;
-        suspendedStart=LocalDateTime.now();
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void suspend(LocalDateTime suspendedUntil) {
+        suspended = true;
+        suspendedStart = LocalDateTime.now();
         setSuspendedEnd(suspendedUntil);
     }
 
-    public void finishSuspension(){
-        suspendedStart=null;
-        suspendedEnd=null;
-        suspended=false;
+    public void finishSuspension() {
+        suspendedStart = null;
+        suspendedEnd = null;
+        suspended = false;
     }
 
     public abstract void login();
@@ -87,9 +97,13 @@ public abstract class User {
 
     public abstract void addOwnerRole(String appoint, String storeName);
 
-    public void removeOwnerRole(String storeName) { throw new RuntimeException("Only registered users can be owners."); }
+    public void removeOwnerRole(String storeName) {
+        throw new RuntimeException("Only registered users can be owners.");
+    }
 
-    public void removeManagerRole(String storeName) { throw new RuntimeException("Only registered users can be managers."); }
+    public void removeManagerRole(String storeName) {
+        throw new RuntimeException("Only registered users can be managers.");
+    }
 
 
     public abstract Role getRoleByStoreId(String store_name_id);
@@ -115,10 +129,6 @@ public abstract class User {
     public abstract List<Notification> getNotifications();
 
     public abstract void receiveNotification(String notification);
-
-    public abstract String getAddress();
-
-    public abstract void setAddress(String address);
 
     public abstract LocalDate getBirthdate();
 

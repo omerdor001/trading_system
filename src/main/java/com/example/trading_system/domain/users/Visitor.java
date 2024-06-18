@@ -11,7 +11,7 @@ public class Visitor extends User {
 
     @Override
     public boolean getLogged() {
-        return false;
+        return true;
     }
 
     @Override
@@ -33,14 +33,6 @@ public class Visitor extends User {
     public void receiveNotification(String notification) {
         throw new UnsupportedOperationException("Visitors cannot receive notifications");
     }
-
-    @Override
-    public String getAddress() {
-        return "";
-    }
-
-    @Override
-    public void setAddress(String address) {}
 
     @Override
     public LocalDate getBirthdate() {
