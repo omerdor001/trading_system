@@ -59,11 +59,11 @@ public abstract class RoleState {
 
     public abstract void setEditSupply(boolean editSupply);
 
-    public boolean isEditBuyPolicy() throws IllegalAccessException {
-        throw new IllegalAccessException("Only managers can access isEditBuyPolicy");
+    public boolean isEditPurchasePolicy() throws IllegalAccessException {
+        throw new IllegalAccessException("Only managers can access isEditPurchasePolicy");
     }
 
-    public abstract void setEditBuyPolicy(boolean editBuyPolicy);
+    public abstract void setEditPurchasePolicy(boolean editPurchasePolicy);
 
     public boolean isEditDiscountPolicy() throws IllegalAccessException {
         throw new IllegalAccessException("Only managers can access isEditDiscountPolicy");

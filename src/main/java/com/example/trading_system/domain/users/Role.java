@@ -76,6 +76,10 @@ public class Role {
     public void editDiscounts() throws IllegalAccessException {
         roleState.isEditDiscountPolicy();
     }
+
+    public void editPurchasePolicies() throws IllegalAccessException {
+        roleState.isEditPurchasePolicy();
+    }
 }
 
 

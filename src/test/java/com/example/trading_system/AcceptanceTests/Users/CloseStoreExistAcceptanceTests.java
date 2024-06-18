@@ -58,7 +58,7 @@ public class CloseStoreExistAcceptanceTests {
     @Test
     public void givenNotExistStore_WhenCloseStoreExist_ThenThrowException() {
         String response = tradingSystemImp.closeStoreExist(userName, token, "Store2").getBody();
-        Assertions.assertEquals("Store must exist to close", response);
+        Assertions.assertEquals("Store must exist", response);
 
     }
 

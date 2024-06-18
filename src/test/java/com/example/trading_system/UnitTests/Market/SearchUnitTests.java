@@ -42,15 +42,23 @@ public class SearchUnitTests {
     }
 
     @Test
-    void SearchNameInStore_Success() {
-        assertDoesNotThrow(() -> marketFacade.searchNameInStore(validUsername,"p1", "store1", 5.0, 5.0, 5.0, Category.Food.getIntValue()));
-        assertTrue(marketFacade.searchNameInStore(validUsername,"p1", "store1", 5.0, 5.0, 5.0, Category.Food.getIntValue()).contains("p1"));
+    void searchNameInStore_Success() {
+        try {
+            assertDoesNotThrow(() -> marketFacade.searchNameInStore(validUsername,"p1", "store1", 5.0, 5.0, 5.0, Category.Food.getIntValue()));
+            assertTrue(marketFacade.searchNameInStore(validUsername,"p1", "store1", 5.0, 5.0, 5.0, Category.Food.getIntValue()).contains("p1"));
+        } catch (Exception e) {
+            fail("Exception occurred: " + e.getMessage());
+        }
     }
 
     @Test
-    void SearchName1InStore_Success() {
-        assertDoesNotThrow(() -> marketFacade.searchNameInStore(validUsername,"p", "store1", 5.0, 5.0, 5.0, Category.Food.getIntValue()));
-        assertFalse(marketFacade.searchNameInStore(validUsername,"p", "store1", 5.0, 5.0, 5.0, Category.Food.getIntValue()).contains("p1"));
+    void searchName1InStore_Success() {
+        try {
+            assertDoesNotThrow(() -> marketFacade.searchNameInStore(validUsername,"p", "store1", 5.0, 5.0, 5.0, Category.Food.getIntValue()));
+            assertFalse(marketFacade.searchNameInStore(validUsername,"p", "store1", 5.0, 5.0, 5.0, Category.Food.getIntValue()).contains("p1"));
+        } catch (Exception e) {
+            fail("Exception occurred: " + e.getMessage());
+        }
     }
 
     @Test
