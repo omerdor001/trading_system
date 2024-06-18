@@ -70,7 +70,7 @@ public class Owner extends RoleState {
     }
 
     @Override
-    public void setEditBuyPolicy(boolean editBuyPolicy) {
+    public void setEditPurchasePolicy(boolean editPurchasePolicy) {
     }
 
     @Override
@@ -96,7 +96,7 @@ public class Owner extends RoleState {
     }
 
     @Override
-    public boolean isEditBuyPolicy(){
+    public boolean isEditPurchasePolicy(){
         return true;
     }
 

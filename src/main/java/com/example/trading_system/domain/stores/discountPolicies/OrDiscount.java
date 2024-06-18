@@ -83,6 +83,6 @@ public class OrDiscount implements DiscountPolicy, Condition {
         String firstInfo = first.getInfo();
         String secondInfo = second.getInfo();
         String thenInfo = then.getInfo();
-        return "{ \"type\": \"and\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + ", \"then\": " + thenInfo + " }";
+        return "{ \"type\": \"or\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + ", \"then\": " + thenInfo + " }";
     }
 }

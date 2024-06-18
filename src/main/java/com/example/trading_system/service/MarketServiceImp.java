@@ -37,7 +37,7 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public void openStoreExist(String userName, String storeName) throws IllegalArgumentException {
+    public void openStoreExist(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException {
         marketFacade.openStoreExist(userName, storeName);
     }
 
@@ -70,21 +70,21 @@ public class MarketServiceImp implements MarketService {
         return result;
     }
 
-    public String searchNameInStore(String userName, String productName, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
+    public String searchNameInStore(String userName, String productName, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) throws IllegalAccessException {
         logger.info("Trying to search products in store : {} with name : {}", store_name, productName);
         String result = marketFacade.searchNameInStore(userName, productName, store_name, minPrice, maxPrice, minRating, category);
         logger.info("FINISHED Searching products in store ");
         return result;
     }
 
-    public String searchCategoryInStore(String userName, int category, String store_name, Double minPrice, Double maxPrice, Double minRating) {
+    public String searchCategoryInStore(String userName, int category, String store_name, Double minPrice, Double maxPrice, Double minRating) throws IllegalAccessException {
         logger.info("Trying to search products in store : {} with category, : {}", store_name, category);
         String result = marketFacade.searchCategoryInStore(userName, category, store_name, minPrice, maxPrice, minRating);
         logger.info("FINISHED Searching products in store ");
         return result;
     }
 
-    public String searchKeywordsInStore(String userName, String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
+    public String searchKeywordsInStore(String userName, String keyWords, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) throws IllegalAccessException {
         logger.info("Trying to search products in store : {} with keyWords,  : {}", store_name, keyWords);
         String result = marketFacade.searchKeywordsInStore(userName, keyWords, store_name, minPrice, maxPrice, minRating, category);
         logger.info("FINISHED Searching products in store ");
@@ -280,7 +280,7 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public void closeStoreExist(String userName, String storeName) throws IllegalArgumentException {
+    public void closeStoreExist(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException {
         marketFacade.closeStoreExist(userName, storeName);
     }
 

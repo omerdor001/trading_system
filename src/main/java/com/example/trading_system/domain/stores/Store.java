@@ -1,11 +1,13 @@
 package com.example.trading_system.domain.stores;
 
 import com.example.trading_system.domain.stores.discountPolicies.*;
+import com.example.trading_system.domain.stores.purchasePolicies.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,7 @@ public class Store {
     private Double storeRating;
     private LinkedList<DiscountPolicy> discountPolicies;
     private LinkedList<Condition> discountConditions;
+    private LinkedList<PurchasePolicy> purchasePolicies;
 
     public Store(String nameId, String description, String founder, Double storeRating) {
         this.nameId = nameId;
@@ -475,5 +478,166 @@ public class Store {
     public String getPurchaseHistoryString(String username) {
         return salesHistory.getPurchaseHistory(username);
     }
+    //endregion
+
+    //region Discount creation
+    public String getPurchasePoliciesInfo() {
+        StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.append("[ ");
+
+        boolean firstElement = true;
+        for (PurchasePolicy policy : purchasePolicies) {
+            if (!firstElement) {
+                jsonBuilder.append(", ");
+            }
+            jsonBuilder.append(policy.getInfo());
+            firstElement = false;
+        }
+
+        jsonBuilder.append(" ]");
+        return jsonBuilder.toString();
+    }
+
+    public void addPurchasePolicyByAge(int ageToCheck, int category) {
+       if(ageToCheck<=0 )
+           throw new IllegalArgumentException("Parameter "+ageToCheck+" cannot be negative or zero");
+        if(category<=0)
+            throw new IllegalArgumentException("Parameter "+category+" cannot be negative or zero");
+        purchasePolicies.add(new PurchasePolicyByAge(ageToCheck,category));
+    }
+
+    public void addPurchasePolicyByCategory(int category) {
+        if(category<=0 )
+            throw new IllegalArgumentException("Parameter "+category+" cannot be negative or zero");
+        purchasePolicies.add(new PurchasePolicyByCategory(category));
+    }
+
+    public void addPurchasePolicyByCategoryAndDate(int category, LocalDateTime dateTime) {
+        if(category<=0 )
+            throw new IllegalArgumentException("Parameter "+category+" cannot be negative or zero");
+        if(dateTime==null)
+            throw new IllegalArgumentException("Parameter "+dateTime+" cannot be null");
+        purchasePolicies.add(new PurchasePolicyByCategoryAndDate(category,dateTime));
+    }
+
+    public void addPurchasePolicyByDate(LocalDateTime dateTime) {
+        if(dateTime==null)
+            throw new IllegalArgumentException("Parameter "+dateTime+" cannot be null");
+        purchasePolicies.add(new PurchasePolicyByDate(dateTime));
+    }
+
+    public void addPurchasePolicyByProduct(int productId) {
+        if(productId<0 )
+            throw new IllegalArgumentException("Parameter "+productId+" cannot be negative");
+        purchasePolicies.add(new PurchasePolicyByProduct(productId));
+    }
+
+    public void addPurchasePolicyByProductAndDate(int productId,LocalDateTime dateTime) {
+        if(productId<0)
+            throw new IllegalArgumentException("Parameter "+productId+" cannot be negative");
+        if(dateTime==null)
+            throw new IllegalArgumentException("Parameter "+dateTime+" cannot be null");
+        purchasePolicies.add(new PurchasePolicyByProductAndDate(productId,dateTime));
+    }
+
+    public void addPurchasePolicyByShoppingBagAndDate(LocalDateTime dateTime) {
+        if(dateTime==null)
+            throw new IllegalArgumentException("Parameter "+dateTime+" cannot be null");
+        purchasePolicies.add(new PurchasePolicyByShoppingBagAndDate(dateTime));
+    }
+
+    public void addPurchasePolicyByShoppingCartMaxProducts(int sumOfProducts) {
+        if(sumOfProducts<=0)
+            throw new IllegalArgumentException("Parameter "+sumOfProducts+" cannot be negative and equal");
+        purchasePolicies.add(new PurchasePolicyByShoppingCartMaxProducts(sumOfProducts));
+    }
+
+    public void addPurchasePolicyByShoppingCartMaxProductsUnit(int productId,int numOfQuantity) {
+        if(productId<0)
+            throw new IllegalArgumentException("Parameter "+productId+" cannot be negative");
+        if(numOfQuantity<=0)
+            throw new IllegalArgumentException("Parameter "+numOfQuantity+" cannot be negative and equal");
+        purchasePolicies.add(new PurchasePolicyByShoppingCartMaxProductsUnit(productId,numOfQuantity));
+    }
+
+    public void addPurchasePolicyByShoppingCartMinProducts(int weight) {
+        if(weight<=0)
+            throw new IllegalArgumentException("Parameter "+weight+" cannot be negative and equal");
+        purchasePolicies.add(new PurchasePolicyByShoppingCartMinProducts(weight));
+    }
+
+    public void addPurchasePolicyByShoppingCartMinProductsUnit(int productId,int numOfQuantity) {
+        if(productId<0)
+            throw new IllegalArgumentException("Parameter "+productId+" cannot be negative");
+        if(numOfQuantity<=0)
+            throw new IllegalArgumentException("Parameter "+numOfQuantity+" cannot be negative and equal");
+        purchasePolicies.add(new PurchasePolicyByShoppingCartMinProductsUnit(productId,numOfQuantity));
+    }
+
+    public void addAndPolicy() {
+        purchasePolicies.add(new AndPolicy());
+    }
+
+    public void addOrPolicy() {
+        purchasePolicies.add(new OrPolicy());
+    }
+
+    public void addConditioningPolicy() {
+        purchasePolicies.add(new ConditioningPolicy());
+    }
+
+    public void setProductIdPurchase(int selectedIndex, int productId) {
+        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
+        purchasePolicy.setProduct(productId);
+    }
+
+    public void setNumOfQuantityPurchase(int selectedIndex, int numOfQuantity) {
+        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
+        purchasePolicy.setNumOfQuantity(numOfQuantity);
+    }
+
+    public void setSumOfProductsPurchase(int selectedIndex, int sumOfProducts) {
+        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
+        purchasePolicy.setSumOfProducts(sumOfProducts);
+    }
+
+    public void setDateTime(int selectedIndex, LocalDateTime dateTime) {
+        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
+        purchasePolicy.setDateTime(dateTime);
+    }
+
+    public void setWeight(int selectedIndex, int weight) {
+        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
+        purchasePolicy.setWeight(weight);
+    }
+
+    public void setAge(int selectedIndex, int age) {
+        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
+        purchasePolicy.setAge(age);
+    }
+
+    public void setFirstPurchasePolicy(int selectedDiscountIndex, int selectedFirstIndex) {
+        if (selectedDiscountIndex == selectedFirstIndex)
+            throw new IllegalArgumentException("Indexes cannot be the same");
+        PurchasePolicy editedDiscount = purchasePolicies.get(selectedDiscountIndex);
+        PurchasePolicy setDiscount = purchasePolicies.remove(selectedFirstIndex);
+        editedDiscount.setFirst(setDiscount);
+    }
+
+    public void setSecondPurchasePolicy(int selectedDiscountIndex, int selectedSecondIndex) {
+        if (selectedDiscountIndex == selectedSecondIndex)
+            throw new IllegalArgumentException("Indexes cannot be the same");
+        PurchasePolicy editedDiscount = purchasePolicies.get(selectedDiscountIndex);
+        PurchasePolicy setDiscount = purchasePolicies.remove(selectedSecondIndex);
+        editedDiscount.setSecond(setDiscount);
+    }
+
+    public void removePurchasePolicy(int selectedIndex) {
+        if (selectedIndex >= purchasePolicies.size())
+            purchasePolicies.remove(selectedIndex - purchasePolicies.size());
+        else
+            purchasePolicies.remove(selectedIndex);
+    }
+
     //endregion
 }
