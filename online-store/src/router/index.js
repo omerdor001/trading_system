@@ -18,7 +18,7 @@ import StoreDetails from '@/views/StoreDetails.vue';
 import ProductDetails from '@/views/ProductDetails.vue';
 import ShoppingCart from '@/views/ShoppingCart.vue';
 import Checkout from '@/views/Checkout.vue';
-
+import PurchaseHistory from '@/views/PurchaseHistory.vue';
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },
@@ -37,26 +37,15 @@ const routes = [
     { path: '/product/:productId', name: 'ProductDetails', component: ProductDetails, props: true },
     { path: '/cart', name: 'ShoppingCart', component: ShoppingCart },
     { path: '/checkout', name: 'Checkout', component: Checkout },
-    {path: '/store-name-input', name: 'StoreNameInput', component: StoreNameInput},
-    {path: '/product-list/:storeName', name: 'ProductList', component: ProductList, props: true},
-    {path: '/product-management/:storeName/:productId', name: 'ProductManagement', component: ProductManagement, props: true},
+    { path: '/store-name-input', name: 'StoreNameInput', component: StoreNameInput },
+    { path: '/product-list/:storeName', name: 'ProductList', component: ProductList, props: true },
+    { path: '/product-management/:storeName/:productId', name: 'ProductManagement', component: ProductManagement, props: true },
+    { path: '/purchase-history', name: 'PurchaseHistory', component: PurchaseHistory }, // Add the new route
 ];
-
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
-    routes
-});
-
-router.beforeEach((to, from, next) => {
-    const loggedIn = localStorage.getItem('isLoggedIn');
-    if (to.name !== 'LoginModel' && to.name !== 'UserRegistration' && !loggedIn) {
-        next({ name: 'LoginModel' });
-    } else if ((to.name === 'LoginModel' || to.name === 'UserRegistration') && loggedIn) {
-        next({ name: 'HomePage' });
-    } else {
-        next();
-    }
+    routes,
 });
 
 export default router;

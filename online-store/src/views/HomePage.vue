@@ -13,7 +13,7 @@
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Appoint Manager" @click="appointManager" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Permissions to Manager" @click="permissionsToManager" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Yield Ownership" @click="yieldOwnership" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Purchases History" @click="purchasesHistoryAsOwner" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Purchases History" @click="navigateToPurchaseHistory" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Close Store" @click="closeStore" class="sidebar-button"/>
       </div>
       <div class="content">
@@ -59,6 +59,7 @@
     </footer>
   </div>
 </template>
+
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
@@ -140,7 +141,7 @@ export default defineComponent({
       console.log('Yielding Ownership');
     };
     const purchasesHistoryAsOwner = () => {
-      console.log('Viewing Purchases History as Owner');
+      router.push({ name: 'PurchaseHistory' }); // Navigate to PurchaseHistory
     };
     const closeStore = () => {
       console.log('Closing Store');
@@ -186,6 +187,7 @@ export default defineComponent({
     };
     const purchasesHistoryAsSystemManager = () => {
       console.log('Viewing Purchases History as System Manager');
+      router.push({ name: 'PurchaseHistory' });
     };
     const allPurchases = () => {
       console.log('Viewing All Purchases');
@@ -196,6 +198,9 @@ export default defineComponent({
       localStorage.removeItem('roles');
       localStorage.removeItem('username');
       router.push('/');
+    };
+    const navigateToPurchaseHistory = () => {
+      router.push({ name: 'PurchaseHistory' });
     };
     return {
       isLoggedIn,
@@ -228,11 +233,13 @@ export default defineComponent({
       watchSuspensions,
       purchasesHistoryAsSystemManager,
       allPurchases,
-      logout
+      logout,
+      navigateToPurchaseHistory
     };
   }
 });
 </script>
+
 <style scoped>
 .main-content {
   display: flex;
