@@ -4,6 +4,7 @@
       <div class="left-buttons">
         <img src="@/assets/logo.png" alt="LASMONY" class="logo">
         <PrimeButton label="Home" @click="goHome" class="p-button-primary" />
+        <PrimeButton label="Search" @click="goToSearch" class="p-button-primary" />
       </div>
       <div class="right-buttons">
         <template v-if="isLoggedIn">
@@ -47,12 +48,17 @@ export default defineComponent({
       router.push({ name: 'HomePage' });
     };
 
+    const goToSearch = () => {
+      router.push({ name: 'SearchPage' });
+    };
+
     const viewCart = () => {
       router.push({ name: 'ShoppingCart' });
     };
 
     return {
       goHome,
+      goToSearch,
       viewCart
     };
   },

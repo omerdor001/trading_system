@@ -122,6 +122,7 @@ export default defineComponent({
     };
     const myStoresIOwn = () => {
       console.log('My Stores I Own');
+      router.push('/my-stores-i-own')
     };
     const manageProductsAsOwner = () => {
       console.log('Managing Products as Owner');

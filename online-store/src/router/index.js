@@ -10,7 +10,7 @@ import CreateSuspension from '@/views/CreateSuspension.vue';
 import EndSuspension from '@/views/EndSuspension.vue';
 import WatchSuspensions from '@/views/WatchSuspensions.vue';
 import StoreNameInput from '@/views/StoreNameInput.vue';
-import ProductList from '@/views/ProductList.vue';
+import ProductList from '@/views/ProductListEditor.vue';
 import ProductManagement from '@/views/ProductManagement.vue';
 import StoresIManage from '@/views/StoresIManage.vue';
 import StoreDetailsEditor from "@/views/StoreDetailsEditor.vue";
@@ -19,6 +19,8 @@ import ProductDetails from '@/views/ProductDetails.vue';
 import ShoppingCart from '@/views/ShoppingCart.vue';
 import Checkout from '@/views/Checkout.vue';
 import PurchaseHistory from '@/views/PurchaseHistory.vue';
+import SearchPage from '@/views/SearchPage.vue';
+import SearchResults from '@/views/SearchResults.vue';
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },
@@ -40,7 +42,9 @@ const routes = [
     { path: '/store-name-input', name: 'StoreNameInput', component: StoreNameInput },
     { path: '/product-list/:storeName', name: 'ProductList', component: ProductList, props: true },
     { path: '/product-management/:storeName/:productId', name: 'ProductManagement', component: ProductManagement, props: true },
-    { path: '/purchase-history', name: 'PurchaseHistory', component: PurchaseHistory }, // Add the new route
+    { path: '/purchase-history', name: 'PurchaseHistory', component: PurchaseHistory },
+    { path: '/search', name: 'SearchPage', component: SearchPage },
+    { path: '/search-results', name: 'SearchResults', component: SearchResults },
 ];
 
 const router = createRouter({
