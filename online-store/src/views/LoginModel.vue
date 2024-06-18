@@ -3,9 +3,9 @@
     <header>
       <div class="header-content">
         <div class="left-buttons">
-          <img src="@/assets/logo.png" alt="LASMONY" class="logo">
-          <PrimeButton label="Home" @click="goHome" class="p-button-primary" />
+          <PrimeButton icon="pi pi-arrow-left" @click="goBack" />
         </div>
+        <img src="@/assets/logo.png" alt="LASMONY" class="logo">
         <div class="right-buttons">
           <PrimeButton label="Notifications" icon="pi pi-bell" @click="notifications" />
           <PrimeButton label="Cart" icon="pi pi-shopping-cart" @click="viewCart" />
@@ -29,7 +29,6 @@
           </div>
           <div class="button-group">
             <PrimeButton label="Login" icon="pi pi-check" type="submit" class="login-button" />
-            <PrimeButton label="Close" icon="pi pi-times" type="button" @click="closeModal" class="close-button" />
             <PrimeButton label="Register" icon="pi pi-user-plus" type="button" @click="goToRegister" class="register-button" />
           </div>
         </form>
@@ -134,13 +133,15 @@ export default defineComponent({
       }
     };
 
-    const closeModal = () => {
+    const goBack = () => {
+      router.go(-1);
+    };
+/*    const closeModal = () => {
       localStorage.setItem('roles', JSON.stringify([]));
       localStorage.setItem('isLoggedIn', 'false');
       localStorage.setItem('username', 'Guest');
       router.push('/');
-    };
-
+    };*/
     const goToRegister = () => {
       router.push('/register');
     };
@@ -162,7 +163,7 @@ export default defineComponent({
       password,
       errorMessage,
       handleLogin,
-      closeModal,
+      goBack,
       goToRegister,
       notifications,
       viewCart,
@@ -190,13 +191,7 @@ export default defineComponent({
   width: auto;
 }
 
-.left-buttons {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.right-buttons {
+.right-buttons, .left-buttons {
   display: flex;
   gap: 10px;
 }
@@ -237,14 +232,6 @@ export default defineComponent({
   color: #333;
 }
 
-.form-group .p-inputtext {
-  width: 100%;
-}
-
-.form-group .p-password {
-  width: 100%;
-}
-
 .custom-card {
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -271,10 +258,6 @@ export default defineComponent({
 }
 
 .login-button .p-button {
-  width: 100%;
-}
-
-.close-button .p-button {
   width: 100%;
 }
 
