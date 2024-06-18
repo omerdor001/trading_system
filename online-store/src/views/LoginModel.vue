@@ -64,17 +64,72 @@ export default defineComponent({
     const password = ref('');
     const errorMessage = ref('');
 
+    const authenticate = async (username, password) => {
+      let roles = [];
+      let isAuthenticated = false;
+
+      switch (username) {
+        case 'admin':
+          if (password === 'admin') {
+            roles = ['storeManager', 'commercialManager', 'storeOwner', 'systemManager'];
+            isAuthenticated = true;
+          }
+          break;
+        case 'manager':
+          if (password === 'manager') {
+            roles = ['storeManager'];
+            isAuthenticated = true;
+          }
+          break;
+        case 'system':
+          if (password === 'system') {
+            roles = ['systemManager'];
+            isAuthenticated = true;
+          }
+          break;
+        case 'commercial':
+          if (password === 'commercial') {
+            roles = ['commercialManager'];
+            isAuthenticated = true;
+          }
+          break;
+        case 'lana':
+          if (password === 'lana') {
+            roles = ['commercialManager', 'systemManager', 'storeOwner'];
+            isAuthenticated = true;
+          }
+          break;
+        case 'user':
+          if (password === 'user') {
+            roles = [];  // No roles for regular user
+            isAuthenticated = true;
+          }
+          break;
+        default:
+          isAuthenticated = false;
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      if (isAuthenticated) {
+        localStorage.setItem('roles', JSON.stringify(roles));
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('username', username);
+        return true;
+      } else {
+        localStorage.removeItem('roles');
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('username');
+        return false;
+      }
+    };
+
     const handleLogin = async () => {
       try {
-        // Perform authentication logic here
         const loggedIn = await authenticate(username.value, password.value);
         if (loggedIn) {
-          // Successful login
-          router.push('/'); // Redirect to home page
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('username', username.value);
+          router.push('/');
         } else {
-          // Authentication failed
           errorMessage.value = 'Invalid username or password';
         }
       } catch (error) {
@@ -96,51 +151,6 @@ export default defineComponent({
 
     const viewCart = () => {
       // Handle viewing cart
-    };
-
-    // Simulated authentication function (replace with actual logic)
-    const authenticate = async (username, password) => {
-      let roles = [];
-      switch (username) {
-        case 'admin':
-          if (password === 'admin') {
-            roles.push('storeManager', 'commercialManager', 'storeOwner', 'systemManager');
-          }
-          break;
-        case 'manager':
-          if (password === 'manager') {
-            roles.push('storeManager');
-          }
-          break;
-        case 'system':
-          if (password === 'system') {
-            roles.push('systemManager');
-          }
-          break;
-        case 'commercial':
-          if (password === 'commercial') {
-            roles.push('commercialManager');
-          }
-          break;
-        case 'lana':
-          if (password === 'lana') {
-            roles.push('commercialManager', 'systemManager', 'storeOwner');
-          }
-          break;
-        case 'user':
-          if (password === 'user') {
-            roles = [];
-          }
-          break;
-        default:
-          return false;
-      }
-
-      // Simulate async delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Simulate successful login
-      return true;
     };
 
     return {

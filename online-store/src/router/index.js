@@ -7,6 +7,9 @@ import YieldOwnership from '@/views/YieldOwnership.vue';
 import UserRegistration from '@/views/UserRegistration.vue';
 import MyStoresIOwn from '@/views/MyStoresIOwn.vue'; // Import the new component
 import StoreDetails from '@/views/StoreDetails.vue'; // Import the store details component
+import CreateSuspension from '@/views/CreateSuspension.vue';
+import EndSuspension from '@/views/EndSuspension.vue';
+import WatchSuspensions from '@/views/WatchSuspensions.vue';
 import StoresIManage from '@/views/StoresIManage.vue';
 
 const routes = [
@@ -46,6 +49,32 @@ const routes = [
         component: MyStoresIOwn // Ensure the route is correctly defined
     },
     {
+        path: '/store/:storeId',
+        name: 'StoreDetails',
+        component: StoreDetails,
+        props: true // Pass route params as props
+    },
+    {
+        path: '/create-suspension',
+        name: 'CreateSuspension',
+        component: CreateSuspension
+    },
+    {
+        path: '/end-suspension',
+        name: 'EndSuspension',
+        component: EndSuspension
+    },
+    {
+        path: '/watch-suspensions',
+        name: 'WatchSuspensions',
+        component: WatchSuspensions
+    },
+    {
+        path: '/my-stores-i-own',
+        name: 'MyStoresIOwn',
+        component: MyStoresIOwn // Ensure the route is correctly defined
+    },
+    {
       path: '/stores-i-manage',
       name: 'StoresIManage',
       component: StoresIManage
@@ -57,6 +86,7 @@ const routes = [
         component: StoreDetails,
         props: true // Pass route params as props
     }
+
 ];
 
 const router = createRouter({
