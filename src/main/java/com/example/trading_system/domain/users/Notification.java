@@ -1,6 +1,5 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.service.NotificationService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

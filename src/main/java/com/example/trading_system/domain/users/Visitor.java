@@ -30,9 +30,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public void receiveNotification(String notification) {
-        throw new UnsupportedOperationException("Visitors cannot receive notifications");
-    }
+    public void receiveNotification(String notification) {}
 
     @Override
     public LocalDate getBirthdate() {

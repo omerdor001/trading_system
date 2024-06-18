@@ -3,18 +3,15 @@ package com.example.trading_system.service;
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class MarketServiceImp implements MarketService {
     private static MarketServiceImp instance = null;
     private MarketFacade marketFacade;
-    private NotificationService notificationService;
 
     private MarketServiceImp() {
         marketFacade = MarketFacadeImp.getInstance();
-        notificationService = ApplicationContextProvider.getBean(NotificationService.class);
     }
 
     public static MarketServiceImp getInstance() {

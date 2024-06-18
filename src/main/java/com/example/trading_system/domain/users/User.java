@@ -127,16 +127,11 @@ public abstract class User {
 
     public abstract List<Notification> getNotifications();
 
-    public abstract void receiveNotification(String notification);
+    public abstract void receiveDelayedNotification(Notification notification);
 
     public abstract LocalDate getBirthdate();
 
     public abstract int getAge();
-
-//    public String sendNotification(String receiverUsername, String content) {
-//        Notification notification = new Notification(this.username, receiverUsername, new Date(), content);
-//        return notification.toString();
-//    }
 
     public void addProductToCart(int productId, int quantity, String storeName, double price, int category) {
         this.cart.addProductToCart(productId, quantity, storeName, price, category);

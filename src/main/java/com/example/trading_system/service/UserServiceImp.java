@@ -12,11 +12,9 @@ public class UserServiceImp implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
     private static UserServiceImp instance = null;
     private UserFacadeImp userFacade;
-    private final NotificationService notificationService;
 
     private UserServiceImp() {
         userFacade = UserFacadeImp.getInstance();
-        notificationService = ApplicationContextProvider.getBean(NotificationService.class);
     }
 
     public static UserServiceImp getInstance() {
@@ -53,6 +51,11 @@ public class UserServiceImp implements UserService {
         userFacade.login(usernameV, username, password);
         logger.info("User: {} logged in", username);
         return true;
+    }
+
+    @Override
+    public void sendPendingNotifications(String username){
+        userFacade.sendPendingNotifications(username);
     }
 
     @Override

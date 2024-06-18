@@ -18,9 +18,11 @@ public interface UserFacade {
 
     void login(String usernameV, String username, String password);
 
+    void sendPendingNotifications(String username);
+
     void logout(int id, String username);
 
-    void suspendUser(String admin, String toSuspend, LocalDateTime endSuspention);
+    void suspendUser(String admin, String toSuspend, LocalDateTime endSuspension);
 
     void endSuspendUser(String admin, String toSuspend);
 
@@ -30,7 +32,7 @@ public interface UserFacade {
 
     boolean isSuspended(String username);
 
-    boolean sendNotification(User sender, User receiver, String content);
+    void sendNotification(String sender, String receiver, String content);
 
     void saveUserCart(String username, int productId, String storeName, int quantity);
 

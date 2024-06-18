@@ -296,6 +296,21 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
+    public ResponseEntity<String> sendPendingNotifications(String username, String token){
+        logger.info("Attempting to send pending notifications for user: {}", username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            userService.sendPendingNotifications(username);
+            logger.info("Pending notifications sent successfully for user: {}", username);
+            return new ResponseEntity<>("", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while sending pending notifications for user: {}: {}", username, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public ResponseEntity<String> logout(String token, String username) {
         logger.info("Attempting to logout user: {}", username);
         try {

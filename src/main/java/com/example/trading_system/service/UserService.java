@@ -20,6 +20,8 @@ public interface UserService {
 
     boolean login(String usernameV, String username, String password);
 
+    void sendPendingNotifications(String username);
+
     boolean logout(int id, String username);
 
     void suspendUser(String admin, String toSuspend, LocalDateTime endSuspention);

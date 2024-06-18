@@ -1,16 +1,16 @@
-package com.example.trading_system.service;
+package com.example.trading_system.domain;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NotificationService {
+public class NotificationController {
 
     private final SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    public NotificationService(SimpMessagingTemplate messagingTemplate) {
+    public NotificationController(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
 

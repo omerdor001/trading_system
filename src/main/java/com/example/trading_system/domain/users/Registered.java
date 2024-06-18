@@ -86,13 +86,8 @@ public class Registered extends User {
     }
 
     @Override
-    public void receiveNotification(String notificationString) {
-        if (!isLogged) {
-            Notification notification = Notification.fromString(notificationString);
-            this.notifications.add(notification);
-        } else {
-            //TODO show in UI
-        }
+    public void receiveDelayedNotification(Notification notification) {
+        notifications.add(notification);
     }
 
     public void addManagerRole(String appoint, String store_name_id) {

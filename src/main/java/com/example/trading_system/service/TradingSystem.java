@@ -41,6 +41,8 @@ public interface TradingSystem {
 
     ResponseEntity<String> login(String token, String usernameV, String username, String password);
 
+    ResponseEntity<String> sendPendingNotifications(String username, String token);
+
     ResponseEntity<String> logout(String token, String username);
 
     ResponseEntity<String> suspendUser(String token, String admin, String toSuspend, LocalDateTime endSuspention);

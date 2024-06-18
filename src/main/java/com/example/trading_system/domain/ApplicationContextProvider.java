@@ -1,4 +1,4 @@
-package com.example.trading_system.service;
+package com.example.trading_system.domain;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
