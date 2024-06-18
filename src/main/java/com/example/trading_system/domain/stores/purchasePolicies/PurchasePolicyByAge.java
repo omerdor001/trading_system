@@ -14,9 +14,9 @@ public class PurchasePolicyByAge implements PurchasePolicy {
     }
 
     @Override
-    public boolean isSatisfied(Collection<ProductInSaleDTO> items, int age) {
+    public boolean isPurchasePolicySatisfied(Collection<ProductInSaleDTO> items, int age) {
         for (ProductInSaleDTO productInSaleDTO:items){
-            if(productInSaleDTO.getId()==categoryId && age<=ageToCheck){
+            if(productInSaleDTO.getCategory()==categoryId && age<=ageToCheck){
                 return false;
             }
         }
@@ -24,56 +24,46 @@ public class PurchasePolicyByAge implements PurchasePolicy {
     }
 
     @Override
-    public void setFirst(PurchasePolicy first) {
+    public void setPurchasePolicyFirst(PurchasePolicy first) {
         throw new RuntimeException("This is a simple, uncomplicated purchase policy");
     }
 
     @Override
-    public void setSecond(PurchasePolicy second) {
+    public void setPurchasePolicySecond(PurchasePolicy second) {
         throw new RuntimeException("This is a simple, uncomplicated purchase policy");
 
     }
 
     @Override
-    public void setCategory(int categoryId) {
+    public void setPurchasePolicyCategory(int categoryId) {
         this.categoryId=categoryId;
     }
 
     @Override
-    public void setProduct(int productID) {
+    public void setPurchasePolicyProduct(int productID) {
         throw new RuntimeException("Action not allowed for policy by age");
     }
 
     @Override
-    public void setNumOfQuantity(int sum) {
+    public void setPurchasePolicyNumOfQuantity(int sum) {
         throw new RuntimeException("Action not allowed for policy by age");
     }
 
     @Override
-    public void setSumOfProducts(int sum) {
+    public void setPurchasePolicyDateTime(LocalDateTime date) {
         throw new RuntimeException("Action not allowed for policy by age");
     }
 
     @Override
-    public void setDateTime(LocalDateTime date) {
-        throw new RuntimeException("Action not allowed for policy by age");
-    }
-
-    @Override
-    public void setWeight(int weight) {
-        throw new RuntimeException("Action not allowed for policy by age");
-    }
-
-    @Override
-    public void setAge(int age) {
-        if(age<=0 )
+    public void setPurchasePolicyAge(int age) {
+        if(age<=0)
             throw new IllegalArgumentException("Parameter "+age+" cannot be negative or zero");
         this.ageToCheck=age;
     }
 
     @Override
-    public String getInfo() {
-        return "{ \"type\": \"ShoppingCart age and category\",  \"category\": " + categoryId+  " }";
+    public String getPurchasePolicyInfo() {
+        return "{ \"type\": \"ShoppingCart age and category\", \"category\": " + categoryId+ ", \"ageToCheck\": " + ageToCheck +  " }";
     }
 
 

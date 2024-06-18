@@ -14,7 +14,7 @@ public class PurchasePolicyByProductAndDate implements PurchasePolicy {
     }
 
     @Override
-    public boolean isSatisfied(Collection<ProductInSaleDTO> items, int age) {
+    public boolean isPurchasePolicySatisfied(Collection<ProductInSaleDTO> items, int age) {
         for (ProductInSaleDTO productInSaleDTO:items){
             if(productInSaleDTO.getId()==productId && dateTime.isAfter(LocalDateTime.now())){
                 return false;
@@ -27,56 +27,46 @@ public class PurchasePolicyByProductAndDate implements PurchasePolicy {
     }
 
     @Override
-    public void setFirst(PurchasePolicy first) {
+    public void setPurchasePolicyFirst(PurchasePolicy first) {
         throw new RuntimeException("This is a simple, uncomplicated purchase policy");
     }
 
     @Override
-    public void setSecond(PurchasePolicy second) {
+    public void setPurchasePolicySecond(PurchasePolicy second) {
         throw new RuntimeException("This is a simple, uncomplicated purchase policy");
     }
 
     @Override
-    public void setCategory(int categoryId) {
+    public void setPurchasePolicyCategory(int categoryId) {
         throw new RuntimeException("Action not allowed for policy by product and date");
     }
 
     @Override
-    public void setProduct(int productID) {
+    public void setPurchasePolicyProduct(int productID) {
         if(productID<=0 )
             throw new IllegalArgumentException("Parameter "+productID+" cannot be negative or zero");
         this.productId=productID;
     }
 
     @Override
-    public void setNumOfQuantity(int sum) {
+    public void setPurchasePolicyNumOfQuantity(int sum) {
         throw new RuntimeException("Action not allowed for policy by product and date");
     }
 
     @Override
-    public void setSumOfProducts(int sum) {
-        throw new RuntimeException("Action not allowed for policy by product and date");
-    }
-
-    @Override
-    public void setDateTime(LocalDateTime date) {
+    public void setPurchasePolicyDateTime(LocalDateTime date) {
         if(dateTime==null)
             throw new IllegalArgumentException("Parameter "+dateTime+" cannot be null");
        this.dateTime=date;
     }
 
     @Override
-    public void setWeight(int weight) {
+    public void setPurchasePolicyAge(int age) {
         throw new RuntimeException("Action not allowed for policy by product and date");
     }
 
     @Override
-    public void setAge(int age) {
-        throw new RuntimeException("Action not allowed for policy by product and date");
-    }
-
-    @Override
-    public String getInfo() {
+    public String getPurchasePolicyInfo() {
         return "{ \"type\": \"ShoppingCart product and date after now\", \"dateTime_limit\": " + dateTime+", \"productId\": " + productId +  " }";
     }
 }

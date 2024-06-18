@@ -1,5 +1,6 @@
 package com.example.trading_system.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MarketService {
@@ -111,5 +112,47 @@ public interface MarketService {
     void setCountCondition(String username, String storeName, int selectedConditionIndex, int newCount) throws IllegalAccessException;
 
     void setCategoryCondition(String username, String storeName, int selectedConditionIndex, int newCategory) throws IllegalAccessException;
+
     //endregion
+
+    //purchase_policy
+    String getPurchasePoliciesInfo(String username, String storeName) throws IllegalAccessException;
+
+    void addPurchasePolicyByAge(String username, String storeName, int ageToCheck, int category) throws IllegalAccessException;
+
+    void addPurchasePolicyByCategory(String username, String storeName, int category, int productId) throws IllegalAccessException;
+
+    void addPurchasePolicyByCategoryAndDate(String username, String storeName, int category, LocalDateTime dateTime) throws IllegalAccessException;
+
+    void addPurchasePolicyByDate(String username, String storeName, LocalDateTime dateTime) throws IllegalAccessException;
+
+    void addPurchasePolicyByProductAndDate(String username, String storeName, int productId, LocalDateTime dateTime) throws IllegalAccessException;
+
+    void addPurchasePolicyByShoppingCartMaxProductsUnit(String username, String storeName, int productId, int numOfQuantity) throws IllegalAccessException;
+
+    void addPurchasePolicyByShoppingCartMinProducts(String username, String storeName, int numOfQuantity) throws IllegalAccessException;
+
+    void addPurchasePolicyByShoppingCartMinProductsUnit(String username, String storeName, int productId, int numOfQuantity) throws IllegalAccessException;
+
+    void addAndPurchasePolicy(String username, String storeName) throws IllegalAccessException;
+
+    void addOrPurchasePolicy(String username, String storeName) throws IllegalAccessException;
+
+    void addConditioningPurchasePolicy(String username, String storeName) throws IllegalAccessException;
+
+    void setPurchasePolicyProductId(String username, String storeName, int selectedIndex, int productId) throws IllegalAccessException;
+
+    void setPurchasePolicyNumOfQuantity(String username, String storeName, int selectedIndex, int numOfQuantity) throws IllegalAccessException;
+
+    void setPurchasePolicyDateTime(String username, String storeName, int selectedIndex, LocalDateTime dateTime) throws IllegalAccessException;
+
+    void setPurchasePolicyAge(String username, String storeName, int selectedIndex, int age) throws IllegalAccessException;
+
+    void setFirstPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedFirstIndex) throws IllegalAccessException;
+
+    void setSecondPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
+
+    void removePurchasePolicy(String username, String storeName, int selectedIndex) throws IllegalAccessException;
+
+    //end region
 }
