@@ -41,6 +41,7 @@ import Textarea from 'primevue/textarea';
 import CreateButton from 'primevue/button';
 import BackButton from 'primevue/button';
 import { useRouter } from 'vue-router';
+import UserViewModel from "@/ViewModel/UserViewModel";
 
 export default defineComponent({
   name: 'OpenStore',
@@ -70,8 +71,8 @@ export default defineComponent({
     };
 
     const logout = () => {
-      router.push('/login');
-    };
+      UserViewModel.actions.logout();
+      router.push('/login');};
 
     return {
       name,

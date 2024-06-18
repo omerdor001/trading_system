@@ -5,12 +5,16 @@ import OpenStore from '@/views/OpenStore.vue';
 import CloseStore from '@/views/CloseStore.vue';
 import YieldOwnership from '@/views/YieldOwnership.vue';
 import UserRegistration from '@/views/UserRegistration.vue';
-import MyStoresIOwn from '@/views/MyStoresIOwn.vue'; // Import the new component
-import StoreDetails from '@/views/StoreDetails.vue'; // Import the store details component
+import MyStoresIOwn from '@/views/MyStoresIOwn.vue';
+import StoreDetails from '@/views/StoreDetails.vue';
 import CreateSuspension from '@/views/CreateSuspension.vue';
 import EndSuspension from '@/views/EndSuspension.vue';
 import WatchSuspensions from '@/views/WatchSuspensions.vue';
+import StoreNameInput from '@/views/StoreNameInput.vue';
+import ProductList from '@/views/ProductList.vue';
+import ProductManagement from '@/views/ProductManagement.vue';
 import StoresIManage from '@/views/StoresIManage.vue';
+
 
 const routes = [
     {
@@ -46,13 +50,13 @@ const routes = [
     {
         path: '/my-stores-i-own',
         name: 'MyStoresIOwn',
-        component: MyStoresIOwn // Ensure the route is correctly defined
+        component: MyStoresIOwn
     },
     {
         path: '/store/:storeId',
         name: 'StoreDetails',
         component: StoreDetails,
-        props: true // Pass route params as props
+        props: true
     },
     {
         path: '/create-suspension',
@@ -68,6 +72,23 @@ const routes = [
         path: '/watch-suspensions',
         name: 'WatchSuspensions',
         component: WatchSuspensions
+    },
+    {
+        path: '/store-name-input',
+        name: 'StoreNameInput',
+        component: StoreNameInput
+    },
+    {
+        path: '/product-list/:storeName',
+        name: 'ProductList',
+        component: ProductList,
+        props: true
+    },
+    {
+        path: '/product-management/:storeName/:productId',
+        name: 'ProductManagement',
+        component: ProductManagement,
+        props: true
     },
     {
         path: '/my-stores-i-own',
@@ -86,7 +107,6 @@ const routes = [
         component: StoreDetails,
         props: true // Pass route params as props
     }
-
 ];
 
 const router = createRouter({
@@ -94,20 +114,5 @@ const router = createRouter({
     routes
 });
 
-router.beforeEach((to, from, next) => {
-    const loggedIn = localStorage.getItem('isLoggedIn'); // Adjusted localStorage key
-    if (to.name !== 'LoginModel' && to.name !== 'UserRegistration' && !loggedIn) {
-        // If navigating to any route other than 'LoginModel' or 'UserRegistration' and not logged in,
-        // redirect to login page
-        next({ name: 'LoginModel' });
-    } else if ((to.name === 'LoginModel' || to.name === 'UserRegistration') && loggedIn) {
-        // If navigating to 'LoginModel' or 'UserRegistration' route and already logged in,
-        // redirect to home page
-        next({ name: 'HomePage' });
-    } else {
-        // Continue navigation as usual
-        next();
-    }
-});
 
 export default router;
