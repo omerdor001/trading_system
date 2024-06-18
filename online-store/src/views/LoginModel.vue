@@ -136,12 +136,7 @@ export default defineComponent({
     const goBack = () => {
       router.go(-1);
     };
-/*    const closeModal = () => {
-      localStorage.setItem('roles', JSON.stringify([]));
-      localStorage.setItem('isLoggedIn', 'false');
-      localStorage.setItem('username', 'Guest');
-      router.push('/');
-    };*/
+
     const goToRegister = () => {
       router.push('/register');
     };

@@ -3,8 +3,7 @@
     <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
     <div class="main-content">
       <div class="sidebar">
-        <PrimeButton label="Enter to Stores" @click="enterStores" class="sidebar-button"/>
-        <PrimeButton label="Search Product" @click="searchProduct" class="sidebar-button"/>
+        <PrimeButton label="Search Store" @click="navigateToSearchStore" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Approve Appointment" @click="approveAppointment" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="My Stores" @click="myStoresIOwn" class="sidebar-button"/>
@@ -13,7 +12,7 @@
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Appoint Manager" @click="appointManager" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Permissions to Manager" @click="permissionsToManager" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Yield Ownership" @click="yieldOwnership" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Purchases History" @click="purchasesHistoryAsOwner" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Purchases History" @click="navigateToPurchaseHistory" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Close Store" @click="closeStore" class="sidebar-button"/>
       </div>
       <div class="content">
@@ -59,6 +58,7 @@
     </footer>
   </div>
 </template>
+
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
@@ -106,26 +106,23 @@ export default defineComponent({
       router.push({ name: 'StoreDetails', params: { storeId } });
     };
 
-    const enterStores = () => {
-      console.log('Entering Stores');
-    };
     const openStore = () => {
       console.log('Opening Store');
       router.push('/open-store');
     };
-    const searchProduct = () => {
-      console.log('Searching Product');
+    const navigateToSearchStore = () => {
+      router.push('/search-store');
     };
     const approveAppointment = () => {
       console.log('Approving Appointment');
     };
     const myStoresIOwn = () => {
       console.log('My Stores I Own');
+      router.push('/my-stores-i-own');
     };
     const manageProductsAsOwner = () => {
       console.log('Managing Products as Owner');
       router.push('/store-name-input');
-
     };
     const appointOwner = () => {
       console.log('Appointing Owner');
@@ -140,7 +137,7 @@ export default defineComponent({
       console.log('Yielding Ownership');
     };
     const purchasesHistoryAsOwner = () => {
-      console.log('Viewing Purchases History as Owner');
+      router.push({ name: 'PurchaseHistory' }); // Navigate to PurchaseHistory
     };
     const closeStore = () => {
       console.log('Closing Store');
@@ -165,27 +162,28 @@ export default defineComponent({
       console.log('Creating Suspension');
       if (isSystemManager.value) {
         router.push('/create-suspension');
-      } else{
-        console.error("Unauthorized");
+      } else {
+        console.error('Unauthorized');
       }
     };
     const endSuspension = () => {
       console.log('Ending Suspension');
       if (isSystemManager.value) {
         router.push('/end-suspension');
-      } else{
-        console.error("Unauthorized");
+      } else {
+        console.error('Unauthorized');
       }
     };
     const watchSuspensions = () => {
       if (isSystemManager.value) {
         router.push('/watch-suspensions');
-      } else{
-        console.error("Unauthorized");
+      } else {
+        console.error('Unauthorized');
       }
     };
     const purchasesHistoryAsSystemManager = () => {
       console.log('Viewing Purchases History as System Manager');
+      router.push({ name: 'PurchaseHistory' });
     };
     const allPurchases = () => {
       console.log('Viewing All Purchases');
@@ -197,6 +195,9 @@ export default defineComponent({
       localStorage.removeItem('username');
       router.push('/');
     };
+    const navigateToPurchaseHistory = () => {
+      router.push({ name: 'PurchaseHistory' });
+    };
     return {
       isLoggedIn,
       isStoreOwner,
@@ -206,9 +207,8 @@ export default defineComponent({
       username,
       activeStores,
       viewProducts,
-      enterStores,
       openStore,
-      searchProduct,
+      navigateToSearchStore,
       approveAppointment,
       myStoresIOwn,
       manageProductsAsOwner,
@@ -228,11 +228,13 @@ export default defineComponent({
       watchSuspensions,
       purchasesHistoryAsSystemManager,
       allPurchases,
-      logout
+      logout,
+      navigateToPurchaseHistory
     };
   }
 });
 </script>
+
 <style scoped>
 .main-content {
   display: flex;
@@ -246,32 +248,39 @@ export default defineComponent({
   gap: 10px;
   flex: 1;
 }
+
 .sidebar-button {
   width: 100%;
   max-width: 150px;
 }
+
 .content {
   flex: 2;
   padding: 0 20px;
 }
+
 .active-stores {
   margin-top: 20px;
 }
+
 .store-item {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
 }
+
 .store-image {
   width: 150px;
   height: 150px;
   margin-right: 10px;
 }
+
 .store-details {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
+
 footer {
   background-color: #425965;
   color: white;
