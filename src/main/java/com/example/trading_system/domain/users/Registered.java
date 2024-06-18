@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 
 public class Registered extends User {
@@ -169,6 +170,12 @@ public class Registered extends User {
 
     public LocalDate getBirthdate() {
         return birthdate;
+    }
+
+    @Override
+    public int getAge() {
+        LocalDate currentDate = LocalDate.now();
+        return Period.between(birthdate, currentDate).getYears();
     }
 
 }

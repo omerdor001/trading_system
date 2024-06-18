@@ -11,57 +11,47 @@ public class PlaceholderPurchasePolicy implements PurchasePolicy{
     }
 
     @Override
-    public boolean isSatisfied(Collection<ProductInSaleDTO> items, int age) {
+    public boolean isPurchasePolicySatisfied(Collection<ProductInSaleDTO> items, int age) {
         return true;
     }
 
     @Override
-    public void setFirst(PurchasePolicy first) {
+    public void setPurchasePolicyFirst(PurchasePolicy first) {
         throw new RuntimeException("Action not allowed for policy by placeholder purchase policy");
     }
 
     @Override
-    public void setSecond(PurchasePolicy second) {
+    public void setPurchasePolicySecond(PurchasePolicy second) {
         throw new RuntimeException("Action not allowed for policy by placeholder purchase policy");
     }
 
     @Override
-    public void setCategory(int categoryId) {
+    public void setPurchasePolicyCategory(int categoryId) {
         throw new RuntimeException("Action not allowed for policy by placeholder purchase policy");
     }
 
     @Override
-    public void setProduct(int productID) {
+    public void setPurchasePolicyProduct(int productID) {
         throw new RuntimeException("Action not allowed for policy by placeholder purchase policy");
     }
 
     @Override
-    public void setNumOfQuantity(int sum) {
+    public void setPurchasePolicyNumOfQuantity(int sum) {
         throw new RuntimeException("Action not allowed for policy by placeholder purchase policy");
     }
 
     @Override
-    public void setSumOfProducts(int sum) {
+    public void setPurchasePolicyDateTime(LocalDateTime date) {
         throw new RuntimeException("Action not allowed for policy by placeholder purchase policy");
     }
 
     @Override
-    public void setDateTime(LocalDateTime date) {
+    public void setPurchasePolicyAge(int age) {
         throw new RuntimeException("Action not allowed for policy by placeholder purchase policy");
     }
 
     @Override
-    public void setWeight(int weight) {
-        throw new RuntimeException("Action not allowed for policy by placeholder purchase policy");
-    }
-
-    @Override
-    public void setAge(int age) {
-        throw new RuntimeException("Action not allowed for policy by placeholder purchase policy");
-    }
-
-    @Override
-    public String getInfo() {
+    public String getPurchasePolicyInfo() {
         return "{ \"type\": \"placeholderPurchasePolicy\" }";
     }
 }

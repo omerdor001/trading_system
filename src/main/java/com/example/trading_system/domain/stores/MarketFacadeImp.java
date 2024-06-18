@@ -764,6 +764,17 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
+    public boolean validatePurchasePolicies(String cartJSON, int age) throws IOException{
+        CartDTO cart = CartDTO.fromJson(cartJSON);
+        for (ShoppingBagDTO bag : cart.getShoppingBags().values()) {
+            if(!storeMemoryRepository.getStore(bag.getStoreId()).validatePurchasePolicies(bag.getProducts_list().values(),age)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public void addPurchase(String customerUsername, List<ProductInSale> productInSaleList, double totalPrice, String storeName){
         storeMemoryRepository.getStore(storeName).addPurchase(new Purchase(customerUsername,productInSaleList,totalPrice,storeName));
     }
@@ -1003,11 +1014,11 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public void addPurchasePolicyByCategory(String username, String storeName, int category) throws IllegalAccessException {
+    public void addPurchasePolicyByCategory(String username, String storeName, int category, int productId) throws IllegalAccessException {
         validateUserAndStore(username, storeName);
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeMemoryRepository.getStore(storeName).addPurchasePolicyByCategory(category);
+        storeMemoryRepository.getStore(storeName).addPurchasePolicyByCategory(category,productId);
     }
 
     @Override
@@ -1027,35 +1038,11 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public void addPurchasePolicyByProduct(String username, String storeName, int productId) throws IllegalAccessException {
-        validateUserAndStore(username, storeName);
-        User user = userFacade.getUser(username);
-        user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeMemoryRepository.getStore(storeName).addPurchasePolicyByProduct(productId);
-    }
-
-    @Override
     public void addPurchasePolicyByProductAndDate(String username, String storeName, int productId, LocalDateTime dateTime) throws IllegalAccessException {
         validateUserAndStore(username, storeName);
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         storeMemoryRepository.getStore(storeName).addPurchasePolicyByProductAndDate(productId, dateTime);
-    }
-
-    @Override
-    public void addPurchasePolicyByShoppingBagAndDate(String username, String storeName, LocalDateTime dateTime) throws IllegalAccessException {
-        validateUserAndStore(username, storeName);
-        User user = userFacade.getUser(username);
-        user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeMemoryRepository.getStore(storeName).addPurchasePolicyByShoppingBagAndDate(dateTime);
-    }
-
-    @Override
-    public void addPurchasePolicyByShoppingCartMaxProducts(String username, String storeName, int sumOfProducts) throws IllegalAccessException {
-        validateUserAndStore(username, storeName);
-        User user = userFacade.getUser(username);
-        user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeMemoryRepository.getStore(storeName).addPurchasePolicyByShoppingCartMaxProducts(sumOfProducts);
     }
 
     @Override
@@ -1067,11 +1054,11 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public void addPurchasePolicyByShoppingCartMinProducts(String username, String storeName, int weight) throws IllegalAccessException {
+    public void addPurchasePolicyByShoppingCartMinProducts(String username, String storeName, int numOfQuantity) throws IllegalAccessException {
         validateUserAndStore(username, storeName);
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeMemoryRepository.getStore(storeName).addPurchasePolicyByShoppingCartMinProducts(weight);
+        storeMemoryRepository.getStore(storeName).addPurchasePolicyByShoppingCartMinProducts(numOfQuantity);
     }
 
     @Override
@@ -1083,75 +1070,59 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public void addAndPolicy(String username, String storeName) throws IllegalAccessException {
+    public void addAndPurchasePolicy(String username, String storeName) throws IllegalAccessException {
         validateUserAndStore(username, storeName);
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeMemoryRepository.getStore(storeName).addAndPolicy();
+        storeMemoryRepository.getStore(storeName).addAndPurchasePolicy();
     }
 
     @Override
-    public void addOrPolicy(String username, String storeName) throws IllegalAccessException {
+    public void addOrPurchasePolicy(String username, String storeName) throws IllegalAccessException {
         validateUserAndStore(username, storeName);
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeMemoryRepository.getStore(storeName).addOrPolicy();
+        storeMemoryRepository.getStore(storeName).addOrPurchasePolicy();
     }
 
     @Override
-    public void addConditioningPolicy(String username, String storeName) throws IllegalAccessException {
+    public void addConditioningPurchasePolicy(String username, String storeName) throws IllegalAccessException {
         validateUserAndStore(username, storeName);
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeMemoryRepository.getStore(storeName).addConditioningPolicy();
+        storeMemoryRepository.getStore(storeName).addConditioningPurchasePolicy();
     }
 
     @Override
-    public void setProductIdPurchase(String username, String storeName, int selectedIndex, int productId) throws IllegalAccessException {
+    public void setPurchasePolicyProductId(String username, String storeName, int selectedIndex, int productId) throws IllegalAccessException {
         validateUserAndStore(username, storeName);
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeMemoryRepository.getStore(storeName).setProductIdPurchase(selectedIndex, productId);
+        storeMemoryRepository.getStore(storeName).setPurchasePolicyProductId(selectedIndex, productId);
     }
 
     @Override
-    public void setNumOfQuantityPurchase(String username, String storeName, int selectedIndex, int numOfQuantity) throws IllegalAccessException {
+    public void setPurchasePolicyNumOfQuantity(String username, String storeName, int selectedIndex, int numOfQuantity) throws IllegalAccessException {
         validateUserAndStore(username, storeName);
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeMemoryRepository.getStore(storeName).setNumOfQuantityPurchase(selectedIndex, numOfQuantity);
+        storeMemoryRepository.getStore(storeName).setPurchasePolicyNumOfQuantity(selectedIndex, numOfQuantity);
     }
 
     @Override
-    public void setSumOfProductsPurchase(String username, String storeName, int selectedIndex, int sumOfProducts) throws IllegalAccessException {
+    public void setPurchasePolicyDateTime(String username, String storeName, int selectedIndex, LocalDateTime dateTime) throws IllegalAccessException {
         validateUserAndStore(username, storeName);
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeMemoryRepository.getStore(storeName).setSumOfProductsPurchase(selectedIndex, sumOfProducts);
+        storeMemoryRepository.getStore(storeName).setPurchasePolicyDateTime(selectedIndex, dateTime);
     }
 
     @Override
-    public void setDateTime(String username, String storeName, int selectedIndex, LocalDateTime dateTime) throws IllegalAccessException {
+    public void setPurchasePolicyAge(String username, String storeName, int selectedIndex, int age) throws IllegalAccessException {
         validateUserAndStore(username, storeName);
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeMemoryRepository.getStore(storeName).setDateTime(selectedIndex, dateTime);
-    }
-
-    @Override
-    public void setWeight(String username, String storeName, int selectedIndex, int weight) throws IllegalAccessException {
-        validateUserAndStore(username, storeName);
-        User user = userFacade.getUser(username);
-        user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeMemoryRepository.getStore(storeName).setWeight(selectedIndex, weight);
-    }
-
-    @Override
-    public void setAge(String username, String storeName, int selectedIndex, int age) throws IllegalAccessException {
-        validateUserAndStore(username, storeName);
-        User user = userFacade.getUser(username);
-        user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeMemoryRepository.getStore(storeName).setAge(selectedIndex, age);
+        storeMemoryRepository.getStore(storeName).setPurchasePolicyAge(selectedIndex, age);
     }
 
     @Override

@@ -47,6 +47,7 @@ public class Store {
         this.storeRating = storeRating;
         this.discountPolicies = new LinkedList<>();
         this.discountConditions = new LinkedList<>();
+        this.purchasePolicies = new LinkedList<>();
         this.isOpen = true;
     }
 
@@ -274,6 +275,15 @@ public class Store {
         return price;
     }
 
+    public boolean validatePurchasePolicies(Collection<ProductInSaleDTO> items,int age) {
+        for (PurchasePolicy policy :purchasePolicies) {
+            if (!policy.isPurchasePolicySatisfied(items, age)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     //region Discount creation
     public String getDiscountPoliciesInfo() {
         StringBuilder jsonBuilder = new StringBuilder();
@@ -490,7 +500,7 @@ public class Store {
             if (!firstElement) {
                 jsonBuilder.append(", ");
             }
-            jsonBuilder.append(policy.getInfo());
+            jsonBuilder.append(policy.getPurchasePolicyInfo());
             firstElement = false;
         }
 
@@ -506,10 +516,10 @@ public class Store {
         purchasePolicies.add(new PurchasePolicyByAge(ageToCheck,category));
     }
 
-    public void addPurchasePolicyByCategory(int category) {
+    public void addPurchasePolicyByCategory(int category, int productId) {
         if(category<=0 )
             throw new IllegalArgumentException("Parameter "+category+" cannot be negative or zero");
-        purchasePolicies.add(new PurchasePolicyByCategory(category));
+        purchasePolicies.add(new PurchasePolicyByCategory(category,productId));
     }
 
     public void addPurchasePolicyByCategoryAndDate(int category, LocalDateTime dateTime) {
@@ -526,30 +536,12 @@ public class Store {
         purchasePolicies.add(new PurchasePolicyByDate(dateTime));
     }
 
-    public void addPurchasePolicyByProduct(int productId) {
-        if(productId<0 )
-            throw new IllegalArgumentException("Parameter "+productId+" cannot be negative");
-        purchasePolicies.add(new PurchasePolicyByProduct(productId));
-    }
-
     public void addPurchasePolicyByProductAndDate(int productId,LocalDateTime dateTime) {
         if(productId<0)
             throw new IllegalArgumentException("Parameter "+productId+" cannot be negative");
         if(dateTime==null)
             throw new IllegalArgumentException("Parameter "+dateTime+" cannot be null");
         purchasePolicies.add(new PurchasePolicyByProductAndDate(productId,dateTime));
-    }
-
-    public void addPurchasePolicyByShoppingBagAndDate(LocalDateTime dateTime) {
-        if(dateTime==null)
-            throw new IllegalArgumentException("Parameter "+dateTime+" cannot be null");
-        purchasePolicies.add(new PurchasePolicyByShoppingBagAndDate(dateTime));
-    }
-
-    public void addPurchasePolicyByShoppingCartMaxProducts(int sumOfProducts) {
-        if(sumOfProducts<=0)
-            throw new IllegalArgumentException("Parameter "+sumOfProducts+" cannot be negative and equal");
-        purchasePolicies.add(new PurchasePolicyByShoppingCartMaxProducts(sumOfProducts));
     }
 
     public void addPurchasePolicyByShoppingCartMaxProductsUnit(int productId,int numOfQuantity) {
@@ -560,10 +552,10 @@ public class Store {
         purchasePolicies.add(new PurchasePolicyByShoppingCartMaxProductsUnit(productId,numOfQuantity));
     }
 
-    public void addPurchasePolicyByShoppingCartMinProducts(int weight) {
-        if(weight<=0)
-            throw new IllegalArgumentException("Parameter "+weight+" cannot be negative and equal");
-        purchasePolicies.add(new PurchasePolicyByShoppingCartMinProducts(weight));
+    public void addPurchasePolicyByShoppingCartMinProducts(int numOfQuantity) {
+        if(numOfQuantity<=0)
+            throw new IllegalArgumentException("Parameter "+numOfQuantity+" cannot be negative and equal");
+        purchasePolicies.add(new PurchasePolicyByShoppingCartMinProducts(numOfQuantity));
     }
 
     public void addPurchasePolicyByShoppingCartMinProductsUnit(int productId,int numOfQuantity) {
@@ -574,46 +566,36 @@ public class Store {
         purchasePolicies.add(new PurchasePolicyByShoppingCartMinProductsUnit(productId,numOfQuantity));
     }
 
-    public void addAndPolicy() {
+    public void addAndPurchasePolicy() {
         purchasePolicies.add(new AndPolicy());
     }
 
-    public void addOrPolicy() {
+    public void addOrPurchasePolicy() {
         purchasePolicies.add(new OrPolicy());
     }
 
-    public void addConditioningPolicy() {
+    public void addConditioningPurchasePolicy() {
         purchasePolicies.add(new ConditioningPolicy());
     }
 
-    public void setProductIdPurchase(int selectedIndex, int productId) {
+    public void setPurchasePolicyProductId(int selectedIndex, int productId) {
         PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
-        purchasePolicy.setProduct(productId);
+        purchasePolicy.setPurchasePolicyProduct(productId);
     }
 
-    public void setNumOfQuantityPurchase(int selectedIndex, int numOfQuantity) {
+    public void setPurchasePolicyNumOfQuantity(int selectedIndex, int numOfQuantity) {
         PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
-        purchasePolicy.setNumOfQuantity(numOfQuantity);
+        purchasePolicy.setPurchasePolicyNumOfQuantity(numOfQuantity);
     }
 
-    public void setSumOfProductsPurchase(int selectedIndex, int sumOfProducts) {
+    public void setPurchasePolicyDateTime(int selectedIndex, LocalDateTime dateTime) {
         PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
-        purchasePolicy.setSumOfProducts(sumOfProducts);
+        purchasePolicy.setPurchasePolicyDateTime(dateTime);
     }
 
-    public void setDateTime(int selectedIndex, LocalDateTime dateTime) {
+    public void setPurchasePolicyAge(int selectedIndex, int age) {
         PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
-        purchasePolicy.setDateTime(dateTime);
-    }
-
-    public void setWeight(int selectedIndex, int weight) {
-        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
-        purchasePolicy.setWeight(weight);
-    }
-
-    public void setAge(int selectedIndex, int age) {
-        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
-        purchasePolicy.setAge(age);
+        purchasePolicy.setPurchasePolicyAge(age);
     }
 
     public void setFirstPurchasePolicy(int selectedDiscountIndex, int selectedFirstIndex) {
@@ -621,7 +603,7 @@ public class Store {
             throw new IllegalArgumentException("Indexes cannot be the same");
         PurchasePolicy editedDiscount = purchasePolicies.get(selectedDiscountIndex);
         PurchasePolicy setDiscount = purchasePolicies.remove(selectedFirstIndex);
-        editedDiscount.setFirst(setDiscount);
+        editedDiscount.setPurchasePolicyFirst(setDiscount);
     }
 
     public void setSecondPurchasePolicy(int selectedDiscountIndex, int selectedSecondIndex) {
@@ -629,7 +611,7 @@ public class Store {
             throw new IllegalArgumentException("Indexes cannot be the same");
         PurchasePolicy editedDiscount = purchasePolicies.get(selectedDiscountIndex);
         PurchasePolicy setDiscount = purchasePolicies.remove(selectedSecondIndex);
-        editedDiscount.setSecond(setDiscount);
+        editedDiscount.setPurchasePolicySecond(setDiscount);
     }
 
     public void removePurchasePolicy(int selectedIndex) {

@@ -139,53 +139,44 @@ public interface MarketFacade {
     //endregion
 
     //purchase_policy
+    boolean validatePurchasePolicies(String cart, int age) throws IOException;
+
     String getPurchasePoliciesInfo(String username, String storeName) throws IllegalAccessException;
 
     void addPurchasePolicyByAge(String username, String storeName, int ageToCheck, int category) throws IllegalAccessException;
 
-    void addPurchasePolicyByCategory(String username, String storeName, int category) throws IllegalAccessException;
+    void addPurchasePolicyByCategory(String username, String storeName, int category, int productId) throws IllegalAccessException;
 
     void addPurchasePolicyByCategoryAndDate(String username, String storeName, int category, LocalDateTime dateTime) throws IllegalAccessException;
 
     void addPurchasePolicyByDate(String username, String storeName, LocalDateTime dateTime) throws IllegalAccessException;
 
-    void addPurchasePolicyByProduct(String username, String storeName, int productId) throws IllegalAccessException;
-
     void addPurchasePolicyByProductAndDate(String username, String storeName, int productId, LocalDateTime dateTime) throws IllegalAccessException;
-
-    void addPurchasePolicyByShoppingBagAndDate(String username, String storeName, LocalDateTime dateTime) throws IllegalAccessException;
-
-    void addPurchasePolicyByShoppingCartMaxProducts(String username, String storeName, int sumOfProducts) throws IllegalAccessException;
 
     void addPurchasePolicyByShoppingCartMaxProductsUnit(String username, String storeName, int productId, int numOfQuantity) throws IllegalAccessException;
 
-    void addPurchasePolicyByShoppingCartMinProducts(String username, String storeName, int weight) throws IllegalAccessException;
+    void addPurchasePolicyByShoppingCartMinProducts(String username, String storeName, int numOfQuantity) throws IllegalAccessException;
 
     void addPurchasePolicyByShoppingCartMinProductsUnit(String username, String storeName, int productId, int numOfQuantity) throws IllegalAccessException;
 
-    void addAndPolicy(String username, String storeName) throws IllegalAccessException;
+    void addAndPurchasePolicy(String username, String storeName) throws IllegalAccessException;
 
-    void addOrPolicy(String username, String storeName) throws IllegalAccessException;
+    void addOrPurchasePolicy(String username, String storeName) throws IllegalAccessException;
 
-    void addConditioningPolicy(String username, String storeName) throws IllegalAccessException;
+    void addConditioningPurchasePolicy(String username, String storeName) throws IllegalAccessException;
 
-    void setProductIdPurchase(String username, String storeName, int selectedIndex, int productId) throws IllegalAccessException;
+    void setPurchasePolicyProductId(String username, String storeName, int selectedIndex, int productId) throws IllegalAccessException;
 
-    void setNumOfQuantityPurchase(String username, String storeName, int selectedIndex, int numOfQuantity) throws IllegalAccessException;
+    void setPurchasePolicyNumOfQuantity(String username, String storeName, int selectedIndex, int numOfQuantity) throws IllegalAccessException;
 
-    void setSumOfProductsPurchase(String username, String storeName, int selectedIndex, int sumOfProducts) throws IllegalAccessException;
+    void setPurchasePolicyDateTime(String username, String storeName, int selectedIndex, LocalDateTime dateTime) throws IllegalAccessException;
 
-    void setDateTime(String username, String storeName, int selectedIndex, LocalDateTime dateTime) throws IllegalAccessException;
-
-    void setWeight(String username, String storeName, int selectedIndex, int weight) throws IllegalAccessException;
-
-    void setAge(String username, String storeName, int selectedIndex, int age) throws IllegalAccessException;
+    void setPurchasePolicyAge(String username, String storeName, int selectedIndex, int age) throws IllegalAccessException;
 
     void setFirstPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedFirstIndex) throws IllegalAccessException;
 
     void setSecondPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
 
     void removePurchasePolicy(String username, String storeName, int selectedIndex) throws IllegalAccessException;
-
 
 }

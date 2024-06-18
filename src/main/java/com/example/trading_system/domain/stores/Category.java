@@ -7,6 +7,7 @@ public enum Category {
     Clothes(4),
     Films(5);
 
+
     private final int intValue;
 
     Category(int intValue) {

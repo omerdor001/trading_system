@@ -960,6 +960,10 @@ public class UserFacadeImp implements UserFacade {
         }
         HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
         User user=userMemoryRepository.getUser(username);
+        if(!marketFacade.validatePurchasePolicies(user.getCart().toJson(),user.getAge())){
+            logger.error("Products do not meet purchase policies conditions.");
+            throw new RuntimeException("Products do not meet purchase policies conditions.");
+        }
         removeReservedProducts(username);
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -968,7 +972,7 @@ public class UserFacadeImp implements UserFacade {
                 throw new RuntimeException("time out !");
             }
         }, 10 * 60 * 1000);
-        double totalPrice = marketFacade.calculateTotalPrice(getUser(username).getCart().toJson());
+        double totalPrice = marketFacade.calculateTotalPrice(user.getCart().toJson());
         int deliveryId = 0;  //For cancelling
         String address =user.getAddress();
         try {

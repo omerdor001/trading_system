@@ -182,4 +182,45 @@ public interface TradingSystem {
 
     ResponseEntity<String> setCategoryCondition(String username, String token, String storeName, int selectedConditionIndex, int newCategory);
     //endregion
+
+    //purchase_policy
+    ResponseEntity<String> getPurchasePoliciesInfo(String username, String token, String storeName);
+
+    ResponseEntity<String> addPurchasePolicyByAge(String username, String token, String storeName, int ageToCheck, int category);
+
+    ResponseEntity<String> addPurchasePolicyByCategory(String username, String token, String storeName, int category, int productId);
+
+    ResponseEntity<String> addPurchasePolicyByCategoryAndDate(String username, String token, String storeName, int category, LocalDateTime dateTime);
+
+    ResponseEntity<String> addPurchasePolicyByDate(String username, String token, String storeName, LocalDateTime dateTime);
+
+    ResponseEntity<String> addPurchasePolicyByProductAndDate(String username, String token, String storeName, int productId, LocalDateTime dateTime);
+
+    ResponseEntity<String> addPurchasePolicyByShoppingCartMaxProductsUnit(String username, String token, String storeName, int productId, int numOfQuantity);
+
+    ResponseEntity<String> addPurchasePolicyByShoppingCartMinProducts(String username, String token, String storeName, int numOfQuantity);
+
+    ResponseEntity<String> addPurchasePolicyByShoppingCartMinProductsUnit(String username, String token, String storeName, int productId, int numOfQuantity);
+
+    ResponseEntity<String> addAndPurchasePolicy(String username, String token, String storeName);
+
+    ResponseEntity<String> addOrPurchasePolicy(String username, String token, String storeName);
+
+    ResponseEntity<String> addConditioningPurchasePolicy(String username, String token, String storeName);
+
+    ResponseEntity<String> setPurchasePolicyProductId(String username, String token, String storeName, int selectedIndex, int productId);
+
+    ResponseEntity<String> setPurchasePolicyNumOfQuantity(String username, String token, String storeName, int selectedIndex, int numOfQuantity);
+
+    ResponseEntity<String> setPurchasePolicyDateTime(String username, String token, String storeName, int selectedIndex, LocalDateTime dateTime);
+
+    ResponseEntity<String> setPurchasePolicyAge(String username, String token, String storeName, int selectedIndex, int age);
+
+    ResponseEntity<String> setFirstPurchasePolicy(String username, String token, String storeName, int selectedDiscountIndex, int selectedFirstIndex);
+
+    ResponseEntity<String> setSecondPurchasePolicy(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex);
+
+    ResponseEntity<String> removePurchasePolicy(String username, String token, String storeName, int selectedIndex);
+
+    //end region
 }

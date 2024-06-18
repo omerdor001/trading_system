@@ -132,6 +132,8 @@ public abstract class User {
 
     public abstract LocalDate getBirthdate();
 
+    public abstract int getAge();
+
 //    public String sendNotification(String receiverUsername, String content) {
 //        Notification notification = new Notification(this.username, receiverUsername, new Date(), content);
 //        return notification.toString();
