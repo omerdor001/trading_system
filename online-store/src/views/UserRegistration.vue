@@ -53,6 +53,7 @@ import { Button as PrimeButton } from 'primevue/button';
 import { InputText } from 'primevue/inputtext';
 import { PasswordText } from 'primevue/password';
 import { PrimeCard } from 'primevue/card';
+import axios from "axios";
 
 export default defineComponent({
   name: 'UserRegistration',
@@ -105,7 +106,7 @@ export default defineComponent({
       return true;
     };
 
-    const register = () => {
+    const register = async () => {
       if (validateInputs()) {
         const userData = {
           username: username.value,
@@ -116,7 +117,16 @@ export default defineComponent({
         localStorage.setItem('userData', JSON.stringify(userData));
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('username', userData.username);
+        console.log()
+        try {
+          // let string = "http://localhost:8082/api/trading/register?username={}&password={}"
+          const response = await axios.get("http://localhost:8082/api/trading/register?username="+username.value.toString()+"&password="+password.value.toString()+"&birthday="+birthdate.value);
+          console.log(response);
+        } catch (e) {
+          console.log(errorMessage)
+          throw Error(errorMessage)
 
+        }
         router.push('/');
       }
     };

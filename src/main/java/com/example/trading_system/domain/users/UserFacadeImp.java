@@ -240,10 +240,11 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("No such user " + username);
         if (username.charAt(0) == 'r' && u.getLogged())
             throw new RuntimeException("User " + username + " already logged in");
-        if (checkPassword(password, u.getPass())) {
-            userMemoryRepository.deleteUser(usernameV);
-            u.login();
-        } else {
+//        if (checkPassword(password, u.getPass())) {
+//            userMemoryRepository.deleteUser(usernameV);
+//            u.login();
+//        }
+        else {
             logger.error("Wrong password, Failed login user: {}", username);
             throw new RuntimeException("Wrong password");
         }
