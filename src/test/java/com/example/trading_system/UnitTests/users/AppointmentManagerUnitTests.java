@@ -1,5 +1,7 @@
 package com.example.trading_system.UnitTests.users;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.users.UserFacade;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import org.junit.jupiter.api.AfterEach;
@@ -11,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 
 class AppointmentManagerUnitTests {
@@ -21,7 +24,7 @@ class AppointmentManagerUnitTests {
 
     @BeforeEach
     public void setUp() {
-        userFacade = UserFacadeImp.getInstance();
+        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
         username1 = "testuser1";
         username2 = "testuser2";
         username3 = "testuser3";

@@ -1,5 +1,7 @@
 package com.example.trading_system.UnitTests.users;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,13 +9,14 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class RegistrationUnitTests {
     private UserFacadeImp userFacade;
 
     @BeforeEach
     void setUp() {
-        userFacade = UserFacadeImp.getInstance();
+        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
         // Adding a sample visitor
         userFacade.enter(1);
         userFacade.enter(2);

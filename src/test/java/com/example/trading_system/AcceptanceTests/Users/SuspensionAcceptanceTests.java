@@ -1,5 +1,7 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
 
 class SuspensionAcceptanceTests {
     String token1;
@@ -24,7 +27,7 @@ class SuspensionAcceptanceTests {
 
     @BeforeEach
     public void setUp() {
-        tradingSystem = TradingSystemImp.getInstance();
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.register("emp1", "password123", LocalDate.now());
         tradingSystem.openSystem();
@@ -78,6 +81,13 @@ class SuspensionAcceptanceTests {
     void suspendUser_Success() {
         ResponseEntity<String> response = tradingSystem.suspendUser(token1, username, username1, LocalDateTime.of(2024, 8, 1, 10, 0));
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
+    }
+
+    @Test
+    void suspendUser_SuccessNotMakeAction() {
+        tradingSystem.suspendUser(token1, username, username1, LocalDateTime.of(2024, 8, 1, 10, 0));
+        ResponseEntity<String> response = tradingSystem.approvePurchase(username1,token1);
+        assertEquals(HttpStatusCode.valueOf(401), response.getStatusCode());
     }
 
     @Test

@@ -17,7 +17,7 @@ class NotificationAcceptanceTests {
 
     @BeforeEach
     public void setUp() {
-//        tradingSystem = TradingSystemImp.getInstance();
+//        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
 //        tradingSystem.register("owner1", "password123", LocalDate.now());
 //        tradingSystem.openSystem();
 //        String userToken = tradingSystem.enter().getBody();

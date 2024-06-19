@@ -982,11 +982,18 @@ public class UserFacadeImp implements UserFacade {
             releaseReservedProducts(username);
             throw new Exception("Error in Delivery");
         }
-
+        if(deliveryId<0){                                //Can Use Them
+            throw new Exception("Error in Delivery");
+        }
         int paymentId = 0;
         try {
             paymentId = paymentService.makePayment(totalPrice);
         } catch (Exception e) {
+            deliveryService.cancelDelivery(deliveryId);
+            releaseReservedProducts(username);
+            throw new Exception("Error in Payment");
+        }
+        if(paymentId<0){
             deliveryService.cancelDelivery(deliveryId);
             releaseReservedProducts(username);
             throw new Exception("Error in Payment");

@@ -1,5 +1,7 @@
 package com.example.trading_system.UnitTests.users;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.users.UserFacade;
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SuspensionUnitTests {
@@ -21,7 +24,7 @@ class SuspensionUnitTests {
     @BeforeAll
     void setUpBA() {
         marketFacade= MarketFacadeImp.getInstance();
-        userFacade= UserFacadeImp.getInstance();
+        userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
         try {
             userFacade.enter(0);
             userFacade.enter(1);
