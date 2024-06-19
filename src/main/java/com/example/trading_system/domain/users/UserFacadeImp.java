@@ -23,8 +23,8 @@ public class UserFacadeImp implements UserFacade {
     private PaymentService paymentService;
 
 
-    private UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService,UserRepository userRepository) {
-        this.marketFacade = MarketFacadeImp.getInstance();
+    private UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService,UserRepository userRepository,StoreRepository storeRepository) {
+        this.marketFacade = MarketFacadeImp.getInstance(storeRepository);
         this.userRepository = userRepository;
         this.paymentService = paymentService;
         this.deliveryService = deliveryService;
@@ -32,9 +32,9 @@ public class UserFacadeImp implements UserFacade {
         marketFacade.initialize(this);
     }
 
-    public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService,UserRepository userRepository) {
+    public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService,UserRepository userRepository,StoreRepository storeRepository) {
         if (instance == null) {
-            instance = new UserFacadeImp(paymentService,deliveryService,userRepository);
+            instance = new UserFacadeImp(paymentService,deliveryService,userRepository,storeRepository);
             instance.marketFacade.initialize(instance);
         }
         return instance;
