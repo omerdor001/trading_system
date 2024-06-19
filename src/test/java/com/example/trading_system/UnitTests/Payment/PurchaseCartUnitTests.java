@@ -14,6 +14,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyByte;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -21,7 +23,9 @@ import static org.mockito.Mockito.when;
 public class PurchaseCartUnitTests {
     MarketFacadeImp marketFacade;
     UserFacade userFacade;
+    @Mock
     DeliveryService deliveryService;
+    @Mock
     PaymentService paymentService;
 
     @BeforeEach
@@ -285,7 +289,7 @@ public class PurchaseCartUnitTests {
 
     //Cannot fail PaymentService
     @Test
-    public void givenPaymentServiceFails_WhenPurchaseCart_ThenThrowException() {
+    public void givenPaymentServiceFail1_WhenPurchaseCart_ThenThrowException() {
         String username = "rValidUser";
         int productId = 1;
         String storeName = "StoreName";
@@ -295,15 +299,38 @@ public class PurchaseCartUnitTests {
             userFacade.register(username, "encrypted_password", LocalDate.now());
             userFacade.enter(0);
             userFacade.login("v0", username, "encrypted_password");
+            userFacade.createStore("r" +username, storeName, "description");
+            userFacade.setAddress("r" + username,address);
+            marketFacade.addProduct("r" + username,productId,storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
+            userFacade.addToCart("r" + username, productId, storeName, quantity);
         } catch (Exception e) {
         }
-        userFacade.getUser("r" + username).setAddress(address);
-        marketFacade.addStore(storeName, "description", username, 4.5);
-        Store store = marketFacade.getStore(storeName);
-        store.addProduct(productId, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
-        Cart shoppingCart = new Cart();
-        userFacade.getUser("r" + username).setCart(shoppingCart);
-        userFacade.addToCart("r" + username, productId, storeName, quantity);
-        //Assertions.assertThrows(Exception.class, () -> userFacade.purchaseCart(username));
+
+        Class<Double> number = Double.class;
+        when(paymentService.makePayment(any(number))).thenReturn(-1);
+        Assertions.assertThrows(Exception.class,() -> userFacade.purchaseCart("r" + username));
+    }
+
+    @Test
+    public void givenPaymentServiceFail2_WhenPurchaseCart_ThenThrowException() {
+        String username = "rValidUser";
+        int productId = 1;
+        String storeName = "StoreName";
+        int quantity = 5;
+        String address = "SomeAddress";
+        try {
+            userFacade.register(username, "encrypted_password", LocalDate.now());
+            userFacade.enter(0);
+            userFacade.login("v0", username, "encrypted_password");
+            userFacade.createStore("r" +username, storeName, "description");
+            userFacade.setAddress("r" + username,address);
+            marketFacade.addProduct("r" + username,productId,storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
+            userFacade.addToCart("r" + username, productId, storeName, quantity);
+        } catch (Exception e) {
+        }
+
+        Class<Double> number = Double.class;
+        when(paymentService.makePayment(any(number))).thenThrow(RuntimeException.class);
+        Assertions.assertThrows(Exception.class,() -> userFacade.purchaseCart("r" + username));
     }
 }

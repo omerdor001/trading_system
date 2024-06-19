@@ -906,7 +906,7 @@ public class UserFacadeImp implements UserFacade {
         return marketFacade.getStore(storeName).getPurchaseHistoryString(username);
     }
 
-    private synchronized boolean checkAvailabilityAndConditions(String username) {
+    private boolean checkAvailabilityAndConditions(String username) {
         if (!isUserExist(username)) {
             logger.error("User not found");
             throw new RuntimeException("User not found");
@@ -924,6 +924,8 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Cart is empty or null");
             throw new RuntimeException("Cart is empty or null");
         }
+
+        //TODO: should be delegated
         HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
         for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
             for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
@@ -935,7 +937,8 @@ public class UserFacadeImp implements UserFacade {
         return true;
     }
 
-    private synchronized void releaseReservedProducts(String username) {
+    private void releaseReservedProducts(String username) {
+        //TODO: should be delegated & Synchronize at the low level
         HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
         for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
             for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
@@ -944,7 +947,8 @@ public class UserFacadeImp implements UserFacade {
         }
     }
 
-    private synchronized void removeReservedProducts(String username) {
+    private  void removeReservedProducts(String username) {
+        //TODO: should be delegated & Synchronize at the low level
         HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
         for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
             for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
@@ -954,7 +958,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public synchronized void purchaseCart(String username) throws Exception {
+    public void purchaseCart(String username) throws Exception {
         if (!checkAvailabilityAndConditions(username)) {
             logger.error("Products are not available or do not meet purchase conditions.");
             throw new RuntimeException("Products are not available or do not meet purchase conditions.");
@@ -998,6 +1002,7 @@ public class UserFacadeImp implements UserFacade {
             releaseReservedProducts(username);
             throw new Exception("Error in Payment");
         }
+        //TODO: should be delegated
         for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
             Store store = marketFacade.getStore(shoppingBagInStore.getValue().getStoreId());
             Purchase purchase = new Purchase(username,shoppingBagInStore.getValue().getProducts_list().values().stream().toList(),shoppingBagInStore.getValue().calculateTotalPrice(),shoppingBagInStore.getValue().getStoreId());
