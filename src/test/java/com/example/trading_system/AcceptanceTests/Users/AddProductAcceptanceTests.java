@@ -77,21 +77,21 @@ class AddProductAcceptanceTests {
     void addProduct_NegativePrice() {
         ResponseEntity<String> result = tradingSystem.addProduct(username, token, 0, "existingStore", "product1", "", -1, 5, 1, 1, new LinkedList<>());
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
-        assertEquals("Price can't be a negative number", result.getBody());
+        assertEquals("Price can't be negative number", result.getBody());
     }
 
     @Test
     void addProduct_NegativeQuantity() {
         ResponseEntity<String> result = tradingSystem.addProduct(username, token, 0, "existingStore", "product1", "", 1, -1, 1, 1, new LinkedList<>());
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
-        assertEquals("Quantity must be a natural number", result.getBody());
+        assertEquals("Quantity must be natural number", result.getBody());
     }
 
     @Test
     void addProduct_NegativeRating() {
         ResponseEntity<String> result = tradingSystem.addProduct(username, token, 0, "existingStore", "product1", "", 1, 5, -1, 1, new LinkedList<>());
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
-        assertEquals("Rating can't be a negative number", result.getBody());
+        assertEquals("Rating can't be negative number", result.getBody());
     }
 
     @Test
