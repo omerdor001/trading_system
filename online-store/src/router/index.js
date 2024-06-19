@@ -17,12 +17,13 @@ import StoreDetailsEditor from "@/views/StoreDetailsEditor.vue";
 import StoreDetails from '@/views/StoreDetails.vue';
 import ProductDetails from '@/views/ProductDetails.vue';
 import ShoppingCart from '@/views/ShoppingCart.vue';
-import Checkout from '@/views/Checkout.vue';
+import Checkout from '@/views/CheckoutPage.vue';
 import PurchaseHistory from '@/views/PurchaseHistory.vue';
 import SearchPage from '@/views/SearchPage.vue';
 import SearchResults from '@/views/SearchResults.vue';
 import StoreSearchPage from '@/views/StoreSearchPage.vue';
 import StoreSearchResults from '@/views/StoreSearchResults.vue';
+import PaymentPage from '@/views/PaymentPage.vue';
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },
@@ -49,6 +50,8 @@ const routes = [
     { path: '/search-results', name: 'SearchResults', component: SearchResults },
     { path: '/search-store', name: 'StoreSearchPage', component: StoreSearchPage },
     { path: '/store-search-results', name: 'StoreSearchResults', component: StoreSearchResults },
+    { path: '/payment', name: 'PaymentPage', component: PaymentPage },
+
 
 ];
 
