@@ -1,5 +1,7 @@
 package com.example.trading_system.AcceptanceTests.Market;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 
 import static org.assertj.core.api.Fail.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 
 public class GetProductsInfoAcceptanceTests {
     private TradingSystem tradingSystem;
@@ -21,7 +24,7 @@ public class GetProductsInfoAcceptanceTests {
 
     @BeforeEach
     void setup() {
-        tradingSystem = TradingSystemImp.getInstance();
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.register("manager", "password123", LocalDate.now());
         tradingSystem.openSystem();

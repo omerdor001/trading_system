@@ -10,6 +10,8 @@
 //Copy code
 package com.example.trading_system;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.service.TradingSystemImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,11 @@ import java.util.List;
 @RequestMapping("/api/trading")
 public class TradingSystemRestController {
 
-    private final TradingSystemImp tradingSystem = TradingSystemImp.getInstance();
+    private final TradingSystemImp tradingSystem;
+
+    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService){
+        tradingSystem = TradingSystemImp.getInstance(paymentService, deliveryService);
+    }
 
     @DeleteMapping("/instance")
     public void deleteInstance() {

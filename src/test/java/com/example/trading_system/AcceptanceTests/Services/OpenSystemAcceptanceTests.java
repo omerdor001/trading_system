@@ -1,5 +1,7 @@
 package com.example.trading_system.AcceptanceTests.Services;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.service.TradingSystemImp;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,13 +12,14 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 
 class OpenSystemAcceptanceTests {
     private TradingSystemImp tradingSystem;
 
     @BeforeEach
     void setUp() {
-        tradingSystem = TradingSystemImp.getInstance();
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
     }
 
     @AfterEach

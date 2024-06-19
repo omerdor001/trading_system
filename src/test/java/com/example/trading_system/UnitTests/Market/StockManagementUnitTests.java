@@ -1,5 +1,7 @@
 package com.example.trading_system.UnitTests.Market;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.users.UserFacade;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StockManagementUnitTests {
@@ -17,7 +20,7 @@ class StockManagementUnitTests {
     @BeforeAll
     void setUp() {
         marketFacade=MarketFacadeImp.getInstance();
-        userFacade= UserFacadeImp.getInstance();
+        userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
         try {
             userFacade.register("testuser0","1pA22w0rd", LocalDate.now());
             userFacade.register("testuser1","pA22w0rd1", LocalDate.now());

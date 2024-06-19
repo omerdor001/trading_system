@@ -1,5 +1,7 @@
 package com.example.trading_system.UnitTests.users;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
@@ -9,6 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
+
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class AddCartUnitTests {
@@ -22,12 +26,12 @@ public class AddCartUnitTests {
         MockitoAnnotations.openMocks(this);
 
         // Clear singleton instances
-        UserFacadeImp.getInstance().deleteInstance();
+        UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class)).deleteInstance();
 
         // Re-instantiate singletons
         userMemoryRepository = UserMemoryRepository.getInstance();
         marketFacade = MarketFacadeImp.getInstance();
-        userFacadeImp = UserFacadeImp.getInstance();
+        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
     }
 
     @AfterEach

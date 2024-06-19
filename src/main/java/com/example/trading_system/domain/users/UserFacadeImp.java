@@ -35,9 +35,9 @@ public class UserFacadeImp implements UserFacade {
         marketFacade.initialize(this);
     }
 
-    public static UserFacadeImp getInstance() {
+    public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService) {
         if (instance == null) {
-            instance = new UserFacadeImp(new PaymentServiceProxy(), new DeliveryServiceProxy());
+            instance = new UserFacadeImp(paymentService,deliveryService);
             instance.marketFacade.initialize(instance);
         }
         return instance;
@@ -982,11 +982,18 @@ public class UserFacadeImp implements UserFacade {
             releaseReservedProducts(username);
             throw new Exception("Error in Delivery");
         }
-
+        if(deliveryId<0){                                //Can Use Them
+            throw new Exception("Error in Delivery");
+        }
         int paymentId = 0;
         try {
             paymentId = paymentService.makePayment(totalPrice);
         } catch (Exception e) {
+            deliveryService.cancelDelivery(deliveryId);
+            releaseReservedProducts(username);
+            throw new Exception("Error in Payment");
+        }
+        if(paymentId<0){
             deliveryService.cancelDelivery(deliveryId);
             releaseReservedProducts(username);
             throw new Exception("Error in Payment");
