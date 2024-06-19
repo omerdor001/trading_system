@@ -95,7 +95,7 @@ class StockManagementUnitTests {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> marketFacade.addProduct("rtestuser1", 123, "Adidas", "Samba", "Snickers shoes",
                 -100.0, 100, 5.0, 1, keyWords));
         int numOfProducts_after=marketFacade.getStore("Adidas").getProducts().size();
-        assertEquals("Price can't be a negative number", exception.getMessage());
+        assertEquals("Price can't be negative number", exception.getMessage());
         assertEquals(numOfProducts_before,numOfProducts_after);
     }
 
@@ -107,7 +107,7 @@ class StockManagementUnitTests {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> marketFacade.addProduct("rtestuser1", 123, "Adidas", "Samba", "Snickers shoes",
                 100.0, -100, 5.0, 1, keyWords));
         int numOfProducts_after=marketFacade.getStore("Adidas").getProducts().size();
-        assertEquals("Quantity must be a natural number", exception.getMessage());
+        assertEquals("Quantity must be natural number", exception.getMessage());
         assertEquals(numOfProducts_before,numOfProducts_after);
 
     }
@@ -120,7 +120,7 @@ class StockManagementUnitTests {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> marketFacade.addProduct("rtestuser1", 123, "Adidas", "Samba", "Snickers shoes",
                 100.0, 100, -5.0, 1, keyWords));
         int numOfProducts_after=marketFacade.getStore("Adidas").getProducts().size();
-        assertEquals("Rating can't be a negative number", exception.getMessage());
+        assertEquals("Rating can't be negative number", exception.getMessage());
         assertEquals(numOfProducts_before,numOfProducts_after);
     }
 
