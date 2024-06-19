@@ -14,7 +14,6 @@
         </div>
         <div class="button-group">
             <PrimeButton label="Suspend" type="submit" class="p-mt-2" />
-            <PrimeButton type="button" label="Back" class="back-button" @click="goBack" />
           </div>
       </form>
       <div v-if="error" class="p-error">{{ error }}</div>
@@ -65,10 +64,6 @@ export default defineComponent({
       router.push('/login');
     };
 
-    const goBack = () => {
-      router.push('/');
-    };
-
     return {
       admin,
       toSuspend,
@@ -77,7 +72,6 @@ export default defineComponent({
       username,
       submitForm,
       logout,
-      goBack,
     };
   },
 });
@@ -127,20 +121,6 @@ export default defineComponent({
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
-}
-
-.back-button {
-  background-color: #95a5a6;
-  border: none;
-  padding: 10px 20px;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.back-button:hover {
-  background-color: #7f8c8d;
 }
 
 .p-error {

@@ -23,6 +23,13 @@ import SearchPage from '@/views/SearchPage.vue';
 import SearchResults from '@/views/SearchResults.vue';
 import StoreSearchPage from '@/views/StoreSearchPage.vue';
 import StoreSearchResults from '@/views/StoreSearchResults.vue';
+import SuggestOwner from '@/views/SuggestOwner.vue';
+import SuggestManager from '@/views/SuggestManager.vue';
+import AppointOwner from '@/views/AppointOwner.vue';
+import AppointManager from '@/views/AppointManager.vue';
+import ApproveOwner from '@/views/ApproveOwner.vue';
+import ApproveManager from '@/views/ApproveManager.vue';
+
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },
@@ -49,7 +56,12 @@ const routes = [
     { path: '/search-results', name: 'SearchResults', component: SearchResults },
     { path: '/search-store', name: 'StoreSearchPage', component: StoreSearchPage },
     { path: '/store-search-results', name: 'StoreSearchResults', component: StoreSearchResults },
-
+    { path: '/suggest-owner', name: 'SuggestOwner', component: SuggestOwner },
+    { path: '/suggest-manager', name: 'SuggestManager', component: SuggestManager },
+    { path: '/appoint-owner', name: 'AppointOwner', component: AppointOwner },
+    { path: '/appoint-manager',name: 'AppointManager',component: AppointManager },
+    { path: '/approve-owner',name: 'ApproveOwner',component: ApproveOwner },
+    { path: '/approve-manager',name: 'ApproveManager',component: ApproveManager}
 ];
 
 const router = createRouter({
