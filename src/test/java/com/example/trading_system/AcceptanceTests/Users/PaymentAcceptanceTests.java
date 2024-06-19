@@ -2,6 +2,10 @@ package com.example.trading_system.AcceptanceTests.Users;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import org.junit.jupiter.api.AfterEach;
@@ -24,12 +28,16 @@ public class PaymentAcceptanceTests {
     private String token;
     private final String storeName = "Store1";
     private final String address = "1234 Main Street, Springfield, IL, 62704-1234";
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     void setUp() {
-        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        userRepository= UserMemoryRepository.getInstance();    //May be change later
+        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
-        tradingSystem.openSystem();
+        tradingSystem.openSystem(storeRepository);
         String userToken = tradingSystem.enter().getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
