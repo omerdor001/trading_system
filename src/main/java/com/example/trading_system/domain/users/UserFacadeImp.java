@@ -35,9 +35,9 @@ public class UserFacadeImp implements UserFacade {
         marketFacade.initialize(this);
     }
 
-    public static UserFacadeImp getInstance() {
+    public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService) {
         if (instance == null) {
-            instance = new UserFacadeImp(new PaymentServiceProxy(), new DeliveryServiceProxy());
+            instance = new UserFacadeImp(paymentService,deliveryService);
             instance.marketFacade.initialize(instance);
         }
         return instance;
