@@ -1,9 +1,11 @@
 package com.example.trading_system.AcceptanceTests.Services;
 
+import com.example.trading_system.TradingSystemApplication;
 import com.example.trading_system.service.TradingSystemImp;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -11,6 +13,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest(classes = TradingSystemApplication.class)
 class OpenSystemAcceptanceTests {
     private TradingSystemImp tradingSystem;
 

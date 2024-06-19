@@ -1,5 +1,6 @@
 package com.example.trading_system.AcceptanceTests.Market;
 
+import com.example.trading_system.TradingSystemApplication;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest(classes = TradingSystemApplication.class)
 public class SearchProductStoresAcceptanceTests {
     private TradingSystem tradingSystem;
     private String token;

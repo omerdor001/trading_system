@@ -294,15 +294,15 @@ public class MarketFacadeImp implements MarketFacade {
         }
         store.setOpen(true);
         for (String managerUserName : store.getManagers())
-            userFacade.getUser(managerUserName).receiveNotification(storeName + " has reopened.");
+            userFacade.sendNotification(userName, managerUserName, "Store " + storeName + " has reopened");
         for (String ownerUserName : store.getOwners())
-            userFacade.getUser(ownerUserName).receiveNotification(storeName + " has reopened.");
+            userFacade.sendNotification(userName, ownerUserName, "Store " + storeName + " has reopened");
     }
 
     @Override
     public void closeStoreExist(String userName, String storeName) throws IllegalAccessException {
         validateUserAndStore(userName,storeName);
-        Store store = storeMemoryRepository.getStore(storeName);    //Change to Repo
+        Store store = storeMemoryRepository.getStore(storeName);
         if (!store.getFounder().equals(userName)) {
             throw new IllegalArgumentException("Only founder can close store exist");
         }
@@ -313,9 +313,9 @@ public class MarketFacadeImp implements MarketFacade {
         for (User user : userFacade.getUsers().values())
             user.getCart().removeShoppingBagFromCartByStore(storeName);
         for (String managerUserName : store.getManagers())
-            userFacade.getUser(managerUserName).receiveNotification(storeName + " has been closed.");
+            userFacade.sendNotification(userName, managerUserName, storeName + " has closed");
         for (String ownerUserName : store.getOwners())
-            userFacade.getUser(ownerUserName).receiveNotification(storeName + " has been closed.");
+            userFacade.sendNotification(userName, ownerUserName, storeName + " has closed");
     }
 
     //Supply Management

@@ -30,7 +30,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public void receiveNotification(String notification) {}
+    public void receiveDelayedNotification(Notification notification) {}
 
     @Override
     public LocalDate getBirthdate() {

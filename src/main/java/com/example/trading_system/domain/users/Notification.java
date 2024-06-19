@@ -9,14 +9,11 @@ import java.util.TimeZone;
 public class Notification {
     private String senderUsername;
     private String receiverUsername;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
-    private LocalDateTime dateOfCreation;
     private String textContent;
 
     public Notification(String senderUsername, String receiverUsername, String textContent) {
         this.senderUsername = senderUsername;
         this.receiverUsername = receiverUsername;
-        this.dateOfCreation = LocalDateTime.now();
         this.textContent = textContent;
     }
 
@@ -44,14 +41,6 @@ public class Notification {
 
     public void setReceiverUsername(String receiverUsername) {
         this.receiverUsername = receiverUsername;
-    }
-
-    public LocalDateTime getDateOfCreation() {
-        return dateOfCreation;
-    }
-
-    public void setDateOfCreation(LocalDateTime dateOfCreation) {
-        this.dateOfCreation = dateOfCreation;
     }
 
     public String getTextContent() {

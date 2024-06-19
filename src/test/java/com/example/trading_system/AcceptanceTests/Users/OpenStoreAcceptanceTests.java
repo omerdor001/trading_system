@@ -1,9 +1,11 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
+import com.example.trading_system.TradingSystemApplication;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Fail.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest(classes = TradingSystemApplication.class)
 public class OpenStoreAcceptanceTests {
     private TradingSystemImp tradingSystem;
     private String token;
