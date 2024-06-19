@@ -3,46 +3,38 @@
     <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
     <div class="main-content">
       <div class="content">
-        <h2>Checkout</h2>
-        <form @submit.prevent="handleCheckout">
-          <div class="form-group">
-            <label for="address">Delivery Address</label>
-            <InputText v-model="address" id="address" required />
-          </div>
-          <div class="form-group">
-            <label for="payment">Payment Details</label>
-            <InputText v-model="payment" id="payment" required />
-          </div>
-          <PrimeButton label="Submit Order" type="submit" class="submit-order-button" />
-        </form>
+        <h2>Payment Page</h2>
+        <p>This is a sample for payments. Delivery Address: {{ address }}</p>
+        <PrimeButton label="Complete Payment" @click="completePayment" class="complete-payment-button" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import PrimeButton from 'primevue/button';
-import InputText from 'primevue/inputtext';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 export default defineComponent({
-  name: 'CheckoutPage',
+  name: 'PaymentPage',
   components: {
     SiteHeader,
-    PrimeButton,
-    InputText
+    PrimeButton
   },
   setup() {
     const router = useRouter();
+    const route = useRoute();
     const username = ref(localStorage.getItem('username') || '');
     const address = ref('');
-    const payment = ref('');
 
-    const handleCheckout = () => {
-      console.log('Order submitted with address:', address.value, 'and payment details:', payment.value);
-      // Implement order submission logic here
+    onMounted(() => {
+      address.value = route.query.address || '';
+    });
+
+    const completePayment = () => {
+      alert('Payment Successful');
       router.push('/');
     };
 
@@ -55,8 +47,7 @@ export default defineComponent({
     return {
       username,
       address,
-      payment,
-      handleCheckout,
+      completePayment,
       logout
     };
   }
@@ -73,10 +64,7 @@ export default defineComponent({
   flex: 2;
   padding: 20px;
 }
-.form-group {
-  margin-bottom: 20px;
-}
-.submit-order-button {
+.complete-payment-button {
   background-color: #e67e22 !important;
   border: none !important;
   padding: 10px 20px !important;
@@ -86,7 +74,7 @@ export default defineComponent({
   font-weight: bold !important;
   transition: background-color 0.3s !important;
 }
-.submit-order-button:hover {
+.complete-payment-button:hover {
   background-color: #d35400 !important;
 }
 </style>

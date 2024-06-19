@@ -17,7 +17,7 @@ import StoreDetailsEditor from "@/views/StoreDetailsEditor.vue";
 import StoreDetails from '@/views/StoreDetails.vue';
 import ProductDetails from '@/views/ProductDetails.vue';
 import ShoppingCart from '@/views/ShoppingCart.vue';
-import Checkout from '@/views/Checkout.vue';
+import Checkout from '@/views/CheckoutPage.vue';
 import PurchaseHistory from '@/views/PurchaseHistory.vue';
 import SearchPage from '@/views/SearchPage.vue';
 import SearchResults from '@/views/SearchResults.vue';
@@ -29,6 +29,7 @@ import AppointOwner from '@/views/AppointOwner.vue';
 import AppointManager from '@/views/AppointManager.vue';
 import ApproveOwner from '@/views/ApproveOwner.vue';
 import ApproveManager from '@/views/ApproveManager.vue';
+import PaymentPage from '@/views/PaymentPage.vue';
 
 
 const routes = [
@@ -62,6 +63,8 @@ const routes = [
     { path: '/appoint-manager',name: 'AppointManager',component: AppointManager },
     { path: '/approve-owner',name: 'ApproveOwner',component: ApproveOwner },
     { path: '/approve-manager',name: 'ApproveManager',component: ApproveManager}
+    { path: '/payment', name: 'PaymentPage', component: PaymentPage },
+
 ];
 
 const router = createRouter({
