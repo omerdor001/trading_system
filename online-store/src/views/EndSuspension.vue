@@ -10,7 +10,6 @@
         </div>
         <div class="button-group">
           <PrimeButton label="End Suspension" type="submit" class="p-mt-2" />
-          <PrimeButton type="button" label="Back" class="back-button" @click="goBack" />
         </div>
       </form>
       <div v-if="error" class="p-error">{{ error }}</div>
@@ -57,17 +56,12 @@ export default defineComponent({
       router.push('/login');
     };
 
-    const goBack = () => {
-      router.push('/');
-    };
-
     return {
       username,
       toSuspend,
       error,
       submitForm,
       logout,
-      goBack,
     };
   },
 });
@@ -97,20 +91,6 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
-}
-
-.back-button {
-  background-color: #95a5a6;
-  border: none;
-  padding: 10px 20px;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.back-button:hover {
-  background-color: #7f8c8d;
 }
 
 .p-error {

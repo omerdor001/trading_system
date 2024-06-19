@@ -18,7 +18,6 @@
           <button v-if="selectedStore" @click="markStoreForClosure">Mark Store for Closure</button>
         </div>
         <div class="button-group">
-          <button class="back-button" @click="goBack">Go Back</button>
           <button class="close-button" @click="closeStore">Close Store</button>
         </div>
       </div>
@@ -67,9 +66,6 @@ export default {
     },
     async selectStore(storeName) {
       this.markedStore = storeName;
-    },
-    goBack() {
-      this.$router.push('/');
     },
     async markStoreForClosure() {
       if (!this.markedStore) {

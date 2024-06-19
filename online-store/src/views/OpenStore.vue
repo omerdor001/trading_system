@@ -15,7 +15,6 @@
           </div>
           <div class="button-group">
             <CreateButton type="submit" label="Create" class="create-button" />
-            <BackButton type="button" label="Back" class="back-button" @click="goBack" />
           </div>
         </form>
       </div>
@@ -39,7 +38,6 @@ import SiteHeader from '@/components/SiteHeader.vue';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import CreateButton from 'primevue/button';
-import BackButton from 'primevue/button';
 import { useRouter } from 'vue-router';
 import UserViewModel from "@/ViewModel/UserViewModel";
 
@@ -50,7 +48,6 @@ export default defineComponent({
     InputText,
     Textarea,
     CreateButton,
-    BackButton,
   },
   setup() {
     const router = useRouter();
@@ -66,10 +63,6 @@ export default defineComponent({
       }
     };
 
-    const goBack = () => {
-      router.push('/');
-    };
-
     const logout = () => {
       UserViewModel.actions.logout();
       router.push('/login');};
@@ -79,7 +72,6 @@ export default defineComponent({
       description,
       username,
       handleCreateStore,
-      goBack,
       logout,
     };
   }
@@ -147,20 +139,6 @@ export default defineComponent({
 
 .create-button:hover {
   background-color: #d35400;
-}
-
-.back-button {
-  background-color: #95a5a6;
-  border: none;
-  padding: 10px 20px;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.back-button:hover {
-  background-color: #7f8c8d;
 }
 
 footer {

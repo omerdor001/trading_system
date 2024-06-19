@@ -24,6 +24,13 @@ import SearchResults from '@/views/SearchResults.vue';
 import StoreSearchPage from '@/views/StoreSearchPage.vue';
 import StoreSearchResults from '@/views/StoreSearchResults.vue';
 import ShowNotifications from '@/views/ShowNotifications.vue';
+import SuggestOwner from '@/views/SuggestOwner.vue';
+import SuggestManager from '@/views/SuggestManager.vue';
+import AppointOwner from '@/views/AppointOwner.vue';
+import AppointManager from '@/views/AppointManager.vue';
+import ApproveOwner from '@/views/ApproveOwner.vue';
+import ApproveManager from '@/views/ApproveManager.vue';
+
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },
@@ -50,7 +57,6 @@ const routes = [
     { path: '/search-results', name: 'SearchResults', component: SearchResults },
     { path: '/search-store', name: 'StoreSearchPage', component: StoreSearchPage },
     { path: '/store-search-results', name: 'StoreSearchResults', component: StoreSearchResults },
-    { path: '/show-notifications', name: 'ShowNotifications', component: ShowNotifications },
 
 ];
 
