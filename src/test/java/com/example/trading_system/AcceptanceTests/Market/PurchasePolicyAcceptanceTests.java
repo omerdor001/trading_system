@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = TradingSystemApplication.class)
 public class PurchasePolicyAcceptanceTests {
+    @Autowired
     private TradingSystem tradingSystem;
     private String username;
     private String token;
     private final String storeName = "store1";
-    private final String address = "1234 Main Street, Springfield, IL, 62704-1234";
 
     @BeforeEach
     void setUp() {
@@ -48,6 +49,7 @@ public class PurchasePolicyAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
+        String address = "1234 Main Street, Springfield, IL, 62704-1234";
         tradingSystem.setAddress(username, token, address);
         tradingSystem.openStore(username, token, storeName, "");
         tradingSystem.addProduct(username, token, 0, storeName, "product1", "", 1, 5, 1, 5, new LinkedList<>());

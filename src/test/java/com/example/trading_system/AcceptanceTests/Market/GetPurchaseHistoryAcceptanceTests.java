@@ -6,6 +6,7 @@ import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = TradingSystemApplication.class)
 class GetPurchaseHistoryAcceptanceTests {
+    @Autowired
     private TradingSystem tradingSystem;
     private String username;
     private String token;
