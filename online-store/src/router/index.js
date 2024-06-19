@@ -23,6 +23,7 @@ import SearchPage from '@/views/SearchPage.vue';
 import SearchResults from '@/views/SearchResults.vue';
 import StoreSearchPage from '@/views/StoreSearchPage.vue';
 import StoreSearchResults from '@/views/StoreSearchResults.vue';
+import ShowNotifications from '@/views/ShowNotifications.vue';
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },
@@ -49,6 +50,7 @@ const routes = [
     { path: '/search-results', name: 'SearchResults', component: SearchResults },
     { path: '/search-store', name: 'StoreSearchPage', component: StoreSearchPage },
     { path: '/store-search-results', name: 'StoreSearchResults', component: StoreSearchResults },
+    { path: '/show-notifications', name: 'ShowNotifications', component: ShowNotifications },
 
 ];
 
