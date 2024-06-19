@@ -13,6 +13,7 @@ import ToastService from 'primevue/toastservice';
 import PrimeToast from 'primevue/toast';
 import PrimeColumn from 'primevue/column';
 import PrimeDataTable from 'primevue/datatable';
+import ToggleButton from 'primevue/togglebutton';
 
 const app = createApp(App);
 app.use(PrimeVue);
@@ -24,5 +25,6 @@ app.use(ToastService);
 app.component('PrimeToast', PrimeToast);
 app.component('PrimeColumn', PrimeColumn);
 app.component('PrimeDataTable', PrimeDataTable);
+app.component('ToggleButton',ToggleButton);
 app.use(router);
 app.mount('#app');

@@ -5,13 +5,14 @@
       <div class="sidebar">
         <PrimeButton label="Search Store" @click="navigateToSearchStore" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Approve Appointment" @click="approveAppointment" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn" label="Approve Ownership" @click="approveOwnership" class="sidebar-button" />
+        <PrimeButton v-if="isLoggedIn" label="Approve Management" @click="approveManagement" class="sidebar-button" />
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="My Stores" @click="myStoresIOwn" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Manage Products" @click="manageProductsAsOwner" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Suggest Owner" @click="suggestOwner" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Appoint Owner" @click="appointOwner" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Suggest Manager" @click="suggestManager" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Appoint Manager" @click="appointManager" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Permissions to Manager" @click="permissionsToManager" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Yield Ownership" @click="yieldOwnership" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Purchases History" @click="navigateToPurchaseHistory" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Close Store" @click="closeStore" class="sidebar-button"/>
       </div>
@@ -38,24 +39,12 @@
         <PrimeButton v-if="isStoreManager && isLoggedIn" label="Manage Products" @click="manageProductsAsManager" class="sidebar-button"/>
         <PrimeButton v-if="isStoreManager && isLoggedIn" label="Add Policy" @click="addPolicy" class="sidebar-button"/>
         <PrimeButton v-if="isStoreManager && isLoggedIn" label="Edit Policy" @click="editPolicy" class="sidebar-button"/>
-        <PrimeButton v-if="isSystemManager && isLoggedIn" label="Suspension" @click="suspension" class="sidebar-button"/>
         <PrimeButton v-if="isSystemManager && isLoggedIn" label="Create Suspension" @click="createSuspension" class="sidebar-button"/>
         <PrimeButton v-if="isSystemManager && isLoggedIn" label="End Suspension" @click="endSuspension" class="sidebar-button"/>
         <PrimeButton v-if="isSystemManager && isLoggedIn" label="Watch Suspensions" @click="watchSuspensions" class="sidebar-button"/>
         <PrimeButton v-if="isSystemManager && isLoggedIn" label="Purchases History" @click="purchasesHistoryAsSystemManager" class="sidebar-button"/>
-        <PrimeButton v-if="isCommercialManager && isLoggedIn" label="All Purchases" @click="allPurchases" class="sidebar-button"/>
       </div>
     </div>
-    <footer>
-      <div class="external-links">
-        <h3>External Links</h3>
-        <ul>
-          <li><a href="#">Link 1</a></li>
-          <li><a href="#">Link 2</a></li>
-          <li><a href="#">Link 3</a></li>
-        </ul>
-      </div>
-    </footer>
   </div>
 </template>
 
@@ -81,7 +70,6 @@ export default defineComponent({
     const isStoreOwner = ref(roles.includes('storeOwner'));
     const isStoreManager = ref(roles.includes('storeManager'));
     const isSystemManager = ref(roles.includes('systemManager'));
-    const isCommercialManager = ref(roles.includes('commercialManager'));
     const username = ref(localStorage.getItem('username') || '');
     const activeStores = ref([
       { id: 1, name: 'Colors Store', image: 'https://via.placeholder.com/150', rating: 8.5 },
@@ -107,40 +95,64 @@ export default defineComponent({
     };
 
     const openStore = () => {
-      console.log('Opening Store');
       router.push('/open-store');
     };
     const navigateToSearchStore = () => {
       router.push('/search-store');
     };
-    const approveAppointment = () => {
-      console.log('Approving Appointment');
+    const approveOwnership = () => {
+      if (isLoggedIn.value) {
+          router.push('/approve-owner');
+       } else{
+        console.error("Unauthorize");
+      }
+    };
+    const approveManagement = () => {
+      if (isLoggedIn.value) {
+          router.push('/approve-manager');
+       } else{
+        console.error("Unauthorize");
+      }
     };
     const myStoresIOwn = () => {
-      console.log('My Stores I Own');
       router.push('/my-stores-i-own');
     };
     const manageProductsAsOwner = () => {
-      console.log('Managing Products as Owner');
       router.push('/store-name-input');
     };
+    const suggestOwner = () => {
+      if (isStoreOwner.value) {
+          router.push('/suggest-owner');
+       } else{
+        console.error("Unauthorize");
+      }
+    };
+    const suggestManager = () => {
+      if (isStoreOwner.value) {
+          router.push('/suggest-manager');
+       } else{
+        console.error("Unauthorize");
+      }
+    };
     const appointOwner = () => {
-      console.log('Appointing Owner');
+      if (isStoreOwner.value) {
+          router.push('/appoint-owner');
+       } else{
+        console.error("Unauthorize");
+      }
     };
     const appointManager = () => {
-      console.log('Appointing Manager');
-    };
-    const permissionsToManager = () => {
-      console.log('Setting Permissions to Manager');
-    };
-    const yieldOwnership = () => {
-      console.log('Yielding Ownership');
+      if (isStoreOwner.value) {
+          router.push('/appoint-manager');
+       } else{
+        console.error("Unauthorize");
+      }
     };
     const purchasesHistoryAsOwner = () => {
-      router.push({ name: 'PurchaseHistory' }); // Navigate to PurchaseHistory
+      router.push({ name: 'PurchaseHistory' }); 
     };
     const closeStore = () => {
-      console.log('Closing Store');
+      router.push('/close-store');
     };
     const myStoresIManage = () => {
       router.push('/stores-i-manage');
@@ -154,9 +166,6 @@ export default defineComponent({
     };
     const editPolicy = () => {
       console.log('Editing Policy');
-    };
-    const suspension = () => {
-      console.log('Suspension');
     };
     const createSuspension = () => {
       console.log('Creating Suspension');
@@ -185,9 +194,6 @@ export default defineComponent({
       console.log('Viewing Purchases History as System Manager');
       router.push({ name: 'PurchaseHistory' });
     };
-    const allPurchases = () => {
-      console.log('Viewing All Purchases');
-    };
     const logout = () => {
       isLoggedIn.value = false;
       localStorage.removeItem('isLoggedIn');
@@ -203,31 +209,29 @@ export default defineComponent({
       isStoreOwner,
       isStoreManager,
       isSystemManager,
-      isCommercialManager,
       username,
       activeStores,
       viewProducts,
       openStore,
       navigateToSearchStore,
-      approveAppointment,
+      approveOwnership,
+      approveManagement,
       myStoresIOwn,
       manageProductsAsOwner,
       appointOwner,
       appointManager,
-      permissionsToManager,
-      yieldOwnership,
       purchasesHistoryAsOwner,
       closeStore,
       myStoresIManage,
       manageProductsAsManager,
+      suggestOwner,
+      suggestManager,
       addPolicy,
       editPolicy,
-      suspension,
       createSuspension,
       endSuspension,
       watchSuspensions,
       purchasesHistoryAsSystemManager,
-      allPurchases,
       logout,
       navigateToPurchaseHistory
     };
@@ -251,7 +255,10 @@ export default defineComponent({
 
 .sidebar-button {
   width: 100%;
-  max-width: 150px;
+  max-width: 200px;
+  height: 40px;
+  margin-bottom: 10px;
+  padding: 0;
 }
 
 .content {
