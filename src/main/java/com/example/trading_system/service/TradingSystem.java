@@ -1,5 +1,6 @@
 package com.example.trading_system.service;
 
+import com.example.trading_system.domain.stores.StoreRepository;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
@@ -9,7 +10,7 @@ import java.util.List;
 public interface TradingSystem {
     void deleteInstance();
 
-    ResponseEntity<String> openSystem();
+    ResponseEntity<String> openSystem(StoreRepository storeRepository);
 
     ResponseEntity<String> closeSystem(String username, String token);
 
