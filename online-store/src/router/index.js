@@ -62,7 +62,7 @@ const routes = [
     { path: '/appoint-owner', name: 'AppointOwner', component: AppointOwner },
     { path: '/appoint-manager',name: 'AppointManager',component: AppointManager },
     { path: '/approve-owner',name: 'ApproveOwner',component: ApproveOwner },
-    { path: '/approve-manager',name: 'ApproveManager',component: ApproveManager}
+    { path: '/approve-manager',name: 'ApproveManager',component: ApproveManager},
     { path: '/payment', name: 'PaymentPage', component: PaymentPage },
 
 ];

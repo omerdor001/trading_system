@@ -1,5 +1,7 @@
 package com.example.trading_system.AcceptanceTests.Market;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 public class PurchasePolicyAcceptanceTests {
     private TradingSystem tradingSystem;
@@ -25,7 +28,7 @@ public class PurchasePolicyAcceptanceTests {
 
     @BeforeEach
     void setUp() {
-        tradingSystem = TradingSystemImp.getInstance();
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
         tradingSystem.register("owner1", "password123", LocalDate.of(1960,1,1));
         tradingSystem.openSystem();
         String userToken = tradingSystem.enter().getBody();

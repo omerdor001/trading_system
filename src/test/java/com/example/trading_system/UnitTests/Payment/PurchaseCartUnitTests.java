@@ -1,5 +1,7 @@
 package com.example.trading_system.UnitTests.Payment;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
@@ -12,17 +14,24 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 public class PurchaseCartUnitTests {
     MarketFacadeImp marketFacade;
     UserFacade userFacade;
+    DeliveryService deliveryService;
+    PaymentService paymentService;
 
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
         // Re-instantiate singletons
         marketFacade = MarketFacadeImp.getInstance();
-        userFacade = UserFacadeImp.getInstance();
+        paymentService=mock(PaymentService.class);
+        deliveryService=mock(DeliveryService.class);
+        userFacade = UserFacadeImp.getInstance(paymentService,deliveryService);
     }
 
     @AfterEach
@@ -270,6 +279,7 @@ public class PurchaseCartUnitTests {
         Cart shoppingCart = new Cart();
         userFacade.getUser("r" + username).setCart(shoppingCart);
         userFacade.getUser("r" + username).addProductToCart(productId, quantity, storeName, marketFacade.getStore(storeName).getProduct(productId).getProduct_price(), marketFacade.getStore(storeName).getProduct(productId).getCategory().getIntValue());
+        when(deliveryService.makeDelivery(address)).thenReturn(-1);
         Assertions.assertThrows(Exception.class, () -> userFacade.purchaseCart("r" + username));
     }
 

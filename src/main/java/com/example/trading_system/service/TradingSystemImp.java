@@ -1,5 +1,7 @@
 package com.example.trading_system.service;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,14 +19,14 @@ public class TradingSystemImp implements TradingSystem {
     public int counter_user = 0;
     private boolean systemOpen;
 
-    private TradingSystemImp() {
+    private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService) {
         this.systemOpen = false;
-        this.userService = UserServiceImp.getInstance();
+        this.userService = UserServiceImp.getInstance(paymentService,deliveryService);
         this.marketService = MarketServiceImp.getInstance();
     }
 
-    public static TradingSystemImp getInstance() {
-        if (instance == null) instance = new TradingSystemImp();
+    public static TradingSystemImp getInstance(PaymentService paymentService, DeliveryService deliveryService) {
+        if (instance == null) instance = new TradingSystemImp(paymentService,deliveryService);
         return instance;
     }
 

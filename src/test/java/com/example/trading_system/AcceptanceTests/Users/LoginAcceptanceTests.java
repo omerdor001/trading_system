@@ -1,5 +1,7 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class LoginAcceptanceTests {
 
@@ -21,7 +24,7 @@ class LoginAcceptanceTests {
 
     @BeforeEach
     void setUp() {
-        tradingSystem = TradingSystemImp.getInstance();
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem();
         String userToken = tradingSystem.enter().getBody();
