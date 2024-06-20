@@ -38,8 +38,9 @@ public class PurchaseCartUnitTests {
 
     @AfterEach
     public void tearDown() {
-        storeRepository.deleteInstance();
         userFacade.deleteInstance();
+        storeRepository.deleteInstance();
+        userRepository.deleteInstance();
         marketFacade.deleteInstance();
     }
 
