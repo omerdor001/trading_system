@@ -1,5 +1,9 @@
 package com.example.trading_system.domain.stores;
 
+import com.example.trading_system.service.UserServiceImp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 public class Product {
@@ -12,6 +16,8 @@ public class Product {
     private double rating;
     private Category category;
     private List<String> keyWords;
+    private static final Logger logger = LoggerFactory.getLogger(Product.class);
+
 
     public Product(int product_id, String product_name, String product_description, double product_price, int product_quantity, double rating, Category category, List<String> keyWords) {
         this.product_id = product_id;
@@ -101,4 +107,19 @@ public class Product {
         return "{" + "\"product_id\":" + product_id + ", \"store_name\":\"" + store_name + "\"" + ", \"product_name\":\"" + product_name + "\"" + ", \"product_description\":\"" + product_description + "\"" + ", \"product_price\":" + product_price + ", \"product_quantity\":" + product_quantity + ", \"rating\":" + rating + ", \"category\":" + (category != null ? category.toString() : "null") + ", \"keyWords\":" + keyWords + '}';
     }
 
+    public synchronized void releaseReservedProducts(int quantity) {
+        this.product_quantity= product_quantity+quantity;
+    }
+
+    public synchronized void removeReservedProducts(int quantity) {
+        this.product_quantity= product_quantity - quantity;
+
+    }
+
+    public synchronized void checkAvailabilityAndConditions(int quantity) {
+        if (product_quantity - quantity<0) {
+            logger.error("Insufficient product quantity in store for product ID: {}", product_id);
+            throw new RuntimeException("Product quantity is too low");
+        }
+    }
 }

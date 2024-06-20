@@ -1,6 +1,8 @@
 package com.example.trading_system.domain.users;
 
+import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.ProductInSale;
+import com.example.trading_system.domain.stores.Purchase;
 
 import java.util.HashMap;
 
@@ -63,5 +65,27 @@ public class ShoppingBag {
 
     public int checkProductQuantity(int productId) {
         return products_list.get(productId).getQuantity();
+    }
+
+    public void removeReservedProducts() {
+        for (ProductInSale product : products_list.values()) {
+            MarketFacadeImp.getInstance().removeReservedProducts(product.getId(), product.getQuantity(), product.getStoreId());
+        }
+    }
+
+    public void releaseReservedProducts() {
+        for (ProductInSale product : products_list.values()) {
+            MarketFacadeImp.getInstance().releaseReservedProducts(product.getId(), product.getQuantity(), product.getStoreId());
+        }
+    }
+
+    public void checkAvailabilityAndConditions() {
+        for (ProductInSale product : products_list.values()) {
+            MarketFacadeImp.getInstance().checkAvailabilityAndConditions(product.getId(), product.getQuantity(), product.getStoreId());
+    }
+        }
+
+    public void addPurchase(String username) {
+            MarketFacadeImp.getInstance().addPurchase(username,products_list.values().stream().toList(),calculateTotalPrice(),storeId);
     }
 }
