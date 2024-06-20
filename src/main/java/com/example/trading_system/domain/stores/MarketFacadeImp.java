@@ -741,13 +741,13 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public synchronized void releaseReservedProducts(int productId, int quantity, String storeName) {
+    public  void releaseReservedProducts(int productId, int quantity, String storeName) {
         getStore(storeName).releaseReservedProducts(productId,quantity);
 
     }
 
     @Override
-    public synchronized void removeReservedProducts(int productId, int quantity, String storeName) {
+    public  void removeReservedProducts(int productId, int quantity, String storeName) {
         getStore(storeName).removeReservedProducts(productId,quantity);
 
     }
