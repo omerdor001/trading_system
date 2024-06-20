@@ -37,10 +37,10 @@ public class PurchaseCartUnitTests {
 
     @AfterEach
     public void tearDown() {
-        marketFacade.deleteInstance();
-        userFacade.deleteInstance();
         storeRepository.deleteInstance();
         userRepository.deleteInstance();
+        marketFacade.deleteInstance();
+        userFacade.deleteInstance();
     }
 
     @Test
