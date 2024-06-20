@@ -11,6 +11,7 @@ import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.*;
+import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ class StockManagementUnitTests {
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
         PaymentService paymentService=mock(PaymentService.class);
