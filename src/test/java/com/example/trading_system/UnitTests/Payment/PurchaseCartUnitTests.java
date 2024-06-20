@@ -27,18 +27,18 @@ public class PurchaseCartUnitTests {
 
     @BeforeEach
     public void init() {
-        paymentService=mock(PaymentService.class);
-        deliveryService=mock(DeliveryService.class);
+        // Re-instantiate singletons
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
+
+        paymentService=mock(PaymentService.class);
+        deliveryService=mock(DeliveryService.class);
         userFacade = UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
     }
 
     @AfterEach
     public void tearDown() {
-        storeRepository.deleteInstance();
-        userRepository.deleteInstance();
         marketFacade.deleteInstance();
         userFacade.deleteInstance();
     }
