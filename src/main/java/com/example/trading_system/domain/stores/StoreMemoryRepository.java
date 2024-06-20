@@ -22,7 +22,6 @@ public class StoreMemoryRepository implements StoreRepository {
             store.getProducts().clear();
         }
         this.stores.clear();
-        this.stores = null;
     }
 
     @Override
