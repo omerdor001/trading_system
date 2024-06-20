@@ -49,7 +49,7 @@ class StockManagementUnitTests {
 
         } catch (Exception e) {
             e.printStackTrace();
-             throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 

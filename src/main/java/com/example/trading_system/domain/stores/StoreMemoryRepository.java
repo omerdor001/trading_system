@@ -17,11 +17,11 @@ public class StoreMemoryRepository implements StoreRepository {
     }
 
     public void deleteInstance() {
-        instance = null;
         for (Store store : stores.values()) {
             store.getProducts().clear();
         }
         this.stores.clear();
+        instance = null;
     }
 
     @Override
