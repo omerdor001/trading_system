@@ -877,10 +877,6 @@ public class UserFacadeImp implements UserFacade {
     }
 
 
-    ///Purchase SECTION - already added to store history
-    private void addPurchase(String registeredId) {
-        getUser(registeredId).addPurchasedProduct();
-    }
 
     @Override
     public String getPurchaseHistory(String username, String storeName) {
@@ -914,66 +910,27 @@ public class UserFacadeImp implements UserFacade {
         if (isSuspended(username)) {
             throw new RuntimeException("User is suspended from the system");
         }
-        if (!getUser(username).getLogged()) {
-            logger.error("User is not logged in");
-            throw new RuntimeException("User is not logged in");
-        }
-        User user = getUser(username);
-        Cart cart = user.getCart();
-        if (cart == null || cart.getShoppingBags().isEmpty()) {
-            logger.error("Cart is empty or null");
-            throw new RuntimeException("Cart is empty or null");
-        }
-
-        //TODO: should be delegated
-        HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
-        for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
-            for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
-                if (marketFacade.getStore(shoppingBagInStore.getKey()) == null)
-                    throw new RuntimeException("store not exist");
-                checkProductQuantity(username, productEntry.getKey(), shoppingBagInStore.getKey(), 0);
-            }
-        }
+        getUser(username).checkAvailabilityAndConditions();
         return true;
     }
 
-    private void releaseReservedProducts(String username) {
-        //TODO: should be delegated & Synchronize at the low level
-        HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
-        for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
-            for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
-                marketFacade.releaseReservedProducts(productEntry.getKey(), productEntry.getValue().getQuantity(), shoppingBagInStore.getKey());
-            }
-        }
-    }
-
-    private  void removeReservedProducts(String username) {
-        //TODO: should be delegated & Synchronize at the low level
-        HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
-        for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
-            for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBagInStore.getValue().getProducts_list().entrySet()) {
-                marketFacade.removeReservedProducts(productEntry.getKey(), productEntry.getValue().getQuantity(), shoppingBagInStore.getKey());
-            }
-        }
-    }
 
     @Override
-    public void purchaseCart(String username) throws Exception {
+    public  void purchaseCart(String username) throws Exception {
         if (!checkAvailabilityAndConditions(username)) {
             logger.error("Products are not available or do not meet purchase conditions.");
             throw new RuntimeException("Products are not available or do not meet purchase conditions.");
         }
-        HashMap<String, ShoppingBag> shoppingBags = getUser(username).getCart().getShoppingBags();
         User user=userMemoryRepository.getUser(username);
         if(!marketFacade.validatePurchasePolicies(user.getCart().toJson(),user.getAge())){
             logger.error("Products do not meet purchase policies conditions.");
             throw new RuntimeException("Products do not meet purchase policies conditions.");
         }
-        removeReservedProducts(username);
+        user.removeReservedProducts();
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
-                releaseReservedProducts(username);
+                getUser(username).releaseReservedProducts();
                 throw new RuntimeException("time out !");
             }
         }, 10 * 60 * 1000);
@@ -983,7 +940,7 @@ public class UserFacadeImp implements UserFacade {
         try {
             deliveryId = deliveryService.makeDelivery(address);
         } catch (Exception e) {
-            releaseReservedProducts(username);
+            user.releaseReservedProducts();
             throw new Exception("Error in Delivery");
         }
         if(deliveryId<0){                                //Can Use Them
@@ -994,21 +951,15 @@ public class UserFacadeImp implements UserFacade {
             paymentId = paymentService.makePayment(totalPrice);
         } catch (Exception e) {
             deliveryService.cancelDelivery(deliveryId);
-            releaseReservedProducts(username);
+            user.releaseReservedProducts();
             throw new Exception("Error in Payment");
         }
         if(paymentId<0){
             deliveryService.cancelDelivery(deliveryId);
-            releaseReservedProducts(username);
+            user.releaseReservedProducts();
             throw new Exception("Error in Payment");
         }
-        //TODO: should be delegated
-        for (Map.Entry<String, ShoppingBag> shoppingBagInStore : shoppingBags.entrySet()) {
-            Store store = marketFacade.getStore(shoppingBagInStore.getValue().getStoreId());
-            Purchase purchase = new Purchase(username,shoppingBagInStore.getValue().getProducts_list().values().stream().toList(),shoppingBagInStore.getValue().calculateTotalPrice(),shoppingBagInStore.getValue().getStoreId());
-            store.addPurchase(purchase);
-        }
-        addPurchase(username);
+        user.addPurchase(username);
         timer.cancel();
         timer.purge();
     }
