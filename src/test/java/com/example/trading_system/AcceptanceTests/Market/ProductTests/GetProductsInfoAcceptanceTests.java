@@ -1,4 +1,4 @@
-package com.example.trading_system.AcceptanceTests.Market;
+package com.example.trading_system.AcceptanceTests.Market.ProductTests;
 
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
@@ -80,8 +80,6 @@ public class GetProductsInfoAcceptanceTests {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("{\"name_id\":\"store1\", \"description\":\"General Store\", \"products\":[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":Sport, \"keyWords\":[]}, ]}",response.getBody());
     }
-
-
 
     @Test
     public void testGetStoreProductsNonExistentStore() {

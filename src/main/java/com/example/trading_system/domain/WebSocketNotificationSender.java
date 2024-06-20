@@ -5,8 +5,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WebSocketNotificationSender implements NotificationSender{
-
+public class WebSocketNotificationSender implements NotificationSender {
     private final SimpMessagingTemplate messagingTemplate;
 
     @Autowired

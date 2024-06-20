@@ -1,4 +1,4 @@
-package com.example.trading_system.AcceptanceTests.Users;
+package com.example.trading_system.AcceptanceTests.Market.ProductTests;
 
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class AddProductToCartAcceptanceTests {
+class AddProductToStoreAcceptanceTests {
     private TradingSystem tradingSystem;
     private String token;
     private String username;

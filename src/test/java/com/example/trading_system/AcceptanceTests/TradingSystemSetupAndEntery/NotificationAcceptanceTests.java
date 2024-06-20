@@ -1,4 +1,4 @@
-package com.example.trading_system.AcceptanceTests.Users;
+package com.example.trading_system.AcceptanceTests.TradingSystemSetupAndEntery;
 
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;

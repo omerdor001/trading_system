@@ -1,4 +1,4 @@
-package com.example.trading_system.AcceptanceTests.Users;
+package com.example.trading_system.AcceptanceTests.Users.RoleTests;
 
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
@@ -19,7 +19,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
-public class OfficialAndPermissionRequestsAcceptanceTests {
+public class GetRoleInfoAcceptanceTests {
 
     private TradingSystemImp tradingSystemImp;
     private String userName = "";
