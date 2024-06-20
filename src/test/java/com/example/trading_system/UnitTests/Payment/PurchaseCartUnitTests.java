@@ -9,18 +9,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyByte;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PurchaseCartUnitTests {
+    @Spy
     MarketFacadeImp marketFacade;
     UserFacade userFacade;
     @Mock
@@ -29,19 +32,28 @@ public class PurchaseCartUnitTests {
     PaymentService paymentService;
 
     @BeforeEach
-    public void init() {
+    public void init() throws NoSuchFieldException, IllegalAccessException {
         MockitoAnnotations.openMocks(this);
         // Re-instantiate singletons
-        marketFacade = MarketFacadeImp.getInstance();
+        marketFacade = Mockito.spy(MarketFacadeImp.getInstance());
+        java.lang.reflect.Field instance = MarketFacadeImp.class.getDeclaredField("instance");
+        instance.setAccessible(true);
+        instance.set(null, marketFacade);
+
+//        marketFacade = MarketFacadeImp.getInstance();
         paymentService=mock(PaymentService.class);
         deliveryService=mock(DeliveryService.class);
         userFacade = UserFacadeImp.getInstance(paymentService,deliveryService);
     }
 
     @AfterEach
-    public void tearDown() {
+    public void tearDown() throws NoSuchFieldException, IllegalAccessException {
         userFacade.deleteInstance();
         marketFacade.deleteInstance();
+
+        java.lang.reflect.Field instance = MarketFacadeImp.class.getDeclaredField("instance");
+        instance.setAccessible(true);
+        instance.set(null, null);
     }
 
     @Test
@@ -260,6 +272,32 @@ public class PurchaseCartUnitTests {
         userFacade.getUser("r" + username).setCart(shoppingCart);
         userFacade.getUser("r" + username).addProductToCart(productId, quantity, storeName, marketFacade.getStore(storeName).getProduct(productId).getProduct_price(), 3);
 
+        Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("r" + username));
+    }
+
+    @Test
+    public void givenNotValidatedPolicy_WhenPurchaseCart_ThenThrowException() throws IOException {
+        String username = "rValidUser";
+        int productId = 1;
+        String storeName = "StoreName";
+        int quantity = 5;
+        String address = "SomeAddress";
+        try {
+            userFacade.enter(0);
+            userFacade.register(username, "encrypted_password", LocalDate.now());
+            userFacade.login("v0", username, "encrypted_password");
+        } catch (Exception e) {
+        }
+        userFacade.getUser("r" + username).setAddress(address);
+        marketFacade.addStore(storeName, "description", username, 4.5);
+        Store store = marketFacade.getStore(storeName);
+        store.addProduct(productId, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
+        Cart shoppingCart = new Cart();
+        User user = userFacade.getUser("r" + username);
+        user.setCart(shoppingCart);
+        user.addProductToCart(productId, quantity, storeName, marketFacade.getStore(storeName).getProduct(productId).getProduct_price(), marketFacade.getStore(storeName).getProduct(productId).getCategory().getIntValue());
+
+        doThrow(new RuntimeException()).when(marketFacade).validatePurchasePolicies(any(), anyInt());
         Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("r" + username));
     }
 
