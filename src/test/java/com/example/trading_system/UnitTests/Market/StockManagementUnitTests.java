@@ -23,7 +23,7 @@ class StockManagementUnitTests {
     private UserRepository userRepository;
     private StoreRepository storeRepository;
 
-    @BeforeAll
+    @BeforeEach
     void setUp() {
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
@@ -45,11 +45,11 @@ class StockManagementUnitTests {
             userFacade.appointManager("rtestuser0","rtestuser2","Adidas",false,false,false,false);
 
         } catch (Exception e) {
-            // throw new RuntimeException(e);
+             throw new RuntimeException(e);
         }
     }
 
-    @AfterAll
+    @AfterEach
     public void tearDown(){
         userFacade.logout(0,"rtestuser0");
         userFacade.logout(1,"rtestuser1");
