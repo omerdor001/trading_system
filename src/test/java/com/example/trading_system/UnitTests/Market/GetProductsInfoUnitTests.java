@@ -1,5 +1,7 @@
 package com.example.trading_system.UnitTests.Market;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.users.Role;
 import com.example.trading_system.domain.users.User;
@@ -30,7 +32,7 @@ class GetProductsInfoUnitTests {
     public void init() {
         MockitoAnnotations.openMocks(this);
         marketFacade = MarketFacadeImp.getInstance();
-        userFacade = UserFacadeImp.getInstance();
+        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
         userFacade.getUsers().put(validUsername, user);
 
         // Mock the user to return a valid role for the store

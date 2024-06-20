@@ -1,6 +1,7 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
-import com.example.trading_system.TradingSystemApplication;
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -8,8 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -17,17 +16,17 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
 
-@SpringBootTest(classes = TradingSystemApplication.class)
 class LogoutAcceptanceTests {
-    @Autowired
+
     private static TradingSystem tradingSystem;
     private String token;
     private String username;
 
     @BeforeEach
     void setUp() {
-        tradingSystem = TradingSystemImp.getInstance();
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem();
         String userToken = tradingSystem.enter().getBody();

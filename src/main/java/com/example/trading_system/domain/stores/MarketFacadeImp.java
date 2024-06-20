@@ -742,15 +742,14 @@ public class MarketFacadeImp implements MarketFacade {
 
     @Override
     public synchronized void releaseReservedProducts(int productId, int quantity, String storeName) {
-        int productQuantity = getStore(storeName).getProduct(productId).getProduct_quantity();
-        getStore(storeName).getProduct(productId).setProduct_quantity(productQuantity + quantity);
+        getStore(storeName).releaseReservedProducts(productId,quantity);
 
     }
 
     @Override
     public synchronized void removeReservedProducts(int productId, int quantity, String storeName) {
-        int productQuantity = getStore(storeName).getProduct(productId).getProduct_quantity();
-        getStore(storeName).getProduct(productId).setProduct_quantity(productQuantity - quantity);
+        getStore(storeName).removeReservedProducts(productId,quantity);
+
     }
 
     @Override
@@ -1162,6 +1161,12 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("User is suspended from the system: {}", username);
             throw new RuntimeException("User is suspended from the system");
         }
+    }
+
+    public void checkAvailabilityAndConditions(int id, int quantity, String storeId) {
+        if (getStore(storeId) == null)
+            throw new RuntimeException("store not exist");
+        getStore(storeId).checkAvailabilityAndConditions(id,quantity);
     }
 //endregion
 

@@ -1,6 +1,7 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
-import com.example.trading_system.TradingSystemApplication;
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,8 +9,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -18,10 +17,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
 
-@SpringBootTest(classes = TradingSystemApplication.class)
 public class EditManagerPermissionsAcceptanceTests {
-    @Autowired
     private TradingSystemImp tradingSystemImp;
     private final String password = "123456";
     private String userName = "";
@@ -35,7 +33,7 @@ public class EditManagerPermissionsAcceptanceTests {
 
     @BeforeEach
     public void setUp() {
-        tradingSystemImp = TradingSystemImp.getInstance();
+        tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
         tradingSystemImp.register("admin", password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response = tradingSystemImp.enter();

@@ -1,5 +1,7 @@
 package com.example.trading_system.UnitTests.users;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.users.Registered;
 import com.example.trading_system.domain.users.UserFacade;
 import com.example.trading_system.domain.users.UserFacadeImp;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class LoginUnitTests {
 
@@ -18,7 +21,7 @@ class LoginUnitTests {
 
     @BeforeEach
     void setUp() {
-        userFacade = UserFacadeImp.getInstance();
+        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
         try {
             userFacade.register("testvisitor", "password123", LocalDate.now());
         } catch (Exception e) {

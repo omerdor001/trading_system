@@ -1,5 +1,7 @@
 package com.example.trading_system.service;
 
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +15,12 @@ public class UserServiceImp implements UserService {
     private static UserServiceImp instance = null;
     private UserFacadeImp userFacade;
 
-    private UserServiceImp() {
-        userFacade = UserFacadeImp.getInstance();
+    private UserServiceImp(PaymentService paymentService, DeliveryService deliveryService) {
+        userFacade = UserFacadeImp.getInstance(paymentService,deliveryService);
     }
 
-    public static UserServiceImp getInstance() {
-        if (instance == null) instance = new UserServiceImp();
+    public static UserServiceImp getInstance(PaymentService paymentService, DeliveryService deliveryService) {
+        if (instance == null) instance = new UserServiceImp(paymentService,deliveryService);
         return instance;
     }
 

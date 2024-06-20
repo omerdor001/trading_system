@@ -1,6 +1,7 @@
 package com.example.trading_system.AcceptanceTests.Market;
 
-import com.example.trading_system.TradingSystemApplication;
+import com.example.trading_system.domain.externalservices.DeliveryService;
+import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -8,8 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -18,18 +17,18 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
-@SpringBootTest(classes = TradingSystemApplication.class)
 public class PurchasePolicyAcceptanceTests {
-    @Autowired
     private TradingSystem tradingSystem;
     private String username;
     private String token;
     private final String storeName = "store1";
+    private final String address = "1234 Main Street, Springfield, IL, 62704-1234";
 
     @BeforeEach
     void setUp() {
-        tradingSystem = TradingSystemImp.getInstance();
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
         tradingSystem.register("owner1", "password123", LocalDate.of(1960,1,1));
         tradingSystem.openSystem();
         String userToken = tradingSystem.enter().getBody();
@@ -49,7 +48,6 @@ public class PurchasePolicyAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        String address = "1234 Main Street, Springfield, IL, 62704-1234";
         tradingSystem.setAddress(username, token, address);
         tradingSystem.openStore(username, token, storeName, "");
         tradingSystem.addProduct(username, token, 0, storeName, "product1", "", 1, 5, 1, 5, new LinkedList<>());
