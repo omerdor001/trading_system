@@ -11,6 +11,7 @@ import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.*;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +28,9 @@ class StockManagementUnitTests {
     void setUp() {
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
-        userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
+        PaymentService paymentService=mock(PaymentService.class);
+        DeliveryService deliveryService=mock(DeliveryService.class);
+        userFacade= UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
         marketFacade=MarketFacadeImp.getInstance(storeRepository);
         try {
             userFacade.register("testuser0","1pA22w0rd", LocalDate.now());
@@ -45,6 +48,7 @@ class StockManagementUnitTests {
             userFacade.appointManager("rtestuser0","rtestuser2","Adidas",false,false,false,false);
 
         } catch (Exception e) {
+            e.printStackTrace();
              throw new RuntimeException(e);
         }
     }
