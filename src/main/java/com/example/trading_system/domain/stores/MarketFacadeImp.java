@@ -42,7 +42,7 @@ public class MarketFacadeImp implements MarketFacade {
     public void deleteInstance() {
         if (instance != null) {
             instance.storeMemoryRepository.deleteInstance();
-            storeMemoryRepository=null;
+            //storeMemoryRepository=null;
             userFacade=null;
             instance = null;
         }
