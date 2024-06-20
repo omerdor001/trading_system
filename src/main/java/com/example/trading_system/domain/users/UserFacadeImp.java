@@ -28,8 +28,6 @@ public class UserFacadeImp implements UserFacade {
         this.userRepository = userRepository;
         this.paymentService = paymentService;
         this.deliveryService = deliveryService;
-
-        marketFacade.initialize(this);
     }
 
     public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService,UserRepository userRepository,StoreRepository storeRepository) {

@@ -27,8 +27,8 @@ class StockManagementUnitTests {
     void setUp() {
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
-        marketFacade=MarketFacadeImp.getInstance(storeRepository);
         userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
+        marketFacade=MarketFacadeImp.getInstance(storeRepository);
         try {
             userFacade.register("testuser0","1pA22w0rd", LocalDate.now());
             userFacade.register("testuser1","pA22w0rd1", LocalDate.now());
