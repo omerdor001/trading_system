@@ -27,18 +27,20 @@ public class PurchaseCartUnitTests {
 
     @BeforeEach
     public void init() {
-        storeRepository= StoreMemoryRepository.getInstance();
-        userRepository = UserMemoryRepository.getInstance();
-        marketFacade = MarketFacadeImp.getInstance(storeRepository);
         paymentService=mock(PaymentService.class);
         deliveryService=mock(DeliveryService.class);
+        storeRepository= StoreMemoryRepository.getInstance();
+        userRepository = UserMemoryRepository.getInstance();
         userFacade = UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
+        marketFacade = MarketFacadeImp.getInstance(storeRepository);
     }
 
     @AfterEach
     public void tearDown() {
         marketFacade.deleteInstance();
         userFacade.deleteInstance();
+        storeRepository.deleteInstance();
+        userRepository.deleteInstance();
     }
 
     @Test
