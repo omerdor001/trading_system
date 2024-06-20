@@ -58,6 +58,8 @@ public class ExitAcceptanceTests {
     @AfterEach
     void setDown() {
         tradingSystem.deleteInstance();
+        userRepository.deleteInstance();
+        storeRepository.deleteInstance();
     }
 
     @Test

@@ -149,6 +149,7 @@ public class RemoveProductAcceptanceTests {
 
     @Test
     public void givenManagerWithPermission_WhenAddProduct_ThenThrowException() {
+        System.out.println(tradingSystemImp.getAllStores(userName,token));
         tradingSystemImp.register("managerWithPermissions", password, LocalDate.now());
         ResponseEntity<String> response = tradingSystemImp.enter();
         String userToken = response.getBody();
