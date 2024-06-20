@@ -32,6 +32,6 @@ jobs:
 
       - name: Build and test with Maven
         run: |
-          mvn clean install
+          mvn clean verify
           mvn test
 
