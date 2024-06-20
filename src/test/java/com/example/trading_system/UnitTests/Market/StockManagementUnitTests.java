@@ -58,8 +58,8 @@ class StockManagementUnitTests {
         userFacade.logout(0,"rtestuser0");
         userFacade.logout(1,"rtestuser1");
         userFacade.logout(2,"rtestuser2");
-        marketFacade.deleteInstance();
         userFacade.deleteInstance();
+        marketFacade.deleteInstance();
     }
 
     @Test

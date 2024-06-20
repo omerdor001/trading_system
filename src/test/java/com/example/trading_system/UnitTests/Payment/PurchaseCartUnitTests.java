@@ -27,7 +27,6 @@ public class PurchaseCartUnitTests {
 
     @BeforeEach
     public void init() {
-        // Re-instantiate singletons
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
