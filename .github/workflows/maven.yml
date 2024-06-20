@@ -12,16 +12,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set up JDK 22
         uses: actions/setup-java@v3
         with:
           java-version: '22'
           distribution: 'temurin'
           cache: maven
-      - name: Set up Node.js (if needed)
-        uses: actions/setup-node@v3
+
+      - name: Cache Maven repository
+        uses: actions/cache@v2
         with:
-          node-version: '20'
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build and test with Maven
+        run: |
+          mvn clean verify
+          mvn test
+

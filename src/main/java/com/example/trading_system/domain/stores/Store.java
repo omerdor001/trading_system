@@ -633,5 +633,24 @@ public class Store {
             purchasePolicies.remove(selectedIndex);
     }
 
+    public void releaseReservedProducts(int productId, int quantity) {
+        getProduct(productId).releaseReservedProducts(quantity);
+    }
+
+    public void removeReservedProducts(int productId, int quantity) {
+        getProduct(productId).removeReservedProducts(quantity);
+
+    }
+
+    public synchronized void checkAvailabilityAndConditions(int id, int quantity) {
+        if (!isOpen())
+            throw new IllegalArgumentException("When store is closed cant to check product quantity");
+        if (getProduct(id) == null) {
+            logger.error("Product not found: " + id);
+            throw new NoSuchElementException("Product not found: " + id);
+        }
+        getProduct(id).checkAvailabilityAndConditions(quantity);
+    }
+
     //endregion
 }

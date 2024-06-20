@@ -93,22 +93,6 @@ public class Cart {
         return list;
     }
 
-    public List<Purchase> purchaseProduct(String username) {
-        double totalcount = 0;
-        List<Purchase> purchases = new ArrayList<>();
-        List<ProductInSale> productInSales = new ArrayList<>();
-        for (Map.Entry<String, ShoppingBag> entry : shoppingBags.entrySet()) {
-            ShoppingBag shoppingBag = entry.getValue();
-            for (Map.Entry<Integer, ProductInSale> productEntry : shoppingBag.getProducts_list().entrySet()) {
-                totalcount += productEntry.getValue().sumTotalPrice();
-                productInSales.add(productEntry.getValue());
-            }
-            purchases.add(new Purchase(username, getProductsToList(), totalcount, entry.getKey()));
-        }
-        return purchases;
-    }
-
-
     public String toJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(this);
@@ -120,4 +104,27 @@ public class Cart {
         return shoppingBags.get(storeName).checkProductQuantity(productId);
     }
 
+    public void removeReservedProducts() {
+        for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
+            shoppingBagInStore.removeReservedProducts();
+        }
+    }
+
+    public void releaseReservedProducts() {
+        for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
+            shoppingBagInStore.releaseReservedProducts();
+        }
+    }
+
+    public void checkAvailabilityAndConditions() {
+        for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
+            shoppingBagInStore.checkAvailabilityAndConditions();
+        }
+    }
+
+    public void addPurchase(String username) {
+        for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
+            shoppingBagInStore.addPurchase(username);
+        }
+    }
 }
