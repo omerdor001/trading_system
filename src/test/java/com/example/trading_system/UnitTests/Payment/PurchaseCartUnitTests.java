@@ -17,7 +17,6 @@ import java.util.concurrent.Executors;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 public class PurchaseCartUnitTests {
     MarketFacadeImp marketFacade;
     UserFacade userFacade;
@@ -28,20 +27,19 @@ public class PurchaseCartUnitTests {
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.openMocks(this);
         // Re-instantiate singletons
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
-        marketFacade = MarketFacadeImp.getInstance(storeRepository);
         paymentService=mock(PaymentService.class);
         deliveryService=mock(DeliveryService.class);
         userFacade = UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
+        marketFacade = MarketFacadeImp.getInstance(storeRepository);
     }
 
     @AfterEach
     public void tearDown() {
-        userFacade.deleteInstance();
         marketFacade.deleteInstance();
+        userFacade.deleteInstance();
     }
 
     @Test
