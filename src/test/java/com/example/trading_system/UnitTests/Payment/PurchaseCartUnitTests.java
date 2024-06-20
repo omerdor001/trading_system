@@ -14,9 +14,9 @@ import java.time.LocalDate;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyByte;
 import static org.mockito.Mockito.*;
@@ -107,60 +107,7 @@ public class PurchaseCartUnitTests {
     }
 
     @Test
-    public void givenTwoProcessesWithDelayedDelivery_WhenPurchaseCart_ThenThrowException() throws IllegalAccessException {
-        String username1 = "ValidUser1";
-        String username2 = "ValidUser2";
-        int productId = 1;
-        String storeName = "StoreName";
-        int quantity = 6;
-        String address = "1234 El Street, Springfield, IL, 62704-5678";  // Valid address format
-        try {
-            userFacade.register(username1, "encrypted_password", LocalDate.now());
-            userFacade.register(username2, "encrypted_password", LocalDate.now());
-            userFacade.enter(0);
-            userFacade.enter(1);
-            userFacade.login("v0", username1, "encrypted_password");
-            userFacade.login("v1", username2, "encrypted_password");
-        } catch (Exception _) {
-        }
-        userFacade.setAddress("r" + username1,address);
-        userFacade.setAddress("r" +username2,address);
-        userFacade.createStore("r" +username1, storeName, "description");
-
-        marketFacade.addProduct("r" +username1,productId,storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
-        userFacade.addToCart("r" + username1, productId, storeName, quantity);
-        userFacade.addToCart("r" + username2, productId, storeName, quantity);
-
-        Assertions.assertDoesNotThrow(() -> userFacade.purchaseCart("r" + username1));
-        Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("r" + username2));
-        CountDownLatch latch = new CountDownLatch(1);
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
-
-        executorService.execute(() -> {
-            try {
-                latch.await(); // Wait for the signal to start
-                userFacade.purchaseCart("r" + username1);
-            } catch (Exception _) {
-
-            }
-        });
-
-        executorService.execute(() -> {
-            latch.countDown(); // Signal the other thread to proceed
-            try {
-                Thread.sleep(1000); // Introduce a delay for the second user
-                Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("r" + username2));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-
-        executorService.shutdown();
-
-    }
-
-    @Test
-    public void givenTwoProcessesWithInsufficientProductQuantity_WhenPurchaseCart_ThenThrowException() throws IllegalAccessException {
+    public void givenTwoProcessesWithDelayedDelivery_WhenPurchaseCart_ThenThrowException() throws Exception {
         String username1 = "ValidUser1";
         String username2 = "ValidUser2";
         int productId = 1;
@@ -175,13 +122,13 @@ public class PurchaseCartUnitTests {
             userFacade.enter(1);
             userFacade.login("v0", username1, "encrypted_password");
             userFacade.login("v1", username2, "encrypted_password");
-        } catch (Exception _) {
-            // Handle exceptions as needed
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         userFacade.setAddress("r" + username1, address);
         userFacade.setAddress("r" + username2, address);
-        userFacade.createStore("r" +username1, storeName, "description");
+        userFacade.createStore("r" + username1, storeName, "description");
 
         marketFacade.addProduct("r" + username1, productId, storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
         userFacade.addToCart("r" + username1, productId, storeName, quantity);
@@ -192,23 +139,125 @@ public class PurchaseCartUnitTests {
 
         executorService.execute(() -> {
             try {
-                userFacade.purchaseCart("r" + username1); // This should hold the product
-                latch.countDown(); // Signal the other thread to proceed
+                latch.await(); // Wait for the signal to start
+//                Thread.sleep(10 * 60 * 1000); // Introduce a delay for the first user
+                userFacade.purchaseCart("r" + username1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+//TODO this one should have recap
+        executorService.execute(() -> {
+            try {
+                latch.await(); // Wait for the signal to start
+                Thread.sleep(10 * 60 * 1000); // Introduce a delay for the second user
+                userFacade.purchaseCart("r" + username2);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
 
-        executorService.execute(() -> {
-            try {
-                latch.await(); // Wait for the signal from the first thread
-                Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("r" + username2));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
+        latch.countDown(); // Signal both threads to proceed
 
         executorService.shutdown();
+        executorService.awaitTermination(1, TimeUnit.MINUTES);
+
+        boolean purchase1Success = false;
+        boolean purchase2Success = false;
+
+        try {
+            userFacade.purchaseCart("r" + username1);
+            purchase1Success = true;
+        } catch (Exception e) {
+            // Expected failure
+        }
+
+        try {
+            userFacade.purchaseCart("r" + username2);
+            purchase2Success = true;
+        } catch (Exception e) {
+            // Expected failure
+        }
+
+        assertTrue(purchase1Success ^ purchase2Success);
+    }
+    @Test
+    public void givenTwoProcessesWithInsufficientProductQuantity_WhenPurchaseCart_ThenOneThrowsException() throws Exception {
+        String username1 = "ValidUser1";
+        String username2 = "ValidUser2";
+        int productId = 1;
+        String storeName = "StoreName";
+        int quantity = 6;
+        String address = "1234 El Street, Springfield, IL, 62704-5678";  // Valid address format
+
+        try {
+            userFacade.register(username1, "encrypted_password", LocalDate.now());
+            userFacade.register(username2, "encrypted_password", LocalDate.now());
+            userFacade.enter(0);
+            userFacade.enter(1);
+            userFacade.login("v0", username1, "encrypted_password");
+            userFacade.login("v1", username2, "encrypted_password");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        userFacade.setAddress("r" + username1, address);
+        userFacade.setAddress("r" + username2, address);
+        userFacade.createStore("r" + username1, storeName, "description");
+
+        marketFacade.addProduct("r" + username1, productId, storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
+        userFacade.addToCart("r" + username1, productId, storeName, quantity);
+        userFacade.addToCart("r" + username2, productId, storeName, quantity);
+
+        CountDownLatch latch = new CountDownLatch(1);
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        Runnable purchaseTask1 = () -> {
+            try {
+                latch.await();
+                userFacade.purchaseCart("r" + username1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
+
+        Runnable purchaseTask2 = () -> {
+            try {
+                latch.await();
+                userFacade.purchaseCart("r" + username2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
+
+        executorService.execute(purchaseTask1);
+        executorService.execute(purchaseTask2);
+
+        // Signal both threads to proceed
+        latch.countDown();
+
+        executorService.shutdown();
+        executorService.awaitTermination(1, TimeUnit.MINUTES);
+
+        // Check results: one should succeed, and one should fail
+        boolean purchase1Success = false;
+        boolean purchase2Success = false;
+
+        try {
+            userFacade.purchaseCart("r" + username1);
+            purchase1Success = true;
+        } catch (Exception e) {
+            // Expected failure
+        }
+
+        try {
+            userFacade.purchaseCart("r" + username2);
+            purchase2Success = true;
+        } catch (Exception e) {
+            // Expected failure
+        }
+
+        assert(purchase1Success ^ purchase2Success); // One should succeed, one should fail
     }
 
     @Test
