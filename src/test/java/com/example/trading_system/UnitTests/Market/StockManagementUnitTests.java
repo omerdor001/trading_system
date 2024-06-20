@@ -24,7 +24,7 @@ class StockManagementUnitTests {
     private UserRepository userRepository;
     private StoreRepository storeRepository;
 
-    @BeforeEach
+    @BeforeAll
     void setUp() {
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
@@ -53,7 +53,7 @@ class StockManagementUnitTests {
         }
     }
 
-    @AfterEach
+    @AfterAll
     public void tearDown(){
         userFacade.logout(0,"rtestuser0");
         userFacade.logout(1,"rtestuser1");
