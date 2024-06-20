@@ -1,10 +1,11 @@
 package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.stores.Purchase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +16,8 @@ public abstract class User {
     private LocalDateTime suspendedStart;
     private LocalDateTime suspendedEnd;
     private String address;
+    private static final Logger logger = LoggerFactory.getLogger(User.class);
+
 
     public User(String username) {
         this.username = username;
@@ -147,9 +150,6 @@ public abstract class User {
         this.cart.removeProductFromCart(productId, quantity, storeName);
     }
 
-    public List<Purchase> addPurchasedProduct() {
-        return cart.purchaseProduct(this.username);
-    }
 
     public String getShoppingCart_ToString() {
         return cart.toString();
@@ -159,4 +159,27 @@ public abstract class User {
         return cart.checkProductQuantity(productId, storeName);
     }
 
+    public void removeReservedProducts() {
+        cart.removeReservedProducts();
+    }
+
+    public void releaseReservedProducts() {
+        cart.releaseReservedProducts();
+    }
+
+    public void checkAvailabilityAndConditions() {
+        if (cart == null || cart.getShoppingBags().isEmpty()) {
+            logger.error("Cart is empty or null");
+            throw new RuntimeException("Cart is empty or null");
+        }
+        if (!getLogged()) {
+            logger.error("User is not logged in");
+            throw new RuntimeException("User is not logged in");
+        }
+        cart.checkAvailabilityAndConditions();
+    }
+
+    public void addPurchase(String username) {
+        cart.addPurchase(username);
+    }
 }
