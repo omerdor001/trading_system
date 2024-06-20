@@ -121,6 +121,8 @@ public class EditProductsAcceptanceTest {
     @AfterEach
     public void tearDown() {
         tradingSystemImp.deleteInstance();
+        userRepository.deleteInstance();
+        storeRepository.deleteInstance();
     }
 
     @Test

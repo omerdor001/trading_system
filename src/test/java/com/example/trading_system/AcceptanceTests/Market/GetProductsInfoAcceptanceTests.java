@@ -61,6 +61,8 @@ public class GetProductsInfoAcceptanceTests {
     @AfterEach
     public void tearDown() {
         tradingSystem.deleteInstance();
+        userRepository.deleteInstance();
+        storeRepository.deleteInstance();
     }
 
     @Test

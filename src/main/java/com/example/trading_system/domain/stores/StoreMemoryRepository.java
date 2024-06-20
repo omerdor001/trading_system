@@ -17,15 +17,10 @@ public class StoreMemoryRepository implements StoreRepository {
     }
 
     public void deleteInstance() {
-        for (Store store : stores.values()) {
-            store.getProducts().clear();
-            store.getManagers().clear();
-            store.getOwners().clear();
-            store.getAllHistoryPurchases().clear();
-            store.getDiscountPolicies().clear();
-            store.getPurchasePolicies().clear();
+        if(stores!=null){
+            this.stores.clear();
+            stores=null;
         }
-        this.stores.clear();
         instance = null;
     }
 

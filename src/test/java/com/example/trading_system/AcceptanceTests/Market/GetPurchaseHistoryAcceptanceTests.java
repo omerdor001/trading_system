@@ -63,6 +63,8 @@ class GetPurchaseHistoryAcceptanceTests {
     @AfterEach
     void setDown(){
         tradingSystem.deleteInstance();
+        userRepository.deleteInstance();
+        storeRepository.deleteInstance();
     }
 
     @Test

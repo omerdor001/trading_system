@@ -33,6 +33,8 @@ class OpenSystemAcceptanceTests {
     @AfterEach
     void setDown(){
         tradingSystem.deleteInstance();
+        userRepository.deleteInstance();
+        storeRepository.deleteInstance();
     }
 
     @Test

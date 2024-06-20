@@ -46,6 +46,8 @@ public class SearchProductSpecificStoreAcceptanceTests {
     @AfterEach
     void tearDown() {
         tradingSystem.deleteInstance();
+        userRepository.deleteInstance();
+        storeRepository.deleteInstance();
     }
 
     private void extractToken(String jsonResponse) {

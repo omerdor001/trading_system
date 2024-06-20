@@ -111,6 +111,8 @@ public class WaiveOnOwnershipAcceptanceTests {
     @AfterEach
     public void tearDown() {
         tradingSystemImp.deleteInstance();
+        userRepository.deleteInstance();
+        storeRepository.deleteInstance();
     }
 
     @Test

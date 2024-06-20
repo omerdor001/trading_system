@@ -134,5 +134,7 @@ public class CloseStoreExistAcceptanceTests {
             System.out.println("Store is already Open");
         }
         tradingSystemImp.deleteInstance();
+        userRepository.deleteInstance();
+        storeRepository.deleteInstance();
     }
 }
