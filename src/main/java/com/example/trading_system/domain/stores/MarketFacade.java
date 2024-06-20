@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface MarketFacade {
+    StoreRepository getStoreRepository();
+
     void deleteInstance();
 
     void initialize(UserFacade userFacade);

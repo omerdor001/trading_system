@@ -19,10 +19,12 @@ public class MarketFacadeImp implements MarketFacade {
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
     private static MarketFacadeImp instance = null;
     private final ConcurrentHashMap<String, Lock> storeLocks = new ConcurrentHashMap<>();
-    @Getter
     private StoreRepository storeRepository;
     private UserFacade userFacade;
 
+    public StoreRepository getStoreRepository() {
+        return storeRepository;
+    }
 
     private MarketFacadeImp(StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
