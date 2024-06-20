@@ -30,7 +30,6 @@ public class PurchaseCartUnitTests {
         // Re-instantiate singletons
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
-
         paymentService=mock(PaymentService.class);
         deliveryService=mock(DeliveryService.class);
         userFacade = UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
@@ -39,8 +38,8 @@ public class PurchaseCartUnitTests {
 
     @AfterEach
     public void tearDown() {
-        marketFacade.deleteInstance();
         userFacade.deleteInstance();
+        marketFacade.deleteInstance();
     }
 
     @Test
