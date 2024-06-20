@@ -1,5 +1,6 @@
 package com.example.trading_system.UnitTests.Market;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.MarketFacade;
@@ -20,7 +21,7 @@ class StockManagementUnitTests {
     @BeforeAll
     void setUp() {
         marketFacade=MarketFacadeImp.getInstance();
-        userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class));
         try {
             userFacade.register("testuser0","1pA22w0rd", LocalDate.now());
             userFacade.register("testuser1","pA22w0rd1", LocalDate.now());

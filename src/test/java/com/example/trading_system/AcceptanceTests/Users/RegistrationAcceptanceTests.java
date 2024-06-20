@@ -1,5 +1,6 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.service.TradingSystem;
@@ -20,7 +21,7 @@ public class RegistrationAcceptanceTests {
 
     @BeforeEach
     void setUp() {
-        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class));
     }
 
     @AfterEach

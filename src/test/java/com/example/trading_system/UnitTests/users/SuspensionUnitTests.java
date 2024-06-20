@@ -1,5 +1,6 @@
 package com.example.trading_system.UnitTests.users;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.MarketFacade;
@@ -24,7 +25,7 @@ class SuspensionUnitTests {
     @BeforeAll
     void setUpBA() {
         marketFacade= MarketFacadeImp.getInstance();
-        userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class));
         try {
             userFacade.enter(0);
             userFacade.enter(1);

@@ -1,5 +1,6 @@
 package com.example.trading_system.service;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import org.slf4j.Logger;
@@ -19,14 +20,14 @@ public class TradingSystemImp implements TradingSystem {
     public int counter_user = 0;
     private boolean systemOpen;
 
-    private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService) {
+    private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender) {
         this.systemOpen = false;
-        this.userService = UserServiceImp.getInstance(paymentService,deliveryService);
+        this.userService = UserServiceImp.getInstance(paymentService, deliveryService, notificationSender);
         this.marketService = MarketServiceImp.getInstance();
     }
 
-    public static TradingSystemImp getInstance(PaymentService paymentService, DeliveryService deliveryService) {
-        if (instance == null) instance = new TradingSystemImp(paymentService,deliveryService);
+    public static TradingSystemImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender) {
+        if (instance == null) instance = new TradingSystemImp(paymentService, deliveryService, notificationSender);
         return instance;
     }
 
@@ -298,7 +299,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> sendPendingNotifications(String username, String token){
+    public ResponseEntity<String> sendPendingNotifications(String username, String token) {
         logger.info("Attempting to send pending notifications for user: {}", username);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
@@ -1319,7 +1320,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> addPurchasePolicyByAge(String username, String token, String storeName, int ageToCheck, int category){
+    public ResponseEntity<String> addPurchasePolicyByAge(String username, String token, String storeName, int ageToCheck, int category) {
         logger.info("Adding age-based purchase policy for user: {}, store: {}, ageToCheck: {}, category: {}", username, storeName, ageToCheck, category);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
@@ -1347,7 +1348,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> addPurchasePolicyByCategoryAndDate(String username, String token, String storeName, int category, LocalDateTime dateTime){
+    public ResponseEntity<String> addPurchasePolicyByCategoryAndDate(String username, String token, String storeName, int category, LocalDateTime dateTime) {
         logger.info("Adding category and date-based purchase policy for user: {}, store: {}, category: {}, dateTime: {}", username, storeName, category, dateTime);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
@@ -1375,7 +1376,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> addPurchasePolicyByProductAndDate(String username, String token, String storeName, int productId, LocalDateTime dateTime){
+    public ResponseEntity<String> addPurchasePolicyByProductAndDate(String username, String token, String storeName, int productId, LocalDateTime dateTime) {
         logger.info("Adding product and date-based purchase policy for user: {}, store: {}, productId: {}, dateTime: {}", username, storeName, productId, dateTime);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
@@ -1403,7 +1404,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> addPurchasePolicyByShoppingCartMinProducts(String username, String token, String storeName, int numOfQuantity){
+    public ResponseEntity<String> addPurchasePolicyByShoppingCartMinProducts(String username, String token, String storeName, int numOfQuantity) {
         logger.info("Adding shopping cart min products purchase policy for user: {}, store: {}, weight: {}", username, storeName, numOfQuantity);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
@@ -1431,7 +1432,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> addAndPurchasePolicy(String username, String token, String storeName){
+    public ResponseEntity<String> addAndPurchasePolicy(String username, String token, String storeName) {
         logger.info("Adding AND purchase policy for user: {}, store: {}", username, storeName);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
@@ -1473,7 +1474,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> setPurchasePolicyProductId(String username, String token, String storeName, int selectedIndex, int productId){
+    public ResponseEntity<String> setPurchasePolicyProductId(String username, String token, String storeName, int selectedIndex, int productId) {
         logger.info("Setting product ID for purchase policy for user: {}, store: {}, selectedIndex: {}, productId: {}", username, storeName, selectedIndex, productId);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
@@ -1501,7 +1502,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> setPurchasePolicyDateTime(String username, String token, String storeName, int selectedIndex, LocalDateTime dateTime){
+    public ResponseEntity<String> setPurchasePolicyDateTime(String username, String token, String storeName, int selectedIndex, LocalDateTime dateTime) {
         logger.info("Setting date time for purchase policy for user: {}, store: {}, selectedIndex: {}, dateTime: {}", username, storeName, selectedIndex, dateTime);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
@@ -1515,7 +1516,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> setPurchasePolicyAge(String username, String token, String storeName, int selectedIndex, int age){
+    public ResponseEntity<String> setPurchasePolicyAge(String username, String token, String storeName, int selectedIndex, int age) {
         logger.info("Setting age for purchase policy for user: {}, store: {}, selectedIndex: {}, age: {}", username, storeName, selectedIndex, age);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
@@ -1530,7 +1531,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> setFirstPurchasePolicy(String username, String token, String storeName, int selectedDiscountIndex, int selectedFirstIndex){
+    public ResponseEntity<String> setFirstPurchasePolicy(String username, String token, String storeName, int selectedDiscountIndex, int selectedFirstIndex) {
         logger.info("Setting first purchase policy for user: {}, store: {}, discountIndex: {}, firstIndex: {}", username, storeName, selectedDiscountIndex, selectedFirstIndex);
         try {
             if (checkSystemClosed()) return systemClosedResponse();

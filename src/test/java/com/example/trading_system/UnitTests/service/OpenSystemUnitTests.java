@@ -1,5 +1,6 @@
 package com.example.trading_system.UnitTests.service;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.service.TradingSystemImp;
@@ -20,7 +21,7 @@ class OpenSystemUnitTests {
     @BeforeEach
     public void setUp() {
         userService = mock(UserService.class);
-        facade = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        facade = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class));
         facade.userService = userService;
     }
 

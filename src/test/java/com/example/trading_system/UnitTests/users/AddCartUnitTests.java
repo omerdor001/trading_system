@@ -1,5 +1,6 @@
 package com.example.trading_system.UnitTests.users;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.*;
@@ -26,12 +27,12 @@ public class AddCartUnitTests {
         MockitoAnnotations.openMocks(this);
 
         // Clear singleton instances
-        UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class)).deleteInstance();
+        UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class)).deleteInstance();
 
         // Re-instantiate singletons
         userMemoryRepository = UserMemoryRepository.getInstance();
         marketFacade = MarketFacadeImp.getInstance();
-        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class));
     }
 
     @AfterEach

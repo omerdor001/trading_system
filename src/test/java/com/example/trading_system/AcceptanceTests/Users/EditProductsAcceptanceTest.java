@@ -1,5 +1,6 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.service.TradingSystemImp;
@@ -21,13 +22,13 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
 public class EditProductsAcceptanceTest {
-    private TradingSystemImp tradingSystemImp;
-    private String userName = "";
-    private String token = "";
     private final String storeName = "Store1";
     private final String productName = "Product1";
     private final String[] keyWords = {"CarPlay", "iPhone"};
     private final int productID = 111;
+    private TradingSystemImp tradingSystemImp;
+    private String userName = "";
+    private String token = "";
     private String ownerUserName = "";
     private String ownerToken = "";
     private String userNameManager = "";
@@ -35,7 +36,7 @@ public class EditProductsAcceptanceTest {
 
     @BeforeEach
     public void setUp() {
-        tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class));
         String password = "123456";
         tradingSystemImp.register("admin", password, LocalDate.now());
         tradingSystemImp.openSystem();
@@ -169,40 +170,39 @@ public class EditProductsAcceptanceTest {
     @Test
     public void GivenOwner_WhenSetProductDescription_ThenSuccess() {
         ResponseEntity<String> resp = tradingSystemImp.getStoreProducts(userName, token, storeName);
-        Assertions.assertTrue(resp.getBody().contains("\"product_id\":111"));
+        Assertions.assertTrue(Objects.requireNonNull(resp.getBody()).contains("\"product_id\":111"));
         Assertions.assertTrue(resp.getBody().contains("\"product_description\":\"oldDescription"));
         ResponseEntity<String> resp2 = tradingSystemImp.setProductDescription(ownerUserName, ownerToken, storeName, productID, "newDescription");
         Assertions.assertEquals("Product description was set successfully.", resp2.getBody());
         Assertions.assertEquals(HttpStatus.OK, resp2.getStatusCode());
         ResponseEntity<String> resp3 = tradingSystemImp.getProductInfo(ownerUserName, ownerToken, storeName, productID);
-        Assertions.assertTrue(resp3.getBody().contains("\"product_description\":\"newDescription"));
+        Assertions.assertTrue(Objects.requireNonNull(resp3.getBody()).contains("\"product_description\":\"newDescription"));
         Assertions.assertEquals(HttpStatus.OK, resp3.getStatusCode());
     }
-
 
     @Test
     public void GivenOwner_WhenSetProductPrice_ThenSuccess() {
         ResponseEntity<String> resp = tradingSystemImp.getStoreProducts(userName, token, storeName);
-        Assertions.assertTrue(resp.getBody().contains("\"product_id\":111"));
+        Assertions.assertTrue(Objects.requireNonNull(resp.getBody()).contains("\"product_id\":111"));
         Assertions.assertTrue(resp.getBody().contains("\"product_price\":15.0"));
         ResponseEntity<String> resp2 = tradingSystemImp.setProductPrice(ownerUserName, ownerToken, storeName, productID, 16.0);
         Assertions.assertEquals("Product price was set successfully.", resp2.getBody());
         Assertions.assertEquals(HttpStatus.OK, resp2.getStatusCode());
         ResponseEntity<String> resp3 = tradingSystemImp.getProductInfo(ownerUserName, ownerToken, storeName, productID);
-        Assertions.assertTrue(resp3.getBody().contains("\"product_price\":16"));
+        Assertions.assertTrue(Objects.requireNonNull(resp3.getBody()).contains("\"product_price\":16"));
         Assertions.assertEquals(HttpStatus.OK, resp3.getStatusCode());
     }
 
     @Test
     public void GivenOwner_WhenSetProductQuantity_ThenSuccess() {
         ResponseEntity<String> resp = tradingSystemImp.getStoreProducts(userName, token, storeName);
-        Assertions.assertTrue(resp.getBody().contains("\"product_id\":111"));
+        Assertions.assertTrue(Objects.requireNonNull(resp.getBody()).contains("\"product_id\":111"));
         Assertions.assertTrue(resp.getBody().contains("\"product_quantity\":6"));
         ResponseEntity<String> resp2 = tradingSystemImp.setProductQuantity(ownerUserName, ownerToken, storeName, productID, 8);
         Assertions.assertEquals("Product quantity was set successfully.", resp2.getBody());
         Assertions.assertEquals(HttpStatus.OK, resp2.getStatusCode());
         ResponseEntity<String> resp3 = tradingSystemImp.getProductInfo(ownerUserName, ownerToken, storeName, productID);
-        Assertions.assertTrue(resp3.getBody().contains("\"product_quantity\":8"));
+        Assertions.assertTrue(Objects.requireNonNull(resp3.getBody()).contains("\"product_quantity\":8"));
         Assertions.assertEquals(HttpStatus.OK, resp3.getStatusCode());
     }
 }

@@ -1,5 +1,6 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.service.TradingSystemImp;
@@ -31,7 +32,7 @@ public class RemoveProductAcceptanceTests {
 
     @BeforeEach
     public void setUp() {
-        tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class));
         tradingSystemImp.register("admin", password, LocalDate.now());
         tradingSystemImp.openSystem();
         ResponseEntity<String> response = tradingSystemImp.enter();

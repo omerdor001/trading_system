@@ -1,11 +1,13 @@
 package com.example.trading_system.service;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public interface TradingSystem {
     void deleteInstance();
 

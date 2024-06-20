@@ -2,10 +2,12 @@ package com.example.trading_system.service;
 
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class MarketServiceImp implements MarketService {
     private static MarketServiceImp instance = null;
     private MarketFacade marketFacade;

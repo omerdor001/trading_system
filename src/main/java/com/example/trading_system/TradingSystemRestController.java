@@ -10,10 +10,10 @@
 //Copy code
 package com.example.trading_system;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.service.TradingSystemImp;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +26,8 @@ public class TradingSystemRestController {
 
     private final TradingSystemImp tradingSystem;
 
-    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService){
-        tradingSystem = TradingSystemImp.getInstance(paymentService, deliveryService);
+    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender){
+        tradingSystem = TradingSystemImp.getInstance(paymentService, deliveryService, notificationSender);
     }
 
     @DeleteMapping("/instance")
