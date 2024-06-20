@@ -5,6 +5,9 @@ import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.concurrent.CountDownLatch;
@@ -24,12 +27,13 @@ public class PurchaseCartUnitTests {
 
     @BeforeEach
     public void init() {
+        // Re-instantiate singletons
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
+        marketFacade = MarketFacadeImp.getInstance(storeRepository);
         paymentService=mock(PaymentService.class);
         deliveryService=mock(DeliveryService.class);
         userFacade = UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
-        marketFacade = MarketFacadeImp.getInstance(storeRepository);
     }
 
     @AfterEach
