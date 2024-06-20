@@ -381,6 +381,18 @@ public class Store {
             discountPolicies.remove(selectedIndex);
     }
 
+    public LinkedList<DiscountPolicy> getDiscountPolicies() {
+        return discountPolicies;
+    }
+
+    public LinkedList<Condition> getDiscountConditions() {
+        return discountConditions;
+    }
+
+    public LinkedList<PurchasePolicy> getPurchasePolicies() {
+        return purchasePolicies;
+    }
+
     //endregion
 
     //region Discount/Condition editing/manipulation

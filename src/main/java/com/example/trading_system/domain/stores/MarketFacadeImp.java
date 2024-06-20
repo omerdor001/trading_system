@@ -41,7 +41,7 @@ public class MarketFacadeImp implements MarketFacade {
     @Override
     public void deleteInstance() {
         if (instance != null) {
-            if(instance.storeRepository==null){
+            if(instance.storeRepository!=null){
                 instance.storeRepository.deleteInstance();
                 instance.storeRepository = null;
             }
