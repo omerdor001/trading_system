@@ -8,16 +8,12 @@ import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
 import static org.mockito.Mockito.mock;
 
-@ExtendWith(MockitoExtension.class)
 public class RemoveFromCartUnitTests {
     MarketFacadeImp marketFacade;
     UserFacadeImp userFacadeImp;
@@ -26,8 +22,6 @@ public class RemoveFromCartUnitTests {
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.openMocks(this);
-        // Re-instantiate singletons
         userRepository = UserMemoryRepository.getInstance();
         storeRepository= StoreMemoryRepository.getInstance();
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
@@ -36,8 +30,8 @@ public class RemoveFromCartUnitTests {
 
     @AfterEach
     public void tearDown() {
-        userFacadeImp.deleteInstance();
         marketFacade.deleteInstance();
+        userFacadeImp.deleteInstance();
     }
 
     @Test

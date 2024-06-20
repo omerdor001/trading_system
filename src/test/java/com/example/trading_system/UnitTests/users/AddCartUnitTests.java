@@ -14,7 +14,6 @@ import java.util.NoSuchElementException;
 
 import static org.mockito.Mockito.mock;
 
-@ExtendWith(MockitoExtension.class)
 public class AddCartUnitTests {
     MarketFacadeImp marketFacade;
     UserFacadeImp userFacadeImp;
@@ -23,19 +22,15 @@ public class AddCartUnitTests {
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.openMocks(this);
-
-        // Clear singleton instances
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
-
-        // Re-instantiate singletons
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
         userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
     }
 
     @AfterEach
     public void tearDown() {
+        marketFacade.deleteInstance();
         userFacadeImp.deleteInstance();
     }
 

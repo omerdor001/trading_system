@@ -31,8 +31,8 @@ class SuspensionUnitTests {
     void setUpBA() {
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
-        marketFacade= MarketFacadeImp.getInstance(storeRepository);
         userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
+        marketFacade= MarketFacadeImp.getInstance(storeRepository);
         try {
             userFacade.enter(0);
             userFacade.enter(1);
