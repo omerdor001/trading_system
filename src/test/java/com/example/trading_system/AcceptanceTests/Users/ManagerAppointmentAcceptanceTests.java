@@ -35,7 +35,7 @@ public class ManagerAppointmentAcceptanceTests {
     @BeforeEach
     public void setUp() {
         userRepository= UserMemoryRepository.getInstance();    //May be change later
-        storeRepository= StoreMemoryRepository.getInstance();
+        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
         tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
         String password = "123456";
         tradingSystemImp.register("admin", password, LocalDate.now());

@@ -23,15 +23,19 @@ public class PurchaseCartUnitTests {
     UserFacade userFacade;
     DeliveryService deliveryService;
     PaymentService paymentService;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
         // Re-instantiate singletons
-        marketFacade = MarketFacadeImp.getInstance();
+        storeRepository= StoreMemoryRepository.getInstance();
+        userRepository = UserMemoryRepository.getInstance();
+        marketFacade = MarketFacadeImp.getInstance(storeRepository);
         paymentService=mock(PaymentService.class);
         deliveryService=mock(DeliveryService.class);
-        userFacade = UserFacadeImp.getInstance(paymentService,deliveryService);
+        userFacade = UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
     }
 
     @AfterEach

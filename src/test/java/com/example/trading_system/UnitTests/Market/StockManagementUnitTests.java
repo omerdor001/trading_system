@@ -4,8 +4,12 @@ import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserFacade;
 import com.example.trading_system.domain.users.UserFacadeImp;
+import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,11 +20,15 @@ import static org.mockito.Mockito.mock;
 class StockManagementUnitTests {
     MarketFacade marketFacade;
     UserFacade userFacade;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeAll
     void setUp() {
-        marketFacade=MarketFacadeImp.getInstance();
-        userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        storeRepository= StoreMemoryRepository.getInstance();
+        userRepository = UserMemoryRepository.getInstance();
+        marketFacade=MarketFacadeImp.getInstance(storeRepository);
+        userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
         try {
             userFacade.register("testuser0","1pA22w0rd", LocalDate.now());
             userFacade.register("testuser1","pA22w0rd1", LocalDate.now());

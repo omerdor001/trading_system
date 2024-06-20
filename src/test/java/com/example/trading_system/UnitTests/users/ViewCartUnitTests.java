@@ -2,6 +2,8 @@ package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,15 +17,17 @@ import static org.mockito.Mockito.mock;
 @ExtendWith(MockitoExtension.class)
 public class ViewCartUnitTests {
 
-    UserMemoryRepository userMemoryRepository;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
     UserFacadeImp userFacadeImp;
 
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
         // Re-instantiate singletons
-        userMemoryRepository = UserMemoryRepository.getInstance();
-        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        userRepository = UserMemoryRepository.getInstance();
+        storeRepository= StoreMemoryRepository.getInstance();
+        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
     }
 
     @AfterEach
@@ -35,11 +39,11 @@ public class ViewCartUnitTests {
     public void givenValidLoggedInUser_WhenViewCart_ThenSuccess() {
         String username = "rValidUser";
 
-        userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
-        userMemoryRepository.getUser(username).login();
-        userMemoryRepository.getUser(username).setCart(new Cart());
+        userRepository.addRegistered(username, "encrypted_password", LocalDate.now());
+        userRepository.getUser(username).login();
+        userRepository.getUser(username).setCart(new Cart());
 
-        userMemoryRepository.getUser(username).getCart().addProductToCart(1, 1, "Store", 10.0, 1);
+        userRepository.getUser(username).getCart().addProductToCart(1, 1, "Store", 10.0, 1);
 
         String result = userFacadeImp.viewCart(username);
 
@@ -50,7 +54,7 @@ public class ViewCartUnitTests {
     public void givenValidUserNotLoggedIn_WhenViewCart_ThenThrowException() {
         String username = "rValidUser";
 
-        userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
+        userRepository.addRegistered(username, "encrypted_password", LocalDate.now());
 
         RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.viewCart(username));
 

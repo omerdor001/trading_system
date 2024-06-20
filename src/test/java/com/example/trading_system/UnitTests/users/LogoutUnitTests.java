@@ -2,9 +2,9 @@ package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.users.Cart;
-import com.example.trading_system.domain.users.User;
-import com.example.trading_system.domain.users.UserFacadeImp;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 
@@ -17,13 +17,16 @@ class LogoutUnitTests {
     User user;
     @Mock
     Cart shoppingCart;
-
     UserFacadeImp userFacadeImp;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     public void init() {
         initMocks(this);
-        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        storeRepository= StoreMemoryRepository.getInstance();
+        userRepository = UserMemoryRepository.getInstance();
+        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
     }
 
     @AfterEach
