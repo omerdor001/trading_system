@@ -873,14 +873,15 @@ public class UserFacadeImp implements UserFacade {
     }
 
     public boolean isUserExist(String username) {
-        return userRepository.isExist(username);
+        if(userRepository == null){
+            return false;
+        }
+        else return userRepository.isExist(username);
     }
 
     public User getUser(String username) {
         return userRepository.getUser(username);
     }
-
-
 
     @Override
     public String getPurchaseHistory(String username, String storeName) {
