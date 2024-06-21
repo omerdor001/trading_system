@@ -8,9 +8,12 @@ import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
 import com.example.trading_system.service.UserService;
+import com.example.trading_system.service.UserServiceImp;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -18,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class OpenSystemUnitTests {
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
     private TradingSystemImp facade;
     private UserService userService;
     private UserRepository userRepository;

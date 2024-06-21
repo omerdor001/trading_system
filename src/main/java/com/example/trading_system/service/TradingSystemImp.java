@@ -40,8 +40,10 @@ public class TradingSystemImp implements TradingSystem {
     @Override
     public void deleteInstance() {
         instance = null;
+        logger.info("Before D {}",userService);
         this.userService.deleteInstance();
         userService = null;
+        logger.info("After D {}",userService);
         if (systemOpen) {
             this.marketService.deleteInstance();
             this.systemOpen=false;

@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UserServiceImp implements UserService {
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
     private static UserServiceImp instance = null;
     private UserFacadeImp userFacade;
 
