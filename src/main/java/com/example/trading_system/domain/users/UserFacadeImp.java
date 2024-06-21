@@ -23,6 +23,9 @@ public class UserFacadeImp implements UserFacade {
 
 
     private UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService,UserRepository userRepository,StoreRepository storeRepository) {
+        if(userRepository!=null){
+            logger.info("UR Not Null");
+        }
         this.paymentService = paymentService;
         this.deliveryService = deliveryService;
         this.userRepository = userRepository;
@@ -31,6 +34,9 @@ public class UserFacadeImp implements UserFacade {
     }
 
     public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService,UserRepository userRepository,StoreRepository storeRepository) {
+        if(instance!=null){
+            logger.info("UF Not Null");
+        }
         if (instance == null) {
             instance = new UserFacadeImp(paymentService,deliveryService,userRepository,storeRepository);
             instance.marketFacade.initialize(instance);

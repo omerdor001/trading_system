@@ -47,9 +47,6 @@ public class RemoveProductAcceptanceTests {
         if(tradingSystemImp.userService.getUserFacade().getUserRepository()!=null){
             logger.info("1");
         }
-        if(tradingSystemImp.userService.getUserFacade().getUserRepository()!=null){
-            logger.info("2");
-        }
         tradingSystemImp.register("admin", password, LocalDate.now());
         tradingSystemImp.openSystem(storeRepository);
         ResponseEntity<String> response = tradingSystemImp.enter();
