@@ -29,14 +29,14 @@ class StockManagementUnitTests {
 
     @BeforeAll
     void setUp() {
-        logger.info("SETUP stock management");
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
         PaymentService paymentService=mock(PaymentService.class);
         DeliveryService deliveryService=mock(DeliveryService.class);
-        logger.info("SETUP stock management initialize facades");
         userFacade= UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
+        logger.info("SETUP stock management initialize UF");
         marketFacade=MarketFacadeImp.getInstance(storeRepository);
+        logger.info("SETUP stock management initialize SF");
         try {
             userFacade.register("testuser0","1pA22w0rd", LocalDate.now());
             userFacade.register("testuser1","pA22w0rd1", LocalDate.now());
