@@ -21,13 +21,11 @@ public class UserServiceImp implements UserService {
     }
 
     private UserServiceImp(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository, StoreRepository storeRepository) {
-        if(userRepository==null){
-            logger.info("23");
-        }
         userFacade = UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
     }
 
     public static UserServiceImp getInstance(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository,StoreRepository storeRepository) {
+        logger.info("Enter US");
         if (instance == null) instance = new UserServiceImp(paymentService,deliveryService,userRepository,storeRepository);
         return instance;
     }
