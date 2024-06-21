@@ -42,7 +42,7 @@ public class PaymentAcceptanceTests {
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem(storeRepository);
         ResponseEntity<String> result = tradingSystem.enter();
-        logger.warn("TESTS FAIL BECAUSE OF: " + result.getBody());
+        logger.debug("TESTS FAIL BECAUSE OF: " + result.getBody());
         String userToken = result.getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
