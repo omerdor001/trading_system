@@ -49,7 +49,7 @@ public class PaymentAcceptanceTests {
             JsonNode rootNode = objectMapper.readTree(userToken);
             token = rootNode.get("token").asText();
         } catch (Exception e) {
-            fail("Setup failed: Unable to extract token from JSON response");
+            fail("Setup failed: Unable to extract token from JSON response, " + e.getMessage() + " userToken: " + userToken);
         }
         userToken = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
         try {
