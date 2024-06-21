@@ -35,9 +35,6 @@ class StockManagementUnitTests {
         DeliveryService deliveryService=mock(DeliveryService.class);
         userFacade= UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
         marketFacade=MarketFacadeImp.getInstance(storeRepository);
-        if(marketFacade.getStoreRepository()!=null){
-            logger.info("SETUP stock management initialize SF a {}",marketFacade.getStoreRepository());
-        }
         try {
             userFacade.register("testuser0","1pA22w0rd", LocalDate.now());
             userFacade.register("testuser1","pA22w0rd1", LocalDate.now());

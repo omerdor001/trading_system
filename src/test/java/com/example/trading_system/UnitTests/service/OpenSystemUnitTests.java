@@ -34,6 +34,7 @@ class OpenSystemUnitTests {
 
     @AfterEach
     void setDown(){
+        facade.setSystemOpen(false);
         facade.deleteInstance();
     }
 
