@@ -24,6 +24,9 @@ public class MarketFacadeImp implements MarketFacade {
 
 
     private MarketFacadeImp(StoreRepository storeRepository) {
+        if(storeRepository!=null){
+            logger.info("store repo is {}", storeRepository);
+        }
         this.storeRepository = storeRepository;
     }
 

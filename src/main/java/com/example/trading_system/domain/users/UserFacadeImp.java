@@ -27,12 +27,6 @@ public class UserFacadeImp implements UserFacade {
 
 
     private UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService,UserRepository userRepository,StoreRepository storeRepository) {
-        if(storeRepository!=null){
-            logger.info("store repo is {}", storeRepository);
-        }
-        if(userRepository!=null){
-            logger.info("user repo is {}", userRepository);
-        }
         this.paymentService = paymentService;
         this.deliveryService = deliveryService;
         this.userRepository = userRepository;
