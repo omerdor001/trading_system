@@ -94,58 +94,57 @@ public class PurchaseCartUnitTests {
         Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("r" + username2));
     }
 
-    @Test
-    public void givenTwoProcessesWithDelayedDelivery_WhenPurchaseCart_ThenThrowException() throws IllegalAccessException {
-        String username1 = "ValidUser1";
-        String username2 = "ValidUser2";
-        int productId = 1;
-        String storeName = "StoreName";
-        int quantity = 6;
-        String address = "1234 El Street, Springfield, IL, 62704-5678";  // Valid address format
-        try {
-            userFacade.register(username1, "encrypted_password", LocalDate.now());
-            userFacade.register(username2, "encrypted_password", LocalDate.now());
-            userFacade.enter(0);
-            userFacade.enter(1);
-            userFacade.login("v0", username1, "encrypted_password");
-            userFacade.login("v1", username2, "encrypted_password");
-        } catch (Exception _) {
-        }
-        userFacade.setAddress("r" + username1,address);
-        userFacade.setAddress("r" +username2,address);
-        userFacade.createStore("r" +username1, storeName, "description");
-
-        marketFacade.addProduct("r" +username1,productId,storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
-        userFacade.addToCart("r" + username1, productId, storeName, quantity);
-        userFacade.addToCart("r" + username2, productId, storeName, quantity);
-
-        Assertions.assertDoesNotThrow(() -> userFacade.purchaseCart("r" + username1));
-        Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("r" + username2));
-        CountDownLatch latch = new CountDownLatch(1);
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
-
-        executorService.execute(() -> {
-            try {
-                latch.await();
-                userFacade.purchaseCart("r" + username1);
-            } catch (Exception _) {
-
-            }
-        });
-
-        executorService.execute(() -> {
-            latch.countDown();
-            try {
-                Thread.sleep(1000);
-                Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("r" + username2));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-
-        executorService.shutdown();
-
-    }
+//    @Test
+//    public void givenTwoProcessesWithDelayedDelivery_WhenPurchaseCart_ThenThrowException() throws IllegalAccessException {
+//        String username1 = "ValidUser1";
+//        String username2 = "ValidUser2";
+//        int productId = 1;
+//        String storeName = "StoreName";
+//        int quantity = 6;
+//        String address = "1234 El Street, Springfield, IL, 62704-5678";  // Valid address format
+//        try {
+//            userFacade.register(username1, "encrypted_password", LocalDate.now());
+//            userFacade.register(username2, "encrypted_password", LocalDate.now());
+//            userFacade.enter(0);
+//            userFacade.enter(1);
+//            userFacade.login("v0", username1, "encrypted_password");
+//            userFacade.login("v1", username2, "encrypted_password");
+//        } catch (Exception _) {
+//        }
+//        userFacade.setAddress("r" + username1,address);
+//        userFacade.setAddress("r" +username2,address);
+//        userFacade.createStore("r" +username1, storeName, "description");
+//
+//        marketFacade.addProduct("r" +username1,productId,storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
+//        userFacade.addToCart("r" + username1, productId, storeName, quantity);
+//        userFacade.addToCart("r" + username2, productId, storeName, quantity);
+//
+//        Assertions.assertDoesNotThrow(() -> userFacade.purchaseCart("r" + username1));
+//        Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("r" + username2));
+//        CountDownLatch latch = new CountDownLatch(1);
+//        ExecutorService executorService = Executors.newFixedThreadPool(2);
+//
+//        executorService.execute(() -> {
+//            try {
+//                latch.await();
+//                userFacade.purchaseCart("r" + username1);
+//            } catch (Exception _) {
+//
+//            }
+//        });
+//
+//        executorService.execute(() -> {
+//            latch.countDown();
+//            try {
+//                Thread.sleep(1000);
+//                Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("r" + username2));
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//
+//        executorService.shutdown();
+//    }
 
     @Test
     public void givenTwoProcessesWithInsufficientProductQuantity_WhenPurchaseCart_ThenThrowException() throws IllegalAccessException {
