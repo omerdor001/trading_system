@@ -38,6 +38,9 @@ public class PaymentAcceptanceTests {
         StoreMemoryRepository.getInstance().deleteInstance();  //May be change later
         userRepository = UserMemoryRepository.getInstance();    //May be change later
         storeRepository = StoreMemoryRepository.getInstance();  //May be change later
+        TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository).deleteInstance();
+        userRepository = UserMemoryRepository.getInstance();    //May be change later
+        storeRepository = StoreMemoryRepository.getInstance();  //May be change later
         tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem(storeRepository);
