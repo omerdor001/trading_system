@@ -33,9 +33,8 @@ public class RegistrationAcceptanceTests {
 
     @AfterEach
     void setDown(){
+        tradingSystem.setSystemOpen(true);
         tradingSystem.deleteInstance();
-        storeRepository.deleteInstance();
-        userRepository.deleteInstance();
     }
 
     @Test
