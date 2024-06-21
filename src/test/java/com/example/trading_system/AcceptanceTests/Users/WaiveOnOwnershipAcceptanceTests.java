@@ -114,9 +114,28 @@ public class WaiveOnOwnershipAcceptanceTests {
 
     @AfterEach
     public void tearDown() {
-        tradingSystemImp.exit(token,"v0");
         tradingSystemImp.deleteInstance();
         logger.info("tearDown");
+    }
+
+    @Test
+    public void GivenValidOwner_WhenWaiveOnOwnerShip_ThenSuccess(){ //check that manager appointment also deleted
+        logger.info("Problematic test");
+        Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,true,true,true,true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName).getStatusCode());
+        ResponseEntity<String> resp = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,storeName);
+        Assertions.assertEquals("Success waiver to own",resp.getBody());
+        Assertions.assertEquals(HttpStatus.OK, resp.getStatusCode());
+        ResponseEntity<String> resp2 = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,storeName);
+        Assertions.assertEquals("User is not owner of this store",resp2.getBody());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp2.getStatusCode());
+        logger.info("{}",tradingSystemImp.getStoreProducts(userName,token,storeName).toString());
+        ResponseEntity<String> resp3 = tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName, ownerUserName);
+        Assertions.assertEquals("User is not employed in this store.",resp3.getBody());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp3.getStatusCode());
+        ResponseEntity<String> resp4 = tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName, userNameManager);
+        Assertions.assertEquals("User is not employed in this store.",resp4.getBody());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp4.getStatusCode());
     }
 
     @Test
@@ -143,24 +162,5 @@ public class WaiveOnOwnershipAcceptanceTests {
         ResponseEntity<String> resp = tradingSystemImp.waiverOnOwnership(userName,token,storeName);
         Assertions.assertEquals("Founder cant waive on ownership",resp.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
-    }
-
-    @Test
-    public void GivenValidOwner_WhenWaiveOnOwnerShip_ThenSuccess(){ //check that manager appointment also deleted
-        logger.info("Problematic test");
-        Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,true,true,true,true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName).getStatusCode());
-        ResponseEntity<String> resp = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,storeName);
-        Assertions.assertEquals("Success waiver to own",resp.getBody());
-        Assertions.assertEquals(HttpStatus.OK, resp.getStatusCode());
-        ResponseEntity<String> resp2 = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,storeName);
-        Assertions.assertEquals("User is not owner of this store",resp2.getBody());
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp2.getStatusCode());
-        ResponseEntity<String> resp3 = tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName, ownerUserName);
-        Assertions.assertEquals("User is not employed in this store.",resp3.getBody());
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp3.getStatusCode());
-        ResponseEntity<String> resp4 = tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName, userNameManager);
-        Assertions.assertEquals("User is not employed in this store.",resp4.getBody());
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp4.getStatusCode());
     }
 }
