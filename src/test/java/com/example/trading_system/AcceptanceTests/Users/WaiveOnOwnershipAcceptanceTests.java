@@ -47,7 +47,7 @@ public class WaiveOnOwnershipAcceptanceTests {
         tradingSystemImp.openSystem(storeRepository);
         ResponseEntity<String> response = tradingSystemImp.enter();
         String userToken = response.getBody();
-        if(tradingSystemImp.marketService.getMarketFacade()!=null){
+        if(tradingSystemImp.marketService.getMarketFacade().getStoreRepository()!=null){
             logger.info("1");
         }
         try {
@@ -59,7 +59,7 @@ public class WaiveOnOwnershipAcceptanceTests {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
         userToken = tradingSystemImp.login(token, "v0", "admin", password).getBody();
-        if(tradingSystemImp.marketService.getMarketFacade()!=null){
+        if(tradingSystemImp.marketService.getMarketFacade().getStoreRepository()!=null){
             logger.info("2");
         }
         try {
@@ -74,7 +74,7 @@ public class WaiveOnOwnershipAcceptanceTests {
         tradingSystemImp.openSystem(storeRepository);
         ResponseEntity<String> response2 = tradingSystemImp.enter();
         String userToken2 = response2.getBody();
-        if(tradingSystemImp.marketService.getMarketFacade()!=null){
+        if(tradingSystemImp.marketService.getMarketFacade().getStoreRepository()!=null){
             logger.info("3");
         }
         try {
