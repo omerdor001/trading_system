@@ -58,7 +58,6 @@ public class MarketFacadeImp implements MarketFacade {
         }
     }
 
-
     public StoreRepository getStoreRepository() {
         return storeRepository;
     }
