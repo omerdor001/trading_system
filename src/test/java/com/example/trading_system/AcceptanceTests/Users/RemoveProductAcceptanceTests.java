@@ -38,7 +38,6 @@ public class RemoveProductAcceptanceTests {
 
     @BeforeEach
     public void setUp() {
-        tradingSystemImp.userService.deleteInstance();
         userRepository= UserMemoryRepository.getInstance();    //May be change later
         storeRepository= StoreMemoryRepository.getInstance();  //May be change later
         tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
