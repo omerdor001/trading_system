@@ -114,6 +114,7 @@ public class WaiveOnOwnershipAcceptanceTests {
 
     @AfterEach
     public void tearDown() {
+        tradingSystemImp.exit(token,"v0");
         tradingSystemImp.deleteInstance();
         logger.info("tearDown");
     }
@@ -142,7 +143,6 @@ public class WaiveOnOwnershipAcceptanceTests {
         ResponseEntity<String> resp = tradingSystemImp.waiverOnOwnership(userName,token,storeName);
         Assertions.assertEquals("Founder cant waive on ownership",resp.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
-        tearDown();
     }
 
     @Test
@@ -156,7 +156,6 @@ public class WaiveOnOwnershipAcceptanceTests {
         ResponseEntity<String> resp2 = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,storeName);
         Assertions.assertEquals("User is not owner of this store",resp2.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp2.getStatusCode());
-        logger.info("Problematic test1");
         ResponseEntity<String> resp3 = tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName, ownerUserName);
         Assertions.assertEquals("User is not employed in this store.",resp3.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp3.getStatusCode());
