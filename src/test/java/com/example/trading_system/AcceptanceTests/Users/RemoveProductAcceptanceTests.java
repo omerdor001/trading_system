@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
 public class RemoveProductAcceptanceTests {
-
     private TradingSystemImp tradingSystemImp;
     private final String password = "123456";
     private String userName = "";
@@ -36,10 +35,10 @@ public class RemoveProductAcceptanceTests {
     private final int productID = 111;
     private UserRepository userRepository;
     private StoreRepository storeRepository;
-    private static final Logger logger = LoggerFactory.getLogger(RemoveProductAcceptanceTests.class);
 
     @BeforeEach
     public void setUp() {
+        tradingSystemImp.userService=null;
         userRepository= UserMemoryRepository.getInstance();    //May be change later
         storeRepository= StoreMemoryRepository.getInstance();  //May be change later
         tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);

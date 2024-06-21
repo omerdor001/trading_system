@@ -42,7 +42,6 @@ public class TradingSystemImp implements TradingSystem {
         instance = null;
         this.userService.deleteInstance();
         userService = null;
-        logger.info("{}",systemOpen);
         if (systemOpen) {
             this.marketService.deleteInstance();
             this.systemOpen=false;

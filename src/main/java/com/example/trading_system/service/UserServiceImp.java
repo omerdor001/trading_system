@@ -25,9 +25,6 @@ public class UserServiceImp implements UserService {
     }
 
     public static UserServiceImp getInstance(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository,StoreRepository storeRepository) {
-        if(instance!=null){
-            logger.info("23");
-        }
         if (instance == null) instance = new UserServiceImp(paymentService,deliveryService,userRepository,storeRepository);
         return instance;
     }
