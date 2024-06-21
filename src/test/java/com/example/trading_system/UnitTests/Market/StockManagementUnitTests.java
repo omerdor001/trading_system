@@ -25,7 +25,7 @@ class StockManagementUnitTests {
     UserFacade userFacade;
     private UserRepository userRepository;
     private StoreRepository storeRepository;
-    private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
+    private static final Logger logger = LoggerFactory.getLogger(StockManagementUnitTests.class);
 
     @BeforeAll
     void setUp() {
