@@ -46,6 +46,8 @@ public class SearchUnitTests {
     void setDown(){
         marketFacade.deleteInstance();
         userFacade.deleteInstance();
+        userRepository.deleteInstance();
+        storeRepository.deleteInstance();
     }
 
     @Test
