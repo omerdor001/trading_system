@@ -37,7 +37,7 @@ public class RemoveProductAcceptanceTests {
     private final int productID = 111;
     private UserRepository userRepository;
     private StoreRepository storeRepository;
-    private static final Logger logger = LoggerFactory.getLogger(UserFacadeImp.class);
+    private static final Logger logger = LoggerFactory.getLogger(RemoveProductAcceptanceTests.class);
 
     @BeforeEach
     public void setUp() {
