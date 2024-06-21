@@ -18,7 +18,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class UserFacadeImp implements UserFacade {
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserFacadeImp.class);
     private static UserFacadeImp instance = null;
     private MarketFacade marketFacade;
     private UserRepository userRepository;
@@ -27,6 +27,12 @@ public class UserFacadeImp implements UserFacade {
 
 
     private UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService,UserRepository userRepository,StoreRepository storeRepository) {
+        if(storeRepository!=null){
+            logger.info("store repo is {}", storeRepository);
+        }
+        if(userRepository!=null){
+            logger.info("user repo is {}", userRepository);
+        }
         this.paymentService = paymentService;
         this.deliveryService = deliveryService;
         this.userRepository = userRepository;

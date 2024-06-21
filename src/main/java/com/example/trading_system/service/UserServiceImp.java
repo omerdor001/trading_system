@@ -12,17 +12,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UserServiceImp implements UserService {
-    private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
     private static UserServiceImp instance = null;
     private UserFacadeImp userFacade;
 
     private UserServiceImp(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository, StoreRepository storeRepository) {
-        if(storeRepository!=null){
-            logger.info("store repo is {}", storeRepository);
-        }
-        if(userRepository!=null){
-            logger.info("user repo is {}", userRepository);
-        }
         userFacade = UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
     }
 
