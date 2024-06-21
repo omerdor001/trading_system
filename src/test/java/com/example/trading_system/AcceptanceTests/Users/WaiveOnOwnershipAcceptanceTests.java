@@ -110,7 +110,6 @@ public class WaiveOnOwnershipAcceptanceTests {
 
     @AfterEach
     public void tearDown() {
-        tradingSystemImp.setSystemOpen(false);
         tradingSystemImp.deleteInstance();
     }
 

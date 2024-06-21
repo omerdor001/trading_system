@@ -33,6 +33,7 @@ public class RegistrationAcceptanceTests {
 
     @AfterEach
     void setDown(){
+        tradingSystem.setSystemOpen(false);
         tradingSystem.deleteInstance();
     }
 
