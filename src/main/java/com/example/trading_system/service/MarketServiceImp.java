@@ -3,7 +3,6 @@ package com.example.trading_system.service;
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserRepository;
 
 
 import java.time.LocalDateTime;
@@ -11,6 +10,11 @@ import java.util.List;
 
 public class MarketServiceImp implements MarketService {
     private static MarketServiceImp instance = null;
+
+    public MarketFacade getMarketFacade() {
+        return marketFacade;
+    }
+
     private MarketFacade marketFacade;
 
     private MarketServiceImp(StoreRepository storeRepository) {

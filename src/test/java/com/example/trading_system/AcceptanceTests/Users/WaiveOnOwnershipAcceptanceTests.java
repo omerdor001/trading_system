@@ -126,13 +126,12 @@ public class WaiveOnOwnershipAcceptanceTests {
         ResponseEntity<String> resp = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,storeName);
         Assertions.assertEquals("Success waiver to own",resp.getBody());
         Assertions.assertEquals(HttpStatus.OK, resp.getStatusCode());
-        if(tradingSystemImp.marketService!=null){
+        if(tradingSystemImp.marketService.getMarketFacade()!=null){
             logger.info("{}",tradingSystemImp.getStoreProducts(userName,token,storeName).toString());
         }
         ResponseEntity<String> resp2 = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,storeName);
         Assertions.assertEquals("User is not owner of this store",resp2.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp2.getStatusCode());
-
         ResponseEntity<String> resp3 = tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName, ownerUserName);
         Assertions.assertEquals("User is not employed in this store.",resp3.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp3.getStatusCode());
