@@ -121,15 +121,14 @@ public class WaiveOnOwnershipAcceptanceTests {
     @Test
     public void GivenValidOwner_WhenWaiveOnOwnerShip_ThenSuccess(){ //check that manager appointment also deleted
         logger.info("Problematic test");
+        if(tradingSystemImp.marketService.getMarketFacade()!=null){
+            logger.info("{}",tradingSystemImp.getStoreProducts(userName,token,storeName).toString());
+        }
         Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,true,true,true,true).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName).getStatusCode());
         ResponseEntity<String> resp = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,storeName);
         Assertions.assertEquals("Success waiver to own",resp.getBody());
         Assertions.assertEquals(HttpStatus.OK, resp.getStatusCode());
-        if(tradingSystemImp.marketService.getMarketFacade().getStoreRepository()!=null){
-            logger.info("{}",tradingSystemImp.getStoreProducts(userName,token,storeName).toString());
-        }
-        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
         ResponseEntity<String> resp2 = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,storeName);
         Assertions.assertEquals("User is not owner of this store",resp2.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp2.getStatusCode());
