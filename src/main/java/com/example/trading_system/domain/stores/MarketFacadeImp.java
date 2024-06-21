@@ -1,7 +1,6 @@
 package com.example.trading_system.domain.stores;
 
 import com.example.trading_system.domain.users.*;
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,19 +23,10 @@ public class MarketFacadeImp implements MarketFacade {
 
 
     private MarketFacadeImp(StoreRepository storeRepository) {
-        if(storeRepository!=null){
-            logger.info("Market facade store repo is {}", storeRepository);
-        }
         this.storeRepository = storeRepository;
     }
 
     public static MarketFacadeImp getInstance(StoreRepository storeRepository) {
-        if(storeRepository!=null) {
-            logger.info("Market facade SF {}", storeRepository);
-        }
-        if(instance!=null) {
-            logger.info("Market facade INSTANCE {}", instance);
-        }
         if (instance == null) instance = new MarketFacadeImp(storeRepository);
         return instance;
     }
