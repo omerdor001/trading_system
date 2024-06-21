@@ -14,6 +14,8 @@ import org.junit.jupiter.api.BeforeEach;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -31,7 +33,7 @@ public class PaymentAcceptanceTests {
     private String token;
     private UserRepository userRepository;
     private StoreRepository storeRepository;
-
+    private static final Logger logger = LoggerFactory.getLogger(PaymentAcceptanceTests.class);
     @BeforeEach
     void setUp() {
         userRepository = UserMemoryRepository.getInstance();    //May be change later
@@ -40,7 +42,7 @@ public class PaymentAcceptanceTests {
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem(storeRepository);
         ResponseEntity<String> result = tradingSystem.enter();
-        System.out.println(result.getBody());
+        logger.warn("TESTS FAIL BECAUSE OF: " + result.getBody());
         String userToken = result.getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
