@@ -22,9 +22,6 @@ public class MarketFacadeImp implements MarketFacade {
     private StoreRepository storeRepository;
     private UserFacade userFacade;
 
-    public StoreRepository getStoreRepository() {
-        return storeRepository;
-    }
 
     private MarketFacadeImp(StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
@@ -52,11 +49,13 @@ public class MarketFacadeImp implements MarketFacade {
         }
     }
 
+
+    public StoreRepository getStoreRepository() {
+        return storeRepository;
+    }
+
     public boolean isStoreExist(String store_name) {
-        if(storeRepository==null){
-            return false;
-        }
-        else return storeRepository.isExist(store_name);
+        return storeRepository.isExist(store_name);
     }
 
     public void addStore(String storeName, String description, String founder, Double storeRating) {
