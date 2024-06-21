@@ -35,7 +35,9 @@ class StockManagementUnitTests {
         DeliveryService deliveryService=mock(DeliveryService.class);
         userFacade= UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
         marketFacade=MarketFacadeImp.getInstance(storeRepository);
-        logger.info("SETUP stock management initialize SF{}",marketFacade.getStoreRepository());
+        if(marketFacade.getStoreRepository()!=null){
+            logger.info("SETUP stock management initialize SF {}",marketFacade.getStoreRepository());
+        }
         try {
             userFacade.register("testuser0","1pA22w0rd", LocalDate.now());
             userFacade.register("testuser1","pA22w0rd1", LocalDate.now());
@@ -46,7 +48,9 @@ class StockManagementUnitTests {
             userFacade.login("v0","testuser0","1pA22w0rd");
             userFacade.login("v1","testuser1","pA22w0rd1");
             userFacade.login("v2","testuser2","pA22w0rd2");
-            logger.info("SF {}",marketFacade.getStoreRepository());
+            if(marketFacade.getStoreRepository()!=null) {
+                logger.info("SF {}", marketFacade.getStoreRepository());
+            }
             userFacade.createStore("rtestuser0","Adidas","sport shop");
             userFacade.createStore("rtestuser0","Nike","sport shop");
             userFacade.appointOwner("rtestuser0","rtestuser1","Adidas");
