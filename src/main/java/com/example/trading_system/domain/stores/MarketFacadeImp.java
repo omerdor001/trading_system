@@ -53,7 +53,10 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     public boolean isStoreExist(String store_name) {
-        return storeRepository.isExist(store_name);
+        if(storeRepository==null){
+            return false;
+        }
+        else return storeRepository.isExist(store_name);
     }
 
     public void addStore(String storeName, String description, String founder, Double storeRating) {
