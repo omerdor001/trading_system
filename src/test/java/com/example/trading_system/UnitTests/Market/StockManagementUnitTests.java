@@ -42,9 +42,6 @@ class StockManagementUnitTests {
             userFacade.register("testuser0","1pA22w0rd", LocalDate.now());
             userFacade.register("testuser1","pA22w0rd1", LocalDate.now());
             userFacade.register("testuser2","pA22w0rd2", LocalDate.now());
-            if(marketFacade.getStoreRepository()!=null) {
-                logger.info("SF {}", marketFacade.getStoreRepository());
-            }
             userFacade.enter(0);
             userFacade.enter(1);
             userFacade.enter(2);

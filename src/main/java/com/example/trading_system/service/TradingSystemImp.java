@@ -22,11 +22,9 @@ public class TradingSystemImp implements TradingSystem {
     private boolean systemOpen;
 
     private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository, StoreRepository storeRepository) {
-        logger.info("Trying initialize Trading System");
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
         this.marketService = MarketServiceImp.getInstance(storeRepository);
-        logger.info("Finish initialize Trading System");
     }
 
     public static TradingSystemImp getInstance(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository, StoreRepository storeRepository) {
