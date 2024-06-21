@@ -63,6 +63,21 @@ public class TradingSystemImp implements TradingSystem {
         return new ResponseEntity<>("Invalid token was supplied", HttpStatus.UNAUTHORIZED);
     }
 
+    public ResponseEntity<String> getPendingUserNotifications(String admin, String token, String username) {
+        logger.info("Attempting to get notifications for user: {}", username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(admin, token)) return invalidTokenResponse();
+            String result = userService.getPendingUserNotifications(admin, username);
+            logger.info("Successfully retrieved notifications for user: {}", username);
+            return new ResponseEntity<>(result,HttpStatus.OK);
+        }
+        catch (Exception e){
+            logger.error("Error while attempting to retrieve user: {} notifications, {}", username, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @Override
     public ResponseEntity<String> openSystem() {
         logger.info("Attempting to open system");
@@ -103,6 +118,22 @@ public class TradingSystemImp implements TradingSystem {
         } catch (Exception e) {
             logger.error("Error occurred while closing the system: {}", e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> makeAdmin(String admin, String token, String newAdmin){
+        logger.info("Attempting to appoint user as an admin");
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(admin, token)) return invalidTokenResponse();
+            userService.makeAdmin(admin, newAdmin);
+            logger.info("User: {} Successfully made user: {} an admin.", admin, newAdmin);
+            return new ResponseEntity<>("Admin added successfully",HttpStatus.OK);
+        }
+        catch (Exception e){
+            logger.error("Error while attempting to make user: {} an admin by user: {}, error: {}", newAdmin, admin, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -320,9 +351,9 @@ public class TradingSystemImp implements TradingSystem {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
             userService.logout(counter_user, username);
-            counter_user++;
+            Security.makeTokenExpire(token);
             logger.info("User: {} logged out successfully", username);
-            return new ResponseEntity<>("Logout successful.", HttpStatus.OK);
+            return enter();
         } catch (Exception e) {
             logger.error("Error occurred while logging out user: {}: {}", username, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

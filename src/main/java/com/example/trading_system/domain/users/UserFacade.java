@@ -8,6 +8,10 @@ import java.util.NoSuchElementException;
 public interface UserFacade {
     void deleteInstance();
 
+    String getPendingUserNotifications(String admin, String username);
+
+    void makeAdmin(String admin, String newAdmin);
+
     void enter(int id);
 
     void exit(String username) throws Exception;
@@ -40,9 +44,9 @@ public interface UserFacade {
 
     void createStore(String username, String storeName, String description) throws IllegalAccessException;
 
-    void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
+    void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
 
-    void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException;
+    void approveManager(String newManager, String store_name_id, String appoint) throws IllegalAccessException;
 
     void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException;
 
@@ -61,6 +65,7 @@ public interface UserFacade {
     void fireManager(String owner, String storeName, String manager) throws IllegalAccessException;
 
     void fireOwner(String ownerAppoint, String storeName, String owner) throws IllegalAccessException;
+
     /**
      * @param userId        is the current user that do the update
      * @param managerToEdit is the manager that the update will affect

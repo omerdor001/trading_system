@@ -18,11 +18,11 @@ import java.util.*;
 public class UserFacadeImp implements UserFacade {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
     private static UserFacadeImp instance = null;
-    private MarketFacade marketFacade;
     private final UserRepository userRepository;
     private final DeliveryService deliveryService;
     private final PaymentService paymentService;
     private final NotificationSender notificationSender;
+    private MarketFacade marketFacade;
 
     private UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender) {
         this.marketFacade = MarketFacadeImp.getInstance();
@@ -64,6 +64,36 @@ public class UserFacadeImp implements UserFacade {
     @Override
     public HashMap<String, User> getUsers() {
         return userRepository.getAllUsers();
+    }
+
+    @Override
+    public String getPendingUserNotifications(String admin, String username) {
+        if (!userRepository.isExist(admin)) {
+            throw new IllegalArgumentException("Admin user doesn't exist in the system");
+        }
+        if (!userRepository.isExist(username)) {
+            throw new IllegalArgumentException("User doesn't exist in the system");
+        }
+        if (!isAdmin(admin)) {
+            throw new IllegalArgumentException("Only admin user can get user notifications");
+        }
+        User usernameUser = userRepository.getUser(username);
+        return usernameUser.getNotificationsJson();
+    }
+
+    @Override
+    public void makeAdmin(String admin, String newAdmin) {
+        if (!userRepository.isExist(admin)) {
+            throw new IllegalArgumentException("Admin user doesn't exist in the system");
+        }
+        if (!userRepository.isExist(newAdmin)) {
+            throw new IllegalArgumentException("User doesn't exist in the system");
+        }
+        if (!isAdmin(admin)) {
+            throw new IllegalArgumentException("Only admin user can get user notifications");
+        }
+        User newAdminUser = userRepository.getUser(newAdmin);
+        newAdminUser.setAdmin(true);
     }
 
     @Override
@@ -251,6 +281,7 @@ public class UserFacadeImp implements UserFacade {
         for (Notification notification : u.getNotifications()) {
             notificationSender.sendNotification(username, notification.toString());
         }
+        u.clearPendingNotifications();
     }
 
     @Override
@@ -456,7 +487,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
+    public void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
         if (!marketFacade.isStoreExist(store_name_id))
             throw new NoSuchElementException("No store called " + store_name_id + " exist");
         if (!userRepository.isExist(appoint)) {
@@ -487,7 +518,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void approveManage(String newManager, String storeName, String appoint) throws IllegalAccessException {
+    public void approveManager(String newManager, String storeName, String appoint) throws IllegalAccessException {
         if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userRepository.isExist(newManager)) {
@@ -695,7 +726,7 @@ public class UserFacadeImp implements UserFacade {
         }
         managerUser.removeManagerRole(storeName);
         marketFacade.getStore(storeName).removeManager(manager);
-        sendNotification(owner, manager, "You are no longer a manager at store: " + storeName + " due to  being fired by " + ownerUser.getUsername());
+        sendNotification(owner, manager, "You are no longer a manager at store: " + storeName + " due to being fired by " + ownerUser.getUsername());
     }
 
     @Override
@@ -945,7 +976,7 @@ public class UserFacadeImp implements UserFacade {
             }
         }, 10 * 60 * 1000);
         double totalPrice = marketFacade.calculateTotalPrice(user.getCart().toJson());
-        int deliveryId = 0;  //For cancelling
+        int deliveryId;  //For cancelling
         String address = user.getAddress();
         try {
             deliveryId = deliveryService.makeDelivery(address);
@@ -953,10 +984,10 @@ public class UserFacadeImp implements UserFacade {
             user.releaseReservedProducts();
             throw new Exception("Error in Delivery");
         }
-        if (deliveryId < 0) {                                //Can Use Them
+        if (deliveryId < 0) {
             throw new Exception("Error in Delivery");
         }
-        int paymentId = 0;
+        int paymentId;
         try {
             paymentId = paymentService.makePayment(totalPrice);
         } catch (Exception e) {
@@ -969,9 +1000,7 @@ public class UserFacadeImp implements UserFacade {
             user.releaseReservedProducts();
             throw new Exception("Error in Payment");
         }
-        //TODO decide where to send
-        //sendNotification(username, store.getFounder(), "User: " + user.getUsername() + " purchased the following items from your store: " + shoppingBagInStore.getValue().getStoreId() + "\n" + shoppingBagInStore.getValue().toString());
-        user.addPurchase();
+        user.addPurchase(username);
         timer.cancel();
         timer.purge();
     }

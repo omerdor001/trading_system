@@ -14,9 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class LogoutAcceptanceTests {
@@ -59,7 +59,7 @@ class LogoutAcceptanceTests {
         }
         ResponseEntity<String> response = tradingSystem.logout(token, username);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Logout successful.", response.getBody(), "Logout message should be 'Logout successful.'");
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("{\"username\": \"v1\", \"token\": "));
     }
 
     @Test

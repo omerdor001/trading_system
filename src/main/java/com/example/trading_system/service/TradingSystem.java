@@ -11,9 +11,13 @@ import java.util.List;
 public interface TradingSystem {
     void deleteInstance();
 
+    ResponseEntity<String> getPendingUserNotifications(String admin, String token, String username);
+
     ResponseEntity<String> openSystem();
 
     ResponseEntity<String> closeSystem(String username, String token);
+
+    ResponseEntity<String> makeAdmin(String admin, String token, String newAdmin);
 
     ResponseEntity<String> enter();
 

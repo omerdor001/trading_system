@@ -9,14 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class User {
+    private static final Logger logger = LoggerFactory.getLogger(User.class);
     public String username;
     private Cart cart;
     private boolean suspended;
     private LocalDateTime suspendedStart;
     private LocalDateTime suspendedEnd;
     private String address;
-    private static final Logger logger = LoggerFactory.getLogger(User.class);
-
 
     public User(String username) {
         this.username = username;
@@ -129,6 +128,10 @@ public abstract class User {
 
     public abstract List<Notification> getNotifications();
 
+    public abstract String getNotificationsJson();
+
+    public abstract void clearPendingNotifications();
+
     public abstract void receiveDelayedNotification(Notification notification);
 
     public abstract LocalDate getBirthdate();
@@ -172,7 +175,7 @@ public abstract class User {
         cart.checkAvailabilityAndConditions();
     }
 
-    public void addPurchase() {
+    public void addPurchase(String username) {
         cart.addPurchase(username);
     }
 }

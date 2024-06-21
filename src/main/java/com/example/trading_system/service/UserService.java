@@ -6,6 +6,10 @@ import java.time.LocalDateTime;
 public interface UserService {
     void deleteInstance();
 
+    String getPendingUserNotifications(String admin, String username);
+
+    void makeAdmin(String admin, String newAdmin);
+
     String enter(int id);
 
     boolean isAdmin(String username);

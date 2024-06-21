@@ -1,5 +1,7 @@
 package com.example.trading_system.domain.users;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -75,6 +77,22 @@ public class Registered extends User {
     @Override
     public List<Notification> getNotifications() {
         return notifications;
+    }
+
+    @Override
+    public String getNotificationsJson() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setTimeZone(TimeZone.getDefault());
+        try {
+            return objectMapper.writeValueAsString(notifications);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error converting list of Notifications to JSON", e);
+        }
+    }
+
+    @Override
+    public void clearPendingNotifications() {
+        this.notifications.clear();
     }
 
     public List<String> getOwnerToApprove() {
@@ -172,5 +190,4 @@ public class Registered extends User {
         LocalDate currentDate = LocalDate.now();
         return Period.between(birthdate, currentDate).getYears();
     }
-
 }

@@ -62,22 +62,14 @@ class GetPurchaseHistoryAcceptanceTests {
     void testGetPurchaseHistory_Success() {
         ResponseEntity<String> result = tradingSystem.getPurchaseHistory(username, token, storeName);
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("""
-                Client Username: rowner1, Total Price: $1.0
-                Products:
-                Product: 0, Category: 1, Quantity: 1, Price: $1.0, Store: Store1
-                """, result.getBody());
+        assertEquals("{\"productInSaleList\":[{\"storeId\":\"Store1\",\"id\":0,\"price\":1.0,\"quantity\":1,\"category\":1}],\"customerUsername\":\"rowner1\",\"totalPrice\":1.0,\"storeName\":\"Store1\"}", result.getBody());
     }
 
     @Test
     void testGetStoresPurchaseHistory_ValidInput() {
         ResponseEntity<String> result = tradingSystem.getAllHistoryPurchases(username, token, storeName);
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("""
-                Client Username: rowner1, Total Price: $1.0
-                Products:
-                Product: 0, Category: 1, Quantity: 1, Price: $1.0, Store: Store1
-                """, result.getBody());
+        assertEquals("{\"productInSaleList\":[{\"storeId\":\"Store1\",\"id\":0,\"price\":1.0,\"quantity\":1,\"category\":1}],\"customerUsername\":\"rowner1\",\"totalPrice\":1.0,\"storeName\":\"Store1\"}", result.getBody());
     }
 
     @Test

@@ -35,6 +35,16 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public String getPendingUserNotifications(String admin, String username){
+        return userFacade.getPendingUserNotifications(admin, username);
+    }
+
+    @Override
+    public void makeAdmin(String admin, String newAdmin){
+        userFacade.makeAdmin(admin, newAdmin);
+    }
+
+    @Override
     public String enter(int id) {
         userFacade.enter(id);
         return "v" + id;
@@ -129,7 +139,7 @@ public class UserServiceImp implements UserService {
     @Override
     public void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
         logger.info("Trying to suggest user : {} to be a manager in store : {}", newManager, store_name_id);
-        userFacade.suggestManage(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+        userFacade.suggestManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
         logger.info("Finished suggesting manager : {} to be a manager in store : {}", newManager, store_name_id);
     }
 
@@ -144,7 +154,7 @@ public class UserServiceImp implements UserService {
     @Override
     public void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException {
         logger.info("Trying to approve manage to store : {}", store_name_id);
-        userFacade.approveManage(newManager, store_name_id, appoint);
+        userFacade.approveManager(newManager, store_name_id, appoint);
         logger.info("Finished approving manage to store : {}", store_name_id);
     }
 

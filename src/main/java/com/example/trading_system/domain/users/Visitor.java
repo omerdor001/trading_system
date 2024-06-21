@@ -2,6 +2,7 @@ package com.example.trading_system.domain.users;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Visitor extends User {
@@ -26,11 +27,23 @@ public class Visitor extends User {
 
     @Override
     public List<Notification> getNotifications() {
-        throw new UnsupportedOperationException("Visitors cannot receive notifications");
+        throw new UnsupportedOperationException("Visitors cannot receive delayed notifications");
     }
 
     @Override
-    public void receiveDelayedNotification(Notification notification) {}
+    public String getNotificationsJson(){
+        throw new UnsupportedOperationException("Visitors cannot receive delayed notifications");
+    }
+
+    @Override
+    public void clearPendingNotifications(){
+        throw new UnsupportedOperationException("Visitors cannot receive delayed notifications");
+    }
+
+    @Override
+    public void receiveDelayedNotification(Notification notification) {
+        throw new UnsupportedOperationException("Visitors cannot receive delayed notifications");
+    }
 
     @Override
     public LocalDate getBirthdate() {
@@ -109,8 +122,5 @@ public class Visitor extends User {
 
     @Override
     public void setAdmin(boolean value) {
-
     }
-
-
 }

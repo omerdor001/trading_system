@@ -2,8 +2,10 @@ package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.ProductInSale;
-import com.example.trading_system.domain.stores.Purchase;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class ShoppingBag {
@@ -82,10 +84,19 @@ public class ShoppingBag {
     public void checkAvailabilityAndConditions() {
         for (ProductInSale product : products_list.values()) {
             MarketFacadeImp.getInstance().checkAvailabilityAndConditions(product.getId(), product.getQuantity(), product.getStoreId());
-    }
         }
+    }
 
     public void addPurchase(String username) {
-            MarketFacadeImp.getInstance().addPurchase(username,products_list.values().stream().toList(),calculateTotalPrice(),storeId);
+        try {
+            MarketFacadeImp.getInstance().addPurchase(username, productsListToJson(), calculateTotalPrice(), storeId);
+        } catch (IOException e) {
+            throw new RuntimeException("error converting shopping bag to json");
+        }
+    }
+
+    public String productsListToJson() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(products_list.values());
     }
 }
