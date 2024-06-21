@@ -126,7 +126,7 @@ public class PurchaseCartUnitTests {
 
         executorService.execute(() -> {
             try {
-                latch.await(); // Wait for the signal to start
+                latch.await();
                 userFacade.purchaseCart("r" + username1);
             } catch (Exception _) {
 
@@ -134,9 +134,9 @@ public class PurchaseCartUnitTests {
         });
 
         executorService.execute(() -> {
-            latch.countDown(); // Signal the other thread to proceed
+            latch.countDown();
             try {
-                Thread.sleep(1000); // Introduce a delay for the second user
+                Thread.sleep(1000);
                 Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("r" + username2));
             } catch (InterruptedException e) {
                 e.printStackTrace();

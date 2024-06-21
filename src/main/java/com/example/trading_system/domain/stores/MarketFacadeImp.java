@@ -770,7 +770,7 @@ public class MarketFacadeImp implements MarketFacade {
         CartDTO cart = CartDTO.fromJson(cartJSON);
         for (ShoppingBagDTO bag : cart.getShoppingBags().values()) {
             Store store = storeRepository.getStore(bag.getStoreId());
-            if(store==null || !store.validatePurchasePolicies(bag.getProducts_list().values(),age)){
+            if(storeRepository==null || store==null || !store.validatePurchasePolicies(bag.getProducts_list().values(),age)){
                 return false;
             }
         }
