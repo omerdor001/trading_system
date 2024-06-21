@@ -35,6 +35,8 @@ class OpenSystemUnitTests {
     @AfterEach
     void setDown(){
         facade.deleteInstance();
+        storeRepository.deleteInstance();
+        userRepository.deleteInstance();
     }
 
     @Test
