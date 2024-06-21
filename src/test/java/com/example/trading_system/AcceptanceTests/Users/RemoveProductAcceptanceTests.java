@@ -42,7 +42,7 @@ public class RemoveProductAcceptanceTests {
     @BeforeEach
     public void setUp() {
         userRepository= UserMemoryRepository.getInstance();    //May be change later
-        if(tradingSystemImp.userService.getUserFacade().getUserRepository()!=null){
+        if(userRepository!=null){
             logger.info("1");
         }
         storeRepository= StoreMemoryRepository.getInstance();  //May be change later
