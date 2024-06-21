@@ -14,15 +14,14 @@ import java.time.LocalDateTime;
 public class UserServiceImp implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
     private static UserServiceImp instance = null;
+    private UserFacadeImp userFacade;
 
     public UserFacadeImp getUserFacade() {
         return userFacade;
     }
 
-    private UserFacadeImp userFacade;
-
     private UserServiceImp(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository, StoreRepository storeRepository) {
-        if(userRepository!=null){
+        if(userRepository==null){
             logger.info("23");
         }
         userFacade = UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);

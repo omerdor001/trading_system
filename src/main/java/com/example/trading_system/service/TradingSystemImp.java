@@ -26,9 +26,6 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository, StoreRepository storeRepository) {
-        if(userRepository!=null){
-            logger.info("22");
-        }
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
         this.marketService = MarketServiceImp.getInstance(storeRepository);
