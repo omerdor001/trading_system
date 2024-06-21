@@ -115,6 +115,7 @@ public class WaiveOnOwnershipAcceptanceTests {
     @AfterEach
     public void tearDown() {
         tradingSystemImp.deleteInstance();
+        logger.info("tearDown");
     }
 
     @Test
@@ -159,7 +160,6 @@ public class WaiveOnOwnershipAcceptanceTests {
         ResponseEntity<String> resp3 = tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName, ownerUserName);
         Assertions.assertEquals("User is not employed in this store.",resp3.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp3.getStatusCode());
-        logger.info("Problematic test-1");
         ResponseEntity<String> resp4 = tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName,token,storeName, userNameManager);
         Assertions.assertEquals("User is not employed in this store.",resp4.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp4.getStatusCode());
