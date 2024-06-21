@@ -129,6 +129,7 @@ public class WaiveOnOwnershipAcceptanceTests {
         if(tradingSystemImp.marketService.getMarketFacade().getStoreRepository()!=null){
             logger.info("{}",tradingSystemImp.getStoreProducts(userName,token,storeName).toString());
         }
+        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
         ResponseEntity<String> resp2 = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,storeName);
         Assertions.assertEquals("User is not owner of this store",resp2.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp2.getStatusCode());
