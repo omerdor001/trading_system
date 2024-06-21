@@ -2,6 +2,10 @@ package com.example.trading_system.AcceptanceTests.Market;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -25,12 +29,16 @@ public class PurchasePolicyAcceptanceTests {
     private String token;
     private final String storeName = "store1";
     private final String address = "1234 Main Street, Springfield, IL, 62704-1234";
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     void setUp() {
-        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        userRepository= UserMemoryRepository.getInstance();    //May be change later
+        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.of(1960,1,1));
-        tradingSystem.openSystem();
+        tradingSystem.openSystem(storeRepository);
         String userToken = tradingSystem.enter().getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -56,6 +64,8 @@ public class PurchasePolicyAcceptanceTests {
     @AfterEach
     void setDown() {
         tradingSystem.deleteInstance();
+        userRepository.deleteInstance();
+        storeRepository.deleteInstance();
     }
 
     @Test

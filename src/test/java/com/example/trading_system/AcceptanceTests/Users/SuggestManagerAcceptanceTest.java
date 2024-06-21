@@ -2,6 +2,10 @@ package com.example.trading_system.AcceptanceTests.Users;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,10 +22,14 @@ import static org.mockito.Mockito.mock;
 
 public class SuggestManagerAcceptanceTest {
     TradingSystemImp tradingSystemImp;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     void setUp() {
-        tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        userRepository= UserMemoryRepository.getInstance();    //May be change later
+        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
+        tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
     }
 
     @AfterEach
@@ -38,14 +46,14 @@ public class SuggestManagerAcceptanceTest {
     @Test
     void testSuggestManager_WhenInvalidToken_GetError() {
         tradingSystemImp.register("admin", "123456", LocalDate.now());
-        tradingSystemImp.openSystem();
+        tradingSystemImp.openSystem(storeRepository);
         tradingSystemImp.suggestManage("admin", "123", "newManager", "Store1", true, true, true, true);
     }
 
     @Test
     void testSuggestManager_WhenStoreNotExist_GetError() {
         tradingSystemImp.register("admin", "123456", LocalDate.now());
-        tradingSystemImp.openSystem();
+        tradingSystemImp.openSystem(storeRepository);
         ResponseEntity<String> response = tradingSystemImp.enter();
         String userToken = response.getBody();
         String userName = "";
@@ -65,7 +73,7 @@ public class SuggestManagerAcceptanceTest {
     void testSuggestManager_Success() {
         tradingSystemImp.register("admin", "123456", LocalDate.now());
         tradingSystemImp.register("user1", "123456", LocalDate.now());
-        tradingSystemImp.openSystem();
+        tradingSystemImp.openSystem(storeRepository);
         ResponseEntity<String> response = tradingSystemImp.enter();
         String userToken = response.getBody();
         String userName = "";

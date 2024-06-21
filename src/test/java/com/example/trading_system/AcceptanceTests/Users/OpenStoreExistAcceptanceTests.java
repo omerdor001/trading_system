@@ -2,6 +2,10 @@ package com.example.trading_system.AcceptanceTests.Users;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,12 +30,16 @@ public class OpenStoreExistAcceptanceTests {
     private String userName;
     private final String password = "123456";
     private final String storeName = "Store1";
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     public void setUp() {
-        tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        userRepository= UserMemoryRepository.getInstance();    //May be change later
+        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
+        tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
         tradingSystemImp.register("admin", password, LocalDate.now());
-        tradingSystemImp.openSystem();
+        tradingSystemImp.openSystem(storeRepository);
         ResponseEntity<String> response = tradingSystemImp.enter();
         String userToken = response.getBody();
         try {
@@ -71,7 +79,7 @@ public class OpenStoreExistAcceptanceTests {
     @Test
     public void givenNotFounderTryCloseStore_WhenCloseStoreExist_ThenThrowException() {
         tradingSystemImp.register("owner", password, LocalDate.now());
-        tradingSystemImp.openSystem();
+        tradingSystemImp.openSystem(storeRepository);
         ResponseEntity<String> response = tradingSystemImp.enter();
         String userToken = response.getBody();
         String userNameOwner = "";

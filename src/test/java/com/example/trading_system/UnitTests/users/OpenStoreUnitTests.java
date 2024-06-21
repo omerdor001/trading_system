@@ -3,29 +3,29 @@ package com.example.trading_system.UnitTests.users;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.mock;
 
-@ExtendWith(MockitoExtension.class)
 public class OpenStoreUnitTests {
-    UserMemoryRepository userMemoryRepository;
     MarketFacadeImp marketFacade;
     UserFacadeImp userFacadeImp;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.openMocks(this);
-
         // Re-instantiate singletons
-        userMemoryRepository = UserMemoryRepository.getInstance();
-        marketFacade = MarketFacadeImp.getInstance();
-        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        storeRepository= StoreMemoryRepository.getInstance();
+        userRepository = UserMemoryRepository.getInstance();
+        marketFacade = MarketFacadeImp.getInstance(storeRepository);
+        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
     }
 
     @AfterEach
@@ -40,8 +40,8 @@ public class OpenStoreUnitTests {
         String storeName = "StoreName";
         String description = "StoreDescription";
 
-        userMemoryRepository.addRegistered(username, "encrypted_password", null);
-        userMemoryRepository.getUser(username).login();
+        userRepository.addRegistered(username, "encrypted_password", null);
+        userRepository.getUser(username).login();
 
         Assertions.assertDoesNotThrow(() -> userFacadeImp.createStore(username, storeName, description));
 
@@ -66,8 +66,8 @@ public class OpenStoreUnitTests {
         //String storeName = null;
         String description = "StoreDescription";
 
-        userMemoryRepository.addRegistered(username, "encrypted_password", null);
-        userMemoryRepository.getUser(username).login();
+        userRepository.addRegistered(username, "encrypted_password", null);
+        userRepository.getUser(username).login();
 
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.createStore(username, null, description));
 
@@ -80,8 +80,8 @@ public class OpenStoreUnitTests {
         String storeName = "";
         String description = "StoreDescription";
 
-        userMemoryRepository.addRegistered(username, "encrypted_password", null);
-        userMemoryRepository.getUser(username).login();
+        userRepository.addRegistered(username, "encrypted_password", null);
+        userRepository.getUser(username).login();
 
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.createStore(username, storeName, description));
 
@@ -94,8 +94,8 @@ public class OpenStoreUnitTests {
         String storeName = "ExistingStoreName";
         String description = "StoreDescription";
 
-        userMemoryRepository.addRegistered(username, "encrypted_password", null);
-        userMemoryRepository.getUser(username).login();
+        userRepository.addRegistered(username, "encrypted_password", null);
+        userRepository.getUser(username).login();
         marketFacade.addStore(storeName, description, username, null); // Ensure store exists
 
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.createStore(username, storeName, description));
@@ -108,8 +108,8 @@ public class OpenStoreUnitTests {
         String username = "rValidUser";
         String description = "StoreDescription";
 
-        userMemoryRepository.addRegistered(username, "encrypted_password", null);
-        userMemoryRepository.getUser(username).login();
+        userRepository.addRegistered(username, "encrypted_password", null);
+        userRepository.getUser(username).login();
 
         // Simulate exception by invalid parameters
         IllegalArgumentException exception;

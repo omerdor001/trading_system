@@ -2,7 +2,7 @@ package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.ProductInSale;
-import com.example.trading_system.domain.stores.Purchase;
+import com.example.trading_system.domain.stores.StoreRepository;
 
 import java.util.HashMap;
 
@@ -67,25 +67,25 @@ public class ShoppingBag {
         return products_list.get(productId).getQuantity();
     }
 
-    public void removeReservedProducts() {
+    public void removeReservedProducts(StoreRepository storeRepository) {
         for (ProductInSale product : products_list.values()) {
-            MarketFacadeImp.getInstance().removeReservedProducts(product.getId(), product.getQuantity(), product.getStoreId());
+            MarketFacadeImp.getInstance(storeRepository).removeReservedProducts(product.getId(), product.getQuantity(), product.getStoreId());
         }
     }
 
-    public void releaseReservedProducts() {
+    public void releaseReservedProducts(StoreRepository storeRepository) {
         for (ProductInSale product : products_list.values()) {
-            MarketFacadeImp.getInstance().releaseReservedProducts(product.getId(), product.getQuantity(), product.getStoreId());
+            MarketFacadeImp.getInstance(storeRepository).releaseReservedProducts(product.getId(), product.getQuantity(), product.getStoreId());
         }
     }
 
-    public void checkAvailabilityAndConditions() {
+    public void checkAvailabilityAndConditions(StoreRepository storeRepository) {
         for (ProductInSale product : products_list.values()) {
-            MarketFacadeImp.getInstance().checkAvailabilityAndConditions(product.getId(), product.getQuantity(), product.getStoreId());
+            MarketFacadeImp.getInstance(storeRepository).checkAvailabilityAndConditions(product.getId(), product.getQuantity(), product.getStoreId());
     }
         }
 
-    public void addPurchase(String username) {
-            MarketFacadeImp.getInstance().addPurchase(username,products_list.values().stream().toList(),calculateTotalPrice(),storeId);
+    public void addPurchase(StoreRepository storeRepository,String username) {
+            MarketFacadeImp.getInstance(storeRepository).addPurchase(username,products_list.values().stream().toList(),calculateTotalPrice(),storeId);
     }
 }

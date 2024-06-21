@@ -5,9 +5,6 @@ import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.concurrent.CountDownLatch;
@@ -17,27 +14,31 @@ import java.util.concurrent.Executors;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 public class PurchaseCartUnitTests {
     MarketFacadeImp marketFacade;
     UserFacade userFacade;
     DeliveryService deliveryService;
     PaymentService paymentService;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.openMocks(this);
         // Re-instantiate singletons
-        marketFacade = MarketFacadeImp.getInstance();
+        storeRepository= StoreMemoryRepository.getInstance();
+        userRepository = UserMemoryRepository.getInstance();
         paymentService=mock(PaymentService.class);
         deliveryService=mock(DeliveryService.class);
-        userFacade = UserFacadeImp.getInstance(paymentService,deliveryService);
+        userFacade = UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
+        marketFacade = MarketFacadeImp.getInstance(storeRepository);
     }
 
     @AfterEach
     public void tearDown() {
         userFacade.deleteInstance();
         marketFacade.deleteInstance();
+        storeRepository.deleteInstance();
+        userRepository.deleteInstance();
     }
 
     @Test
@@ -122,7 +123,7 @@ public class PurchaseCartUnitTests {
 
         executorService.execute(() -> {
             try {
-                latch.await(); // Wait for the signal to start
+                latch.await();
                 userFacade.purchaseCart("r" + username1);
             } catch (Exception _) {
 
@@ -130,9 +131,9 @@ public class PurchaseCartUnitTests {
         });
 
         executorService.execute(() -> {
-            latch.countDown(); // Signal the other thread to proceed
+            latch.countDown();
             try {
-                Thread.sleep(1000); // Introduce a delay for the second user
+                Thread.sleep(1000);
                 Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("r" + username2));
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -140,7 +141,6 @@ public class PurchaseCartUnitTests {
         });
 
         executorService.shutdown();
-
     }
 
     @Test

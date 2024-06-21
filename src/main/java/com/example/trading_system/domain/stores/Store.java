@@ -136,9 +136,9 @@ public class Store {
     public synchronized void addProduct(int product_id, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords) {
         if (isProductExist(product_id))
             throw new IllegalArgumentException("Product with id " + product_id + " already exists");
-        if (product_price < 0) throw new IllegalArgumentException("Price can't be a negative number");
-        if (product_quantity <= 0) throw new IllegalArgumentException("Quantity must be a natural number");
-        if (rating < 0) throw new IllegalArgumentException("Rating can't be a negative number");
+        if (product_price < 0) throw new IllegalArgumentException("Price can't be negative number");
+        if (product_quantity <= 0) throw new IllegalArgumentException("Quantity must be natural number");
+        if (rating < 0) throw new IllegalArgumentException("Rating can't be negative number");
         Product product = new Product(product_id, product_name, product_description, product_price, product_quantity, rating, Category.getCategoryFromInt(category), keyWords);
         products.put(product.getProduct_id(), product);
     }
@@ -379,6 +379,18 @@ public class Store {
             discountConditions.remove(selectedIndex - discountPolicies.size());
         else
             discountPolicies.remove(selectedIndex);
+    }
+
+    public LinkedList<DiscountPolicy> getDiscountPolicies() {
+        return discountPolicies;
+    }
+
+    public LinkedList<Condition> getDiscountConditions() {
+        return discountConditions;
+    }
+
+    public LinkedList<PurchasePolicy> getPurchasePolicies() {
+        return purchasePolicies;
     }
 
     //endregion

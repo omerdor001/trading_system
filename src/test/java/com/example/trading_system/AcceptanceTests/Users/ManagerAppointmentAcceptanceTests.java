@@ -2,6 +2,10 @@ package com.example.trading_system.AcceptanceTests.Users;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,13 +29,17 @@ public class ManagerAppointmentAcceptanceTests {
     private final String storeName = "Store1";
     private String tokenManager = "";
     private String userNameManager = "";
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     public void setUp() {
-        tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        userRepository= UserMemoryRepository.getInstance();    //May be change later
+        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
+        tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
         String password = "123456";
         tradingSystemImp.register("admin", password, LocalDate.now());
-        tradingSystemImp.openSystem();
+        tradingSystemImp.openSystem(storeRepository);
         ResponseEntity<String> response = tradingSystemImp.enter();
         String userToken = response.getBody();
         try {
@@ -54,7 +62,7 @@ public class ManagerAppointmentAcceptanceTests {
         tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
 
         tradingSystemImp.register("manager", password, LocalDate.now());
-        tradingSystemImp.openSystem();
+        tradingSystemImp.openSystem(storeRepository);
         ResponseEntity<String> response2 = tradingSystemImp.enter();
         String userToken2 = response2.getBody();
         try {

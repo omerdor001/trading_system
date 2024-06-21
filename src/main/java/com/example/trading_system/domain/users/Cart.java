@@ -2,6 +2,7 @@ package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.stores.ProductInSale;
 import com.example.trading_system.domain.stores.Purchase;
+import com.example.trading_system.domain.stores.StoreRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -104,27 +105,27 @@ public class Cart {
         return shoppingBags.get(storeName).checkProductQuantity(productId);
     }
 
-    public void removeReservedProducts() {
+    public void removeReservedProducts(StoreRepository storeRepository) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
-            shoppingBagInStore.removeReservedProducts();
+            shoppingBagInStore.removeReservedProducts(storeRepository);
         }
     }
 
-    public void releaseReservedProducts() {
+    public void releaseReservedProducts(StoreRepository storeRepository) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
-            shoppingBagInStore.releaseReservedProducts();
+            shoppingBagInStore.releaseReservedProducts(storeRepository);
         }
     }
 
-    public void checkAvailabilityAndConditions() {
+    public void checkAvailabilityAndConditions(StoreRepository storeRepository) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
-            shoppingBagInStore.checkAvailabilityAndConditions();
+            shoppingBagInStore.checkAvailabilityAndConditions(storeRepository);
         }
     }
 
-    public void addPurchase(String username) {
+    public void addPurchase(StoreRepository storeRepository,String username) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
-            shoppingBagInStore.addPurchase(username);
+            shoppingBagInStore.addPurchase(storeRepository,username);
         }
     }
 }

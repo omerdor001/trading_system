@@ -2,10 +2,9 @@ package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.users.Registered;
-import com.example.trading_system.domain.users.UserFacade;
-import com.example.trading_system.domain.users.UserFacadeImp;
-import com.example.trading_system.domain.users.Visitor;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,10 +17,14 @@ import static org.mockito.Mockito.mock;
 class LoginUnitTests {
 
     private UserFacade userFacade;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     void setUp() {
-        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        userRepository= UserMemoryRepository.getInstance();    //May be change later
+        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
+        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
         try {
             userFacade.register("testvisitor", "password123", LocalDate.now());
         } catch (Exception e) {

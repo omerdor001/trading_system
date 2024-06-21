@@ -2,6 +2,8 @@ package com.example.trading_system.service;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,14 +21,18 @@ public class TradingSystemImp implements TradingSystem {
     public int counter_user = 0;
     private boolean systemOpen;
 
-    private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService) {
-        this.systemOpen = false;
-        this.userService = UserServiceImp.getInstance(paymentService,deliveryService);
-        this.marketService = MarketServiceImp.getInstance();
+    public void setSystemOpen(boolean systemOpen) {   //For tests
+        this.systemOpen = systemOpen;
     }
 
-    public static TradingSystemImp getInstance(PaymentService paymentService, DeliveryService deliveryService) {
-        if (instance == null) instance = new TradingSystemImp(paymentService,deliveryService);
+    private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository, StoreRepository storeRepository) {
+        this.systemOpen = false;
+        this.userService = UserServiceImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
+        this.marketService = MarketServiceImp.getInstance(storeRepository);
+    }
+
+    public static TradingSystemImp getInstance(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository, StoreRepository storeRepository) {
+        if (instance == null) instance = new TradingSystemImp(paymentService,deliveryService,userRepository,storeRepository);
         return instance;
     }
 
@@ -37,6 +43,7 @@ public class TradingSystemImp implements TradingSystem {
         userService = null;
         if (systemOpen) {
             this.marketService.deleteInstance();
+            this.systemOpen=false;
         }
     }
 
@@ -63,7 +70,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> openSystem() {
+    public ResponseEntity<String> openSystem(StoreRepository storeRepository) {
         logger.info("Attempting to open system");
         if (systemOpen) {
             logger.warn("System attempted to open twice");
@@ -71,7 +78,7 @@ public class TradingSystemImp implements TradingSystem {
         }
         try {
             if (userService.isAdminRegistered()) {
-                marketService = MarketServiceImp.getInstance();
+                marketService = MarketServiceImp.getInstance(storeRepository);
                 systemOpen = true;
                 logger.info("System opened successfully");
                 return new ResponseEntity<>("System opened successfully.", HttpStatus.OK);

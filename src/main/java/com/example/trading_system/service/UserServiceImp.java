@@ -2,22 +2,27 @@ package com.example.trading_system.service;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserFacadeImp;
+import com.example.trading_system.domain.users.UserRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UserServiceImp implements UserService {
-
     private static UserServiceImp instance = null;
     private UserFacadeImp userFacade;
 
-    private UserServiceImp(PaymentService paymentService, DeliveryService deliveryService) {
-        userFacade = UserFacadeImp.getInstance(paymentService,deliveryService);
+    public UserFacadeImp getUserFacade() {
+        return userFacade;
     }
 
-    public static UserServiceImp getInstance(PaymentService paymentService, DeliveryService deliveryService) {
-        if (instance == null) instance = new UserServiceImp(paymentService,deliveryService);
+    private UserServiceImp(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository, StoreRepository storeRepository) {
+        userFacade = UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
+    }
+
+    public static UserServiceImp getInstance(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository,StoreRepository storeRepository) {
+        if (instance == null) instance = new UserServiceImp(paymentService,deliveryService,userRepository,storeRepository);
         return instance;
     }
 
