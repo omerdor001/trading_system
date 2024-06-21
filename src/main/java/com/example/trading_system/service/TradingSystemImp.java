@@ -28,7 +28,6 @@ public class TradingSystemImp implements TradingSystem {
     private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository, StoreRepository storeRepository) {
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
-
         this.marketService = MarketServiceImp.getInstance(storeRepository);
     }
 
@@ -40,10 +39,8 @@ public class TradingSystemImp implements TradingSystem {
     @Override
     public void deleteInstance() {
         instance = null;
-        logger.info("Before D {}",userService);
         this.userService.deleteInstance();
         userService = null;
-        logger.info("After D {}",userService);
         if (systemOpen) {
             this.marketService.deleteInstance();
             this.systemOpen=false;
