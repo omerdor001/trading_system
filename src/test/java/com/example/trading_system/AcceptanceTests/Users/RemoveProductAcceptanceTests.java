@@ -4,7 +4,6 @@ import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
@@ -54,7 +53,7 @@ public class RemoveProductAcceptanceTests {
             userName = rootNode.get("username").asText();
             token = rootNode.get("token").asText();
         } catch (Exception e) {
-            fail("Setup failed: Unable to extract username and token from JSON response");
+            fail("Setup failed: Unable to extract username and token from JSON response1");
         }
         userToken = tradingSystemImp.login(token, "v0", "admin", password).getBody();
         try {
@@ -63,7 +62,7 @@ public class RemoveProductAcceptanceTests {
             userName = rootNode.get("username").asText();
             token = rootNode.get("token").asText();
         } catch (Exception e) {
-            fail("Setup failed: Unable to extract username and token from JSON response");
+            fail("Setup failed: Unable to extract username and token from JSON response2");
         }
         tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
         tradingSystemImp.addProduct(userName, token, productID, storeName, "Product1", "ProductDescription", 10, 5, 6, 1, new ArrayList<>(Arrays.asList(keyWords)));
