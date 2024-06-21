@@ -78,6 +78,8 @@ public class PaymentAcceptanceTests {
 
     @Test
     void testVisitor_Success() {
+        setDown();
+        setUp();
         String userToken = tradingSystem.enter().getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
