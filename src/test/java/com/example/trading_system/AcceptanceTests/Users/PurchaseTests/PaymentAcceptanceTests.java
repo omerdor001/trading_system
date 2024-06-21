@@ -43,8 +43,15 @@ public class PaymentAcceptanceTests {
         tradingSystem.openSystem(storeRepository);
         String userToken = tradingSystem.enter().getBody();
         try {
-            if(userToken == null)
+            if(userToken == null) {
+                userRepository.deleteInstance();
+                storeRepository.deleteInstance();
+                tradingSystem.deleteInstance();
+                userRepository = UserMemoryRepository.getInstance();    //May be change later
+                storeRepository = StoreMemoryRepository.getInstance();  //May be change later
+                tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
                 userToken = tradingSystem.enter().getBody();
+            }
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
             token = rootNode.get("token").asText();
