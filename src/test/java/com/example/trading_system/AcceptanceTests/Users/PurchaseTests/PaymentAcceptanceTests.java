@@ -39,7 +39,9 @@ public class PaymentAcceptanceTests {
         tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem(storeRepository);
-        String userToken = tradingSystem.enter().getBody();
+        ResponseEntity<String> result = tradingSystem.enter();
+        System.out.println(result.getBody());
+        String userToken = result.getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
