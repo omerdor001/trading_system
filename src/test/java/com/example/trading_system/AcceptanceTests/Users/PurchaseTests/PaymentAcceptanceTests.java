@@ -24,19 +24,21 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 public class PaymentAcceptanceTests {
+    private final String storeName = "Store1";
+    private final String address = "1234 Main Street, Springfield, IL, 62704-1234";
     private TradingSystem tradingSystem;
     private String username;
     private String token;
-    private final String storeName = "Store1";
-    private final String address = "1234 Main Street, Springfield, IL, 62704-1234";
     private UserRepository userRepository;
     private StoreRepository storeRepository;
 
     @BeforeEach
     void setUp() {
-        userRepository= UserMemoryRepository.getInstance();    //May be change later
-        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
-        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
+        UserMemoryRepository.getInstance().deleteInstance();    //May be change later
+        StoreMemoryRepository.getInstance().deleteInstance();  //May be change later
+        userRepository = UserMemoryRepository.getInstance();    //May be change later
+        storeRepository = StoreMemoryRepository.getInstance();  //May be change later
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem(storeRepository);
         String userToken = tradingSystem.enter().getBody();
@@ -70,8 +72,6 @@ public class PaymentAcceptanceTests {
 
     @Test
     void testRegistered_Success() {
-        setDown();
-        setUp();
         tradingSystem.addToCart(username, token, 0, storeName, 1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username, token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
