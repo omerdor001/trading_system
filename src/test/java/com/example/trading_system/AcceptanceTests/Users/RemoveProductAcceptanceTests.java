@@ -71,6 +71,7 @@ public class RemoveProductAcceptanceTests {
 
     @AfterEach
     public void tearDown() {
+        tradingSystemImp.setSystemOpen(true);
         tradingSystemImp.deleteInstance();
     }
 
