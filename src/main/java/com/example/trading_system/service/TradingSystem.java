@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TradingSystem {
+    void setSystemOpen(boolean systemOpen); //For tests
     void deleteInstance();
 
     ResponseEntity<String> openSystem(StoreRepository storeRepository);

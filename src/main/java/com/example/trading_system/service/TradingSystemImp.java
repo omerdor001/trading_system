@@ -21,6 +21,10 @@ public class TradingSystemImp implements TradingSystem {
     public int counter_user = 0;
     private boolean systemOpen;
 
+    public void setSystemOpen(boolean systemOpen) {   //For tests
+        this.systemOpen = systemOpen;
+    }
+
     private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository, StoreRepository storeRepository) {
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
