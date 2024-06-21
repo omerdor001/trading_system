@@ -5,16 +5,24 @@ import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UserServiceImp implements UserService {
-
+    private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
     private static UserServiceImp instance = null;
     private UserFacadeImp userFacade;
 
     private UserServiceImp(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository, StoreRepository storeRepository) {
+        if(storeRepository!=null){
+            logger.info("store repo is {}", storeRepository);
+        }
+        if(userRepository!=null){
+            logger.info("user repo is {}", userRepository);
+        }
         userFacade = UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
     }
 
