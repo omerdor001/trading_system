@@ -70,6 +70,8 @@ public class PaymentAcceptanceTests {
 
     @Test
     void testRegistered_Success() {
+        setDown();
+        setUp();
         tradingSystem.addToCart(username, token, 0, storeName, 1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username, token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
