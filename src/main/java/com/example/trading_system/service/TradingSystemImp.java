@@ -43,7 +43,7 @@ public class TradingSystemImp implements TradingSystem {
         userService = null;
         if (systemOpen) {
             this.marketService.deleteInstance();
-            systemOpen=false;
+            this.systemOpen=false;
         }
     }
 
