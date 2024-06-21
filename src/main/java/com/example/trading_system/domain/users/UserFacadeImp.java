@@ -17,18 +17,11 @@ import java.util.*;
 public class UserFacadeImp implements UserFacade {
     private static final Logger logger = LoggerFactory.getLogger(UserFacadeImp.class);
     private static UserFacadeImp instance = null;
-    private final UserRepository userRepository;
-    private final DeliveryService deliveryService;
-    private final PaymentService paymentService;
     private final NotificationSender notificationSender;
-    private MarketFacade marketFacade;
     private UserRepository userRepository;
     private DeliveryService deliveryService;
     private PaymentService paymentService;
-
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private MarketFacade marketFacade;
 
     private UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         this.paymentService = paymentService;
@@ -39,9 +32,9 @@ public class UserFacadeImp implements UserFacade {
         marketFacade.initialize(this);
     }
 
-    public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender,UserRepository userRepository,StoreRepository storeRepository) {
+    public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         if (instance == null) {
-            instance = new UserFacadeImp(paymentService,deliveryService, notificationSender,userRepository,storeRepository);
+            instance = new UserFacadeImp(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
             instance.marketFacade.initialize(instance);
         }
         return instance;
@@ -64,17 +57,21 @@ public class UserFacadeImp implements UserFacade {
         return userRepository;
     }
 
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Override
     public void deleteInstance() {
         instance = null;
         if (marketFacade != null) marketFacade.deleteInstance();
         this.marketFacade = null;
-        if(userRepository!=null){
+        if (userRepository != null) {
             this.userRepository.deleteInstance();
-            userRepository=null;
+            userRepository = null;
         }
-        this.paymentService=null;
-        this.deliveryService=null;
+        this.paymentService = null;
+        this.deliveryService = null;
     }
 
     @Override
@@ -1016,7 +1013,7 @@ public class UserFacadeImp implements UserFacade {
             user.releaseReservedProducts(marketFacade.getStoreRepository());
             throw new Exception("Error in Payment");
         }
-        user.addPurchase(marketFacade.getStoreRepository(),username);
+        user.addPurchase(marketFacade.getStoreRepository(), username);
         timer.cancel();
         timer.purge();
     }

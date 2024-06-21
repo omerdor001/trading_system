@@ -37,7 +37,7 @@ public class PurchasePolicyAcceptanceTests {
     void setUp() {
         userRepository= UserMemoryRepository.getInstance();    //May be change later
         storeRepository= StoreMemoryRepository.getInstance();  //May be change later
-        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),mock(NotificationSender.class),userRepository,storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.of(1960,1,1));
         tradingSystem.openSystem(storeRepository);
         String userToken = tradingSystem.enter().getBody();

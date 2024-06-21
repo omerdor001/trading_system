@@ -2,6 +2,7 @@ package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.ProductInSale;
+import com.example.trading_system.domain.stores.StoreRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -83,13 +84,13 @@ public class ShoppingBag {
 
     public void checkAvailabilityAndConditions(StoreRepository storeRepository) {
         for (ProductInSale product : products_list.values()) {
-            MarketFacadeImp.getInstance().checkAvailabilityAndConditions(product.getId(), product.getQuantity(), product.getStoreId());
+            MarketFacadeImp.getInstance(storeRepository).checkAvailabilityAndConditions(product.getId(), product.getQuantity(), product.getStoreId());
         }
     }
 
-    public void addPurchase(String username) {
+    public void addPurchase(StoreRepository storeRepository, String username) {
         try {
-            MarketFacadeImp.getInstance().addPurchase(username, productsListToJson(), calculateTotalPrice(), storeId);
+            MarketFacadeImp.getInstance(storeRepository).addPurchase(username, productsListToJson(), calculateTotalPrice(), storeId);
         } catch (IOException e) {
             throw new RuntimeException("error converting shopping bag to json");
         }
