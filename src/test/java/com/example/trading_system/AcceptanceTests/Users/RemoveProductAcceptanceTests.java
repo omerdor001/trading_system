@@ -44,7 +44,7 @@ public class RemoveProductAcceptanceTests {
         userRepository= UserMemoryRepository.getInstance();    //May be change later
         storeRepository= StoreMemoryRepository.getInstance();  //May be change later
         tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
-        if(tradingSystemImp.userService.getUserFacade().getUserRepository()!=null){
+        if(tradingSystemImp==null){
             logger.info("1");
         }
         tradingSystemImp.register("admin", password, LocalDate.now());
