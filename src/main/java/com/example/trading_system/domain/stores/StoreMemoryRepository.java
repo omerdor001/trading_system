@@ -19,7 +19,6 @@ public class StoreMemoryRepository implements StoreRepository {
     public void deleteInstance() {
         if(stores!=null){
             this.stores.clear();
-            stores=null;
         }
         instance = null;
     }
