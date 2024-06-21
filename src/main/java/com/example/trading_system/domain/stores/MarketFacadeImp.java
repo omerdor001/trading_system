@@ -769,7 +769,8 @@ public class MarketFacadeImp implements MarketFacade {
     public boolean validatePurchasePolicies(String cartJSON, int age) throws IOException{
         CartDTO cart = CartDTO.fromJson(cartJSON);
         for (ShoppingBagDTO bag : cart.getShoppingBags().values()) {
-            if(!storeRepository.getStore(bag.getStoreId()).validatePurchasePolicies(bag.getProducts_list().values(),age)){
+            Store store = storeRepository.getStore(bag.getStoreId());
+            if(store==null || !store.validatePurchasePolicies(bag.getProducts_list().values(),age)){
                 return false;
             }
         }
