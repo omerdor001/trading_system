@@ -11,6 +11,8 @@ import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,13 +25,16 @@ class StockManagementUnitTests {
     UserFacade userFacade;
     private UserRepository userRepository;
     private StoreRepository storeRepository;
+    private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
 
     @BeforeAll
     void setUp() {
+        logger.info("SETUP stock management");
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
         PaymentService paymentService=mock(PaymentService.class);
         DeliveryService deliveryService=mock(DeliveryService.class);
+        logger.info("SETUP stock management initialize facades");
         userFacade= UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
         marketFacade=MarketFacadeImp.getInstance(storeRepository);
         try {
