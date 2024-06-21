@@ -44,6 +44,9 @@ public class WaiveOnOwnershipAcceptanceTests {
         tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
         String password = "123456";
         tradingSystemImp.register("admin", password, LocalDate.now());
+        if(tradingSystemImp.marketService.getMarketFacade().getStoreRepository()!=null){
+            logger.info("0");
+        }
         tradingSystemImp.openSystem(storeRepository);
         ResponseEntity<String> response = tradingSystemImp.enter();
         String userToken = response.getBody();
