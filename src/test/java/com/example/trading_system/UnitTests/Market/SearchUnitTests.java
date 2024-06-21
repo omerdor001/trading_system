@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 public class SearchUnitTests {
-    /*
     private MarketFacadeImp marketFacade;
     private final String validUsername = "validName";
     User user;
@@ -121,5 +120,5 @@ public class SearchUnitTests {
         Exception exception = assertThrows(Exception.class, () -> marketFacade.searchKeywordsInStores(validUsername,null, 5.0, 5.0, 5.0, Category.Food.getIntValue(),null));
         assertEquals(exception.getMessage(), "No keywords provided");
     }
-*/
+
 }
