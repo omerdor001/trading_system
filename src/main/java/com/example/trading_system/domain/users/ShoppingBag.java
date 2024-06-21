@@ -69,19 +69,19 @@ public class ShoppingBag {
         return products_list.get(productId).getQuantity();
     }
 
-    public void removeReservedProducts() {
+    public void removeReservedProducts(StoreRepository storeRepository) {
         for (ProductInSale product : products_list.values()) {
-            MarketFacadeImp.getInstance().removeReservedProducts(product.getId(), product.getQuantity(), product.getStoreId());
+            MarketFacadeImp.getInstance(storeRepository).removeReservedProducts(product.getId(), product.getQuantity(), product.getStoreId());
         }
     }
 
-    public void releaseReservedProducts() {
+    public void releaseReservedProducts(StoreRepository storeRepository) {
         for (ProductInSale product : products_list.values()) {
-            MarketFacadeImp.getInstance().releaseReservedProducts(product.getId(), product.getQuantity(), product.getStoreId());
+            MarketFacadeImp.getInstance(storeRepository).releaseReservedProducts(product.getId(), product.getQuantity(), product.getStoreId());
         }
     }
 
-    public void checkAvailabilityAndConditions() {
+    public void checkAvailabilityAndConditions(StoreRepository storeRepository) {
         for (ProductInSale product : products_list.values()) {
             MarketFacadeImp.getInstance().checkAvailabilityAndConditions(product.getId(), product.getQuantity(), product.getStoreId());
         }

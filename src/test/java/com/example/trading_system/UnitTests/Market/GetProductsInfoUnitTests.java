@@ -4,9 +4,9 @@ import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
-import com.example.trading_system.domain.users.Role;
-import com.example.trading_system.domain.users.User;
-import com.example.trading_system.domain.users.UserFacadeImp;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
@@ -28,12 +28,16 @@ class GetProductsInfoUnitTests {
     String validUsername = "validUser";
     String validStoreName = "ValidStore";
     String validDescription = "This is a valid description.";
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
-        marketFacade = MarketFacadeImp.getInstance();
-        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class));
+        storeRepository= StoreMemoryRepository.getInstance();
+        userRepository = UserMemoryRepository.getInstance();
+        marketFacade = MarketFacadeImp.getInstance(storeRepository);
+        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
         userFacade.getUsers().put(validUsername, user);
 
         // Mock the user to return a valid role for the store

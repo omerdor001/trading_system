@@ -7,14 +7,12 @@ import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.domain.users.User;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDate;
-import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
@@ -22,19 +20,20 @@ import static org.mockito.Mockito.mock;
 public class GetPurchaseHistoryUnitTests {
     @Mock
     Purchase purchase;
-
-    UserMemoryRepository userMemoryRepository;
     MarketFacadeImp marketFacade;
     UserFacadeImp userFacadeImp;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
 
         // Re-instantiate singletons
-        userMemoryRepository = UserMemoryRepository.getInstance();
-        marketFacade = MarketFacadeImp.getInstance();
-        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class));
+        storeRepository=StoreMemoryRepository.getInstance();
+        userRepository = UserMemoryRepository.getInstance();
+        marketFacade = MarketFacadeImp.getInstance(storeRepository);
+        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
     }
 
     @AfterEach
@@ -61,7 +60,7 @@ public class GetPurchaseHistoryUnitTests {
 
         marketFacade.getStore(storeName).addPurchase(purchase);
 
-        userMemoryRepository.addRegistered(username, "encrypted_password", null);
+        userRepository.addRegistered(username, "encrypted_password", null);
         // Ensure user is added but not logged in
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.getPurchaseHistory(username, storeName), "User is not logged");
     }
@@ -73,9 +72,9 @@ public class GetPurchaseHistoryUnitTests {
         marketFacade.addStore(storeName,"Description","founder",6.0);
         marketFacade.getStore(storeName).addPurchase(purchase);
 
-        userMemoryRepository.addRegistered(username, "encrypted_password", null);
+        userRepository.addRegistered(username, "encrypted_password", null);
         // Ensure user is logged in
-        User user = userMemoryRepository.getUser(username);
+        User user = userRepository.getUser(username);
         user.login();
 
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.getPurchaseHistory(username, storeName), "User is not commercial manager");

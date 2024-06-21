@@ -1,5 +1,7 @@
 package com.example.trading_system.domain.users;
 
+import com.example.trading_system.domain.stores.Purchase;
+import com.example.trading_system.domain.stores.StoreRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -155,15 +157,15 @@ public abstract class User {
         return cart.checkProductQuantity(productId, storeName);
     }
 
-    public void removeReservedProducts() {
-        cart.removeReservedProducts();
+    public void removeReservedProducts(StoreRepository storeRepository) {
+        cart.removeReservedProducts(storeRepository);
     }
 
-    public void releaseReservedProducts() {
-        cart.releaseReservedProducts();
+    public void releaseReservedProducts(StoreRepository storeRepository) {
+        cart.releaseReservedProducts(storeRepository);
     }
 
-    public void checkAvailabilityAndConditions() {
+    public void checkAvailabilityAndConditions(StoreRepository storeRepository) {
         if (cart == null || cart.getShoppingBags().isEmpty()) {
             logger.error("Cart is empty or null");
             throw new RuntimeException("Cart is empty or null");
@@ -172,10 +174,10 @@ public abstract class User {
             logger.error("User is not logged in");
             throw new RuntimeException("User is not logged in");
         }
-        cart.checkAvailabilityAndConditions();
+        cart.checkAvailabilityAndConditions(storeRepository);
     }
 
-    public void addPurchase(String username) {
-        cart.addPurchase(username);
+    public void addPurchase(StoreRepository storeRepository,String username) {
+        cart.addPurchase(storeRepository,username);
     }
 }

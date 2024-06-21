@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 public interface UserFacade {
+    UserRepository getUserRepository();
+    void setUserRepository(UserRepository userRepository);
     void deleteInstance();
 
     String getPendingUserNotifications(String admin, String username);

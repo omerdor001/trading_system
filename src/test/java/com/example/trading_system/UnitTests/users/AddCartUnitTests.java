@@ -15,28 +15,23 @@ import java.util.NoSuchElementException;
 
 import static org.mockito.Mockito.mock;
 
-@ExtendWith(MockitoExtension.class)
 public class AddCartUnitTests {
-
-    UserMemoryRepository userMemoryRepository;
     MarketFacadeImp marketFacade;
     UserFacadeImp userFacadeImp;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.openMocks(this);
-
-        // Clear singleton instances
-        UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class)).deleteInstance();
-
-        // Re-instantiate singletons
-        userMemoryRepository = UserMemoryRepository.getInstance();
-        marketFacade = MarketFacadeImp.getInstance();
-        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class));
+        storeRepository= StoreMemoryRepository.getInstance();
+        userRepository = UserMemoryRepository.getInstance();
+        marketFacade = MarketFacadeImp.getInstance(storeRepository);
+        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),mock(NotificationSender.class),userRepository,storeRepository);
     }
 
     @AfterEach
     public void tearDown() {
+        marketFacade.deleteInstance();
         userFacadeImp.deleteInstance();
     }
 
@@ -48,15 +43,15 @@ public class AddCartUnitTests {
         int quantity = 5;
 
         // Setup data in singletons
-        userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
-        userMemoryRepository.getUser(username).login();
+        userRepository.addRegistered(username, "encrypted_password", LocalDate.now());
+        userRepository.getUser(username).login();
         marketFacade.addStore(storeName, "description", username, 4.5);
 
         Store store = marketFacade.getStore(storeName);
         store.addProduct(productId, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
 
         Cart shoppingCart = new Cart();
-        userMemoryRepository.getUser(username).setCart(shoppingCart);
+        userRepository.getUser(username).setCart(shoppingCart);
 
         Assertions.assertDoesNotThrow(() -> userFacadeImp.addToCart(username, productId, storeName, quantity));
 
@@ -100,7 +95,7 @@ public class AddCartUnitTests {
         //String storeName = null;
         int quantity = 5;
 
-        userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
+        userRepository.addRegistered(username, "encrypted_password", LocalDate.now());
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.addToCart(username, productId, null, quantity));
     }
@@ -112,7 +107,7 @@ public class AddCartUnitTests {
         String storeName = "";
         int quantity = 5;
 
-        userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
+        userRepository.addRegistered(username, "encrypted_password", LocalDate.now());
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity));
     }
@@ -124,7 +119,7 @@ public class AddCartUnitTests {
         String storeName = "NonExistentStore";
         int quantity = 5;
 
-        userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
+        userRepository.addRegistered(username, "encrypted_password", LocalDate.now());
 
         Assertions.assertThrows(NoSuchElementException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity));
     }
@@ -136,7 +131,7 @@ public class AddCartUnitTests {
         String storeName = "StoreName";
         int quantity = 5;
 
-        userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
+        userRepository.addRegistered(username, "encrypted_password", LocalDate.now());
         marketFacade.addStore(storeName, "description", username, 4.5);
 
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity));
@@ -149,15 +144,15 @@ public class AddCartUnitTests {
         String storeName = "StoreName";
         int quantity = 10;
 
-        userMemoryRepository.addRegistered(username, "encrypted_password", LocalDate.now());
-        userMemoryRepository.getUser(username).login();
+        userRepository.addRegistered(username, "encrypted_password", LocalDate.now());
+        userRepository.getUser(username).login();
         marketFacade.addStore(storeName, "description", username, 4.5);
 
         Store store = marketFacade.getStore(storeName);
         store.addProduct(productId, "ProductName", "ProductDescription", 10.0, 5, 4.5, 1, null);
 
         Cart shoppingCart = new Cart();
-        userMemoryRepository.getUser(username).setCart(shoppingCart);
+        userRepository.getUser(username).setCart(shoppingCart);
 
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity));
     }

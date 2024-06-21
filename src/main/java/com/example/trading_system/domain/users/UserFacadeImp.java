@@ -4,7 +4,6 @@ import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.*;
-import com.example.trading_system.service.UserServiceImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,26 +15,33 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class UserFacadeImp implements UserFacade {
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserFacadeImp.class);
     private static UserFacadeImp instance = null;
     private final UserRepository userRepository;
     private final DeliveryService deliveryService;
     private final PaymentService paymentService;
     private final NotificationSender notificationSender;
     private MarketFacade marketFacade;
+    private UserRepository userRepository;
+    private DeliveryService deliveryService;
+    private PaymentService paymentService;
 
-    private UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender) {
-        this.marketFacade = MarketFacadeImp.getInstance();
-        this.userRepository = UserMemoryRepository.getInstance();
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    private UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         this.paymentService = paymentService;
         this.deliveryService = deliveryService;
+        this.userRepository = userRepository;
+        this.marketFacade = MarketFacadeImp.getInstance(storeRepository);
         this.notificationSender = notificationSender;
         marketFacade.initialize(this);
     }
 
-    public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender) {
+    public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender,UserRepository userRepository,StoreRepository storeRepository) {
         if (instance == null) {
-            instance = new UserFacadeImp(paymentService, deliveryService, notificationSender);
+            instance = new UserFacadeImp(paymentService,deliveryService, notificationSender,userRepository,storeRepository);
             instance.marketFacade.initialize(instance);
         }
         return instance;
@@ -54,11 +60,21 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
+    public UserRepository getUserRepository() {
+        return userRepository;
+    }
+
+    @Override
     public void deleteInstance() {
         instance = null;
         if (marketFacade != null) marketFacade.deleteInstance();
         this.marketFacade = null;
-        this.userRepository.deleteInstance();
+        if(userRepository!=null){
+            this.userRepository.deleteInstance();
+            userRepository=null;
+        }
+        this.paymentService=null;
+        this.deliveryService=null;
     }
 
     @Override
@@ -951,7 +967,7 @@ public class UserFacadeImp implements UserFacade {
         if (isSuspended(username)) {
             throw new RuntimeException("User is suspended from the system");
         }
-        getUser(username).checkAvailabilityAndConditions();
+        getUser(username).checkAvailabilityAndConditions(marketFacade.getStoreRepository());
         return true;
     }
 
@@ -967,11 +983,11 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Products do not meet purchase policies conditions.");
             throw new RuntimeException("Products do not meet purchase policies conditions.");
         }
-        user.removeReservedProducts();
+        user.removeReservedProducts(marketFacade.getStoreRepository());
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
-                getUser(username).releaseReservedProducts();
+                getUser(username).releaseReservedProducts(marketFacade.getStoreRepository());
                 throw new RuntimeException("time out !");
             }
         }, 10 * 60 * 1000);
@@ -981,7 +997,7 @@ public class UserFacadeImp implements UserFacade {
         try {
             deliveryId = deliveryService.makeDelivery(address);
         } catch (Exception e) {
-            user.releaseReservedProducts();
+            user.releaseReservedProducts(marketFacade.getStoreRepository());
             throw new Exception("Error in Delivery");
         }
         if (deliveryId < 0) {
@@ -992,15 +1008,15 @@ public class UserFacadeImp implements UserFacade {
             paymentId = paymentService.makePayment(totalPrice);
         } catch (Exception e) {
             deliveryService.cancelDelivery(deliveryId);
-            user.releaseReservedProducts();
+            user.releaseReservedProducts(marketFacade.getStoreRepository());
             throw new Exception("Error in Payment");
         }
         if (paymentId < 0) {
             deliveryService.cancelDelivery(deliveryId);
-            user.releaseReservedProducts();
+            user.releaseReservedProducts(marketFacade.getStoreRepository());
             throw new Exception("Error in Payment");
         }
-        user.addPurchase(username);
+        user.addPurchase(marketFacade.getStoreRepository(),username);
         timer.cancel();
         timer.purge();
     }

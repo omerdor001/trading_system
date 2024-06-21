@@ -3,6 +3,10 @@ package com.example.trading_system.AcceptanceTests.Market.ProductTests;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,14 +25,17 @@ public class SearchProductSpecificStoreAcceptanceTests {
     private TradingSystem tradingSystem;
     private String token;
     private String username;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     void setup() {
-        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class));
-
+        userRepository= UserMemoryRepository.getInstance();    //May be change later
+        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.register("manager", "password123", LocalDate.now());
-        tradingSystem.openSystem();
+        tradingSystem.openSystem(storeRepository);
 
         String userTokenResponse = tradingSystem.enter().getBody();
         extractToken(userTokenResponse);
@@ -40,6 +47,8 @@ public class SearchProductSpecificStoreAcceptanceTests {
     @AfterEach
     void tearDown() {
         tradingSystem.deleteInstance();
+        userRepository.deleteInstance();
+        storeRepository.deleteInstance();
     }
 
     private void extractToken(String jsonResponse) {

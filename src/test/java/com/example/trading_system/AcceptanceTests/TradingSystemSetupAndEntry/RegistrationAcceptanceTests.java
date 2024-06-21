@@ -3,6 +3,10 @@ package com.example.trading_system.AcceptanceTests.TradingSystemSetupAndEntry;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import org.junit.jupiter.api.AfterEach;
@@ -18,14 +22,19 @@ import static org.mockito.Mockito.mock;
 
 public class RegistrationAcceptanceTests {
     private TradingSystem tradingSystem;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     void setUp() {
-        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class));
+        userRepository= UserMemoryRepository.getInstance();    //May be change later
+        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
     }
 
     @AfterEach
     void setDown(){
+        tradingSystem.setSystemOpen(true);
         tradingSystem.deleteInstance();
     }
 

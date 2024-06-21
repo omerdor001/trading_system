@@ -5,9 +5,16 @@ import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserFacade;
 import com.example.trading_system.domain.users.UserFacadeImp;
+import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,11 +24,18 @@ import static org.mockito.Mockito.mock;
 class StockManagementUnitTests {
     MarketFacade marketFacade;
     UserFacade userFacade;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
+    private static final Logger logger = LoggerFactory.getLogger(StockManagementUnitTests.class);
 
     @BeforeAll
     void setUp() {
-        marketFacade=MarketFacadeImp.getInstance();
-        userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class));
+        storeRepository= StoreMemoryRepository.getInstance();
+        userRepository = UserMemoryRepository.getInstance();
+        PaymentService paymentService=mock(PaymentService.class);
+        DeliveryService deliveryService=mock(DeliveryService.class);
+        userFacade= UserFacadeImp.getInstance(paymentService,deliveryService, mock(NotificationSender.class),userRepository,storeRepository);
+        marketFacade=MarketFacadeImp.getInstance(storeRepository);
         try {
             userFacade.register("testuser0","1pA22w0rd", LocalDate.now());
             userFacade.register("testuser1","pA22w0rd1", LocalDate.now());
@@ -38,6 +52,7 @@ class StockManagementUnitTests {
             userFacade.appointManager("rtestuser0","rtestuser2","Adidas",false,false,false,false);
 
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -96,7 +111,7 @@ class StockManagementUnitTests {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> marketFacade.addProduct("rtestuser1", 123, "Adidas", "Samba", "Snickers shoes",
                 -100.0, 100, 5.0, 1, keyWords));
         int numOfProducts_after=marketFacade.getStore("Adidas").getProducts().size();
-        assertEquals("Price can't be a negative number", exception.getMessage());
+        assertEquals("Price can't be negative number", exception.getMessage());
         assertEquals(numOfProducts_before,numOfProducts_after);
     }
 
@@ -108,7 +123,7 @@ class StockManagementUnitTests {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> marketFacade.addProduct("rtestuser1", 123, "Adidas", "Samba", "Snickers shoes",
                 100.0, -100, 5.0, 1, keyWords));
         int numOfProducts_after=marketFacade.getStore("Adidas").getProducts().size();
-        assertEquals("Quantity must be a natural number", exception.getMessage());
+        assertEquals("Quantity must be natural number", exception.getMessage());
         assertEquals(numOfProducts_before,numOfProducts_after);
 
     }
@@ -121,7 +136,7 @@ class StockManagementUnitTests {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> marketFacade.addProduct("rtestuser1", 123, "Adidas", "Samba", "Snickers shoes",
                 100.0, 100, -5.0, 1, keyWords));
         int numOfProducts_after=marketFacade.getStore("Adidas").getProducts().size();
-        assertEquals("Rating can't be a negative number", exception.getMessage());
+        assertEquals("Rating can't be negative number", exception.getMessage());
         assertEquals(numOfProducts_before,numOfProducts_after);
     }
 

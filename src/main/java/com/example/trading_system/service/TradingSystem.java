@@ -1,5 +1,6 @@
 package com.example.trading_system.service;
 
+import com.example.trading_system.domain.stores.StoreRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -9,11 +10,12 @@ import java.util.List;
 
 @Service
 public interface TradingSystem {
+    void setSystemOpen(boolean systemOpen); //For tests
     void deleteInstance();
 
     ResponseEntity<String> getPendingUserNotifications(String admin, String token, String username);
 
-    ResponseEntity<String> openSystem();
+    ResponseEntity<String> openSystem(StoreRepository storeRepository);
 
     ResponseEntity<String> closeSystem(String username, String token);
 
