@@ -42,11 +42,11 @@ public class RemoveProductAcceptanceTests {
     @BeforeEach
     public void setUp() {
         userRepository= UserMemoryRepository.getInstance();    //May be change later
-        if(userRepository!=null){
-            logger.info("10");
-        }
         storeRepository= StoreMemoryRepository.getInstance();  //May be change later
         tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
+        if(tradingSystemImp.userService.getUserFacade().getUserRepository()!=null){
+            logger.info("1");
+        }
         if(tradingSystemImp.userService.getUserFacade().getUserRepository()!=null){
             logger.info("2");
         }

@@ -38,8 +38,6 @@ public class UserFacadeImp implements UserFacade {
         return instance;
     }
 
-
-
     // Method to encrypt a given password
     private static String encrypt(String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
