@@ -34,6 +34,9 @@ public class MarketFacadeImp implements MarketFacade {
         if(storeRepository!=null) {
             logger.info("Market facade SF {}", storeRepository);
         }
+        if(instance!=null) {
+            logger.info("Market facade INSTANCE {}", instance);
+        }
         if (instance == null) instance = new MarketFacadeImp(storeRepository);
         return instance;
     }
