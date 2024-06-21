@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
 public class WaiveOnOwnershipAcceptanceTests {
-    private static final Logger logger = LoggerFactory.getLogger(UserFacadeImp.class);
     private TradingSystemImp tradingSystemImp;
     private String userName = "";
     private String token = "";
@@ -42,17 +41,11 @@ public class WaiveOnOwnershipAcceptanceTests {
         userRepository= UserMemoryRepository.getInstance();    //May be change later
         storeRepository= StoreMemoryRepository.getInstance();  //May be change later
         tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
-        if(tradingSystemImp.marketService.getMarketFacade()!=null){
-            logger.info("0");
-        }
         String password = "123456";
         tradingSystemImp.register("admin", password, LocalDate.now());
         tradingSystemImp.openSystem(storeRepository);
         ResponseEntity<String> response = tradingSystemImp.enter();
         String userToken = response.getBody();
-        if(tradingSystemImp.marketService.getMarketFacade().getStoreRepository()!=null){
-            logger.info("1");
-        }
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -62,9 +55,6 @@ public class WaiveOnOwnershipAcceptanceTests {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
         userToken = tradingSystemImp.login(token, "v0", "admin", password).getBody();
-        if(tradingSystemImp.marketService.getMarketFacade().getStoreRepository()!=null){
-            logger.info("2");
-        }
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
@@ -77,9 +67,6 @@ public class WaiveOnOwnershipAcceptanceTests {
         tradingSystemImp.openSystem(storeRepository);
         ResponseEntity<String> response2 = tradingSystemImp.enter();
         String userToken2 = response2.getBody();
-        if(tradingSystemImp.marketService.getMarketFacade().getStoreRepository()!=null){
-            logger.info("3");
-        }
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken2);

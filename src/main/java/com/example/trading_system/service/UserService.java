@@ -1,9 +1,13 @@
 package com.example.trading_system.service;
 
+import com.example.trading_system.domain.users.UserFacadeImp;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public interface UserService {
+    UserFacadeImp getUserFacade();
+
     void deleteInstance();
 
     String enter(int id);

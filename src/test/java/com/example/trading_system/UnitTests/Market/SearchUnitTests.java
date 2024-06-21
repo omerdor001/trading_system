@@ -28,17 +28,15 @@ public class SearchUnitTests {
     void setUp() {
         userRepository= UserMemoryRepository.getInstance();    //May be change later
         storeRepository= StoreMemoryRepository.getInstance();  //May be change later
-        marketFacade = MarketFacadeImp.getInstance(storeRepository);
         userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
+        marketFacade = MarketFacadeImp.getInstance(storeRepository);
         Store store = new Store("store1", "description","robert",null);
         store.addProduct(1,"p1", "", 5, 5, 5, 3, new ArrayList<>());
         marketFacade.getStores().put(store.getNameId(), store);
         // Mock user object
         user = mock(User.class);
-
         // Add the mocked user to the facade
         userFacade.getUsers().put(validUsername, user);
-
         // Mock the user to return a valid role for the store
         //marketFacade.getStores().put("store2", new Store("store2","description"));
     }

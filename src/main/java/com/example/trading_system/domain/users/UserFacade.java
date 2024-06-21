@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 public interface UserFacade {
+    UserRepository getUserRepository();
     void deleteInstance();
 
     void enter(int id);

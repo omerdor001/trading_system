@@ -1,14 +1,10 @@
 package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.externalservices.DeliveryService;
-import com.example.trading_system.domain.externalservices.DeliveryServiceProxy;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.externalservices.PaymentServiceProxy;
 import com.example.trading_system.domain.stores.*;
-import com.example.trading_system.service.UserServiceImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.Duration;
@@ -42,6 +38,8 @@ public class UserFacadeImp implements UserFacade {
         return instance;
     }
 
+
+
     // Method to encrypt a given password
     private static String encrypt(String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -52,6 +50,11 @@ public class UserFacadeImp implements UserFacade {
     private static boolean checkPassword(String password, String hashedPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.matches(password, hashedPassword);
+    }
+
+    @Override
+    public UserRepository getUserRepository() {
+        return userRepository;
     }
 
     @Override

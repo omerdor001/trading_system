@@ -14,6 +14,11 @@ import java.time.LocalDateTime;
 public class UserServiceImp implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
     private static UserServiceImp instance = null;
+
+    public UserFacadeImp getUserFacade() {
+        return userFacade;
+    }
+
     private UserFacadeImp userFacade;
 
     private UserServiceImp(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository, StoreRepository storeRepository) {
