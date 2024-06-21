@@ -34,9 +34,9 @@ class StockManagementUnitTests {
         PaymentService paymentService=mock(PaymentService.class);
         DeliveryService deliveryService=mock(DeliveryService.class);
         userFacade= UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
-        logger.info("SETUP stock management initialize UF");
+        logger.info("SETUP stock management initialize UF {}",userRepository);
         marketFacade=MarketFacadeImp.getInstance(storeRepository);
-        logger.info("SETUP stock management initialize SF");
+        logger.info("SETUP stock management initialize SF{}",storeRepository);
         try {
             userFacade.register("testuser0","1pA22w0rd", LocalDate.now());
             userFacade.register("testuser1","pA22w0rd1", LocalDate.now());
