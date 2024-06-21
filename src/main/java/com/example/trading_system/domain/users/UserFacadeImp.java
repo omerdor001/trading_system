@@ -971,7 +971,7 @@ public class UserFacadeImp implements UserFacade {
         }
         //TODO decide where to send
         //sendNotification(username, store.getFounder(), "User: " + user.getUsername() + " purchased the following items from your store: " + shoppingBagInStore.getValue().getStoreId() + "\n" + shoppingBagInStore.getValue().toString());
-        user.addPurchase(username);
+        user.addPurchase();
         timer.cancel();
         timer.purge();
     }

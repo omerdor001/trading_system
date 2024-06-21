@@ -1,4 +1,4 @@
-package com.example.trading_system.AcceptanceTests.TradingSystemSetupAndEntery;
+package com.example.trading_system.AcceptanceTests.TradingSystemSetupAndEntry;
 
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
@@ -15,13 +15,15 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
-class LoginAcceptanceTests {
+class LogoutAcceptanceTests {
 
     private static TradingSystem tradingSystem;
     private String token;
+    private String username;
 
     @BeforeEach
     void setUp() {
@@ -32,6 +34,7 @@ class LoginAcceptanceTests {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
+            username = rootNode.get("username").asText();
             token = rootNode.get("token").asText();
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
@@ -44,37 +47,42 @@ class LoginAcceptanceTests {
     }
 
     @Test
-    void login_Success() {
-        ResponseEntity<String> response = tradingSystem.login(token, "v0", "owner1", "password123");
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody(), "Token should not be empty");
-    }
-
-    @Test
-    void login_User_Logged_In() {
-        tradingSystem.login(token, "v0", "owner1", "password123");
-        String userToken = tradingSystem.enter().getBody();
+    void logout_Success() {
+        String userToken = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
+            username = rootNode.get("username").asText();
             token = rootNode.get("token").asText();
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        ResponseEntity<String> response = tradingSystem.login(token, "v1", "owner1", "password123");
+        ResponseEntity<String> response = tradingSystem.logout(token, username);
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Logout successful.", response.getBody(), "Logout message should be 'Logout successful.'");
     }
 
     @Test
-    void login_Wrong_Password() {
-        ResponseEntity<String> response = tradingSystem.login(token, "v0", "owner1", "password12");
+    void logout_NotLoggedIn() {
+        String userToken = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            username = rootNode.get("username").asText();
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract username and token from JSON response");
+        }
+        tradingSystem.logout(token, username);
+        ResponseEntity<String> response = tradingSystem.logout(token, username);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals(response.getBody(), "Wrong password");
+        assertEquals("User rowner1 already Logged out", response.getBody());
     }
 
     @Test
-    void login_Wrong_Username() {
-        ResponseEntity<String> response = tradingSystem.login(token, "v0", "owner", "password123");
+    void logout_Visitor() {
+        ResponseEntity<String> response = tradingSystem.logout(token, username);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("User performs not like a registered", response.getBody());
     }
 }

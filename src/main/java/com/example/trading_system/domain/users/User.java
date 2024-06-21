@@ -1,6 +1,5 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.Purchase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -173,7 +172,7 @@ public abstract class User {
         cart.checkAvailabilityAndConditions();
     }
 
-    public void addPurchase(String username) {
+    public void addPurchase() {
         cart.addPurchase(username);
     }
 }

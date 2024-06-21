@@ -1,4 +1,4 @@
-package com.example.trading_system.AcceptanceTests.TradingSystemSetupAndEntery;
+package com.example.trading_system.AcceptanceTests.TradingSystemSetupAndEntry;
 
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
@@ -15,11 +15,11 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
-public class EnterAcceptanceTests {
-
+public class ExitAcceptanceTests {
     private static TradingSystem tradingSystem;
     private String token;
     private String username;
@@ -54,29 +54,43 @@ public class EnterAcceptanceTests {
     }
 
     @Test
-    public void testEnterSuccessfully() {
+    public void testExitSuccess() {
         ResponseEntity<String> enterResponse = tradingSystem.enter();
-        assertEquals(HttpStatus.OK, enterResponse.getStatusCode());
-        String token = enterResponse.getBody();
-        assertNotNull(token);
+        String userToken = enterResponse.getBody();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(userToken);
+            username = rootNode.get("username").asText();
+            token = rootNode.get("token").asText();
+        } catch (Exception e) {
+            fail("Setup failed: Unable to extract username and token from JSON response");
+        }
+        ResponseEntity<String> exitResponse = tradingSystem.exit(token, username);
+        assertEquals(HttpStatus.OK, exitResponse.getStatusCode());
+        assertEquals("User exited successfully.", exitResponse.getBody());
     }
 
     @Test
-    public void testEnterSystemClosed() {
+    public void testExitSystemClosed() {
+        ResponseEntity<String> enterResponse = tradingSystem.enter();
+        String userToken = enterResponse.getBody();
         tradingSystem.closeSystem(username, token);
-        ResponseEntity<String> enterResponse = tradingSystem.enter();
-        assertEquals(HttpStatus.FORBIDDEN, enterResponse.getStatusCode());
-        assertEquals("", enterResponse.getBody());
+        ResponseEntity<String> exitResponse = tradingSystem.exit(userToken, "owner1");
+        assertEquals(HttpStatus.FORBIDDEN, exitResponse.getStatusCode());
+        assertEquals("System is not open. Only registration is allowed.", exitResponse.getBody());
     }
 
     @Test
-    public void testEnterTwoSessions() {
-        ResponseEntity<String> enterResponse = tradingSystem.enter();
-        assertEquals(HttpStatus.OK, enterResponse.getStatusCode());
-        String token = enterResponse.getBody();
-        ResponseEntity<String> reEnterResponse = tradingSystem.enter();
-        assertEquals(HttpStatus.OK, reEnterResponse.getStatusCode());
-        String newToken = reEnterResponse.getBody();
-        assertNotEquals(newToken, token);
+    public void testExitInvalidToken() {
+        ResponseEntity<String> exitResponse = tradingSystem.exit(token, "owner1");
+        assertEquals(HttpStatus.UNAUTHORIZED, exitResponse.getStatusCode());
+        assertEquals("Invalid token was supplied", exitResponse.getBody());
+    }
+
+    @Test
+    public void testExitNonExistentUser() {
+        ResponseEntity<String> exitResponse = tradingSystem.exit(token, "nonExistentUser");
+        assertEquals(HttpStatus.UNAUTHORIZED, exitResponse.getStatusCode());
+        assertEquals("Invalid token was supplied", exitResponse.getBody());
     }
 }

@@ -1,4 +1,4 @@
-package com.example.trading_system.AcceptanceTests.TradingSystemSetupAndEntery;
+package com.example.trading_system.AcceptanceTests.TradingSystemSetupAndEntry;
 
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
@@ -15,15 +15,13 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class LogoutAcceptanceTests {
+class LoginAcceptanceTests {
 
     private static TradingSystem tradingSystem;
     private String token;
-    private String username;
 
     @BeforeEach
     void setUp() {
@@ -34,7 +32,6 @@ class LogoutAcceptanceTests {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
-            username = rootNode.get("username").asText();
             token = rootNode.get("token").asText();
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
@@ -47,42 +44,37 @@ class LogoutAcceptanceTests {
     }
 
     @Test
-    void logout_Success() {
-        String userToken = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode rootNode = objectMapper.readTree(userToken);
-            username = rootNode.get("username").asText();
-            token = rootNode.get("token").asText();
-        } catch (Exception e) {
-            fail("Setup failed: Unable to extract username and token from JSON response");
-        }
-        ResponseEntity<String> response = tradingSystem.logout(token, username);
+    void login_Success() {
+        ResponseEntity<String> response = tradingSystem.login(token, "v0", "owner1", "password123");
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Logout successful.", response.getBody(), "Logout message should be 'Logout successful.'");
+        assertNotNull(response.getBody(), "Token should not be empty");
     }
 
     @Test
-    void logout_NotLoggedIn() {
-        String userToken = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
+    void login_User_Logged_In() {
+        tradingSystem.login(token, "v0", "owner1", "password123");
+        String userToken = tradingSystem.enter().getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
-            username = rootNode.get("username").asText();
             token = rootNode.get("token").asText();
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystem.logout(token, username);
-        ResponseEntity<String> response = tradingSystem.logout(token, username);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("User rowner1 already Logged out", response.getBody());
+        ResponseEntity<String> response = tradingSystem.login(token, "v1", "owner1", "password123");
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
-    void logout_Visitor() {
-        ResponseEntity<String> response = tradingSystem.logout(token, username);
+    void login_Wrong_Password() {
+        ResponseEntity<String> response = tradingSystem.login(token, "v0", "owner1", "password12");
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("User performs not like a registered", response.getBody());
+        assertEquals(response.getBody(), "Wrong password");
+    }
+
+    @Test
+    void login_Wrong_Username() {
+        ResponseEntity<String> response = tradingSystem.login(token, "v0", "owner", "password123");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 }
