@@ -34,11 +34,6 @@ public class PaymentAcceptanceTests {
 
     @BeforeEach
     void setUp() {
-        UserMemoryRepository.getInstance().deleteInstance();    //May be change later
-        StoreMemoryRepository.getInstance().deleteInstance();  //May be change later
-        userRepository = UserMemoryRepository.getInstance();    //May be change later
-        storeRepository = StoreMemoryRepository.getInstance();  //May be change later
-        TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository).deleteInstance();
         userRepository = UserMemoryRepository.getInstance();    //May be change later
         storeRepository = StoreMemoryRepository.getInstance();  //May be change later
         tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
