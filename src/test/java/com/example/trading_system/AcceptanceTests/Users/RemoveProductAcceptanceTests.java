@@ -43,7 +43,7 @@ public class RemoveProductAcceptanceTests {
     public void setUp() {
         userRepository= UserMemoryRepository.getInstance();    //May be change later
         if(userRepository!=null){
-            logger.info("1");
+            logger.info("10");
         }
         storeRepository= StoreMemoryRepository.getInstance();  //May be change later
         tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
