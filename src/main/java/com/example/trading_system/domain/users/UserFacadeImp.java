@@ -21,8 +21,11 @@ public class UserFacadeImp implements UserFacade {
     private DeliveryService deliveryService;
     private PaymentService paymentService;
 
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-    private UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService,UserRepository userRepository,StoreRepository storeRepository) {
+    private UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService, UserRepository userRepository, StoreRepository storeRepository) {
         if(userRepository!=null){
             logger.info("UR Not Null");
         }

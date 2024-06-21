@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 
 public interface UserFacade {
     UserRepository getUserRepository();
+    void setUserRepository(UserRepository userRepository);
     void deleteInstance();
 
     void enter(int id);
