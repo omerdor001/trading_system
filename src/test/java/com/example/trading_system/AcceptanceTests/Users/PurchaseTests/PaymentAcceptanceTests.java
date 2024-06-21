@@ -41,10 +41,10 @@ public class PaymentAcceptanceTests {
         tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem(storeRepository);
-        ResponseEntity<String> result = tradingSystem.enter();
-        logger.debug("TESTS FAIL BECAUSE OF: " + result.getBody());
-        String userToken = result.getBody();
+        String userToken = tradingSystem.enter().getBody();
         try {
+            if(userToken == null)
+                userToken = tradingSystem.enter().getBody();
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
             token = rootNode.get("token").asText();
