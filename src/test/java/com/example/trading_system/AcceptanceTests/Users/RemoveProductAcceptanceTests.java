@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
 public class RemoveProductAcceptanceTests {
+    private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
     private TradingSystemImp tradingSystemImp;
     private final String password = "123456";
     private String userName = "";
@@ -44,6 +45,12 @@ public class RemoveProductAcceptanceTests {
         storeRepository= StoreMemoryRepository.getInstance();  //May be change later
         tradingSystemImp = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
         tradingSystemImp.userService= UserServiceImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class),userRepository,storeRepository);
+        if(tradingSystemImp.userService.getUserFacade()!=null){
+            logger.info("14");
+        }
+        if(tradingSystemImp.userService.getUserFacade().getUserRepository()!=null){
+            logger.info("15");
+        }
         tradingSystemImp.register("admin", password, LocalDate.now());
         tradingSystemImp.openSystem(storeRepository);
         ResponseEntity<String> response = tradingSystemImp.enter();
