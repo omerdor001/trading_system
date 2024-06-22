@@ -71,6 +71,7 @@ public class PaymentAcceptanceTests {
         tradingSystem.deleteInstance();
         userRepository.deleteInstance();
         storeRepository.deleteInstance();
+        tradingSystem.setSystemOpen(true);
     }
 
     @Test
@@ -121,8 +122,6 @@ public class PaymentAcceptanceTests {
 
     @Test
     void testRegistered_ProductNotAvailable() {
-        setDown();
-        setUp();
         tradingSystem.addToCart(username, token, 0, storeName, 2);
         tradingSystem.setProductQuantity(username, token, storeName, 0, 1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username, token);
