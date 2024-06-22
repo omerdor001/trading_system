@@ -50,13 +50,15 @@ public class PaymentAcceptanceTests {
                 userRepository = UserMemoryRepository.getInstance();    //May be change later
                 storeRepository = StoreMemoryRepository.getInstance();  //May be change later
                 tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
+                tradingSystem.register("owner1", "password123", LocalDate.now());
+                tradingSystem.openSystem(storeRepository);
                 userToken = tradingSystem.enter().getBody();
             }
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
             token = rootNode.get("token").asText();
         } catch (Exception e) {
-            fail("Setup failed: Unable to extract token from JSON response, " + e.getMessage() + " userToken: " + userToken);
+            fail("Setup failed: Unable to extract token from JSON response, " + e.getMessage() + " userToken: " + userToken );
         }
         userToken = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
         try {
