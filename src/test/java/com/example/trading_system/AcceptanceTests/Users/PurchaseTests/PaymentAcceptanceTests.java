@@ -34,7 +34,6 @@ public class PaymentAcceptanceTests {
     private String token;
     private UserRepository userRepository;
     private StoreRepository storeRepository;
-    private static final Logger logger = LoggerFactory.getLogger(PaymentAcceptanceTests.class);
     @BeforeEach
     void setUp() {
         userRepository = UserMemoryRepository.getInstance();    //May be change later
@@ -70,8 +69,8 @@ public class PaymentAcceptanceTests {
     void setDown() {
         tradingSystem.deleteInstance();
         userRepository.deleteInstance();
-        storeRepository.deleteInstance();
         tradingSystem.setSystemOpen(true);
+        storeRepository.deleteInstance();
     }
 
     @Test
