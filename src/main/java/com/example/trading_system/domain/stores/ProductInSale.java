@@ -1,10 +1,8 @@
 package com.example.trading_system.domain.stores;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@AllArgsConstructor
 @Getter
 @Setter
 public class ProductInSale {
@@ -23,6 +21,15 @@ public class ProductInSale {
     @Getter
     @Setter
     private int category;
+
+
+    public ProductInSale(String storeId, int productId, double price, int quantity, int category) {
+        this.storeId=storeId;
+        this.id=productId;
+        this.price=price;
+        this.quantity=quantity;
+        this.category=category;
+    }
 
     @Override
     public String toString() {

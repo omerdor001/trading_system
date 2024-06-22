@@ -1,17 +1,25 @@
 package com.example.trading_system.service;
 
+import com.example.trading_system.domain.stores.StoreRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public interface TradingSystem {
+    void setSystemOpen(boolean systemOpen); //For tests
     void deleteInstance();
 
-    ResponseEntity<String> openSystem();
+    ResponseEntity<String> getPendingUserNotifications(String admin, String token, String username);
+
+    ResponseEntity<String> openSystem(StoreRepository storeRepository);
 
     ResponseEntity<String> closeSystem(String username, String token);
+
+    ResponseEntity<String> makeAdmin(String admin, String token, String newAdmin);
 
     ResponseEntity<String> enter();
 
@@ -40,6 +48,8 @@ public interface TradingSystem {
     ResponseEntity<String> setCategory(String username, String token, String storeName, int productId, int category);
 
     ResponseEntity<String> login(String token, String usernameV, String username, String password);
+
+    ResponseEntity<String> sendPendingNotifications(String username, String token);
 
     ResponseEntity<String> logout(String token, String username);
 

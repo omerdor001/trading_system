@@ -1,10 +1,18 @@
 package com.example.trading_system.service;
 
+import com.example.trading_system.domain.users.UserFacadeImp;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public interface UserService {
+    UserFacadeImp getUserFacade();
+
     void deleteInstance();
+
+    String getPendingUserNotifications(String admin, String username);
+
+    void makeAdmin(String admin, String newAdmin);
 
     String enter(int id);
 
@@ -19,6 +27,8 @@ public interface UserService {
     boolean register(String username, String password, LocalDate birthdate) throws Exception;
 
     boolean login(String usernameV, String username, String password);
+
+    void sendPendingNotifications(String username);
 
     boolean logout(int id, String username);
 

@@ -41,7 +41,7 @@ export default defineComponent({
       default: ''
     }
   },
-  setup() {
+  setup(_, { emit }) {
     const router = useRouter();
 
     const goHome = () => {
@@ -56,20 +56,22 @@ export default defineComponent({
       router.push({ name: 'ShoppingCart' });
     };
 
+    const notifications = () => {
+      router.push('/show-notifications');
+    };
+
+    const logout = () => {
+      emit('logout');
+    };
+
     return {
       goHome,
       goToSearch,
-      viewCart
+      viewCart,
+      notifications,
+      logout
     };
   },
-  methods: {
-    notifications() {
-      // handle notifications
-    },
-    logout() {
-      this.$emit('logout');
-    }
-  }
 });
 </script>
 

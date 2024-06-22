@@ -1,9 +1,12 @@
 package com.example.trading_system.service;
 
+import com.example.trading_system.domain.stores.MarketFacade;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MarketService {
+    MarketFacade getMarketFacade();
 
     void deleteInstance();
 

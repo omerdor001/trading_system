@@ -1,11 +1,16 @@
 package com.example.trading_system.UnitTests.users;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserFacade;
 import com.example.trading_system.domain.users.UserFacadeImp;
+import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.*;
 
 import java.time.Duration;
@@ -20,11 +25,15 @@ import static org.mockito.Mockito.mock;
 class SuspensionUnitTests {
     MarketFacade marketFacade;
     UserFacade userFacade;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeAll
     void setUpBA() {
-        marketFacade= MarketFacadeImp.getInstance();
-        userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class));
+        storeRepository= StoreMemoryRepository.getInstance();
+        userRepository = UserMemoryRepository.getInstance();
+        userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
+        marketFacade= MarketFacadeImp.getInstance(storeRepository);
         try {
             userFacade.enter(0);
             userFacade.enter(1);

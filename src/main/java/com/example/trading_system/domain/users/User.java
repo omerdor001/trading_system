@@ -1,6 +1,7 @@
 package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.stores.Purchase;
+import com.example.trading_system.domain.stores.StoreRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,14 +11,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class User {
+    private static final Logger logger = LoggerFactory.getLogger(User.class);
     public String username;
     private Cart cart;
     private boolean suspended;
     private LocalDateTime suspendedStart;
     private LocalDateTime suspendedEnd;
     private String address;
-    private static final Logger logger = LoggerFactory.getLogger(User.class);
-
 
     public User(String username) {
         this.username = username;
@@ -108,7 +108,6 @@ public abstract class User {
         throw new RuntimeException("Only registered users can be managers.");
     }
 
-
     public abstract Role getRoleByStoreId(String store_name_id);
 
     public abstract boolean isAdmin();
@@ -131,16 +130,15 @@ public abstract class User {
 
     public abstract List<Notification> getNotifications();
 
-    public abstract void receiveNotification(String notification);
+    public abstract String getNotificationsJson();
+
+    public abstract void clearPendingNotifications();
+
+    public abstract void receiveDelayedNotification(Notification notification);
 
     public abstract LocalDate getBirthdate();
 
     public abstract int getAge();
-
-//    public String sendNotification(String receiverUsername, String content) {
-//        Notification notification = new Notification(this.username, receiverUsername, new Date(), content);
-//        return notification.toString();
-//    }
 
     public void addProductToCart(int productId, int quantity, String storeName, double price, int category) {
         this.cart.addProductToCart(productId, quantity, storeName, price, category);
@@ -159,15 +157,15 @@ public abstract class User {
         return cart.checkProductQuantity(productId, storeName);
     }
 
-    public void removeReservedProducts() {
-        cart.removeReservedProducts();
+    public void removeReservedProducts(StoreRepository storeRepository) {
+        cart.removeReservedProducts(storeRepository);
     }
 
-    public void releaseReservedProducts() {
-        cart.releaseReservedProducts();
+    public void releaseReservedProducts(StoreRepository storeRepository) {
+        cart.releaseReservedProducts(storeRepository);
     }
 
-    public void checkAvailabilityAndConditions() {
+    public void checkAvailabilityAndConditions(StoreRepository storeRepository) {
         if (cart == null || cart.getShoppingBags().isEmpty()) {
             logger.error("Cart is empty or null");
             throw new RuntimeException("Cart is empty or null");
@@ -176,10 +174,10 @@ public abstract class User {
             logger.error("User is not logged in");
             throw new RuntimeException("User is not logged in");
         }
-        cart.checkAvailabilityAndConditions();
+        cart.checkAvailabilityAndConditions(storeRepository);
     }
 
-    public void addPurchase(String username) {
-        cart.addPurchase(username);
+    public void addPurchase(StoreRepository storeRepository,String username) {
+        cart.addPurchase(storeRepository,username);
     }
 }

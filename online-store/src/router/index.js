@@ -23,6 +23,7 @@ import SearchPage from '@/views/SearchPage.vue';
 import SearchResults from '@/views/SearchResults.vue';
 import StoreSearchPage from '@/views/StoreSearchPage.vue';
 import StoreSearchResults from '@/views/StoreSearchResults.vue';
+import ShowNotifications from '@/views/ShowNotifications.vue';
 import SuggestOwner from '@/views/SuggestOwner.vue';
 import SuggestManager from '@/views/SuggestManager.vue';
 import AppointOwner from '@/views/AppointOwner.vue';
@@ -64,13 +65,11 @@ const routes = [
     { path: '/approve-owner',name: 'ApproveOwner',component: ApproveOwner },
     { path: '/approve-manager',name: 'ApproveManager',component: ApproveManager},
     { path: '/payment', name: 'PaymentPage', component: PaymentPage },
-
 ];
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
-    routes
+    routes,
 });
-
 
 export default router;

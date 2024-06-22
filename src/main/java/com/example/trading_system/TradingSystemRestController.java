@@ -10,10 +10,14 @@
 //Copy code
 package com.example.trading_system;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +29,13 @@ import java.util.List;
 public class TradingSystemRestController {
 
     private final TradingSystemImp tradingSystem;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
-    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService){
-        tradingSystem = TradingSystemImp.getInstance(paymentService, deliveryService);
+    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender){
+        userRepository= UserMemoryRepository.getInstance();      //TODO: change it on version 3
+        storeRepository= StoreMemoryRepository.getInstance();    //TODO: change it on version 3
+        tradingSystem = TradingSystemImp.getInstance(paymentService, deliveryService, notificationSender,userRepository,storeRepository);
     }
 
     @DeleteMapping("/instance")
@@ -37,7 +45,7 @@ public class TradingSystemRestController {
 
     @PostMapping("/openSystem")
     public ResponseEntity<String> openSystem() {
-        return tradingSystem.openSystem();
+        return tradingSystem.openSystem(storeRepository);
     }
 
     @PostMapping("/closeSystem")

@@ -6,7 +6,13 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 public interface UserFacade {
+    UserRepository getUserRepository();
+    void setUserRepository(UserRepository userRepository);
     void deleteInstance();
+
+    String getPendingUserNotifications(String admin, String username);
+
+    void makeAdmin(String admin, String newAdmin);
 
     void enter(int id);
 
@@ -18,9 +24,11 @@ public interface UserFacade {
 
     void login(String usernameV, String username, String password);
 
+    void sendPendingNotifications(String username);
+
     void logout(int id, String username);
 
-    void suspendUser(String admin, String toSuspend, LocalDateTime endSuspention);
+    void suspendUser(String admin, String toSuspend, LocalDateTime endSuspension);
 
     void endSuspendUser(String admin, String toSuspend);
 
@@ -30,7 +38,7 @@ public interface UserFacade {
 
     boolean isSuspended(String username);
 
-    boolean sendNotification(User sender, User receiver, String content);
+    void sendNotification(String sender, String receiver, String content);
 
     void saveUserCart(String username, int productId, String storeName, int quantity);
 
@@ -38,9 +46,9 @@ public interface UserFacade {
 
     void createStore(String username, String storeName, String description) throws IllegalAccessException;
 
-    void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
+    void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
 
-    void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException;
+    void approveManager(String newManager, String store_name_id, String appoint) throws IllegalAccessException;
 
     void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException;
 
@@ -59,6 +67,7 @@ public interface UserFacade {
     void fireManager(String owner, String storeName, String manager) throws IllegalAccessException;
 
     void fireOwner(String ownerAppoint, String storeName, String owner) throws IllegalAccessException;
+
     /**
      * @param userId        is the current user that do the update
      * @param managerToEdit is the manager that the update will affect

@@ -2,21 +2,29 @@ package com.example.trading_system.service;
 
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
+import com.example.trading_system.domain.stores.StoreRepository;
 
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class MarketServiceImp implements MarketService {
     private static MarketServiceImp instance = null;
-    private MarketFacade marketFacade;
 
-    private MarketServiceImp() {
-        marketFacade = MarketFacadeImp.getInstance();
+    public MarketFacade getMarketFacade() {
+        return marketFacade;
     }
 
-    public static MarketServiceImp getInstance() {
-        if (instance == null) instance = new MarketServiceImp();
+    private MarketFacade marketFacade;
+
+    private MarketServiceImp(StoreRepository storeRepository) {
+        marketFacade = MarketFacadeImp.getInstance(storeRepository);
+    }
+
+    public static MarketServiceImp getInstance(StoreRepository storeRepository) {
+        if (instance == null) instance = new MarketServiceImp(storeRepository);
         return instance;
     }
 

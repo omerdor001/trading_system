@@ -1,23 +1,35 @@
 package com.example.trading_system.service;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserFacadeImp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import com.example.trading_system.domain.users.UserRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Service
 public class UserServiceImp implements UserService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
     private static UserServiceImp instance = null;
     private UserFacadeImp userFacade;
 
-    private UserServiceImp(PaymentService paymentService, DeliveryService deliveryService) {
-        userFacade = UserFacadeImp.getInstance(paymentService,deliveryService);
+    public UserFacadeImp getUserFacade() {
+        return userFacade;
     }
 
-    public static UserServiceImp getInstance(PaymentService paymentService, DeliveryService deliveryService) {
-        if (instance == null) instance = new UserServiceImp(paymentService,deliveryService);
+    private UserServiceImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
+        userFacade = UserFacadeImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
+    }
+
+    public static UserServiceImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository,StoreRepository storeRepository) {
+        if (instance == null) instance = new UserServiceImp(paymentService,deliveryService, notificationSender,userRepository,storeRepository);
         return instance;
     }
 
@@ -26,6 +38,16 @@ public class UserServiceImp implements UserService {
         instance = null;
         userFacade.deleteInstance();
         userFacade = null;
+    }
+
+    @Override
+    public String getPendingUserNotifications(String admin, String username){
+        return userFacade.getPendingUserNotifications(admin, username);
+    }
+
+    @Override
+    public void makeAdmin(String admin, String newAdmin){
+        userFacade.makeAdmin(admin, newAdmin);
     }
 
     @Override
@@ -46,13 +68,22 @@ public class UserServiceImp implements UserService {
 
     @Override
     public boolean login(String usernameV, String username, String password) {
+        logger.info("Trying to login user: {}", username);
         userFacade.login(usernameV, username, password);
+        logger.info("User: {} logged in", username);
         return true;
     }
 
     @Override
+    public void sendPendingNotifications(String username){
+        userFacade.sendPendingNotifications(username);
+    }
+
+    @Override
     public boolean logout(int id, String username) {
+        logger.info("Trying to logout user: {}", username);
         userFacade.logout(id, username);
+        logger.info("User: {} logged out", username);
         return true;
     }
 
@@ -83,54 +114,75 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void addToCart(String username, int productId, String storeName, int quantity) {
+        logger.info("Trying adding to cart  product with id: {}", productId);
         userFacade.addToCart(username, productId, storeName, quantity);
+        logger.info("Finished adding to cart product with id: {}", productId);
     }
 
     @Override
     public void removeFromCart(String username, int productId, String storeName, int quantity) {
+        logger.info("Trying removing from cart product with id: {}", productId);
         userFacade.removeFromCart(username, productId, storeName, quantity);
+        logger.info("Finished removing from cart product with id: {}", productId);
     }
 
     @Override
     public boolean openStore(String username, String storeName, String description) {
+        logger.info("Trying opening store with name: {}", storeName);
         userFacade.createStore(username, storeName, description);
+        logger.info("Finished opening store with name: {}", storeName);
         return true;
     }
 
     @Override
     public String viewCart(String username) {
-        return userFacade.viewCart(username);
+        logger.info("Trying registered : {} view cart ", username);
+        String result = userFacade.viewCart(username);
+        logger.info("Finished registered view cart: {} ", username);
+        return result;
     }
 
     @Override
     public void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
-        userFacade.suggestManage(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+        logger.info("Trying to suggest user : {} to be a manager in store : {}", newManager, store_name_id);
+        userFacade.suggestManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+        logger.info("Finished suggesting manager : {} to be a manager in store : {}", newManager, store_name_id);
     }
 
     @Override
     public void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException {
+        logger.info("{} trying to suggest user : {} to be a owner in store : {}", appoint, newOwner, storeName);
         userFacade.suggestOwner(appoint, newOwner, storeName);
+        logger.info("Finished suggesting  : {} to be a owner in store : {}", newOwner, storeName);
     }
 
 
     @Override
     public void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException {
-        userFacade.approveManage(newManager, store_name_id, appoint);
+        logger.info("Trying to approve manage to store : {}", store_name_id);
+        userFacade.approveManager(newManager, store_name_id, appoint);
+        logger.info("Finished approving manage to store : {}", store_name_id);
     }
 
     @Override
     public void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException {
+        logger.info("{} trying to approve owner to store : {}", userName, storeName);
         userFacade.rejectToManageStore(userName, storeName, appoint);
+        logger.info("Finished approving owner to store : {}", storeName);
     }
 
     @Override
     public void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException {
+        logger.info("{} trying to approve owner to store : {}", newOwner, storeName);
         userFacade.approveOwner(newOwner, storeName, appoint);
+        logger.info("Finished approving owner to store : {}", storeName);
     }
 
     @Override
     public void rejectToOwnStore(String userName, String storeName, String appoint) throws IllegalAccessException {
+        logger.info("{} trying to approve owner to store : {}", userName, storeName);
         userFacade.rejectToOwnStore(userName, storeName, appoint);
+        logger.info("Finished approving owner to store : {}", storeName);
     }
 
     @Override
@@ -151,17 +203,23 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
+        logger.info("Trying to appoint manager : {} to store : {}", newManager, store_name_id);
         userFacade.appointManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+        logger.info("Finished appointing manager : {} to store : {}", newManager, store_name_id);
     }
 
     @Override
     public void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException {
+        logger.info("Trying to appoint owner : {} to store : {}", newOwner, storeName);
         userFacade.appointOwner(appoint, newOwner, storeName);
+        logger.info("Finished appointing owner : {} to store : {}", newOwner, storeName);
     }
 
     @Override
     public void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
+        logger.info("{} is Trying to edit permission for manager : {} in store : {}", userId, managerToEdit, storeNameId);
         userFacade.editPermissionForManager(userId, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+        logger.info("Finished edit permission to manager : {}  in store : {}", managerToEdit, storeNameId);
     }
 
     @Override
@@ -171,16 +229,24 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void approvePurchase(String registeredId) throws Exception {
+        logger.info("Approving purchase for registered user with ID: {} ", registeredId);
         userFacade.purchaseCart(registeredId);
+        logger.info("Purchase approved for registered user with ID: {}", registeredId);
     }
 
     @Override
     public String getPurchaseHistory(String username, String storeName) {
-        return userFacade.getPurchaseHistory(username, storeName);
+        String result;
+        logger.info("Get Purchase History");
+        result = userFacade.getPurchaseHistory(username, storeName);
+        return result;
     }
 
     @Override
     public String calculatePrice(String username) throws Exception {
-        return userFacade.calculatePrice(username);
+        logger.info("Calculating price for user with ID: {} ", username);
+        String result = userFacade.calculatePrice(username);
+        logger.info("Finished calculating price for user with ID: {}", username);
+        return result;
     }
 }

@@ -1,5 +1,7 @@
 package com.example.trading_system.domain.stores;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.List;
 @Getter
 
 public class Purchase {
-    private List<ProductInSale> productInSaleList;
+    private List<ProductInSaleDTO> productInSaleList;
     @Getter
     private String customerUsername;
     private double totalPrice;
@@ -15,26 +17,26 @@ public class Purchase {
     private String storeName;
 
 
-    public Purchase(String customerUsername, List<ProductInSale> productInSaleList, double totalPrice, String storeName) {
+    public Purchase(String customerUsername, List<ProductInSaleDTO> productInSaleList, double totalPrice, String storeName) {
         this.customerUsername = customerUsername;
         this.productInSaleList = productInSaleList;
         this.totalPrice = totalPrice;
         this.storeName = storeName;
     }
 
-    public void addProduct(ProductInSale product) {
+    public void addProduct(ProductInSaleDTO product) {
         productInSaleList.add(product);
         totalPrice += product.getPrice();
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Client Username: ").append(customerUsername).append(", Total Price: $").append(totalPrice).append("\n");
-        builder.append("Products:\n");
-        for (ProductInSale product : productInSaleList) {
-            builder.append(product.toString()).append("\n");
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.writeValueAsString(this);
         }
-        return builder.toString();
+        catch (JsonProcessingException e){
+            throw new RuntimeException("Error converting Purchase to JSON");
+        }
     }
 }
