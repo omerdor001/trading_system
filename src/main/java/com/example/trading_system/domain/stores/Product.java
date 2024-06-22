@@ -108,16 +108,21 @@ public class Product {
     }
 
     public synchronized void releaseReservedProducts(int quantity) {
-        this.product_quantity= product_quantity+quantity;
+        this.product_quantity += quantity;
+        logger.info("Released {} products. New quantity: {}", quantity, this.product_quantity);
     }
 
     public synchronized void removeReservedProducts(int quantity) {
-        this.product_quantity= product_quantity - quantity;
-
+        if (this.product_quantity < quantity) {
+            logger.error("Insufficient product quantity in store for product ID: {}", product_id);
+            throw new RuntimeException("Product quantity is too low");
+        }
+        this.product_quantity -= quantity;
+        logger.info("Removed {} products. New quantity: {}", quantity, this.product_quantity);
     }
 
     public synchronized void checkAvailabilityAndConditions(int quantity) {
-        if (product_quantity - quantity<0) {
+        if (this.product_quantity < quantity) {
             logger.error("Insufficient product quantity in store for product ID: {}", product_id);
             throw new RuntimeException("Product quantity is too low");
         }
