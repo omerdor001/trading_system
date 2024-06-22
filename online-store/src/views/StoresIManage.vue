@@ -13,26 +13,30 @@
               <PrimeButton label="Enter Store" @click="showStoreDetails(store)" />
             </div>
           </div>
+        </div>
+        <!-- Detailed store information -->
+        <div v-if="selectedStore" class="store-details">
+          <h3>Store Details</h3>
+          <hr>
+          <!-- Left column for description and products -->
+          <div class="details-column">
+            <p><strong>Description:</strong> {{ selectedStore.description }}</p>
+            <h4>Products:</h4>
+            <ul>
+              <li v-for="product in selectedStore.products" :key="product.id">{{ product.name }}</li>
+            </ul>
           </div>
-          <!-- Detailed store information -->
-          <div v-if="selectedStore" class="store-details">
-            <h3>Store Details</h3>
-            <hr>
-            <!-- Left column for description and products -->
-            <div class="details-column">
-              <p><strong>Description:</strong> {{ selectedStore.description }}</p>
-              <h4>Products:</h4>
-              <ul>
-                <li v-for="product in selectedStore.products" :key="product.id">{{ product.name }}</li>
-              </ul>
-            </div>
-            <!-- Right column for founder, isActive, rating, isOpen -->
-            <div class="details-column">
-              <p><strong>Founder:</strong> {{ selectedStore.founder }}</p>
-              <label><input type="checkbox" v-model="selectedStore.active"> Active</label><br>
-              <label><input type="checkbox" v-model="selectedStore.isOpen"> Is Open</label><br>
-              <p><strong>Rating:</strong> {{ selectedStore.rating }}</p>
-            </div>
+          <!-- Right column for founder, isActive, rating, isOpen -->
+          <div class="details-column">
+            <p><strong>Founder:</strong> {{ selectedStore.founder }}</p>
+            <label><input type="checkbox" v-model="selectedStore.active"> Active</label><br>
+            <label><input type="checkbox" v-model="selectedStore.isOpen"> Is Open</label><br>
+            <p><strong>Rating:</strong> {{ selectedStore.rating }}</p>
+          </div>
+          <!-- Manage Products button for store owner and store manager -->
+          <div v-if="isStoreOwner || isStoreManager">
+            <PrimeButton label="Manage Products" @click="manageProducts(selectedStore.name)" />
+          </div>
         </div>
       </div>
     </div>
@@ -66,13 +70,16 @@ export default defineComponent({
     const stores = ref([]);
     const username = ref(localStorage.getItem('username') || '');
     const selectedStore = ref(null); // Track selected store for detailed view
+    const roles = JSON.parse(localStorage.getItem('roles') || '[]');
+    const isStoreOwner = ref(roles.includes('storeOwner'));
+    const isStoreManager = ref(roles.includes('storeManager'));
 
     onMounted(() => {
       // Fetch stores data here
       stores.value = [
         {
           id: 1,
-          name: 'Store 1',
+          name: 'store 1',
           description: 'Description for Store 1',
           products: [
             { id: 1, name: 'Product A' },
@@ -86,7 +93,7 @@ export default defineComponent({
         },
         {
           id: 2,
-          name: 'Store 2',
+          name: 'store 2',
           description: 'Description for Store 2',
           products: [
             { id: 4, name: 'Product D' },
@@ -104,6 +111,10 @@ export default defineComponent({
       selectedStore.value = store;
     };
 
+    const manageProducts = (storeName) => {
+      router.push({ name: 'ProductList', params: { storeName } });
+    };
+
     const logout = () => {
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('username');
@@ -115,6 +126,9 @@ export default defineComponent({
       username,
       showStoreDetails,
       selectedStore,
+      isStoreOwner,
+      isStoreManager,
+      manageProducts,
       logout
     };
   }

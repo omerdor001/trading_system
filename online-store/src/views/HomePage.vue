@@ -8,7 +8,6 @@
         <PrimeButton v-if="isLoggedIn" label="Approve Ownership" @click="approveOwnership" class="sidebar-button" />
         <PrimeButton v-if="isLoggedIn" label="Approve Management" @click="approveManagement" class="sidebar-button" />
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="My Stores" @click="myStoresIOwn" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Manage Products" @click="manageProductsAsOwner" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Suggest Owner" @click="suggestOwner" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Appoint Owner" @click="appointOwner" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Suggest Manager" @click="suggestManager" class="sidebar-button"/>
@@ -36,7 +35,6 @@
       </div>
       <div class="sidebar2">
         <PrimeButton v-if="isStoreManager && isLoggedIn" label="My Stores I Manage" @click="myStoresIManage" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreManager && isLoggedIn" label="Manage Products" @click="manageProductsAsManager" class="sidebar-button"/>
         <PrimeButton v-if="isStoreManager && isLoggedIn" label="Add Policy" @click="addPolicy" class="sidebar-button"/>
         <PrimeButton v-if="isStoreManager && isLoggedIn" label="Edit Policy" @click="editPolicy" class="sidebar-button"/>
         <PrimeButton v-if="isSystemManager && isLoggedIn" label="Create Suspension" @click="createSuspension" class="sidebar-button"/>
