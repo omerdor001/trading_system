@@ -98,6 +98,8 @@ public class PaymentAcceptanceTests {
 
     @Test
     void testVisitor_ProductNotAvailable() {
+        setDown();
+        setUp();
         String visitorToken = "";
         String visitorUsername = "";
         String userToken = tradingSystem.enter().getBody();
