@@ -1,12 +1,17 @@
 package com.example.trading_system.domain.stores;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.Collection;
 import java.util.HashMap;
 
+@Service
 public class StoreMemoryRepository implements StoreRepository {
     private static StoreMemoryRepository instance = null;
     private HashMap<String, Store> stores;
 
+    @Autowired
     private StoreMemoryRepository() {
         stores = new HashMap<>();
     }
