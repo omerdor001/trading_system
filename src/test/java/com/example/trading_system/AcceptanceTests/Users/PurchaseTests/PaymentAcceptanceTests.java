@@ -66,8 +66,6 @@ public class PaymentAcceptanceTests {
     void setDown() {
         tradingSystem.setSystemOpen(true);
         tradingSystem.deleteInstance();
-        userRepository.deleteInstance();
-        storeRepository.deleteInstance();
     }
 
     @Test
