@@ -10,6 +10,10 @@ public interface UserService {
 
     void deleteInstance();
 
+    String getPendingUserNotifications(String admin, String username);
+
+    void makeAdmin(String admin, String newAdmin);
+
     String enter(int id);
 
     boolean isAdmin(String username);
@@ -23,6 +27,8 @@ public interface UserService {
     boolean register(String username, String password, LocalDate birthdate) throws Exception;
 
     boolean login(String usernameV, String username, String password);
+
+    void sendPendingNotifications(String username);
 
     boolean logout(int id, String username);
 

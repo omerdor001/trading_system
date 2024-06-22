@@ -78,7 +78,7 @@ public interface MarketFacade {
 
     double calculateTotalPrice(String cart) throws IOException;
 
-    void addPurchase(String customerUsername, List<ProductInSale> productInSaleList, double totalPrice, String storeName);
+    void addPurchase(String customerUsername, String productInSaleList, double totalPrice, String storeName) throws IOException;
 
     //region Discount creation
     String getDiscountPolicies(String username, String storeName) throws IllegalAccessException;

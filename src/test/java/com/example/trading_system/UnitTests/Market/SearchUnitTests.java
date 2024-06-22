@@ -1,5 +1,6 @@
 package com.example.trading_system.UnitTests.Market;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.*;
@@ -28,7 +29,7 @@ public class SearchUnitTests {
     void setUp() {
         userRepository= UserMemoryRepository.getInstance();    //May be change later
         storeRepository= StoreMemoryRepository.getInstance();  //May be change later
-        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
+        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
         Store store = new Store("store1", "description","robert",null);
         store.addProduct(1,"p1", "", 5, 5, 5, 3, new ArrayList<>());
@@ -45,6 +46,8 @@ public class SearchUnitTests {
     void setDown(){
         marketFacade.deleteInstance();
         userFacade.deleteInstance();
+        userRepository.deleteInstance();
+        storeRepository.deleteInstance();
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.example.trading_system.UnitTests.users;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
@@ -24,7 +25,7 @@ class RegistrationUnitTests {
     void setUp() {
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
-        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
+        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
         // Adding a sample visitor
         userFacade.enter(1);
         userFacade.enter(2);

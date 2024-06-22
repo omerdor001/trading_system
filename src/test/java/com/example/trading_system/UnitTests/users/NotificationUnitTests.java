@@ -52,15 +52,15 @@ class NotificationUnitTests {
         assertEquals(dateFormat.format(notification.getDateOfCreation()), dateFormat.format(t.getDateOfCreation()));
     }*/
 
-    @Test
-    void receiveNotification_Visitor() {
-        String notificationString = "Notification{senderId=2, receiverId=1, dateOfCreation=" + new Date() + ", textContent='Test Content'}";
-        UnsupportedOperationException thrown = assertThrows(
-                UnsupportedOperationException.class,
-                () -> visitor.receiveNotification(notificationString),
-                "Expected receiveNotification to throw, but it didn't"
-        );
-
-        assertTrue(thrown.getMessage().contains("Visitors cannot receive notifications"));
-    }
+//    @Test
+//    void receiveNotification_Visitor() {
+//        String notificationString = "Notification{senderId=2, receiverId=1, dateOfCreation=" + new Date() + ", textContent='Test Content'}";
+//        UnsupportedOperationException thrown = assertThrows(
+//                UnsupportedOperationException.class,
+//                () -> visitor.receiveNotification(notificationString),
+//                "Expected receiveNotification to throw, but it didn't"
+//        );
+//
+//        assertTrue(thrown.getMessage().contains("Visitors cannot receive notifications"));
+//    }
 }

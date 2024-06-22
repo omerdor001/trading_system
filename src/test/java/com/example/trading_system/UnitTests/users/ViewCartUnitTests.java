@@ -1,5 +1,6 @@
 package com.example.trading_system.UnitTests.users;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
@@ -21,7 +22,7 @@ public class ViewCartUnitTests {
     public void init() {
         userRepository = UserMemoryRepository.getInstance();
         storeRepository= StoreMemoryRepository.getInstance();
-        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
+        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
     }
 
     @AfterEach

@@ -1,5 +1,6 @@
 package com.example.trading_system.AcceptanceTests.Users;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
@@ -35,7 +36,7 @@ class SuspensionAcceptanceTests {
     public void setUp() {
         userRepository= UserMemoryRepository.getInstance();    //May be change later
         storeRepository= StoreMemoryRepository.getInstance();  //May be change later
-        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.register("emp1", "password123", LocalDate.now());
         tradingSystem.openSystem(storeRepository);

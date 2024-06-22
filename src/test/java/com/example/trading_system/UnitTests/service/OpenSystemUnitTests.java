@@ -1,5 +1,6 @@
 package com.example.trading_system.UnitTests.service;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
@@ -32,7 +33,7 @@ class OpenSystemUnitTests {
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
         userService = mock(UserService.class);
-        facade = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
+        facade = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
         facade.userService = userService;
     }
 

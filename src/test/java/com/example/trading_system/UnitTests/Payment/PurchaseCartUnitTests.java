@@ -1,5 +1,6 @@
 package com.example.trading_system.UnitTests.Payment;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.*;
@@ -29,7 +30,7 @@ public class PurchaseCartUnitTests {
         userRepository = UserMemoryRepository.getInstance();
         paymentService=mock(PaymentService.class);
         deliveryService=mock(DeliveryService.class);
-        userFacade = UserFacadeImp.getInstance(paymentService,deliveryService,userRepository,storeRepository);
+        userFacade = UserFacadeImp.getInstance(paymentService,deliveryService, mock(NotificationSender.class),userRepository,storeRepository);
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
     }
 
@@ -52,7 +53,7 @@ public class PurchaseCartUnitTests {
             userFacade.register(username, "encrypted_password", LocalDate.now());
             userFacade.enter(0);
             userFacade.login("v0", username, "encrypted_password");
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         userFacade.createStore("r" +username, storeName, "description");
         userFacade.setAddress("r" + username,address);
@@ -77,7 +78,7 @@ public class PurchaseCartUnitTests {
             userFacade.enter(1);
             userFacade.login("v0", username1, "encrypted_password");
             userFacade.login("v1", username2, "encrypted_password");
-        } catch (Exception _) {
+        } catch (Exception ignored) {
         }
         userFacade.setAddress("r" + username1,address);
         userFacade.setAddress("r" +username2,address);
@@ -106,7 +107,7 @@ public class PurchaseCartUnitTests {
             userFacade.enter(1);
             userFacade.login("v0", username1, "encrypted_password");
             userFacade.login("v1", username2, "encrypted_password");
-        } catch (Exception _) {
+        } catch (Exception ignored) {
         }
         userFacade.setAddress("r" + username1,address);
         userFacade.setAddress("r" +username2,address);
@@ -125,7 +126,7 @@ public class PurchaseCartUnitTests {
             try {
                 latch.await();
                 userFacade.purchaseCart("r" + username1);
-            } catch (Exception _) {
+            } catch (Exception ignored) {
 
             }
         });
@@ -159,7 +160,7 @@ public class PurchaseCartUnitTests {
             userFacade.enter(1);
             userFacade.login("v0", username1, "encrypted_password");
             userFacade.login("v1", username2, "encrypted_password");
-        } catch (Exception _) {
+        } catch (Exception e) {
             // Handle exceptions as needed
         }
 
@@ -220,7 +221,7 @@ public class PurchaseCartUnitTests {
         String username = "rValidUser";
         try {
             userFacade.register(username, "encrypted_password", LocalDate.now());
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart(username));
     }
@@ -232,7 +233,7 @@ public class PurchaseCartUnitTests {
             userFacade.register(username, "encrypted_password", LocalDate.now());
             userFacade.enter(0);
             userFacade.login("v0", username, "encrypted_password");
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart(username));
     }
@@ -247,7 +248,7 @@ public class PurchaseCartUnitTests {
             userFacade.register(username, "encrypted_password", LocalDate.now());
             userFacade.enter(0);
             userFacade.login("v0", username, "encrypted_password");
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         marketFacade.addStore(storeName, "description", username, 4.5);
         Store store = marketFacade.getStore(storeName);
@@ -270,7 +271,7 @@ public class PurchaseCartUnitTests {
             userFacade.enter(0);
             userFacade.register(username, "encrypted_password", LocalDate.now());
             userFacade.login("v0", username, "encrypted_password");
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         userFacade.getUser("r" + username).setAddress(address);
         marketFacade.addStore(storeName, "description", username, 4.5);
@@ -295,7 +296,7 @@ public class PurchaseCartUnitTests {
             userFacade.register(username, "encrypted_password", LocalDate.now());
             userFacade.enter(0);
             userFacade.login("v0", username, "encrypted_password");
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         userFacade.getUser("r" + username).setAddress(address);
         marketFacade.addStore(storeName, "description", username, 4.5);

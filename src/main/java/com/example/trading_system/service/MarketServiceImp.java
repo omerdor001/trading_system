@@ -4,10 +4,12 @@ import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.StoreRepository;
 
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class MarketServiceImp implements MarketService {
     private static MarketServiceImp instance = null;
 

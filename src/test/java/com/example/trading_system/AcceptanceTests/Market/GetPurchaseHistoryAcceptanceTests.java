@@ -1,5 +1,6 @@
 package com.example.trading_system.AcceptanceTests.Market;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
@@ -32,7 +33,7 @@ class GetPurchaseHistoryAcceptanceTests {
     void setUp() {
         userRepository= UserMemoryRepository.getInstance();    //May be change later
         storeRepository= StoreMemoryRepository.getInstance();  //May be change later
-        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem(storeRepository);
         String userToken = tradingSystem.enter().getBody();
@@ -71,22 +72,14 @@ class GetPurchaseHistoryAcceptanceTests {
     void testGetPurchaseHistory_Success() {
         ResponseEntity<String> result = tradingSystem.getPurchaseHistory(username, token, storeName);
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("""
-                Client Username: rowner1, Total Price: $1.0
-                Products:
-                Product: 0, Category: 1, Quantity: 1, Price: $1.0, Store: Store1
-                """, result.getBody());
+        assertEquals("{\"productInSaleList\":[{\"storeId\":\"Store1\",\"id\":0,\"price\":1.0,\"quantity\":1,\"category\":1}],\"customerUsername\":\"rowner1\",\"totalPrice\":1.0,\"storeName\":\"Store1\"}", result.getBody());
     }
 
     @Test
     void testGetStoresPurchaseHistory_ValidInput() {
         ResponseEntity<String> result = tradingSystem.getAllHistoryPurchases(username, token, storeName);
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("""
-                Client Username: rowner1, Total Price: $1.0
-                Products:
-                Product: 0, Category: 1, Quantity: 1, Price: $1.0, Store: Store1
-                """, result.getBody());
+        assertEquals("{\"productInSaleList\":[{\"storeId\":\"Store1\",\"id\":0,\"price\":1.0,\"quantity\":1,\"category\":1}],\"customerUsername\":\"rowner1\",\"totalPrice\":1.0,\"storeName\":\"Store1\"}", result.getBody());
     }
 
     @Test

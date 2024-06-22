@@ -11,14 +11,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class User {
+    private static final Logger logger = LoggerFactory.getLogger(User.class);
     public String username;
     private Cart cart;
     private boolean suspended;
     private LocalDateTime suspendedStart;
     private LocalDateTime suspendedEnd;
     private String address;
-    private static final Logger logger = LoggerFactory.getLogger(User.class);
-
 
     public User(String username) {
         this.username = username;
@@ -109,7 +108,6 @@ public abstract class User {
         throw new RuntimeException("Only registered users can be managers.");
     }
 
-
     public abstract Role getRoleByStoreId(String store_name_id);
 
     public abstract boolean isAdmin();
@@ -132,16 +130,15 @@ public abstract class User {
 
     public abstract List<Notification> getNotifications();
 
-    public abstract void receiveNotification(String notification);
+    public abstract String getNotificationsJson();
+
+    public abstract void clearPendingNotifications();
+
+    public abstract void receiveDelayedNotification(Notification notification);
 
     public abstract LocalDate getBirthdate();
 
     public abstract int getAge();
-
-//    public String sendNotification(String receiverUsername, String content) {
-//        Notification notification = new Notification(this.username, receiverUsername, new Date(), content);
-//        return notification.toString();
-//    }
 
     public void addProductToCart(int productId, int quantity, String storeName, double price, int category) {
         this.cart.addProductToCart(productId, quantity, storeName, price, category);

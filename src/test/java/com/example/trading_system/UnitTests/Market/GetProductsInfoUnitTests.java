@@ -1,5 +1,6 @@
 package com.example.trading_system.UnitTests.Market;
 
+import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
@@ -36,7 +37,7 @@ class GetProductsInfoUnitTests {
         storeRepository= StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
-        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),userRepository,storeRepository);
+        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
         userFacade.getUsers().put(validUsername, user);
 
         // Mock the user to return a valid role for the store
