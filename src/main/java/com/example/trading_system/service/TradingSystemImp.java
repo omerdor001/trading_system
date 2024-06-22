@@ -22,10 +22,6 @@ public class TradingSystemImp implements TradingSystem {
     public int counter_user = 0;
     private boolean systemOpen;
 
-    public void setSystemOpen(boolean systemOpen) {   //For tests
-        this.systemOpen = systemOpen;
-    }
-
     private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance(paymentService,deliveryService, notificationSender,userRepository,storeRepository);
@@ -35,6 +31,10 @@ public class TradingSystemImp implements TradingSystem {
     public static TradingSystemImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         if (instance == null) instance = new TradingSystemImp(paymentService,deliveryService, notificationSender,userRepository,storeRepository);
         return instance;
+    }
+
+    public void setSystemOpen(boolean systemOpen) {   //For tests
+        this.systemOpen = systemOpen;
     }
 
     @Override

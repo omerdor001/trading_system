@@ -3,11 +3,15 @@ package com.example.trading_system.domain.externalservices;
 import com.example.trading_system.service.TradingSystemImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PaymentServiceProxy implements PaymentService {
     private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
     int id = 1;
 
+    @Autowired
     public PaymentServiceProxy() {
     }
 
