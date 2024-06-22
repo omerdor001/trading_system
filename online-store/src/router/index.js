@@ -9,7 +9,7 @@ import MyStoresIOwn from '@/views/MyStoresIOwn.vue';
 import CreateSuspension from '@/views/CreateSuspension.vue';
 import EndSuspension from '@/views/EndSuspension.vue';
 import WatchSuspensions from '@/views/WatchSuspensions.vue';
-import StoreNameInput from '@/views/StoreNameInput.vue';
+// import StoreNameInput from '@/views/StoreNameInput.vue'; // Remove this line
 import ProductList from '@/views/ProductListEditor.vue';
 import ProductManagement from '@/views/ProductManagement.vue';
 import StoresIManage from '@/views/StoresIManage.vue';
@@ -23,7 +23,7 @@ import SearchPage from '@/views/SearchPage.vue';
 import SearchResults from '@/views/SearchResults.vue';
 import StoreSearchPage from '@/views/StoreSearchPage.vue';
 import StoreSearchResults from '@/views/StoreSearchResults.vue';
-import ShowNotifications from '@/views/ShowNotifications.vue';
+// import ShowNotifications from '@/views/ShowNotifications.vue';
 import SuggestOwner from '@/views/SuggestOwner.vue';
 import SuggestManager from '@/views/SuggestManager.vue';
 import AppointOwner from '@/views/AppointOwner.vue';
@@ -50,7 +50,7 @@ const routes = [
     { path: '/product/:productId', name: 'ProductDetails', component: ProductDetails, props: true },
     { path: '/cart', name: 'ShoppingCart', component: ShoppingCart },
     { path: '/checkout', name: 'Checkout', component: Checkout },
-    { path: '/store-name-input', name: 'StoreNameInput', component: StoreNameInput },
+    // { path: '/store-name-input', name: 'StoreNameInput', component: StoreNameInput }, // Remove this line
     { path: '/product-list/:storeName', name: 'ProductList', component: ProductList, props: true },
     { path: '/product-management/:storeName/:productId', name: 'ProductManagement', component: ProductManagement, props: true },
     { path: '/purchase-history', name: 'PurchaseHistory', component: PurchaseHistory },

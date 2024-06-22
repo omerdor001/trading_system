@@ -36,8 +36,12 @@ export default {
       const storeName = route.params.storeName;
       const userName = localStorage.getItem('username');
       const token = localStorage.getItem('token');
-      await StoreViewModel.actions.getStoreProducts(userName, token, storeName);
-      products.value = StoreViewModel.getters.getProducts();
+      try {
+        await StoreViewModel.actions.getStoreProducts(userName, token, storeName);
+        products.value = StoreViewModel.getters.getProducts();
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
     });
 
     const showProductDetails = (productId) => {
