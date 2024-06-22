@@ -7,7 +7,6 @@ import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
-import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.example.trading_system.service.UserServiceImp;
 import org.junit.jupiter.api.AfterEach;
@@ -15,8 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -67,9 +64,9 @@ public class PaymentAcceptanceTests {
 
     @AfterEach
     void setDown() {
+        tradingSystem.setSystemOpen(true);
         tradingSystem.deleteInstance();
         userRepository.deleteInstance();
-        tradingSystem.setSystemOpen(true);
         storeRepository.deleteInstance();
     }
 
