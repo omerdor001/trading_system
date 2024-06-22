@@ -9,6 +9,7 @@ import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
+import com.example.trading_system.service.UserServiceImp;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -28,7 +29,7 @@ import static org.mockito.Mockito.mock;
 public class PaymentAcceptanceTests {
     private final String storeName = "Store1";
     private final String address = "1234 Main Street, Springfield, IL, 62704-1234";
-    private TradingSystem tradingSystem;
+    private TradingSystemImp tradingSystem;
     private String username;
     private String token;
     private UserRepository userRepository;
@@ -39,21 +40,12 @@ public class PaymentAcceptanceTests {
         userRepository = UserMemoryRepository.getInstance();    //May be change later
         storeRepository = StoreMemoryRepository.getInstance();  //May be change later
         tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
+        tradingSystem.userService = UserServiceImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
+        tradingSystem.userService.getUserFacade().setUserRepository(userRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem(storeRepository);
         String userToken = tradingSystem.enter().getBody();
         try {
-            if(userToken == null) {
-                userRepository.deleteInstance();
-                storeRepository.deleteInstance();
-                tradingSystem.deleteInstance();
-                userRepository = UserMemoryRepository.getInstance();    //May be change later
-                storeRepository = StoreMemoryRepository.getInstance();  //May be change later
-                tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
-                tradingSystem.register("owner1", "password123", LocalDate.now());
-                tradingSystem.openSystem(storeRepository);
-                userToken = tradingSystem.enter().getBody();
-            }
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(userToken);
             token = rootNode.get("token").asText();
