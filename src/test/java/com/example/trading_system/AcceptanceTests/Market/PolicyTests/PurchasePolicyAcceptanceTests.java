@@ -88,24 +88,6 @@ public class PurchasePolicyAcceptanceTests {
     }
 
     @Test
-    public void testAddPurchasePolicyByCategory_success() {
-        tradingSystem.addPurchasePolicyByCategory(username, token, storeName, 5, 0);
-        tradingSystem.addToCart(username,token,0,storeName,1);
-        ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
-        assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("Purchase approved", result.getBody());
-    }
-
-    @Test
-    public void testAddPurchasePolicyByCategory_fail() {
-        tradingSystem.addPurchasePolicyByCategory(username, token, storeName, 4, 0);
-        tradingSystem.addToCart(username,token,0,storeName,1);
-        ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
-        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
-        assertEquals("Products do not meet purchase policies conditions.", result.getBody());
-    }
-
-    @Test
     public void testAddPurchasePolicyByCategoryAndDate_success() {
         tradingSystem.addPurchasePolicyByCategoryAndDate(username, token, storeName, 5, LocalDateTime.of(3000,1,1,15,0));
         tradingSystem.addToCart(username,token,0,storeName,1);

@@ -272,11 +272,6 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public void addPurchasePolicyByCategory(String username, String storeName, int category, int productId) throws IllegalAccessException {
-        marketFacade.addPurchasePolicyByCategory(username, storeName, category, productId);
-    }
-
-    @Override
     public void addPurchasePolicyByCategoryAndDate(String username, String storeName, int category, LocalDateTime dateTime) throws IllegalAccessException {
         marketFacade.addPurchasePolicyByCategoryAndDate(username, storeName, category, dateTime);
     }

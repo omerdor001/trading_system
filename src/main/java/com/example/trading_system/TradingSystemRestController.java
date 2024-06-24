@@ -580,14 +580,6 @@ public class TradingSystemRestController {
         return tradingSystem.addPurchasePolicyByAge(username, token, storeName, ageToCheck, category);
     }
 
-    @PostMapping("/store/{storeName}/purchase-policies/category")
-    public ResponseEntity<String> addPurchasePolicyByCategory(@RequestParam String username,
-                                                              @RequestParam String token,
-                                                              @PathVariable String storeName,
-                                                              @RequestParam int category,
-                                                              @RequestParam int productId) {
-        return tradingSystem.addPurchasePolicyByCategory(username, token, storeName, category, productId);
-    }
 
     @PostMapping("/store/{storeName}/purchase-policies/category-date")
     public ResponseEntity<String> addPurchasePolicyByCategoryAndDate(@RequestParam String username,

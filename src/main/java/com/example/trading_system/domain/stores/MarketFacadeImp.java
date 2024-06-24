@@ -1015,14 +1015,6 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public void addPurchasePolicyByCategory(String username, String storeName, int category, int productId) throws IllegalAccessException {
-        validateUserAndStore(username, storeName);
-        User user = userFacade.getUser(username);
-        user.getRoleByStoreId(storeName).editPurchasePolicies();
-        storeRepository.getStore(storeName).addPurchasePolicyByCategory(category, productId);
-    }
-
-    @Override
     public void addPurchasePolicyByCategoryAndDate(String username, String storeName, int category, LocalDateTime dateTime) throws IllegalAccessException {
         validateUserAndStore(username, storeName);
         User user = userFacade.getUser(username);
