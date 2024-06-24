@@ -47,7 +47,7 @@ class SuspensionAcceptanceTests {
             JsonNode rootNode = objectMapper.readTree(userToken);
             token1 = rootNode.get("token").asText();
         } catch (Exception e) {
-            fail("Setup failed: Unable to extract token from JSON response");
+            fail("Setup failed: Unable to extract token from JSON response: " + userToken);
         }
         userToken = tradingSystem.login(token1, "v0", "owner1", "password123").getBody();
         try {
