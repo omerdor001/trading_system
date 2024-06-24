@@ -233,4 +233,12 @@ public interface TradingSystem {
     ResponseEntity<String> removePurchasePolicy(String username, String token, String storeName, int selectedIndex);
 
     //end region
+
+    ResponseEntity<String> getIsWatchPermission(String username,String token,String manager,String storeName);
+
+    ResponseEntity<String> getIsEditSupplyPermission(String username,String token,String manager,String storeName);
+
+    ResponseEntity<String> getIsEditDiscountPolicyPermission(String username,String token,String manager,String storeName);
+
+    ResponseEntity<String> getIsEditPurchasePolicyPermission(String username,String token,String manager,String storeName);
 }

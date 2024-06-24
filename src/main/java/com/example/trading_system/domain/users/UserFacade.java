@@ -93,4 +93,12 @@ public interface UserFacade {
     void purchaseCart(String username) throws Exception;
 
     String calculatePrice(String username) throws Exception;
+
+    boolean getIsWatchPermission(String username,String storeName) throws IllegalAccessException;
+
+    boolean getIsEditSupplyPermission(String username,String storeName) throws IllegalAccessException;
+
+    boolean getIsEditDiscountPolicyPermission(String username,String storeName) throws IllegalAccessException;
+
+    boolean getIsEditPurchasePolicyPermission(String username,String storeName) throws IllegalAccessException;
 }

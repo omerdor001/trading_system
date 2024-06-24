@@ -1024,5 +1024,63 @@ public class UserFacadeImp implements UserFacade {
         return Double.toString(Math.round(result * 100.0) / 100.0); // round to 2 decimal points
     }
 
+    @Override
+    public boolean getIsWatchPermission(String username, String storeName) throws IllegalAccessException {
+        if (!marketFacade.isStoreExist(storeName))
+            throw new NoSuchElementException("No store called " + storeName + " exist");
+        if (!userRepository.isExist(username))
+            throw new NoSuchElementException("No user called " + username + " exist");
+        if (isSuspended(username))
+            throw new RuntimeException("User is suspended from the system");
+        User user=userRepository.getUser(username);
+        if (!user.isManager(storeName))
+            throw new IllegalAccessException("User must be Manager");
+        return user.getRoleByStoreId(storeName).getRoleState().isWatch();
+
+    }
+
+    @Override
+    public boolean getIsEditSupplyPermission(String username, String storeName) throws IllegalAccessException {
+        if (!marketFacade.isStoreExist(storeName))
+            throw new NoSuchElementException("No store called " + storeName + " exist");
+        if (!userRepository.isExist(username))
+            throw new NoSuchElementException("No user called " + username + " exist");
+        if (isSuspended(username))
+            throw new RuntimeException("User is suspended from the system");
+        User user=userRepository.getUser(username);
+        if (!user.isManager(storeName))
+            throw new IllegalAccessException("User must be Manager");
+        return user.getRoleByStoreId(storeName).getRoleState().isEditSupply();
+    }
+
+    @Override
+    public boolean getIsEditDiscountPolicyPermission(String username, String storeName) throws IllegalAccessException {
+        if (!marketFacade.isStoreExist(storeName))
+            throw new NoSuchElementException("No store called " + storeName + " exist");
+        if (!userRepository.isExist(username))
+            throw new NoSuchElementException("No user called " + username + " exist");
+        if (isSuspended(username))
+            throw new RuntimeException("User is suspended from the system");
+        User user=userRepository.getUser(username);
+        if (!user.isManager(storeName))
+            throw new IllegalAccessException("User must be Manager");
+        return user.getRoleByStoreId(storeName).getRoleState().isEditDiscountPolicy();
+
+    }
+
+    @Override
+    public boolean getIsEditPurchasePolicyPermission(String username, String storeName) throws IllegalAccessException {
+        if (!marketFacade.isStoreExist(storeName))
+            throw new NoSuchElementException("No store called " + storeName + " exist");
+        if (!userRepository.isExist(username))
+            throw new NoSuchElementException("No user called " + username + " exist");
+        if (isSuspended(username))
+            throw new RuntimeException("User is suspended from the system");
+        User user=userRepository.getUser(username);
+        if (!user.isManager(storeName))
+            throw new IllegalAccessException("User must be Manager");
+        return user.getRoleByStoreId(storeName).getRoleState().isEditPurchasePolicy();
+    }
+
 
 }

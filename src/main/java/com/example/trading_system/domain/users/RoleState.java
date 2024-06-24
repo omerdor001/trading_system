@@ -47,9 +47,7 @@ public abstract class RoleState {
         throw new IllegalArgumentException("");
     }
 
-    public boolean isWatch() throws IllegalAccessException {
-        throw new IllegalAccessException("Only managers can access isWatch");
-    }
+    public abstract boolean isWatch();
 
     public abstract void setWatch(boolean watch);
 
