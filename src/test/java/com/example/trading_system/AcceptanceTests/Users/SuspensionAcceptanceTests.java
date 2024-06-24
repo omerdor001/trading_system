@@ -81,6 +81,7 @@ class SuspensionAcceptanceTests {
 
     @AfterEach
     public void tearDown() {
+        tradingSystem.setSystemOpen(true);
         tradingSystem.deleteInstance();
     }
 
