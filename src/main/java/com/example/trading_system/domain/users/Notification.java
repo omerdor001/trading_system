@@ -1,9 +1,7 @@
 package com.example.trading_system.domain.users;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDateTime;
 import java.util.TimeZone;
 
 public class Notification {

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.*;
 import org.mockito.*;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 class LogoutUnitTests {
 
@@ -19,15 +18,14 @@ class LogoutUnitTests {
     @Mock
     Cart shoppingCart;
     UserFacadeImp userFacadeImp;
-    private UserRepository userRepository;
-    private StoreRepository storeRepository;
 
     @BeforeEach
     public void init() {
-        initMocks(this);
-        storeRepository= StoreMemoryRepository.getInstance();
-        userRepository = UserMemoryRepository.getInstance();
-        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
+        user = mock(User.class);
+        shoppingCart = mock(Cart.class);
+        StoreRepository storeRepository = StoreMemoryRepository.getInstance();
+        UserRepository userRepository = UserMemoryRepository.getInstance();
+        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
     }
 
     @AfterEach

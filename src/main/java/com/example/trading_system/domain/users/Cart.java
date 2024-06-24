@@ -1,7 +1,6 @@
 package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.stores.ProductInSale;
-import com.example.trading_system.domain.stores.Purchase;
 import com.example.trading_system.domain.stores.StoreRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Cart {
-    private HashMap<String, ShoppingBag> shoppingBags;
+    private final HashMap<String, ShoppingBag> shoppingBags;
 
     public Cart() {
         shoppingBags = new HashMap<>();
