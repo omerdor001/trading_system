@@ -35,6 +35,7 @@ public class Manager extends RoleState {
         this.editSupply = editSupply;
     }
 
+    @Override
     public boolean isEditPurchasePolicy() {
         return editPurchasePolicy;
     }
@@ -44,6 +45,7 @@ public class Manager extends RoleState {
         this.editPurchasePolicy = editPurchasePolicy;
     }
 
+    @Override
     public boolean isEditDiscountPolicy() {
         return editDiscountPolicy;
     }

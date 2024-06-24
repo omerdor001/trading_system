@@ -69,12 +69,17 @@ public class Role {
         roleState.setCategory(username, store_name_id, productId, category);
     }
 
-    public void editDiscounts() throws IllegalAccessException {
-        roleState.isEditDiscountPolicy();
+    public boolean editDiscounts() throws IllegalAccessException {
+        if(roleState.isEditDiscountPolicy())
+            return true;
+        else throw new IllegalAccessException("Only managers can access isEditDiscountPolicy");
     }
 
-    public void editPurchasePolicies() throws IllegalAccessException {
-        roleState.isEditPurchasePolicy();
+    public boolean editPurchasePolicies() throws IllegalAccessException {
+        if(roleState.isEditPurchasePolicy()){
+            return true;
+        }
+        else throw new IllegalAccessException("Only managers can access isEditPurchasePolicy");
     }
 }
 

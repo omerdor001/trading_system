@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -102,13 +103,12 @@ class PermissionsUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Samba");
         try{
-            marketFacade.addProduct("rtestuser2",124,"Adidas" ,"product1", "", 1, 5, 1, 1, new LinkedList<>());
-
+            marketFacade.addProduct("rtestuser2",124,"Adidas" ,"product1", "", 1, 1, 1, 1, new LinkedList<>());
         }
         catch (Exception e){}
         ProductInSaleDTO product=new ProductInSaleDTO();
-        product.setStoreId("store1");
-        product.setId(0);
+        product.setStoreId("Adidas");
+        product.setId(124);
         product.setPrice(1);
         product.setQuantity(1);
         product.setCategory(1);
@@ -120,6 +120,81 @@ class PermissionsUnitTests {
         }, "addDiscountPolicy should not throw any exceptions");
         double price = store.calculatePrice(bag);
         assertEquals(0.5, price);
+    }
+
+    @Test
+    void addDiscountPolicyManager_NoPermission() {
+        ArrayList<String> keyWords=new ArrayList<>();
+        keyWords.add("Samba");
+        try{
+            userFacade.editPermissionForManager("rtestuser1","rtestuser2","Adidas",true,true,true,false);
+            marketFacade.addProduct("rtestuser2",124,"Adidas" ,"product1", "", 1, 1, 1, 1, new LinkedList<>());
+
+        }
+        catch (Exception e){}
+        ProductInSaleDTO product=new ProductInSaleDTO();
+        product.setStoreId("Adidas");
+        product.setId(124);
+        product.setPrice(1);
+        product.setQuantity(1);
+        product.setCategory(1);
+        LinkedList<ProductInSaleDTO> bag = new LinkedList<>();
+        bag.add(product);
+        Store store=marketFacade.getStore("Adidas");
+        IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> marketFacade.addCategoryPercentageDiscount("rtestuser2","Adidas",1,0.5));
+        assertEquals("Only managers can access isEditPurchasePolicy", exception.getMessage());
+        double price = store.calculatePrice(bag);
+        assertEquals(1.0, price);
+    }
+
+    @Test
+    void addPurchasePolicyManager_Success() {
+        ArrayList<String> keyWords=new ArrayList<>();
+        keyWords.add("Samba");
+        try{
+            marketFacade.addProduct("rtestuser2",124,"Adidas" ,"product1", "", 1, 1, 1, 1, new LinkedList<>());
+        }
+        catch (Exception e){}
+        ProductInSaleDTO product=new ProductInSaleDTO();
+        product.setStoreId("Adidas");
+        product.setId(124);
+        product.setPrice(1);
+        product.setQuantity(1);
+        product.setCategory(1);
+        LinkedList<ProductInSaleDTO> bag = new LinkedList<>();
+        bag.add(product);
+        Store store=marketFacade.getStore("Adidas");
+
+        assertDoesNotThrow(() -> {
+            marketFacade.addPurchasePolicyByDate("rtestuser2","Adidas",LocalDateTime.now().minusDays(1));
+        }, "addPurchasePolicy should not throw any exceptions");
+        boolean result = store.validatePurchasePolicies(bag, 20);
+        assertTrue(result);
+    }
+
+    @Test
+    void addPurchasePolicyManager_NoPermission() {
+        ArrayList<String> keyWords=new ArrayList<>();
+        keyWords.add("Samba");
+        try{
+            userFacade.editPermissionForManager("rtestuser1","rtestuser2","Adidas",true,true,false,true);
+            marketFacade.addProduct("rtestuser2",124,"Adidas" ,"product1", "", 1, 1, 1, 1, new LinkedList<>());
+
+        }
+        catch (Exception e){}
+        ProductInSaleDTO product=new ProductInSaleDTO();
+        product.setStoreId("Adidas");
+        product.setId(124);
+        product.setPrice(1);
+        product.setQuantity(1);
+        product.setCategory(1);
+        LinkedList<ProductInSaleDTO> bag = new LinkedList<>();
+        bag.add(product);
+        Store store=marketFacade.getStore("Adidas");
+        IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> marketFacade.addPurchasePolicyByDate("rtestuser2","Adidas",LocalDateTime.now().minusDays(1)));
+        assertEquals("Only managers can access isEditDiscountPolicy", exception.getMessage());
+        boolean result = store.validatePurchasePolicies(bag, 20);
+        assertTrue(result);
     }
 
 
