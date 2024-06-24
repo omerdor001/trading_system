@@ -41,10 +41,6 @@ public class Role {
         roleState.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
     }
 
-//    public void requestInftomationAboutRolesInStore(String username, String storeId) throws IllegalAccessException {
-//        roleState.requestInftomationAboutRolesInStore(store_name_id);
-//    }
-
     public void removeProduct(String username, String store_name_id, int product_id) throws IllegalAccessException {
         roleState.removeProduct(username, store_name_id, product_id);
     }

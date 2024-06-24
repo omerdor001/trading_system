@@ -1023,4 +1023,6 @@ public class UserFacadeImp implements UserFacade {
         double result = marketFacade.calculateTotalPrice(getUser(username).getCart().toJson());
         return Double.toString(Math.round(result * 100.0) / 100.0); // round to 2 decimal points
     }
+
+
 }
