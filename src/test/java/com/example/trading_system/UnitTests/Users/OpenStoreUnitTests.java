@@ -1,4 +1,4 @@
-package com.example.trading_system.UnitTests.users;
+package com.example.trading_system.UnitTests.Users;
 
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
@@ -10,7 +10,6 @@ import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.*;
-import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.mock;
 

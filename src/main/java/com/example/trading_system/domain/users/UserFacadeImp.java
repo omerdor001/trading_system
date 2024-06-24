@@ -301,6 +301,7 @@ public class UserFacadeImp implements UserFacade {
     public void sendNotification(String sender, String receiver, String content) {
         if (!isUserExist(sender)) throw new RuntimeException("Not a valid sender: " + sender);
         if (!isUserExist(receiver)) throw new RuntimeException("Not a valid receiver: " + receiver);
+        if (content.isEmpty()) throw new RuntimeException("Empty notification content");
         Notification notification = new Notification(sender, receiver, content);
         User senderUser = userRepository.getUser(sender);
         if (!senderUser.getLogged()) throw new RuntimeException("Notification sender must be logged in");

@@ -1,4 +1,4 @@
-package com.example.trading_system.UnitTests.users;
+package com.example.trading_system.UnitTests.Users;
 
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
