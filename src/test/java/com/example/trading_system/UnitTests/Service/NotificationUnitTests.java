@@ -294,6 +294,8 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_WaiverOwner_Logged() {
         try {
+            setDown();
+            setUp();
             userRepository.addRegistered(manager, "password123", LocalDate.now());
             userFacade.appointOwner(owner1, owner2, storeName);
             userFacade.getUser(owner2).login();

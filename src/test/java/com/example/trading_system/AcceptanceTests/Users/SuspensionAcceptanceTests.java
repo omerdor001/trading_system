@@ -29,14 +29,12 @@ class SuspensionAcceptanceTests {
     String token2;
     String username1;
     private TradingSystemImp tradingSystem;
-    private UserRepository userRepository;
-    private StoreRepository storeRepository;
 
     @BeforeEach
     public void setUp() {
-        userRepository= UserMemoryRepository.getInstance();    //May be change later
-        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
-        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
+        UserRepository userRepository = UserMemoryRepository.getInstance();    //May be change later
+        StoreRepository storeRepository = StoreMemoryRepository.getInstance();  //May be change later
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.register("emp1", "password123", LocalDate.now());
         tradingSystem.openSystem(storeRepository);
