@@ -29,14 +29,13 @@ public class PaymentAcceptanceTests {
     private TradingSystemImp tradingSystem;
     private String username;
     private String token;
-    private UserRepository userRepository;
-    private StoreRepository storeRepository;
+
     @BeforeEach
     void setUp() {
-        userRepository = UserMemoryRepository.getInstance();    //May be change later
-        storeRepository = StoreMemoryRepository.getInstance();  //May be change later
+        UserRepository userRepository = UserMemoryRepository.getInstance();    //May be change later
+        StoreRepository storeRepository = StoreMemoryRepository.getInstance();  //May be change later
         tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
-        tradingSystem.userService = UserServiceImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
+        tradingSystem.userService = UserServiceImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
         tradingSystem.userService.getUserFacade().setUserRepository(userRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem(storeRepository);

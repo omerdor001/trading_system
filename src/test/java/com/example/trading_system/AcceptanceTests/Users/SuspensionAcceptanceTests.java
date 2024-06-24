@@ -32,8 +32,10 @@ class SuspensionAcceptanceTests {
 
     @BeforeEach
     public void setUp() {
-        UserRepository userRepository = UserMemoryRepository.getInstance();    //May be change later
-        StoreRepository storeRepository = StoreMemoryRepository.getInstance();  //May be change later
+        UserMemoryRepository.getInstance().deleteInstance();    //May be change later
+        StoreMemoryRepository.getInstance().deleteInstance();  //May be change later
+        UserRepository userRepository = UserMemoryRepository.getInstance();
+        StoreRepository storeRepository = StoreMemoryRepository.getInstance();
         tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.register("emp1", "password123", LocalDate.now());
