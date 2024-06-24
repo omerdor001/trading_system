@@ -131,6 +131,8 @@ class SuspensionAcceptanceTests {
 
     @Test
     void endSuspendUser_ToSuspendNotExist() {
+        tearDown();
+        setUp();
         ResponseEntity<String> response = tradingSystem.endSuspendUser(token1, username, "");
         assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
     }
