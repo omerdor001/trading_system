@@ -1,6 +1,5 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.Purchase;
 import com.example.trading_system.domain.stores.StoreRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

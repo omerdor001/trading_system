@@ -2,7 +2,6 @@ package com.example.trading_system.domain.users;
 
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Visitor extends User {

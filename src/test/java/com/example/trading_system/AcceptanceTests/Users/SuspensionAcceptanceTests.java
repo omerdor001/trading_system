@@ -8,6 +8,7 @@ import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
+import com.example.trading_system.service.UserServiceImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -29,14 +30,14 @@ class SuspensionAcceptanceTests {
     String token2;
     String username1;
     private TradingSystemImp tradingSystem;
-    private UserRepository userRepository;
-    private StoreRepository storeRepository;
 
     @BeforeEach
     public void setUp() {
-        userRepository= UserMemoryRepository.getInstance();    //May be change later
-        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
-        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
+        UserRepository userRepository = UserMemoryRepository.getInstance();
+        StoreRepository storeRepository = StoreMemoryRepository.getInstance();
+        tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
+        tradingSystem.userService.getUserFacade().setUserRepository(userRepository);
+        tradingSystem.userService = UserServiceImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.register("emp1", "password123", LocalDate.now());
         tradingSystem.openSystem(storeRepository);
@@ -47,7 +48,7 @@ class SuspensionAcceptanceTests {
             JsonNode rootNode = objectMapper.readTree(userToken);
             token1 = rootNode.get("token").asText();
         } catch (Exception e) {
-            fail("Setup failed: Unable to extract token from JSON response");
+            fail("Setup failed: Unable to extract token from JSON response: " + userToken);
         }
         userToken = tradingSystem.login(token1, "v0", "owner1", "password123").getBody();
         try {
@@ -83,6 +84,7 @@ class SuspensionAcceptanceTests {
 
     @AfterEach
     public void tearDown() {
+        tradingSystem.setSystemOpen(true);
         tradingSystem.deleteInstance();
     }
 
@@ -95,7 +97,7 @@ class SuspensionAcceptanceTests {
     @Test
     void suspendUser_SuccessNotMakeAction() {
         tradingSystem.suspendUser(token1, username, username1, LocalDateTime.of(2024, 8, 1, 10, 0));
-        ResponseEntity<String> response = tradingSystem.approvePurchase(username1,token1);
+        ResponseEntity<String> response = tradingSystem.approvePurchase(username1, token1);
         assertEquals(HttpStatusCode.valueOf(401), response.getStatusCode());
     }
 
@@ -132,6 +134,8 @@ class SuspensionAcceptanceTests {
 
     @Test
     void endSuspendUser_ToSuspendNotExist() {
+        tearDown();
+        setUp();
         ResponseEntity<String> response = tradingSystem.endSuspendUser(token1, username, "");
         assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
     }

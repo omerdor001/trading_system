@@ -1,4 +1,4 @@
-package com.example.trading_system.UnitTests.service;
+package com.example.trading_system.UnitTests.Service;
 
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
@@ -9,12 +9,9 @@ import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
 import com.example.trading_system.service.UserService;
-import com.example.trading_system.service.UserServiceImp;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -22,18 +19,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class OpenSystemUnitTests {
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
     private TradingSystemImp facade;
     private UserService userService;
-    private UserRepository userRepository;
     private StoreRepository storeRepository;
 
     @BeforeEach
     public void setUp() {
         storeRepository= StoreMemoryRepository.getInstance();
-        userRepository = UserMemoryRepository.getInstance();
+        UserRepository userRepository = UserMemoryRepository.getInstance();
         userService = mock(UserService.class);
-        facade = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
+        facade = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class), userRepository,storeRepository);
         facade.userService = userService;
     }
 

@@ -12,8 +12,6 @@ import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,17 +22,14 @@ import static org.mockito.Mockito.mock;
 class StockManagementUnitTests {
     MarketFacade marketFacade;
     UserFacade userFacade;
-    private UserRepository userRepository;
-    private StoreRepository storeRepository;
-    private static final Logger logger = LoggerFactory.getLogger(StockManagementUnitTests.class);
 
     @BeforeAll
     void setUp() {
-        storeRepository= StoreMemoryRepository.getInstance();
-        userRepository = UserMemoryRepository.getInstance();
+        StoreRepository storeRepository = StoreMemoryRepository.getInstance();
+        UserRepository userRepository = UserMemoryRepository.getInstance();
         PaymentService paymentService=mock(PaymentService.class);
         DeliveryService deliveryService=mock(DeliveryService.class);
-        userFacade= UserFacadeImp.getInstance(paymentService,deliveryService, mock(NotificationSender.class),userRepository,storeRepository);
+        userFacade= UserFacadeImp.getInstance(paymentService,deliveryService, mock(NotificationSender.class), userRepository, storeRepository);
         marketFacade=MarketFacadeImp.getInstance(storeRepository);
         try {
             userFacade.register("testuser0","1pA22w0rd", LocalDate.now());

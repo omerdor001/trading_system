@@ -114,7 +114,6 @@ public class Registered extends User {
         getRoles().add(manager);
     }
 
-
     public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editPurchasePolicy, boolean editDiscountPolicy) {
         Role manager = getRoleByStoreId(store_name_id);
         manager.getRoleState().setWatch(watch);

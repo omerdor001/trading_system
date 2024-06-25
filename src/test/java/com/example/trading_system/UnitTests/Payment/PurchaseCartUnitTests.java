@@ -8,7 +8,6 @@ import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -315,6 +314,7 @@ public class PurchaseCartUnitTests {
             userFacade.register(username, "encrypted_password", LocalDate.now());
             userFacade.login("v0", username, "encrypted_password");
         } catch (Exception e) {
+            fail("unexpected error: " + e.getMessage());
         }
         userFacade.getUser("r" + username).setAddress(address);
         marketFacade.addStore(storeName, "description", username, 4.5);
@@ -370,6 +370,7 @@ public class PurchaseCartUnitTests {
             marketFacade.addProduct("r" + username,productId,storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
             userFacade.addToCart("r" + username, productId, storeName, quantity);
         } catch (Exception e) {
+            fail("unexpected error: " + e.getMessage());
         }
 
         Class<Double> number = Double.class;
@@ -393,6 +394,7 @@ public class PurchaseCartUnitTests {
             marketFacade.addProduct("r" + username,productId,storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
             userFacade.addToCart("r" + username, productId, storeName, quantity);
         } catch (Exception e) {
+            fail("unexpected error: " + e.getMessage());
         }
 
         Class<Double> number = Double.class;
