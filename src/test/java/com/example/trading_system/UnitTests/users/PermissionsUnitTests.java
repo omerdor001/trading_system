@@ -142,7 +142,7 @@ class PermissionsUnitTests {
         bag.add(product);
         Store store=marketFacade.getStore("Adidas");
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> marketFacade.addCategoryPercentageDiscount("rtestuser2","Adidas",1,0.5));
-        assertEquals("Only managers can access isEditPurchasePolicy", exception.getMessage());
+        assertEquals("Only managers can access isEditDiscountPolicy", exception.getMessage());
         double price = store.calculatePrice(bag);
         assertEquals(1.0, price);
     }
@@ -192,7 +192,7 @@ class PermissionsUnitTests {
         bag.add(product);
         Store store=marketFacade.getStore("Adidas");
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> marketFacade.addPurchasePolicyByDate("rtestuser2","Adidas",LocalDateTime.now().minusDays(1)));
-        assertEquals("Only managers can access isEditDiscountPolicy", exception.getMessage());
+        assertEquals("Only managers can access isEditPurchasePolicy", exception.getMessage());
         boolean result = store.validatePurchasePolicies(bag, 20);
         assertTrue(result);
     }
