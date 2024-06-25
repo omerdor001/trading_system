@@ -147,8 +147,6 @@ public interface MarketFacade {
 
     void addPurchasePolicyByAge(String username, String storeName, int ageToCheck, int category) throws IllegalAccessException;
 
-    void addPurchasePolicyByCategory(String username, String storeName, int category, int productId) throws IllegalAccessException;
-
     void addPurchasePolicyByCategoryAndDate(String username, String storeName, int category, LocalDateTime dateTime) throws IllegalAccessException;
 
     void addPurchasePolicyByDate(String username, String storeName, LocalDateTime dateTime) throws IllegalAccessException;

@@ -198,8 +198,6 @@ public interface TradingSystem {
 
     ResponseEntity<String> addPurchasePolicyByAge(String username, String token, String storeName, int ageToCheck, int category);
 
-    ResponseEntity<String> addPurchasePolicyByCategory(String username, String token, String storeName, int category, int productId);
-
     ResponseEntity<String> addPurchasePolicyByCategoryAndDate(String username, String token, String storeName, int category, LocalDateTime dateTime);
 
     ResponseEntity<String> addPurchasePolicyByDate(String username, String token, String storeName, LocalDateTime dateTime);

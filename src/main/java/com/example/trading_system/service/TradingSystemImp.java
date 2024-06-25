@@ -1372,20 +1372,6 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> addPurchasePolicyByCategory(String username, String token, String storeName, int category, int productId) {
-        logger.info("Adding category-based purchase policy for user: {}, store: {}, category: {}", username, storeName, category);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            marketService.addPurchasePolicyByCategory(username, storeName, category, productId);
-            return new ResponseEntity<>("Category-based purchase policy added successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while adding category-based purchase policy for user: {}, store: {}, category: {}", username, storeName, category);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
     public ResponseEntity<String> addPurchasePolicyByCategoryAndDate(String username, String token, String storeName, int category, LocalDateTime dateTime) {
         logger.info("Adding category and date-based purchase policy for user: {}, store: {}, category: {}, dateTime: {}", username, storeName, category, dateTime);
         try {

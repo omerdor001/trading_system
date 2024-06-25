@@ -528,12 +528,6 @@ public class Store {
         purchasePolicies.add(new PurchasePolicyByAge(ageToCheck,category));
     }
 
-    public void addPurchasePolicyByCategory(int category, int productId) {
-        if(category<=0 )
-            throw new IllegalArgumentException("Parameter "+category+" cannot be negative or zero");
-        purchasePolicies.add(new PurchasePolicyByCategory(category,productId));
-    }
-
     public void addPurchasePolicyByCategoryAndDate(int category, LocalDateTime dateTime) {
         if(category<=0 )
             throw new IllegalArgumentException("Parameter "+category+" cannot be negative or zero");
