@@ -1596,5 +1596,61 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
+    public ResponseEntity<String> getIsWatchPermission(String username, String token, String manager, String storeName) {
+        logger.info("Trying to get watch permission of username {} to store {}", manager, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            String result=userService.getIsWatchPermission(manager,storeName);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while trying to get watch permission of username {} to store {}", username, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getIsEditSupplyPermission(String username, String token, String manager, String storeName) {
+        logger.info("Trying to get edit supply permission of username {} to store {}", manager, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            String result=userService.getIsEditSupplyPermission(manager,storeName);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while trying to get edit supply permission of username {} to store {}", username, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getIsEditDiscountPolicyPermission(String username, String token, String manager, String storeName) {
+        logger.info("Trying to get edit discount policy permission of username {} to store {}", manager, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            String result=userService.getIsEditDiscountPolicyPermission(manager,storeName);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while trying to get edit discount policy permission of username {} to store {}", username, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getIsEditPurchasePolicyPermission(String username, String token, String manager, String storeName) {
+        logger.info("Trying to get edit purchase policy permission of username {} to store {}", manager, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            String result=userService.getIsEditPurchasePolicyPermission(manager,storeName);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while trying to get edit purchase policy permission of username {} to store {}", username, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     //end region
 }

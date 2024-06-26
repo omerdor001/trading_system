@@ -249,4 +249,24 @@ public class UserServiceImp implements UserService {
         logger.info("Finished calculating price for user with ID: {}", username);
         return result;
     }
+
+    @Override
+    public String getIsWatchPermission(String username, String storeName) throws IllegalAccessException {
+        return String.valueOf(userFacade.getIsWatchPermission(username,storeName));
+    }
+
+    @Override
+    public String getIsEditSupplyPermission(String username, String storeName) throws IllegalAccessException {
+        return String.valueOf(userFacade.getIsEditSupplyPermission(username,storeName));
+    }
+
+    @Override
+    public String getIsEditDiscountPolicyPermission(String username, String storeName) throws IllegalAccessException {
+        return String.valueOf(userFacade.getIsEditDiscountPolicyPermission(username,storeName));
+    }
+
+    @Override
+    public String getIsEditPurchasePolicyPermission(String username, String storeName) throws IllegalAccessException {
+        return String.valueOf(userFacade.getIsEditPurchasePolicyPermission(username,storeName));
+    }
 }
