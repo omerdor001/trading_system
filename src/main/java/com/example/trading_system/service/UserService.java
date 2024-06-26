@@ -75,4 +75,6 @@ public interface UserService {
     String getPurchaseHistory(String username, String storeName);
 
     String calculatePrice(String username) throws Exception;
+
+    void sendMessageUserToUser(String sender, String receiver, String content);
 }

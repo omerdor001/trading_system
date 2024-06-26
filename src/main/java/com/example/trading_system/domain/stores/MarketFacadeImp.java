@@ -56,7 +56,7 @@ public class MarketFacadeImp implements MarketFacade {
         return storeRepository.isExist(store_name);
     }
 
-    private void validateUserAndStore(String username, String storeName){
+    private void validateUserAndStore(String username, String storeName) {
         if (!storeRepository.isExist(storeName)) {
             logger.error("Store must exist: {}", storeName);
             throw new IllegalArgumentException("Store must exist");
@@ -166,7 +166,7 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchCategoryInStore(String userName, int category, String storeName, Double minPrice, Double maxPrice, Double minRating){
+    public String searchCategoryInStore(String userName, int category, String storeName, Double minPrice, Double maxPrice, Double minRating) {
         if (category < 0) {                //TODO fix according to the logics of this function
             logger.error("No category provided");
             throw new IllegalArgumentException("No category provided");
@@ -193,7 +193,7 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String searchKeywordsInStore(String userName, String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, int category){
+    public String searchKeywordsInStore(String userName, String keyWords, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) {
         if (keyWords == null) {
             logger.error("No keywords provided");
             throw new IllegalArgumentException("No keywords provided");
@@ -291,7 +291,7 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public void openStoreExist(String userName, String storeName){
+    public void openStoreExist(String userName, String storeName) {
         validateUserAndStore(userName, storeName);
         Store store = storeRepository.getStore(storeName);
         if (!store.getFounder().equals(userName)) {
@@ -1147,4 +1147,43 @@ public class MarketFacadeImp implements MarketFacade {
         getStore(storeId).checkAvailabilityAndConditions(id, quantity);
     }
 //endregion
+
+    @Override
+    public void sendMessageUserToStore(String sender, String storeName, String content) {
+        if (!userFacade.isUserExist(sender))
+            throw new RuntimeException("Message sender user must exist");
+        if (!isStoreExist(storeName))
+            throw new RuntimeException("Message receiver store must exist");
+        if (content.isEmpty())
+            throw new RuntimeException("Message content cannot be empty");
+        Store store = storeRepository.getStore(storeName);
+        String username = "";
+        if (sender.charAt(0) == 'v')
+            username = "visitor " + sender;
+        else if (sender.charAt(0) == 'r')
+            username = sender.substring(1);
+        store.receiveMessage(sender, username, content);
+        if (sender.charAt(0) == 'r')
+            userFacade.sendNotificationToStoreOwners(sender, store.getOwners(), "Store: " + storeName + " received a message from user: " + sender);
+        else
+            userFacade.sendNotificationToStoreOwners(sender, store.getOwners(), "Store: " + storeName + " received a message from a visitor");
+    }
+
+    @Override
+    public void sendMessageStoreToUser(String owner, String receiver, String storeName, String content) {
+        if (!userFacade.isUserExist(receiver)) {
+            if (receiver.charAt(0) == 'r')
+                throw new RuntimeException("Message receiver user must exist");
+            else if (receiver.charAt(0) == 'v')
+                throw new RuntimeException("Visitor no longer exists, no need to reply");
+        }
+        if (!isStoreExist(storeName))
+            throw new RuntimeException("Message sender store must exist");
+        if (content.isEmpty())
+            throw new RuntimeException("Message content cannot be empty");
+        User receiverUser = userFacade.getUser(receiver);
+        User ownerUser = userFacade.getUser(owner);
+        receiverUser.receiveMessage(storeName, storeName, content);
+        userFacade.sendNotification(storeName, receiver,  "Owner: " + ownerUser.getUsername() + "from store: " + storeName + " has replied to your message");
+    }
 }

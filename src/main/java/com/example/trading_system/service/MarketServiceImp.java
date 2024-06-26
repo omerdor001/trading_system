@@ -381,6 +381,16 @@ public class MarketServiceImp implements MarketService {
     public String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException {
         return marketFacade.requestInformationAboutSpecificOfficialInStore(userName, storeName, officialUserName);
     }
+
+    @Override
+    public void sendMessageUserToStore(String sender, String storeName, String content){
+        marketFacade.sendMessageUserToStore(sender, storeName, content);
+    }
+
+    @Override
+    public void sendMessageStoreToUser(String owner, String receiver, String storeName, String content){
+        marketFacade.sendMessageStoreToUser(owner, receiver, storeName, content);
+    }
 }
 
 

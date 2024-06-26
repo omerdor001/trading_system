@@ -58,6 +58,10 @@ public interface MarketService {
 
     String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
 
+    void sendMessageUserToStore(String sender, String storeName, String content);
+
+    void sendMessageStoreToUser(String owner, String receiver, String storeName, String content);
+
     //region Discount creation
     String getDiscountPolicies(String username, String storeName) throws IllegalAccessException;
 
@@ -118,7 +122,7 @@ public interface MarketService {
 
     //endregion
 
-    //purchase_policy
+    //region purchase policy
     String getPurchasePoliciesInfo(String username, String storeName) throws IllegalAccessException;
 
     void addPurchasePolicyByAge(String username, String storeName, int ageToCheck, int category) throws IllegalAccessException;
@@ -154,6 +158,5 @@ public interface MarketService {
     void setSecondPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
 
     void removePurchasePolicy(String username, String storeName, int selectedIndex) throws IllegalAccessException;
-
-    //end region
+    //endregion
 }

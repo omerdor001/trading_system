@@ -1,5 +1,6 @@
 package com.example.trading_system.domain.users;
 
+import com.example.trading_system.domain.Message;
 import com.example.trading_system.domain.stores.StoreRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class User {
@@ -17,6 +19,7 @@ public abstract class User {
     private LocalDateTime suspendedStart;
     private LocalDateTime suspendedEnd;
     private String address;
+    private LinkedList<Message> messages;
 
     public User(String username) {
         this.username = username;
@@ -25,6 +28,7 @@ public abstract class User {
         this.suspendedStart = null;
         this.suspendedEnd = null;
         this.address = "";
+        this.messages = new LinkedList<>();
     }
 
     public String getUsername() {
@@ -121,6 +125,14 @@ public abstract class User {
         this.cart = cart;
     }
 
+    public LinkedList<Message> getMessages(){
+        return this.messages;
+    }
+
+    public String getMessagesJSON(){
+        return Message.toJsonList(this.messages);
+    }
+
     public abstract boolean getLogged();
 
     public abstract List<String> getOwnerToApprove();
@@ -178,5 +190,9 @@ public abstract class User {
 
     public void addPurchase(StoreRepository storeRepository,String username) {
         cart.addPurchase(storeRepository,username);
+    }
+
+    public void receiveMessage(String senderId, String senderUsername, String content){
+        this.messages.add(new Message(senderId, senderUsername, content));
     }
 }

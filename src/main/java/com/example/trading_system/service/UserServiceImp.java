@@ -249,4 +249,9 @@ public class UserServiceImp implements UserService {
         logger.info("Finished calculating price for user with ID: {}", username);
         return result;
     }
+
+    @Override
+    public void sendMessageUserToUser(String sender, String receiver, String content){
+        userFacade.sendMessageUserToUser(sender, receiver, content);
+    }
 }

@@ -311,6 +311,20 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
+    public void sendNotificationToStoreOwners(String sender, List<String> owners, String content){
+        if (!isUserExist(sender)) throw new RuntimeException("Not a valid sender: " + sender);
+        User senderUser = userRepository.getUser(sender);
+        if (!senderUser.getLogged()) throw new RuntimeException("Notification sender must be logged in");
+        for(String owner : owners){
+            if (!isUserExist(owner)) throw new RuntimeException("Not a valid receiver: " + owner);
+            Notification notification = new Notification(sender, owner, content);
+            User receiverUser = userRepository.getUser(owner);
+            if (!receiverUser.getLogged()) receiverUser.receiveDelayedNotification(notification);
+            else notificationSender.sendNotification(owner, notification.toString());
+        }
+    }
+
+    @Override
     public void saveUserCart(String username, int productId, String storeName, int quantity) {
         if (storeName == null || storeName.trim().isEmpty()) {
             logger.error("Store name is null");
@@ -1023,5 +1037,21 @@ public class UserFacadeImp implements UserFacade {
     public String calculatePrice(String username) throws Exception {
         double result = marketFacade.calculateTotalPrice(getUser(username).getCart().toJson());
         return Double.toString(Math.round(result * 100.0) / 100.0); // round to 2 decimal points
+    }
+
+    @Override
+    public void sendMessageUserToUser(String sender, String receiver, String content) {
+        if (!userRepository.isExist(sender))
+            throw new RuntimeException("Message sender user must exist");
+        if (!userRepository.isExist(receiver))
+            throw new RuntimeException("Message receiver user must exist");
+        if (content.isEmpty())
+            throw new RuntimeException("Message content cannot be empty");
+        if (sender.charAt(0) == 'v' && receiver.charAt(0) == 'v')
+            throw new RuntimeException("Visitors cannot message each other");
+        User receiverUser = userRepository.getUser(receiver);
+        User senderUser = userRepository.getUser(sender);
+        receiverUser.receiveMessage(sender.substring(1), sender, content);
+        sendNotification(sender,receiver,"You have received a message from user: " + senderUser.getUsername());
     }
 }

@@ -3,6 +3,8 @@ package com.example.trading_system.domain.users;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public interface UserFacade {
@@ -26,6 +28,10 @@ public interface UserFacade {
 
     void sendPendingNotifications(String username);
 
+    void sendNotification(String sender, String receiver, String content);
+
+    void sendNotificationToStoreOwners(String sender, List<String> owners, String content);
+
     void logout(int id, String username);
 
     void suspendUser(String admin, String toSuspend, LocalDateTime endSuspension);
@@ -37,8 +43,6 @@ public interface UserFacade {
     String watchSuspensions(String admin);
 
     boolean isSuspended(String username);
-
-    void sendNotification(String sender, String receiver, String content);
 
     void saveUserCart(String username, int productId, String storeName, int quantity);
 
@@ -93,4 +97,6 @@ public interface UserFacade {
     void purchaseCart(String username) throws Exception;
 
     String calculatePrice(String username) throws Exception;
+
+    void sendMessageUserToUser(String sender, String receiver, String content);
 }

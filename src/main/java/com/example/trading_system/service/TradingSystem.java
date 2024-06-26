@@ -134,6 +134,12 @@ public interface TradingSystem {
 
     ResponseEntity<String> calculatePrice(String username, String token);
 
+    ResponseEntity<String> sendMessageUserToUser(String sender, String token, String receiver, String content);
+
+    ResponseEntity<String> sendMessageUserToStore(String sender, String token, String storeName, String content);
+
+    ResponseEntity<String> sendMessageStoreToUser(String owner, String token, String receiver, String storeName, String content);
+
     //region Discount creation
     ResponseEntity<String> getDiscountPolicies(String username, String token, String storeName);
 
@@ -193,7 +199,7 @@ public interface TradingSystem {
     ResponseEntity<String> setCategoryCondition(String username, String token, String storeName, int selectedConditionIndex, int newCategory);
     //endregion
 
-    //purchase_policy
+    //region purchase policy
     ResponseEntity<String> getPurchasePoliciesInfo(String username, String token, String storeName);
 
     ResponseEntity<String> addPurchasePolicyByAge(String username, String token, String storeName, int ageToCheck, int category);
@@ -229,6 +235,5 @@ public interface TradingSystem {
     ResponseEntity<String> setSecondPurchasePolicy(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex);
 
     ResponseEntity<String> removePurchasePolicy(String username, String token, String storeName, int selectedIndex);
-
-    //end region
+    //endregion
 }
