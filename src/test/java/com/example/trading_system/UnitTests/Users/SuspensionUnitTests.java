@@ -46,8 +46,10 @@ class SuspensionUnitTests {
             userFacade.login("v2","testuser2","pA22w0rd2");
             userFacade.createStore("rtestuser0","Adidas","sport shop");
             userFacade.createStore("rtestuser0","Nike","sport shop");
-            userFacade.appointOwner("rtestuser0","rtestuser1","Adidas");
-            userFacade.appointManager("rtestuser0","rtestuser2","Adidas",false,false,false,false);
+            userFacade.suggestOwner("rtestuser0","rtestuser1","Adidas");
+            userFacade.approveOwner("rtestuser1","Adidas","rtestuser0");
+            userFacade.suggestManager("rtestuser0","rtestuser2","Adidas",false,false,false,false);
+            userFacade.approveManager("rtestuser2","Adidas","rtestuser0",false,false,false,false);
 
         } catch (Exception e) {
             throw new RuntimeException(e);

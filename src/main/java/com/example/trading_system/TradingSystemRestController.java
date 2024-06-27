@@ -214,6 +214,14 @@ public class TradingSystemRestController {
         return tradingSystem.watchSuspensions(token, admin);
     }
 
+    @PostMapping("/suggestOwner")
+    public ResponseEntity<String> suggestOwner(@RequestParam String appoint,
+                                               @RequestParam String token,
+                                               @RequestParam String newOwner,
+                                               @RequestParam String storeName) {
+        return tradingSystem.suggestOwner(appoint, token, newOwner, storeName);
+    }
+
     @PostMapping("/suggestManage")
     public ResponseEntity<String> suggestManage(@RequestParam String appoint,
                                                 @RequestParam String token,
@@ -226,20 +234,16 @@ public class TradingSystemRestController {
         return tradingSystem.suggestManage(appoint, token, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
     }
 
-    @PostMapping("/suggestOwner")
-    public ResponseEntity<String> suggestOwner(@RequestParam String appoint,
-                                               @RequestParam String token,
-                                               @RequestParam String newOwner,
-                                               @RequestParam String storeName) {
-        return tradingSystem.suggestOwner(appoint, token, newOwner, storeName);
-    }
-
     @PostMapping("/approveManage")
     public ResponseEntity<String> approveManage(@RequestParam String newManager,
                                                 @RequestParam String token,
                                                 @RequestParam String store_name_id,
-                                                @RequestParam String appoint) {
-        return tradingSystem.approveManage(newManager, token, store_name_id, appoint);
+                                                @RequestParam String appoint,
+                                                @RequestParam boolean watch,
+                                                @RequestParam boolean editSupply,
+                                                @RequestParam boolean editBuyPolicy,
+                                                @RequestParam boolean editDiscountPolicy) {
+        return tradingSystem.approveManage(newManager, token, store_name_id, appoint,watch,editSupply,editBuyPolicy,editDiscountPolicy);
     }
 
     @PostMapping("/approveOwner")
@@ -287,29 +291,6 @@ public class TradingSystemRestController {
                                             @RequestParam String storeName,
                                             @RequestParam String ownerToFire) {
         return tradingSystem.fireOwner(ownerAppoint, token, storeName, ownerToFire);
-    }
-
-    @PostMapping("/store/{store_name_id}/appoint-manager")
-    public ResponseEntity<String> appointManager(
-            @RequestParam String username,
-            @RequestParam String token,
-            @RequestParam String appoint,
-            @RequestParam String newManager,
-            @PathVariable String store_name_id,
-            @RequestParam boolean watch,
-            @RequestParam boolean editSupply,
-            @RequestParam boolean editBuyPolicy,
-            @RequestParam boolean editDiscountPolicy) {
-        return tradingSystem.appointManager(username, token, appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
-    }
-
-    @PostMapping("/store/owner/appoint")
-    public ResponseEntity<String> appointOwner(@RequestParam String username,
-                                               @RequestParam String token,
-                                               @RequestParam String appoint,
-                                               @RequestParam String newOwner,
-                                               @RequestParam String storeName) {
-        return tradingSystem.appointOwner(username, token, appoint, newOwner, storeName);
     }
 
     @PostMapping("/store/manager/permission/edit")

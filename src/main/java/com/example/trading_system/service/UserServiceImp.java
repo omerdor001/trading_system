@@ -143,6 +143,13 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException {
+        logger.info("{} trying to suggest user : {} to be a owner in store : {}", appoint, newOwner, storeName);
+        userFacade.suggestOwner(appoint, newOwner, storeName);
+        logger.info("Finished suggesting  : {} to be a owner in store : {}", newOwner, storeName);
+    }
+
+    @Override
     public void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
         logger.info("Trying to suggest user : {} to be a manager in store : {}", newManager, store_name_id);
         userFacade.suggestManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
@@ -150,17 +157,16 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException {
-        logger.info("{} trying to suggest user : {} to be a owner in store : {}", appoint, newOwner, storeName);
-        userFacade.suggestOwner(appoint, newOwner, storeName);
-        logger.info("Finished suggesting  : {} to be a owner in store : {}", newOwner, storeName);
+    public void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException {
+        logger.info("{} trying to approve owner to store : {}", newOwner, storeName);
+        userFacade.approveOwner(newOwner, storeName, appoint);
+        logger.info("Finished approving owner to store : {}", storeName);
     }
 
-
     @Override
-    public void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException {
+    public void approveManage(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
         logger.info("Trying to approve manage to store : {}", store_name_id);
-        userFacade.approveManager(newManager, store_name_id, appoint);
+        userFacade.approveManager(newManager, store_name_id, appoint,watch, editSupply, editBuyPolicy,  editDiscountPolicy);
         logger.info("Finished approving manage to store : {}", store_name_id);
     }
 
@@ -168,13 +174,6 @@ public class UserServiceImp implements UserService {
     public void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException {
         logger.info("{} trying to approve owner to store : {}", userName, storeName);
         userFacade.rejectToManageStore(userName, storeName, appoint);
-        logger.info("Finished approving owner to store : {}", storeName);
-    }
-
-    @Override
-    public void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException {
-        logger.info("{} trying to approve owner to store : {}", newOwner, storeName);
-        userFacade.approveOwner(newOwner, storeName, appoint);
         logger.info("Finished approving owner to store : {}", storeName);
     }
 
@@ -198,21 +197,6 @@ public class UserServiceImp implements UserService {
     @Override
     public void fireOwner(String ownerAppoint, String storeName, String owner) throws IllegalAccessException {
         userFacade.fireOwner(ownerAppoint, storeName, owner);
-    }
-
-
-    @Override
-    public void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
-        logger.info("Trying to appoint manager : {} to store : {}", newManager, store_name_id);
-        userFacade.appointManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
-        logger.info("Finished appointing manager : {} to store : {}", newManager, store_name_id);
-    }
-
-    @Override
-    public void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException {
-        logger.info("Trying to appoint owner : {} to store : {}", newOwner, storeName);
-        userFacade.appointOwner(appoint, newOwner, storeName);
-        logger.info("Finished appointing owner : {} to store : {}", newOwner, storeName);
     }
 
     @Override
