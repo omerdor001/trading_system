@@ -75,17 +75,35 @@ export default defineComponent({
       { id: 3, name: 'Laptops Store', image: 'https://via.placeholder.com/150', rating: 8.5 }
     ]);
 
-    const fetchActiveStores = async () => {
+
+    const enter = async () => {
       try {
-        const response = await axios.get('/api/active-stores');
-        activeStores.value = response.data;
+        console.log("hi");
+        alert("enter");
+        const res = await axios.get('http://localhost:8082/api/trading/enter');
+        localStorage.setItem('username', res.data.username);
+        localStorage.setItem('token', res.data.token);
+        // console.log(res.data.token);
+
       } catch (error) {
-        console.error('Error fetching active stores:', error);
+        console.error('Error entering:', error);
       }
-    };
+    }
+
+    // const fetchActiveStores = async () => {
+    //   try {
+    //     console.log(localStorage.getItem('token'))
+    //     const response = await axios.get('http://localhost:8082/api/trading/active-stores');
+    //     activeStores.value = response.data;
+    //   } catch (error) {
+    //     console.error('Error fetching active stores:', error);
+    //   }
+    // };
 
     onMounted(() => {
-      fetchActiveStores();
+      // console.log("onMounted");
+      enter();
+      // fetchActiveStores();
     });
 
     const viewProducts = (storeId) => {

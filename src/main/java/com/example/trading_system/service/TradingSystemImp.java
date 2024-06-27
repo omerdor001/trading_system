@@ -148,10 +148,11 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> enter() {
         logger.info("Attempting to enter system");
         try {
-            if (checkSystemClosed()) {
-                logger.warn("System is not open, entry forbidden");
-                return new ResponseEntity<>("", HttpStatus.FORBIDDEN);
-            }
+//            TODO Uncomment this
+//            if (checkSystemClosed()) {
+//                logger.warn("System is not open, entry forbidden");
+//                return new ResponseEntity<>("System is not open, entry forbidden", HttpStatus.FORBIDDEN);
+//            }
             logger.info("Trying enter to system as a visitor , with id : {}", counter_user);
             String username = userService.enter(counter_user);
             counter_user++;
