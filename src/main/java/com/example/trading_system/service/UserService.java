@@ -77,4 +77,12 @@ public interface UserService {
     String calculatePrice(String username) throws Exception;
 
     void sendMessageUserToUser(String sender, String receiver, String content);
+
+    String getIsWatchPermission(String username,String storeName) throws IllegalAccessException;
+
+    String getIsEditSupplyPermission(String username,String storeName) throws IllegalAccessException;
+
+    String getIsEditDiscountPolicyPermission(String username,String storeName) throws IllegalAccessException;
+
+    String getIsEditPurchasePolicyPermission(String username,String storeName) throws IllegalAccessException;
 }

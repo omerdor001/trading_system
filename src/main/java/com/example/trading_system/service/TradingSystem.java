@@ -235,5 +235,14 @@ public interface TradingSystem {
     ResponseEntity<String> setSecondPurchasePolicy(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex);
 
     ResponseEntity<String> removePurchasePolicy(String username, String token, String storeName, int selectedIndex);
+
     //endregion
+
+    ResponseEntity<String> getIsWatchPermission(String username,String token,String manager,String storeName);
+
+    ResponseEntity<String> getIsEditSupplyPermission(String username,String token,String manager,String storeName);
+
+    ResponseEntity<String> getIsEditDiscountPolicyPermission(String username,String token,String manager,String storeName);
+
+    ResponseEntity<String> getIsEditPurchasePolicyPermission(String username,String token,String manager,String storeName);
 }

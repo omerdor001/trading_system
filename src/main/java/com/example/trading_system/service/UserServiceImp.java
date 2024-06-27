@@ -254,4 +254,24 @@ public class UserServiceImp implements UserService {
     public void sendMessageUserToUser(String sender, String receiver, String content){
         userFacade.sendMessageUserToUser(sender, receiver, content);
     }
+
+    @Override
+    public String getIsWatchPermission(String username, String storeName) throws IllegalAccessException {
+        return String.valueOf(userFacade.getIsWatchPermission(username,storeName));
+    }
+
+    @Override
+    public String getIsEditSupplyPermission(String username, String storeName) throws IllegalAccessException {
+        return String.valueOf(userFacade.getIsEditSupplyPermission(username,storeName));
+    }
+
+    @Override
+    public String getIsEditDiscountPolicyPermission(String username, String storeName) throws IllegalAccessException {
+        return String.valueOf(userFacade.getIsEditDiscountPolicyPermission(username,storeName));
+    }
+
+    @Override
+    public String getIsEditPurchasePolicyPermission(String username, String storeName) throws IllegalAccessException {
+        return String.valueOf(userFacade.getIsEditPurchasePolicyPermission(username,storeName));
+    }
 }

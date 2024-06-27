@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8080") //TODO IP and Port (general)
 @RequestMapping("/api/trading")
 public class TradingSystemRestController {
 
@@ -55,7 +56,7 @@ public class TradingSystemRestController {
         return tradingSystem.closeSystem(username, token);
     }
 
-    @PostMapping("/enter")
+    @GetMapping("/enter")
     public ResponseEntity<String> enter() {
         return tradingSystem.enter();
     }

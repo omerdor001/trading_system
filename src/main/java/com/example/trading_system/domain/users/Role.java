@@ -41,10 +41,6 @@ public class Role {
         roleState.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
     }
 
-//    public void requestInftomationAboutRolesInStore(String username, String storeId) throws IllegalAccessException {
-//        roleState.requestInftomationAboutRolesInStore(store_name_id);
-//    }
-
     public void removeProduct(String username, String store_name_id, int product_id) throws IllegalAccessException {
         roleState.removeProduct(username, store_name_id, product_id);
     }
@@ -73,12 +69,17 @@ public class Role {
         roleState.setCategory(username, store_name_id, productId, category);
     }
 
-    public void editDiscounts() throws IllegalAccessException {
-        roleState.isEditDiscountPolicy();
+    public boolean editDiscounts() throws IllegalAccessException {
+        if(roleState.isEditDiscountPolicy())
+            return true;
+        else throw new IllegalAccessException("Only managers can access isEditDiscountPolicy");
     }
 
-    public void editPurchasePolicies() throws IllegalAccessException {
-        roleState.isEditPurchasePolicy();
+    public boolean editPurchasePolicies() throws IllegalAccessException {
+        if(roleState.isEditPurchasePolicy()){
+            return true;
+        }
+        else throw new IllegalAccessException("Only managers can access isEditPurchasePolicy");
     }
 }
 
