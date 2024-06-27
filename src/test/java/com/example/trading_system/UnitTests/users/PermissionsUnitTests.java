@@ -1,4 +1,4 @@
-package com.example.trading_system.UnitTests.users;
+package com.example.trading_system.UnitTests.Users;
 
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
@@ -48,8 +48,7 @@ class PermissionsUnitTests {
             userFacade.login("v2", username3, username3);
             userFacade.createStore("r" + username1, "Adidas", "");
             userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, true ,true, true);
-            userFacade.approveManager("r" + username2, "Adidas", "r" + username1);
-            userFacade.appointManager("r" + username1, "r" + username2, "Adidas", true, true, true, true);
+            userFacade.approveManager("r" + username2, "Adidas", "r" + username1, true, true, true, true);
         } catch (Exception e) {
         }
     }
