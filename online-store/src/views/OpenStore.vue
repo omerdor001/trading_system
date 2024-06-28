@@ -34,12 +34,13 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
+import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import CreateButton from 'primevue/button';
-import { useRouter } from 'vue-router';
 import UserViewModel from "@/ViewModel/UserViewModel";
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'OpenStore',
@@ -53,11 +54,23 @@ export default defineComponent({
     const router = useRouter();
     const name = ref('');
     const description = ref('');
-    const username = ref('');  //TODO fix
+    const username = localStorage.getItem('username'); 
+    const token = localStorage.getItem('token'); 
+    
 
     const handleCreateStore = async () => {
       try {
-        console.log('Store created with name:', name.value, 'and description:', description.value);
+        const response = await axios.put('http://localhost:8082/api/trading/create-store',null, {
+            params : { 
+            username: 'r'+username,
+            token: token,
+            storeName: name.value,
+            description: description.value
+            }
+        });
+        alert('Store created:', response.data);
+        name.value = '';
+        description.value = '';
       } catch (error) {
         console.error('Failed to create store:', error.message);
       }
@@ -65,12 +78,14 @@ export default defineComponent({
 
     const logout = () => {
       UserViewModel.actions.logout();
-      router.push('/login');};
+      router.push('/login');
+    };
 
     return {
       name,
       description,
       username,
+      token,
       handleCreateStore,
       logout,
     };

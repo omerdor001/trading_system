@@ -108,26 +108,20 @@ export default defineComponent({
 
     const register = async () => {
       if (validateInputs()) {
-        const userData = {
+        const params = {
           username: username.value,
           password: password.value,
-          birthdate: birthdate.value,
+          birthday: birthdate.value,
         };
 
-        localStorage.setItem('userData', JSON.stringify(userData));
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', userData.username);
-        console.log()
         try {
-          // let string = "http://localhost:8082/api/trading/register?username={}&password={}"
-          const response = await axios.get("http://localhost:8082/api/trading/register?username="+username.value.toString()+"&password="+password.value.toString()+"&birthday="+birthdate.value);
-          console.log(response);
-        } catch (e) {
-          console.log(errorMessage)
-          throw Error(errorMessage)
-
+          const response = await axios.get("http://localhost:8082/api/trading/register",{ params });
+          console.log(response.data); 
+          //TODO add success message
+        } catch (error) {
+          errorMessage.value = error.response.data || 'Failed to register'; // Display server error message if available
+          console.error('Registration error:', error);
         }
-        router.push('/');
       }
     };
 

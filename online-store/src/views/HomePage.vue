@@ -78,12 +78,10 @@ export default defineComponent({
 
     const enter = async () => {
       try {
-        console.log("hi");
-        alert("enter");
         const res = await axios.get('http://localhost:8082/api/trading/enter');
         localStorage.setItem('username', res.data.username);
         localStorage.setItem('token', res.data.token);
-        // console.log(res.data.token);
+        localStorage.setItem('isLoggedIn',false);
 
       } catch (error) {
         console.error('Error entering:', error);
@@ -101,8 +99,10 @@ export default defineComponent({
     // };
 
     onMounted(() => {
-      // console.log("onMounted");
-      enter();
+      if(!isLoggedIn.value){
+        enter();
+      }
+      alert(localStorage.getItem('username'));
       // fetchActiveStores();
     });
 
@@ -111,7 +111,11 @@ export default defineComponent({
     };
 
     const openStore = () => {
-      router.push('/open-store');
+      if (isLoggedIn.value) {
+        router.push('/open-store');
+      } else {
+        console.error("Unauthorize");
+      }
     };
     const navigateToSearchStore = () => {
       router.push('/search-store');
@@ -126,7 +130,7 @@ export default defineComponent({
     const approveManagement = () => {
       if (isLoggedIn.value) {
           router.push('/approve-manager');
-       } else{
+       } else {
         console.error("Unauthorize");
       }
     };
@@ -210,11 +214,23 @@ export default defineComponent({
       console.log('Viewing Purchases History as System Manager');
       router.push({ name: 'PurchaseHistory' });
     };
-    const logout = () => {
+
+    const logout = async () => {
+      try {
+        const res = await axios.get('http://localhost:8082/api/trading/logout', {
+        params: {
+            token: localStorage.getItem('token'),
+            username: localStorage.getItem('username'),
+          }
+        });
+        localStorage.setItem('username', res.data.username);
+        localStorage.setItem('token', res.data.token);
+      } catch (error) {
+        console.error('Error entering:', error);
+      }
       isLoggedIn.value = false;
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('roles');
-      localStorage.removeItem('username');
       router.push('/');
     };
     const navigateToPurchaseHistory = () => {

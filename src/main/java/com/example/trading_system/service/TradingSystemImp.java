@@ -320,7 +320,7 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> login(String token, String usernameV, String username, String password) {
         logger.info("Attempting to login user: {}", username);
         try {
-            if (checkSystemClosed()) return systemClosedResponse();
+            //if (checkSystemClosed()) return systemClosedResponse();
             if (userService.login(usernameV, username, password)) {
                 if (!token.isEmpty()) Security.makeTokenExpire(token);
                 String newToken = Security.generateToken("r" + username);
@@ -752,7 +752,7 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> openStoreExist(String userName, String token, String storeName) {
         logger.info("{} Trying to Open Store Exist : {}", userName, storeName);
         try {
-            if (checkSystemClosed()) return systemClosedResponse();
+           // if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             marketService.openStoreExist(userName, storeName);
             logger.info("Finished open store exist successfully");

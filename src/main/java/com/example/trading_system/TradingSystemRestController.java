@@ -81,7 +81,7 @@ public class TradingSystemRestController {
         return tradingSystem.openStoreExist(username, token, storeName);
     }
 
-    @PostMapping("/store/create")
+    @PutMapping("/create-store")
     public ResponseEntity<String> openStore(@RequestParam String username,
                                             @RequestParam String token,
                                             @RequestParam String storeName,
@@ -175,7 +175,7 @@ public class TradingSystemRestController {
         return tradingSystem.setCategory(username, token, storeName, productId, category);
     }
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     public ResponseEntity<String> login(@RequestParam String token,
                                         @RequestParam String usernameV,
                                         @RequestParam String username,

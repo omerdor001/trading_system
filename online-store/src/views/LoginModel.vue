@@ -45,6 +45,7 @@ import { Button as PrimeButton } from 'primevue/button';
 import { InputText } from 'primevue/inputtext';
 import { PasswordText } from 'primevue/password';
 import { PrimeCard } from 'primevue/card';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'LoginModel',
@@ -59,86 +60,41 @@ export default defineComponent({
     const username = ref('');
     const password = ref('');
     const errorMessage = ref('');
-
-    const authenticate = async (username, password) => {
-      let roles = [];
-      let isAuthenticated = false;
-
-      switch (username) {
-        case 'admin':
-          if (password === 'admin') {
-            roles = ['storeManager', 'commercialManager', 'storeOwner', 'systemManager'];
-            isAuthenticated = true;
-          }
-          break;
-        case 'manager':
-          if (password === 'manager') {
-            roles = ['storeManager'];
-            isAuthenticated = true;
-          }
-          break;
-        case 'system':
-          if (password === 'system') {
-            roles = ['systemManager'];
-            isAuthenticated = true;
-          }
-          break;
-        case 'commercial':
-          if (password === 'commercial') {
-            roles = ['commercialManager'];
-            isAuthenticated = true;
-          }
-          break;
-        case 'lana':
-          if (password === 'lana') {
-            roles = ['commercialManager', 'systemManager', 'storeOwner'];
-            isAuthenticated = true;
-          }
-          break;
-        case 'user':
-          if (password === 'user') {
-            roles = [];  // No roles for regular user
-            isAuthenticated = true;
-          }
-          break;
-        default:
-          isAuthenticated = false;
-      }
-
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      if (isAuthenticated) {
-        localStorage.setItem('roles', JSON.stringify(roles));
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', username);
-        return true;
-      } else {
-        localStorage.removeItem('roles');
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('username');
-        return false;
-      }
-    };
-
     const handleLogin = async () => {
       try {
-        const loggedIn = await authenticate(username.value, password.value);
-        if (loggedIn) {
-          router.push('/');
-        } else {
-          errorMessage.value = 'Invalid username or password';
-        }
+        const response = await axios.get('http://localhost:8082/api/trading/login', {
+        params: {
+            token: localStorage.getItem('token'),
+            usernameV: localStorage.getItem('username'),
+            username: username.value,
+            password: password.value
+          }
+        });
+        console.log('Login successful:', response.data);
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('username', username.value);
+        localStorage.setItem('token', response.data.token);
+        router.push('/'); 
       } catch (error) {
-        errorMessage.value = error.message;
+        if (error.response) {
+            errorMessage.value = error.response.data || 'Failed to Login';
+            console.error('Server responded with status:', error.response.status);
+          } else if (error.request) {
+            errorMessage.value = 'No response from server';
+            console.error('No response received:', error.request);
+          } else {
+            errorMessage.value = 'Request failed to reach the server';
+            console.error('Error setting up the request:', error.message);
+          }
       }
     };
 
     const goBack = () => {
-      router.go(-1);
+      router.go(-1); // Go back to previous page using router
     };
 
     const goToRegister = () => {
-      router.push('/register');
+      router.push('/register'); // Navigate to register page using router
     };
 
     const notifications = () => {
@@ -149,10 +105,6 @@ export default defineComponent({
       // Handle viewing cart
     };
 
-    const goHome = () => {
-      router.push({ name: 'HomePage' });
-    };
-
     return {
       username,
       password,
@@ -161,8 +113,7 @@ export default defineComponent({
       goBack,
       goToRegister,
       notifications,
-      viewCart,
-      goHome
+      viewCart
     };
   }
 });
@@ -225,23 +176,6 @@ export default defineComponent({
   display: block;
   margin-bottom: 5px;
   color: #333;
-}
-
-.custom-card {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.card-body {
-  padding: 1rem;
-  display: block;
-}
-
-.card-footer {
-  background-color: #f0f0f0;
-  padding: 0.5rem;
-  text-align: center;
 }
 
 .button-group {
