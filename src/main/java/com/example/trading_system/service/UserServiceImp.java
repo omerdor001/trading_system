@@ -20,17 +20,18 @@ public class UserServiceImp implements UserService {
     private static UserServiceImp instance = null;
     private UserFacadeImp userFacade;
 
-    public UserFacadeImp getUserFacade() {
-        return userFacade;
-    }
-
     private UserServiceImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         userFacade = UserFacadeImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
     }
 
-    public static UserServiceImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository,StoreRepository storeRepository) {
-        if (instance == null) instance = new UserServiceImp(paymentService,deliveryService, notificationSender,userRepository,storeRepository);
+    public static UserServiceImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
+        if (instance == null)
+            instance = new UserServiceImp(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
         return instance;
+    }
+
+    public UserFacadeImp getUserFacade() {
+        return userFacade;
     }
 
     @Override
@@ -41,12 +42,12 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public String getPendingUserNotifications(String admin, String username){
+    public String getPendingUserNotifications(String admin, String username) {
         return userFacade.getPendingUserNotifications(admin, username);
     }
 
     @Override
-    public void makeAdmin(String admin, String newAdmin){
+    public void makeAdmin(String admin, String newAdmin) {
         userFacade.makeAdmin(admin, newAdmin);
     }
 
@@ -75,7 +76,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void sendPendingNotifications(String username){
+    public void sendPendingNotifications(String username) {
         userFacade.sendPendingNotifications(username);
     }
 
@@ -251,27 +252,32 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void sendMessageUserToUser(String sender, String receiver, String content){
+    public void sendMessageUserToUser(String sender, String receiver, String content) {
         userFacade.sendMessageUserToUser(sender, receiver, content);
     }
 
     @Override
     public String getIsWatchPermission(String username, String storeName) throws IllegalAccessException {
-        return String.valueOf(userFacade.getIsWatchPermission(username,storeName));
+        return String.valueOf(userFacade.getIsWatchPermission(username, storeName));
     }
 
     @Override
     public String getIsEditSupplyPermission(String username, String storeName) throws IllegalAccessException {
-        return String.valueOf(userFacade.getIsEditSupplyPermission(username,storeName));
+        return String.valueOf(userFacade.getIsEditSupplyPermission(username, storeName));
     }
 
     @Override
     public String getIsEditDiscountPolicyPermission(String username, String storeName) throws IllegalAccessException {
-        return String.valueOf(userFacade.getIsEditDiscountPolicyPermission(username,storeName));
+        return String.valueOf(userFacade.getIsEditDiscountPolicyPermission(username, storeName));
     }
 
     @Override
     public String getIsEditPurchasePolicyPermission(String username, String storeName) throws IllegalAccessException {
-        return String.valueOf(userFacade.getIsEditPurchasePolicyPermission(username,storeName));
+        return String.valueOf(userFacade.getIsEditPurchasePolicyPermission(username, storeName));
+    }
+
+    @Override
+    public String getUserMessagesJson(String admin, String username) {
+        return userFacade.getUserMessagesJson(admin, username);
     }
 }

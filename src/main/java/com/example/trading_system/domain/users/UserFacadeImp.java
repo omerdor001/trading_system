@@ -1047,11 +1047,11 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("Message receiver user must exist");
         if (content.isEmpty())
             throw new RuntimeException("Message content cannot be empty");
-        if (sender.charAt(0) == 'v' && receiver.charAt(0) == 'v')
-            throw new RuntimeException("Visitors cannot message each other");
+        if (receiver.charAt(0) == 'v')
+            throw new RuntimeException("Visitors cannot receive messages from users");
         User receiverUser = userRepository.getUser(receiver);
         User senderUser = userRepository.getUser(sender);
-        receiverUser.receiveMessage(sender.substring(1), sender, content);
+        receiverUser.receiveMessage(sender, sender.substring(1), content);
         sendNotification(sender,receiver,"You have received a message from user: " + senderUser.getUsername());
     }
 
@@ -1111,5 +1111,20 @@ public class UserFacadeImp implements UserFacade {
         if (!user.isManager(storeName))
             throw new IllegalAccessException("User must be Manager");
         return user.getRoleByStoreId(storeName).getRoleState().isEditPurchasePolicy();
+    }
+
+    @Override
+    public String getUserMessagesJson(String admin, String username){
+        if (!userRepository.isExist(admin)) {
+            throw new IllegalArgumentException("Admin user doesn't exist in the system");
+        }
+        if (!userRepository.isExist(username)) {
+            throw new IllegalArgumentException("User doesn't exist in the system");
+        }
+        if (!isAdmin(admin)) {
+            throw new IllegalArgumentException("Only admin user can get user notifications");
+        }
+        User usernameUser = userRepository.getUser(username);
+        return usernameUser.getMessagesJSON();
     }
 }

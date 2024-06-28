@@ -391,6 +391,11 @@ public class MarketServiceImp implements MarketService {
     public void sendMessageStoreToUser(String owner, String receiver, String storeName, String content){
         marketFacade.sendMessageStoreToUser(owner, receiver, storeName, content);
     }
+
+    @Override
+    public String getStoreMessagesJson(String admin, String storename){
+        return marketFacade.getStoreMessagesJson(admin, storename);
+    }
 }
 
 

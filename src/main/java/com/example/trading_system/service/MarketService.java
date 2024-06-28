@@ -159,4 +159,6 @@ public interface MarketService {
 
     void removePurchasePolicy(String username, String storeName, int selectedIndex) throws IllegalAccessException;
     //endregion
+
+    String getStoreMessagesJson(String admin, String storeName);
 }

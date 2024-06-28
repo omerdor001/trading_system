@@ -22,7 +22,7 @@ public interface UserFacade {
 
     HashMap<String, User> getUsers();
 
-    void register(String username, String token, LocalDate birthdate) throws Exception;
+    void register(String username, String password, LocalDate birthdate) throws Exception;
 
     void login(String usernameV, String username, String password);
 
@@ -107,4 +107,6 @@ public interface UserFacade {
     boolean getIsEditPurchasePolicyPermission(String username,String storeName) throws IllegalAccessException;
 
     void sendMessageUserToUser(String sender, String receiver, String content);
+
+    String getUserMessagesJson(String admin, String username);
 }

@@ -1177,13 +1177,34 @@ public class MarketFacadeImp implements MarketFacade {
             else if (receiver.charAt(0) == 'v')
                 throw new RuntimeException("Visitor no longer exists, no need to reply");
         }
+        if (!userFacade.isUserExist(owner)) {
+            throw new RuntimeException("Message sender user must exist");
+        }
         if (!isStoreExist(storeName))
             throw new RuntimeException("Message sender store must exist");
         if (content.isEmpty())
             throw new RuntimeException("Message content cannot be empty");
         User receiverUser = userFacade.getUser(receiver);
         User ownerUser = userFacade.getUser(owner);
+        if (!ownerUser.isOwner(storeName)){
+            throw new RuntimeException("Message sender must be an owner of the store");
+        }
         receiverUser.receiveMessage(storeName, storeName, content);
-        userFacade.sendNotification(storeName, receiver,  "Owner: " + ownerUser.getUsername() + "from store: " + storeName + " has replied to your message");
+        userFacade.sendNotification(owner, receiver, "Owner: " + ownerUser.getUsername() + " from store: " + storeName + " has replied to your message");
+    }
+
+    @Override
+    public String  getStoreMessagesJson(String admin, String storeName){
+        if (!userFacade.isUserExist(admin)) {
+            throw new IllegalArgumentException("Admin user doesn't exist in the system");
+        }
+        if (!storeRepository.isExist(storeName)) {
+            throw new IllegalArgumentException("Store doesn't exist in the system");
+        }
+        if (!userFacade.isAdmin(admin)) {
+            throw new IllegalArgumentException("Only admin user can get user notifications");
+        }
+        Store store = storeRepository.getStore(storeName);
+        return store.getMessagesJSON();
     }
 }

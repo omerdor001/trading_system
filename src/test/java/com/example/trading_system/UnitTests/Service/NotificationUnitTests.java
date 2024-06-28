@@ -25,11 +25,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 public class NotificationUnitTests {
-    private NotificationSender mockNotificationSender;
     private final String owner1 = "rowner1";
     private final String owner2 = "rowner2";
     private final String manager = "rmanager";
     private final String storeName = "store1";
+    private NotificationSender mockNotificationSender;
     private UserRepository userRepository;
     private StoreRepository storeRepository;
     private UserFacade userFacade;
@@ -385,6 +385,81 @@ public class NotificationUnitTests {
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
             assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as a manager at store: store1\"}]", notifications);
             verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}"));
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentToUser_NotLogged() {
+        try {
+            userFacade.sendMessageUserToUser(owner1, owner2, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You have received a message from user: owner1\"}]", notifications);
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentToUser_Logged() {
+        try {
+            userFacade.getUser(owner2).login();
+            userFacade.sendMessageUserToUser(owner1, owner2, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
+            assertEquals("[]", notifications);
+            verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You have received a message from user: owner1\"}"));
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentToStore_NotLogged() {
+        try {
+            userFacade.getUser(owner2).login();
+            userFacade.getUser(owner1).logout();
+            marketFacade.sendMessageUserToStore(owner2, storeName, "test");
+            userFacade.getUser(owner1).login();
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner1);
+            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"Store: store1 received a message from user: rowner2\"}]", notifications);
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentToStore_Logged() {
+        try {
+            userFacade.getUser(owner2).login();
+            marketFacade.sendMessageUserToStore(owner2, storeName, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner1);
+            assertEquals("[]", notifications);
+            verify(mockNotificationSender).sendNotification(eq(owner1), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"Store: store1 received a message from user: rowner2\"}"));
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentFromStore_NotLogged() {
+        try {
+            marketFacade.sendMessageStoreToUser(owner1, owner2, storeName, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Owner: owner1 from store: store1 has replied to your message\"}]", notifications);
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentFromStore_Logged() {
+        try {
+            userFacade.getUser(owner2).login();
+            marketFacade.sendMessageStoreToUser(owner1, owner2, storeName, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
+            assertEquals("[]", notifications);
+            verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Owner: owner1 from store: store1 has replied to your message\"}"));
         } catch (Exception e) {
             fail("Unexpected error: " + e.getMessage());
         }

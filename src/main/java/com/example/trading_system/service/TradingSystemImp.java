@@ -1004,6 +1004,34 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+    @Override
+    public ResponseEntity<String> getUserMessagesJson(String admin, String token, String username){
+        logger.info("Trying to get messages of user: {}", username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(admin, token)) return invalidTokenResponse();
+            String result = userService.getUserMessagesJson(admin, username);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while trying to get messages of user: {}", username);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getStoreMessagesJson(String admin, String token, String storeName){
+        logger.info("Trying to get messages of store: {}", storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(admin, token)) return invalidTokenResponse();
+            String result = marketService.getStoreMessagesJson(admin, storeName);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while trying to get messages of store: {}", storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     //region Discount management
 
     @Override
@@ -1695,6 +1723,4 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-    //end region
 }

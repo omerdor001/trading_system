@@ -27,11 +27,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 
 class NotificationAcceptanceTests {
+    private final String storeName = "store1";
     private TradingSystem tradingSystem;
     private NotificationSender mockNotificationSender;
     private String token;
     private String username;
-    private final String storeName = "store1";
     private String owner2Username;
     private String owner2Token;
     private UserRepository userRepository;
@@ -350,6 +350,89 @@ class NotificationAcceptanceTests {
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as a manager at store: store1\"}]", result.getBody());
         verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}"));
+    }
+
+
+    @Test
+    public void testNotification_MessageSentToUser_NotLogged() {
+        try {
+            tradingSystem.sendMessageUserToUser(username, token, "rowner2", "test");
+            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+            assertEquals(HttpStatus.OK, result.getStatusCode());
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You have received a message from user: owner1\"}]", result.getBody());
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentToUser_Logged() {
+        try {
+            loginOwner2();
+            tradingSystem.sendMessageUserToUser(username, token, "rowner2", "test");
+            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+            assertEquals("[]", result.getBody());
+            assertEquals(HttpStatus.OK, result.getStatusCode());
+            verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You have received a message from user: owner1\"}"));
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentToStore_NotLogged() {
+        try {
+            loginOwner2();
+            tradingSystem.makeAdmin(username, token, owner2Username);
+            tradingSystem.logout(token, username);
+            tradingSystem.sendMessageUserToStore(owner2Username, owner2Token, storeName, "test");
+            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(owner2Username, owner2Token, username);
+            assertEquals(HttpStatus.OK, result.getStatusCode());
+            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"Store: store1 received a message from user: rowner2\"}]", result.getBody());
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentToStore_Logged() {
+        try {
+            loginOwner2();
+            tradingSystem.makeAdmin(username, token, owner2Username);
+            tradingSystem.sendMessageUserToStore(owner2Username, owner2Token, storeName, "test");
+            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(owner2Username, owner2Token, username);
+            assertEquals(HttpStatus.OK, result.getStatusCode());
+            assertEquals("[]", result.getBody());
+            verify(mockNotificationSender).sendNotification(eq(username), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"Store: store1 received a message from user: rowner2\"}"));
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentFromStore_NotLogged() {
+        try {
+            tradingSystem.sendMessageStoreToUser(username, token, "rowner2", storeName, "test");
+            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+            assertEquals(HttpStatus.OK, result.getStatusCode());
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Owner: owner1 from store: store1 has replied to your message\"}]", result.getBody());
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentFromStore_Logged() {
+        try {
+            loginOwner2();
+            tradingSystem.sendMessageStoreToUser(username, token, "rowner2", storeName, "test");
+            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+            assertEquals(HttpStatus.OK, result.getStatusCode());
+            assertEquals("[]", result.getBody());
+            verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Owner: owner1 from store: store1 has replied to your message\"}"));
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
     }
 
     @Test

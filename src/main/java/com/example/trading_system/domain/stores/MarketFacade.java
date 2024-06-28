@@ -182,4 +182,6 @@ public interface MarketFacade {
     void sendMessageUserToStore(String sender, String storeName, String content);
 
     void sendMessageStoreToUser(String owner, String receiver, String storeName, String content);
+
+    String getStoreMessagesJson(String admin, String storeName);
 }
