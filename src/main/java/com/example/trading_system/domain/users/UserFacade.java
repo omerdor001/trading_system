@@ -3,6 +3,8 @@ package com.example.trading_system.domain.users;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public interface UserFacade {
@@ -20,11 +22,15 @@ public interface UserFacade {
 
     HashMap<String, User> getUsers();
 
-    void register(String username, String token, LocalDate birthdate) throws Exception;
+    void register(String username, String password, LocalDate birthdate) throws Exception;
 
     void login(String usernameV, String username, String password);
 
     void sendPendingNotifications(String username);
+
+    void sendNotification(String sender, String receiver, String content);
+
+    void sendNotificationToStoreOwners(String sender, List<String> owners, String content);
 
     void logout(int id, String username);
 
@@ -37,8 +43,6 @@ public interface UserFacade {
     String watchSuspensions(String admin);
 
     boolean isSuspended(String username);
-
-    void sendNotification(String sender, String receiver, String content);
 
     void saveUserCart(String username, int productId, String storeName, int quantity);
 
@@ -97,4 +101,8 @@ public interface UserFacade {
     boolean getIsEditDiscountPolicyPermission(String username,String storeName) throws IllegalAccessException;
 
     boolean getIsEditPurchasePolicyPermission(String username,String storeName) throws IllegalAccessException;
+
+    void sendMessageUserToUser(String sender, String receiver, String content);
+
+    String getUserMessagesJson(String admin, String username);
 }

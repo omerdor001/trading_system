@@ -361,6 +361,81 @@ public class NotificationUnitTests {
     }
 
     @Test
+    public void testNotification_MessageSentToUser_NotLogged() {
+        try {
+            userFacade.sendMessageUserToUser(owner1, owner2, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You have received a message from user: owner1\"}]", notifications);
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentToUser_Logged() {
+        try {
+            userFacade.getUser(owner2).login();
+            userFacade.sendMessageUserToUser(owner1, owner2, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
+            assertEquals("[]", notifications);
+            verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You have received a message from user: owner1\"}"));
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentToStore_NotLogged() {
+        try {
+            userFacade.getUser(owner2).login();
+            userFacade.getUser(owner1).logout();
+            marketFacade.sendMessageUserToStore(owner2, storeName, "test");
+            userFacade.getUser(owner1).login();
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner1);
+            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"Store: store1 received a message from user: rowner2\"}]", notifications);
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentToStore_Logged() {
+        try {
+            userFacade.getUser(owner2).login();
+            marketFacade.sendMessageUserToStore(owner2, storeName, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner1);
+            assertEquals("[]", notifications);
+            verify(mockNotificationSender).sendNotification(eq(owner1), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"Store: store1 received a message from user: rowner2\"}"));
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentFromStore_NotLogged() {
+        try {
+            marketFacade.sendMessageStoreToUser(owner1, owner2, storeName, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Owner: owner1 from store: store1 has replied to your message\"}]", notifications);
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentFromStore_Logged() {
+        try {
+            userFacade.getUser(owner2).login();
+            marketFacade.sendMessageStoreToUser(owner1, owner2, storeName, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
+            assertEquals("[]", notifications);
+            verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Owner: owner1 from store: store1 has replied to your message\"}"));
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
     public void testNotification_SendPendingNotifications() {
         try {
             userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);

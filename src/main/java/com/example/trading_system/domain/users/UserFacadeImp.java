@@ -311,6 +311,20 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
+    public void sendNotificationToStoreOwners(String sender, List<String> owners, String content){
+        if (!isUserExist(sender)) throw new RuntimeException("Not a valid sender: " + sender);
+        User senderUser = userRepository.getUser(sender);
+        if (!senderUser.getLogged()) throw new RuntimeException("Notification sender must be logged in");
+        for(String owner : owners){
+            if (!isUserExist(owner)) throw new RuntimeException("Not a valid receiver: " + owner);
+            Notification notification = new Notification(sender, owner, content);
+            User receiverUser = userRepository.getUser(owner);
+            if (!receiverUser.getLogged()) receiverUser.receiveDelayedNotification(notification);
+            else notificationSender.sendNotification(owner, notification.toString());
+        }
+    }
+
+    @Override
     public void saveUserCart(String username, int productId, String storeName, int quantity) {
         if (storeName == null || storeName.trim().isEmpty()) {
             logger.error("Store name is null");
@@ -968,6 +982,22 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
+    public void sendMessageUserToUser(String sender, String receiver, String content) {
+        if (!userRepository.isExist(sender))
+            throw new RuntimeException("Message sender user must exist");
+        if (!userRepository.isExist(receiver))
+            throw new RuntimeException("Message receiver user must exist");
+        if (content.isEmpty())
+            throw new RuntimeException("Message content cannot be empty");
+        if (receiver.charAt(0) == 'v')
+            throw new RuntimeException("Visitors cannot receive messages from users");
+        User receiverUser = userRepository.getUser(receiver);
+        User senderUser = userRepository.getUser(sender);
+        receiverUser.receiveMessage(sender, sender.substring(1), content);
+        sendNotification(sender,receiver,"You have received a message from user: " + senderUser.getUsername());
+    }
+
+    @Override
     public boolean getIsWatchPermission(String username, String storeName) throws IllegalAccessException {
         if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
@@ -1025,5 +1055,18 @@ public class UserFacadeImp implements UserFacade {
         return user.getRoleByStoreId(storeName).getRoleState().isEditPurchasePolicy();
     }
 
-
+    @Override
+    public String getUserMessagesJson(String admin, String username){
+        if (!userRepository.isExist(admin)) {
+            throw new IllegalArgumentException("Admin user doesn't exist in the system");
+        }
+        if (!userRepository.isExist(username)) {
+            throw new IllegalArgumentException("User doesn't exist in the system");
+        }
+        if (!isAdmin(admin)) {
+            throw new IllegalArgumentException("Only admin user can get user notifications");
+        }
+        User usernameUser = userRepository.getUser(username);
+        return usernameUser.getMessagesJSON();
+    }
 }

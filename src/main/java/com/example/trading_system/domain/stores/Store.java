@@ -1,5 +1,6 @@
 package com.example.trading_system.domain.stores;
 
+import com.example.trading_system.domain.Message;
 import com.example.trading_system.domain.stores.discountPolicies.*;
 import com.example.trading_system.domain.stores.purchasePolicies.*;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 @Getter
 public class Store {
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
-    private String nameId; // this will be the ID for the store
+    private String nameId;
     private String description;
     private HashMap<Integer, Product> products;
     @Getter
@@ -34,6 +35,7 @@ public class Store {
     private LinkedList<DiscountPolicy> discountPolicies;
     private LinkedList<Condition> discountConditions;
     private LinkedList<PurchasePolicy> purchasePolicies;
+    private LinkedList<Message> messages;
 
     public Store(String nameId, String description, String founder, Double storeRating) {
         this.nameId = nameId;
@@ -49,6 +51,7 @@ public class Store {
         this.discountConditions = new LinkedList<>();
         this.purchasePolicies = new LinkedList<>();
         this.isOpen = true;
+        this.messages = new LinkedList<>();
     }
 
     public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, int category) {
@@ -266,6 +269,43 @@ public class Store {
         return founder;
     }
 
+    public LinkedList<DiscountPolicy> getDiscountPolicies() {
+        return discountPolicies;
+    }
+
+    public LinkedList<Condition> getDiscountConditions() {
+        return discountConditions;
+    }
+
+    public LinkedList<PurchasePolicy> getPurchasePolicies() {
+        return purchasePolicies;
+    }
+
+    public LinkedList<Message> getMessages(){
+        return this.messages;
+    }
+
+    public String getMessagesJSON(){
+        return Message.toJsonList(this.messages);
+    }
+
+    public synchronized void releaseReservedProducts(int productId, int quantity) {
+        getProduct(productId).releaseReservedProducts(quantity);
+    }
+
+    public synchronized void removeReservedProducts(int productId, int quantity) {
+        getProduct(productId).removeReservedProducts(quantity);
+    }
+
+    public synchronized void checkAvailabilityAndConditions(int id, int quantity) {
+        if (!isOpen()) throw new IllegalArgumentException("When store is closed cant to check product quantity");
+        if (getProduct(id) == null) {
+            logger.error("Product not found: " + id);
+            throw new NoSuchElementException("Product not found: " + id);
+        }
+        getProduct(id).checkAvailabilityAndConditions(quantity);
+    }
+
     public double calculatePrice(Collection<ProductInSaleDTO> items) {
         double price = 0;
         for (ProductInSaleDTO item : items)
@@ -275,13 +315,21 @@ public class Store {
         return price;
     }
 
-    public boolean validatePurchasePolicies(Collection<ProductInSaleDTO> items,int age) {
-        for (PurchasePolicy policy :purchasePolicies) {
+    public boolean validatePurchasePolicies(Collection<ProductInSaleDTO> items, int age) {
+        for (PurchasePolicy policy : purchasePolicies) {
             if (!policy.isPurchasePolicySatisfied(items, age)) {
                 return false;
             }
         }
         return true;
+    }
+
+    public String getPurchaseHistoryString(String username) {
+        return salesHistory.getPurchaseHistory(username);
+    }
+
+    public void receiveMessage(String senderId, String senderUsername, String content){
+        this.messages.add(new Message(senderId, senderUsername, content));
     }
 
     //region Discount creation
@@ -377,22 +425,8 @@ public class Store {
     public void removeDiscount(int selectedIndex) {
         if (selectedIndex >= discountPolicies.size())
             discountConditions.remove(selectedIndex - discountPolicies.size());
-        else
-            discountPolicies.remove(selectedIndex);
+        else discountPolicies.remove(selectedIndex);
     }
-
-    public LinkedList<DiscountPolicy> getDiscountPolicies() {
-        return discountPolicies;
-    }
-
-    public LinkedList<Condition> getDiscountConditions() {
-        return discountConditions;
-    }
-
-    public LinkedList<PurchasePolicy> getPurchasePolicies() {
-        return purchasePolicies;
-    }
-
     //endregion
 
     //region Discount/Condition editing/manipulation
@@ -420,8 +454,7 @@ public class Store {
         if (selectedSecondIndex >= discountPolicies.size())
             setDiscount = discountConditions.remove(selectedSecondIndex - discountPolicies.size());
         else {
-            if (selectedDiscountIndex < selectedSecondIndex)
-                selectedSecondIndex -= 1;
+            if (selectedDiscountIndex < selectedSecondIndex) selectedSecondIndex -= 1;
             setDiscount = discountPolicies.remove(selectedSecondIndex);
         }
         editedDiscount.setFirst(setDiscount);
@@ -435,8 +468,7 @@ public class Store {
         if (selectedSecondIndex >= discountPolicies.size())
             setDiscount = discountConditions.remove(selectedSecondIndex - discountPolicies.size());
         else {
-            if (selectedDiscountIndex < selectedSecondIndex)
-                selectedSecondIndex -= 1;
+            if (selectedDiscountIndex < selectedSecondIndex) selectedSecondIndex -= 1;
             setDiscount = discountPolicies.remove(selectedSecondIndex);
         }
         editedDiscount.setSecond(setDiscount);
@@ -475,8 +507,7 @@ public class Store {
         if (selectedDeciderIndex >= discountPolicies.size())
             setDiscount = discountConditions.remove(selectedDeciderIndex - discountPolicies.size());
         else {
-            if (selectedDiscountIndex < selectedDeciderIndex)
-                selectedDeciderIndex -= 1;
+            if (selectedDiscountIndex < selectedDeciderIndex) selectedDeciderIndex -= 1;
             setDiscount = discountPolicies.remove(selectedDeciderIndex);
         }
         editedDiscount.setDecider(setDiscount);
@@ -496,13 +527,9 @@ public class Store {
         Condition setCondition = discountConditions.get(selectedConditionIndex);
         setCondition.setCategory(newCategory);
     }
-
-    public String getPurchaseHistoryString(String username) {
-        return salesHistory.getPurchaseHistory(username);
-    }
     //endregion
 
-    //region Discount creation
+    //region Policy creation
     public String getPurchasePoliciesInfo() {
         StringBuilder jsonBuilder = new StringBuilder();
         jsonBuilder.append("[ ");
@@ -521,55 +548,47 @@ public class Store {
     }
 
     public void addPurchasePolicyByAge(int ageToCheck, int category) {
-       if(ageToCheck<=0 )
-           throw new IllegalArgumentException("Parameter "+ageToCheck+" cannot be negative or zero");
-        if(category<=0)
-            throw new IllegalArgumentException("Parameter "+category+" cannot be negative or zero");
-        purchasePolicies.add(new PurchasePolicyByAge(ageToCheck,category));
+        if (ageToCheck <= 0)
+            throw new IllegalArgumentException("Parameter " + ageToCheck + " cannot be negative or zero");
+        if (category <= 0) throw new IllegalArgumentException("Parameter " + category + " cannot be negative or zero");
+        purchasePolicies.add(new PurchasePolicyByAge(ageToCheck, category));
     }
 
     public void addPurchasePolicyByCategoryAndDate(int category, LocalDateTime dateTime) {
-        if(category<=0 )
-            throw new IllegalArgumentException("Parameter "+category+" cannot be negative or zero");
-        if(dateTime==null)
-            throw new IllegalArgumentException("Parameter "+dateTime+" cannot be null");
-        purchasePolicies.add(new PurchasePolicyByCategoryAndDate(category,dateTime));
+        if (category <= 0) throw new IllegalArgumentException("Parameter " + category + " cannot be negative or zero");
+        if (dateTime == null) throw new IllegalArgumentException("Parameter " + dateTime + " cannot be null");
+        purchasePolicies.add(new PurchasePolicyByCategoryAndDate(category, dateTime));
     }
 
     public void addPurchasePolicyByDate(LocalDateTime dateTime) {
-        if(dateTime==null)
-            throw new IllegalArgumentException("Parameter "+dateTime+" cannot be null");
+        if (dateTime == null) throw new IllegalArgumentException("Parameter " + dateTime + " cannot be null");
         purchasePolicies.add(new PurchasePolicyByDate(dateTime));
     }
 
-    public void addPurchasePolicyByProductAndDate(int productId,LocalDateTime dateTime) {
-        if(productId<0)
-            throw new IllegalArgumentException("Parameter "+productId+" cannot be negative");
-        if(dateTime==null)
-            throw new IllegalArgumentException("Parameter "+dateTime+" cannot be null");
-        purchasePolicies.add(new PurchasePolicyByProductAndDate(productId,dateTime));
+    public void addPurchasePolicyByProductAndDate(int productId, LocalDateTime dateTime) {
+        if (productId < 0) throw new IllegalArgumentException("Parameter " + productId + " cannot be negative");
+        if (dateTime == null) throw new IllegalArgumentException("Parameter " + dateTime + " cannot be null");
+        purchasePolicies.add(new PurchasePolicyByProductAndDate(productId, dateTime));
     }
 
-    public void addPurchasePolicyByShoppingCartMaxProductsUnit(int productId,int numOfQuantity) {
-        if(productId<0)
-            throw new IllegalArgumentException("Parameter "+productId+" cannot be negative");
-        if(numOfQuantity<=0)
-            throw new IllegalArgumentException("Parameter "+numOfQuantity+" cannot be negative and equal");
-        purchasePolicies.add(new PurchasePolicyByShoppingCartMaxProductsUnit(productId,numOfQuantity));
+    public void addPurchasePolicyByShoppingCartMaxProductsUnit(int productId, int numOfQuantity) {
+        if (productId < 0) throw new IllegalArgumentException("Parameter " + productId + " cannot be negative");
+        if (numOfQuantity <= 0)
+            throw new IllegalArgumentException("Parameter " + numOfQuantity + " cannot be negative and equal");
+        purchasePolicies.add(new PurchasePolicyByShoppingCartMaxProductsUnit(productId, numOfQuantity));
     }
 
     public void addPurchasePolicyByShoppingCartMinProducts(int numOfQuantity) {
-        if(numOfQuantity<=0)
-            throw new IllegalArgumentException("Parameter "+numOfQuantity+" cannot be negative and equal");
+        if (numOfQuantity <= 0)
+            throw new IllegalArgumentException("Parameter " + numOfQuantity + " cannot be negative and equal");
         purchasePolicies.add(new PurchasePolicyByShoppingCartMinProducts(numOfQuantity));
     }
 
-    public void addPurchasePolicyByShoppingCartMinProductsUnit(int productId,int numOfQuantity) {
-        if(productId<0)
-            throw new IllegalArgumentException("Parameter "+productId+" cannot be negative");
-        if(numOfQuantity<=0)
-            throw new IllegalArgumentException("Parameter "+numOfQuantity+" cannot be negative and equal");
-        purchasePolicies.add(new PurchasePolicyByShoppingCartMinProductsUnit(productId,numOfQuantity));
+    public void addPurchasePolicyByShoppingCartMinProductsUnit(int productId, int numOfQuantity) {
+        if (productId < 0) throw new IllegalArgumentException("Parameter " + productId + " cannot be negative");
+        if (numOfQuantity <= 0)
+            throw new IllegalArgumentException("Parameter " + numOfQuantity + " cannot be negative and equal");
+        purchasePolicies.add(new PurchasePolicyByShoppingCartMinProductsUnit(productId, numOfQuantity));
     }
 
     public void addAndPurchasePolicy() {
@@ -585,22 +604,22 @@ public class Store {
     }
 
     public void setPurchasePolicyProductId(int selectedIndex, int productId) {
-        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
+        PurchasePolicy purchasePolicy = purchasePolicies.get(selectedIndex);
         purchasePolicy.setPurchasePolicyProduct(productId);
     }
 
     public void setPurchasePolicyNumOfQuantity(int selectedIndex, int numOfQuantity) {
-        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
+        PurchasePolicy purchasePolicy = purchasePolicies.get(selectedIndex);
         purchasePolicy.setPurchasePolicyNumOfQuantity(numOfQuantity);
     }
 
     public void setPurchasePolicyDateTime(int selectedIndex, LocalDateTime dateTime) {
-        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
+        PurchasePolicy purchasePolicy = purchasePolicies.get(selectedIndex);
         purchasePolicy.setPurchasePolicyDateTime(dateTime);
     }
 
     public void setPurchasePolicyAge(int selectedIndex, int age) {
-        PurchasePolicy purchasePolicy=purchasePolicies.get(selectedIndex);
+        PurchasePolicy purchasePolicy = purchasePolicies.get(selectedIndex);
         purchasePolicy.setPurchasePolicyAge(age);
     }
 
@@ -621,30 +640,10 @@ public class Store {
     }
 
     public void removePurchasePolicy(int selectedIndex) {
-        if (selectedIndex >= purchasePolicies.size())
-            purchasePolicies.remove(selectedIndex - purchasePolicies.size());
-        else
-            purchasePolicies.remove(selectedIndex);
-    }
-
-    public synchronized  void releaseReservedProducts(int productId, int quantity) {
-        getProduct(productId).releaseReservedProducts(quantity);
-    }
-
-    public synchronized  void removeReservedProducts(int productId, int quantity) {
-        getProduct(productId).removeReservedProducts(quantity);
-
-    }
-
-    public synchronized   void checkAvailabilityAndConditions(int id, int quantity) {
-        if (!isOpen())
-            throw new IllegalArgumentException("When store is closed cant to check product quantity");
-        if (getProduct(id) == null) {
-            logger.error("Product not found: " + id);
-            throw new NoSuchElementException("Product not found: " + id);
-        }
-        getProduct(id).checkAvailabilityAndConditions(quantity);
+        if (selectedIndex >= purchasePolicies.size()) purchasePolicies.remove(selectedIndex - purchasePolicies.size());
+        else purchasePolicies.remove(selectedIndex);
     }
 
     //endregion
+
 }
