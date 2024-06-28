@@ -61,13 +61,13 @@ public interface TradingSystem {
 
     ResponseEntity<String> watchSuspensions(String token,String admin);
 
-    ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
-
     ResponseEntity<String> suggestOwner(String appoint, String token, String newOwner, String storeName);
 
-    ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint);
+    ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
     ResponseEntity<String> approveOwner(String newOwner, String token, String storeName, String appoint);
+
+    ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
     ResponseEntity<String> rejectToOwnStore(String username, String token, String storeName, String appoint);
 
@@ -78,12 +78,6 @@ public interface TradingSystem {
     ResponseEntity<String> fireManager(String owner, String token, String storeName, String manager);
 
     ResponseEntity<String> fireOwner(String ownerAppoint, String token, String storeName, String ownerToFire);
-
-    //TODO Same as suggestManager/approveManager?
-    ResponseEntity<String> appointManager(String username, String token, String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
-
-    //TODO same as suggestOwner/approveOwner?
-    ResponseEntity<String> appointOwner(String username, String token, String appoint, String newOwner, String storeName);
 
     ResponseEntity<String> editPermissionForManager(String username, String token, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 

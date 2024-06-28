@@ -122,7 +122,6 @@ public class AppointOwnerAcceptanceTests {
     public void GivenNewOwnerIsAlreadyOwner_WhenSuggestOwner_ThenThrowException() {
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveOwner(ownerUserName, ownerToken, storeName, userName).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.appointOwner(userName, token, userName, ownerUserName, storeName).getStatusCode());
         ResponseEntity<String> resp = tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
         Assertions.assertEquals("User already Owner of this store", resp.getBody());
@@ -169,7 +168,6 @@ public class AppointOwnerAcceptanceTests {
     public void GivenUserIsAlreadyOwner_WhenApproveOwner_ThenThrowException() {
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveOwner(ownerUserName, ownerToken, storeName, userName).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.appointOwner(userName, token, userName, ownerUserName, storeName).getStatusCode());
         ResponseEntity<String> resp = tradingSystemImp.approveOwner(ownerUserName, ownerToken, storeName, userName);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
         Assertions.assertEquals("User already Owner of this store", resp.getBody());
@@ -186,15 +184,13 @@ public class AppointOwnerAcceptanceTests {
     @Test
     public void GivenUserIsManagerValid_WhenApprove_Owner_ThenSuccess() {
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, ownerUserName, storeName, true, true, true, true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(ownerUserName, ownerToken, storeName, userName).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.appointManager(userName, token, userName, ownerUserName, storeName, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(ownerUserName, ownerToken, storeName, userName, true, true, true, true).getStatusCode());
         ResponseEntity<String> response = tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName, token, storeName, ownerUserName);
         Assertions.assertTrue(Objects.requireNonNull(response.getBody()).contains("Manager"));
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName).getStatusCode());
         ResponseEntity<String> resp = tradingSystemImp.approveOwner(ownerUserName, ownerToken, storeName, userName);
         Assertions.assertEquals(HttpStatus.OK, resp.getStatusCode());
         Assertions.assertEquals("Success approving owner", resp.getBody());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.appointOwner(userName, token, userName, ownerUserName, storeName).getStatusCode());
         ResponseEntity<String> response2 = tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName, token, storeName, ownerUserName);
         Assertions.assertFalse(Objects.requireNonNull(response2.getBody()).contains("Manager"));
         Assertions.assertTrue(response2.getBody().contains("Owner"));
@@ -228,7 +224,6 @@ public class AppointOwnerAcceptanceTests {
     public void GivenAlreadyOwner_WhenRejectOwner_ThenThrowException() {
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveOwner(ownerUserName, ownerToken, storeName, userName).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.appointOwner(userName, token, userName, ownerUserName, storeName).getStatusCode());
         ResponseEntity<String> res = tradingSystemImp.rejectToOwnStore(ownerUserName, ownerToken, storeName, userName);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
         Assertions.assertEquals("User already Owner of this store", res.getBody());

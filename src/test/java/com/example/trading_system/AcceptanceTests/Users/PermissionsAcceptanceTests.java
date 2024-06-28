@@ -77,8 +77,7 @@ public class PermissionsAcceptanceTests {
         }
         tradingSystem.openStore(username, token1, "store1", "");
         tradingSystem.suggestManage(username,token1,username1,"store1",true,true,true,true);
-        tradingSystem.approveManage(username1,token2,"store1",username);
-        tradingSystem.appointManager(username,token1,username,username1,"store1",true,true,true,true);
+        tradingSystem.approveManage(username1,token2,"store1",username,true,true,true,true);
     }
 
     @AfterEach

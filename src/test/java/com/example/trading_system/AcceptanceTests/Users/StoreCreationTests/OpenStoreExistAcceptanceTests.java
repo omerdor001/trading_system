@@ -104,7 +104,6 @@ public class OpenStoreExistAcceptanceTests {
         }
         tradingSystemImp.suggestOwner(userName, token, userNameOwner, storeName);
         tradingSystemImp.approveOwner(userNameOwner, tokenOwner, storeName, userName);
-        tradingSystemImp.appointOwner(userName, token, userName, userNameOwner, storeName);
         String response2 = tradingSystemImp.openStoreExist(userNameOwner, tokenOwner, storeName).getBody();
         Assertions.assertEquals("Only founder can open store exist", response2);
     }

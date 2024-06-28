@@ -26,8 +26,6 @@ import StoreSearchResults from '@/views/StoreSearchResults.vue';
 // import ShowNotifications from '@/views/ShowNotifications.vue';
 import SuggestOwner from '@/views/SuggestOwner.vue';
 import SuggestManager from '@/views/SuggestManager.vue';
-import AppointOwner from '@/views/AppointOwner.vue';
-import AppointManager from '@/views/AppointManager.vue';
 import ApproveOwner from '@/views/ApproveOwner.vue';
 import ApproveManager from '@/views/ApproveManager.vue';
 import PaymentPage from '@/views/PaymentPage.vue';
@@ -60,8 +58,6 @@ const routes = [
     { path: '/store-search-results', name: 'StoreSearchResults', component: StoreSearchResults },
     { path: '/suggest-owner', name: 'SuggestOwner', component: SuggestOwner },
     { path: '/suggest-manager', name: 'SuggestManager', component: SuggestManager },
-    { path: '/appoint-owner', name: 'AppointOwner', component: AppointOwner },
-    { path: '/appoint-manager',name: 'AppointManager',component: AppointManager },
     { path: '/approve-owner',name: 'ApproveOwner',component: ApproveOwner },
     { path: '/approve-manager',name: 'ApproveManager',component: ApproveManager},
     { path: '/payment', name: 'PaymentPage', component: PaymentPage },

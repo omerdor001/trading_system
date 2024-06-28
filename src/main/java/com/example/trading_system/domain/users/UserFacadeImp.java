@@ -532,70 +532,6 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void approveManager(String newManager, String storeName, String appoint) throws IllegalAccessException {
-        if (!marketFacade.isStoreExist(storeName))
-            throw new NoSuchElementException("No store called " + storeName + " exist");
-        if (!userRepository.isExist(newManager)) {
-            throw new NoSuchElementException("No user called " + newManager + " exist");
-        }
-        if (!userRepository.isExist(appoint)) {
-            throw new NoSuchElementException("No user called " + appoint + " exist");
-        }
-        if (isSuspended(newManager)) {
-            throw new RuntimeException("User is suspended from the system");
-        }
-        User appointUser = userRepository.getUser(appoint);
-        User newManagerUser = userRepository.getUser(newManager);
-        if (!newManagerUser.getLogged()) {
-            throw new IllegalAccessException("New Manager user is not logged");
-        }
-        if (!appointUser.isOwner(storeName)) {
-            throw new IllegalAccessException("User must be Owner");
-        }
-        if (newManagerUser.isManager(storeName)) {
-            throw new IllegalAccessException("User already Manager of this store");
-        }
-        if (newManagerUser.isOwner(storeName)) {
-            throw new IllegalAccessException("User cannot be owner of this store");
-        }
-        if (newManagerUser.removeWaitingAppoint_Manager(storeName) == null)
-            throw new RuntimeException("No appointment requests in this store.");
-        sendNotification(newManager, appoint, newManagerUser.getUsername() + " accepted your suggestion to become a manager at store: " + storeName);
-    }
-
-    @Override
-    public void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException {
-        if (!marketFacade.isStoreExist(storeName))
-            throw new NoSuchElementException("No store called " + storeName + " exist");
-        if (!userRepository.isExist(userName)) {
-            throw new NoSuchElementException("No user called " + userName + " exist");
-        }
-        if (!userRepository.isExist(appoint)) {
-            throw new NoSuchElementException("No user called " + appoint + " exist");
-        }
-        if (isSuspended(userName)) {
-            throw new RuntimeException("User is suspended from the system");
-        }
-        User appointUser = userRepository.getUser(appoint);
-        User newManagerUser = userRepository.getUser(userName);
-        if (!newManagerUser.getLogged()) {
-            throw new IllegalAccessException("New Manager user is not logged");
-        }
-        if (!appointUser.isOwner(storeName)) {
-            throw new IllegalAccessException("User must be Owner");
-        }
-        if (newManagerUser.isManager(storeName)) {
-            throw new IllegalAccessException("User already Manager of this store");
-        }
-        if (newManagerUser.isOwner(storeName)) {
-            throw new IllegalAccessException("User cannot be owner of this store");
-        }
-        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName);
-        if (perm == null) throw new IllegalAccessException("No one suggest this user to be a manager");
-        sendNotification(userName, appoint, newManagerUser.getUsername() + " rejected your suggestion to become a manager at store: " + storeName);
-    }
-
-    @Override
     public void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException {
         if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
@@ -626,7 +562,44 @@ public class UserFacadeImp implements UserFacade {
             newOwnerUser.removeManagerRole(storeName);
             marketFacade.getStore(storeName).removeManager(newOwner);
         }
+        newOwnerUser.addOwnerRole(appoint, storeName);
+        marketFacade.getStore(storeName).addOwner(newOwner);
         sendNotification(newOwner, appoint, newOwnerUser.getUsername() + " accepted your suggestion to become an owner at store: " + storeName);
+    }
+
+    @Override
+    public void approveManager(String newManager, String storeName, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
+        if (!marketFacade.isStoreExist(storeName))
+            throw new NoSuchElementException("No store called " + storeName + " exist");
+        if (!userRepository.isExist(newManager)) {
+            throw new NoSuchElementException("No user called " + newManager + " exist");
+        }
+        if (!userRepository.isExist(appoint)) {
+            throw new NoSuchElementException("No user called " + appoint + " exist");
+        }
+        if (isSuspended(newManager)) {
+            throw new RuntimeException("User is suspended from the system");
+        }
+        User appointUser = userRepository.getUser(appoint);
+        User newManagerUser = userRepository.getUser(newManager);
+        if (!newManagerUser.getLogged()) {
+            throw new IllegalAccessException("New Manager user is not logged");
+        }
+        if (!appointUser.isOwner(storeName)) {
+            throw new IllegalAccessException("User must be Owner");
+        }
+        if (newManagerUser.isManager(storeName)) {
+            throw new IllegalAccessException("User already Manager of this store");
+        }
+        if (newManagerUser.isOwner(storeName)) {
+            throw new IllegalAccessException("User cannot be owner of this store");
+        }
+        if (newManagerUser.removeWaitingAppoint_Manager(storeName) == null)
+            throw new RuntimeException("No appointment requests in this store.");
+        newManagerUser.addManagerRole(appoint, storeName);
+        marketFacade.getStore(storeName).addManager(newManager);
+        newManagerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+        sendNotification(newManager, appoint, newManagerUser.getUsername() + " accepted your suggestion to become a manager at store: " + storeName);
     }
 
     @Override
@@ -798,26 +771,26 @@ public class UserFacadeImp implements UserFacade {
         sendNotification(ownerAppoint, owner, "You are no longer an owner at store: " + storeName + " due to being fired by user: " + ownerAppointer.getUsername());
     }
 
-
-    public void appointManager(String appoint, String newManager, String storeName, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
+    @Override
+    public void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException {
         if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
+        if (!userRepository.isExist(userName)) {
+            throw new NoSuchElementException("No user called " + userName + " exist");
+        }
         if (!userRepository.isExist(appoint)) {
             throw new NoSuchElementException("No user called " + appoint + " exist");
         }
-        if (isSuspended(appoint)) {
+        if (isSuspended(userName)) {
             throw new RuntimeException("User is suspended from the system");
         }
-        if (!userRepository.isExist(newManager)) {
-            throw new NoSuchElementException("No user called " + newManager + " exist");
-        }
         User appointUser = userRepository.getUser(appoint);
-        User newManagerUser = userRepository.getUser(newManager);
-        if (!appointUser.getLogged()) {
-            throw new IllegalAccessException("Appoint user is not logged");
+        User newManagerUser = userRepository.getUser(userName);
+        if (!newManagerUser.getLogged()) {
+            throw new IllegalAccessException("New Manager user is not logged");
         }
         if (!appointUser.isOwner(storeName)) {
-            throw new IllegalAccessException("Appoint user must be Owner");
+            throw new IllegalAccessException("User must be Owner");
         }
         if (newManagerUser.isManager(storeName)) {
             throw new IllegalAccessException("User already Manager of this store");
@@ -825,40 +798,9 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User cannot be owner of this store");
         }
-        newManagerUser.addManagerRole(appoint, storeName);
-        marketFacade.getStore(storeName).addManager(newManager);
-        newManagerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy);
-        sendNotification(appoint, newManager, "User: " + appointUser.getUsername() + " has appointed you as a manager at store: " + storeName);
-    }
-
-    @Override
-    public void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException, NoSuchElementException {
-        if (!marketFacade.isStoreExist(storeName))
-            throw new NoSuchElementException("No store called " + storeName + " exist");
-        if (!userRepository.isExist(appoint)) {
-            throw new NoSuchElementException("No user called " + appoint + " exist");
-        }
-        if (isSuspended(appoint)) {
-            throw new RuntimeException("User is suspended from the system");
-        }
-        if (!userRepository.isExist(newOwner)) {
-            throw new NoSuchElementException("No user called " + newOwner + " exist");
-        }
-        User appointUser = userRepository.getUser(appoint);
-        User newOwnerUser = userRepository.getUser(newOwner);
-        if (!appointUser.getLogged()) {
-            throw new IllegalAccessException("Appoint user is not logged");
-        }
-        if (!appointUser.isOwner(storeName)) {
-            throw new IllegalAccessException("Appoint user must be Owner");
-        }
-        if (newOwnerUser.isOwner(storeName)) {
-            throw new IllegalAccessException("User already Owner of this store");
-        }
-        newOwnerUser.addOwnerRole(appoint, storeName);
-        marketFacade.getStore(storeName).addOwner(newOwner);
-        sendNotification(appoint, newOwner, "User: " + appointUser.getUsername() + " has appointed you as an owner at store: " + storeName);
-
+        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName);
+        if (perm == null) throw new IllegalAccessException("No one suggest this user to be a manager");
+        sendNotification(userName, appoint, newManagerUser.getUsername() + " rejected your suggestion to become a manager at store: " + storeName);
     }
 
     @Override
