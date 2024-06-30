@@ -20,6 +20,8 @@ public abstract class User {
     private LocalDateTime suspendedEnd;
     private String address;
     private LinkedList<Message> messages;
+    private boolean isTimerCancelled;
+
 
     public User(String username) {
         this.username = username;
@@ -29,6 +31,7 @@ public abstract class User {
         this.suspendedEnd = null;
         this.address = "";
         this.messages = new LinkedList<>();
+        this.isTimerCancelled = true;
     }
 
     public String getUsername() {
@@ -194,5 +197,12 @@ public abstract class User {
 
     public void receiveMessage(String senderId, String senderUsername, String content){
         this.messages.add(new Message(senderId, senderUsername, content));
+    }
+    public boolean isTimerCancelled() {
+        return isTimerCancelled;
+    }
+
+    public void setTimerCancelled(boolean timerCancelled) {
+        isTimerCancelled = timerCancelled;
     }
 }
