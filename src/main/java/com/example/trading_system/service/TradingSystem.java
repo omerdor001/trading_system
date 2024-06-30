@@ -84,6 +84,8 @@ public interface TradingSystem {
 
     ResponseEntity<String> getAllStores(String userName, String token);
 
+    ResponseEntity<String> getStoresIOpened(String username, String token);
+
     ResponseEntity<String> getStoresIOwn(String username, String token);
 
     ResponseEntity<String> getStoresIManage(String username, String token);

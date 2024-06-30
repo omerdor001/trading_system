@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -115,6 +116,22 @@ public class MarketFacadeImp implements MarketFacade {
         sb.deleteCharAt(sb.length() - 1);
         sb.append("]");
         return sb.toString();
+    }
+
+    @Override
+    public String getStoresIOpened(String username){
+        if (!userFacade.isUserExist(username)) {
+            throw new IllegalArgumentException("User must exist");
+        }
+        if (userFacade.isSuspended(username)) {
+            throw new RuntimeException("User is suspended from the system");
+        }
+        List stores=new ArrayList();
+        for(Store store:storeRepository.getAllStoresByStores()){
+            if(store.getFounder().equals(username))
+                stores.add(store.getNameId());
+        }
+        return stores.toString();
     }
 
     @Override

@@ -875,7 +875,6 @@ public class UserFacadeImp implements UserFacade {
         return user.getStoresIManage();
     }
 
-
     @Override
     public String getUserPassword(String username) {
         if (username.charAt(0) != 'r') {

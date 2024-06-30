@@ -312,6 +312,11 @@ public class TradingSystemRestController {
         return tradingSystem.getAllStores(userName, token);
     }
 
+    @GetMapping("/stores-I-created")
+    public ResponseEntity<String> getStoresIOpened(@RequestParam String userName, @RequestParam String token) {
+        return tradingSystem.getStoresIOpened(userName,token);
+    }
+
     @GetMapping("/stores-I-own")
     public ResponseEntity<String> getStoresIOwn(@RequestParam String userName, @RequestParam String token) {
         return tradingSystem.getStoresIOwn(userName,token);
