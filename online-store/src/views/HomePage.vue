@@ -9,7 +9,9 @@
         <PrimeButton v-if="isLoggedIn" label="Approve Management" @click="approveManagement" class="sidebar-button" />
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="My Stores" @click="myStoresIOwn" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Suggest Owner" @click="suggestOwner" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Appoint Owner" @click="appointOwner" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Suggest Manager" @click="suggestManager" class="sidebar-button"/>
+        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Appoint Manager" @click="appointManager" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Purchases History" @click="navigateToPurchaseHistory" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Close Store" @click="closeStore" class="sidebar-button"/>
       </div>
@@ -41,6 +43,7 @@
         <PrimeButton v-if="isSystemManager && isLoggedIn" label="Purchases History" @click="purchasesHistoryAsSystemManager" class="sidebar-button"/>
       </div>
     </div>
+    <p-toast></p-toast>
   </div>
 </template>
 
@@ -50,6 +53,7 @@ import SiteHeader from '@/components/SiteHeader.vue';
 import AboutSection from '@/components/AboutSection.vue';
 import { Button as PrimeButton } from 'primevue/button';
 import { useRouter } from 'vue-router';
+import { useToast } from 'primevue/usetoast';
 import axios from 'axios';
 
 export default defineComponent({
@@ -61,6 +65,7 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
+    const toast = useToast();
     const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
     const roles = JSON.parse(localStorage.getItem('roles') || '[]');
     const isStoreOwner = ref(roles.includes('storeOwner'));
@@ -73,35 +78,23 @@ export default defineComponent({
       { id: 3, name: 'Laptops Store', image: 'https://via.placeholder.com/150', rating: 8.5 }
     ]);
 
-
     const enter = async () => {
       try {
         const res = await axios.get('http://localhost:8082/api/trading/enter');
         localStorage.setItem('username', res.data.username);
         localStorage.setItem('token', res.data.token);
-        localStorage.setItem('isLoggedIn',false);
-
+        localStorage.setItem('isLoggedIn', false);
       } catch (error) {
-        console.error('Error entering:', error);
+        if(error.response.status==403){
+          router.push('/register');
+        }
       }
-    }
-
-    // const fetchActiveStores = async () => {
-    //   try {
-    //     console.log(localStorage.getItem('token'))
-    //     const response = await axios.get('http://localhost:8082/api/trading/active-stores');
-    //     activeStores.value = response.data;
-    //   } catch (error) {
-    //     console.error('Error fetching active stores:', error);
-    //   }
-    // };
+    };
 
     onMounted(() => {
-      if(!isLoggedIn.value){
+      if (!isLoggedIn.value) {
         enter();
       }
-      alert(localStorage.getItem('username'));
-      // fetchActiveStores();
     });
 
     const viewProducts = (storeId) => {
@@ -112,115 +105,140 @@ export default defineComponent({
       if (isLoggedIn.value) {
         router.push('/open-store');
       } else {
-        console.error("Unauthorize");
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Unauthorized', life: 3000 });
       }
     };
+
     const navigateToSearchStore = () => {
       router.push('/search-store');
     };
+
     const approveOwnership = () => {
       if (isLoggedIn.value) {
-          router.push('/approve-owner');
-       } else{
-        console.error("Unauthorize");
+        router.push('/approve-owner');
+      } else {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Unauthorized', life: 3000 });
       }
     };
+
     const approveManagement = () => {
       if (isLoggedIn.value) {
-          router.push('/approve-manager');
-       } else {
-        console.error("Unauthorize");
+        router.push('/approve-manager');
+      } else {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Unauthorized', life: 3000 });
       }
     };
+
     const myStoresIOwn = () => {
       router.push('/my-stores-i-own');
     };
-    const manageProductsAsOwner = () => {
-      router.push('/store-name-input');
-    };
+
     const suggestOwner = () => {
       if (isStoreOwner.value) {
-          router.push('/suggest-owner');
-       } else{
-        console.error("Unauthorize");
+        router.push('/suggest-owner');
+      } else {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Unauthorized', life: 3000 });
       }
     };
+
     const suggestManager = () => {
       if (isStoreOwner.value) {
-          router.push('/suggest-manager');
-       } else{
-        console.error("Unauthorize");
+        router.push('/suggest-manager');
+      } else {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Unauthorized', life: 3000 });
+      }
+    };
+
+    const appointOwner = () => {
+      if (isStoreOwner.value) {
+        router.push('/appoint-owner');
+      } else {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Unauthorized', life: 3000 });
+      }
+    };
+
+    const appointManager = () => {
+      if (isStoreOwner.value) {
+        router.push('/appoint-manager');
+      } else {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Unauthorized', life: 3000 });
       }
     };
 
     const purchasesHistoryAsOwner = () => {
-      router.push({ name: 'PurchaseHistory' }); 
+      router.push({ name: 'PurchaseHistory' });
     };
+
     const closeStore = () => {
       router.push('/close-store');
     };
+
     const myStoresIManage = () => {
       router.push('/stores-i-manage');
     };
-    const manageProductsAsManager = () => {
-      console.log('Managing Products as Manager');
-      router.push('/store-name-input');
-    };
+
     const addPolicy = () => {
       console.log('Adding Policy');
     };
+
     const editPolicy = () => {
       console.log('Editing Policy');
     };
+
     const createSuspension = () => {
-      console.log('Creating Suspension');
       if (isSystemManager.value) {
         router.push('/create-suspension');
       } else {
-        console.error('Unauthorized');
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Unauthorized', life: 3000 });
       }
     };
+
     const endSuspension = () => {
-      console.log('Ending Suspension');
       if (isSystemManager.value) {
         router.push('/end-suspension');
       } else {
-        console.error('Unauthorized');
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Unauthorized', life: 3000 });
       }
     };
+
     const watchSuspensions = () => {
       if (isSystemManager.value) {
         router.push('/watch-suspensions');
       } else {
-        console.error('Unauthorized');
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Unauthorized', life: 3000 });
       }
     };
+
     const purchasesHistoryAsSystemManager = () => {
-      console.log('Viewing Purchases History as System Manager');
       router.push({ name: 'PurchaseHistory' });
     };
 
     const logout = async () => {
       try {
-        const res = await axios.get('http://localhost:8082/api/trading/logout', {
-        params: {
+        console.log(localStorage.getItem('token'));
+        const response = await axios.get('http://localhost:8082/api/trading/logout', {
+          params: {
             token: localStorage.getItem('token'),
             username: localStorage.getItem('username'),
           }
         });
-        localStorage.setItem('username', res.data.username);
-        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('username', response.data.username);
+        localStorage.setItem('token', response.data.token);
+        console.log(localStorage.getItem('token'));
       } catch (error) {
-        console.error('Error entering:', error);
+        console.log(error.response.data);
+        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
       }
       isLoggedIn.value = false;
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('roles');
-      router.push('/');
+      router.push('/login');
     };
+
     const navigateToPurchaseHistory = () => {
       router.push({ name: 'PurchaseHistory' });
     };
+
     return {
       isLoggedIn,
       isStoreOwner,
@@ -234,13 +252,13 @@ export default defineComponent({
       approveOwnership,
       approveManagement,
       myStoresIOwn,
-      manageProductsAsOwner,
+      suggestOwner,
+      suggestManager,
+      appointOwner,
+      appointManager,
       purchasesHistoryAsOwner,
       closeStore,
       myStoresIManage,
-      manageProductsAsManager,
-      suggestOwner,
-      suggestManager,
       addPolicy,
       editPolicy,
       createSuspension,

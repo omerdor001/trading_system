@@ -19,6 +19,7 @@
 <script>
 import { ref, defineComponent, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { useToast } from 'primevue/usetoast';
 import PrimeToast from 'primevue/toast';
@@ -38,6 +39,7 @@ export default defineComponent({
   setup() {
     const suspendedUsers = ref([]);
     const username = ref(localStorage.getItem('username') || '');
+    const token = ref(localStorage.getItem('token') || '');
     const toast = useToast();
     const router = useRouter();
 
@@ -61,12 +63,13 @@ export default defineComponent({
 
     onMounted(async () => {
       try {
-        const response = await fetch('/api/watchSuspensions?admin=username'); 
-        if (!response.ok) {
-          throw new Error('Failed to fetch suspension details');
-        }
-        const data = await response.json();
-        suspendedUsers.value = data.map(user => ({
+        const response = await axios.get('/api/watchSuspensions', {
+          params: { 
+            token: token.value,
+            admin: username.value 
+          }
+        });
+        suspendedUsers.value = response.data.map(user => ({
           suspendedUsername: user.suspendedUsername,
           suspendedStart: new Date(user.suspendedStart).toLocaleString(),
           suspensionDays: user.suspensionDays,

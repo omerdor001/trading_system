@@ -186,7 +186,7 @@ public class TradingSystemRestController {
 
     @GetMapping("/logout")
     public ResponseEntity<String> logout(@RequestParam String token, @RequestParam String username) {
-        return tradingSystem.logout(token, username);
+        return tradingSystem.logout(token, "r"+username);
     }
 
     @PostMapping("/suspendUser")
