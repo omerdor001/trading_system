@@ -76,13 +76,9 @@ export default defineComponent({
 
     const enter = async () => {
       try {
-        console.log("hi");
-        alert("enter");
         const res = await axios.get('http://localhost:8082/api/trading/enter');
         localStorage.setItem('username', res.data.username);
         localStorage.setItem('token', res.data.token);
-        // console.log(res.data.token);
-
       } catch (error) {
         console.error('Error entering:', error);
       }
