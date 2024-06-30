@@ -58,6 +58,7 @@ public class TradingSystemRestController {
 
     @GetMapping("/enter")
     public ResponseEntity<String> enter() {
+        tradingSystem.openSystem(storeRepository);
         return tradingSystem.enter();
     }
 
@@ -183,7 +184,7 @@ public class TradingSystemRestController {
         return tradingSystem.login(token, usernameV, username, password);
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public ResponseEntity<String> logout(@RequestParam String token, @RequestParam String username) {
         return tradingSystem.logout(token, username);
     }
