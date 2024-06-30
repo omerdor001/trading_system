@@ -170,7 +170,11 @@ export default defineComponent({
     };
 
     const closeStore = () => {
-      router.push('/close-store');
+      if (isLoggedIn.value) {
+         router.push('/close-store');
+      } else {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Unauthorized', life: 3000 });
+      }
     };
 
     const myStoresIManage = () => {

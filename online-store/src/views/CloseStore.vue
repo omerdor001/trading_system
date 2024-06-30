@@ -4,7 +4,8 @@
   <div class="close-store-container">
     <div class="close-store-form">
       <h2>Select Store to Close</h2>
-      <div v-if="stores.length === 0">Loading...</div>
+      <div v-if="loading">Loading...</div>
+      <div v-else-if="stores.length === 0">No stores found.</div>
       <div v-else>
         <div class="store-list">
           <div v-for="store in stores" :key="store">
@@ -15,53 +16,58 @@
           </div>
         </div>
         <div class="button-group">
-          <button v-if="selectedStore" @click="markStoreForClosure">Mark Store for Closure</button>
-        </div>
-        <div class="button-group">
+          <button v-if="markedStore" @click="markStoreForClosure">Mark Store for Closure</button>
           <button class="close-button" @click="closeStore">Close Store</button>
+          <button class="back-button" @click="goBack">Go Back</button>
         </div>
       </div>
     </div>
   </div>
-  </div>
+</div>
 </template>
 
 <script>
 import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
-import StoreViewModel from '@/ViewModel/StoreViewModel';
-import UserViewModel from '@/ViewModel/UserViewModel';
 
 const api_base_url = '/api';
-console.log(api_base_url)
+
 export default {
-   name: 'CloseStore',
+  name: 'CloseStore',
   components: {
     SiteHeader
   },
   data() {
     return {
       stores: [],
+      loading: true,
       selectedStoreId: '',
       markedStore: null,
-      username: UserViewModel.getters.getUsername() || ''
-
+      username: localStorage.getItem('username'),
+      token: localStorage.getItem('token'),
     };
   },
-  async mounted() {
-    this.stores = ['nirStore','nirStore2']
-   // try {
-    //  const response = await axios.get(`$api_base_url/stores/owned`);
-     // this.stores = response.data;
-   // } catch (error) {
-     // console.error('Error fetching stores:', error);
-   // }
+  created() {
+    this.fetchStores();
   },
-
-  
   methods: {
-        logout() {
-      UserViewModel.actions.logout();
+    async fetchStores() {
+      try {
+        const response = await axios.get(`${api_base_url}/stores-I-created`, {
+          params: {
+            userName: this.username,
+            token: this.token,
+          }
+        });
+        this.stores = response.data; 
+      } catch (error) {
+        console.error('Failed to fetch stores:', error);
+        alert('Failed to load stores.');
+      } finally {
+        this.loading = false;
+      }
+    },
+    logout() {
       this.$router.push('/login');
     },
     async selectStore(storeName) {
@@ -72,35 +78,27 @@ export default {
         alert('Please select a store.');
         return;
       }
-
-      try {
-        await axios.put(`${api_base_url}/stores/${this.selectedStoreId}/close`);
-        this.markedStore = this.stores.find(store => store.id === this.selectedStoreId);
-      } catch (error) {
-        console.error('Error marking store for closure:', error);
-        alert('Failed to mark store for closure.');
-      }
+      // Mark store for closure logic here, if needed
     },
     async closeStore() {
-      if (!this.markedStore) {
-        alert('No store is marked for closure.');
-        return;
-      }
       try {
-        await StoreViewModel.actions.closeStoreExist(this.username, '', this.markedStore);
-        console.log('Store Closed with name:', this.markedStore, 'and description:', this.description);
+        const response = await axios.post(`${api_base_url}/store/close`, null, {
+          params: {
+            username: this.username,
+            token: this.token,
+            storeName: this.markedStore
+          }
+        });
+        console.log('Store Closed:', response.data);
+        alert('Store closed successfully.');
+        this.$router.push('/');
       } catch (error) {
-        console.error('Failed to Closed store:', error.message);
+        console.error('Failed to close store:', error);
+        alert('Failed to close store.');
       }
-      this.$router.push('/');
-    }
-  },
-  watch: {
-    selectedStoreId(newValue, oldValue) {
-      if (newValue !== oldValue) {
-        // Reset markedStore when a new store is selected
-        this.markedStore = null;
-      }
+    },
+    goBack() {
+      this.$router.go(-1);
     }
   }
 };
@@ -121,7 +119,7 @@ export default {
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   width: 400px;
-  text-align: left; /* Align form content to the left */
+  text-align: left;
 }
 
 .close-store-form h2 {
@@ -146,7 +144,7 @@ export default {
 
 .button-group {
   display: flex;
-  justify-content: space-between; /* Adjust as needed */
+  justify-content: space-between;
   margin-top: 20px;
 }
 

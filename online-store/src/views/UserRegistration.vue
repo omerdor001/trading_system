@@ -31,7 +31,7 @@
           <!-- Birthdate input -->
           <div class="form-group">
             <label for="birthdate">Birthdate</label>
-            <input type="date" id="birthdate" v-model="birthdate" />
+            <PrimeCalendar v-model="birthdate" id="birthdate"/>
           </div>
           <!-- Button group -->
           <div class="button-group">
@@ -55,6 +55,7 @@ import { PrimeCard } from 'primevue/card';
 import axios from "axios";
 import { useToast } from 'primevue/usetoast';
 import PrimeToast from 'primevue/toast';
+import { PrimeCalendar } from 'primevue/calendar';
 
 export default defineComponent({
   name: 'UserRegistration',
@@ -63,6 +64,7 @@ export default defineComponent({
     InputText,
     PasswordText,
     PrimeCard,
+    PrimeCalendar,
     'p-toast': PrimeToast,
   },
   setup() {
@@ -110,10 +112,12 @@ export default defineComponent({
 
     const register = async () => {
       if (validateInputs()) {
+        const formattedBirthdate = new Date(birthdate.value).toISOString().split('T')[0]; // format the date as yyyy-MM-dd
+
         const params = {
           username: username.value,
           password: password.value,
-          birthday: birthdate.value,
+          birthday: formattedBirthdate,
         };
 
         try {
