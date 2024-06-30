@@ -189,4 +189,26 @@ public class Registered extends User {
         LocalDate currentDate = LocalDate.now();
         return Period.between(birthdate, currentDate).getYears();
     }
+
+    @Override
+    public String getStoresIOwn(){
+        List stores=new ArrayList();
+        for (Role role:roles){
+            if(role.getRoleState().isOwner()){
+                stores.add(role.getStoreId());
+            }
+        }
+        return stores.toString();
+    }
+
+    @Override
+    public String getStoresIManage(){
+        List stores=new ArrayList();
+        for (Role role:roles){
+            if(role.getRoleState().isManager()){
+                stores.add(role.getStoreId());
+            }
+        }
+        return stores.toString();
+    }
 }

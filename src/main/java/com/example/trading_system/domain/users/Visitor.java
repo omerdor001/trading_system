@@ -55,6 +55,16 @@ public class Visitor extends User {
     }
 
     @Override
+    public String getStoresIOwn() {
+        return "";
+    }
+
+    @Override
+    public String getStoresIManage() {
+        return "";
+    }
+
+    @Override
     public void login() {
         throw new RuntimeException("Only registered users can login");
     }

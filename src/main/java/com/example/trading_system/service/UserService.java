@@ -83,4 +83,8 @@ public interface UserService {
     String getIsEditPurchasePolicyPermission(String username,String storeName) throws IllegalAccessException;
 
     String getUserMessagesJson(String admin, String username);
+
+    String getStoresIOwn(String username);
+
+    String getStoresIManage(String username);
 }

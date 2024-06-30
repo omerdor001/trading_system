@@ -852,6 +852,31 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
+    public String getStoresIOwn(String username){
+        if (!userRepository.isExist(username)) {
+            throw new NoSuchElementException("No user called " + username + " exist");
+        }
+        if (isSuspended(username)) {
+            throw new RuntimeException("User is suspended from the system");
+        }
+        User user=userRepository.getUser(username);
+        return user.getStoresIOwn();
+    }
+
+    @Override
+    public String getStoresIManage(String username){
+        if (!userRepository.isExist(username)) {
+            throw new NoSuchElementException("No user called " + username + " exist");
+        }
+        if (isSuspended(username)) {
+            throw new RuntimeException("User is suspended from the system");
+        }
+        User user=userRepository.getUser(username);
+        return user.getStoresIManage();
+    }
+
+
+    @Override
     public String getUserPassword(String username) {
         if (username.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + username + " is registered");

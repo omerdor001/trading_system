@@ -151,6 +151,10 @@ public abstract class User {
 
     public abstract int getAge();
 
+    public abstract String getStoresIOwn();
+
+    public abstract String getStoresIManage();
+
     public void addProductToCart(int productId, int quantity, String storeName, double price, int category) {
         this.cart.addProductToCart(productId, quantity, storeName, price, category);
     }

@@ -672,6 +672,34 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
+    public ResponseEntity<String> getStoresIOwn(String username, String token) {
+        logger.info("Trying to Get Stores {} owns",username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Get All Stores {} owns",username);
+            return new ResponseEntity<>(userService.getStoresIOwn(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Stores {} owns Info ",username, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getStoresIManage(String username, String token) {
+        logger.info("Trying to Get Stores {} manages",username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Get All Stores {} manages",username);
+            return new ResponseEntity<>(userService.getStoresIManage(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Stores {} manages Info ",username, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public ResponseEntity<String> getStoreProducts(String userName, String token, String store_name) {
         logger.info("Trying to Gather ALL Store Products");
         try {
