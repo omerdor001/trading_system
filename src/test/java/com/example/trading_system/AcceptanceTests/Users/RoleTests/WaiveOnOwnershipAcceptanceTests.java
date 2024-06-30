@@ -106,7 +106,6 @@ public class WaiveOnOwnershipAcceptanceTests {
         tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
         tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName);
         tradingSystemImp.approveOwner(ownerUserName, ownerToken, storeName, userName);
-        tradingSystemImp.appointOwner(userName, token, userName, ownerUserName, storeName);
     }
 
     @AfterEach
@@ -117,7 +116,7 @@ public class WaiveOnOwnershipAcceptanceTests {
     @Test
     public void GivenValidOwner_WhenWaiveOnOwnerShip_ThenSuccess(){ //check that manager appointment also deleted
         Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,true,true,true,true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName,true,true,true,true).getStatusCode());
         ResponseEntity<String> resp = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,storeName);
         Assertions.assertEquals("Success waiver to own",resp.getBody());
         Assertions.assertEquals(HttpStatus.OK, resp.getStatusCode());
@@ -144,7 +143,7 @@ public class WaiveOnOwnershipAcceptanceTests {
     public void GivenNotOwnerUser_WhenWaiveOnOwnership_ThenThrowException()
     {
         Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,true,true,true,true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName,true,true,true,true).getStatusCode());
         ResponseEntity<String> resp = tradingSystemImp.waiverOnOwnership(userNameManager,tokenManager,storeName);
         Assertions.assertEquals("User is not owner of this store",resp.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());

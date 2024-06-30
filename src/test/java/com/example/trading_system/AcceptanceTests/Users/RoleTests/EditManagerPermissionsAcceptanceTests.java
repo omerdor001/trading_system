@@ -108,8 +108,7 @@ public class EditManagerPermissionsAcceptanceTests {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
         tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true);
-        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName);
-        tradingSystemImp.appointManager(userName, token, userName, userNameManager, storeName, true, true, true, true);
+        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true);
 
     }
 
@@ -174,7 +173,6 @@ public class EditManagerPermissionsAcceptanceTests {
         }
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveOwner(ownerUserName, ownerToken, storeName, userName).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.appointOwner(userName, token, userName, ownerUserName, storeName).getStatusCode());
         ResponseEntity<String> resp = tradingSystemImp.editPermissionForManager(ownerUserName, ownerToken, userNameManager, storeName, true, true, true, true);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
         Assertions.assertEquals("Owner cant edit permissions to manager that he/she didn't appointed", resp.getBody());

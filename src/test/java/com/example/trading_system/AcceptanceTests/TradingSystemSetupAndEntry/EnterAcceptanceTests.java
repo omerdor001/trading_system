@@ -76,7 +76,7 @@ public class EnterAcceptanceTests {
         tradingSystem.closeSystem(username, token);
         ResponseEntity<String> enterResponse = tradingSystem.enter();
         assertEquals(HttpStatus.FORBIDDEN, enterResponse.getStatusCode());
-        assertEquals("", enterResponse.getBody());
+        assertEquals("System is not open, entry forbidden", enterResponse.getBody());
     }
 
     @Test

@@ -25,11 +25,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 public class NotificationUnitTests {
-    private NotificationSender mockNotificationSender;
     private final String owner1 = "rowner1";
     private final String owner2 = "rowner2";
     private final String manager = "rmanager";
     private final String storeName = "store1";
+    private NotificationSender mockNotificationSender;
     private UserRepository userRepository;
     private StoreRepository storeRepository;
     private UserFacade userFacade;
@@ -143,7 +143,7 @@ public class NotificationUnitTests {
             userFacade.getUser(owner2).setAdmin(true);
             userFacade.getUser(owner1).logout();
             userFacade.getUser(owner2).login();
-            userFacade.approveManager(owner2, storeName, owner1);
+            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true);
             String notifications = userFacade.getPendingUserNotifications(owner2, owner1);
             assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"owner2 accepted your suggestion to become a manager at store: store1\"}]", notifications);
         } catch (Exception e) {
@@ -156,7 +156,7 @@ public class NotificationUnitTests {
         try {
             userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
             userFacade.getUser(owner2).login();
-            userFacade.approveManager(owner2, storeName, owner1);
+            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner1);
             assertEquals("[]", notifications);
             verify(mockNotificationSender).sendNotification(eq(owner1), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"owner2 accepted your suggestion to become a manager at store: store1\"}"));
@@ -225,67 +225,22 @@ public class NotificationUnitTests {
     }
 
     @Test
-    public void testNotification_AppointOwner_NotLogged() {
-        try {
-            userFacade.appointOwner(owner1, owner2, storeName);
-            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
-            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as an owner at store: store1\"}]", notifications);
-        } catch (Exception e) {
-            fail("Unexpected error: " + e.getMessage());
-        }
-    }
-
-    @Test
-    public void testNotification_AppointOwner_Logged() {
-        try {
-            userFacade.getUser(owner2).login();
-            userFacade.appointOwner(owner1, owner2, storeName);
-            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
-            assertEquals("[]", notifications);
-            verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as an owner at store: store1\"}"));
-
-        } catch (Exception e) {
-            fail("Unexpected error: " + e.getMessage());
-        }
-    }
-
-    @Test
-    public void testNotification_AppointManager_NotLogged() {
-        try {
-            userFacade.appointManager(owner1, owner2, storeName, true, true, true, true);
-            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
-            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as a manager at store: store1\"}]", notifications);
-        } catch (Exception e) {
-            fail("Unexpected error: " + e.getMessage());
-        }
-    }
-
-    @Test
-    public void testNotification_AppointManager_Logged() {
-        try {
-            userFacade.getUser(owner2).login();
-            userFacade.appointManager(owner1, owner2, storeName, true, true, true, true);
-            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
-            assertEquals("[]", notifications);
-            verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as a manager at store: store1\"}"));
-
-        } catch (Exception e) {
-            fail("Unexpected error: " + e.getMessage());
-        }
-    }
-
-    @Test
     public void testNotification_WaiverOwner_NotLogged() {
         try {
             userRepository.addRegistered(manager, "password123", LocalDate.now());
-            userFacade.appointOwner(owner1, owner2, storeName);
+            userFacade.suggestOwner(owner1, owner2, storeName);
+            userRepository.getUser(owner2).login();
+            userFacade.approveOwner(owner2, storeName, owner1);
             userFacade.getUser(owner2).login();
-            userFacade.appointOwner(owner2, manager, storeName);
+            userFacade.suggestOwner(owner2, manager, storeName);
+            userFacade.getUser(manager).login();
+            userFacade.approveOwner(manager, storeName, owner2);
+            userFacade.getUser(manager).logout();
             userFacade.waiverOnOwnership(owner2, storeName);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
-            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as an owner at store: store1\"}]", notifications);
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}]", notifications);
             notifications = userFacade.getPendingUserNotifications(owner1, manager);
-            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"User: owner2 has appointed you as an owner at store: store1\"},{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 waiving his ownership\"}]", notifications);
+            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"},{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 waiving his ownership\"}]", notifications);
         } catch (Exception e) {
             fail("Unexpected error: " + e.getMessage());
         }
@@ -297,15 +252,18 @@ public class NotificationUnitTests {
             setDown();
             setUp();
             userRepository.addRegistered(manager, "password123", LocalDate.now());
-            userFacade.appointOwner(owner1, owner2, storeName);
+            userFacade.suggestOwner(owner1, owner2, storeName);
+            userRepository.getUser(owner2).login();
+            userFacade.approveOwner(owner2, storeName, owner1);
             userFacade.getUser(owner2).login();
-            userFacade.appointOwner(owner2, manager, storeName);
+            userFacade.suggestOwner(owner2, manager, storeName);
             userFacade.getUser(manager).login();
+            userFacade.approveOwner(manager, storeName, owner2);
             userFacade.waiverOnOwnership(owner2, storeName);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
-            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as an owner at store: store1\"}]", notifications);
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}]", notifications);
             notifications = userFacade.getPendingUserNotifications(owner1, manager);
-            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"User: owner2 has appointed you as an owner at store: store1\"}]", notifications);
+            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"}]", notifications);
             verify(mockNotificationSender).sendNotification(eq(manager), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 waiving his ownership\"}"));
         } catch (Exception e) {
             fail("Unexpected error: " + e.getMessage());
@@ -315,10 +273,13 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_FireManager_NotLogged() {
         try {
-            userFacade.appointManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.getUser(owner2).login();
+            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true);
+            userRepository.getUser(owner2).logout();
             userFacade.fireManager(owner1, storeName, owner2);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
-            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as a manager at store: store1\"},{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You are no longer a manager at store: store1 due to being fired by owner1\"}]", notifications);
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"},{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You are no longer a manager at store: store1 due to being fired by owner1\"}]", notifications);
         } catch (Exception e) {
             fail("Unexpected error: " + e.getMessage());
         }
@@ -327,11 +288,12 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_FireManager_Logged() {
         try {
-            userFacade.appointManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
             userFacade.getUser(owner2).login();
+            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true);
             userFacade.fireManager(owner1, storeName, owner2);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
-            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as a manager at store: store1\"}]", notifications);
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}]", notifications);
             verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You are no longer a manager at store: store1 due to being fired by owner1\"}"));
         } catch (Exception e) {
             fail("Unexpected error: " + e.getMessage());
@@ -341,10 +303,13 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_FireOwner_NotLogged() {
         try {
-            userFacade.appointOwner(owner1, owner2, storeName);
+            userFacade.suggestOwner(owner1, owner2, storeName);
+            userRepository.getUser(owner2).login();
+            userFacade.approveOwner(owner2, storeName, owner1);
+            userRepository.getUser(owner2).logout();
             userFacade.fireOwner(owner1, storeName, owner2);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
-            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as an owner at store: store1\"},{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You are no longer an owner at store: store1 due to being fired by user: owner1\"}]", notifications);
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"},{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You are no longer an owner at store: store1 due to being fired by user: owner1\"}]", notifications);
         } catch (Exception e) {
             fail("Unexpected error: " + e.getMessage());
         }
@@ -353,11 +318,12 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_FireOwner_Logged() {
         try {
-            userFacade.appointOwner(owner1, owner2, storeName);
+            userFacade.suggestOwner(owner1, owner2, storeName);
             userRepository.getUser(owner2).login();
+            userFacade.approveOwner(owner2, storeName, owner1);
             userFacade.fireOwner(owner1, storeName, owner2);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
-            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as an owner at store: store1\"}]", notifications);
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}]", notifications);
             verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You are no longer an owner at store: store1 due to being fired by user: owner1\"}"));
         } catch (Exception e) {
             fail("Unexpected error: " + e.getMessage());
@@ -367,10 +333,13 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_EditPermission_NotLogged() {
         try {
-            userFacade.appointManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
+            userRepository.getUser(owner2).login();
+            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true);
+            userRepository.getUser(owner2).logout();
             userFacade.editPermissionForManager(owner1, owner2, storeName, true, true, true, false);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
-            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as a manager at store: store1\"},{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}]", notifications);
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"},{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}]", notifications);
         } catch (Exception e) {
             fail("Unexpected error: " + e.getMessage());
         }
@@ -379,12 +348,88 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_EditPermission_Logged() {
         try {
-            userFacade.appointManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
             userRepository.getUser(owner2).login();
+            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true);
             userFacade.editPermissionForManager(owner1, owner2, storeName, true, true, true, false);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
-            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as a manager at store: store1\"}]", notifications);
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}]", notifications);
             verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}"));
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentToUser_NotLogged() {
+        try {
+            userFacade.sendMessageUserToUser(owner1, owner2, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You have received a message from user: owner1\"}]", notifications);
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentToUser_Logged() {
+        try {
+            userFacade.getUser(owner2).login();
+            userFacade.sendMessageUserToUser(owner1, owner2, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
+            assertEquals("[]", notifications);
+            verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You have received a message from user: owner1\"}"));
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentToStore_NotLogged() {
+        try {
+            userFacade.getUser(owner2).login();
+            userFacade.getUser(owner1).logout();
+            marketFacade.sendMessageUserToStore(owner2, storeName, "test");
+            userFacade.getUser(owner1).login();
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner1);
+            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"Store: store1 received a message from user: rowner2\"}]", notifications);
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentToStore_Logged() {
+        try {
+            userFacade.getUser(owner2).login();
+            marketFacade.sendMessageUserToStore(owner2, storeName, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner1);
+            assertEquals("[]", notifications);
+            verify(mockNotificationSender).sendNotification(eq(owner1), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"Store: store1 received a message from user: rowner2\"}"));
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentFromStore_NotLogged() {
+        try {
+            marketFacade.sendMessageStoreToUser(owner1, owner2, storeName, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
+            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Owner: owner1 from store: store1 has replied to your message\"}]", notifications);
+        } catch (Exception e) {
+            fail("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotification_MessageSentFromStore_Logged() {
+        try {
+            userFacade.getUser(owner2).login();
+            marketFacade.sendMessageStoreToUser(owner1, owner2, storeName, "test");
+            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
+            assertEquals("[]", notifications);
+            verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Owner: owner1 from store: store1 has replied to your message\"}"));
         } catch (Exception e) {
             fail("Unexpected error: " + e.getMessage());
         }
@@ -393,14 +438,12 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_SendPendingNotifications() {
         try {
-            userFacade.appointManager(owner1, owner2, storeName, true, true, true, true);
-            userFacade.editPermissionForManager(owner1, owner2, storeName, true, true, true, false);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
             userRepository.getUser(owner2).login();
             userFacade.sendPendingNotifications(owner2);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
             assertEquals("[]", notifications);
-            verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"User: owner1 has appointed you as a manager at store: store1\"}"));
-            verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}"));
+            verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}"));
         } catch (Exception e) {
             fail("Unexpected error: " + e.getMessage());
         }

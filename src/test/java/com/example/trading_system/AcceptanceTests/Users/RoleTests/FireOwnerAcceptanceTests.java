@@ -131,13 +131,10 @@ public class FireOwnerAcceptanceTests {
         tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
         tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName);
         tradingSystemImp.approveOwner(ownerUserName, ownerToken, storeName, userName);
-        tradingSystemImp.appointOwner(userName, token, userName, ownerUserName, storeName);
         tradingSystemImp.suggestManage(ownerUserName, ownerToken, userNameManager, storeName, false, false, false, false);
-        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, ownerUserName);
-        tradingSystemImp.appointManager(ownerUserName, ownerToken, ownerUserName, userNameManager, storeName, false, false, false, false);
+        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, ownerUserName, false, false, false, false);
         tradingSystemImp.suggestOwner(ownerUserName, ownerToken, ownerUserName2, storeName);
         tradingSystemImp.approveOwner(ownerUserName2, ownerToken2, storeName, ownerUserName);
-        tradingSystemImp.appointOwner(ownerUserName, ownerToken, ownerUserName, ownerUserName2, storeName);
     }
 
     @AfterEach

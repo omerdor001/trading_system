@@ -108,10 +108,8 @@ public class GetRoleInfoAcceptanceTests {
         }
         tradingSystemImp.suggestOwner(userName, token, ownerUser, storeName);
         tradingSystemImp.approveOwner(ownerUser, ownerToken, storeName, userName);
-        tradingSystemImp.appointOwner(userName, token, userName, ownerUser, storeName);
         tradingSystemImp.suggestManage(ownerUser, ownerToken, userNameManager, storeName, true, true, true, true);
-        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, ownerUser);
-        tradingSystemImp.appointManager(ownerUser, ownerToken, ownerUser, userNameManager, storeName, true, true, true, true);
+        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, ownerUser, true, true, true, true);
 
     }
 

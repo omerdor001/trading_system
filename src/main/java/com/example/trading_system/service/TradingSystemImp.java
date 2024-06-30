@@ -24,12 +24,13 @@ public class TradingSystemImp implements TradingSystem {
 
     private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         this.systemOpen = false;
-        this.userService = UserServiceImp.getInstance(paymentService,deliveryService, notificationSender,userRepository,storeRepository);
+        this.userService = UserServiceImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
         this.marketService = MarketServiceImp.getInstance(storeRepository);
     }
 
     public static TradingSystemImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
-        if (instance == null) instance = new TradingSystemImp(paymentService,deliveryService, notificationSender,userRepository,storeRepository);
+        if (instance == null)
+            instance = new TradingSystemImp(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
         return instance;
     }
 
@@ -44,7 +45,7 @@ public class TradingSystemImp implements TradingSystem {
         userService = null;
         if (systemOpen) {
             this.marketService.deleteInstance();
-            this.systemOpen=false;
+            this.systemOpen = false;
         }
     }
 
@@ -77,9 +78,8 @@ public class TradingSystemImp implements TradingSystem {
             if (checkInvalidToken(admin, token)) return invalidTokenResponse();
             String result = userService.getPendingUserNotifications(admin, username);
             logger.info("Successfully retrieved notifications for user: {}", username);
-            return new ResponseEntity<>(result,HttpStatus.OK);
-        }
-        catch (Exception e){
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
             logger.error("Error while attempting to retrieve user: {} notifications, {}", username, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -129,16 +129,15 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> makeAdmin(String admin, String token, String newAdmin){
+    public ResponseEntity<String> makeAdmin(String admin, String token, String newAdmin) {
         logger.info("Attempting to appoint user as an admin");
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(admin, token)) return invalidTokenResponse();
             userService.makeAdmin(admin, newAdmin);
             logger.info("User: {} Successfully made user: {} an admin.", admin, newAdmin);
-            return new ResponseEntity<>("Admin added successfully",HttpStatus.OK);
-        }
-        catch (Exception e){
+            return new ResponseEntity<>("Admin added successfully", HttpStatus.OK);
+        } catch (Exception e) {
             logger.error("Error while attempting to make user: {} an admin by user: {}, error: {}", newAdmin, admin, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -428,21 +427,6 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
-        logger.info("Trying to suggest user : {} to be a manager in store : {}", newManager, store_name_id);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(appoint, token)) return invalidTokenResponse();
-            userService.suggestManage(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
-            logger.info("Finished suggesting manager : {} to be a manager in store : {}", newManager, store_name_id);
-            return new ResponseEntity<>("Success suggesting manager", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , while trying to suggest the user : {} to be a manager in store : {}", e.getMessage(), appoint, store_name_id);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
     public ResponseEntity<String> suggestOwner(String appoint, String token, String newOwner, String storeName) {
         logger.info("{} trying to suggest user : {} to be a owner in store : {}", appoint, newOwner, storeName);
         try {
@@ -458,16 +442,16 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint) {
-        logger.info("Trying to approve manage to store : {}", store_name_id);
+    public ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+        logger.info("Trying to suggest user : {} to be a manager in store : {}", newManager, store_name_id);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(newManager, token)) return invalidTokenResponse();
-            userService.approveManage(newManager, store_name_id, appoint);
-            logger.info("Finished approving manage to store : {}", store_name_id);
-            return new ResponseEntity<>("Success approving manage", HttpStatus.OK);
+            if (checkInvalidToken(appoint, token)) return invalidTokenResponse();
+            userService.suggestManage(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+            logger.info("Finished suggesting manager : {} to be a manager in store : {}", newManager, store_name_id);
+            return new ResponseEntity<>("Success suggesting manager", HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , while trying to approve management to store : {}", e.getMessage(), store_name_id);
+            logger.error("Error occurred : {} , while trying to suggest the user : {} to be a manager in store : {}", e.getMessage(), appoint, store_name_id);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -483,6 +467,21 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Success approving owner", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while trying to approve owner to store : {}", e.getMessage(), storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+        logger.info("Trying to approve manage to store : {}", store_name_id);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(newManager, token)) return invalidTokenResponse();
+            userService.approveManage(newManager, store_name_id, appoint,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+            logger.info("Finished approving manage to store : {}", store_name_id);
+            return new ResponseEntity<>("Success approving manage", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to approve management to store : {}", e.getMessage(), store_name_id);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -561,38 +560,6 @@ public class TradingSystemImp implements TradingSystem {
         }
         logger.info("Finished fire {} from store : {}", ownerToFire, storeName);
         return new ResponseEntity<>("Success fire owner", HttpStatus.OK);
-    }
-
-    //TODO Same as suggestManager/approveManager?
-    @Override
-    public ResponseEntity<String> appointManager(String username, String token, String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
-        logger.info("Trying to appoint manager : {} to store : {}", newManager, store_name_id);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            userService.appointManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
-            logger.info("Finished appointing manager : {} to store : {}", newManager, store_name_id);
-            return new ResponseEntity<>("Success appointing manager", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , while trying to appoint the user : {} to store : {}", e.getMessage(), appoint, store_name_id);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    //TODO same as suggestOwner/approveOwner?
-    @Override
-    public ResponseEntity<String> appointOwner(String username, String token, String appoint, String newOwner, String storeName) {
-        logger.info("Trying to appoint owner : {} to store : {}", newOwner, storeName);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            userService.appointOwner(appoint, newOwner, storeName);
-            logger.info("Finished appointing owner : {} to store : {}", newOwner, storeName);
-            return new ResponseEntity<>("Success appointing owner", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , while trying to appoint the user : {} to be owner in store : {}", e.getMessage(), appoint, storeName);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
     }
 
     @Override
@@ -751,7 +718,7 @@ public class TradingSystemImp implements TradingSystem {
     public ResponseEntity<String> openStoreExist(String userName, String token, String storeName) {
         logger.info("{} Trying to Open Store Exist : {}", userName, storeName);
         try {
-           // if (checkSystemClosed()) return systemClosedResponse();
+            if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             marketService.openStoreExist(userName, storeName);
             logger.info("Finished open store exist successfully");
@@ -959,6 +926,76 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed user calculate price ", username);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> sendMessageUserToUser(String sender, String token, String receiver, String content) {
+        logger.info("Trying to send message to user: {} from user: {} with content: {}", receiver, sender, content);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(sender, token)) return invalidTokenResponse();
+            userService.sendMessageUserToUser(sender, receiver, content);
+            return new ResponseEntity<>("Message sent successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed to send message to user", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> sendMessageUserToStore(String sender, String token, String storeName, String content) {
+        logger.info("Trying to send message to store: {} from user: {} with content: {}", storeName, sender, content);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(sender, token)) return invalidTokenResponse();
+            marketService.sendMessageUserToStore(sender, storeName, content);
+            return new ResponseEntity<>("Message sent successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed to send message to store", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> sendMessageStoreToUser(String owner, String token, String receiver, String storeName, String content) {
+        logger.info("Trying to send message to user: {} from store: {} by owner: {} with content: {}", receiver, storeName, owner, content);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(owner, token)) return invalidTokenResponse();
+            marketService.sendMessageStoreToUser(owner, receiver, storeName, content);
+            return new ResponseEntity<>("Message sent successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed to send message from store to user", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getUserMessagesJson(String admin, String token, String username){
+        logger.info("Trying to get messages of user: {}", username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(admin, token)) return invalidTokenResponse();
+            String result = userService.getUserMessagesJson(admin, username);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while trying to get messages of user: {}", username);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getStoreMessagesJson(String admin, String token, String storeName){
+        logger.info("Trying to get messages of store: {}", storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(admin, token)) return invalidTokenResponse();
+            String result = marketService.getStoreMessagesJson(admin, storeName);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while trying to get messages of store: {}", storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -1342,7 +1379,9 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+    //endregion
 
+    //region purchase policy
     @Override
     public ResponseEntity<String> getPurchasePoliciesInfo(String username, String token, String storeName) {
         logger.info("Fetching purchase policies info for user: {}, store: {}", username, storeName);
@@ -1595,6 +1634,7 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+    //endregion
 
     @Override
     public ResponseEntity<String> getIsWatchPermission(String username, String token, String manager, String storeName) {
@@ -1651,6 +1691,4 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-    //end region
 }

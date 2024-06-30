@@ -9,9 +9,7 @@
         <PrimeButton v-if="isLoggedIn" label="Approve Management" @click="approveManagement" class="sidebar-button" />
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="My Stores" @click="myStoresIOwn" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Suggest Owner" @click="suggestOwner" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Appoint Owner" @click="appointOwner" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Suggest Manager" @click="suggestManager" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Appoint Manager" @click="appointManager" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Purchases History" @click="navigateToPurchaseHistory" class="sidebar-button"/>
         <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Close Store" @click="closeStore" class="sidebar-button"/>
       </div>
@@ -154,20 +152,7 @@ export default defineComponent({
         console.error("Unauthorize");
       }
     };
-    const appointOwner = () => {
-      if (isStoreOwner.value) {
-          router.push('/appoint-owner');
-       } else{
-        console.error("Unauthorize");
-      }
-    };
-    const appointManager = () => {
-      if (isStoreOwner.value) {
-          router.push('/appoint-manager');
-       } else{
-        console.error("Unauthorize");
-      }
-    };
+
     const purchasesHistoryAsOwner = () => {
       router.push({ name: 'PurchaseHistory' }); 
     };
@@ -250,8 +235,6 @@ export default defineComponent({
       approveManagement,
       myStoresIOwn,
       manageProductsAsOwner,
-      appointOwner,
-      appointManager,
       purchasesHistoryAsOwner,
       closeStore,
       myStoresIManage,

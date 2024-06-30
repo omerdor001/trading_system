@@ -40,21 +40,17 @@ public interface UserService {
 
     String watchSuspensions(String admin);
 
-    void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
-
-    void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException;
-
-    void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException;
-
-    void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
-
     void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
+
+    void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
 
     void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
 
-    void rejectToOwnStore(String userName, String storeName, String appoint) throws IllegalAccessException;
+    void approveManage(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
 
-    void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
+    void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException;
+
+    void rejectToOwnStore(String userName, String storeName, String appoint) throws IllegalAccessException;
 
     void waiverOnOwnership(String userName, String storeName) throws IllegalAccessException;
 
@@ -76,6 +72,8 @@ public interface UserService {
 
     String calculatePrice(String username) throws Exception;
 
+    void sendMessageUserToUser(String sender, String receiver, String content);
+
     String getIsWatchPermission(String username,String storeName) throws IllegalAccessException;
 
     String getIsEditSupplyPermission(String username,String storeName) throws IllegalAccessException;
@@ -83,4 +81,6 @@ public interface UserService {
     String getIsEditDiscountPolicyPermission(String username,String storeName) throws IllegalAccessException;
 
     String getIsEditPurchasePolicyPermission(String username,String storeName) throws IllegalAccessException;
+
+    String getUserMessagesJson(String admin, String username);
 }

@@ -20,17 +20,18 @@ public class UserServiceImp implements UserService {
     private static UserServiceImp instance = null;
     private UserFacadeImp userFacade;
 
-    public UserFacadeImp getUserFacade() {
-        return userFacade;
-    }
-
     private UserServiceImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         userFacade = UserFacadeImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
     }
 
-    public static UserServiceImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository,StoreRepository storeRepository) {
-        if (instance == null) instance = new UserServiceImp(paymentService,deliveryService, notificationSender,userRepository,storeRepository);
+    public static UserServiceImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
+        if (instance == null)
+            instance = new UserServiceImp(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
         return instance;
+    }
+
+    public UserFacadeImp getUserFacade() {
+        return userFacade;
     }
 
     @Override
@@ -41,12 +42,12 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public String getPendingUserNotifications(String admin, String username){
+    public String getPendingUserNotifications(String admin, String username) {
         return userFacade.getPendingUserNotifications(admin, username);
     }
 
     @Override
-    public void makeAdmin(String admin, String newAdmin){
+    public void makeAdmin(String admin, String newAdmin) {
         userFacade.makeAdmin(admin, newAdmin);
     }
 
@@ -75,7 +76,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void sendPendingNotifications(String username){
+    public void sendPendingNotifications(String username) {
         userFacade.sendPendingNotifications(username);
     }
 
@@ -143,6 +144,13 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException {
+        logger.info("{} trying to suggest user : {} to be a owner in store : {}", appoint, newOwner, storeName);
+        userFacade.suggestOwner(appoint, newOwner, storeName);
+        logger.info("Finished suggesting  : {} to be a owner in store : {}", newOwner, storeName);
+    }
+
+    @Override
     public void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
         logger.info("Trying to suggest user : {} to be a manager in store : {}", newManager, store_name_id);
         userFacade.suggestManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
@@ -150,17 +158,16 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException {
-        logger.info("{} trying to suggest user : {} to be a owner in store : {}", appoint, newOwner, storeName);
-        userFacade.suggestOwner(appoint, newOwner, storeName);
-        logger.info("Finished suggesting  : {} to be a owner in store : {}", newOwner, storeName);
+    public void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException {
+        logger.info("{} trying to approve owner to store : {}", newOwner, storeName);
+        userFacade.approveOwner(newOwner, storeName, appoint);
+        logger.info("Finished approving owner to store : {}", storeName);
     }
 
-
     @Override
-    public void approveManage(String newManager, String store_name_id, String appoint) throws IllegalAccessException {
+    public void approveManage(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
         logger.info("Trying to approve manage to store : {}", store_name_id);
-        userFacade.approveManager(newManager, store_name_id, appoint);
+        userFacade.approveManager(newManager, store_name_id, appoint,watch, editSupply, editBuyPolicy,  editDiscountPolicy);
         logger.info("Finished approving manage to store : {}", store_name_id);
     }
 
@@ -168,13 +175,6 @@ public class UserServiceImp implements UserService {
     public void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException {
         logger.info("{} trying to approve owner to store : {}", userName, storeName);
         userFacade.rejectToManageStore(userName, storeName, appoint);
-        logger.info("Finished approving owner to store : {}", storeName);
-    }
-
-    @Override
-    public void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException {
-        logger.info("{} trying to approve owner to store : {}", newOwner, storeName);
-        userFacade.approveOwner(newOwner, storeName, appoint);
         logger.info("Finished approving owner to store : {}", storeName);
     }
 
@@ -198,21 +198,6 @@ public class UserServiceImp implements UserService {
     @Override
     public void fireOwner(String ownerAppoint, String storeName, String owner) throws IllegalAccessException {
         userFacade.fireOwner(ownerAppoint, storeName, owner);
-    }
-
-
-    @Override
-    public void appointManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
-        logger.info("Trying to appoint manager : {} to store : {}", newManager, store_name_id);
-        userFacade.appointManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
-        logger.info("Finished appointing manager : {} to store : {}", newManager, store_name_id);
-    }
-
-    @Override
-    public void appointOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException {
-        logger.info("Trying to appoint owner : {} to store : {}", newOwner, storeName);
-        userFacade.appointOwner(appoint, newOwner, storeName);
-        logger.info("Finished appointing owner : {} to store : {}", newOwner, storeName);
     }
 
     @Override
@@ -251,22 +236,32 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public void sendMessageUserToUser(String sender, String receiver, String content) {
+        userFacade.sendMessageUserToUser(sender, receiver, content);
+    }
+
+    @Override
     public String getIsWatchPermission(String username, String storeName) throws IllegalAccessException {
-        return String.valueOf(userFacade.getIsWatchPermission(username,storeName));
+        return String.valueOf(userFacade.getIsWatchPermission(username, storeName));
     }
 
     @Override
     public String getIsEditSupplyPermission(String username, String storeName) throws IllegalAccessException {
-        return String.valueOf(userFacade.getIsEditSupplyPermission(username,storeName));
+        return String.valueOf(userFacade.getIsEditSupplyPermission(username, storeName));
     }
 
     @Override
     public String getIsEditDiscountPolicyPermission(String username, String storeName) throws IllegalAccessException {
-        return String.valueOf(userFacade.getIsEditDiscountPolicyPermission(username,storeName));
+        return String.valueOf(userFacade.getIsEditDiscountPolicyPermission(username, storeName));
     }
 
     @Override
     public String getIsEditPurchasePolicyPermission(String username, String storeName) throws IllegalAccessException {
-        return String.valueOf(userFacade.getIsEditPurchasePolicyPermission(username,storeName));
+        return String.valueOf(userFacade.getIsEditPurchasePolicyPermission(username, storeName));
+    }
+
+    @Override
+    public String getUserMessagesJson(String admin, String username) {
+        return userFacade.getUserMessagesJson(admin, username);
     }
 }
