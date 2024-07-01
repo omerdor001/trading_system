@@ -43,38 +43,20 @@ export default defineComponent({
     const toast = useToast();
     const router = useRouter();
 
-    // Add some test data
-    suspendedUsers.value = [
-      {
-        suspendedUsername: 'user1',
-        suspendedStart: new Date().toLocaleString(),
-        suspensionDays: 3,
-        suspensionHours: 72,
-        suspendedEnd: new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000).toLocaleString()
-      },
-      {
-        suspendedUsername: 'user2',
-        suspendedStart: new Date().toLocaleString(),
-        suspensionDays: 1,
-        suspensionHours: 24,
-        suspendedEnd: new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toLocaleString()
-      }
-    ];
-
     onMounted(async () => {
       try {
-        const response = await axios.get('/api/watchSuspensions', {
+        const response = await axios.get('http://localhost:8082/api/trading/watchSuspensions', {
           params: { 
             token: token.value,
             admin: username.value 
           }
         });
-        suspendedUsers.value = response.data.map(user => ({
-          suspendedUsername: user.suspendedUsername,
-          suspendedStart: new Date(user.suspendedStart).toLocaleString(),
-          suspensionDays: user.suspensionDays,
-          suspensionHours: user.suspensionHours,
-          suspendedEnd: new Date(user.suspendedEnd).toLocaleString()
+          suspendedUsers.value = response.data.map(user => ({
+          suspendedUsername: user.Username,
+          suspendedStart: new Date(user["Start of suspension"]).toLocaleString(),
+          suspensionDays: user["Time of suspension (in days)"],
+          suspensionHours: user["Time of suspension (in hours)"],
+          suspendedEnd: new Date(user["End of suspension"]).toLocaleString()
         }));
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });

@@ -213,7 +213,7 @@ public class TradingSystemRestController {
 
     @GetMapping("/watchSuspensions")
     public ResponseEntity<String> watchSuspensions(@RequestParam String token, @RequestParam String admin) {
-        return tradingSystem.watchSuspensions(token, admin);
+        return tradingSystem.watchSuspensions(token, "r"+admin);
     }
 
     @PostMapping("/suggestOwner")

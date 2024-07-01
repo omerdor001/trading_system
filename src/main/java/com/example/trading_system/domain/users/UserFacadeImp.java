@@ -4,6 +4,8 @@ import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -189,7 +191,9 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public String watchSuspensions(String admin) {
-        StringBuilder details = new StringBuilder();
+        ObjectMapper mapper = new ObjectMapper();
+        List<Map<String, Object>> suspensionDetailsList = new ArrayList<>();
+
         if (!userRepository.isExist(admin)) {
             throw new IllegalArgumentException("Admin user doesn't exist in the system");
         }
@@ -198,14 +202,20 @@ public class UserFacadeImp implements UserFacade {
         }
         for (User user : userRepository.getAllUsersAsList()) {
             if (user.isSuspended()) {
-                details.append("Username - ").append(user.getUsername()).append("\n");
-                details.append("Start of suspension - ").append(user.getSuspendedStart().truncatedTo(ChronoUnit.SECONDS)).append("\n");
-                details.append("Time of suspension (in days) - ").append(Math.max(0, Math.abs(Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toDays()))).append("\n");
-                details.append("Time of suspension (in hours) - ").append(Math.max(0, Math.abs(Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toHours()))).append("\n");
-                details.append("End of suspension - ").append(user.getSuspendedEnd().toString());
+                Map<String, Object> details = new HashMap<>();
+                details.put("Username", user.getUsername());
+                details.put("Start of suspension", user.getSuspendedStart().truncatedTo(ChronoUnit.SECONDS).toString());
+                details.put("Time of suspension (in days)", Math.max(0, Math.abs(Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toDays())));
+                details.put("Time of suspension (in hours)", Math.max(0, Math.abs(Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toHours())));
+                details.put("End of suspension", user.getSuspendedEnd().toString());
+                suspensionDetailsList.add(details);
             }
         }
-        return details.toString();
+        try {
+            return mapper.writeValueAsString(suspensionDetailsList);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+        }
     }
 
     @Override
