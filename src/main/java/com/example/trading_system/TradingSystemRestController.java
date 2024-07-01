@@ -327,11 +327,11 @@ public class TradingSystemRestController {
     }
 
     @GetMapping("/requests-for-ownership")
-    public ResponseEntity<String> getUserRequestsOwnership(@RequestParam String userName, @RequestParam String token) {
-        return tradingSystem.getUserRequestsOwnership("r"+userName,token);
+    public ResponseEntity<String> getUserRequestsOwnership(@RequestParam String username, @RequestParam String token) {
+        return tradingSystem.getUserRequestsOwnership("r"+username,token);
     }
 
-    @GetMapping("/requests-for-ownership")
+    @GetMapping("/requests-for-management")
     public ResponseEntity<String> getUserRequestsManagement(@RequestParam String userName, @RequestParam String token) {
         return tradingSystem.getUserRequestsManagement("r"+userName,token);
     }
