@@ -189,19 +189,19 @@ public class TradingSystemRestController {
         return tradingSystem.logout(token, "r"+username);
     }
 
-    @PostMapping("/suspendUser")
+    @PutMapping("/suspendUser")
     public ResponseEntity<String> suspendUser(@RequestParam String token,
                                               @RequestParam String admin,
                                               @RequestParam String toSuspend,
-                                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endSuspention) {
-        return tradingSystem.suspendUser(token, admin, toSuspend, endSuspention);
+                                              @RequestParam LocalDateTime endSuspension) {
+        return tradingSystem.suspendUser(token, "r"+admin, "r"+toSuspend, endSuspension);
     }
 
     @PostMapping("/endSuspendUser")
     public ResponseEntity<String> endSuspendUser(@RequestParam String token,
                                                  @RequestParam String admin,
                                                  @RequestParam String toSuspend) {
-        return tradingSystem.endSuspendUser(token, admin, toSuspend);
+        return tradingSystem.endSuspendUser(token, "r"+admin, "r"+toSuspend);
     }
 
     @PostMapping("/setAddress")

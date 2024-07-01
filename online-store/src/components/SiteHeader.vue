@@ -17,19 +17,25 @@
         <PrimeButton label="Notifications" @click="notifications" icon="pi pi-bell" />
         <PrimeButton label="Cart" @click="viewCart" icon="pi pi-shopping-cart" />
       </div>
+      <p-toast></p-toast>
     </div>
   </header>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import PrimeButton from 'primevue/button';
 import { useRouter } from 'vue-router';
+import { useToast } from 'primevue/usetoast';
+import PrimeToast from 'primevue/toast';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'SiteHeader',
   components: {
-    PrimeButton
+    PrimeButton,
+    'p-toast': PrimeToast,
+
   },
   props: {
     isLoggedIn: {
@@ -41,9 +47,10 @@ export default defineComponent({
       default: ''
     }
   },
-  setup(_, { emit }) {
+  setup() {
     const router = useRouter();
-
+    const toast = useToast();
+    const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
     const goHome = () => {
       router.push({ name: 'HomePage' });
     };
@@ -60,8 +67,26 @@ export default defineComponent({
       router.push('/show-notifications');
     };
 
-    const logout = () => {
-      emit('logout');
+    const logout = async () => {
+      try {
+        console.log(localStorage.getItem('token'));
+        const response = await axios.get('http://localhost:8082/api/trading/logout', {
+          params: {
+            token: localStorage.getItem('token'),
+            username: localStorage.getItem('username'),
+          }
+        });
+        localStorage.setItem('username', response.data.username);
+        localStorage.setItem('token', response.data.token);
+        console.log(localStorage.getItem('token'));
+      } catch (error) {
+        console.log(error.response.data);
+        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+      }
+      isLoggedIn.value = false;
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('isAdmin');
+      router.push('/login');
     };
 
     return {
