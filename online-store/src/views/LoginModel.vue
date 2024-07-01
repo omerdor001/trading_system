@@ -74,6 +74,7 @@ export default defineComponent({
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('username', username.value);
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('isAdmin',response.data.isAdmin);
         router.push('/'); 
       } catch (error) {
         if (error.response) {

@@ -19,16 +19,7 @@
         </form>
       </div>
     </div>
-    <footer>
-      <div class="external-links">
-        <h3>External Links</h3>
-        <ul>
-          <li><a href="#">Link 1</a></li>
-          <li><a href="#">Link 2</a></li>
-          <li><a href="#">Link 3</a></li>
-        </ul>
-      </div>
-    </footer>
+    <p-toast></p-toast>
   </div>
 </template>
 
@@ -41,6 +32,8 @@ import Textarea from 'primevue/textarea';
 import CreateButton from 'primevue/button';
 import UserViewModel from "@/ViewModel/UserViewModel";
 import { useRouter } from 'vue-router';
+import { useToast } from 'primevue/usetoast';
+import PrimeToast from 'primevue/toast';
 
 export default defineComponent({
   name: 'OpenStore',
@@ -49,6 +42,7 @@ export default defineComponent({
     InputText,
     Textarea,
     CreateButton,
+     'p-toast': PrimeToast,
   },
   setup() {
     const router = useRouter();
@@ -56,7 +50,7 @@ export default defineComponent({
     const description = ref('');
     const username = localStorage.getItem('username'); 
     const token = localStorage.getItem('token'); 
-    
+    const toast = useToast();
 
     const handleCreateStore = async () => {
       try {
@@ -68,10 +62,12 @@ export default defineComponent({
             description: description.value
             }
         });
-        alert('Store created:', response.data);
+        console.log(response.data);
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Store was opened Successfully', life: 3000 });
         name.value = '';
         description.value = '';
       } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to open store', life: 3000 });
         console.error('Failed to create store:', error.message);
       }
     };

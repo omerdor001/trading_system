@@ -23,19 +23,23 @@
       </div>
     </div>
   </div>
+  <p-toast></p-toast>
 </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { useToast } from 'primevue/usetoast';
+import PrimeToast from 'primevue/toast'
 import SiteHeader from '@/components/SiteHeader.vue';
 
-const api_base_url = '/api';
+const api_base_url = 'http://localhost:8082/api/trading';
 
 export default {
   name: 'CloseStore',
   components: {
-    SiteHeader
+    SiteHeader,
+    'p-toast': PrimeToast,
   },
   data() {
     return {
@@ -59,7 +63,7 @@ export default {
             token: this.token,
           }
         });
-        this.stores = response.data; 
+        this.stores = response.data.split(",");
       } catch (error) {
         console.error('Failed to fetch stores:', error);
         alert('Failed to load stores.');
@@ -151,7 +155,7 @@ export default {
 .button-group button {
   background-color: #e67e22;
   border: none;
-  padding: 10px 20px;
+  padding: 5px 10px;
   color: white;
   border-radius: 5px;
   cursor: pointer;
