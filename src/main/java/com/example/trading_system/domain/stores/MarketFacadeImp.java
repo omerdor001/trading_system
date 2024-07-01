@@ -131,7 +131,7 @@ public class MarketFacadeImp implements MarketFacade {
             if(store.getFounder().equals(username))
                 stores.add(store.getNameId());
         }
-        return stores.toString();
+        return stores.toString().substring(1,stores.toString().length()-1);
     }
 
     @Override

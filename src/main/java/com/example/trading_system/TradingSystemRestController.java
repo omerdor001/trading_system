@@ -74,7 +74,7 @@ public class TradingSystemRestController {
 
     @PostMapping("/store/close")
     public ResponseEntity<String> closeStoreExist(@RequestParam String username, @RequestParam String token, @RequestParam String storeName) {
-        return tradingSystem.closeStoreExist(username, token, storeName);
+        return tradingSystem.closeStoreExist("r"+username, token, storeName);
     }
 
     @PostMapping("/store/open")
@@ -314,7 +314,7 @@ public class TradingSystemRestController {
 
     @GetMapping("/stores-I-created")
     public ResponseEntity<String> getStoresIOpened(@RequestParam String userName, @RequestParam String token) {
-        return tradingSystem.getStoresIOpened(userName,token);
+        return tradingSystem.getStoresIOpened("r"+userName,token);
     }
 
     @GetMapping("/stores-I-own")
