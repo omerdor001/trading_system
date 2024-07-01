@@ -322,7 +322,7 @@ public class TradingSystemImp implements TradingSystem {
             if (userService.login(usernameV, username, password)) {
                 if (!token.isEmpty()) Security.makeTokenExpire(token);
                 String newToken = Security.generateToken("r" + username);
-                String userToken = "{\"username\": \"" + "r" + username + "\", \"token\": \"" + newToken + "\"}";
+                String userToken = "{\"username\": \"" + "r" + username + "\", \"token\": \"" + newToken + "\", \"isAdmin\": " + userService.isAdmin("r"+username) + "}";
                 logger.info("User: {} logged in successfully", username);
                 return new ResponseEntity<>(userToken, HttpStatus.OK);
             } else {
