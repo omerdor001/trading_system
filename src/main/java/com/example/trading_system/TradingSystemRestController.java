@@ -87,7 +87,7 @@ public class TradingSystemRestController {
                                             @RequestParam String token,
                                             @RequestParam String storeName,
                                             @RequestParam String description) {
-        return tradingSystem.openStore(username, token, storeName, description);
+        return tradingSystem.openStore("r"+username, token, storeName, description);
     }
 
     @PostMapping("/product/add")

@@ -42,7 +42,7 @@ export default defineComponent({
     InputText,
     Textarea,
     CreateButton,
-     'p-toast': PrimeToast,
+    'p-toast': PrimeToast,
   },
   setup() {
     const router = useRouter();
@@ -56,7 +56,7 @@ export default defineComponent({
       try {
         const response = await axios.put('http://localhost:8082/api/trading/create-store',null, {
             params : { 
-            username: 'r'+username,
+            username: username,
             token: token,
             storeName: name.value,
             description: description.value
