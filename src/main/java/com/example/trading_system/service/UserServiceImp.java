@@ -275,5 +275,15 @@ public class UserServiceImp implements UserService {
         return userFacade.getStoresIManage(username);
     }
 
+    @Override
+    public String getUserRequestsOwnership(String username) {
+        return userFacade.getUserRequestsOwnership(username);
+    }
+
+    @Override
+    public String getUserRequestsManagement(String username) {
+        return userFacade.getUserRequestsManagement(username);
+    }
+
 
 }

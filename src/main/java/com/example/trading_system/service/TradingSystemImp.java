@@ -700,6 +700,34 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
+    public ResponseEntity<String> getUserRequestsOwnership(String username, String token) {
+        logger.info("Trying to Get Requests owners for {}",username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Get Requests owners for {}",username);
+            return new ResponseEntity<>(userService.getUserRequestsOwnership(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Requests owners for {} ",username, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getUserRequestsManagement(String username, String token) {
+        logger.info("Trying to Get Requests managers for {}",username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Get Requests managers for {}",username);
+            return new ResponseEntity<>(userService.getUserRequestsManagement(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Requests managers for {} ",username, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public ResponseEntity<String> getStoresIManage(String username, String token) {
         logger.info("Trying to Get Stores {} manages",username);
         try {

@@ -87,4 +87,8 @@ public interface UserService {
     String getStoresIOwn(String username);
 
     String getStoresIManage(String username);
+
+    String getUserRequestsOwnership(String username);
+
+    String getUserRequestsManagement(String username);
 }

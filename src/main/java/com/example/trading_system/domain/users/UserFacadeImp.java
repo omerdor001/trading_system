@@ -520,7 +520,7 @@ public class UserFacadeImp implements UserFacade {
         if (newOwnerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User already Owner of this store");
         }
-        newOwnerUser.addWaitingAppoint_Owner(storeName);
+        newOwnerUser.addWaitingAppoint_Owner(storeName,appoint);
         sendNotification(appoint, newOwner, appointUser.getUsername() + " suggests you to become a store owner at " + storeName);
     }
 
@@ -551,7 +551,7 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(store_name_id)) {
             throw new IllegalAccessException("User cannot be owner of this store");
         }
-        newManagerUser.addWaitingAppoint_Manager(store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+        newManagerUser.addWaitingAppoint_Manager(store_name_id,appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy);
         sendNotification(appoint, newManager, appointUser.getUsername() + " suggests you to become a store manager at " + store_name_id);
     }
 
@@ -618,7 +618,7 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User cannot be owner of this store");
         }
-        if (newManagerUser.removeWaitingAppoint_Manager(storeName) == null)
+        if (newManagerUser.removeWaitingAppoint_Manager(storeName,appoint) == null)
             throw new RuntimeException("No appointment requests in this store.");
         newManagerUser.addManagerRole(appoint, storeName);
         marketFacade.getStore(storeName).addManager(newManager);
@@ -822,7 +822,7 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User cannot be owner of this store");
         }
-        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName);
+        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName,appoint);
         if (perm == null) throw new IllegalAccessException("No one suggest this user to be a manager");
         sendNotification(userName, appoint, newManagerUser.getUsername() + " rejected your suggestion to become a manager at store: " + storeName);
     }
@@ -1103,4 +1103,40 @@ public class UserFacadeImp implements UserFacade {
         User usernameUser = userRepository.getUser(username);
         return usernameUser.getMessagesJSON();
     }
+
+    @Override
+    public String getUserRequestsOwnership(String username){
+        if (!userRepository.isExist(username)) {
+            throw new IllegalArgumentException("User doesn't exist in the system");
+        }
+        if (isSuspended(username))
+            throw new RuntimeException("User is suspended from the system");
+        User user=userRepository.getUser(username);
+        ObjectMapper mapper = new ObjectMapper();
+        HashMap<String,String> toApproves=user.getOwnerToApprove();
+        try {
+            return mapper.writeValueAsString(toApproves);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public String getUserRequestsManagement(String username){
+        if (!userRepository.isExist(username)) {
+            throw new IllegalArgumentException("User doesn't exist in the system");
+        }
+        if (isSuspended(username))
+            throw new RuntimeException("User is suspended from the system");
+        User user=userRepository.getUser(username);
+        ObjectMapper mapper = new ObjectMapper();
+        HashMap<List<String>,List<Boolean>> toApproves=user.getManagerToApprove();
+        try {
+            return mapper.writeValueAsString(toApproves);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+        }
+    }
+
+
 }

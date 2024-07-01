@@ -18,7 +18,6 @@ import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -325,6 +324,16 @@ public class TradingSystemRestController {
     @GetMapping("/stores-I-manage")
     public ResponseEntity<String> getStoresIManage(@RequestParam String userName, @RequestParam String token) {
         return tradingSystem.getStoresIManage(userName,token);
+    }
+
+    @GetMapping("/requests-for-ownership")
+    public ResponseEntity<String> getUserRequestsOwnership(@RequestParam String userName, @RequestParam String token) {
+        return tradingSystem.getUserRequestsOwnership("r"+userName,token);
+    }
+
+    @GetMapping("/requests-for-ownership")
+    public ResponseEntity<String> getUserRequestsManagement(@RequestParam String userName, @RequestParam String token) {
+        return tradingSystem.getUserRequestsManagement("r"+userName,token);
     }
 
     @GetMapping("/product/info")
