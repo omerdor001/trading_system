@@ -318,12 +318,12 @@ public class TradingSystemRestController {
 
     @GetMapping("/stores-I-own")
     public ResponseEntity<String> getStoresIOwn(@RequestParam String userName, @RequestParam String token) {
-        return tradingSystem.getStoresIOwn(userName,token);
+        return tradingSystem.getStoresIOwn("r"+userName,token);
     }
 
     @GetMapping("/stores-I-manage")
     public ResponseEntity<String> getStoresIManage(@RequestParam String userName, @RequestParam String token) {
-        return tradingSystem.getStoresIManage(userName,token);
+        return tradingSystem.getStoresIManage("r"+userName,token);
     }
 
     @GetMapping("/requests-for-ownership")
