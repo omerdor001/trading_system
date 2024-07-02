@@ -1,12 +1,13 @@
 package com.example.trading_system.domain.stores;
-
-import com.example.trading_system.service.UserServiceImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.List;
+import javax.persistence.*;
 
+@Entity
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int product_id;
     private String store_name;
     private String product_name;
@@ -14,7 +15,10 @@ public class Product {
     private double product_price;
     private volatile int product_quantity;
     private double rating;
+    @Enumerated(EnumType.STRING)
     private Category category;
+
+    @ElementCollection
     private List<String> keyWords;
     private static final Logger logger = LoggerFactory.getLogger(Product.class);
 

@@ -3,6 +3,8 @@ package com.example.trading_system.domain.stores;
 import com.example.trading_system.domain.users.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -14,6 +16,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
+@Service
 public class MarketFacadeImp implements MarketFacade {
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
     private static MarketFacadeImp instance = null;
@@ -22,6 +25,7 @@ public class MarketFacadeImp implements MarketFacade {
     private UserFacade userFacade;
 
 
+    @Autowired
     private MarketFacadeImp(StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
     }
@@ -125,7 +129,6 @@ public class MarketFacadeImp implements MarketFacade {
             throw new IllegalAccessException("When the store is closed only role holders can get products");
 
         return store.toString();
-
     }
 
     @Override
@@ -143,7 +146,6 @@ public class MarketFacadeImp implements MarketFacade {
 
     @Override
     public String searchNameInStore(String userName, String productName, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) throws IllegalAccessException {
-
         if (productName == null) {
             logger.error("No name provided");
             throw new IllegalArgumentException("No name provided");
