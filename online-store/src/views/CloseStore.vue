@@ -4,7 +4,7 @@
     <div class="close-store-container">
       <div class="close-store-form">
         <h2>Close Store</h2>
-        <form @submit.prevent="handleCloseStore">
+        <form>
           <div class="form-group">
             <label for="store">Select Store</label>
             <select v-model="selectedStore" id="store" required>
@@ -14,7 +14,8 @@
             </select>
           </div>
           <div class="button-group">
-            <CloseButton type="submit" label="Close" class="close-button" />
+            <CloseButtonPer type="submit" label="Close Permanently" class="close-button" />
+            <CloseButtonFor type="button" @click="handleCloseStore" label="Close Forever" class="close-button" />
           </div>
         </form>
       </div>
@@ -27,7 +28,8 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
-import CloseButton from 'primevue/button';
+import CloseButtonPer from 'primevue/button';
+import CloseButtonFor from 'primevue/button';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import PrimeToast from 'primevue/toast';
@@ -36,7 +38,8 @@ export default defineComponent({
   name: 'CloseStore',
   components: {
     SiteHeader,
-    CloseButton,
+    CloseButtonPer,
+    CloseButtonFor,
     'p-toast': PrimeToast,
   },
   setup() {
@@ -141,7 +144,7 @@ export default defineComponent({
 
 .button-group {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   margin-top: 20px;
 }
 
