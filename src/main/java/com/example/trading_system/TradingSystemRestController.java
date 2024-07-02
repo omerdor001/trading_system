@@ -332,8 +332,8 @@ public class TradingSystemRestController {
     }
 
     @GetMapping("/requests-for-management")
-    public ResponseEntity<String> getUserRequestsManagement(@RequestParam String userName, @RequestParam String token) {
-        return tradingSystem.getUserRequestsManagement("r"+userName,token);
+    public ResponseEntity<String> getUserRequestsManagement(@RequestParam String username, @RequestParam String token) {
+        return tradingSystem.getUserRequestsManagement("r"+username,token);
     }
 
     @GetMapping("/product/info")

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
+    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
     <div class="approve-owner">
       <h2>Approve Owner Requests</h2>
       <div v-if="requests.length === 0 && !loading && !error && !ownersLoading">
@@ -59,7 +59,7 @@ export default defineComponent({
     const loading = ref(false);
     const error = ref(null);
     const requests = ref([]);
-    const username=localStorage.getItem('username'); 
+    const username = localStorage.getItem('username'); 
     const token = localStorage.getItem('token'); 
 
     const fetchRequests = async () => {
@@ -122,6 +122,7 @@ export default defineComponent({
     onMounted(fetchRequests);
 
     return {
+      username,
       loading,
       error,
       requests,
