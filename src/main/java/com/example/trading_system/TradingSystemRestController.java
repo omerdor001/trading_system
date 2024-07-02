@@ -338,8 +338,8 @@ public class TradingSystemRestController {
 
     @GetMapping("/product/info")
     public ResponseEntity<String> getProductInfo(@RequestParam String userName, @RequestParam String token,
-                                                 @RequestParam String store_name, @RequestParam int product_Id) {
-        return tradingSystem.getProductInfo(userName, token, store_name, product_Id);
+                                                 @RequestParam String storeName, @RequestParam int product_Id) {
+        return tradingSystem.getProductInfo(userName, token, storeName, product_Id);
     }
 
     @GetMapping("/store/search/name")
@@ -409,7 +409,6 @@ public class TradingSystemRestController {
         return tradingSystem.removeFromCart(username, token, productId, storeName, quantity);
     }
 
-
     @GetMapping("/cart/view")
     public ResponseEntity<String> viewCart(@RequestParam String username, @RequestParam String token) {
         return tradingSystem.viewCart(username, token);
@@ -447,7 +446,7 @@ public class TradingSystemRestController {
         return tradingSystem.requestInformationAboutSpecificOfficialInStore(userName, token, storeName, officialUserName);
     }
 
-    @PostMapping("/cart/price/calculate")
+    @GetMapping("/cart/price/calculate")
     public ResponseEntity<String> calculatePrice(@RequestParam String username, @RequestParam String token) {
         return tradingSystem.calculatePrice(username, token);
     }
@@ -722,6 +721,4 @@ public class TradingSystemRestController {
                                                        @PathVariable int selectedIndex) {
         return tradingSystem.removePurchasePolicy(username, token, storeName, selectedIndex);
     }
-
 }
-

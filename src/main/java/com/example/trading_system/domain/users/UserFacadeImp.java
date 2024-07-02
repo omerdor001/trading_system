@@ -675,24 +675,22 @@ public class UserFacadeImp implements UserFacade {
         }
         if (store.getFounder().equals(userName)) throw new IllegalAccessException("Founder cant waive on ownership");
 
+        cancelOwnerShip(userName, storeName);
+    }
+
+    private void cancelOwnerShip(String userName, String storeName)
+    {
+        Store store = marketFacade.getStore(storeName);
+        User ownerUser = userRepository.getUser(userName);
         List<String> storeOwners = store.getOwners();
         List<String> storeManagers = store.getManagers();
 
-        //Same as the second loop?
-//        for (String storeOwner : storeOwners) {
-//            User user = userMemoryRepository.getUser(storeOwner);
-//            if (user.getRoleByStoreId(storeName).getAppointedById().equals(userName)) {
-//                user.removeOwnerRole(storeName);
-//                store.removeOwner(storeName);
-//            }
-//        }
 
         for (String storeOwner : storeOwners) {
             User user = userRepository.getUser(storeOwner);
             if (user.getRoleByStoreId(storeName).getAppointedById().equals(userName)) {
-                user.removeOwnerRole(storeName);
-                store.removeOwner(storeOwner);
-                sendNotification(userName, "r" + user.getUsername(), "You are no longer an owner at store: " + storeName + " due to user: " + owner.getUsername() + " waiving his ownership");
+                cancelOwnerShip(storeOwner,storeName);
+                sendNotification(userName, "r" + user.getUsername(), "You are no longer an owner at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
             }
         }
 
@@ -701,11 +699,12 @@ public class UserFacadeImp implements UserFacade {
             if (user.getRoleByStoreId(storeName).getAppointedById().equals(userName)) {
                 user.removeManagerRole(storeName);
                 store.removeManager(storeManager);
-                sendNotification(userName, "r" + user.getUsername(), "You are no longer a manager at store: " + storeName + " due to user: " + owner.getUsername() + " waiving his ownership");
+                sendNotification(userName, "r" + user.getUsername(), "You are no longer a manager at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
             }
         }
-        owner.removeOwnerRole(storeName);
+        userRepository.getUser(userName).removeOwnerRole(storeName);
         marketFacade.getStore(storeName).removeOwner(userName);
+
     }
 
     @Override
@@ -769,29 +768,7 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("Owner cant fire owner that he/she didn't appointed");
         }
 
-        Store store = marketFacade.getStore(storeName);
-        List<String> storeOwners = store.getOwners();
-        List<String> storeManagers = store.getManagers();
-
-        for (String storeOwner : storeOwners) {
-            User user = userRepository.getUser(storeOwner);
-            if (user.getRoleByStoreId(storeName).getAppointedById().equals(owner)) {
-                user.removeOwnerRole(storeName);
-                store.removeOwner(storeOwner);
-                sendNotification(ownerAppoint, "r" + user.getUsername(), "You are no longer an owner at store: " + storeName + " due to user: " + ownerUser.getUsername() + ", who appointed you, being fired");
-            }
-        }
-
-        for (String storeManager : storeManagers) {
-            User user = userRepository.getUser(storeManager);
-            if (user.getRoleByStoreId(storeName).getAppointedById().equals(owner)) {
-                user.removeManagerRole(storeName);
-                store.removeManager(storeManager);
-                sendNotification(ownerAppoint, "r" + user.getUsername(), "You are no longer a manager at store: " + storeName + " due to user: " + ownerUser.getUsername() + ", who appointed you, being fired");
-            }
-        }
-        ownerUser.removeOwnerRole(storeName);
-        marketFacade.getStore(storeName).removeOwner(owner);
+        cancelOwnerShip(owner, storeName);
         sendNotification(ownerAppoint, owner, "You are no longer an owner at store: " + storeName + " due to being fired by user: " + ownerAppointer.getUsername());
     }
 
