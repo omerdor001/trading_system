@@ -4,6 +4,8 @@ import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -189,7 +191,9 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public String watchSuspensions(String admin) {
-        StringBuilder details = new StringBuilder();
+        ObjectMapper mapper = new ObjectMapper();
+        List<Map<String, Object>> suspensionDetailsList = new ArrayList<>();
+
         if (!userRepository.isExist(admin)) {
             throw new IllegalArgumentException("Admin user doesn't exist in the system");
         }
@@ -198,14 +202,20 @@ public class UserFacadeImp implements UserFacade {
         }
         for (User user : userRepository.getAllUsersAsList()) {
             if (user.isSuspended()) {
-                details.append("Username - ").append(user.getUsername()).append("\n");
-                details.append("Start of suspension - ").append(user.getSuspendedStart().truncatedTo(ChronoUnit.SECONDS)).append("\n");
-                details.append("Time of suspension (in days) - ").append(Math.max(0, Math.abs(Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toDays()))).append("\n");
-                details.append("Time of suspension (in hours) - ").append(Math.max(0, Math.abs(Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toHours()))).append("\n");
-                details.append("End of suspension - ").append(user.getSuspendedEnd().toString());
+                Map<String, Object> details = new HashMap<>();
+                details.put("Username", user.getUsername());
+                details.put("Start of suspension", user.getSuspendedStart().truncatedTo(ChronoUnit.SECONDS).toString());
+                details.put("Time of suspension (in days)", Math.max(0, Math.abs(Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toDays())));
+                details.put("Time of suspension (in hours)", Math.max(0, Math.abs(Duration.between(user.getSuspendedStart(), user.getSuspendedEnd()).toHours())));
+                details.put("End of suspension", user.getSuspendedEnd().toString());
+                suspensionDetailsList.add(details);
             }
         }
-        return details.toString();
+        try {
+            return mapper.writeValueAsString(suspensionDetailsList);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+        }
     }
 
     @Override
@@ -510,7 +520,7 @@ public class UserFacadeImp implements UserFacade {
         if (newOwnerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User already Owner of this store");
         }
-        newOwnerUser.addWaitingAppoint_Owner(storeName);
+        newOwnerUser.addWaitingAppoint_Owner(storeName,appoint);
         sendNotification(appoint, newOwner, appointUser.getUsername() + " suggests you to become a store owner at " + storeName);
     }
 
@@ -541,7 +551,7 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(store_name_id)) {
             throw new IllegalAccessException("User cannot be owner of this store");
         }
-        newManagerUser.addWaitingAppoint_Manager(store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+        newManagerUser.addWaitingAppoint_Manager(store_name_id,appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy);
         sendNotification(appoint, newManager, appointUser.getUsername() + " suggests you to become a store manager at " + store_name_id);
     }
 
@@ -608,7 +618,7 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User cannot be owner of this store");
         }
-        if (newManagerUser.removeWaitingAppoint_Manager(storeName) == null)
+        if (newManagerUser.removeWaitingAppoint_Manager(storeName,appoint) == null)
             throw new RuntimeException("No appointment requests in this store.");
         newManagerUser.addManagerRole(appoint, storeName);
         marketFacade.getStore(storeName).addManager(newManager);
@@ -789,7 +799,7 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User cannot be owner of this store");
         }
-        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName);
+        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName,appoint);
         if (perm == null) throw new IllegalAccessException("No one suggest this user to be a manager");
         sendNotification(userName, appoint, newManagerUser.getUsername() + " rejected your suggestion to become a manager at store: " + storeName);
     }
@@ -826,6 +836,30 @@ public class UserFacadeImp implements UserFacade {
         }
         managerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy);
         sendNotification(userId, managerToEdit, "Your permissions for store: " + storeName + " were changed by user: " + appointUser.getUsername());
+    }
+
+    @Override
+    public String getStoresIOwn(String username){
+        if (!userRepository.isExist(username)) {
+            throw new NoSuchElementException("No user called " + username + " exist");
+        }
+        if (isSuspended(username)) {
+            throw new RuntimeException("User is suspended from the system");
+        }
+        User user=userRepository.getUser(username);
+        return user.getStoresIOwn();
+    }
+
+    @Override
+    public String getStoresIManage(String username){
+        if (!userRepository.isExist(username)) {
+            throw new NoSuchElementException("No user called " + username + " exist");
+        }
+        if (isSuspended(username)) {
+            throw new RuntimeException("User is suspended from the system");
+        }
+        User user=userRepository.getUser(username);
+        return user.getStoresIManage();
     }
 
     @Override
@@ -1046,4 +1080,40 @@ public class UserFacadeImp implements UserFacade {
         User usernameUser = userRepository.getUser(username);
         return usernameUser.getMessagesJSON();
     }
+
+    @Override
+    public String getUserRequestsOwnership(String username){
+        if (!userRepository.isExist(username)) {
+            throw new IllegalArgumentException("User doesn't exist in the system");
+        }
+        if (isSuspended(username))
+            throw new RuntimeException("User is suspended from the system");
+        User user=userRepository.getUser(username);
+        ObjectMapper mapper = new ObjectMapper();
+        HashMap<String,String> toApproves=user.getOwnerToApprove();
+        try {
+            return mapper.writeValueAsString(toApproves);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public String getUserRequestsManagement(String username){
+        if (!userRepository.isExist(username)) {
+            throw new IllegalArgumentException("User doesn't exist in the system");
+        }
+        if (isSuspended(username))
+            throw new RuntimeException("User is suspended from the system");
+        User user=userRepository.getUser(username);
+        ObjectMapper mapper = new ObjectMapper();
+        HashMap<List<String>,List<Boolean>> toApproves=user.getManagerToApprove();
+        try {
+            return mapper.writeValueAsString(toApproves);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+        }
+    }
+
+
 }

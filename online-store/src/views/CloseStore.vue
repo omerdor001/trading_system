@@ -1,109 +1,99 @@
 <template>
-<div>
-  <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
-  <div class="close-store-container">
-    <div class="close-store-form">
-      <h2>Select Store to Close</h2>
-      <div v-if="stores.length === 0">Loading...</div>
-      <div v-else>
-        <div class="store-list">
-          <div v-for="store in stores" :key="store">
-            <label class="store-item">
-              <input type="radio" name="selectedStore" :value="store" @change="selectStore(store)">
-              {{ store }}
-            </label>
+  <div>
+    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
+    <div class="close-store-container">
+      <div class="close-store-form">
+        <h2>Close Store</h2>
+        <form>
+          <div class="form-group">
+            <label for="store">Select Store</label>
+            <select v-model="selectedStore" id="store" required>
+              <option v-for="store in stores" :key="store" :value="store">
+                {{ store }}
+              </option>
+            </select>
           </div>
-        </div>
-        <div class="button-group">
-          <button v-if="selectedStore" @click="markStoreForClosure">Mark Store for Closure</button>
-        </div>
-        <div class="button-group">
-          <button class="close-button" @click="closeStore">Close Store</button>
-        </div>
+          <div class="button-group">
+            <CloseButtonPer type="submit" @click="handleCloseStorePer" label="Close Permanently" class="close-button" />
+          </div>
+        </form>
       </div>
     </div>
-  </div>
+    <p-toast></p-toast>
   </div>
 </template>
 
 <script>
+import { defineComponent, ref, onMounted } from 'vue';
 import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
-import StoreViewModel from '@/ViewModel/StoreViewModel';
-import UserViewModel from '@/ViewModel/UserViewModel';
+import CloseButtonPer from 'primevue/button';
+import { useRouter } from 'vue-router';
+import { useToast } from 'primevue/usetoast';
+import PrimeToast from 'primevue/toast';
 
-const api_base_url = '/api';
-console.log(api_base_url)
-export default {
-   name: 'CloseStore',
+export default defineComponent({
+  name: 'CloseStore',
   components: {
-    SiteHeader
+    SiteHeader,
+    CloseButtonPer,
+    'p-toast': PrimeToast,
   },
-  data() {
-    return {
-      stores: [],
-      selectedStoreId: '',
-      markedStore: null,
-      username: UserViewModel.getters.getUsername() || ''
+  setup() {
+    const router = useRouter();
+    const stores = ref([]);
+    const selectedStore = ref('');
+    const username = localStorage.getItem('username'); 
+    const token = localStorage.getItem('token'); 
+    const toast = useToast();
+    const loading = ref(true);
 
+    onMounted(async () => {
+      try {
+        const response = await axios.get('http://localhost:8082/api/trading/stores-I-created', {
+           params: {
+            userName: username,
+            token: token,
+          }
+        });
+        stores.value = response.data.split(',');
+      } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to load stores', life: 3000 });
+      } finally {
+        loading.value = false;
+      }
+    });
+
+    const handleCloseStorePer = async () => {
+      try {
+        const response = await axios.post('http://localhost:8082/api/trading/store/close', null, {
+          params: { username, token, storeName: selectedStore.value }
+        });
+        console.log(response.data);
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Store was closed successfully', life: 3000 });
+        selectedStore.value = '';
+      } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to close store', life: 3000 });
+      }
+    };
+
+    const logout = () => {
+      localStorage.removeItem('username');
+      localStorage.removeItem('token');
+      router.push('/login');
+    };
+
+    return {
+      stores,
+      selectedStore,
+      username,
+      token,
+      handleCloseStorePer,
+      logout,
+      loading,
     };
   },
-  async mounted() {
-    this.stores = ['nirStore','nirStore2']
-   // try {
-    //  const response = await axios.get(`$api_base_url/stores/owned`);
-     // this.stores = response.data;
-   // } catch (error) {
-     // console.error('Error fetching stores:', error);
-   // }
-  },
-
-  
-  methods: {
-        logout() {
-      UserViewModel.actions.logout();
-      this.$router.push('/login');
-    },
-    async selectStore(storeName) {
-      this.markedStore = storeName;
-    },
-    async markStoreForClosure() {
-      if (!this.markedStore) {
-        alert('Please select a store.');
-        return;
-      }
-
-      try {
-        await axios.put(`${api_base_url}/stores/${this.selectedStoreId}/close`);
-        this.markedStore = this.stores.find(store => store.id === this.selectedStoreId);
-      } catch (error) {
-        console.error('Error marking store for closure:', error);
-        alert('Failed to mark store for closure.');
-      }
-    },
-    async closeStore() {
-      if (!this.markedStore) {
-        alert('No store is marked for closure.');
-        return;
-      }
-      try {
-        await StoreViewModel.actions.closeStoreExist(this.username, '', this.markedStore);
-        console.log('Store Closed with name:', this.markedStore, 'and description:', this.description);
-      } catch (error) {
-        console.error('Failed to Closed store:', error.message);
-      }
-      this.$router.push('/');
-    }
-  },
-  watch: {
-    selectedStoreId(newValue, oldValue) {
-      if (newValue !== oldValue) {
-        // Reset markedStore when a new store is selected
-        this.markedStore = null;
-      }
-    }
-  }
-};
+});
 </script>
 
 <style scoped>
@@ -121,7 +111,7 @@ export default {
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   width: 400px;
-  text-align: left; /* Align form content to the left */
+  text-align: center;
 }
 
 .close-store-form h2 {
@@ -129,28 +119,33 @@ export default {
   margin-bottom: 20px;
 }
 
-.store-list {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: 1fr;
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
 }
 
-.store-item {
-  display: flex;
-  align-items: center;
+.form-group label {
+  display: block;
+  color: #333;
+  margin-bottom: 5px;
 }
 
-.store-item input[type="radio"] {
-  margin-right: 10px;
+.form-group .store-select {
+  width: 150%;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  font-family: inherit; 
 }
 
 .button-group {
   display: flex;
-  justify-content: space-between; /* Adjust as needed */
+  justify-content: space-between;
   margin-top: 20px;
 }
 
-.button-group button {
+.close-button {
   background-color: #e67e22;
   border: none;
   padding: 10px 20px;
@@ -160,32 +155,7 @@ export default {
   font-weight: bold;
 }
 
-.button-group button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.button-group button:hover {
-  background-color: #d35400;
-}
-
-.back-button {
-  background-color: #95a5a6;
-}
-
-.back-button:hover {
-  background-color: #7f8c8d;
-}
-
-.close-button {
-  background-color: #3498db;
-}
-
-.close-button.disabled {
-  background-color: #ccc;
-}
-
 .close-button:hover {
-  background-color: #2980b9;
+  background-color: #d35400;
 }
 </style>

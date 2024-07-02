@@ -2,23 +2,31 @@
   <div>
     <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
     <div class="approve-owner">
-      <h2>Approve Owner</h2>
-      <div v-if="!loading && !error && !ownersLoading">
-        <div class="p-field">
-          <label for="newOwner">New Owner: </label>
-          <p>{{ newOwnerLabel }}</p>
-        </div>
-        <div class="p-field">
-          <label for="storeName">Store Name: </label>
-          <p>{{ storeNameLabel }}</p>
-        </div>
-        <div class="p-field">
-          <label for="appoint">Appointer: </label>
-          <p>{{ appointLabel }}</p>
-        </div>
-        <div class="button-group">
-          <PrimeButton label="Approve" type="button" class="submit-button" @click="approveOwner" />
-        </div>
+      <h2>Approve Owner Requests</h2>
+      <div v-if="requests.length === 0 && !loading && !error && !ownersLoading">
+        <p>No requests found.</p>
+      </div>
+      <div v-if="requests.length > 0">
+        <table class="owner-requests">
+          <thead>
+            <tr>
+              <th>New Owner</th>
+              <th>Store Name</th>
+              <th>Appointer</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(request, index) in requests" :key="index">
+              <td>{{ request.newOwner }}</td>
+              <td>{{ request.storeName }}</td>
+              <td>{{ request.appointer }}</td> <!-- Assuming the backend returns 'appointer' instead of 'appoint' -->
+              <td>
+                <PrimeButton label="Approve" type="button" @click="approveOwner(request)" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div v-if="loading || ownersLoading">
         <p>Loading...</p>
@@ -33,7 +41,7 @@
 
 <script>
 import axios from 'axios';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { Button as PrimeButton } from 'primevue/button';
 import { Toast as PrimeToast } from 'primevue/toast';
@@ -46,28 +54,38 @@ export default defineComponent({
     PrimeButton,
     PrimeToast,
   },
-  props: {
-    newOwnerLabel: String,
-    storeNameLabel: String,
-    appointLabel: String,
-  },
-  setup(props) {
+  setup() {
     const router = useRouter();
-    const username = ref(localStorage.getItem('username') || '');
-    const isLoggedIn = ref(!!username.value);
     const loading = ref(false);
-    //const ownersLoading = ref(false);
     const error = ref(null);
+    const requests = ref([]);
+    const username=localStorage.getItem('username'); 
+    const token = localStorage.getItem('token'); 
 
-    const approveOwner = async () => {
+    const fetchRequests = async () => {
       try {
         loading.value = true;
-        const response = await axios.post('/api/approve-owner', {
-          newOwner: props.newOwnerLabel,
-          storeName: props.storeNameLabel,
-          appoint: props.appointLabel,
-        });
+        const response = await axios.get(`http://localhost:8082/api/trading/requests-for-ownership`,{
+             params : { 
+              username: username,
+              token: token,
+            }
+          });
+        requests.value = response.data; 
+        loading.value = false;
+      } catch (err) {
+        loading.value = false;
+        error.value = err.response?.data?.message || 'An error occurred';
+      }
+    };
+
+    const approveOwner = async (request) => {
+      try {
+        loading.value = true;
+        const response = await axios.post('http://localhost:8082/api/trading/approveOwner', request);
         showSuccessToast(response.data.message);
+        // Remove the approved request from the list
+        requests.value = requests.value.filter(req => req !== request);
         loading.value = false;
       } catch (err) {
         loading.value = false;
@@ -100,11 +118,13 @@ export default defineComponent({
       });
     };
 
+    // Fetch requests on component mount
+    onMounted(fetchRequests);
+
     return {
-      username,
-      isLoggedIn,
       loading,
       error,
+      requests,
       approveOwner,
       logout,
     };
@@ -118,7 +138,7 @@ export default defineComponent({
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  width: 400px;
+  width: 800px; /* Adjust width as needed */
   margin: 0 auto;
   text-align: center;
 }
@@ -128,33 +148,21 @@ export default defineComponent({
   margin-bottom: 20px;
 }
 
-.approve-owner .p-field {
-  margin-bottom: 15px;
-}
-
-.approve-owner label {
-  font-weight: bold;
-}
-
-.button-group {
-  display: flex;
-  justify-content: center; 
-  justify-content: space-between;
+.owner-requests {
+  width: 100%;
+  border-collapse: collapse;
   margin-top: 20px;
 }
 
-.submit-button {
-  background-color: #e67e22 !important;
-  border: none;
-  padding: 10px 20px;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
+.owner-requests th,
+.owner-requests td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
 }
 
-.submit-button:hover {
-  background-color: #d35400 !important;
+.owner-requests th {
+  background-color: #f2f2f2;
 }
 
 .p-error {

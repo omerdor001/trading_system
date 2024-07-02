@@ -18,7 +18,6 @@ import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,6 +57,7 @@ public class TradingSystemRestController {
 
     @GetMapping("/enter")
     public ResponseEntity<String> enter() {
+        tradingSystem.openSystem(storeRepository);
         return tradingSystem.enter();
     }
 
@@ -73,7 +73,7 @@ public class TradingSystemRestController {
 
     @PostMapping("/store/close")
     public ResponseEntity<String> closeStoreExist(@RequestParam String username, @RequestParam String token, @RequestParam String storeName) {
-        return tradingSystem.closeStoreExist(username, token, storeName);
+        return tradingSystem.closeStoreExist("r"+username, token, storeName);
     }
 
     @PostMapping("/store/open")
@@ -81,12 +81,12 @@ public class TradingSystemRestController {
         return tradingSystem.openStoreExist(username, token, storeName);
     }
 
-    @PostMapping("/store/create")
+    @PutMapping("/create-store")
     public ResponseEntity<String> openStore(@RequestParam String username,
                                             @RequestParam String token,
                                             @RequestParam String storeName,
                                             @RequestParam String description) {
-        return tradingSystem.openStore(username, token, storeName, description);
+        return tradingSystem.openStore("r"+username, token, storeName, description);
     }
 
     @PostMapping("/product/add")
@@ -175,7 +175,7 @@ public class TradingSystemRestController {
         return tradingSystem.setCategory(username, token, storeName, productId, category);
     }
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     public ResponseEntity<String> login(@RequestParam String token,
                                         @RequestParam String usernameV,
                                         @RequestParam String username,
@@ -183,24 +183,24 @@ public class TradingSystemRestController {
         return tradingSystem.login(token, usernameV, username, password);
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public ResponseEntity<String> logout(@RequestParam String token, @RequestParam String username) {
-        return tradingSystem.logout(token, username);
+        return tradingSystem.logout(token, "r"+username);
     }
 
-    @PostMapping("/suspendUser")
+    @PutMapping("/suspendUser")
     public ResponseEntity<String> suspendUser(@RequestParam String token,
                                               @RequestParam String admin,
                                               @RequestParam String toSuspend,
-                                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endSuspention) {
-        return tradingSystem.suspendUser(token, admin, toSuspend, endSuspention);
+                                              @RequestParam LocalDateTime endSuspension) {
+        return tradingSystem.suspendUser(token, "r"+admin, "r"+toSuspend, endSuspension);
     }
 
     @PostMapping("/endSuspendUser")
     public ResponseEntity<String> endSuspendUser(@RequestParam String token,
                                                  @RequestParam String admin,
                                                  @RequestParam String toSuspend) {
-        return tradingSystem.endSuspendUser(token, admin, toSuspend);
+        return tradingSystem.endSuspendUser(token, "r"+admin, "r"+toSuspend);
     }
 
     @PostMapping("/setAddress")
@@ -212,7 +212,7 @@ public class TradingSystemRestController {
 
     @GetMapping("/watchSuspensions")
     public ResponseEntity<String> watchSuspensions(@RequestParam String token, @RequestParam String admin) {
-        return tradingSystem.watchSuspensions(token, admin);
+        return tradingSystem.watchSuspensions(token, "r"+admin);
     }
 
     @PostMapping("/suggestOwner")
@@ -311,7 +311,32 @@ public class TradingSystemRestController {
         return tradingSystem.getAllStores(userName, token);
     }
 
-    @GetMapping("/store/{storeName}/product/info")
+    @GetMapping("/stores-I-created")
+    public ResponseEntity<String> getStoresIOpened(@RequestParam String userName, @RequestParam String token) {
+        return tradingSystem.getStoresIOpened("r"+userName,token);
+    }
+
+    @GetMapping("/stores-I-own")
+    public ResponseEntity<String> getStoresIOwn(@RequestParam String userName, @RequestParam String token) {
+        return tradingSystem.getStoresIOwn("r"+userName,token);
+    }
+
+    @GetMapping("/stores-I-manage")
+    public ResponseEntity<String> getStoresIManage(@RequestParam String userName, @RequestParam String token) {
+        return tradingSystem.getStoresIManage("r"+userName,token);
+    }
+
+    @GetMapping("/requests-for-ownership")
+    public ResponseEntity<String> getUserRequestsOwnership(@RequestParam String username, @RequestParam String token) {
+        return tradingSystem.getUserRequestsOwnership("r"+username,token);
+    }
+
+    @GetMapping("/requests-for-management")
+    public ResponseEntity<String> getUserRequestsManagement(@RequestParam String username, @RequestParam String token) {
+        return tradingSystem.getUserRequestsManagement("r"+username,token);
+    }
+
+    @GetMapping("/product/info")
     public ResponseEntity<String> getProductInfo(@RequestParam String userName, @RequestParam String token,
                                                  @RequestParam String storeName, @RequestParam int product_Id) {
         return tradingSystem.getProductInfo(userName, token, storeName, product_Id);

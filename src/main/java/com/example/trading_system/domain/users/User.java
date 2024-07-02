@@ -87,15 +87,13 @@ public abstract class User {
 
     public abstract boolean isOwner(String store_name_id);
 
-    public abstract void addWaitingAppoint_Owner(String storeName);
-
     public abstract boolean isManager(String store_name_id);
 
-    public abstract void addWaitingAppoint_Manager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+    public abstract void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
     public abstract boolean removeWaitingAppoint_Owner(String storeName);
 
-    public abstract List<Boolean> removeWaitingAppoint_Manager(String store_name_id);
+    public abstract List<Boolean> removeWaitingAppoint_Manager(String store_name_id,String appointee);
 
     public abstract void addManagerRole(String appoint, String store_name_id);
 
@@ -135,9 +133,9 @@ public abstract class User {
 
     public abstract boolean getLogged();
 
-    public abstract List<String> getOwnerToApprove();
+    public abstract HashMap<String, String> getOwnerToApprove();
 
-    public abstract HashMap<String, List<Boolean>> getManagerToApprove();
+    public abstract HashMap<List<String>, List<Boolean>> getManagerToApprove();
 
     public abstract List<Notification> getNotifications();
 
@@ -150,6 +148,12 @@ public abstract class User {
     public abstract LocalDate getBirthdate();
 
     public abstract int getAge();
+
+    public abstract String getStoresIOwn();
+
+    public abstract String getStoresIManage();
+
+    public abstract void addWaitingAppoint_Owner(String storeName,String appointee);
 
     public void addProductToCart(int productId, int quantity, String storeName, double price, int category) {
         this.cart.addProductToCart(productId, quantity, storeName, price, category);
