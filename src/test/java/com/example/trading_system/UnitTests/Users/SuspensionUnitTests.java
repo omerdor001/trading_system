@@ -162,13 +162,13 @@ class SuspensionUnitTests {
         assertDoesNotThrow(() -> {
             userFacade.watchSuspensions("rtestuser0");
         }, "watchSuspensions should not throw any exceptions");
-
         String result = userFacade.watchSuspensions("rtestuser0");
         long duration_hours = Math.abs(Duration.between(currentDateTime, LocalDateTime.of(2024, 8, 1, 1, 1)).toHours());
         long duration_days = Math.abs(Duration.between(currentDateTime, LocalDateTime.of(2024, 8, 1, 1, 1)).toDays());
-        String expectedJson = "[{\"End of suspension\":\"2024-08-01T01:01\",\"Username\":\"testuser2\",\"Time of suspension (in days)\":30,\"Start of suspension\":\"" + currentDateTime.truncatedTo(ChronoUnit.SECONDS) + "\",\"Time of suspension (in hours)\":" + duration_hours + "}]";
+        String expectedJson = "[{\"End of suspension\":\"2024-08-01T01:01\",\"Username\":\"testuser2\",\"Time of suspension (in days)\":" + duration_days + ",\"Start of suspension\":\"" + currentDateTime.truncatedTo(ChronoUnit.SECONDS) + "\",\"Time of suspension (in hours)\":" + duration_hours + "}]";
         assertEquals(expectedJson, result);
     }
+
 
     @Test
     void watchSuspensions_AdminNotExist() {
