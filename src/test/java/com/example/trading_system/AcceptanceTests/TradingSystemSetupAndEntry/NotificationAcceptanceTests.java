@@ -257,7 +257,7 @@ class NotificationAcceptanceTests {
         tradingSystem.waiverOnOwnership(owner2Username, owner2Token, storeName);
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rmanager");
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"},{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 waiving his ownership\"}]", result.getBody());
+        assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"},{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 is fired/waiving his ownership\"}]", result.getBody());
     }
 
     @Test
@@ -273,7 +273,7 @@ class NotificationAcceptanceTests {
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rmanager");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"}]", result.getBody());
-        verify(mockNotificationSender).sendNotification(eq("rmanager"), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 waiving his ownership\"}"));
+        verify(mockNotificationSender).sendNotification(eq("rmanager"), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 is fired/waiving his ownership\"}"));
     }
 
     @Test

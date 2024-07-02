@@ -240,7 +240,7 @@ public class NotificationUnitTests {
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
             assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}]", notifications);
             notifications = userFacade.getPendingUserNotifications(owner1, manager);
-            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"},{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 waiving his ownership\"}]", notifications);
+            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"},{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 is fired/waiving his ownership\"}]", notifications);
         } catch (Exception e) {
             fail("Unexpected error: " + e.getMessage());
         }
@@ -264,7 +264,7 @@ public class NotificationUnitTests {
             assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}]", notifications);
             notifications = userFacade.getPendingUserNotifications(owner1, manager);
             assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"}]", notifications);
-            verify(mockNotificationSender).sendNotification(eq(manager), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 waiving his ownership\"}"));
+            verify(mockNotificationSender).sendNotification(eq(manager), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 is fired/waiving his ownership\"}"));
         } catch (Exception e) {
             fail("Unexpected error: " + e.getMessage());
         }
