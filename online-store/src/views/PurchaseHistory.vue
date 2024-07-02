@@ -18,15 +18,19 @@
         </DataTable>
       </div>
     </div>
+    <PrimeToast ref="toast" position="top-right" :life="3000"></PrimeToast>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import PrimeToast from 'primevue/toast';
 import SiteHeader from '@/components/SiteHeader.vue';
+import axios from 'axios';
 
 export default {
   name: 'PurchaseHistory',
@@ -34,32 +38,56 @@ export default {
     Button,
     DataTable,
     Column,
+    PrimeToast,
     SiteHeader,
   },
   setup() {
-    const stores = ref([
-      {
-        id: 1,
-        name: 'Store 1',
-        description: 'Description for Store 1',
-        purchasedProducts: [
-          { name: 'Product 1', price: '$10', quantity: 1, total: '$10', address: '123 Main St', purchaseTime: '2024-01-01 10:00', paymentInfo: 'Paid with Visa' },
-          { name: 'Product 2', price: '$20', quantity: 2, total: '$40', address: '123 Main St', purchaseTime: '2024-02-01 11:00', paymentInfo: 'Paid with MasterCard' }
-        ]
-      },
-      {
-        id: 2,
-        name: 'Store 2',
-        description: 'Description for Store 2',
-        purchasedProducts: [
-          { name: 'Product 3', price: '$30', quantity: 1, total: '$30', address: '456 Elm St', purchaseTime: '2024-03-01 12:00', paymentInfo: 'Paid with PayPal' },
-          { name: 'Product 4', price: '$40', quantity: 3, total: '$120', address: '456 Elm St', purchaseTime: '2024-04-01 13:00', paymentInfo: 'Paid with American Express' }
-        ]
-      }
-    ]);
-
+    const stores = ref([]);
     const selectedStoreId = ref(null);
     const username = ref(localStorage.getItem('username') || '');
+    const token = ref(localStorage.getItem('token') || '');
+    const toast = ref(null);
+    const router = useRouter();
+
+    const showSuccessToast = (message) => {
+      toast.value.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: message,
+        life: 3000,
+      });
+    };
+
+    const showErrorToast = (message) => {
+      toast.value.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: message,
+        life: 5000,
+      });
+    };
+
+    const fetchPurchaseHistory = async () => {
+      try {
+        const response = await axios.get('http://localhost:8082/api/trading/purchase/history', {
+          params: {
+            username: username.value,
+            token: token.value,
+            storeName: '', // Pass the store name if needed or remove it from the API
+          },
+        });
+
+        if (response.status === 200) {
+          // Assuming response.data contains the purchase history data
+          stores.value = response.data;
+          showSuccessToast('Purchase history fetched successfully');
+        } else {
+          showErrorToast(`Failed to fetch purchase history: ${response.statusText}`);
+        }
+      } catch (error) {
+        showErrorToast(`Error fetching purchase history: ${error.message}`);
+      }
+    };
 
     const toggleProducts = (storeId) => {
       if (selectedStoreId.value === storeId) {
@@ -69,18 +97,32 @@ export default {
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      this.$router.push('/login');
+    const logout = async () => {
+      try {
+        await axios.post('http://localhost:8082/api/trading/logout', null, {
+          params: {
+            username: username.value,
+            token: token.value
+          }
+        });
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('username');
+        localStorage.removeItem('token');
+        router.push('/login');
+      } catch (error) {
+        showErrorToast(`Error during logout: ${error.message}`);
+      }
     };
+
+    onMounted(fetchPurchaseHistory);
 
     return {
       stores,
       selectedStoreId,
       toggleProducts,
       username,
-      logout
+      logout,
+      toast,
     };
   },
 };

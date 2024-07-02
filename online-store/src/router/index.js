@@ -45,10 +45,9 @@ const routes = [
     { path: '/end-suspension', name: 'EndSuspension', component: EndSuspension },
     { path: '/watch-suspensions', name: 'WatchSuspensions', component: WatchSuspensions },
     { path: '/stores-i-manage', name: 'StoresIManage', component: StoresIManage },
-    { path: '/product/:productId', name: 'ProductDetails', component: ProductDetails, props: true },
+    { path: '/store/:storeName/product/:productId', name: 'ProductDetails', component: ProductDetails, props: true },
     { path: '/cart', name: 'ShoppingCart', component: ShoppingCart },
     { path: '/checkout', name: 'Checkout', component: Checkout },
-    // { path: '/store-name-input', name: 'StoreNameInput', component: StoreNameInput }, // Remove this line
     { path: '/product-list/:storeName', name: 'ProductList', component: ProductList, props: true },
     { path: '/product-management/:storeName/:productId', name: 'ProductManagement', component: ProductManagement, props: true },
     { path: '/purchase-history', name: 'PurchaseHistory', component: PurchaseHistory },

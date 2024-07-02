@@ -1,7 +1,6 @@
 <template>
   <div>
     <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
-    <Toast ref="toast" />
     <div class="main-content">
       <div class="sidebar">
         <PrimeButton label="Back to Store" @click="backToStore" class="sidebar-button" />
@@ -17,8 +16,8 @@
               <p>{{ product.description }}</p>
               <p><strong>Store:</strong> {{ product.storeLocation }}</p>
               <p><strong>Quantity:</strong> <input type="number" v-model="quantity" /></p>
-              <PrimeButton label="Add To Cart" @click="addToCart" class="action-button"/>
-              <PrimeButton label="Buy It Now" @click="buyNow" class="action-button"/>
+              <PrimeButton label="Add To Cart" @click="addToCart" class="action-button" />
+              <!-- <PrimeButton label="Buy It Now" @click="buyNow" class="action-button" /> -->
             </div>
           </div>
           <div class="product-ids">
@@ -28,24 +27,25 @@
           </div>
         </div>
       </div>
+      <PrimeToast ref="toast" position="top-right" :life="3000"></PrimeToast>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { useRouter } from 'vue-router';
 import { Button as PrimeButton } from 'primevue/button';
-import Toast from 'primevue/toast';
-import { useToast } from 'primevue/usetoast';
+import { Toast as PrimeToast } from 'primevue/toast';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'ProductDetails',
   components: {
     SiteHeader,
     PrimeButton,
-    Toast
+    PrimeToast,
   },
   props: {
     productId: {
@@ -53,10 +53,9 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
+  setup(props) {
     const router = useRouter();
-    const toast = useToast();
-    const username = ref(localStorage.getItem('username') || '');
+    const toast = ref(null);
     const product = ref({
       name: 'White Unisex Tee',
       description: 'Sizes: XS, S, M, L, XL, XXL\nType: T-shirt\nFor: Men, Women',
@@ -69,37 +68,126 @@ export default defineComponent({
     });
     const quantity = ref(1);
 
-    const backToStore = () => {
-      router.push({name: 'StoreDetails', params: {storeId: product.value.storeId}});
+    const fetchProductInfo = async () => {
+      try {
+        const storeName = 'Example Store'; // Replace with actual store name
+        const response = await axios.get(`http://localhost:8082/api/trading/store/${encodeURIComponent(storeName)}/product/info`, {
+          params: {
+            userName: localStorage.getItem('username') || '',
+            token: localStorage.getItem('token') || '',
+            product_Id: props.productId
+          }
+        });
+        return response.data;
+      } catch (error) {
+        console.error('Error fetching product info:', error);
+        return null;
+      }
     };
-
-    const addToCart = () => {
-      // Simulate adding to cart with a success message
-      if (quantity.value > 0) {
-        toast.add({severity: 'success', summary: 'Success', detail: 'Product added to cart', life: 3000});
-      } else {
-        toast.add({severity: 'error', summary: 'Error', detail: 'Failed to add product to cart', life: 3000});
+    const updateProductInfo = async () => {
+      try {
+        const info = await fetchProductInfo();
+        if (info) {
+          product.value = info; // Update product details with fetched data
+        } else {
+          // Handle fallback data if API call fails
+          product.value = {
+            name: 'White Unisex Tee',
+            description: 'Sizes: XS, S, M, L, XL, XXL\nType: T-shirt\nFor: Men, Women',
+            image: 'https://via.placeholder.com/150',
+            storeLocation: 'Manchester, UK',
+            lastUpdated: 'Jan 29, 2023, at 2:39 PM',
+            productId: '119-12',
+            orderId: 'SK19-111',
+            storeId: '119'
+          };
+        }
+      } catch (error) {
+        console.error('Error updating product info:', error);
+        product.value = null;
       }
     };
 
-    const buyNow = () => {
-      console.log('Buying now:', product.value.name, quantity.value);
+    const backToStore = () => {
+      router.push({ name: 'StoreDetails', params: { storeId: product.value.storeId } });
     };
 
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      router.push('/login');
+    const addToCart = async () => {
+      const storeName = 'Example Store'; // Replace with actual store name
+
+      try {
+        const response = await axios.post('http://localhost:8082/api/trading/cart/add', null, {
+          params: {
+            username: localStorage.getItem('username') || '',
+            token: localStorage.getItem('token') || '',
+            productId: props.productId,
+            storeName: storeName,
+            quantity: quantity.value
+          }
+        });
+
+        if (response.status === 200) {
+          showSuccessToast('Product added to cart');
+        } else {
+          showErrorToast(`Failed to add product to cart: ${response.message}`);
+        }
+      } catch (error) {
+        console.error('Error adding product to cart:', error);
+        showErrorToast(`Failed to add product to cart: ${error.message}`);
+      }
     };
+
+    // const buyNow = () => {
+    //   console.log('Buying now:', product.value.name, quantity.value);
+    // };
+
+    const logout = async () => {
+      try {
+        await axios.post('http://localhost:8082/api/trading/logout', null, {
+          params: {
+            username: localStorage.getItem('username') || '',
+            token: localStorage.getItem('token') || '',
+          }
+        });
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('username');
+        localStorage.removeItem('token');
+        router.push('/login');
+      } catch (error) {
+        showErrorToast(`Error during logout: ${error.message}`);
+      }
+    };
+
+    const showSuccessToast = (message) => {
+      toast.value.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: message,
+        life: 3000,
+      });
+    };
+
+    const showErrorToast = (message) => {
+      toast.value.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: message,
+        life: 5000,
+      });
+    };
+
+    onMounted(() => {
+      updateProductInfo();
+    });
 
     return {
-      username,
       product,
       quantity,
       backToStore,
       addToCart,
-      buyNow,
-      logout
+      // buyNow,
+      logout,
+      toast // Export toast reference for PrimeToast
     };
   }
 });
