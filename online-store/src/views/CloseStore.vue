@@ -14,8 +14,7 @@
             </select>
           </div>
           <div class="button-group">
-            <CloseButtonPer type="submit" label="Close Permanently" class="close-button" />
-            <CloseButtonFor type="button" @click="handleCloseStore" label="Close Forever" class="close-button" />
+            <CloseButtonPer type="submit" @click="handleCloseStorePer" label="Close Permanently" class="close-button" />
           </div>
         </form>
       </div>
@@ -29,7 +28,6 @@ import { defineComponent, ref, onMounted } from 'vue';
 import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
 import CloseButtonPer from 'primevue/button';
-import CloseButtonFor from 'primevue/button';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import PrimeToast from 'primevue/toast';
@@ -39,7 +37,6 @@ export default defineComponent({
   components: {
     SiteHeader,
     CloseButtonPer,
-    CloseButtonFor,
     'p-toast': PrimeToast,
   },
   setup() {
@@ -67,7 +64,7 @@ export default defineComponent({
       }
     });
 
-    const handleCloseStore = async () => {
+    const handleCloseStorePer = async () => {
       try {
         const response = await axios.post('http://localhost:8082/api/trading/store/close', null, {
           params: { username, token, storeName: selectedStore.value }
@@ -91,7 +88,7 @@ export default defineComponent({
       selectedStore,
       username,
       token,
-      handleCloseStore,
+      handleCloseStorePer,
       logout,
       loading,
     };

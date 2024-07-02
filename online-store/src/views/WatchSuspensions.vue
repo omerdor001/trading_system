@@ -1,6 +1,6 @@
 <template>   
   <div>
-    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
+    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
     <h2>Suspended Users</h2>
     <p-toast></p-toast>
     <p-table :value="suspendedUsers" responsiveLayout="scroll">
