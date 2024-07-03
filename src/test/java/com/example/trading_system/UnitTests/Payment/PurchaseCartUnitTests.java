@@ -78,7 +78,8 @@ public class PurchaseCartUnitTests {
         userFacade.addToCart("r" + username, productId, storeName, quantity);
 
         Assertions.assertDoesNotThrow(() -> userFacade.purchaseCart("r" + username));
-        assertTrue(marketFacade.getHistoryPurchasesByCustomer("r" + username,storeName,"r"+username).isEmpty());
+        assertFalse(marketFacade.getAllHistoryPurchases("r" + username,storeName).isEmpty());
+        assertTrue(marketFacade.getAllHistoryPurchases("r" + username,storeName).contains("\"storeId\":\"StoreName\",\"id\":1"));
         assertEquals(5, marketFacade.getStore(storeName).getProduct(productId).getProduct_quantity());
         assertTrue(userFacade.getUser("r" + username).isTimerCancelled());
 
@@ -113,6 +114,7 @@ public class PurchaseCartUnitTests {
         Assertions.assertDoesNotThrow(() -> userFacade.purchaseCart("r" + username1));
         Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("r" + username2));
         assertFalse(marketFacade.getAllHistoryPurchases("r" + username1,storeName).isEmpty());
+        assertTrue(marketFacade.getAllHistoryPurchases("r" + username1,storeName).contains("\"storeId\":\"StoreName\",\"id\":1"));
         assertEquals(4, marketFacade.getStore(storeName).getProduct(productId).getProduct_quantity());
         assertTrue(userFacade.getUser("r" + username1).isTimerCancelled());
         assertTrue(userFacade.getUser("r" + username2).isTimerCancelled());
@@ -488,7 +490,6 @@ public class PurchaseCartUnitTests {
         executorService.execute(() -> {
             try {
                 latch.await();
-                Thread.sleep(100); // Introduce a small delay for the second user
                 userFacade.purchaseCart("r" + username2);
                 purchase2Success[0] = true;
                 System.out.println("User2 purchase succeeded.");
@@ -508,7 +509,12 @@ public class PurchaseCartUnitTests {
 
         // Check that timer is stopped
         assertFalse(marketFacade.getAllHistoryPurchases("r" + username1,storeName).isEmpty());
+        assertTrue(marketFacade.getAllHistoryPurchases("r" + username1,storeName).contains("\"storeId\":\"StoreName\",\"id\":1"));
+        assertTrue(marketFacade.getAllHistoryPurchases("r" + username1,storeName).contains("\"customerUsername\":\"rValidUser1\""));
+        assertTrue(marketFacade.getAllHistoryPurchases("r" + username1,storeName).contains("\"customerUsername\":\"rValidUser2\""));
         assertTrue(userFacade.getUser("r" + username1).isTimerCancelled());
+        assertTrue(userFacade.getUser("r" + username2).isTimerCancelled());
+
     }
 
 }
