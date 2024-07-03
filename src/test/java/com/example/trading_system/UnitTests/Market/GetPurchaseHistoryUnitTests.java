@@ -14,6 +14,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,10 +34,10 @@ public class GetPurchaseHistoryUnitTests {
         MockitoAnnotations.openMocks(this);
 
         // Re-instantiate singletons
-        storeRepository=StoreMemoryRepository.getInstance();
+        storeRepository = StoreMemoryRepository.getInstance();
         userRepository = UserMemoryRepository.getInstance();
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
-        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
+        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
     }
 
     @AfterEach
@@ -43,10 +47,74 @@ public class GetPurchaseHistoryUnitTests {
     }
 
     @Test
+    public void givenValidPurchase_WhenAddPurchase_ThenAddedSuccessfully() {
+        String username = "ValidUser";
+        String storeName = "StoreName";
+        ProductInSaleDTO product = new ProductInSaleDTO(storeName, 1, 100.0, 2, 3);
+        Purchase purchase = new Purchase(username, List.of(product), 200.0, storeName);
+
+        StoreSalesHistory salesHistory = new StoreSalesHistory();
+        salesHistory.addPurchase(purchase);
+
+        assertEquals(1, salesHistory.getAllPurchases().size());
+        assertEquals(purchase, salesHistory.getAllPurchases().get(0));
+    }
+
+    @Test
+    public void givenMultiplePurchases_WhenFilterByCustomer_ThenReturnFilteredResults() {
+        String username1 = "User1";
+        String username2 = "User2";
+        String storeName = "StoreName";
+        ProductInSaleDTO product1 = new ProductInSaleDTO(storeName, 1, 100.0, 2, 3);
+        ProductInSaleDTO product2 = new ProductInSaleDTO(storeName, 2, 150.0, 1, 3);
+        Purchase purchase1 = new Purchase(username1, List.of(product1), 200.0, storeName);
+        Purchase purchase2 = new Purchase(username2, List.of(product2), 150.0, storeName);
+
+        StoreSalesHistory salesHistory = new StoreSalesHistory();
+        salesHistory.addPurchase(purchase1);
+        salesHistory.addPurchase(purchase2);
+
+        List<Purchase> user1Purchases = salesHistory.getPurchasesByCustomer(username1);
+
+        assertEquals(1, user1Purchases.size());
+        assertEquals(purchase1, user1Purchases.get(0));
+    }
+
+    @Test
+    public void givenNoPurchases_WhenGetAllPurchases_ThenReturnEmptyList() {
+        StoreSalesHistory salesHistory = new StoreSalesHistory();
+
+        assertTrue(salesHistory.getAllPurchases().isEmpty());
+    }
+
+    @Test
+    public void givenEmptyPurchaseHistory_WhenGetPurchaseHistory_ThenReturnEmptyString() {
+        StoreSalesHistory salesHistory = new StoreSalesHistory();
+
+        assertEquals("", salesHistory.getPurchaseHistory(null));
+    }
+
+    @Test
+    public void givenInvalidCustomerUsername_WhenGetPurchasesByCustomer_ThenReturnEmptyList() {
+        String username = "InvalidUser";
+        String storeName = "StoreName";
+        ProductInSaleDTO product = new ProductInSaleDTO(storeName, 1, 100.0, 2, 3);
+        Purchase purchase = new Purchase("ValidUser", List.of(product), 200.0, storeName);
+
+        StoreSalesHistory salesHistory = new StoreSalesHistory();
+        salesHistory.addPurchase(purchase);
+
+        List<Purchase> purchases = salesHistory.getPurchasesByCustomer(username);
+
+        assertTrue(purchases.isEmpty());
+    }
+
+
+    @Test
     public void givenNonExistentUser_WhenGetPurchaseHistory_ThenThrowException() {
         String username = "rNonExistentUser";
         String storeName = "StoreName";
-        marketFacade.addStore(storeName,"Description","founder",6.0);
+        marketFacade.addStore(storeName, "Description", "founder", 6.0);
         marketFacade.getStore(storeName).addPurchase(purchase);
 
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.getPurchaseHistory(username, storeName), "User not found");
@@ -56,7 +124,7 @@ public class GetPurchaseHistoryUnitTests {
     public void givenUserNotLoggedIn_WhenGetPurchaseHistory_ThenThrowException() {
         String username = "rValidUser";
         String storeName = "StoreName";
-        marketFacade.addStore(storeName,"Description","founder",6.0);
+        marketFacade.addStore(storeName, "Description", "founder", 6.0);
 
         marketFacade.getStore(storeName).addPurchase(purchase);
 
@@ -69,7 +137,7 @@ public class GetPurchaseHistoryUnitTests {
     public void givenUserNotCommercialManager_WhenGetPurchaseHistory_ThenThrowException() {
         String username = "rValidUser";
         String storeName = "StoreName";
-        marketFacade.addStore(storeName,"Description","founder",6.0);
+        marketFacade.addStore(storeName, "Description", "founder", 6.0);
         marketFacade.getStore(storeName).addPurchase(purchase);
 
         userRepository.addRegistered(username, "encrypted_password", null);
@@ -80,32 +148,4 @@ public class GetPurchaseHistoryUnitTests {
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.getPurchaseHistory(username, storeName), "User is not commercial manager");
     }
 
-    //TODO fix this test as soon as possible
-//@Test
-//    public void givenValidInputs_WhenGetPurchaseHistory_ThenReturnHistory() {
-//        String username = "ValidUser";
-//        String storeName = "StoreName";
-//        String expectedHistory = """
-//                Client Username: rValidUser, Total Price: $100.0
-//                Products:
-//                Product: 1, Quantity: 2, Price: $100.0, Store: StoreName
-//
-//                Client Username: rValidUser, Total Price: $100.0
-//                Products:
-//                Product: 2, Quantity: 2, Price: $100.0, Store: StoreName
-//                """;
-//        try{
-//            userFacadeImp.register(username, "encrypted_password", LocalDate.now());
-//            userFacadeImp.enter(0);
-//            userFacadeImp.login("v0",username,"encrypted_password");
-//        }
-//        catch (Exception _) {}
-//        userFacadeImp.createStore("r"+username,storeName,"");
-//        ProductInSale productInSale = new ProductInSale(storeName,1, 100.0, 2,3);
-//        ProductInSale productInSale2 = new ProductInSale(storeName,2, 100.0, 2,3);
-//        marketFacade.addPurchase(username, List.of(productInSale), 100.0, storeName);
-//        marketFacade.addPurchase(username, List.of(productInSale2), 100.0, storeName);
-//        String purchaseHistory = userFacadeImp.getPurchaseHistory("r"+username, storeName);
-//        Assertions.assertEquals(expectedHistory, purchaseHistory);
-//    }
 }

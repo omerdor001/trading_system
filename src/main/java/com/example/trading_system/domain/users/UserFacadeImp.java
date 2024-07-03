@@ -939,33 +939,44 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void purchaseCart(String username) throws Exception {
+        User user = userRepository.getUser(username);
+
         if (!checkAvailabilityAndConditions(username)) {
+            user.setTimerCancelled(true);
             logger.error("Products are not available or do not meet purchase conditions.");
             throw new RuntimeException("Products are not available or do not meet purchase conditions.");
         }
-        User user = userRepository.getUser(username);
         if (!marketFacade.validatePurchasePolicies(user.getCart().toJson(), user.getAge())) {
+            user.setTimerCancelled(true);
+
             logger.error("Products do not meet purchase policies conditions.");
             throw new RuntimeException("Products do not meet purchase policies conditions.");
         }
         user.removeReservedProducts(marketFacade.getStoreRepository());
         Timer timer = new Timer();
+        user.setTimerCancelled(false);
         timer.schedule(new TimerTask() {
             public void run() {
                 getUser(username).releaseReservedProducts(marketFacade.getStoreRepository());
-                throw new RuntimeException("time out !");
+                user.setTimerCancelled(true);
+                logger.error("Purchase timeout for user: " + username);
             }
         }, 10 * 60 * 1000);
         double totalPrice = marketFacade.calculateTotalPrice(user.getCart().toJson());
-        int deliveryId;  //For cancelling
+        int deliveryId;
         String address = user.getAddress();
         try {
             deliveryId = deliveryService.makeDelivery(address);
         } catch (Exception e) {
             user.releaseReservedProducts(marketFacade.getStoreRepository());
+            timer.cancel();
+            user.setTimerCancelled(true);
             throw new Exception("Error in Delivery");
         }
         if (deliveryId < 0) {
+            getUser(username).releaseReservedProducts(marketFacade.getStoreRepository());
+            timer.cancel();
+            user.setTimerCancelled(true);
             throw new Exception("Error in Delivery");
         }
         int paymentId;
@@ -974,17 +985,23 @@ public class UserFacadeImp implements UserFacade {
         } catch (Exception e) {
             deliveryService.cancelDelivery(deliveryId);
             user.releaseReservedProducts(marketFacade.getStoreRepository());
+            timer.cancel();
+            user.setTimerCancelled(true);
             throw new Exception("Error in Payment");
         }
         if (paymentId < 0) {
             deliveryService.cancelDelivery(deliveryId);
             user.releaseReservedProducts(marketFacade.getStoreRepository());
+            timer.cancel();
+            user.setTimerCancelled(true);
             throw new Exception("Error in Payment");
         }
         user.addPurchase(marketFacade.getStoreRepository(), username);
         timer.cancel();
+        user.setTimerCancelled(true);
         timer.purge();
     }
+
 
     @Override
     public String calculatePrice(String username) throws Exception {
