@@ -149,7 +149,7 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (checkSystemClosed()) {
                 logger.warn("System is not open, entry forbidden");
-                return new ResponseEntity<>("System is not open, entry forbidden", HttpStatus.FORBIDDEN);
+               return new ResponseEntity<>("System is not open, entry forbidden", HttpStatus.FORBIDDEN);
             }
             logger.info("Trying enter to system as a visitor , with id : {}", counter_user);
             String username = userService.enter(counter_user);
@@ -322,7 +322,7 @@ public class TradingSystemImp implements TradingSystem {
             if (userService.login(usernameV, username, password)) {
                 if (!token.isEmpty()) Security.makeTokenExpire(token);
                 String newToken = Security.generateToken("r" + username);
-                String userToken = "{\"username\": \"" + "r" + username + "\", \"token\": \"" + newToken + "\"}";
+                String userToken = "{\"username\": \"" + "r" + username + "\", \"token\": \"" + newToken + "\", \"isAdmin\": " + userService.isAdmin("r"+username) + "}";
                 logger.info("User: {} logged in successfully", username);
                 return new ResponseEntity<>(userToken, HttpStatus.OK);
             } else {
@@ -667,6 +667,76 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(marketService.getAllStores(userName), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed on Gathering Stores Info ", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getStoresIOpened(String username, String token) {
+        logger.info("Trying to get all Stores {} created",username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Gather All Stores {} created",username);
+            return new ResponseEntity<>(marketService.getStoresIOpened(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Stores {} created ",username, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getStoresIOwn(String username, String token) {
+        logger.info("Trying to Get Stores {} owns",username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Get All Stores {} owns",username);
+            return new ResponseEntity<>(userService.getStoresIOwn(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Stores {} owns Info ",username, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getUserRequestsOwnership(String username, String token) {
+        logger.info("Trying to Get Requests owners for {}",username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Get Requests owners for {}",username);
+            return new ResponseEntity<>(userService.getUserRequestsOwnership(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Requests owners for {} ",username, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getUserRequestsManagement(String username, String token) {
+        logger.info("Trying to Get Requests managers for {}",username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Get Requests managers for {}",username);
+            return new ResponseEntity<>(userService.getUserRequestsManagement(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Requests managers for {} ",username, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getStoresIManage(String username, String token) {
+        logger.info("Trying to Get Stores {} manages",username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Get All Stores {} manages",username);
+            return new ResponseEntity<>(userService.getStoresIManage(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Stores {} manages Info ",username, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

@@ -18,8 +18,8 @@ public class Registered extends User {
     private boolean isLogged = false;
     private List<Role> roles;
     private List<Notification> notifications;
-    private HashMap<String, List<Boolean>> managerToApprove;
-    private List<String> ownerToApprove;
+    private HashMap<List<String>, List<Boolean>> managerToApprove;
+    private HashMap<String, String> ownerToApprove;
 
     public Registered(String userName, String encryption, LocalDate birthdate) {
         super(userName);
@@ -30,7 +30,7 @@ public class Registered extends User {
         this.notifications = new LinkedList<>();
         this.roles = new ArrayList<>();
         this.managerToApprove = new HashMap<>();
-        this.ownerToApprove = new ArrayList<>();
+        this.ownerToApprove = new HashMap<>();
     }
 
     public void openStore(String storeName) {
@@ -95,11 +95,11 @@ public class Registered extends User {
         this.notifications.clear();
     }
 
-    public List<String> getOwnerToApprove() {
+    public HashMap<String, String> getOwnerToApprove() {
         return ownerToApprove;
     }
 
-    public HashMap<String, List<Boolean>> getManagerToApprove() {
+    public HashMap<List<String>, List<Boolean>> getManagerToApprove() {
         return managerToApprove;
     }
 
@@ -160,20 +160,20 @@ public class Registered extends User {
         }
     }
 
-    public void addWaitingAppoint_Manager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
-        managerToApprove.put(store_name_id, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy));
+    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+        managerToApprove.put(Arrays.asList(store_name_id,appointee), Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy));
     }
 
-    public void addWaitingAppoint_Owner(String storeName) {
-        ownerToApprove.add(storeName);
+    public void addWaitingAppoint_Owner(String storeName,String appointee) {
+        ownerToApprove.put(storeName,appointee);
     }
 
-    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id) {
-        return managerToApprove.remove(store_name_id);
+    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id,String appointee) {
+        return managerToApprove.remove(Arrays.asList(store_name_id,appointee));
     }
 
     public boolean removeWaitingAppoint_Owner(String storeName) {
-        return ownerToApprove.remove(storeName);
+        return ownerToApprove.remove(storeName)!=null;
     }
 
     public List<Role> getRoles() {
@@ -188,5 +188,27 @@ public class Registered extends User {
     public int getAge() {
         LocalDate currentDate = LocalDate.now();
         return Period.between(birthdate, currentDate).getYears();
+    }
+
+    @Override
+    public String getStoresIOwn(){
+        List stores=new ArrayList();
+        for (Role role:roles){
+            if(role.getRoleState().isOwner()){
+                stores.add(role.getStoreId());
+            }
+        }
+        return stores.toString();
+    }
+
+    @Override
+    public String getStoresIManage(){
+        List stores=new ArrayList();
+        for (Role role:roles){
+            if(role.getRoleState().isManager()){
+                stores.add(role.getStoreId());
+            }
+        }
+        return stores.toString();
     }
 }

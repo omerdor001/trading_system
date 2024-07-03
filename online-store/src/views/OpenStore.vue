@@ -19,27 +19,21 @@
         </form>
       </div>
     </div>
-    <footer>
-      <div class="external-links">
-        <h3>External Links</h3>
-        <ul>
-          <li><a href="#">Link 1</a></li>
-          <li><a href="#">Link 2</a></li>
-          <li><a href="#">Link 3</a></li>
-        </ul>
-      </div>
-    </footer>
+    <p-toast></p-toast>
   </div>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue';
+import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import CreateButton from 'primevue/button';
-import { useRouter } from 'vue-router';
 import UserViewModel from "@/ViewModel/UserViewModel";
+import { useRouter } from 'vue-router';
+import { useToast } from 'primevue/usetoast';
+import PrimeToast from 'primevue/toast';
 
 export default defineComponent({
   name: 'OpenStore',
@@ -48,29 +42,46 @@ export default defineComponent({
     InputText,
     Textarea,
     CreateButton,
+    'p-toast': PrimeToast,
   },
   setup() {
     const router = useRouter();
     const name = ref('');
     const description = ref('');
-    const username = ref('');  //TODO fix
+    const username = localStorage.getItem('username'); 
+    const token = localStorage.getItem('token'); 
+    const toast = useToast();
 
     const handleCreateStore = async () => {
       try {
-        console.log('Store created with name:', name.value, 'and description:', description.value);
+        const response = await axios.put('http://localhost:8082/api/trading/create-store',null, {
+            params : { 
+            username: username,
+            token: token,
+            storeName: name.value,
+            description: description.value
+            }
+        });
+        console.log(response.data);
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Store was opened Successfully', life: 3000 });
+        name.value = '';
+        description.value = '';
       } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to open store', life: 3000 });
         console.error('Failed to create store:', error.message);
       }
     };
 
     const logout = () => {
       UserViewModel.actions.logout();
-      router.push('/login');};
+      router.push('/login');
+    };
 
     return {
       name,
       description,
       username,
+      token,
       handleCreateStore,
       logout,
     };
