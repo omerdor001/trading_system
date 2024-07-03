@@ -1,7 +1,10 @@
 package com.example.trading_system.domain.users;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "owner_roles")
 public class Owner extends RoleState {
     public Owner(Role role) {
         this.role = role;

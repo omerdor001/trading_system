@@ -1,11 +1,21 @@
 package com.example.trading_system.domain.users;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "manager_roles")
 public class Manager extends RoleState {
+    @Column(name = "watch")
     private boolean watch;
+
+    @Column(name = "edit_supply")
     private boolean editSupply;
+
+    @Column(name = "edit_purchase_policy")
     private boolean editPurchasePolicy;
+
+    @Column(name = "edit_discount_policy")
     private boolean editDiscountPolicy;
 
     public Manager() {

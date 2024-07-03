@@ -6,11 +6,16 @@ import com.example.trading_system.domain.stores.StoreRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.persistence.*;
 import java.io.IOException;
 import java.util.HashMap;
 
+@Embeddable
 public class ShoppingBag {
     private String storeId;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @MapKeyColumn(name = "product_id")
     private HashMap<Integer, ProductInSale> products_list;
 
     public ShoppingBag(String storeId) {

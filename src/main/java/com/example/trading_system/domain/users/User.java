@@ -2,23 +2,40 @@ package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.Message;
 import com.example.trading_system.domain.stores.StoreRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+@MappedSuperclass
 public abstract class User {
     private static final Logger logger = LoggerFactory.getLogger(User.class);
+
+    @Id
+    @Column(nullable = false, unique = true)
     public String username;
+
+    @Embedded
     private Cart cart;
+
+    @Column(nullable = false)
     private boolean suspended;
+
+    @Column
     private LocalDateTime suspendedStart;
+
+    @Column
     private LocalDateTime suspendedEnd;
+
+    @Column
     private String address;
+
+    @OneToMany(cascade = CascadeType.ALL)
     private LinkedList<Message> messages;
 
     public User(String username) {
@@ -135,9 +152,9 @@ public abstract class User {
 
     public abstract boolean getLogged();
 
-    public abstract List<String> getOwnerToApprove();
+    public abstract List<String> getOwnerSuggestions();
 
-    public abstract HashMap<String, List<Boolean>> getManagerToApprove();
+    public abstract HashMap<String, List<Boolean>> getManagerSuggestions();
 
     public abstract List<Notification> getNotifications();
 
@@ -158,7 +175,6 @@ public abstract class User {
     public void removeProductFromCart(int productId, int quantity, String storeName) {
         this.cart.removeProductFromCart(productId, quantity, storeName);
     }
-
 
     public String getShoppingCart_ToString() {
         return cart.toString();

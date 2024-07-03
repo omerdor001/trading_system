@@ -18,14 +18,13 @@ public class UserMemoryRepository implements UserRepository {
     }
 
     public static UserMemoryRepository getInstance() {
-        if (instance == null)
-            instance = new UserMemoryRepository();
+        if (instance == null) instance = new UserMemoryRepository();
         return instance;
     }
 
     @Override
     public void deleteInstance() {
-        if(users!=null){
+        if (users != null) {
             this.users.clear();
             this.users = null;
         }
@@ -43,6 +42,21 @@ public class UserMemoryRepository implements UserRepository {
     }
 
     @Override
+    public boolean isAdmin(String username) {
+        if (isExist(username)) return users.get(username).isAdmin();
+        return false;
+    }
+
+    @Override
+    public boolean isAdminRegistered() {
+        for (User r : users.values())
+            if (r.isAdmin()) {
+                return true;
+            }
+        return false;
+    }
+
+    @Override
     public HashMap<String, User> getAllUsers() {
         return users;
     }
@@ -50,11 +64,6 @@ public class UserMemoryRepository implements UserRepository {
     @Override
     public Collection<User> getAllUsersAsList() {
         return users.values();
-    }
-
-    @Override
-    public Collection<String> getAllUsersAsUsernames() {
-        return users.keySet();
     }
 
     @Override
@@ -75,5 +84,17 @@ public class UserMemoryRepository implements UserRepository {
     @Override
     public void addRegistered(String userName, String encryption, LocalDate birthdate) {
         users.put(userName, new Registered(userName.substring(1), encryption, birthdate));
+    }
+
+    @Override
+    public void saveUser(User user) {
+    }
+
+    @Override
+    public boolean checkIfRegistersEmpty() {
+        for (String username : users.keySet()) {
+            if (username.startsWith("r")) return false;
+        }
+        return true;
     }
 }

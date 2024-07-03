@@ -1,10 +1,17 @@
 package com.example.trading_system.domain.users;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
 public class Role {
+    @OneToOne(cascade = CascadeType.ALL)
     private RoleState roleState;
+
+    @Column(nullable = false)
     private String store_name_id;
+
+    @Column(nullable = false)
     private String appointedById;
 
     public Role(String store_name_id, String appointedById) {

@@ -5,21 +5,45 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
+@Entity
+@Table(name = "registered_users")
 public class Registered extends User {
+    @Column(nullable = false)
     private String encrypted_pass;
+
+    @Column(nullable = false)
     private LocalDate birthdate;
+
+    @Column(nullable = false)
     private boolean isAdmin;
+
+    @Column(nullable = false)
     @Getter
     @Setter
     private boolean isLogged = false;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "registered_id")
     private List<Role> roles;
+
+    @OneToMany(mappedBy = "receiverUsername", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications;
-    private HashMap<String, List<Boolean>> managerToApprove;
-    private List<String> ownerToApprove;
+
+    @ElementCollection
+    @CollectionTable(name = "manager_suggestions", joinColumns = @JoinColumn(name = "username"))
+    @MapKeyColumn(name = "store_name")
+    @Column(name = "permission_flags")
+    private HashMap<String, List<Boolean>> managerSuggestions;
+
+    @ElementCollection
+    @CollectionTable(name = "owner_suggestions", joinColumns = @JoinColumn(name = "username"))
+    @Column(name = "store_name")
+    private List<String> ownerSuggestions;
 
     public Registered(String userName, String encryption, LocalDate birthdate) {
         super(userName);
@@ -29,8 +53,8 @@ public class Registered extends User {
         this.isLogged = false;
         this.notifications = new LinkedList<>();
         this.roles = new ArrayList<>();
-        this.managerToApprove = new HashMap<>();
-        this.ownerToApprove = new ArrayList<>();
+        this.managerSuggestions = new HashMap<>();
+        this.ownerSuggestions = new ArrayList<>();
     }
 
     public void openStore(String storeName) {
@@ -95,12 +119,12 @@ public class Registered extends User {
         this.notifications.clear();
     }
 
-    public List<String> getOwnerToApprove() {
-        return ownerToApprove;
+    public List<String> getOwnerSuggestions() {
+        return ownerSuggestions;
     }
 
-    public HashMap<String, List<Boolean>> getManagerToApprove() {
-        return managerToApprove;
+    public HashMap<String, List<Boolean>> getManagerSuggestions() {
+        return managerSuggestions;
     }
 
     @Override
@@ -161,19 +185,19 @@ public class Registered extends User {
     }
 
     public void addWaitingAppoint_Manager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
-        managerToApprove.put(store_name_id, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy));
+        managerSuggestions.put(store_name_id, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy));
     }
 
     public void addWaitingAppoint_Owner(String storeName) {
-        ownerToApprove.add(storeName);
+        ownerSuggestions.add(storeName);
     }
 
     public List<Boolean> removeWaitingAppoint_Manager(String store_name_id) {
-        return managerToApprove.remove(store_name_id);
+        return managerSuggestions.remove(store_name_id);
     }
 
     public boolean removeWaitingAppoint_Owner(String storeName) {
-        return ownerToApprove.remove(storeName);
+        return ownerSuggestions.remove(storeName);
     }
 
     public List<Role> getRoles() {
