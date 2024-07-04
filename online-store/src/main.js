@@ -13,7 +13,9 @@ import ToastService from 'primevue/toastservice';
 import PrimeToast from 'primevue/toast';
 import PrimeColumn from 'primevue/column';
 import PrimeDataTable from 'primevue/datatable';
+import PrimeCheckBox from 'primevue/checkbox';
 import ToggleButton from 'primevue/togglebutton';
+import RadioButton from 'primevue/radiobutton';
 
 const app = createApp(App);
 app.use(PrimeVue);
@@ -26,5 +28,7 @@ app.component('PrimeToast', PrimeToast);
 app.component('PrimeColumn', PrimeColumn);
 app.component('PrimeDataTable', PrimeDataTable);
 app.component('ToggleButton',ToggleButton);
+app.component('PrimeCheckBox',PrimeCheckBox);
+app.component('RadioButton',RadioButton);
 app.use(router);
 app.mount('#app');

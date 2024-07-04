@@ -10,19 +10,21 @@
         <table class="owner-requests">
           <thead>
             <tr>
-              <th>New Owner</th>
               <th>Store Name</th>
               <th>Appointer</th>
-              <th>Action</th>
+              <th>Approve</th>
+              <th>Reject</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(request, index) in requests" :key="index">
-              <td>{{ request.newOwner }}</td>
               <td>{{ request.storeName }}</td>
-              <td>{{ request.appointer }}</td> <!-- Assuming the backend returns 'appointer' instead of 'appoint' -->
+              <td>{{ request.appointee }}</td> 
               <td>
-                <PrimeButton label="Approve" type="button" @click="approveOwner(request)" />
+                <PrimeButton label="Click-Approve" type="button" @click="approveOwner(request)" />
+              </td>
+              <td>
+                <PrimeButton label="Click-Reject" type="button" @click="rejectOwner(request)" />
               </td>
             </tr>
           </tbody>
@@ -59,9 +61,10 @@ export default defineComponent({
     const loading = ref(false);
     const error = ref(null);
     const requests = ref([]);
-    const username=localStorage.getItem('username'); 
+    const toast = ref(null);
+    const username = localStorage.getItem('username'); 
     const token = localStorage.getItem('token'); 
-
+  
     const fetchRequests = async () => {
       try {
         loading.value = true;
@@ -71,7 +74,12 @@ export default defineComponent({
               token: token,
             }
           });
-        requests.value = response.data; 
+        requests.value = response.data.map(request => ({
+          newOwner: request.newOwner,
+          storeName: request.storeName,
+          appointee: request.appointee,
+        })); 
+        console.log(requests);
         loading.value = false;
       } catch (err) {
         loading.value = false;
@@ -82,9 +90,35 @@ export default defineComponent({
     const approveOwner = async (request) => {
       try {
         loading.value = true;
-        const response = await axios.post('http://localhost:8082/api/trading/approveOwner', request);
+        const response = await axios.post('http://localhost:8082/api/trading/approveOwner', null, {
+          params: {
+            newOwner: username,
+            token: token,
+            storeName: request.storeName,
+            appoint: request.appointee,
+          }
+        });
         showSuccessToast(response.data.message);
-        // Remove the approved request from the list
+        requests.value = requests.value.filter(req => req !== request);
+        loading.value = false;
+      } catch (err) {
+        loading.value = false;
+        showErrorToast(err.response?.data?.message || 'An error occurred');
+      }
+    };
+
+    const rejectOwner = async (request) => {
+      try {
+        loading.value = true;
+        const response = await axios.post('http://localhost:8082/api/trading/rejectToOwnStore', null, {
+          params: {
+            username: username,
+            token: token,
+            storeName: request.storeName,
+            appoint: request.appointee,
+          }
+        });
+        showSuccessToast(response.data.message);
         requests.value = requests.value.filter(req => req !== request);
         loading.value = false;
       } catch (err) {
@@ -99,8 +133,7 @@ export default defineComponent({
     };
 
     const showSuccessToast = (message) => {
-      const toast = ref.$refs.toast;
-      toast.add({
+      toast.value.add({
         severity: 'success',
         summary: 'Success',
         detail: message,
@@ -109,8 +142,7 @@ export default defineComponent({
     };
 
     const showErrorToast = (message) => {
-      const toast = ref.$refs.toast;
-      toast.add({
+      toast.value.add({
         severity: 'error',
         summary: 'Error',
         detail: message,
@@ -118,7 +150,6 @@ export default defineComponent({
       });
     };
 
-    // Fetch requests on component mount
     onMounted(fetchRequests);
 
     return {
@@ -126,7 +157,9 @@ export default defineComponent({
       error,
       requests,
       approveOwner,
+      rejectOwner,
       logout,
+      toast,
     };
   },
 });

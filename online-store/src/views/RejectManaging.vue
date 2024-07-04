@@ -1,44 +1,42 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
-    <div class="approve-manage">
-      <h2>Approve Manager Requests</h2>
-      <div v-if="requests.length === 0 && !loading && !error && !managerLoading">
+    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
+    <div class="reject-manage">
+      <h2>Reject Manager Requests</h2>
+      <div v-if="requests.length === 0 && !loading && !error && !managersLoading">
         <p>No requests found.</p>
       </div>
       <div v-if="requests.length > 0">
         <table class="manager-requests">
           <thead>
             <tr>
+              <th>New Manager</th>
               <th>Store Name</th>
               <th>Appointer</th>
               <th>Watch</th>
               <th>Edit Supply</th>
               <th>Edit Buy Policy</th>
               <th>Edit Discount Policy</th>
-              <th>Approve</th>
-              <th>Reject</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(request, index) in requests" :key="index">
+              <td>{{ request.newManager }}</td>
               <td>{{ request.storeName }}</td>
-              <td>{{ request.appointee }}</td>
+              <td>{{ request.appointer }}</td>
               <td>{{ request.watch ? '✔' : '✘' }}</td>
               <td>{{ request.editSupply ? '✔' : '✘' }}</td>
               <td>{{ request.editBuyPolicy ? '✔' : '✘' }}</td>
               <td>{{ request.editDiscountPolicy ? '✔' : '✘' }}</td>
               <td>
-                <PrimeButton label="Approve-Click" type="button" @click="approveManager(request)" />
-              </td>
-              <td>
-                <PrimeButton label="Reject-Click" type="button" @click="rejectManager(request)" />
+                <PrimeButton label="Reject" type="button" @click="rejectManager(request)" />
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div v-if="loading || managerLoading">
+      <div v-if="loading || managersLoading">
         <p>Loading...</p>
       </div>
       <div v-if="error">
@@ -53,12 +51,12 @@
 import axios from 'axios';
 import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
-import { Button as PrimeButton } from 'primevue/button';
-import { Toast as PrimeToast } from 'primevue/toast';
+import { PrimeButton } from 'primevue/button';
+import { PrimeToast } from 'primevue/toast';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({
-  name: 'ApproveManager',
+  name: 'RejectManaging',
   components: {
     SiteHeader,
     PrimeButton,
@@ -70,9 +68,8 @@ export default defineComponent({
     const error = ref(null);
     const requests = ref([]);
     const toast = ref(null);
-    const username = localStorage.getItem('username');
-    const token = localStorage.getItem('token');
-    const isLoggedIn = !!username;
+    const username = localStorage.getItem('username'); 
+    const token = localStorage.getItem('token'); 
 
     const fetchRequests = async () => {
       try {
@@ -98,10 +95,10 @@ export default defineComponent({
       }
     };
 
-    const approveManager = async (request) => {
+    const rejectManager = async (request) => {
       try {
         loading.value = true;
-        const response = await axios.post('http://localhost:8082/api/trading/approveManage', null, {
+        const response = await axios.post('http://localhost:8082/api/trading/rejectToManageStore', null, {
           params: {
             newManager: username,
             token: token,
@@ -111,26 +108,6 @@ export default defineComponent({
             editSupply: request.editSupply,
             editBuyPolicy: request.editBuyPolicy,
             editDiscountPolicy: request.editDiscountPolicy,
-          }
-        });
-        showSuccessToast(response.data.message);
-        requests.value = requests.value.filter(req => req !== request);
-        loading.value = false;
-      } catch (err) {
-        loading.value = false;
-        showErrorToast(err.response?.data?.message || 'An error occurred');
-      }
-    };
-
-    const rejectManager = async (request) => {
-      try {
-        loading.value = true;
-        const response = await axios.post('http://localhost:8082/api/trading/rejectToManageStore', null, {
-          params: {
-            username: username,
-            token: token,
-            store_name_id: request.storeName,
-            appoint: request.appointee,
           }
         });
         showSuccessToast(response.data.message);
@@ -168,12 +145,10 @@ export default defineComponent({
     onMounted(fetchRequests);
 
     return {
-      isLoggedIn,
       username,
       loading,
       error,
       requests,
-      approveManager,
       rejectManager,
       logout,
       toast,
@@ -183,7 +158,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.approve-manage {
+.reject-manage {
   background: #fff;
   padding: 30px;
   border-radius: 10px;
@@ -193,7 +168,7 @@ export default defineComponent({
   text-align: center;
 }
 
-.approve-manage h2 {
+.reject-manage h2 {
   color: #e67e22;
   margin-bottom: 20px;
 }
