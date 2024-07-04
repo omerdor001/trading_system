@@ -1,12 +1,12 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
+    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
     <div class="suspend-user">
       <h2>End Suspension</h2>
       <form @submit.prevent="submitForm">
         <div class="p-field">
-          <label for="toSuspend">Username: </label>
-          <InputText v-model="toSuspend" id="toSuspend" required />
+          <label for="toEndSuspend">Username: </label>
+          <InputText v-model="toEndSuspend" id="toEndSuspend" required />
         </div>
         <div class="button-group">
           <PrimeButton label="End Suspension" type="submit" class="p-mt-2" />
@@ -14,6 +14,7 @@
       </form>
       <div v-if="error" class="p-error">{{ error }}</div>
     </div>
+    <p-toast></p-toast>
   </div>
 </template>
 
@@ -24,6 +25,8 @@ import SiteHeader from '@/components/SiteHeader.vue';
 import { InputText } from 'primevue/inputtext';
 import { PrimeButton } from 'primevue/button';
 import { useRouter } from 'vue-router';
+import { useToast } from 'primevue/usetoast';
+import PrimeToast from 'primevue/toast';
 
 export default defineComponent({
   name: 'EndSuspension',
@@ -31,24 +34,30 @@ export default defineComponent({
     SiteHeader,
     InputText,
     PrimeButton,
+    'p-toast': PrimeToast,
   },
   setup() {
     const router = useRouter();
-    const toSuspend = ref('');
-    const error = ref(null);
-    const username = ref(localStorage.getItem('username') || '');
+    const toast = useToast();
+    const toEndSuspend = ref('');
+    const username = localStorage.getItem('username'); 
+    const token = localStorage.getItem('token'); 
 
     const submitForm = async () => {
       try {
-        error.value = null;
-        await axios.post('/api/endSuspendUser', {
+        const response = await axios.post('http://localhost:8082/api/trading/endSuspendUser', null , { 
+          params : {
+          token: token,
           admin: username,
-          toSuspend: toSuspend.value,
+          toSuspend: toEndSuspend.value,
+          }
         });
-        alert('User suspension ended successfully');
-        router.push('/'); // Redirect to home or appropriate page
-      } catch (err) {
-        error.value = err.response.data.message || 'An error occurred';
+        console.log(response.data);
+        toast.add({ severity: 'success', summary: 'Success', detail: 'End user suspension successfully', life: 3000 });
+        toEndSuspend.value = '';
+      } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to end user suspension', life: 3000 });
+        console.error('Failed to end user suspension:', error.message);
       }
     };
 
@@ -58,8 +67,7 @@ export default defineComponent({
 
     return {
       username,
-      toSuspend,
-      error,
+      toEndSuspend,
       submitForm,
       logout,
     };
@@ -89,7 +97,8 @@ export default defineComponent({
 
 .button-group {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   margin-top: 20px;
 }
 

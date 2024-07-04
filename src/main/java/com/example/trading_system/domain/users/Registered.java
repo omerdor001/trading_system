@@ -33,8 +33,10 @@ public class Registered extends User {
 
     @OneToMany(mappedBy = "receiverUsername", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications;
+    private HashMap<List<String>, List<Boolean>> managerToApprove;
+    private HashMap<String, String> ownerToApprove;
 
-    @ElementCollection
+    /*    @ElementCollection
     @CollectionTable(name = "manager_suggestions", joinColumns = @JoinColumn(name = "username"))
     @MapKeyColumn(name = "store_name")
     @Column(name = "permission_flags")
@@ -43,7 +45,7 @@ public class Registered extends User {
     @ElementCollection
     @CollectionTable(name = "owner_suggestions", joinColumns = @JoinColumn(name = "username"))
     @Column(name = "store_name")
-    private List<String> ownerSuggestions;
+    private List<String> ownerSuggestions;*/
 
     public Registered(String userName, String encryption, LocalDate birthdate) {
         super(userName);
@@ -53,8 +55,8 @@ public class Registered extends User {
         this.isLogged = false;
         this.notifications = new LinkedList<>();
         this.roles = new ArrayList<>();
-        this.managerSuggestions = new HashMap<>();
-        this.ownerSuggestions = new ArrayList<>();
+        this.managerToApprove = new HashMap<>();
+        this.ownerToApprove = new HashMap<>();
     }
 
     public void openStore(String storeName) {
@@ -119,12 +121,12 @@ public class Registered extends User {
         this.notifications.clear();
     }
 
-    public List<String> getOwnerSuggestions() {
-        return ownerSuggestions;
+    public HashMap<String, String> getOwnerToApprove() {
+        return ownerToApprove;
     }
 
-    public HashMap<String, List<Boolean>> getManagerSuggestions() {
-        return managerSuggestions;
+    public HashMap<List<String>, List<Boolean>> getManagerToApprove() {
+        return managerToApprove;
     }
 
     @Override
@@ -184,20 +186,20 @@ public class Registered extends User {
         }
     }
 
-    public void addWaitingAppoint_Manager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
-        managerSuggestions.put(store_name_id, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy));
+    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+        managerToApprove.put(Arrays.asList(store_name_id,appointee), Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy));
     }
 
-    public void addWaitingAppoint_Owner(String storeName) {
-        ownerSuggestions.add(storeName);
+    public void addWaitingAppoint_Owner(String storeName,String appointee) {
+        ownerToApprove.put(storeName,appointee);
     }
 
-    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id) {
-        return managerSuggestions.remove(store_name_id);
+    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id,String appointee) {
+        return managerToApprove.remove(Arrays.asList(store_name_id,appointee));
     }
 
     public boolean removeWaitingAppoint_Owner(String storeName) {
-        return ownerSuggestions.remove(storeName);
+        return ownerToApprove.remove(storeName)!=null;
     }
 
     public List<Role> getRoles() {
@@ -212,5 +214,27 @@ public class Registered extends User {
     public int getAge() {
         LocalDate currentDate = LocalDate.now();
         return Period.between(birthdate, currentDate).getYears();
+    }
+
+    @Override
+    public String getStoresIOwn(){
+        List stores=new ArrayList();
+        for (Role role:roles){
+            if(role.getRoleState().isOwner()){
+                stores.add(role.getStoreId());
+            }
+        }
+        return stores.toString();
+    }
+
+    @Override
+    public String getStoresIManage(){
+        List stores=new ArrayList();
+        for (Role role:roles){
+            if(role.getRoleState().isManager()){
+                stores.add(role.getStoreId());
+            }
+        }
+        return stores.toString();
     }
 }

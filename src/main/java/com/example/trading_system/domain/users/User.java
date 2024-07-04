@@ -37,6 +37,8 @@ public abstract class User {
 
     @OneToMany(cascade = CascadeType.ALL)
     private LinkedList<Message> messages;
+    private boolean isTimerCancelled;
+
 
     public User(String username) {
         this.username = username;
@@ -46,6 +48,7 @@ public abstract class User {
         this.suspendedEnd = null;
         this.address = "";
         this.messages = new LinkedList<>();
+        this.isTimerCancelled = true;
     }
 
     public String getUsername() {
@@ -104,15 +107,13 @@ public abstract class User {
 
     public abstract boolean isOwner(String store_name_id);
 
-    public abstract void addWaitingAppoint_Owner(String storeName);
-
     public abstract boolean isManager(String store_name_id);
 
-    public abstract void addWaitingAppoint_Manager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+    public abstract void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
     public abstract boolean removeWaitingAppoint_Owner(String storeName);
 
-    public abstract List<Boolean> removeWaitingAppoint_Manager(String store_name_id);
+    public abstract List<Boolean> removeWaitingAppoint_Manager(String store_name_id,String appointee);
 
     public abstract void addManagerRole(String appoint, String store_name_id);
 
@@ -152,9 +153,9 @@ public abstract class User {
 
     public abstract boolean getLogged();
 
-    public abstract List<String> getOwnerSuggestions();
+    public abstract HashMap<String, String> getOwnerToApprove();
 
-    public abstract HashMap<String, List<Boolean>> getManagerSuggestions();
+    public abstract HashMap<List<String>, List<Boolean>> getManagerToApprove();
 
     public abstract List<Notification> getNotifications();
 
@@ -167,6 +168,12 @@ public abstract class User {
     public abstract LocalDate getBirthdate();
 
     public abstract int getAge();
+
+    public abstract String getStoresIOwn();
+
+    public abstract String getStoresIManage();
+
+    public abstract void addWaitingAppoint_Owner(String storeName,String appointee);
 
     public void addProductToCart(int productId, int quantity, String storeName, double price, int category) {
         this.cart.addProductToCart(productId, quantity, storeName, price, category);
@@ -210,5 +217,12 @@ public abstract class User {
 
     public void receiveMessage(String senderId, String senderUsername, String content){
         this.messages.add(new Message(senderId, senderUsername, content));
+    }
+    public boolean isTimerCancelled() {
+        return isTimerCancelled;
+    }
+
+    public void setTimerCancelled(boolean timerCancelled) {
+        isTimerCancelled = timerCancelled;
     }
 }

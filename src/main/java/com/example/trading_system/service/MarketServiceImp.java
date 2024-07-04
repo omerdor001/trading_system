@@ -41,6 +41,11 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public String getStoresIOpened(String username) {
+        return marketFacade.getStoresIOpened(username);
+    }
+
+    @Override
     public void openStoreExist(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException {
         marketFacade.openStoreExist(userName, storeName);
     }

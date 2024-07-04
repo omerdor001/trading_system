@@ -264,4 +264,26 @@ public class UserServiceImp implements UserService {
     public String getUserMessagesJson(String admin, String username) {
         return userFacade.getUserMessagesJson(admin, username);
     }
+
+    @Override
+    public String getStoresIOwn(String username) {
+        return userFacade.getStoresIOwn(username);
+    }
+
+    @Override
+    public String getStoresIManage(String username) {
+        return userFacade.getStoresIManage(username);
+    }
+
+    @Override
+    public String getUserRequestsOwnership(String username) {
+        return userFacade.getUserRequestsOwnership(username);
+    }
+
+    @Override
+    public String getUserRequestsManagement(String username) {
+        return userFacade.getUserRequestsManagement(username);
+    }
+
+
 }

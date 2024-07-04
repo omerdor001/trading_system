@@ -105,4 +105,12 @@ public interface UserFacade {
     void sendMessageUserToUser(String sender, String receiver, String content);
 
     String getUserMessagesJson(String admin, String username);
+
+    String getStoresIOwn(String username);
+
+    String getStoresIManage(String username);
+
+    String getUserRequestsOwnership(String username);
+
+    String getUserRequestsManagement(String username);
 }
