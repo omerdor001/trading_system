@@ -20,7 +20,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public HashMap<List<String>, List<Boolean>> getManagerToApprove() {
+    public HashMap<String, HashMap<String, List<Boolean>>> getManagerToApprove() {
         return null;
     }
 

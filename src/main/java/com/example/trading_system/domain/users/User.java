@@ -135,7 +135,7 @@ public abstract class User {
 
     public abstract HashMap<String, String> getOwnerToApprove();
 
-    public abstract HashMap<List<String>, List<Boolean>> getManagerToApprove();
+    public abstract HashMap<String, HashMap<String, List<Boolean>>> getManagerToApprove();
 
     public abstract List<Notification> getNotifications();
 

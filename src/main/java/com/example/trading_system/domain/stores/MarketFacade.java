@@ -16,6 +16,8 @@ public interface MarketFacade {
 
     String getAllStores(String userName);
 
+    String getAllStoresInJSONFormat(String username);
+
     void openStoreExist(String userName, String storeId) throws IllegalAccessException;
 
     void closeStoreExist(String userName, String storeId) throws IllegalAccessException;

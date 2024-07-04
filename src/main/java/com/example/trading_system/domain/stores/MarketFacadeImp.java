@@ -1,15 +1,14 @@
 package com.example.trading_system.domain.stores;
 
 import com.example.trading_system.domain.users.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -116,6 +115,33 @@ public class MarketFacadeImp implements MarketFacade {
         sb.deleteCharAt(sb.length() - 1);
         sb.append("]");
         return sb.toString();
+    }
+
+    @Override
+    public String getAllStoresInJSONFormat(String username){
+        List<Map<String, Object>> storeList = new ArrayList<>();
+        for (Store store : storeRepository.getAllStoresByStores()) {
+            Map<String, Object> storeMap = new HashMap<>();
+            storeMap.put("name", store.getNameId());
+            if(store.isOwnerOfStore(username))
+                storeMap.put("role", "Owner");
+            else if(store.isManagerOfStore(username))
+                storeMap.put("role", "Manager");
+            else storeMap.put("role", "Viewer");
+            storeMap.put("status",store.isActive());
+            storeMap.put("description", store.getDescription());
+            storeMap.put("founder", store.getFounder().substring(1));
+            storeMap.put("isOpen", store.isOpen());
+            storeMap.put("rating",store.getStoreRating());
+            storeList.add(storeMap);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(storeList);
+        } catch (JsonProcessingException e) {
+            logger.error("Error converting stores to JSON", e);
+            return "Error converting stores to JSON";
+        }
     }
 
     @Override

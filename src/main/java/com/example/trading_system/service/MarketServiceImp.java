@@ -41,6 +41,11 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public String getAllStoresInJSONFormat(String username) {
+        return marketFacade.getAllStoresInJSONFormat(username);
+    }
+
+    @Override
     public String getStoresIOpened(String username) {
         return marketFacade.getStoresIOpened(username);
     }

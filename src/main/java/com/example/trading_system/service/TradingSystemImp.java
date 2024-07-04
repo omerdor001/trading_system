@@ -451,7 +451,7 @@ public class TradingSystemImp implements TradingSystem {
             logger.info("Finished suggesting manager : {} to be a manager in store : {}", newManager, store_name_id);
             return new ResponseEntity<>("Success suggesting manager", HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , while trying to suggest the user : {} to be a manager in store : {}", e.getMessage(), appoint, store_name_id);
+            logger.error("Error occurred : {} , while trying to suggest the user : {} to be a manager in store : {}", e.getMessage(), newManager, store_name_id);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -667,6 +667,20 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(marketService.getAllStores(userName), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed on Gathering Stores Info ", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getAllStoresInJSONFormat(String username, String token) {
+        logger.info("Trying to Gather All Stores Details");
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Gather All Stores Details by JSON format");
+            return new ResponseEntity<>(marketService.getAllStoresInJSONFormat(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Stores Details ", e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
