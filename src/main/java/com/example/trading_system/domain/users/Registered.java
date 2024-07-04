@@ -33,8 +33,18 @@ public class Registered extends User {
 
     @OneToMany(mappedBy = "receiverUsername", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications;
-    private HashMap<List<String>, List<Boolean>> managerToApprove;
-    private HashMap<String, String> ownerToApprove;
+
+    @ElementCollection
+    @CollectionTable(name = "manager_to_approve", joinColumns = @JoinColumn(name = "registered_id"))
+    @MapKeyColumn(name = "suggested_by")
+    @Column(name = "permissions")
+    private HashMap<List<String>, List<Boolean>> managerSuggestions;
+
+    @ElementCollection
+    @CollectionTable(name = "owner_to_approve", joinColumns = @JoinColumn(name = "registered_id"))
+    @MapKeyColumn(name = "suggested_by")
+    @Column(name = "suggestion_value")
+    private HashMap<String, String> ownerSuggestions;
 
     /*    @ElementCollection
     @CollectionTable(name = "manager_suggestions", joinColumns = @JoinColumn(name = "username"))
@@ -55,8 +65,8 @@ public class Registered extends User {
         this.isLogged = false;
         this.notifications = new LinkedList<>();
         this.roles = new ArrayList<>();
-        this.managerToApprove = new HashMap<>();
-        this.ownerToApprove = new HashMap<>();
+        this.managerSuggestions = new HashMap<>();
+        this.ownerSuggestions = new HashMap<>();
     }
 
     public void openStore(String storeName) {
@@ -121,12 +131,12 @@ public class Registered extends User {
         this.notifications.clear();
     }
 
-    public HashMap<String, String> getOwnerToApprove() {
-        return ownerToApprove;
+    public HashMap<String, String> getOwnerSuggestions() {
+        return ownerSuggestions;
     }
 
-    public HashMap<List<String>, List<Boolean>> getManagerToApprove() {
-        return managerToApprove;
+    public HashMap<List<String>, List<Boolean>> getManagerSuggestions() {
+        return managerSuggestions;
     }
 
     @Override
@@ -187,19 +197,19 @@ public class Registered extends User {
     }
 
     public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
-        managerToApprove.put(Arrays.asList(store_name_id,appointee), Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy));
+        managerSuggestions.put(Arrays.asList(store_name_id,appointee), Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy));
     }
 
     public void addWaitingAppoint_Owner(String storeName,String appointee) {
-        ownerToApprove.put(storeName,appointee);
+        ownerSuggestions.put(storeName,appointee);
     }
 
     public List<Boolean> removeWaitingAppoint_Manager(String store_name_id,String appointee) {
-        return managerToApprove.remove(Arrays.asList(store_name_id,appointee));
+        return managerSuggestions.remove(Arrays.asList(store_name_id,appointee));
     }
 
     public boolean removeWaitingAppoint_Owner(String storeName) {
-        return ownerToApprove.remove(storeName)!=null;
+        return ownerSuggestions.remove(storeName)!=null;
     }
 
     public List<Role> getRoles() {

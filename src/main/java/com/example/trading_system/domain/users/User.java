@@ -153,9 +153,9 @@ public abstract class User {
 
     public abstract boolean getLogged();
 
-    public abstract HashMap<String, String> getOwnerToApprove();
+    public abstract HashMap<String, String> getOwnerSuggestions();
 
-    public abstract HashMap<List<String>, List<Boolean>> getManagerToApprove();
+    public abstract HashMap<List<String>, List<Boolean>> getManagerSuggestions();
 
     public abstract List<Notification> getNotifications();
 

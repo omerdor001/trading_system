@@ -1120,7 +1120,7 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("User is suspended from the system");
         User user=userRepository.getUser(username);
         ObjectMapper mapper = new ObjectMapper();
-        HashMap<String,String> toApproves=user.getOwnerToApprove();
+        HashMap<String,String> toApproves=user.getOwnerSuggestions();
         try {
             return mapper.writeValueAsString(toApproves);
         } catch (JsonProcessingException e) {
@@ -1137,13 +1137,12 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("User is suspended from the system");
         User user=userRepository.getUser(username);
         ObjectMapper mapper = new ObjectMapper();
-        HashMap<List<String>,List<Boolean>> toApproves=user.getManagerToApprove();
+        HashMap<List<String>,List<Boolean>> toApproves=user.getManagerSuggestions();
         try {
             return mapper.writeValueAsString(toApproves);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
         }
     }
-
 
 }
