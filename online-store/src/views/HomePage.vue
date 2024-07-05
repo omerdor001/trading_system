@@ -19,7 +19,6 @@
         <PrimeButton v-if="isLoggedIn && isAdmin" label="Purchases History" @click="purchasesHistoryAsSystemManager" class="sidebar-button"/>
       </div>
     </div>
-    <p-toast></p-toast>
   </div>
 </template>
 
@@ -29,8 +28,6 @@ import SiteHeader from '@/components/SiteHeader.vue';
 import AboutSection from '@/components/AboutSection.vue';
 import { Button as PrimeButton } from 'primevue/button';
 import { useRouter } from 'vue-router';
-import { useToast } from 'primevue/usetoast';
-import PrimeToast from 'primevue/toast';
 import axios from 'axios';
 
 export default defineComponent({
@@ -39,11 +36,9 @@ export default defineComponent({
     SiteHeader,
     AboutSection,
     PrimeButton,
-    'p-toast': PrimeToast,
   },
   setup() {
     const router = useRouter();
-    const toast = useToast();
     const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
     const isAdmin = ref(localStorage.getItem('isAdmin') === 'true');
     const username = ref(localStorage.getItem('username') || '');
@@ -118,28 +113,6 @@ export default defineComponent({
       router.push({ name: 'PurchaseHistory' });
     };
 
-    const logout = async () => {
-      try {
-        console.log(localStorage.getItem('token'));
-        const response = await axios.get('http://localhost:8082/api/trading/logout', {
-          params: {
-            token: localStorage.getItem('token'),
-            username: localStorage.getItem('username'),
-          }
-        });
-        localStorage.setItem('username', response.data.username);
-        localStorage.setItem('token', response.data.token);
-        console.log(localStorage.getItem('token'));
-      } catch (error) {
-        console.log(error.response.data);
-        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
-      }
-      isLoggedIn.value = false;
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('isAdmin');
-      router.push('/login');
-    };
-
     return {
       isLoggedIn,
       isAdmin,
@@ -155,7 +128,6 @@ export default defineComponent({
       endSuspension,
       watchSuspensions,
       purchasesHistoryAsSystemManager,
-      logout,
     };
   }
 });

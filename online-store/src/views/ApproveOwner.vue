@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
+    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
     <div class="approve-owner">
       <h2>Approve Owner Requests</h2>
       <div v-if="requests.length === 0 && !loading && !error && !ownersLoading">
@@ -47,7 +47,6 @@ import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { Button as PrimeButton } from 'primevue/button';
 import { Toast as PrimeToast } from 'primevue/toast';
-import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'ApproveOwner',
@@ -57,7 +56,6 @@ export default defineComponent({
     PrimeToast,
   },
   setup() {
-    const router = useRouter();
     const loading = ref(false);
     const error = ref(null);
     const requests = ref([]);
@@ -79,7 +77,6 @@ export default defineComponent({
           storeName: request.storeName,
           appointee: request.appointee,
         })); 
-        console.log(requests);
         loading.value = false;
       } catch (err) {
         loading.value = false;
@@ -127,11 +124,6 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     const showSuccessToast = (message) => {
       toast.value.add({
         severity: 'success',
@@ -158,8 +150,8 @@ export default defineComponent({
       requests,
       approveOwner,
       rejectOwner,
-      logout,
       toast,
+      username,
     };
   },
 });

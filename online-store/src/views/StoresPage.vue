@@ -36,16 +36,16 @@
             <p><strong>Founder:</strong> {{ selectedStore.founder }}</p>
             <label><input type="checkbox" v-model="selectedStore.status"> Active</label><br />
             <label><input type="checkbox" v-model="selectedStore.isOpen"> Is Open</label><br />
-             <p><strong>Rating:</strong> {{ selectedStore.rating }}</p>
+            <p><strong>Rating:</strong> {{ selectedStore.rating }}</p>
           </div>
         </div>
         <div class="options-container">
           <h3>Options</h3>
-          <PrimeButton class="option-button primary" @click="suggestOwner(selectedStore.name)">Suggest Owner</PrimeButton>
-          <PrimeButton class="option-button primary" @click="suggestManager(selectedStore.name)">Suggest Manager</PrimeButton>
-          <PrimeButton class="option-button primary" @click="yieldOwnership()">Yield Ownership</PrimeButton>
-          <PrimeButton class="option-button primary" @click="editPurchasePolicy(selectedStore.name)">Edit Purchase Policy</PrimeButton>
-          <PrimeButton class="option-button primary" @click="editDiscountPolicy(selectedStore.name)">Edit Discount Policy</PrimeButton>
+          <PrimeButton v-if="selectedStore.permissions.isOwner" class="option-button primary" @click="suggestOwner(selectedStore.name)">Suggest Owner</PrimeButton>
+          <PrimeButton v-if="selectedStore.permissions.isOwner" class="option-button primary" @click="suggestManager(selectedStore.name)">Suggest Manager</PrimeButton>
+          <PrimeButton v-if="selectedStore.permissions.isOwner" class="option-button primary" @click="yieldOwnership()">Yield Ownership</PrimeButton>
+          <PrimeButton v-if="selectedStore.permissions.isEditPurchasePolicy" class="option-button primary" @click="editPurchasePolicy(selectedStore.name)">Edit Purchase Policy</PrimeButton>
+          <PrimeButton v-if="selectedStore.permissions.isEditDiscountPolicy" class="option-button primary" @click="editDiscountPolicy(selectedStore.name)">Edit Discount Policy</PrimeButton>
           <PrimeButton class="option-button primary" @click="purchasesHistory(selectedStore.name)">Purchases History</PrimeButton>
         </div>
       </div>
@@ -95,14 +95,39 @@ export default defineComponent({
           founder: store.founder,
           isOpen: store.isOpen,
           rating: store.rating,
+          permissions: {
+            isWatch: false,
+            isEditSupply: false,
+            isEditPurchasePolicy: false,
+            isEditDiscountPolicy: false,
+            isOwner: false,
+          }
         }));
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
       }
     });
-
-    const showStoreDetails = (store) => {
+    
+    const showStoreDetails = async (store) => {
       selectedStore.value = store;
+      try {
+         const response = await axios.get('http://localhost:8082/api/trading/permissions-for-user', {
+           params: {
+             username: username,
+             storeName: store.name,
+             token: token,
+          }
+       });
+       const permissions = response.data; 
+       store.permissions.isOwner = store.role === 'Owner';
+       store.permissions.isWatch = permissions.watch;
+       store.permissions.isEditSupply = permissions.editSupply;
+       store.permissions.isEditPurchasePolicy = permissions.editBuyPolicy;
+       store.permissions.isEditDiscountPolicy = permissions.editDiscountPolicy;
+      } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch permissions', life: 3000 });
+        console.error('Error fetching permissions:', error);
+      }
     };
 
     const closeModal = () => {
@@ -124,33 +149,48 @@ export default defineComponent({
     };
 
     const suggestOwner = (storeName) => {
-      router.push({ name: 'SuggestOwner', params: { storeName } });
+      const store = selectedStore.value;
+      if (store && store.permissions.isOwner) {
+        router.push({ name: 'SuggestOwner', params: { storeName } });
+      } 
     };
 
     const suggestManager = (storeName) => {
-      router.push({ name: 'SuggestManager', params: { storeName } });
+      const store = selectedStore.value;
+      if (store && store.permissions.isOwner) {
+        router.push({ name: 'SuggestManager', params: { storeName } });
+      }
     };
 
     const editPurchasePolicy = (storeName) => {
-      router.push({ name: 'EditPurchasePolicy', params: { storeName } });
+      const store = selectedStore.value;
+      if (store && store.permissions.isEditPurchasePolicy) {
+        router.push({ name: 'EditPurchasePolicy', params: { storeName } });
+      }
     };
 
     const editDiscountPolicy = (storeName) => {
-      router.push({ name: 'EditDiscountPolicy', params: { storeName } });
+      const store = selectedStore.value;
+      if (store && store.permissions.isEditDiscountPolicy) {
+        router.push({ name: 'EditDiscountPolicy', params: { storeName } });
+      }
     };
 
     const yieldOwnership = async () => {
-      try {
-        const response = await axios.post('http://localhost:8082/api/trading/waiverOnOwnership',null, {
-          params: { 
-            username: username,
-            token: token,
-            storeName: selectedStore.value.name,
-          }
-        });
-        toast.add({ severity: 'success', summary: 'Success', detail: response.data, life: 3000 });
-      } catch (error) {
-        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+      const store = selectedStore.value;
+      if (store && store.permissions.isOwner) {
+        try {
+          const response = await axios.post('http://localhost:8082/api/trading/waiverOnOwnership', null, {
+            params: { 
+              username: username,
+              token: token,
+              storeName: store.name,
+            }
+          });
+          toast.add({ severity: 'success', summary: 'Success', detail: response.data, life: 3000 });
+        } catch (error) {
+          toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+        }
       }
     };
 
@@ -188,7 +228,7 @@ export default defineComponent({
   width: 80%;
   padding: 15px;
   margin: auto; 
-  font-family: inherit; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .store-container {
@@ -209,7 +249,12 @@ export default defineComponent({
 .store-content {
   display: flex;
   flex-direction: column;
-  font-family: inherit;
+}
+
+.status, .role-at-store {
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #666;
 }
 
 /* Modal Overlay */
@@ -226,11 +271,10 @@ export default defineComponent({
   z-index: 1000;
 }
 
-/* Modal Content */
 .modal-content {
   background-color: #fefefe;
-  padding: 50px;
-  border-radius: 8px;
+  padding: 30px;
+  border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   max-width: 80%;
   max-height: 80%;
@@ -311,4 +355,3 @@ export default defineComponent({
   background-color: #b3d7ff;
 }
 </style>
-
