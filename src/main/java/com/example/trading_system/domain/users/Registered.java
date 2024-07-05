@@ -33,8 +33,18 @@ public class Registered extends User {
 
     @OneToMany(mappedBy = "receiverUsername", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications;
-    private HashMap<String, HashMap<String,List<Boolean>>> managerToApprove;
-    private HashMap<String, String> ownerToApprove;
+
+    @ElementCollection
+    @CollectionTable(name = "manager_suggestions", joinColumns = @JoinColumn(name = "registered_id"))
+    @MapKeyColumn(name = "store_name")
+    @Column(name = "suggestion_map")
+    private HashMap<String, HashMap<String,List<Boolean>>> managerSuggestions;
+
+    @ElementCollection
+    @CollectionTable(name = "owner_suggestions", joinColumns = @JoinColumn(name = "registered_id"))
+    @MapKeyColumn(name = "store_name")
+    @Column(name = "owner_suggestion")
+    private HashMap<String, String> ownerSuggestions;
 
     public Registered(String userName, String encryption, LocalDate birthdate) {
         super(userName);
@@ -114,8 +124,8 @@ public class Registered extends User {
         return ownerSuggestions;
     }
 
-    public HashMap<String, HashMap<String, List<Boolean>>> getManagerToApprove() {
-        return managerToApprove;
+    public HashMap<String, HashMap<String, List<Boolean>>> getManagerSuggestions() {
+        return managerSuggestions;
     }
 
     @Override
@@ -214,7 +224,7 @@ public class Registered extends User {
     public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
         HashMap<String,List<Boolean>> permissions=new HashMap<>();
         permissions.put(appointee,Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy));
-        managerToApprove.put(store_name_id,permissions);
+        managerSuggestions.put(store_name_id,permissions);
     }
 
     public void addWaitingAppoint_Owner(String storeName,String appointee) {
@@ -222,7 +232,7 @@ public class Registered extends User {
     }
 
     public List<Boolean> removeWaitingAppoint_Manager(String store_name_id, String appointee) throws IllegalAccessException {
-        HashMap<String,List<Boolean>> removed=managerToApprove.remove(store_name_id);
+        HashMap<String,List<Boolean>> removed= managerSuggestions.remove(store_name_id);
         if (removed == null) throw new IllegalAccessException("No one suggest this user to be a manager");
         return removed.get(appointee);
     }

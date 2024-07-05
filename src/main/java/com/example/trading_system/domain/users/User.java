@@ -166,7 +166,7 @@ public abstract class User {
 
     public abstract HashMap<String, String> getOwnerSuggestions();
 
-    public abstract HashMap<String, HashMap<String, List<Boolean>>> getManagerToApprove();
+    public abstract HashMap<String, HashMap<String, List<Boolean>>> getManagerSuggestions();
 
     public abstract List<Notification> getNotifications();
 
