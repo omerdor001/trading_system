@@ -756,6 +756,20 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
+    public ResponseEntity<String> getPermissionsForUserJSONFormat(String username, String token, String storeName) {
+        logger.info("Trying to Get permissions for {}",username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Get permissions for {}",username);
+            return new ResponseEntity<>(userService.getPermissionsForUserJSONFormat(username,storeName), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering permissions for {} ",username, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public ResponseEntity<String> getStoreProducts(String userName, String token, String store_name) {
         logger.info("Trying to Gather ALL Store Products");
         try {

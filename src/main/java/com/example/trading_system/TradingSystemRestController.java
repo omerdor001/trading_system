@@ -341,6 +341,11 @@ public class TradingSystemRestController {
         return tradingSystem.getUserRequestsManagement("r"+username,token);
     }
 
+    @GetMapping("/permissions-for-user")
+    public ResponseEntity<String> getPermissionsForUserJSONFormat(@RequestParam String username,@RequestParam String storeName, @RequestParam String token) {
+        return tradingSystem.getPermissionsForUserJSONFormat("r"+username,token,storeName);
+    }
+
     @GetMapping("/product/info")
     public ResponseEntity<String> getProductInfo(@RequestParam String userName, @RequestParam String token,
                                                  @RequestParam String storeName, @RequestParam int product_Id) {

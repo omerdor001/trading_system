@@ -91,4 +91,6 @@ public interface UserService {
     String getUserRequestsOwnership(String username);
 
     String getUserRequestsManagement(String username);
+
+    String getPermissionsForUserJSONFormat(String username,String storeName);
 }

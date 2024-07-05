@@ -95,6 +95,26 @@ public class Visitor extends User {
     }
 
     @Override
+    public boolean isWatch(String storeName) {
+        return false;
+    }
+
+    @Override
+    public boolean isEditSupply(String storeName) {
+        return false;
+    }
+
+    @Override
+    public boolean isEditPurchasePolicy(String storeName) {
+        return false;
+    }
+
+    @Override
+    public boolean isEditDiscountPolicy(String storeName) {
+        return false;
+    }
+
+    @Override
     public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
     }
 

@@ -51,9 +51,7 @@ public abstract class RoleState {
 
     public abstract void setWatch(boolean watch);
 
-    public boolean isEditSupply() throws IllegalAccessException {
-        throw new IllegalAccessException("Only managers can access isEditSupply");
-    }
+    public abstract boolean isEditSupply();
 
     public abstract void setEditSupply(boolean editSupply);
 

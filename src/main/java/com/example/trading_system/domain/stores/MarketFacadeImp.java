@@ -154,7 +154,7 @@ public class MarketFacadeImp implements MarketFacade {
         }
         List stores=new ArrayList();
         for(Store store:storeRepository.getAllStoresByStores()){
-            if(store.getFounder().equals(username))
+            if(store.getFounder().equals(username)  && store.isOpen())
                 stores.add(store.getNameId());
         }
         return stores.toString().substring(1,stores.toString().length()-1);

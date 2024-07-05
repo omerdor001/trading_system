@@ -800,7 +800,6 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("User cannot be owner of this store");
         }
         List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName,appoint);
-        if (perm == null) throw new IllegalAccessException("No one suggest this user to be a manager");
         sendNotification(userName, appoint, newManagerUser.getUsername() + " rejected your suggestion to become a manager at store: " + storeName);
     }
 
@@ -1164,6 +1163,30 @@ public class UserFacadeImp implements UserFacade {
         approveMap.put("editDiscountPolicy", permissions.get(3));
         return approveMap;
     }
+
+    @Override
+    public String getPermissionsForUserJSONFormat(String username,String storeName) {
+        if (!userRepository.isExist(username)) {
+            throw new IllegalArgumentException("User doesn't exist in the system");
+        }
+        if(!marketFacade.isStoreExist(storeName)){
+            throw new IllegalArgumentException("Store doesn't exist in the system");
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> permissions = new HashMap<>();
+        User user=userRepository.getUser(username);
+        permissions.put("watch", user.isWatch(storeName));
+        permissions.put("editSupply", user.isEditSupply(storeName));
+        permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
+        permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
+        try {
+            return mapper.writeValueAsString(permissions);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+        }
+    }
+
+
 
 
 }

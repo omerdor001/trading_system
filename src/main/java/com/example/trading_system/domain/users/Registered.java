@@ -160,6 +160,42 @@ public class Registered extends User {
         }
     }
 
+    public boolean isWatch(String storeName){
+        if (isOwner(storeName))
+            return true;
+        else if(isManager(storeName)){
+            return getRoleByStoreId(storeName).isWatch();
+        }
+        else return false;
+    }
+
+    public boolean isEditSupply(String storeName){
+        if (isOwner(storeName))
+            return true;
+        else if(isManager(storeName)){
+            return getRoleByStoreId(storeName).isEditSupply();
+        }
+        else return false;
+    }
+
+    public boolean isEditPurchasePolicy(String storeName){
+        if (isOwner(storeName))
+            return true;
+        else if(isManager(storeName)){
+            return getRoleByStoreId(storeName).isEditPurchasePolicy();
+        }
+        else return false;
+    }
+
+    public boolean isEditDiscountPolicy(String storeName){
+        if (isOwner(storeName))
+            return true;
+        else if(isManager(storeName)){
+            return getRoleByStoreId(storeName).isEditDiscountPolicy();
+        }
+        else return false;
+    }
+
     public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
         HashMap<String,List<Boolean>> permissions=new HashMap<>();
         permissions.put(appointee,Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy));
@@ -170,8 +206,9 @@ public class Registered extends User {
         ownerToApprove.put(storeName,appointee);
     }
 
-    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id, String appointee) {
+    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id, String appointee) throws IllegalAccessException {
         HashMap<String,List<Boolean>> removed=managerToApprove.remove(store_name_id);
+        if (removed == null) throw new IllegalAccessException("No one suggest this user to be a manager");
         return removed.get(appointee);
     }
 
