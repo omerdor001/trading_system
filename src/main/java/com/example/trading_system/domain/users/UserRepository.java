@@ -1,5 +1,7 @@
 package com.example.trading_system.domain.users;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;

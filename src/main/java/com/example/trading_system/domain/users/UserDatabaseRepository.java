@@ -1,34 +1,34 @@
 package com.example.trading_system.domain.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Repository;
 
-import javax.persistence.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-@Service
-@Transactional
+@Repository
 public class UserDatabaseRepository implements UserRepository {
     private static UserDatabaseRepository instance = null;
-    private HashMap<String, User> visitors;
+    private HashMap<String, User> visitors = new HashMap<>();
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Autowired
-    private UserDatabaseRepository() {
-        visitors = new HashMap<>();
+    public UserDatabaseRepository(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
-    public static UserDatabaseRepository getInstance() {
-        if (instance == null)
-            instance = new UserDatabaseRepository();
-        return instance;
-    }
+//    public static UserDatabaseRepository getInstance() {
+//        if (instance == null)
+//            instance = new UserDatabaseRepository();
+//        return instance;
+//    }
 
     @Override
     public void deleteInstance() {
@@ -44,7 +44,7 @@ public class UserDatabaseRepository implements UserRepository {
         if (username.startsWith("v")) {
             return visitors.get(username);
         } else {
-            return entityManager.find(User.class, username);
+            return entityManager.find(Registered.class, username);
         }
     }
 
@@ -53,7 +53,7 @@ public class UserDatabaseRepository implements UserRepository {
         if (username.startsWith("v")) {
             return visitors.containsKey(username);
         } else {
-            return entityManager.find(User.class, username) != null;
+            return entityManager.find(Registered.class, username) != null;
         }
     }
 
@@ -66,7 +66,7 @@ public class UserDatabaseRepository implements UserRepository {
 
     @Override
     public boolean isAdminRegistered() {
-        List<User> registeredUsers = entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
+        List<Registered> registeredUsers = entityManager.createQuery("SELECT u FROM Registered u", Registered.class).getResultList();
         for (User user : registeredUsers) {
             if (user.isAdmin())
                 return true;
@@ -77,7 +77,7 @@ public class UserDatabaseRepository implements UserRepository {
     @Override
     public HashMap<String, User> getAllUsers() {
         HashMap<String, User> allUsers = new HashMap<>(visitors);
-        List<User> registeredUsers = entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
+        List<Registered> registeredUsers = entityManager.createQuery("SELECT u FROM Registered u", Registered.class).getResultList();
         for (User user : registeredUsers) {
             allUsers.put(user.getUsername(), user);
         }
@@ -86,9 +86,10 @@ public class UserDatabaseRepository implements UserRepository {
 
     @Override
     public Collection<User> getAllUsersAsList() {
-        List<User> registeredUsers = entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
-        registeredUsers.addAll(visitors.values());
-        return registeredUsers;
+        List<Registered> registeredUsers = entityManager.createQuery("SELECT u FROM Registered u", Registered.class).getResultList();
+        List<User> allUsers = new ArrayList<>(registeredUsers);
+        allUsers.addAll(visitors.values());
+        return allUsers;
     }
 
     @Override
@@ -96,7 +97,7 @@ public class UserDatabaseRepository implements UserRepository {
         if (username.startsWith("v")) {
             visitors.remove(username);
         } else {
-            User user = entityManager.find(User.class, username);
+            Registered user = entityManager.find(Registered.class, username);
             if (user != null) {
                 entityManager.remove(user);
             }
@@ -105,7 +106,7 @@ public class UserDatabaseRepository implements UserRepository {
 
     @Override
     public boolean isEmpty() {
-        Long count = entityManager.createQuery("SELECT COUNT(u) FROM User u", Long.class).getSingleResult();
+        Long count = entityManager.createQuery("SELECT COUNT(u) FROM Registered u", Long.class).getSingleResult();
         return visitors.isEmpty() && count == 0;
     }
 
@@ -127,7 +128,7 @@ public class UserDatabaseRepository implements UserRepository {
 
     @Override
     public boolean checkIfRegistersEmpty() {
-        Long count = entityManager.createQuery("SELECT COUNT(u) FROM User u", Long.class).getSingleResult();
+        Long count = entityManager.createQuery("SELECT COUNT(u) FROM Registered u", Long.class).getSingleResult();
         return count > 0;
     }
 }

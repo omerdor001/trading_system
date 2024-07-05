@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @MappedSuperclass
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User {
     private static final Logger logger = LoggerFactory.getLogger(User.class);
 
@@ -32,11 +33,13 @@ public abstract class User {
     @Column
     private LocalDateTime suspendedEnd;
 
-    @Column
+    @Column(nullable = false)
     private String address;
 
     @OneToMany(cascade = CascadeType.ALL)
     private LinkedList<Message> messages;
+
+    @Column(nullable = false)
     private boolean isTimerCancelled;
 
 

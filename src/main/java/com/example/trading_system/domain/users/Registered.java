@@ -25,7 +25,7 @@ public class Registered extends User {
     @Column(nullable = false)
     @Getter
     @Setter
-    private boolean isLogged = false;
+    private boolean isLogged;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "registered_id")
