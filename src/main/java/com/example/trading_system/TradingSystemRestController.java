@@ -222,7 +222,7 @@ public class TradingSystemRestController {
                                                @RequestParam String token,
                                                @RequestParam String newOwner,
                                                @RequestParam String storeName) {
-        return tradingSystem.suggestOwner(appoint, token, newOwner, storeName);
+        return tradingSystem.suggestOwner("r"+appoint, token, "r"+newOwner, storeName);
     }
 
     @PostMapping("/suggestManage")
@@ -234,7 +234,7 @@ public class TradingSystemRestController {
                                                 @RequestParam boolean editSupply,
                                                 @RequestParam boolean editBuyPolicy,
                                                 @RequestParam boolean editDiscountPolicy) {
-        return tradingSystem.suggestManage(appoint, token, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+        return tradingSystem.suggestManage("r"+appoint, token, "r"+newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
     }
 
     @PostMapping("/approveManage")
@@ -246,7 +246,7 @@ public class TradingSystemRestController {
                                                 @RequestParam boolean editSupply,
                                                 @RequestParam boolean editBuyPolicy,
                                                 @RequestParam boolean editDiscountPolicy) {
-        return tradingSystem.approveManage(newManager, token, store_name_id, appoint,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+        return tradingSystem.approveManage("r"+newManager, token, store_name_id, "r"+appoint,watch,editSupply,editBuyPolicy,editDiscountPolicy);
     }
 
     @PostMapping("/approveOwner")
@@ -254,7 +254,7 @@ public class TradingSystemRestController {
                                                @RequestParam String token,
                                                @RequestParam String storeName,
                                                @RequestParam String appoint) {
-        return tradingSystem.approveOwner(newOwner, token, storeName, appoint);
+        return tradingSystem.approveOwner("r"+newOwner, token, storeName, "r"+appoint);
     }
 
     @PostMapping("/rejectToOwnStore")
@@ -262,22 +262,22 @@ public class TradingSystemRestController {
                                                    @RequestParam String token,
                                                    @RequestParam String storeName,
                                                    @RequestParam String appoint) {
-        return tradingSystem.rejectToOwnStore(username, token, storeName, appoint);
+        return tradingSystem.rejectToOwnStore("r"+username, token, storeName, "r"+appoint);
     }
 
     @PostMapping("/rejectToManageStore")
-    public ResponseEntity<String> rejectToManageStore(@RequestParam String userName,
+    public ResponseEntity<String> rejectToManageStore(@RequestParam String username,
                                                       @RequestParam String token,
                                                       @RequestParam String store_name_id,
                                                       @RequestParam String appoint) {
-        return tradingSystem.rejectToManageStore(userName, token, store_name_id, appoint);
+        return tradingSystem.rejectToManageStore("r"+username, token, store_name_id, "r"+appoint);
     }
 
     @PostMapping("/waiverOnOwnership")
-    public ResponseEntity<String> waiverOnOwnership(@RequestParam String userName,
+    public ResponseEntity<String> waiverOnOwnership(@RequestParam String username,
                                                     @RequestParam String token,
                                                     @RequestParam String storeName) {
-        return tradingSystem.waiverOnOwnership(userName, token, storeName);
+        return tradingSystem.waiverOnOwnership("r"+username, token, storeName);
     }
 
     @PostMapping("/fireManager")
@@ -313,6 +313,11 @@ public class TradingSystemRestController {
         return tradingSystem.getAllStores(userName, token);
     }
 
+    @GetMapping("/stores-detailed-info")
+    public ResponseEntity<String> getAllStoresInJSONFormat(@RequestParam String username, @RequestParam String token) {
+        return tradingSystem.getAllStoresInJSONFormat("r"+username, token);
+    }
+
     @GetMapping("/stores-I-created")
     public ResponseEntity<String> getStoresIOpened(@RequestParam String userName, @RequestParam String token) {
         return tradingSystem.getStoresIOpened("r"+userName,token);
@@ -336,6 +341,11 @@ public class TradingSystemRestController {
     @GetMapping("/requests-for-management")
     public ResponseEntity<String> getUserRequestsManagement(@RequestParam String username, @RequestParam String token) {
         return tradingSystem.getUserRequestsManagement("r"+username,token);
+    }
+
+    @GetMapping("/permissions-for-user")
+    public ResponseEntity<String> getPermissionsForUserJSONFormat(@RequestParam String username,@RequestParam String storeName, @RequestParam String token) {
+        return tradingSystem.getPermissionsForUserJSONFormat("r"+username,token,storeName);
     }
 
     @GetMapping("/product/info")

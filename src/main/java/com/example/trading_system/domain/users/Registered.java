@@ -33,29 +33,8 @@ public class Registered extends User {
 
     @OneToMany(mappedBy = "receiverUsername", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications;
-
-    @ElementCollection
-    @CollectionTable(name = "manager_to_approve", joinColumns = @JoinColumn(name = "registered_id"))
-    @MapKeyColumn(name = "suggested_by")
-    @Column(name = "permissions")
-    private HashMap<List<String>, List<Boolean>> managerSuggestions;
-
-    @ElementCollection
-    @CollectionTable(name = "owner_to_approve", joinColumns = @JoinColumn(name = "registered_id"))
-    @MapKeyColumn(name = "suggested_by")
-    @Column(name = "suggestion_value")
-    private HashMap<String, String> ownerSuggestions;
-
-    /*    @ElementCollection
-    @CollectionTable(name = "manager_suggestions", joinColumns = @JoinColumn(name = "username"))
-    @MapKeyColumn(name = "store_name")
-    @Column(name = "permission_flags")
-    private HashMap<String, List<Boolean>> managerSuggestions;
-
-    @ElementCollection
-    @CollectionTable(name = "owner_suggestions", joinColumns = @JoinColumn(name = "username"))
-    @Column(name = "store_name")
-    private List<String> ownerSuggestions;*/
+    private HashMap<String, HashMap<String,List<Boolean>>> managerToApprove;
+    private HashMap<String, String> ownerToApprove;
 
     public Registered(String userName, String encryption, LocalDate birthdate) {
         super(userName);
@@ -135,8 +114,8 @@ public class Registered extends User {
         return ownerSuggestions;
     }
 
-    public HashMap<List<String>, List<Boolean>> getManagerSuggestions() {
-        return managerSuggestions;
+    public HashMap<String, HashMap<String, List<Boolean>>> getManagerToApprove() {
+        return managerToApprove;
     }
 
     @Override
@@ -196,16 +175,56 @@ public class Registered extends User {
         }
     }
 
+    public boolean isWatch(String storeName){
+        if (isOwner(storeName))
+            return true;
+        else if(isManager(storeName)){
+            return getRoleByStoreId(storeName).isWatch();
+        }
+        else return false;
+    }
+
+    public boolean isEditSupply(String storeName){
+        if (isOwner(storeName))
+            return true;
+        else if(isManager(storeName)){
+            return getRoleByStoreId(storeName).isEditSupply();
+        }
+        else return false;
+    }
+
+    public boolean isEditPurchasePolicy(String storeName){
+        if (isOwner(storeName))
+            return true;
+        else if(isManager(storeName)){
+            return getRoleByStoreId(storeName).isEditPurchasePolicy();
+        }
+        else return false;
+    }
+
+    public boolean isEditDiscountPolicy(String storeName){
+        if (isOwner(storeName))
+            return true;
+        else if(isManager(storeName)){
+            return getRoleByStoreId(storeName).isEditDiscountPolicy();
+        }
+        else return false;
+    }
+
     public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
-        managerSuggestions.put(Arrays.asList(store_name_id,appointee), Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy));
+        HashMap<String,List<Boolean>> permissions=new HashMap<>();
+        permissions.put(appointee,Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy));
+        managerToApprove.put(store_name_id,permissions);
     }
 
     public void addWaitingAppoint_Owner(String storeName,String appointee) {
         ownerSuggestions.put(storeName,appointee);
     }
 
-    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id,String appointee) {
-        return managerSuggestions.remove(Arrays.asList(store_name_id,appointee));
+    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id, String appointee) throws IllegalAccessException {
+        HashMap<String,List<Boolean>> removed=managerToApprove.remove(store_name_id);
+        if (removed == null) throw new IllegalAccessException("No one suggest this user to be a manager");
+        return removed.get(appointee);
     }
 
     public boolean removeWaitingAppoint_Owner(String storeName) {

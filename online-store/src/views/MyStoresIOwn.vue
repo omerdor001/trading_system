@@ -4,6 +4,8 @@
     <div class="main-content">
       <div class="sidebar">
         <PrimeButton label="Manage Products" @click="manageProducts" />
+        <PrimeButton label="Add Product" @click="addProduct" />
+        <PrimeButton label="Remove Product" @click="removeProduct" />
         <PrimeButton label="Suggest Owner" @click="suggestOwner" />
         <PrimeButton label="Suggest Manager" @click="suggestManager" />
         <PrimeButton label="Manage Purchase Policy" @click="managePurchasePolicy" />
@@ -183,7 +185,15 @@ export default defineComponent({
     };
 
     const manageProducts = () => {
-      router.push('/product-management/:storeName/:productId');
+      router.push('/productsForStore/:storeName');
+    };
+
+    const addProduct = () => {
+      router.push('/add-product/');
+    };
+
+    const removeProduct = () => {
+      router.push('/removeProduct/');
     };
 
     const suggestOwner = () => {
@@ -256,6 +266,8 @@ export default defineComponent({
       selectStore,
       enterStore,
       manageProducts,
+      addProduct,
+      removeProduct,
       suggestOwner,
       suggestManager,
       managePurchasePolicy,

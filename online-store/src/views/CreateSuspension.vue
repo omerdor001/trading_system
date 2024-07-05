@@ -51,7 +51,7 @@ export default defineComponent({
 
     const submitForm = async () => {
       try {
-        const formattedEndSuspension = new Date(endSuspension.value).toISOString().slice(0, -1); // remove the 'Z' at the end
+        const formattedEndSuspension = new Date(endSuspension.value).toISOString().slice(0, -1); 
         const response = await axios.put('http://localhost:8082/api/trading/suspendUser', null , { 
           params : {
           token: token,
