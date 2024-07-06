@@ -4,7 +4,8 @@
       <div class="left-buttons">
         <img src="@/assets/logo.png" alt="LASMONY" class="logo">
         <PrimeButton label="Home" @click="goHome" class="p-button-primary" />
-        <PrimeButton label="Search Product" @click="goToSearch" class="p-button-primary" />
+        <PrimeButton label="Search Product" @click="goToSearchProduct" class="p-button-primary" />
+        <PrimeButton label="Search Store" @click="goToSearchStore" class="p-button-primary" /> <!-- New button -->
       </div>
       <div class="right-buttons">
         <template v-if="isLoggedIn">
@@ -35,7 +36,6 @@ export default defineComponent({
   components: {
     PrimeButton,
     'p-toast': PrimeToast,
-
   },
   props: {
     isLoggedIn: {
@@ -51,12 +51,17 @@ export default defineComponent({
     const router = useRouter();
     const toast = useToast();
     const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
+
     const goHome = () => {
       router.push({ name: 'HomePage' });
     };
 
-    const goToSearch = () => {
+    const goToSearchProduct = () => {
       router.push({ name: 'SearchPage' });
+    };
+
+    const goToSearchStore = () => {
+      router.push({ name: 'StoreSearchPage' });
     };
 
     const viewCart = () => {
@@ -91,12 +96,13 @@ export default defineComponent({
 
     return {
       goHome,
-      goToSearch,
+      goToSearchProduct,
+      goToSearchStore, // Include the new function
       viewCart,
       notifications,
       logout
     };
-  },
+  }
 });
 </script>
 

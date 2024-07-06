@@ -3,6 +3,7 @@
     <SiteHeader :isLoggedIn="isLoggedIn" :username="username" :isAdmin="isAdmin" @logout="logout" />
     <div class="main-content">
       <div class="sidebar">
+        <PrimeButton label="View All Stores" @click="viewAllStores" class="sidebar-button"/> <!-- New button -->
         <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Approve Ownership" @click="approveOwnership" class="sidebar-button" />
         <PrimeButton v-if="isLoggedIn" label="Approve Management" @click="approveManagement" class="sidebar-button" />
@@ -123,6 +124,10 @@ export default defineComponent({
       router.push({ name: 'PurchaseHistory' });
     };
 
+    const viewAllStores = () => {
+      router.push({ name: 'StoreSearchResults' });
+    };
+
     const logout = async () => {
       try {
         console.log(localStorage.getItem('token'));
@@ -161,6 +166,7 @@ export default defineComponent({
       endSuspension,
       watchSuspensions,
       purchasesHistoryAsSystemManager,
+      viewAllStores, // Include the new function in the return object
       logout,
     };
   }
