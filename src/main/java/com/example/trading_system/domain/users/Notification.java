@@ -3,7 +3,7 @@ package com.example.trading_system.domain.users;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.TimeZone;
 
 @Entity

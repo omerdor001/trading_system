@@ -1,19 +1,17 @@
 package com.example.trading_system.domain.users;
 
+import jakarta.persistence.metamodel.EntityType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import org.springframework.stereotype.Service;
 
-@Repository
+import java.time.LocalDate;
+import java.util.*;
+
+@Service
 public class UserDatabaseRepository implements UserRepository {
-    private static UserDatabaseRepository instance = null;
     private HashMap<String, User> visitors = new HashMap<>();
 
     @PersistenceContext
@@ -36,7 +34,6 @@ public class UserDatabaseRepository implements UserRepository {
             this.visitors.clear();
             this.visitors = null;
         }
-        instance = null;
     }
 
     @Override
@@ -66,6 +63,15 @@ public class UserDatabaseRepository implements UserRepository {
 
     @Override
     public boolean isAdminRegistered() {
+//        System.out.println(entityManager.createNativeQuery("SELECT @@SERVERNAME").getSingleResult());
+//        System.out.println(entityManager.createNativeQuery("SELECT DB_NAME() AS DatabaseName").getSingleResult());
+        Set<EntityType<?>> entities = entityManager.getEntityManagerFactory().getMetamodel().getEntities();
+        for (EntityType<?> entity : entities) {
+            System.out.println("Entity Name: " + entity.getName());
+            System.out.println("Java Type: " + entity.getJavaType().getName());
+            System.out.println("Table Name: " + entity.getName());
+            System.out.println("-----------------------------------");
+        }
         List<Registered> registeredUsers = entityManager.createQuery("SELECT u FROM Registered u", Registered.class).getResultList();
         for (User user : registeredUsers) {
             if (user.isAdmin())

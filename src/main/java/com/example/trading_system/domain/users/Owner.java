@@ -1,6 +1,6 @@
 package com.example.trading_system.domain.users;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity

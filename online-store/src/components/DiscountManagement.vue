@@ -7,7 +7,7 @@
         <Column field="value" header="Value" :body="valueTemplate"></Column>
         <Column header="Actions" :body="actionTemplate"></Column>
     </DataTable>
-    <Dialog header="Edit Discount" v-model:visible="editDialogVisible">
+    <Dialog header="Edit Discount" v-model="editDialogVisible">
         <div class="p-fluid">
             <div class="p-field">
                 <label for="type">Type</label>
