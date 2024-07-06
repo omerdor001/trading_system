@@ -28,7 +28,7 @@ public class Registered extends User {
     private boolean isLogged;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "registered_id")
+    @JoinColumn(name = "registered_username", referencedColumnName = "username")
     private List<Role> roles;
 
     @OneToMany(mappedBy = "receiverUsername", cascade = CascadeType.ALL, orphanRemoval = true)

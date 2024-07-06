@@ -1,11 +1,18 @@
 package com.example.trading_system.domain.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "manager_roles")
 public class Manager extends RoleState {
+
+    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(name = "watch")
     private boolean watch;
 

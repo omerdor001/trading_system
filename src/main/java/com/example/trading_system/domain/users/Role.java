@@ -1,11 +1,19 @@
 package com.example.trading_system.domain.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "roles")
 public class Role {
-    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "role_state_id", referencedColumnName = "id")
     private RoleState roleState;
 
     @Column(nullable = false)

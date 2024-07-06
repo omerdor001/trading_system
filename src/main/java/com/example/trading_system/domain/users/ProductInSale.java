@@ -1,27 +1,43 @@
-package com.example.trading_system.domain.stores;
+package com.example.trading_system.domain.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Entity
 public class ProductInSale {
-    @Getter
-    @Setter
-    private String storeId;
-    @Getter
-    @Setter
-    private int id;
-    @Getter
-    @Setter
-    private double price;
-    @Getter
-    @Setter
-    private int quantity;
-    @Getter
-    @Setter
-    private int category;
+    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long pid;
 
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private String storeId;
+
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private int id;
+
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private double price;
+
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private int quantity;
+
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private int category;
 
     public ProductInSale(String storeId, int productId, double price, int quantity, int category) {
         this.storeId=storeId;
