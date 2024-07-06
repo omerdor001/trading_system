@@ -30,7 +30,8 @@ import ApproveOwner from '@/views/ApproveOwner.vue';
 import ApproveManager from '@/views/ApproveManager.vue';
 import PaymentPage from '@/views/PaymentPage.vue';
 import ProductsForStore from '@/views/ProductsForStore.vue';
-import EditDiscountPolicy from '@/components/DiscountManagement.vue'
+import EditDiscountPolicy from '@/views/DiscountManagement.vue';
+import EditPurchasePolicy from '@/views/PurchacePolicyManagement.vue';
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },
@@ -64,6 +65,7 @@ const routes = [
     { path: '/payment', name: 'PaymentPage', component: PaymentPage },
     { path: '/productsForStore/:storeName', name: 'ProductsForStore', component: ProductsForStore },
     { path: '/edit-discount-policy/:storeName', name: 'EditDiscountPolicy', component: EditDiscountPolicy },
+    { path: '/edit-purchase-policy/:storeName', name: 'EditPurchasePolicy', component: EditPurchasePolicy },
 ];
 
 const router = createRouter({
