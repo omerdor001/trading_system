@@ -20,7 +20,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public HashMap<List<String>, List<Boolean>> getManagerToApprove() {
+    public HashMap<String, HashMap<String, List<Boolean>>> getManagerToApprove() {
         return null;
     }
 
@@ -91,6 +91,26 @@ public class Visitor extends User {
 
     @Override
     public boolean isManager(String store_name_id) {
+        return false;
+    }
+
+    @Override
+    public boolean isWatch(String storeName) {
+        return false;
+    }
+
+    @Override
+    public boolean isEditSupply(String storeName) {
+        return false;
+    }
+
+    @Override
+    public boolean isEditPurchasePolicy(String storeName) {
+        return false;
+    }
+
+    @Override
+    public boolean isEditDiscountPolicy(String storeName) {
         return false;
     }
 

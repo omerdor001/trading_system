@@ -87,14 +87,14 @@ public class PermissionsAcceptanceTests {
 
     @Test
     void addProduct_Success() {
-        ResponseEntity<String> response = tradingSystem.addProduct(username1, token2, 123, "store1", "product1", "description", 10.0, 100, 4.5, 1, new LinkedList<>());
+        ResponseEntity<String> response = tradingSystem.addProduct(username1, token2, 123, "store1", "product1", "description", 10.0, 100, 4.5, 1, "[]");
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     void addProductManager_NoPermission() {
         tradingSystem.editPermissionForManager(username,token1,username1,"store1",true,false,true,true);
-        ResponseEntity<String> response = tradingSystem.addProduct(username1, token2, 123, "store1", "product1", "description", 10.0, 100, 4.5, 1, new LinkedList<>());
+        ResponseEntity<String> response = tradingSystem.addProduct(username1, token2, 123, "store1", "product1", "description", 10.0, 100, 4.5, 1, "");
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
@@ -113,7 +113,7 @@ public class PermissionsAcceptanceTests {
 
     @Test
     void addPurchasePolicyManager_Success() {
-        tradingSystem.addProduct(username1, token2, 123, "store1", "product1", "description", 10.0, 100, 4.5, 1, new LinkedList<>());
+        tradingSystem.addProduct(username1, token2, 123, "store1", "product1", "description", 10.0, 100, 4.5, 1, "");
         ResponseEntity<String> response = tradingSystem.addPurchasePolicyByAge(username1,token2,"store1",20,1);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
@@ -121,7 +121,7 @@ public class PermissionsAcceptanceTests {
     @Test
     void addPurchasePolicyManager_NoPermission() {
         tradingSystem.editPermissionForManager(username,token1,username1,"store1",true,true,false,true);
-        tradingSystem.addProduct(username1, token2, 123, "store1", "product1", "description", 10.0, 100, 4.5, 1, new LinkedList<>());
+        tradingSystem.addProduct(username1, token2, 123, "store1", "product1", "description", 10.0, 100, 4.5, 1, "");
         ResponseEntity<String> response = tradingSystem.addPurchasePolicyByAge(username1,token2,"store1",20,1);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }

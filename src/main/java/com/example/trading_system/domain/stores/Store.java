@@ -233,6 +233,14 @@ public class Store {
         return managers;
     }
 
+    public boolean isOwnerOfStore(String username){
+        return owners.contains(username);
+    }
+
+    public boolean isManagerOfStore(String username){
+        return managers.contains(username);
+    }
+
     public void addPurchase(Purchase purchase) {
         salesHistory.addPurchase(purchase);
     }

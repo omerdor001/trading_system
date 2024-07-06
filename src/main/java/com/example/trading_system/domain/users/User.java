@@ -92,11 +92,19 @@ public abstract class User {
 
     public abstract boolean isManager(String store_name_id);
 
+    public abstract boolean isWatch(String storeName);
+
+    public abstract boolean isEditSupply(String storeName);
+
+    public abstract boolean isEditPurchasePolicy(String storeName);
+
+    public abstract boolean isEditDiscountPolicy(String storeName);
+
     public abstract void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
     public abstract boolean removeWaitingAppoint_Owner(String storeName);
 
-    public abstract List<Boolean> removeWaitingAppoint_Manager(String store_name_id,String appointee);
+    public abstract List<Boolean> removeWaitingAppoint_Manager(String store_name_id,String appointee) throws IllegalAccessException;
 
     public abstract void addManagerRole(String appoint, String store_name_id);
 
@@ -138,7 +146,7 @@ public abstract class User {
 
     public abstract HashMap<String, String> getOwnerToApprove();
 
-    public abstract HashMap<List<String>, List<Boolean>> getManagerToApprove();
+    public abstract HashMap<String, HashMap<String, List<Boolean>>> getManagerToApprove();
 
     public abstract List<Notification> getNotifications();
 

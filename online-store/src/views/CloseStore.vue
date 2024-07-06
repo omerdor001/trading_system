@@ -4,22 +4,18 @@
     <div class="close-store-container">
       <div class="close-store-form">
         <h2>Close Store</h2>
-        <form>
+        <form @submit.prevent="handleCloseStorePer">
           <div class="form-group">
             <label for="store">Select Store</label>
-            <select v-model="selectedStore" id="store" required>
-              <option v-for="store in stores" :key="store" :value="store">
-                {{ store }}
-              </option>
-            </select>
+            <PrimeDropdown v-model="selectedStore" :options="storeOptions" optionLabel="label" optionValue="value" id="store" placeholder="Select a Store" required />
           </div>
           <div class="button-group">
-            <CloseButtonPer type="submit" @click="handleCloseStorePer" label="Close Permanently" class="close-button" />
+            <Button type="submit" label="Close Permanently" class="close-button" />
           </div>
         </form>
       </div>
     </div>
-    <p-toast></p-toast>
+    <PrimeToast ref="toast" />
   </div>
 </template>
 
@@ -27,36 +23,41 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
-import CloseButtonPer from 'primevue/button';
+import Button from 'primevue/button';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import PrimeToast from 'primevue/toast';
+import PrimeDropdown from 'primevue/dropdown';
 
 export default defineComponent({
   name: 'CloseStore',
   components: {
     SiteHeader,
-    CloseButtonPer,
-    'p-toast': PrimeToast,
+    Button,
+    PrimeDropdown,
+    PrimeToast,
   },
   setup() {
     const router = useRouter();
     const stores = ref([]);
+    const storeOptions = ref([]);
     const selectedStore = ref('');
-    const username = localStorage.getItem('username'); 
-    const token = localStorage.getItem('token'); 
+    const username = localStorage.getItem('username');
+    const token = localStorage.getItem('token');
     const toast = useToast();
     const loading = ref(true);
 
     onMounted(async () => {
       try {
         const response = await axios.get('http://localhost:8082/api/trading/stores-I-created', {
-           params: {
+          params: {
             userName: username,
             token: token,
-          }
+          },
         });
-        stores.value = response.data.split(',');
+        const storeArray = response.data.split(',');
+        stores.value = storeArray;
+        storeOptions.value = storeArray.map(store => ({ label: store, value: store }));
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to load stores', life: 3000 });
       } finally {
@@ -67,10 +68,12 @@ export default defineComponent({
     const handleCloseStorePer = async () => {
       try {
         const response = await axios.post('http://localhost:8082/api/trading/store/close', null, {
-          params: { username, token, storeName: selectedStore.value }
+          params: { username, token, storeName: selectedStore.value },
         });
         console.log(response.data);
         toast.add({ severity: 'success', summary: 'Success', detail: 'Store was closed successfully', life: 3000 });
+        stores.value = stores.value.filter(store => store !== selectedStore.value);
+        storeOptions.value = storeOptions.value.filter(option => option.value !== selectedStore.value);
         selectedStore.value = '';
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to close store', life: 3000 });
@@ -85,6 +88,7 @@ export default defineComponent({
 
     return {
       stores,
+      storeOptions,
       selectedStore,
       username,
       token,
@@ -130,18 +134,9 @@ export default defineComponent({
   margin-bottom: 5px;
 }
 
-.form-group .store-select {
-  width: 150%;
-  padding: 20px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  background-color: #f9f9f9;
-  font-family: inherit; 
-}
-
 .button-group {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-top: 20px;
 }
 
