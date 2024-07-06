@@ -86,6 +86,8 @@ public interface TradingSystem {
 
     ResponseEntity<String> getAllStoresInJSONFormat(String username, String token);
 
+    ResponseEntity<String> getProductsFromStoreJSONFormat(String username, String token,String storeName);
+
     ResponseEntity<String> getStoresIOpened(String username, String token);
 
     ResponseEntity<String> getStoresIOwn(String username, String token);

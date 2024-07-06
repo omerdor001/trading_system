@@ -316,6 +316,11 @@ public class TradingSystemRestController {
         return tradingSystem.getAllStoresInJSONFormat("r"+username, token);
     }
 
+    @GetMapping("/products_of_store")
+    public ResponseEntity<String> getProductsFromStoreJSONFormat(@RequestParam String storeName,@RequestParam String username, @RequestParam String token) {
+        return tradingSystem.getProductsFromStoreJSONFormat(storeName,username,token);
+    }
+
     @GetMapping("/stores-I-created")
     public ResponseEntity<String> getStoresIOpened(@RequestParam String userName, @RequestParam String token) {
         return tradingSystem.getStoresIOpened("r"+userName,token);

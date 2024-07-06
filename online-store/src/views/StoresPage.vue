@@ -86,7 +86,6 @@ export default defineComponent({
             username: username 
           }
         });
-        console.log(response.data);
         stores.value = response.data.map(store => ({
           name: store.name,
           role: store.role,

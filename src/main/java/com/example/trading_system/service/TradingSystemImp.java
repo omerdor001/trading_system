@@ -686,6 +686,20 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
+    public ResponseEntity<String> getProductsFromStoreJSONFormat(String storeName,String username, String token) {
+        logger.info("Trying to Gather All Products Details of store {}",storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Gather All Products Details of store {}",storeName);
+            return new ResponseEntity<>(marketService.getAllStoresInJSONFormat(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Products Details of store {} ",storeName, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public ResponseEntity<String> getStoresIOpened(String username, String token) {
         logger.info("Trying to get all Stores {} created",username);
         try {
