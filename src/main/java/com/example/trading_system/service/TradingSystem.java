@@ -32,7 +32,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> openStoreExist(String userName, String token, String storeName);
 
-    ResponseEntity<String> addProduct(String username, String token, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords);
+    ResponseEntity<String> addProduct(String username, String token, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, String keyWords);
 
     ResponseEntity<String> removeProduct(String username, String token, String storeName, int productId);
 

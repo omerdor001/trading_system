@@ -70,7 +70,7 @@ public class SearchProductStoresAcceptanceTests {
     @Test
     public void testSearchNameInStore_Successful() {
         tradingSystem.openStore(username, token, "store1", "General Store");
-        tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 1, new ArrayList<>());
+        tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 1, "[]");
         ResponseEntity<String> response = tradingSystem.searchNameInStores(username, token, "product1", null, null, null, 1, null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":Sport, \"keyWords\":[]}]",response.getBody());
@@ -79,7 +79,7 @@ public class SearchProductStoresAcceptanceTests {
     @Test
     public void testSearchCategoryInStore_Successful() {
         tradingSystem.openStore(username, token, "store1", "General Store");
-        tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 1, new ArrayList<>());
+        tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 1, "[]");
         ResponseEntity<String> response = tradingSystem.searchCategoryInStores(username, token, 1, null, null, null, null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":Sport, \"keyWords\":[]}]",response.getBody());
@@ -87,10 +87,8 @@ public class SearchProductStoresAcceptanceTests {
 
     @Test
     public void testSearchKeywordsInStore_Successful() {
-        ArrayList<String> keywords = new ArrayList<>();
-        keywords.add("keyword");
         tradingSystem.openStore(username, token, "store1", "General Store");
-        tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 1, keywords);
+        tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 1, "[\"keyword\"]");
         ResponseEntity<String> response = tradingSystem.searchKeywordsInStores(username, token, "keyword", null, null, null, 1, null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":Sport, \"keyWords\":[keyword]}]",response.getBody());

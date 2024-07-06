@@ -146,7 +146,7 @@ public class MarketFacadeImp implements MarketFacade {
 
     @Override
     public String getProductsFromStoreJSONFormat(String storeName){
-        if (isStoreExist(storeName)) {
+        if (!isStoreExist(storeName)) {
             throw new IllegalArgumentException("Store is not exist");
         }
         Store store=storeRepository.getStore(storeName);
