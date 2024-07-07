@@ -32,7 +32,7 @@
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import PrimeButton from 'primevue/button';
 import PrimeToast from 'primevue/toast';
 import axios from 'axios';
@@ -45,14 +45,9 @@ export default defineComponent({
     PrimeButton,
     PrimeToast
   },
-  props: {
-    storeId: {
-      type: String,
-      required: true
-    }
-  },
-  setup(props) {
+  setup() {
     const router = useRouter();
+    const route = useRoute();
     const username = ref(localStorage.getItem('username') || '');
     const store = ref({
       name: '',
@@ -62,23 +57,29 @@ export default defineComponent({
     const toast = useToast();
 
     onMounted(() => {
-      fetchStoreDetails(props.storeId);
+      fetchStoreDetails(route.params.storeId);
     });
 
-    const fetchStoreDetails = async () => {
+    const fetchStoreDetails = async (storeId) => {
       const token = localStorage.getItem('token');
       if (!token) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Invalid token was supplied', life: 3000 });
         return;
       }
       try {
-        const response = await axios.get(`http://localhost:8082/api/trading/stores/products_of_store`, {
+        const response = await axios.get('http://localhost:8082/api/trading/products_of_store', {
           params: {
-            userName: username.value,
+            storeName: storeId,
+            username: username.value,
             token: token
           }
         });
-        store.value = response.data;
+        const storeProducts = response.data;
+        store.value = {
+          name: storeId,
+          description: 'Store description here...', // Replace with actual description if available
+          products: storeProducts
+        };
       } catch (error) {
         if (error.response && error.response.data) {
           toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });

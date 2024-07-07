@@ -8,13 +8,13 @@
       </div>
       <div v-else>
         <ul class="stores-list">
-          <li v-for="store in stores" :key="store.id" class="store-item">
+          <li v-for="store in stores" :key="store.name" class="store-item">
             <img :src="store.image" alt="Store Image" class="store-image">
             <div class="store-details">
               <h3>{{ store.name }}</h3>
               <p>{{ store.description }}</p>
               <p>Rating: {{ store.rating }}</p>
-              <PrimeButton label="View Products" @click="viewProducts(store.id)" class="view-products-button"/>
+              <PrimeButton label="View Products" @click="viewProducts(store.name)" class="view-products-button"/>
             </div>
           </li>
         </ul>
@@ -59,14 +59,19 @@ export default {
       }
 
       try {
-        const response = await axios.get('http://localhost:8082/api/trading/stores', {
+        const response = await axios.get('http://localhost:8082/api/trading/stores-detailed-info', {
           params: {
-            userName: username,
+            username: username,
             token: token
           }
         });
         console.log(response.data);  // Add this line to check the returned data
-        this.stores = response.data;
+        this.stores = response.data.map(store => ({
+          name: store.name,
+          image: 'default-image-url', // Replace with actual image URL if available
+          description: store.description,
+          rating: store.rating
+        }));
       } catch (error) {
         if (error.response && error.response.data) {
           toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
@@ -75,12 +80,8 @@ export default {
         }
       }
     },
-    viewProducts() {
-/*      if (!storeId) {
-        console.error('Missing storeId');
-        return;
-      }*/
-      this.$router.push({ name: 'StoreDetails', params: { storeId: 'humberger' } });
+    viewProducts(storeId) {
+      this.$router.push({ name: 'StoreDetails', params: { storeId } });
     },
     logout() {
       localStorage.removeItem('isLoggedIn');
