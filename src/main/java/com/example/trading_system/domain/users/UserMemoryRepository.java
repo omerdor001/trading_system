@@ -1,9 +1,12 @@
 package com.example.trading_system.domain.users;
 
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 
+@Service
 public class UserMemoryRepository implements UserRepository {
     private static UserMemoryRepository instance = null;
     private HashMap<String, User> users;

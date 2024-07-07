@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@EnableTransactionManagement
-@EntityScan(basePackages = {"com.example.trading_system", "com.example.trading_system.domain"})
-@EnableJpaRepositories(basePackages = {"com.example.trading_system", "com.example.trading_system.domain"})
+//@EnableTransactionManagement
+//@EntityScan(basePackages = {"com.example.trading_system", "com.example.trading_system.domain"})
+//@EnableJpaRepositories(basePackages = {"com.example.trading_system", "com.example.trading_system.domain"})
 public class TradingSystemApplication {
     public static void main(String[] args) {
         SpringApplication.run(TradingSystemApplication.class, args);
