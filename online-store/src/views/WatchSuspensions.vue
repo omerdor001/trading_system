@@ -34,7 +34,7 @@ export default defineComponent({
     'p-toast': PrimeToast,
     'p-table': PrimeDataTable,
     'p-column': PrimeColumn,
-    PrimeButton
+     PrimeButton
   },
   setup() {
     const suspendedUsers = ref([]);
