@@ -425,7 +425,7 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public void approveBid(String userName, String storeName, int productID, String bidUserName) throws IllegalArgumentException, IllegalAccessException {
+    public void approveBid(String userName, String storeName, int productID, String bidUserName) throws Exception {
         marketFacade.approveBid(userName, storeName, productID, bidUserName);
     }
 

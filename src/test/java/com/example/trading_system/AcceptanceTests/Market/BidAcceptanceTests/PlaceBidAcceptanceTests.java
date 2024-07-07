@@ -189,8 +189,9 @@ public class PlaceBidAcceptanceTests {
         verify(mockNotificationSender).sendNotification(eq(ownerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner1\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}"));
         verify(mockNotificationSender).sendNotification(eq(regularUserName), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rregularUser\",\"textContent\":\"Your bid on product Product1 in store Store1 is approved\"}"));
 
-        Assertions.assertEquals("{\n  \"storeName\" : \"Store1\",\n  \"bids\" : [\n{\n  \"userName\" : \"rregularUser\",\n  \"productID\" : 111,\n  \"price\" : 10.0,\n  \"allOwnersApproved\" : true,\n  \"approvedBy\" : [\"rowner1\"]\n}\n]\n}",tradingSystem.getMyBids(regularUserName,regularUserToken,storeName).getBody());
-        Assertions.assertEquals("{\n  \"storeName\" : \"Store1\",\n  \"bids\" : [\n{\n  \"userName\" : \"rregularUser\",\n  \"productID\" : 111,\n  \"price\" : 10.0,\n  \"allOwnersApproved\" : true,\n  \"approvedBy\" : [\"rowner1\"]\n}\n]\n}",tradingSystem.getStoreBids(ownerUserName,ownerToken,storeName).getBody());
+        Assertions.assertNotEquals("",tradingSystem.getAllHistoryPurchases(ownerUserName, ownerToken, storeName).getBody());
+        Assertions.assertEquals("{}",tradingSystem.getMyBids(regularUserName,regularUserToken,storeName).getBody());
+        Assertions.assertEquals("{}",tradingSystem.getStoreBids(ownerUserName,ownerToken,storeName).getBody());
 
 
 
@@ -212,6 +213,7 @@ public class PlaceBidAcceptanceTests {
         verify(mockNotificationSender).sendNotification(eq(ownerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner1\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}"));
         verify(mockNotificationSender).sendNotification(eq(secondOwnerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner2\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}"));
 
+        Assertions.assertEquals("",tradingSystem.getAllHistoryPurchases(ownerUserName, ownerToken, storeName).getBody());
 
         Assertions.assertEquals("{\n  \"storeName\" : \"Store1\",\n  \"bids\" : [\n{\n  \"userName\" : \"rregularUser\",\n  \"productID\" : 111,\n  \"price\" : 10.0,\n  \"allOwnersApproved\" : false,\n  \"approvedBy\" : [\"rowner1\"]\n}\n]\n}",tradingSystem.getMyBids(regularUserName,regularUserToken,storeName).getBody());
         Assertions.assertEquals("{\n  \"storeName\" : \"Store1\",\n  \"bids\" : [\n{\n  \"userName\" : \"rregularUser\",\n  \"productID\" : 111,\n  \"price\" : 10.0,\n  \"allOwnersApproved\" : false,\n  \"approvedBy\" : [\"rowner1\"]\n}\n]\n}",tradingSystem.getStoreBids(ownerUserName,ownerToken,storeName).getBody());
@@ -233,13 +235,13 @@ public class PlaceBidAcceptanceTests {
         verify(mockNotificationSender).sendNotification(eq(ownerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner1\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}"));
         verify(mockNotificationSender).sendNotification(eq(secondOwnerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner2\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}"));
 //
-//
+        Assertions.assertEquals("",tradingSystem.getAllHistoryPurchases(ownerUserName, ownerToken, storeName).getBody());
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveBid(secondOwnerUserName,secondOwnerToken,storeName,productID,regularUserName).getStatusCode());
         verify(mockNotificationSender).sendNotification(eq(regularUserName), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rregularUser\",\"textContent\":\"Your bid on product Product1 in store Store1 is approved\"}"));
+        Assertions.assertNotEquals("",tradingSystem.getAllHistoryPurchases(ownerUserName, ownerToken, storeName).getBody());
 
-
-        Assertions.assertEquals("{\n  \"storeName\" : \"Store1\",\n  \"bids\" : [\n{\n  \"userName\" : \"rregularUser\",\n  \"productID\" : 111,\n  \"price\" : 10.0,\n  \"allOwnersApproved\" : true,\n  \"approvedBy\" : [\"rowner1\", \"rowner2\"]\n}\n]\n}",tradingSystem.getMyBids(regularUserName,regularUserToken,storeName).getBody());
-        Assertions.assertEquals("{\n  \"storeName\" : \"Store1\",\n  \"bids\" : [\n{\n  \"userName\" : \"rregularUser\",\n  \"productID\" : 111,\n  \"price\" : 10.0,\n  \"allOwnersApproved\" : true,\n  \"approvedBy\" : [\"rowner1\", \"rowner2\"]\n}\n]\n}",tradingSystem.getStoreBids(ownerUserName,ownerToken,storeName).getBody());
+        Assertions.assertEquals("{}",tradingSystem.getMyBids(regularUserName,regularUserToken,storeName).getBody());
+        Assertions.assertEquals("{}",tradingSystem.getStoreBids(ownerUserName,ownerToken,storeName).getBody());
 
     }
 

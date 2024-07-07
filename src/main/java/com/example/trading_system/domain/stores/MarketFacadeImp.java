@@ -1327,7 +1327,7 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public void approveBid(String userName, String storeName, int productID, String bidUserName) throws IllegalArgumentException, IllegalAccessException {
+    public void approveBid(String userName, String storeName, int productID, String bidUserName) throws Exception {
         validateUserAndStore(userName, storeName);
         Store store = storeRepository.getStore(storeName);
         if(!store.getProducts().containsKey(productID))
@@ -1339,7 +1339,11 @@ public class MarketFacadeImp implements MarketFacade {
 
         boolean allOwnersApproved = store.approveBid(userName, productID, bidUserName);
         if(allOwnersApproved)
+        {
             userFacade.sendNotification(userName, bidUserName, "Your bid on product " + store.getProducts().get(productID).getProduct_name() + " in store " + storeName + " is approved");
+            userFacade.bidPurchase(bidUserName, storeName, productID, store.getBidPrice(bidUserName, productID));
+            store.removeBidAccepted(bidUserName, productID);
+        }
 
     }
 

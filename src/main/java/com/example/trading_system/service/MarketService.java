@@ -172,7 +172,7 @@ public interface MarketService {
 
     void placeBid(String userName, String storeName, int productID, double price) throws IllegalArgumentException;
 
-    void approveBid(String userName, String storeName, int productID, String bidUserName) throws IllegalArgumentException, IllegalAccessException;
+    void approveBid(String userName, String storeName, int productID, String bidUserName) throws Exception;
 
     void rejectBid(String userName, String storeName, int productID, String bidUserName) throws IllegalArgumentException, IllegalAccessException;
 

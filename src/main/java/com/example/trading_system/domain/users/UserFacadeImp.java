@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.Duration;
@@ -944,6 +945,58 @@ public class UserFacadeImp implements UserFacade {
         return true;
     }
 
+
+    @Override
+    public void bidPurchase(String userName, String storeName, int productID, double price) throws Exception {
+        // quantity = 1
+        User user = userRepository.getUser(userName);
+        Store store = marketFacade.getStore(storeName);
+        Product product = store.getProduct(productID);
+        synchronized (product)
+        {
+            if(product.getProduct_quantity() == 0)
+                throw new IllegalArgumentException("Dont have enough from this product");
+            else
+                marketFacade.getStore(storeName).removeReservedProducts(productID, 1);
+        }
+
+        LinkedList<ProductInSaleDTO> products = new LinkedList<>();
+        ProductInSaleDTO productInSaleDTO = new ProductInSaleDTO(storeName,productID,price,1,product.getCategory().getIntValue());
+         products.add(productInSaleDTO);
+        int userAge = getUser(userName).getAge();
+        store.validatePurchasePolicies(products, userAge);
+        int deliveryId;
+        String address = user.getAddress();
+        try {
+            deliveryId = deliveryService.makeDelivery(address);
+        } catch (Exception e) {
+            throw new Exception("Error in Delivery");
+        }
+        if (deliveryId < 0) {
+            store.releaseReservedProducts(productID,1);
+            throw new Exception("Error in Delivery");
+        }
+        int paymentId;
+        try {
+            paymentId = paymentService.makePayment(price);
+        } catch (Exception e) {
+            deliveryService.cancelDelivery(deliveryId);
+            store.releaseReservedProducts(productID,1);
+            throw new Exception("Error in Payment");
+        }
+        if (paymentId < 0) {
+            deliveryService.cancelDelivery(deliveryId);
+            store.releaseReservedProducts(productID,1);
+            throw new Exception("Error in Payment");
+        }
+         HashMap<Integer, ProductInSale> products_list = new HashMap<>();
+        products_list.put(productID,new ProductInSale(storeName,productID,price,1,product.getCategory().getIntValue()));
+        ObjectMapper objectMapper = new ObjectMapper();
+        String a = objectMapper.writeValueAsString(products_list.values());
+        marketFacade.addPurchase(userName,a,price,storeName);
+
+
+    }
 
     @Override
     public void purchaseCart(String username) throws Exception {

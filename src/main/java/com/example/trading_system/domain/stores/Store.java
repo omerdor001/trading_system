@@ -779,12 +779,27 @@ public class Store {
 
     }
 
-    public String getDescription() {
-        return description;
+
+    public double getBidPrice(String userName, int productID) {
+        for ( Bid b : bids)
+        {
+            if(b.getProductID() == productID && b.getUserName().equals(userName))
+            {
+                return b.getPrice();
+            }
+        }
+        return 0;
     }
 
-    public double getStoreRating() {
-        return storeRating;
+    public void removeBidAccepted(String userName, int productID) {
+        for ( Bid b : bids)
+        {
+            if(b.getProductID() == productID && b.getUserName().equals(userName))
+            {
+                bids.remove(b);
+                break;
+            }
+        }
     }
 
     //endregion
