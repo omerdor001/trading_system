@@ -7,6 +7,7 @@
 <script>
 import { createApp } from 'vue';
 import PrimeVue from 'primevue/config';
+import { testService } from "@/testExternalSystem";
 import 'primevue/resources/themes/saga-blue/theme.css'; // or other theme
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
@@ -17,6 +18,7 @@ export default {
     const app = createApp();
     app.use(PrimeVue);
     this.$root.$primevue = PrimeVue;
+    testService();
   }
 }
 </script>
