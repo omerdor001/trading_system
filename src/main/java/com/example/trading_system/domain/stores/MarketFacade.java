@@ -32,6 +32,12 @@ public interface MarketFacade {
 
     String getProductInfo(String userName, String storeName, int productId) throws IllegalAccessException;
 
+    String getCategories(String username);
+
+    String getPurchaseHistoryJSONFormatForStore(String userName,String storeName);
+
+    String getPurchaseHistoryJSONFormat(String userName);
+
     String searchNameInStore(String userName, String productName, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) throws IllegalAccessException;
 
     String searchCategoryInStore(String userName, int category, String storeName, Double minPrice, Double maxPrice, Double minRating) throws IllegalAccessException;
