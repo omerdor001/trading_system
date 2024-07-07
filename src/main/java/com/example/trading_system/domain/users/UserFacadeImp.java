@@ -800,7 +800,6 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("User cannot be owner of this store");
         }
         List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName,appoint);
-        if (perm == null) throw new IllegalAccessException("No one suggest this user to be a manager");
         sendNotification(userName, appoint, newManagerUser.getUsername() + " rejected your suggestion to become a manager at store: " + storeName);
     }
 
@@ -1107,7 +1106,13 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("User is suspended from the system");
         User user=userRepository.getUser(username);
         ObjectMapper mapper = new ObjectMapper();
-        HashMap<String,String> toApproves=user.getOwnerToApprove();
+        List<Map<String, Object>> toApproves = new ArrayList<>();
+        for(String storeName:user.getOwnerToApprove().keySet()){
+            Map<String, Object> approveMap = new HashMap<>();
+            approveMap.put("storeName",storeName);
+            approveMap.put("appointee",user.getOwnerToApprove().get(storeName).substring(1));
+            toApproves.add(approveMap);
+        }
         try {
             return mapper.writeValueAsString(toApproves);
         } catch (JsonProcessingException e) {
@@ -1116,21 +1121,72 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public String getUserRequestsManagement(String username){
+    public String getUserRequestsManagement(String username) {
         if (!userRepository.isExist(username)) {
             throw new IllegalArgumentException("User doesn't exist in the system");
         }
-        if (isSuspended(username))
+        if (isSuspended(username)) {
             throw new RuntimeException("User is suspended from the system");
-        User user=userRepository.getUser(username);
+        }
         ObjectMapper mapper = new ObjectMapper();
-        HashMap<List<String>,List<Boolean>> toApproves=user.getManagerToApprove();
+        List<Map<String, Object>> toApproves = getMapsForManagement(username);
         try {
             return mapper.writeValueAsString(toApproves);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
         }
     }
+
+    private List<Map<String, Object>> getMapsForManagement(String username) {
+        User user = userRepository.getUser(username);
+        List<Map<String, Object>> toApproves = new ArrayList<>();
+        for (Map.Entry<String, HashMap<String, List<Boolean>>> entry : user.getManagerToApprove().entrySet()) {
+            String storeName = entry.getKey();
+            HashMap<String, List<Boolean>> appointeesPermissions = entry.getValue();
+            for (Map.Entry<String, List<Boolean>> appointeeEntry : appointeesPermissions.entrySet()) {
+                Map<String, Object> approveMap = getStringObjectMap(appointeeEntry, storeName);
+                toApproves.add(approveMap);
+            }
+        }
+        return toApproves;
+    }
+
+    private Map<String, Object> getStringObjectMap(Map.Entry<String, List<Boolean>> appointeeEntry, String storeName) {
+        String appointee = appointeeEntry.getKey();
+        List<Boolean> permissions = appointeeEntry.getValue();
+        Map<String, Object> approveMap = new HashMap<>();
+        approveMap.put("storeName", storeName);
+        approveMap.put("appointee", appointee.substring(1));
+        approveMap.put("watch", permissions.get(0));
+        approveMap.put("editSupply", permissions.get(1));
+        approveMap.put("editBuyPolicy", permissions.get(2));
+        approveMap.put("editDiscountPolicy", permissions.get(3));
+        return approveMap;
+    }
+
+    @Override
+    public String getPermissionsForUserJSONFormat(String username,String storeName) {
+        if (!userRepository.isExist(username)) {
+            throw new IllegalArgumentException("User doesn't exist in the system");
+        }
+        if(!marketFacade.isStoreExist(storeName)){
+            throw new IllegalArgumentException("Store doesn't exist in the system");
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> permissions = new HashMap<>();
+        User user=userRepository.getUser(username);
+        permissions.put("watch", user.isWatch(storeName));
+        permissions.put("editSupply", user.isEditSupply(storeName));
+        permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
+        permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
+        try {
+            return mapper.writeValueAsString(permissions);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+        }
+    }
+
+
 
 
 }

@@ -3,25 +3,23 @@
     <SiteHeader :isLoggedIn="isLoggedIn" :username="username" :isAdmin="isAdmin" @logout="logout" />
     <div class="main-content">
       <div class="sidebar">
-        <PrimeButton label="View All Stores" @click="viewAllStores" class="sidebar-button"/> <!-- New button -->
+        <PrimeButton label="View All Stores" @click="viewAllStores" class="sidebar-button"/>
+      <PrimeButton v-if="isLoggedIn" label="Stores Manager" @click="stores" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn" label="Close Store" @click="closeStore" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Approve Ownership" @click="approveOwnership" class="sidebar-button" />
         <PrimeButton v-if="isLoggedIn" label="Approve Management" @click="approveManagement" class="sidebar-button" />
-        <PrimeButton v-if="isLoggedIn" label="My Stores I Own" @click="myStoresIOwn" class="sidebar-button"/>
-        <PrimeButton v-if="isLoggedIn" label="Close Store" @click="closeStore" class="sidebar-button"/>
       </div>
       <div class="content">
         <AboutSection />
       </div>
       <div class="sidebar2">
-        <PrimeButton v-if="isLoggedIn" label="My Stores I Manage" @click="myStoresIManage" class="sidebar-button"/>
-        <PrimeButton v-if="isLoggedIn && isAdmin" label="Create Suspension" @click="createSuspension" class="sidebar-button"/>
-        <PrimeButton v-if="isLoggedIn && isAdmin" label="End Suspension" @click="endSuspension" class="sidebar-button"/>
-        <PrimeButton v-if="isLoggedIn && isAdmin" label="Watch Suspensions" @click="watchSuspensions" class="sidebar-button"/>
-        <PrimeButton v-if="isLoggedIn && isAdmin" label="Purchases History" @click="purchasesHistoryAsSystemManager" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn" label="Create Suspension" @click="createSuspension" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn" label="End Suspension" @click="endSuspension" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn" label="Watch Suspensions" @click="watchSuspensions" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn" label="Purchases History" @click="purchasesHistoryAsSystemManager" class="sidebar-button"/>
       </div>
     </div>
-    <p-toast></p-toast>
   </div>
 </template>
 
@@ -31,8 +29,6 @@ import SiteHeader from '@/components/SiteHeader.vue';
 import AboutSection from '@/components/AboutSection.vue';
 import { Button as PrimeButton } from 'primevue/button';
 import { useRouter } from 'vue-router';
-import { useToast } from 'primevue/usetoast';
-import PrimeToast from 'primevue/toast';
 import axios from 'axios';
 
 export default defineComponent({
@@ -41,11 +37,9 @@ export default defineComponent({
     SiteHeader,
     AboutSection,
     PrimeButton,
-    'p-toast': PrimeToast,
   },
   setup() {
     const router = useRouter();
-    const toast = useToast();
     const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
     const isAdmin = ref(localStorage.getItem('isAdmin') === 'true');
     const username = ref(localStorage.getItem('username') || '');
@@ -90,16 +84,12 @@ export default defineComponent({
       router.push('/approve-manager');
     };
 
-    const myStoresIOwn = () => {
-      router.push('/my-stores-i-own');
+    const stores = () => {
+      router.push('/stores-page');
     };
 
     const closeStore = () => {
       router.push('/close-store');
-    };
-
-    const myStoresIManage = () => {
-      router.push('/stores-i-manage');
     };
 
     const createSuspension = () => {
@@ -128,27 +118,6 @@ export default defineComponent({
       router.push({ name: 'StoreSearchResults' });
     };
 
-    const logout = async () => {
-      try {
-        console.log(localStorage.getItem('token'));
-        const response = await axios.get('http://localhost:8082/api/trading/logout', {
-          params: {
-            token: localStorage.getItem('token'),
-            username: localStorage.getItem('username'),
-          }
-        });
-        localStorage.setItem('username', response.data.username);
-        localStorage.setItem('token', response.data.token);
-        console.log(localStorage.getItem('token'));
-      } catch (error) {
-        console.log(error.response.data);
-        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
-      }
-      isLoggedIn.value = false;
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('isAdmin');
-      router.push('/login');
-    };
 
     return {
       isLoggedIn,
@@ -159,15 +128,13 @@ export default defineComponent({
       openStore,
       approveOwnership,
       approveManagement,
-      myStoresIOwn,
+      stores,
       closeStore,
-      myStoresIManage,
       createSuspension,
       endSuspension,
       watchSuspensions,
       purchasesHistoryAsSystemManager,
       viewAllStores, // Include the new function in the return object
-      logout,
     };
   }
 });

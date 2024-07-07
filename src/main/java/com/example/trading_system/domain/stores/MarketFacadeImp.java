@@ -1,15 +1,14 @@
 package com.example.trading_system.domain.stores;
 
 import com.example.trading_system.domain.users.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -119,6 +118,61 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
+    public String getAllStoresInJSONFormat(String username){
+        List<Map<String, Object>> storeList = new ArrayList<>();
+        for (Store store : storeRepository.getAllStoresByStores()) {
+            Map<String, Object> storeMap = new HashMap<>();
+            storeMap.put("name", store.getNameId());
+            if(store.isOwnerOfStore(username))
+                storeMap.put("role", "Owner");
+            else if(store.isManagerOfStore(username))
+                storeMap.put("role", "Manager");
+            else storeMap.put("role", "Viewer");
+            storeMap.put("status",store.isActive());
+            storeMap.put("description", store.getDescription());
+            storeMap.put("founder", store.getFounder().substring(1));
+            storeMap.put("isOpen", store.isOpen());
+            storeMap.put("rating",store.getStoreRating());
+            storeList.add(storeMap);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(storeList);
+        } catch (JsonProcessingException e) {
+            logger.error("Error converting stores to JSON", e);
+            return "Error converting stores to JSON";
+        }
+    }
+
+    @Override
+    public String getProductsFromStoreJSONFormat(String storeName){
+        if (!isStoreExist(storeName)) {
+            throw new IllegalArgumentException("Store is not exist");
+        }
+        Store store=storeRepository.getStore(storeName);
+        List<Map<String, Object>> productList = new ArrayList<>();
+        for(Product product:store.getProducts().values()){
+            Map<String, Object> productMap = new HashMap<>();
+            productMap.put("id",product.getProduct_id());
+            productMap.put("name",product.getProduct_name());
+            productMap.put("description",product.getProduct_description());
+            productMap.put("price",product.getProduct_price());
+            productMap.put("quantity",product.getProduct_quantity());
+            productMap.put("rating",product.getRating());
+            productMap.put("category",Category.getCategoryFromInt(product.getCategory().getIntValue()));
+            productMap.put("keyWords", product.getKeyWords());
+            productList.add(productMap);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(productList);
+        } catch (JsonProcessingException e) {
+            logger.error("Error converting stores to JSON", e);
+            return "Error converting stores to JSON";
+        }
+    }
+
+    @Override
     public String getStoresIOpened(String username){
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
@@ -128,7 +182,7 @@ public class MarketFacadeImp implements MarketFacade {
         }
         List stores=new ArrayList();
         for(Store store:storeRepository.getAllStoresByStores()){
-            if(store.getFounder().equals(username))
+            if(store.getFounder().equals(username)  && store.isOpen())
                 stores.add(store.getNameId());
         }
         return stores.toString().substring(1,stores.toString().length()-1);
