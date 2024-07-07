@@ -14,9 +14,9 @@
             </label>
           </div>
         </div>
-        <div class="button-group">
-          <button v-if="selectedStore" @click="markStoreForClosure">Mark Store for Closure</button>
-        </div>
+        <!-- <div class="button-group"> -->
+          <!-- <button v-if="selectedStore" @click="markStoreForClosure">Mark Store for Closure</button> -->
+        <!-- </div> -->
         <div class="button-group">
           <button class="back-button" @click="goBack">Go Back</button>
           <button class="yield-ownership-button" @click="yieldOwnership">Yield Ownership</button>
@@ -31,84 +31,89 @@
 import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
 import UserViewModel from '@/ViewModel/UserViewModel';
+import { useToast } from 'primevue/usetoast';
+import { useRouter } from 'vue-router';
+import { defineComponent, ref, onMounted } from 'vue';
+
 
 const api_base_url = '/api';
 console.log(api_base_url)
-export default {
+export default defineComponent({
    name: 'yieldOwnership',
   components: {
     SiteHeader
   },
-  data() {
-    return {
-      stores: [],
-      selectedStoreId: '',
-      markedStore: null,
-      username: UserViewModel.getters.getUsername() || ''
+  setup() {
+    const router = useRouter();
+    const username = localStorage.getItem('username');
+    const token = localStorage.getItem('token');
+    var selectedStore = ref(null);
+    var stores = ref([]); // Use ref for reactivity
 
-    };
-  },
-  async mounted() {
-    this.stores = ['nirStore','nirStore2']
-   // try {
-    //  const response = await axios.get(`$api_base_url/stores/owned`);
-     // this.stores = response.data;
-   // } catch (error) {
-     // console.error('Error fetching stores:', error);
-   // }
-  },
+    const toast = useToast();
 
-  
-  methods: {
-        logout() {
+    const loadStores = async () => {
+    try {
+        console.log(username)
+        console.log(token)
+        const response =  await axios.get('http://localhost:8082/api/trading/stores-I-own', {
+           params: {
+            userName: username,
+            token: token,
+          }
+        });
+        console.log(response.data);
+        stores = response.data.substring(1,response.data.length-1).split(',');
+      } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to load stores', life: 3000 });
+      }  
+    };    
+
+    onMounted(() => {
+      loadStores(); // Load stores when component is mounted
+    });
+
+  const logout = () => {
       UserViewModel.actions.logout();
-      this.$router.push('/login');
-    },
-    async selectStore(storeName) {
-      this.markedStore = storeName;
-    },
-    goBack() {
-      this.$router.push('/');
-    },
-    async markStoreForClosure() {
-      if (!this.selectedStoreId) {
+      router.push('/login');
+    };
+    const selectStore = (storeName) => {
+      selectedStore = storeName;
+    };
+    const goBack = () => {
+      router.push('/');
+    };
+
+    const yieldOwnership = () => {
+      if (!selectedStore) {
         alert('Please select a store.');
         return;
       }
 
       try {
-        await axios.put(`${api_base_url}/stores/${this.selectedStoreId}/yieldOwnership`);
+        axios.put(`${api_base_url}/stores/${selectedStore}/waiverOnOwnership`);
         alert('Store marked for closure successfully!');
-        this.markedStore = this.stores.find(store => store.id === this.selectedStoreId);
+        this.markedStore = this.stores.find(store => store.id === selectedStore);
       } catch (error) {
         console.error('Error marking store for closure:', error);
         alert('Failed to mark store for closure.');
       }
-    },
-    async yieldOwnership() {
-      if (!this.markedStore) {
-        alert('No store is marked for closure.');
-        return;
-      }
-      try {
-        await UserViewModel.actions.yieldOwnership(this.username, '', this.markedStore);
-        console.log(this.username, " is yield ownership at store", this.markedStore)
-      } catch (error) {
-        console.error('Failed to Yield Ownership:', error.message);
-      }
-        this.$router.push('/');
 
-    }
-  },
-  watch: {
-    selectedStoreId(newValue, oldValue) {
-      if (newValue !== oldValue) {
-        // Reset markedStore when a new store is selected
-        this.markedStore = null;
-      }
-    }
+    };
+
+    return {
+      stores,
+      selectedStore,
+      username,
+      token,
+      logout,
+      selectStore,
+      goBack,
+      yieldOwnership,
+      loadStores
+    };
   }
-};
+});
 </script>
 
 <style scoped>

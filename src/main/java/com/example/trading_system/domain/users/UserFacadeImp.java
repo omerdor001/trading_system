@@ -384,7 +384,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public synchronized void addToCart(String username, int productId, String storeName, int quantity) {
+    public synchronized void addToCart(String username, int productId, String storeName, int quantity, double price) {
         if (username == null || username.trim().isEmpty()) {
             logger.error("Username cannot be null or empty");
             throw new IllegalArgumentException("Username cannot be null or empty");
@@ -412,8 +412,17 @@ public class UserFacadeImp implements UserFacade {
         }
         checkProductQuantity(username, productId, storeName, quantity);
         Product p = marketFacade.getStore(storeName).getProduct(productId);
-        userRepository.getUser(username).addProductToCart(productId, quantity, storeName, p.getProduct_price(), p.getCategory().getIntValue());
+        if(p.getProduct_price() == price)
+            userRepository.getUser(username).addProductToCart(productId, quantity, storeName, p.getProduct_price(), p.getCategory().getIntValue());
+        else {
+            if(marketFacade.getStore(storeName).isBidApproved(username,productId,price))
+                userRepository.getUser(username).addProductToCart(productId, quantity, storeName, price, p.getCategory().getIntValue());
+            else
+                throw new IllegalArgumentException("This bid has not approved by all owners or there is no bid with this price");
+        }
     }
+
+
 
     private void checkProductQuantity(String username, int productId, String storeName, int quantity) {
         if (!userRepository.isExist(username)) {
@@ -525,7 +534,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
+    public void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException, NoSuchElementException {
         if (!marketFacade.isStoreExist(store_name_id))
             throw new NoSuchElementException("No store called " + store_name_id + " exist");
         if (!userRepository.isExist(appoint)) {
@@ -549,9 +558,9 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("User already Manager of this store");
         }
         if (newManagerUser.isOwner(store_name_id)) {
-            throw new IllegalAccessException("User cannot be owner of this store");
+            throw new IllegalAccessException("User is already owner of this store");
         }
-        newManagerUser.addWaitingAppoint_Manager(store_name_id,appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+        newManagerUser.addWaitingAppoint_Manager(store_name_id,appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
         sendNotification(appoint, newManager, appointUser.getUsername() + " suggests you to become a store manager at " + store_name_id);
     }
 
@@ -592,7 +601,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void approveManager(String newManager, String storeName, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
+    public void approveManager(String newManager, String storeName, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException {
         if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userRepository.isExist(newManager)) {
@@ -616,13 +625,13 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("User already Manager of this store");
         }
         if (newManagerUser.isOwner(storeName)) {
-            throw new IllegalAccessException("User cannot be owner of this store");
+            throw new IllegalAccessException("User is already owner of this store");
         }
         if (newManagerUser.removeWaitingAppoint_Manager(storeName,appoint) == null)
             throw new RuntimeException("No appointment requests in this store.");
         newManagerUser.addManagerRole(appoint, storeName);
         marketFacade.getStore(storeName).addManager(newManager);
-        newManagerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+        newManagerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
         sendNotification(newManager, appoint, newManagerUser.getUsername() + " accepted your suggestion to become a manager at store: " + storeName);
     }
 
@@ -797,7 +806,7 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("User already Manager of this store");
         }
         if (newManagerUser.isOwner(storeName)) {
-            throw new IllegalAccessException("User cannot be owner of this store");
+            throw new IllegalAccessException("User is already owner of this store");
         }
         List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName,appoint);
         if (perm == null) throw new IllegalAccessException("No one suggest this user to be a manager");
@@ -805,7 +814,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void editPermissionForManager(String userId, String managerToEdit, String storeName, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException {
+    public void editPermissionForManager(String userId, String managerToEdit, String storeName, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException, NoSuchElementException {
         if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userRepository.isExist(userId)) {
@@ -834,7 +843,7 @@ public class UserFacadeImp implements UserFacade {
         if (!managerUser.getRoleByStoreId(storeName).getAppointedById().equals(userId)) {
             throw new IllegalAccessException("Owner cant edit permissions to manager that he/she didn't appointed");
         }
-        managerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+        managerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
         sendNotification(userId, managerToEdit, "Your permissions for store: " + storeName + " were changed by user: " + appointUser.getUsername());
     }
 
@@ -1131,6 +1140,8 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
         }
     }
+
+
 
 
 }

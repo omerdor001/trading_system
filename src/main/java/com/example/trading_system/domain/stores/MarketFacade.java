@@ -1,8 +1,10 @@
 package com.example.trading_system.domain.stores;
 
 import com.example.trading_system.domain.users.UserFacade;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +26,7 @@ public interface MarketFacade {
 
     String getStoresIOpened(String username);
 
-    String getStoreProducts(String userName, String storeName) throws IllegalAccessException;
+    String getStoreProducts(String userName, String storeName) throws IllegalAccessException, JsonProcessingException;
 
     String getProductInfo(String userName, String storeName, int productId) throws IllegalAccessException;
 
@@ -60,7 +62,7 @@ public interface MarketFacade {
 
     String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) throws IllegalAccessException;
 
-    String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
+    String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException, JsonProcessingException;
 
     String requestManagersPermissions(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
 
@@ -186,4 +188,22 @@ public interface MarketFacade {
     void sendMessageStoreToUser(String owner, String receiver, String storeName, String content);
 
     String getStoreMessagesJson(String admin, String storeName);
+
+    void placeBid(String userName, String storeName, int productID, double price) throws IllegalArgumentException;
+
+    void approveBid(String userName, String storeName, int productID, String bidUserName) throws IllegalArgumentException, IllegalAccessException;
+
+    void rejectBid(String userName, String storeName, int productID, String bidUserName) throws IllegalArgumentException, IllegalAccessException;
+
+    void placeCounterOffer(String userName, String storeName, int productID, String bidUserName, double newPrice) throws IllegalArgumentException, IllegalAccessException;
+
+    String getStoreBids(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
+
+    String getMyBids(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
+
+    void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception;
+
+    String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception;
+
+    void editProduct(String username, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity) throws Exception;
 }

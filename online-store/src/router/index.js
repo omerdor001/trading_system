@@ -28,6 +28,7 @@ import SuggestOwner from '@/views/SuggestOwner.vue';
 import SuggestManager from '@/views/SuggestManager.vue';
 import ApproveOwner from '@/views/ApproveOwner.vue';
 import ApproveManager from '@/views/ApproveManager.vue';
+import WatchStoreBids from '@/views/WatchStoreBids.vue';
 import PaymentPage from '@/views/PaymentPage.vue';
 
 
@@ -60,6 +61,7 @@ const routes = [
     { path: '/suggest-manager', name: 'SuggestManager', component: SuggestManager },
     { path: '/approve-owner',name: 'ApproveOwner',component: ApproveOwner },
     { path: '/approve-manager',name: 'ApproveManager',component: ApproveManager},
+    { path: '/get-store-bids', name: 'WatchStoreBids', component: WatchStoreBids},
     { path: '/payment', name: 'PaymentPage', component: PaymentPage },
 ];
 

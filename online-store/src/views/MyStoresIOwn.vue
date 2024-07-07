@@ -10,6 +10,7 @@
         <PrimeButton label="Manage Discount Policy" @click="manageDiscountPolicy" />
         <PrimeButton label="Yield Ownership" @click="yieldOwnership" />
         <PrimeButton label="Purchase History" @click="purchaseHistory" />
+        <PrimeButton label="Watch Store Bids" @click="watchStoreBids" />
       </div>
       <div class="content">
         <h2>Stores I Own</h2>
@@ -21,7 +22,7 @@
         </div>
 
         <!-- Edit Workers Section -->
-        <div v-if="editingWorkers === selectedStore">
+        <div v-if="selectedStore != null">
           <h4>Edit Workers</h4>
           <table>
             <thead>
@@ -34,7 +35,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="worker in editableWorkers" :key="worker.username">
+              <tr v-for="worker in usersByRole.owners" :key="worker.id">
+                <td><input type="checkbox" v-model="worker.selected" /></td>
+                <td><input v-model="worker.username" /></td>
+                <td><input v-model="worker.role" /></td>
+                <td><input v-model="worker.birthdate" /></td>
+                <td><input v-model="worker.address" /></td>
+              </tr>
+              <tr v-for="worker in usersByRole.managers" :key="worker.id">
                 <td><input type="checkbox" v-model="worker.selected" /></td>
                 <td><input v-model="worker.username" /></td>
                 <td><input v-model="worker.role" /></td>
@@ -67,6 +75,7 @@
                 <td>{{ worker.birthdate }}</td>
                 <td>{{ worker.address }}</td>
               </tr>
+              
             </tbody>
           </table>
           <PrimeButton label="Edit Workers" @click="editWorkers(selectedStore)" />
@@ -131,7 +140,7 @@
 
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted} from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { useRouter } from 'vue-router';
 import { Button as PrimeButton } from 'primevue/button';
@@ -155,10 +164,15 @@ export default defineComponent({
     const editingPermissions = ref(null);
     const selectedStore = ref(null);
     const toast = useToast();
+    var usersByRole = {
+        owners: [],
+        managers: []
+      };
 
     onMounted(
       async () => {
       try {
+
         const response = await axios.get('http://localhost:8082/api/trading/stores-I-own', {
            params: {
             userName: username,
@@ -171,11 +185,76 @@ export default defineComponent({
         toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to load stores', life: 3000 });
       }  
     });
+    const parseResponseLoadWorkers = (responseText) => {
+      const lines = responseText.trim().split('\n');
+      const dataStartIndex = 2; // Data starts from the third line
+
+      for (let i = dataStartIndex; i < lines.length; i++) {
+    const [role, id, username, address, birthdate] = lines[i].split(' ');
+    const selected = false;
+
+    const user = {
+      id,
+      role,
+      username,
+      address,
+      birthdate,
+      selected
+    };
+
+
+
+    if (role === 'Founder') {
+      continue;
+    } else if (role === 'Owner') {
+      usersByRole.owners.push(user);
+    } else if (role === 'Manager') {
+      usersByRole.managers.push(user);
+    }
+  }
+
+  }
+    const loadStoreWorkers = async () => {
+      if( selectedStore.value == null)
+      {
+        alert('Please select a store.');
+        return;
+      }
+      try {
+        const response = await axios.get('http://localhost:8082/api/trading/store/officials/info', {
+            params : { 
+            userName: username,
+            token: token,
+            storeName: selectedStore.value,
+            }
+        });
+
+        console.log(response.data);
+        parseResponseLoadWorkers(response.data)
+        // editingWorkers.value = Object.values(response.data.products);
+        var worker = usersByRole.owners[0]
+
+          toast.add({ severity: 'success', summary: 'success', detail: worker, life: 3000 });
+          toast.add({ severity: 'success', summary: 'success', detail: worker.selected, life: 3000 });
+          toast.add({ severity: 'success', summary: 'success', detail: worker.username, life: 3000 });
+          toast.add({ severity: 'success', summary: 'success', detail: worker.role, life: 3000 });
+          toast.add({ severity: 'success', summary: 'success', detail: worker.birthdate, life: 3000 });
+          toast.add({ severity: 'success', summary: 'success', detail: worker.address, life: 3000 });
+
+          // owner false rUsername owner date mahrozetreka
+
+      }
+      catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to open store', life: 3000 });
+        console.error('Failed to create store:', error.message);
+      }
+    };
 
     const selectStore = (store) => {
       selectedStore.value = store;
       console.log('Selected Store:', store);
       // You can perform additional actions here based on the selected store
+      loadStoreWorkers();
     };
 
     const enterStore = (storeId) => {
@@ -209,6 +288,10 @@ export default defineComponent({
     const purchaseHistory = () => {
       router.push('/purchase-history');
     };
+
+    const watchStoreBids = () => {
+      router.push('/get-store-bids');
+    }
 
     const editWorkers = (storeId) => {
       const store = stores.value.find(store => store.id === storeId);
@@ -252,16 +335,21 @@ export default defineComponent({
 
     return {
       stores,
+      token,
       username,
       selectStore,
+      selectedStore,
       enterStore,
       manageProducts,
       suggestOwner,
       suggestManager,
       managePurchasePolicy,
       manageDiscountPolicy,
+      loadStoreWorkers,
+      parseResponseLoadWorkers,
       yieldOwnership,
       purchaseHistory,
+      watchStoreBids,
       editWorkers,
       saveWorkers,
       editPermissions,
@@ -269,6 +357,7 @@ export default defineComponent({
       addWorker,
       removeWorker,
       editingWorkers,
+      usersByRole,
       editingPermissions,
       logout
     };
@@ -311,5 +400,20 @@ export default defineComponent({
 .stores-list h3 {
   margin-bottom: 10px;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+thead th, tbody td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+thead th {
+  background-color: #f2f2f2;
+}
+
 </style>
 

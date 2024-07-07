@@ -18,7 +18,8 @@ public interface UserService {
 
     boolean isAdmin(String username);
 
-    void addToCart(String username, int productId, String storeName, int quantity);
+    void addToCart(String username, int productId, String storeName, int quantity, double price);
+
 
     void removeFromCart(String username, int productId, String storeName, int quantity);
 
@@ -42,11 +43,11 @@ public interface UserService {
 
     void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
 
-    void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
+    void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException;
 
     void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
 
-    void approveManage(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
+    void approveManage(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException;
 
     void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException;
 
@@ -62,7 +63,7 @@ public interface UserService {
 
     String viewCart(String username);
 
-    void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
+    void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException;
 
     boolean isAdminRegistered();
 
@@ -91,4 +92,5 @@ public interface UserService {
     String getUserRequestsOwnership(String username);
 
     String getUserRequestsManagement(String username);
+
 }

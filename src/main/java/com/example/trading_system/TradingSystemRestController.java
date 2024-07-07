@@ -101,7 +101,7 @@ public class TradingSystemRestController {
                                              @RequestParam double rating,
                                              @RequestParam int category,
                                              @RequestParam List<String> keyWords) {
-        return tradingSystem.addProduct(username, token, productId, storeName, productName, productDescription, productPrice, productQuantity, rating, category, keyWords);
+        return tradingSystem.addProduct("r" + username, token, productId, storeName, productName, productDescription, productPrice, productQuantity, rating, category, keyWords);
     }
 
     @DeleteMapping("/product/remove")
@@ -109,14 +109,14 @@ public class TradingSystemRestController {
                                                 @RequestParam String token,
                                                 @RequestParam String storeName,
                                                 @RequestParam int productId) {
-        return tradingSystem.removeProduct(username, token, storeName, productId);
+        return tradingSystem.removeProduct("r" + username, token, storeName, productId);
     }
 
     @GetMapping("/getStoreProducts")
     public ResponseEntity<String> getStoreProducts(@RequestParam String userName,
                                                    @RequestParam String token,
                                                    @RequestParam String store_name) {
-        return tradingSystem.getStoreProducts(userName, token, store_name);
+        return tradingSystem.getStoreProducts("r"+ userName, token, store_name);
 
     }
 
@@ -175,6 +175,19 @@ public class TradingSystemRestController {
         return tradingSystem.setCategory(username, token, storeName, productId, category);
     }
 
+    @PutMapping("/editProduct")
+    public ResponseEntity<String> editProduct(@RequestParam String username,
+                                              @RequestParam String token,
+                                              @RequestParam String storeName,
+                                              @RequestParam int productId,
+                                              @RequestParam String productName,
+                                              @RequestParam String productDescription,
+                                              @RequestParam double productPrice,
+                                              @RequestParam int productQuantity
+                                       ) {
+        return tradingSystem.editProduct("r" + username, token, storeName, productId, productName, productDescription, productPrice, productQuantity);
+    }
+
     @GetMapping("/login")
     public ResponseEntity<String> login(@RequestParam String token,
                                         @RequestParam String usernameV,
@@ -220,7 +233,7 @@ public class TradingSystemRestController {
                                                @RequestParam String token,
                                                @RequestParam String newOwner,
                                                @RequestParam String storeName) {
-        return tradingSystem.suggestOwner(appoint, token, newOwner, storeName);
+        return tradingSystem.suggestOwner("r" +appoint, token, "r" + newOwner, storeName);
     }
 
     @PostMapping("/suggestManage")
@@ -231,8 +244,10 @@ public class TradingSystemRestController {
                                                 @RequestParam boolean watch,
                                                 @RequestParam boolean editSupply,
                                                 @RequestParam boolean editBuyPolicy,
-                                                @RequestParam boolean editDiscountPolicy) {
-        return tradingSystem.suggestManage(appoint, token, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+                                                @RequestParam boolean editDiscountPolicy,
+                                                @RequestParam boolean acceptBids,
+                                                @RequestParam boolean createLottery) {
+        return tradingSystem.suggestManage("r" + appoint, token, "r" + newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
     }
 
     @PostMapping("/approveManage")
@@ -243,8 +258,10 @@ public class TradingSystemRestController {
                                                 @RequestParam boolean watch,
                                                 @RequestParam boolean editSupply,
                                                 @RequestParam boolean editBuyPolicy,
-                                                @RequestParam boolean editDiscountPolicy) {
-        return tradingSystem.approveManage(newManager, token, store_name_id, appoint,watch,editSupply,editBuyPolicy,editDiscountPolicy);
+                                                @RequestParam boolean editDiscountPolicy,
+                                                @RequestParam boolean acceptBids,
+                                                @RequestParam boolean createLottery) {
+        return tradingSystem.approveManage("r" + newManager, token, store_name_id, appoint,watch,editSupply,editBuyPolicy,editDiscountPolicy, acceptBids, createLottery);
     }
 
     @PostMapping("/approveOwner")
@@ -252,7 +269,7 @@ public class TradingSystemRestController {
                                                @RequestParam String token,
                                                @RequestParam String storeName,
                                                @RequestParam String appoint) {
-        return tradingSystem.approveOwner(newOwner, token, storeName, appoint);
+        return tradingSystem.approveOwner("r" + newOwner, token, storeName, appoint);
     }
 
     @PostMapping("/rejectToOwnStore")
@@ -275,7 +292,7 @@ public class TradingSystemRestController {
     public ResponseEntity<String> waiverOnOwnership(@RequestParam String userName,
                                                     @RequestParam String token,
                                                     @RequestParam String storeName) {
-        return tradingSystem.waiverOnOwnership(userName, token, storeName);
+        return tradingSystem.waiverOnOwnership("r" + userName, token, storeName);
     }
 
     @PostMapping("/fireManager")
@@ -302,8 +319,10 @@ public class TradingSystemRestController {
                                                            @RequestParam boolean watch,
                                                            @RequestParam boolean editSupply,
                                                            @RequestParam boolean editBuyPolicy,
-                                                           @RequestParam boolean editDiscountPolicy) {
-        return tradingSystem.editPermissionForManager(username, token, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+                                                           @RequestParam boolean editDiscountPolicy,
+                                                           @RequestParam boolean acceptBids,
+                                                           @RequestParam boolean createLottery) {
+        return tradingSystem.editPermissionForManager(username, token, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
     }
 
     @GetMapping("/stores")
@@ -400,8 +419,8 @@ public class TradingSystemRestController {
     }
 
     @PostMapping("/cart/add")
-    public ResponseEntity<String> addToCart(@RequestParam String username, @RequestParam String token, @RequestParam int productId, @RequestParam String storeName, @RequestParam int quantity) {
-        return tradingSystem.addToCart(username, token, productId, storeName, quantity);
+    public ResponseEntity<String> addToCart(@RequestParam String username, @RequestParam String token, @RequestParam int productId, @RequestParam String storeName, @RequestParam int quantity, @RequestParam double price) {
+        return tradingSystem.addToCart(username, token, productId, storeName, quantity, price);
     }
 
     @PostMapping("/cart/remove")
@@ -428,7 +447,7 @@ public class TradingSystemRestController {
     public ResponseEntity<String> requestInformationAboutOfficialsInStore(@RequestParam String userName,
                                                                           @RequestParam String token,
                                                                           @RequestParam String storeName) {
-        return tradingSystem.requestInformationAboutOfficialsInStore(userName, token, storeName);
+        return tradingSystem.requestInformationAboutOfficialsInStore("r" + userName, token, storeName);
     }
 
     @GetMapping("/store/manager/permissions")
@@ -571,7 +590,7 @@ public class TradingSystemRestController {
 
     // Purchase Policies
     @GetMapping("/store/{storeName}/purchase-policies")
-    public ResponseEntity<String> getPurchasePoliciesInfo(@RequestParam String username,
+    public ResponseEntity<String>  getPurchasePoliciesInfo(@RequestParam String username,
                                                           @RequestParam String token,
                                                           @PathVariable String storeName) {
         return tradingSystem.getPurchasePoliciesInfo(username, token, storeName);
@@ -721,4 +740,87 @@ public class TradingSystemRestController {
                                                        @PathVariable int selectedIndex) {
         return tradingSystem.removePurchasePolicy(username, token, storeName, selectedIndex);
     }
+
+
+    @PostMapping("/store/{storeName}/place-bid")
+    public ResponseEntity<String> placeBid(@RequestParam String userName,
+                                           @RequestParam String token,
+                                           @PathVariable String storeName,
+                                           @RequestParam int productID,
+                                           @RequestParam double price){
+        return tradingSystem.placeBid(userName, token, storeName, productID, price);
+    }
+
+    @PutMapping("/store/{storeName}/approve-bid")
+    public ResponseEntity<String> approveBid(@RequestParam String userName,
+                                           @RequestParam String token,
+                                           @PathVariable String storeName,
+                                           @RequestParam int productID,
+                                           @RequestParam String bidUserName){
+        return tradingSystem.approveBid(userName, token, storeName, productID, bidUserName);
+    }
+
+    @PutMapping("/store/{storeName}/reject-bid")
+    public ResponseEntity<String> rejectBid(@RequestParam String userName,
+                                             @RequestParam String token,
+                                             @PathVariable String storeName,
+                                             @RequestParam int productID,
+                                             @RequestParam String bidUserName){
+        return tradingSystem.rejectBid(userName, token, storeName, productID, bidUserName);
+    }
+
+    @PostMapping("/store/{storeName}/place-counter-offer")
+    public ResponseEntity<String> placeCounterOffer(@RequestParam String userName,
+                                                    @RequestParam String token,
+                                                    @PathVariable String storeName,
+                                                    @RequestParam int productID,
+                                                    @RequestParam String bidUserName,
+                                                    @RequestParam double newPrice){
+        return tradingSystem.placeCounterOffer(userName, token, storeName, productID, bidUserName, newPrice);
+    }
+
+
+    @PostMapping("/store/{storeName}/approve-counter-offer")
+    public ResponseEntity<String> approveCounterOffer(@RequestParam String userName,
+                                                    @RequestParam String token,
+                                                    @PathVariable String storeName,
+                                                    @RequestParam int productID,
+                                                    @RequestParam double price){
+        return tradingSystem.placeBid(userName, token, storeName, productID, price);
+    }
+
+    @GetMapping("/store/{storeName}/get-store-bids")
+    public ResponseEntity<String> getStoreBids(@RequestParam String userName,
+                                                    @RequestParam String token,
+                                                    @PathVariable String storeName){
+        return tradingSystem.getStoreBids(userName, token, storeName);
+    }
+
+    @GetMapping("/store/{storeName}/get-my-bids")
+    public ResponseEntity<String> getMyBids(@RequestParam String userName,
+                                          @RequestParam String token,
+                                            @PathVariable String storeName){
+        return tradingSystem.getMyBids(userName, token, storeName);
+    }
+
+    @PostMapping("/store/{storeName}/create-product-lottery")
+    public ResponseEntity<String> createProductLottery(@RequestParam String userName,
+                                                       @RequestParam String token,
+                                                       @PathVariable String storeName,
+                                                       @RequestParam int productID,
+                                                       @RequestParam LocalDateTime localDateTime,
+                                                       @RequestParam double price){
+        return tradingSystem.createProductLottery(userName, token, storeName, productID, localDateTime, price);
+    }
+
+    @PostMapping("/store/{storeName}/buy-lottery-ticket")
+    public ResponseEntity<String> buyLotteryProductTicket(@RequestParam String userName,
+                                                          @RequestParam String token,
+                                                          @PathVariable String storeName,
+                                                          @RequestParam int productID,
+                                                          @RequestParam double price){
+        return tradingSystem.buyLotteryProductTicket(userName,token,storeName,productID,price);
+    }
+
+
 }

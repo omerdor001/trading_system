@@ -114,11 +114,12 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void addToCart(String username, int productId, String storeName, int quantity) {
+    public void addToCart(String username, int productId, String storeName, int quantity, double price) {
         logger.info("Trying adding to cart  product with id: {}", productId);
-        userFacade.addToCart(username, productId, storeName, quantity);
+        userFacade.addToCart(username, productId, storeName, quantity, price);
         logger.info("Finished adding to cart product with id: {}", productId);
     }
+
 
     @Override
     public void removeFromCart(String username, int productId, String storeName, int quantity) {
@@ -151,9 +152,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
+    public void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException {
         logger.info("Trying to suggest user : {} to be a manager in store : {}", newManager, store_name_id);
-        userFacade.suggestManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+        userFacade.suggestManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
         logger.info("Finished suggesting manager : {} to be a manager in store : {}", newManager, store_name_id);
     }
 
@@ -165,9 +166,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void approveManage(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
+    public void approveManage(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException {
         logger.info("Trying to approve manage to store : {}", store_name_id);
-        userFacade.approveManager(newManager, store_name_id, appoint,watch, editSupply, editBuyPolicy,  editDiscountPolicy);
+        userFacade.approveManager(newManager, store_name_id, appoint,watch, editSupply, editBuyPolicy,  editDiscountPolicy, acceptBids, createLottery);
         logger.info("Finished approving manage to store : {}", store_name_id);
     }
 
@@ -201,9 +202,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException {
+    public void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException {
         logger.info("{} is Trying to edit permission for manager : {} in store : {}", userId, managerToEdit, storeNameId);
-        userFacade.editPermissionForManager(userId, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy);
+        userFacade.editPermissionForManager(userId, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
         logger.info("Finished edit permission to manager : {}  in store : {}", managerToEdit, storeNameId);
     }
 
@@ -284,6 +285,7 @@ public class UserServiceImp implements UserService {
     public String getUserRequestsManagement(String username) {
         return userFacade.getUserRequestsManagement(username);
     }
+
 
 
 }

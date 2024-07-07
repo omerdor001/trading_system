@@ -107,8 +107,8 @@ public class EditManagerPermissionsAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true);
-        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true);
+        tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true, true, true);
+        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true, true, true);
 
     }
 
@@ -121,28 +121,28 @@ public class EditManagerPermissionsAcceptanceTests {
 
     @Test
     public void GivenStoreNotExist_WhenEditPermissionsForManager_ThenThrowException() {
-        ResponseEntity<String> response = tradingSystemImp.editPermissionForManager(userName, token, userNameManager, "BadStoreName", true, true, true, true);
+        ResponseEntity<String> response = tradingSystemImp.editPermissionForManager(userName, token, userNameManager, "BadStoreName", true, true, true, true, true, true);
         Assertions.assertEquals("No store called BadStoreName exist", response.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
     public void GivenBadUserName_WhenEditPermissionsForManager_ThenThrowException() {
-        ResponseEntity<String> response = tradingSystemImp.editPermissionForManager(userName, token, "BadUserName", storeName, true, true, true, true);
+        ResponseEntity<String> response = tradingSystemImp.editPermissionForManager(userName, token, "BadUserName", storeName, true, true, true, true, true, true);
         Assertions.assertEquals("No user called BadUserName exist", response.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
     public void GivenManagerAppointer_WhenEditPermissionsForManager_ThenThrowException() {
-        ResponseEntity<String> response = tradingSystemImp.editPermissionForManager(userNameManager, tokenManager, userNameManager, storeName, true, true, true, true);
+        ResponseEntity<String> response = tradingSystemImp.editPermissionForManager(userNameManager, tokenManager, userNameManager, storeName, true, true, true, true, true, true);
         Assertions.assertEquals("User must be owner of this store", response.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
     public void GivenRegularUserAsManagerToEdit_WhenEditPermissionForManager_ThenThrowException() {
-        ResponseEntity<String> response = tradingSystemImp.editPermissionForManager(userName, token, regularUser, storeName, true, true, true, true);
+        ResponseEntity<String> response = tradingSystemImp.editPermissionForManager(userName, token, regularUser, storeName, true, true, true, true, true, true);
         Assertions.assertEquals("User must be a  Manager of this store", response.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
@@ -173,7 +173,7 @@ public class EditManagerPermissionsAcceptanceTests {
         }
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveOwner(ownerUserName, ownerToken, storeName, userName).getStatusCode());
-        ResponseEntity<String> resp = tradingSystemImp.editPermissionForManager(ownerUserName, ownerToken, userNameManager, storeName, true, true, true, true);
+        ResponseEntity<String> resp = tradingSystemImp.editPermissionForManager(ownerUserName, ownerToken, userNameManager, storeName, true, true, true, true, true, true);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
         Assertions.assertEquals("Owner cant edit permissions to manager that he/she didn't appointed", resp.getBody());
     }
@@ -182,7 +182,7 @@ public class EditManagerPermissionsAcceptanceTests {
     public void GivenGoodManagerAndOwner_WhenEditPermissionToManager_ThenSuccesss() //testing EditSupply Permission
     {
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.addProduct(userNameManager, tokenManager, 111, storeName, "Product1", "ProductDescription", 5, 5, 5, 1, new ArrayList<>(Arrays.asList(keyWords))).getStatusCode());
-        ResponseEntity<String> resp = tradingSystemImp.editPermissionForManager(userName, token, userNameManager, storeName, true, false, true, true);
+        ResponseEntity<String> resp = tradingSystemImp.editPermissionForManager(userName, token, userNameManager, storeName, true, false, true, true, true, true);
         Assertions.assertEquals(HttpStatus.OK, resp.getStatusCode());
         Assertions.assertEquals("Success edit permission for manager ", resp.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, tradingSystemImp.addProduct(userNameManager, tokenManager, 222, storeName, "Product1", "ProductDescription", 5, 5, 5, 1, new ArrayList<>(Arrays.asList(keyWords))).getStatusCode());
@@ -193,7 +193,7 @@ public class EditManagerPermissionsAcceptanceTests {
     {
         //TODO why store sales is Singelton
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.getAllHistoryPurchases(userNameManager, tokenManager, storeName).getStatusCode());
-        ResponseEntity<String> resp = tradingSystemImp.editPermissionForManager(userName, token, userNameManager, storeName, false, true, true, true);
+        ResponseEntity<String> resp = tradingSystemImp.editPermissionForManager(userName, token, userNameManager, storeName, false, true, true, true, true, true);
         Assertions.assertEquals(HttpStatus.OK, resp.getStatusCode());
         Assertions.assertEquals("Success edit permission for manager ", resp.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, tradingSystemImp.getAllHistoryPurchases(userNameManager, tokenManager, storeName).getStatusCode());
