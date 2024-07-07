@@ -403,7 +403,7 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public String getPurchaseHistoryJSONFormat(String userName) {
+    public String getPurchaseHistoryJSONFormat(String userName) throws IllegalAccessException {
         return marketFacade.getPurchaseHistoryJSONFormat(userName);
     }
 

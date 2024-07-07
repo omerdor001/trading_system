@@ -66,7 +66,7 @@ public interface MarketService {
 
     String getPurchaseHistoryJSONFormatForStore(String userName,String storeName);
 
-    String getPurchaseHistoryJSONFormat(String userName);
+    String getPurchaseHistoryJSONFormat(String userName) throws IllegalAccessException;
 
     String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
 

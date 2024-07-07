@@ -390,8 +390,6 @@ public class TradingSystemRestController {
         return tradingSystem.getPurchaseHistoryJSONFormat("r"+username,token);
     }
 
-
-
     @GetMapping("/store/search/name")
     public ResponseEntity<String> searchNameInStore(@RequestParam String userName, @RequestParam String productName, @RequestParam String token,
                                                     @RequestParam String store_name, @RequestParam Double minPrice, @RequestParam Double maxPrice,

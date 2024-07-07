@@ -231,11 +231,11 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String getPurchaseHistoryJSONFormat(String userName){
-        List<Map<String, Object>> allStoresPurchases = new ArrayList<>();
-        if(userFacade.isUserExist(userName)){
-            throw new IllegalArgumentException("Username is not exist");
+    public String getPurchaseHistoryJSONFormat(String userName) throws IllegalAccessException {
+        if(!userFacade.isUserExist(userName)){
+            throw new IllegalAccessException("Username is not exist");
         }
+        List<Map<String, Object>> allStoresPurchases = new ArrayList<>();
         for(Store store:storeRepository.getAllStoresByStores()){
             Map<String, Object> storePurchaseMap = Map.of(
                     "purchaseHistory", getPurchaseHistoryJSONFormatForStore(userName,store.getNameId())
