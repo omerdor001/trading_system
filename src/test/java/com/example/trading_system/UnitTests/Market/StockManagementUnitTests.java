@@ -388,7 +388,7 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("rtestuser0", 142, "Adidas", "Shirt11", "Sport shirt",
+            marketFacade.addProduct("rtestuser0", 181, "Adidas", "Shirt11", "Sport shirt",
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
