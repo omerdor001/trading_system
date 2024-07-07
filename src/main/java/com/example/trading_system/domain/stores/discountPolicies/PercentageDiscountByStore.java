@@ -1,14 +1,24 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.Collection;
-
-public class PercentageDiscountByStore implements DiscountPolicy, Condition {
+@Entity
+@DiscriminatorValue("PercentageDiscountByStore")
+public class PercentageDiscountByStore extends  DiscountPolicy {
     private double discountPercent;
-
+    @Id
+    @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     public PercentageDiscountByStore(double discountPercent) {
         this.discountPercent = discountPercent;
+    }
+
+    public PercentageDiscountByStore() {
+
     }
 
     @Override

@@ -3,10 +3,14 @@ package com.example.trading_system.domain.stores;
 import com.example.trading_system.domain.Message;
 import com.example.trading_system.domain.stores.discountPolicies.*;
 import com.example.trading_system.domain.stores.purchasePolicies.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import jakarta.persistence.*;
+
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -14,27 +18,48 @@ import java.util.stream.Collectors;
 
 @Setter
 @Getter
+@Entity
 public class Store {
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
+    @Getter
+    @Id
     private String nameId;
     private String description;
+    //Added because missing
+    @Getter
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "store_id")
     private HashMap<Integer, Product> products;
+    //Added because missing
     @Getter
+    @ElementCollection
     private List<String> managers;
+    //Added because missing
     @Getter
+    @ElementCollection
     private List<String> owners;
+    @Getter
     private String founder;
     @Getter
     @Setter
     private boolean isActive;
     private boolean isOpen;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private StoreSalesHistory salesHistory;
     @Getter
     @Setter
     private Double storeRating;
+    @Getter
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private LinkedList<DiscountPolicy> discountPolicies;
+    @Getter
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private LinkedList<Condition> discountConditions;
+    @Getter
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private LinkedList<PurchasePolicy> purchasePolicies;
+    @Getter
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private LinkedList<Message> messages;
 
     public Store(String nameId, String description, String founder, Double storeRating) {
@@ -52,6 +77,10 @@ public class Store {
         this.purchasePolicies = new LinkedList<>();
         this.isOpen = true;
         this.messages = new LinkedList<>();
+    }
+
+    public Store() {
+
     }
 
     public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, int category) {
@@ -209,28 +238,12 @@ public class Store {
     }
 
 
-    public String getNameId() {
-        return nameId;
-    }
-
-    public HashMap<Integer, Product> getProducts() {     //Added because missing
-        return products;
-    }
-
     public void setActive(Boolean active) {             //Added because missing
         this.isActive = active;
     }
 
     public Boolean isActive() {                      //Added because missing
         return isActive;
-    }
-
-    public List<String> getOwners() {                //Added because missing
-        return owners;
-    }
-
-    public List<String> getManagers() {                //Added because missing
-        return managers;
     }
 
     public void addPurchase(Purchase purchase) {
@@ -263,26 +276,6 @@ public class Store {
 
     public void setOpen(Boolean open) {            //Added because missing
         isOpen = open;
-    }
-
-    public String getFounder() {
-        return founder;
-    }
-
-    public LinkedList<DiscountPolicy> getDiscountPolicies() {
-        return discountPolicies;
-    }
-
-    public LinkedList<Condition> getDiscountConditions() {
-        return discountConditions;
-    }
-
-    public LinkedList<PurchasePolicy> getPurchasePolicies() {
-        return purchasePolicies;
-    }
-
-    public LinkedList<Message> getMessages(){
-        return this.messages;
     }
 
     public String getMessagesJSON(){
@@ -447,31 +440,24 @@ public class Store {
     }
 
     public void setFirstCondition(int selectedDiscountIndex, int selectedSecondIndex) {
-        if (selectedDiscountIndex == selectedSecondIndex)
-            throw new IllegalArgumentException("Indexes cannot be the same");
+//        if (selectedDiscountIndex == selectedSecondIndex)
+//            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         Condition setDiscount;
-        if (selectedSecondIndex >= discountPolicies.size())
-            setDiscount = discountConditions.remove(selectedSecondIndex - discountPolicies.size());
-        else {
-            if (selectedDiscountIndex < selectedSecondIndex) selectedSecondIndex -= 1;
-            setDiscount = discountPolicies.remove(selectedSecondIndex);
-        }
-        editedDiscount.setFirst(setDiscount);
+            setDiscount = discountConditions.remove(selectedSecondIndex);
+            editedDiscount.setFirst(setDiscount);
+
     }
 
     public void setSecondCondition(int selectedDiscountIndex, int selectedSecondIndex) {
-        if (selectedDiscountIndex == selectedSecondIndex)
-            throw new IllegalArgumentException("Indexes cannot be the same");
+//        if (selectedDiscountIndex == selectedSecondIndex)
+//            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         Condition setDiscount;
-        if (selectedSecondIndex >= discountPolicies.size())
-            setDiscount = discountConditions.remove(selectedSecondIndex - discountPolicies.size());
-        else {
-            if (selectedDiscountIndex < selectedSecondIndex) selectedSecondIndex -= 1;
-            setDiscount = discountPolicies.remove(selectedSecondIndex);
+        if (selectedSecondIndex >= discountPolicies.size()){
+            setDiscount = discountConditions.remove(selectedSecondIndex- discountPolicies.size());
+            editedDiscount.setSecond(setDiscount);
         }
-        editedDiscount.setSecond(setDiscount);
     }
 
     public void setThenDiscount(int selectedDiscountIndex, int selectedThenIndex) {
@@ -500,17 +486,12 @@ public class Store {
     }
 
     public void setDeciderDiscount(int selectedDiscountIndex, int selectedDeciderIndex) {
-        if (selectedDiscountIndex == selectedDeciderIndex)
-            throw new IllegalArgumentException("Indexes cannot be the same");
+//        if (selectedDiscountIndex == selectedDeciderIndex)
+//            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         Condition setDiscount;
-        if (selectedDeciderIndex >= discountPolicies.size())
-            setDiscount = discountConditions.remove(selectedDeciderIndex - discountPolicies.size());
-        else {
-            if (selectedDiscountIndex < selectedDeciderIndex) selectedDeciderIndex -= 1;
-            setDiscount = discountPolicies.remove(selectedDeciderIndex);
-        }
-        editedDiscount.setDecider(setDiscount);
+            setDiscount = discountConditions.remove(selectedDeciderIndex);
+            editedDiscount.setDecider(setDiscount);
     }
 
     public void setTotalSum(int selectedConditionIndex, double newSum) {

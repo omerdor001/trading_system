@@ -2,7 +2,10 @@ package com.example.trading_system.domain.stores;
 
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.persistence.*;
 
+
+@Embeddable
 @Getter
 @Setter
 public class ProductInSale {
@@ -29,6 +32,10 @@ public class ProductInSale {
         this.price=price;
         this.quantity=quantity;
         this.category=category;
+    }
+
+    public ProductInSale() {
+
     }
 
     @Override

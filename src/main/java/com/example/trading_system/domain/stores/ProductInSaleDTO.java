@@ -3,11 +3,12 @@ package com.example.trading_system.domain.stores;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import jakarta.persistence.*;
 
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
+@Embeddable
 public class ProductInSaleDTO {
     private String storeId;
     private int id;

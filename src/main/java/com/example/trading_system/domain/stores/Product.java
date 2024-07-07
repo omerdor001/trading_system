@@ -1,8 +1,8 @@
 package com.example.trading_system.domain.stores;
+import jakarta.persistence.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
-import javax.persistence.*;
 
 @Entity
 public class Product {
@@ -33,6 +33,10 @@ public class Product {
         this.store_name = "";
         this.category = category;
         this.keyWords = keyWords;
+    }
+
+    public Product() {
+
     }
 
     public int getProduct_id() {

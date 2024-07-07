@@ -1,16 +1,29 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.Collection;
+@Entity
+@DiscriminatorValue("ProductCountCondition")
 
-public class ProductCountCondition implements Condition {
+public class ProductCountCondition extends Condition {
     private int productId;
     private int count;
+    @Id
+    @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    private Long id;
 
     public ProductCountCondition(int productId, int amount) {
         this.productId = productId;
         this.count = amount;
+    }
+
+    public ProductCountCondition() {
+
     }
 
     @Override
@@ -47,5 +60,13 @@ public class ProductCountCondition implements Condition {
     @Override
     public String getInfo() {
         return "{ \"type\": \"productCount\", \"productId\": " + productId + ", \"count\": " + count + " }";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

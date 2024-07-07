@@ -1,18 +1,24 @@
 package com.example.trading_system.domain.stores.purchasePolicies;
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
-import com.example.trading_system.domain.stores.discountPolicies.DiscountPolicy;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-public interface PurchasePolicy {
-    boolean isPurchasePolicySatisfied(Collection<ProductInSaleDTO> items, int age);
-    void setPurchasePolicyFirst(PurchasePolicy first);
-    void setPurchasePolicySecond(PurchasePolicy second);
-    void setPurchasePolicyCategory(int categoryId);
-    void setPurchasePolicyProduct(int productID);
-    void setPurchasePolicyNumOfQuantity(int sum);
-    void setPurchasePolicyDateTime(LocalDateTime date);
-    void setPurchasePolicyAge(int age);
-    String getPurchasePolicyInfo();
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "purchase_type")
+public abstract class PurchasePolicy implements  PurchasePolicyInterface{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    public abstract boolean isPurchasePolicySatisfied(Collection<ProductInSaleDTO> items, int age);
+    public abstract void setPurchasePolicyFirst(PurchasePolicy first);
+    public abstract void setPurchasePolicySecond(PurchasePolicy second);
+    public abstract void setPurchasePolicyCategory(int categoryId);
+    public abstract void setPurchasePolicyProduct(int productID);
+    public abstract void setPurchasePolicyNumOfQuantity(int sum);
+    public abstract void setPurchasePolicyDateTime(LocalDateTime date);
+    public abstract void setPurchasePolicyAge(int age);
+    public abstract String getPurchasePolicyInfo();
 }

@@ -1,27 +1,60 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.Collection;
 
-public interface DiscountPolicy extends Condition {
-    double calculateDiscount(Collection<ProductInSaleDTO> items);
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type")
 
-    void setFirst(DiscountPolicy first);
+public abstract class DiscountPolicy implements DiscountPolicyInterface {
 
-    void setSecond(DiscountPolicy second);
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
 
-    void setFirst(Condition first);
+    @ManyToOne
+    @JsonIgnore
+    private DiscountPolicy first;
 
-    void setSecond(Condition second);
+    @ManyToOne
+    @JsonIgnore
 
-    void setThen(DiscountPolicy then);
+    private DiscountPolicy second;
 
-    void setCategory(int discountedCategory);
+    @ManyToOne
 
-    void setProductId(int productId);
+    private DiscountPolicy then;
 
-    void setPercent(double discountPercent);
+    public abstract double calculateDiscount(Collection<ProductInSaleDTO> items);
 
-    void setDecider(Condition decider);
+    public abstract void setFirst(DiscountPolicy first);
+
+    public abstract void setSecond(DiscountPolicy second);
+
+    public abstract void setFirst(Condition first);
+
+    public abstract void setSecond(Condition second);
+
+    public abstract void setThen(DiscountPolicy then);
+
+    public abstract void setCategory(int discountedCategory);
+
+    public abstract void setProductId(int productId);
+
+    public abstract void setPercent(double discountPercent);
+
+    public abstract void setDecider(Condition decider);
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
 }

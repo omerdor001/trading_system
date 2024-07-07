@@ -1,16 +1,30 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 
 import java.util.Collection;
+@Entity
+@DiscriminatorValue("CATEGORYCOUNT")
 
-public class CategoryCountCondition implements Condition {
+public class CategoryCountCondition extends Condition {
+    @Id
+    @JsonIgnore
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private int category;
     private int count;
 
     public CategoryCountCondition(int category, int count) {
         this.category = category;
         this.count = count;
+    }
+
+    public CategoryCountCondition() {
+
     }
 
     @Override
