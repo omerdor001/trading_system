@@ -1722,257 +1722,67 @@ This generated password is for development use only. Your security configuration
 2024-07-07T18:22:44.619+03:00  INFO 23096 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
 2024-07-07T18:22:44.619+03:00  INFO 23096 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@251c4280]]
 2024-07-07T18:22:44.619+03:00  INFO 23096 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
-2024-07-07T18:27:03.269+03:00  INFO 20224 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 20224 (C:\Users\alex\Documents\trading_system\target\classes started by alex in C:\Users\alex\Documents\trading_system)
-2024-07-07T18:27:03.269+03:00  INFO 20224 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
-2024-07-07T18:27:04.147+03:00  INFO 20224 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : OpenCV is Loaded.
-2024-07-07T18:27:04.462+03:00  INFO 20224 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
-2024-07-07T18:27:04.477+03:00  INFO 20224 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2024-07-07T18:27:04.477+03:00  INFO 20224 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
-2024-07-07T18:27:04.540+03:00  INFO 20224 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2024-07-07T18:27:04.540+03:00  INFO 20224 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1206 ms
-2024-07-07T18:27:04.855+03:00  WARN 20224 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+2024-07-07T18:26:26.156+03:00  INFO 11292 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 11292 (C:\Users\adidi\Documents\trading_system\target\classes started by adidi in C:\Users\adidi\Documents\trading_system)
+2024-07-07T18:26:26.161+03:00  INFO 11292 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-07T18:26:28.283+03:00  INFO 11292 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : OpenCV is Loaded.
+2024-07-07T18:26:28.886+03:00  INFO 11292 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-07T18:26:28.919+03:00  INFO 11292 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-07T18:26:28.920+03:00  INFO 11292 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-07T18:26:29.036+03:00  INFO 11292 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-07T18:26:29.037+03:00  INFO 11292 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2764 ms
+2024-07-07T18:26:29.699+03:00  WARN 11292 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
 
-Using generated security password: 27bb22aa-ba79-4490-8b54-e01c30b9841b
-
-This generated password is for development use only. Your security configuration must be updated before running your application in production.
-
-2024-07-07T18:27:05.108+03:00  INFO 20224 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7c0f28f8, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2abc8034, org.springframework.security.web.context.SecurityContextHolderFilter@7645f03e, org.springframework.security.web.header.HeaderWriterFilter@51a651c1, org.springframework.web.filter.CorsFilter@467b0f6e, org.springframework.security.web.authentication.logout.LogoutFilter@49ca94a9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7a6ea47d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@54b2fc58, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@474179fa, org.springframework.security.web.access.ExceptionTranslationFilter@55b5cd2b, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7bc58891]
-2024-07-07T18:27:05.249+03:00  INFO 20224 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
-2024-07-07T18:27:05.265+03:00  INFO 20224 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
-2024-07-07T18:27:05.265+03:00  INFO 20224 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5d05f453]]
-2024-07-07T18:27:05.265+03:00  INFO 20224 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
-2024-07-07T18:27:05.274+03:00  INFO 20224 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 2.538 seconds (process running for 2.908)
-2024-07-07T18:28:05.259+03:00  INFO 20224 --- [Trading_System] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
-2024-07-07T18:34:35.562+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2024-07-07T18:34:35.562+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2024-07-07T18:34:35.562+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
-2024-07-07T18:34:35.750+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to register user: Omer with password : Omer1234 and birthdate : 2023-02-01 
-2024-07-07T18:34:36.111+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : User registered successfully : Omer with password : Omer1234 and birthdate : 2023-02-01
-2024-07-07T18:34:38.132+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to logout user: rOmer
-2024-07-07T18:34:38.132+03:00  WARN 20224 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : System is not open
-2024-07-07T18:34:39.345+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to open system
-2024-07-07T18:34:39.345+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : System opened successfully
-2024-07-07T18:34:39.345+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to enter system
-2024-07-07T18:34:39.345+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 0
-2024-07-07T18:34:39.524+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MCIsImlhdCI6MTcyMDM2NjQ3OSwiZXhwIjoxNzIwNDAyNDc5fQ.BNNEhlVKyHQwBS9RqfefBAF9yPgYevHbwzs0jJG67Rs and username: v0
-2024-07-07T18:34:46.028+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Attempting to login user: Omer
-2024-07-07T18:34:46.028+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.UserServiceImp             : Trying to login user: Omer
-2024-07-07T18:34:46.286+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.UserServiceImp             : User: Omer logged in
-2024-07-07T18:34:46.364+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : User: Omer logged in successfully
-2024-07-07T19:01:20.901+03:00  INFO 20224 --- [Trading_System] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
-2024-07-07T19:04:25.093+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History
-2024-07-07T19:04:25.099+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store
-2024-07-07T19:04:25.099+03:00 ERROR 20224 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Error occurred : Username is not exist , Purchase History for Store
-2024-07-07T19:04:28.265+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History
-2024-07-07T19:04:28.265+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store
-2024-07-07T19:04:28.265+03:00 ERROR 20224 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Error occurred : Username is not exist , Purchase History for Store
-2024-07-07T19:05:37.213+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History
-2024-07-07T19:05:37.216+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store
-2024-07-07T19:05:37.218+03:00 ERROR 20224 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Error occurred : Username is not exist , Purchase History for Store
-2024-07-07T19:06:25.527+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History
-2024-07-07T19:06:25.530+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store
-2024-07-07T19:06:25.530+03:00 ERROR 20224 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Error occurred : Username is not exist , Purchase History for Store
-2024-07-07T19:06:31.720+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History
-2024-07-07T19:06:31.720+03:00  INFO 20224 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store
-2024-07-07T19:06:31.720+03:00 ERROR 20224 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Error occurred : Username is not exist , Purchase History for Store
-2024-07-07T19:07:47.030+03:00  INFO 20224 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
-2024-07-07T19:07:47.030+03:00  INFO 20224 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5d05f453]]
-2024-07-07T19:07:47.030+03:00  INFO 20224 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
-2024-07-07T19:11:02.875+03:00  INFO 12332 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 12332 (C:\Users\alex\Documents\trading_system\target\classes started by alex in C:\Users\alex\Documents\trading_system)
-2024-07-07T19:11:02.875+03:00  INFO 12332 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
-2024-07-07T19:11:03.880+03:00  INFO 12332 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : OpenCV is Loaded.
-2024-07-07T19:11:04.256+03:00  INFO 12332 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
-2024-07-07T19:11:04.277+03:00  INFO 12332 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2024-07-07T19:11:04.278+03:00  INFO 12332 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
-2024-07-07T19:11:04.345+03:00  INFO 12332 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2024-07-07T19:11:04.346+03:00  INFO 12332 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1407 ms
-2024-07-07T19:11:04.727+03:00  WARN 12332 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
-
-Using generated security password: af41f8e1-f3dd-47f5-b7f1-69ccd3998be6
+Using generated security password: 34b9b75d-96b4-4805-8935-16c2c4fbc56b
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2024-07-07T19:11:05.022+03:00  INFO 12332 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@236ae13d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@193eb1ba, org.springframework.security.web.context.SecurityContextHolderFilter@1e12a5a6, org.springframework.security.web.header.HeaderWriterFilter@51d0ec6f, org.springframework.web.filter.CorsFilter@2be818da, org.springframework.security.web.authentication.logout.LogoutFilter@4cdba2ed, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@47a7c93e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6f9ab79d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@46320c9a, org.springframework.security.web.access.ExceptionTranslationFilter@747835f5, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@45a1d057]
-2024-07-07T19:11:05.187+03:00  INFO 12332 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
-2024-07-07T19:11:05.190+03:00  INFO 12332 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
-2024-07-07T19:11:05.190+03:00  INFO 12332 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@233f52f8]]
-2024-07-07T19:11:05.190+03:00  INFO 12332 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
-2024-07-07T19:11:05.190+03:00  INFO 12332 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 2.921 seconds (process running for 3.83)
-2024-07-07T19:12:05.172+03:00  INFO 12332 --- [Trading_System] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
-2024-07-07T19:14:56.834+03:00  INFO 12332 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
-2024-07-07T19:14:56.834+03:00  INFO 12332 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@233f52f8]]
-2024-07-07T19:14:56.834+03:00  INFO 12332 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
-2024-07-07T19:15:04.360+03:00  INFO 4980 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 4980 (C:\Users\alex\Documents\trading_system\target\classes started by alex in C:\Users\alex\Documents\trading_system)
-2024-07-07T19:15:04.360+03:00  INFO 4980 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
-2024-07-07T19:15:05.281+03:00  INFO 4980 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : OpenCV is Loaded.
-2024-07-07T19:15:05.653+03:00  INFO 4980 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
-2024-07-07T19:15:05.669+03:00  INFO 4980 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2024-07-07T19:15:05.669+03:00  INFO 4980 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
-2024-07-07T19:15:05.745+03:00  INFO 4980 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2024-07-07T19:15:05.745+03:00  INFO 4980 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1315 ms
-2024-07-07T19:15:06.154+03:00  WARN 4980 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
-
-Using generated security password: a1408619-0fc7-4672-af34-b3f750ce9e1a
-
-This generated password is for development use only. Your security configuration must be updated before running your application in production.
-
-2024-07-07T19:15:06.445+03:00  INFO 4980 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2be818da, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@46320c9a, org.springframework.security.web.context.SecurityContextHolderFilter@47a7c93e, org.springframework.security.web.header.HeaderWriterFilter@4e0cc334, org.springframework.web.filter.CorsFilter@32256e68, org.springframework.security.web.authentication.logout.LogoutFilter@55c57422, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@64ae105d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@10a18e3e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5e7abaf7, org.springframework.security.web.access.ExceptionTranslationFilter@51d0ec6f, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@385d819]
-2024-07-07T19:15:06.597+03:00  INFO 4980 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
-2024-07-07T19:15:06.613+03:00  INFO 4980 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
-2024-07-07T19:15:06.613+03:00  INFO 4980 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@20440c6c]]
-2024-07-07T19:15:06.613+03:00  INFO 4980 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
-2024-07-07T19:15:06.613+03:00  INFO 4980 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 2.935 seconds (process running for 3.489)
-2024-07-07T19:15:27.227+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2024-07-07T19:15:27.227+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2024-07-07T19:15:27.231+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
-2024-07-07T19:15:27.463+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to register user: Omer with password : Omer1234 and birthdate : 1990-01-14 
-2024-07-07T19:15:27.791+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : User registered successfully : Omer with password : Omer1234 and birthdate : 1990-01-14
-2024-07-07T19:15:30.167+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to logout user: rOmer
-2024-07-07T19:15:30.167+03:00  WARN 4980 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : System is not open
-2024-07-07T19:15:31.969+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to open system
-2024-07-07T19:15:31.969+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : System opened successfully
-2024-07-07T19:15:31.969+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to enter system
-2024-07-07T19:15:31.969+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 0
-2024-07-07T19:15:32.183+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MCIsImlhdCI6MTcyMDM2ODkzMiwiZXhwIjoxNzIwNDA0OTMyfQ.TaIki0OWxxLp5ec8PP4ispJIDgxq1EfxXMgdA_U1SBA and username: v0
-2024-07-07T19:15:38.917+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Attempting to login user: Omer
-2024-07-07T19:15:38.917+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.UserServiceImp             : Trying to login user: Omer
-2024-07-07T19:15:39.184+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.UserServiceImp             : User: Omer logged in
-2024-07-07T19:15:39.262+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : User: Omer logged in successfully
-2024-07-07T19:15:45.886+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History
-2024-07-07T19:15:48.185+03:00  INFO 4980 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store
-2024-07-07T19:16:13.321+03:00 ERROR 4980 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Error occurred : Username is not exist , Purchase History for Store
-2024-07-07T19:16:13.332+03:00  INFO 4980 --- [Trading_System] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
-2024-07-07T19:16:13.369+03:00  INFO 4980 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
-2024-07-07T19:16:13.369+03:00  INFO 4980 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@20440c6c]]
-2024-07-07T19:16:13.369+03:00  INFO 4980 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
-2024-07-07T19:16:27.894+03:00  INFO 18448 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 18448 (C:\Users\alex\Documents\trading_system\target\classes started by alex in C:\Users\alex\Documents\trading_system)
-2024-07-07T19:16:27.894+03:00  INFO 18448 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
-2024-07-07T19:16:29.762+03:00  INFO 18448 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : OpenCV is Loaded.
-2024-07-07T19:16:30.102+03:00  INFO 18448 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
-2024-07-07T19:16:30.102+03:00  INFO 18448 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2024-07-07T19:16:30.102+03:00  INFO 18448 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
-2024-07-07T19:16:30.170+03:00  INFO 18448 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2024-07-07T19:16:30.170+03:00  INFO 18448 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2218 ms
-2024-07-07T19:16:30.596+03:00  WARN 18448 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
-
-Using generated security password: 2c6bf361-bbda-40e2-93ca-41a9b147c3f9
-
-This generated password is for development use only. Your security configuration must be updated before running your application in production.
-
-2024-07-07T19:16:30.849+03:00  INFO 18448 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5b251fb9, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@67d4c48d, org.springframework.security.web.context.SecurityContextHolderFilter@2b80e5a9, org.springframework.security.web.header.HeaderWriterFilter@23ca36d, org.springframework.web.filter.CorsFilter@230a73f2, org.springframework.security.web.authentication.logout.LogoutFilter@740fefc6, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2a50b32d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@36c7cbe1, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4b97b3d2, org.springframework.security.web.access.ExceptionTranslationFilter@5bde57ab, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5e7abaf7]
-2024-07-07T19:16:31.035+03:00  INFO 18448 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
-2024-07-07T19:16:31.038+03:00  INFO 18448 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
-2024-07-07T19:16:31.040+03:00  INFO 18448 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4168f3d9]]
-2024-07-07T19:16:31.041+03:00  INFO 18448 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
-2024-07-07T19:16:31.050+03:00  INFO 18448 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 3.821 seconds (process running for 4.313)
-2024-07-07T19:16:54.882+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2024-07-07T19:16:54.882+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2024-07-07T19:16:54.882+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
-2024-07-07T19:16:55.085+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to register user: Omer with password : Omer1234 and birthdate : 2023-03-01 
-2024-07-07T19:16:55.413+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : User registered successfully : Omer with password : Omer1234 and birthdate : 2023-03-01
-2024-07-07T19:16:57.546+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to logout user: rOmer
-2024-07-07T19:16:57.546+03:00  WARN 18448 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : System is not open
-2024-07-07T19:16:58.317+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to open system
-2024-07-07T19:16:58.317+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : System opened successfully
-2024-07-07T19:16:58.317+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to enter system
-2024-07-07T19:16:58.317+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 0
-2024-07-07T19:16:58.522+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MCIsImlhdCI6MTcyMDM2OTAxOCwiZXhwIjoxNzIwNDA1MDE4fQ.VL4RKLn4Aj-jJOtxYKGnQg7AeESqf-8gbbl1GlMq6Os and username: v0
-2024-07-07T19:17:05.891+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Attempting to login user: Omer
-2024-07-07T19:17:05.892+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.UserServiceImp             : Trying to login user: Omer
-2024-07-07T19:17:06.147+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.UserServiceImp             : User: Omer logged in
-2024-07-07T19:17:06.225+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : User: Omer logged in successfully
-2024-07-07T19:17:11.482+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History
-2024-07-07T19:17:13.635+03:00  INFO 18448 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store
-2024-07-07T19:17:42.693+03:00 ERROR 18448 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Error occurred : Username is not exist , Purchase History for Store
-2024-07-07T19:17:42.704+03:00  INFO 18448 --- [Trading_System] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
-2024-07-07T19:17:42.725+03:00  INFO 18448 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
-2024-07-07T19:17:42.725+03:00  INFO 18448 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4168f3d9]]
-2024-07-07T19:17:42.725+03:00  INFO 18448 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
-2024-07-07T19:18:09.466+03:00  INFO 3008 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 3008 (C:\Users\alex\Documents\trading_system\target\classes started by alex in C:\Users\alex\Documents\trading_system)
-2024-07-07T19:18:09.466+03:00  INFO 3008 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
-2024-07-07T19:18:10.340+03:00  INFO 3008 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : OpenCV is Loaded.
-2024-07-07T19:18:10.672+03:00  INFO 3008 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
-2024-07-07T19:18:10.685+03:00  INFO 3008 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2024-07-07T19:18:10.685+03:00  INFO 3008 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
-2024-07-07T19:18:10.746+03:00  INFO 3008 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2024-07-07T19:18:10.746+03:00  INFO 3008 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1222 ms
-2024-07-07T19:18:11.145+03:00  WARN 3008 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
-
-Using generated security password: 3fe77fb7-fd1a-46c8-aea3-62b2e6e7a98c
-
-This generated password is for development use only. Your security configuration must be updated before running your application in production.
-
-2024-07-07T19:18:11.381+03:00  INFO 3008 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@68b734a8, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1a464fa3, org.springframework.security.web.context.SecurityContextHolderFilter@7161457, org.springframework.security.web.header.HeaderWriterFilter@62cba181, org.springframework.web.filter.CorsFilter@4215e133, org.springframework.security.web.authentication.logout.LogoutFilter@3d299393, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@629984eb, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7b1e5e55, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5ccb85d6, org.springframework.security.web.access.ExceptionTranslationFilter@6f825516, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@e91b4f4]
-2024-07-07T19:18:11.539+03:00  INFO 3008 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
-2024-07-07T19:18:11.539+03:00  INFO 3008 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
-2024-07-07T19:18:11.539+03:00  INFO 3008 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7f73ce28]]
-2024-07-07T19:18:11.539+03:00  INFO 3008 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
-2024-07-07T19:18:11.554+03:00  INFO 3008 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 2.663 seconds (process running for 3.038)
-2024-07-07T19:18:25.612+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2024-07-07T19:18:25.612+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2024-07-07T19:18:25.612+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
-2024-07-07T19:18:25.782+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to register user: Omer with password : Omer1234 and birthdate : 2023-06-30 
-2024-07-07T19:18:26.061+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User registered successfully : Omer with password : Omer1234 and birthdate : 2023-06-30
-2024-07-07T19:18:28.114+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to logout user: rOmer
-2024-07-07T19:18:28.114+03:00  WARN 3008 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : System is not open
-2024-07-07T19:18:30.557+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to open system
-2024-07-07T19:18:30.557+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : System opened successfully
-2024-07-07T19:18:30.561+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to enter system
-2024-07-07T19:18:30.561+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 0
-2024-07-07T19:18:30.724+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MCIsImlhdCI6MTcyMDM2OTExMCwiZXhwIjoxNzIwNDA1MTEwfQ.PEHnqLfWxB-NFMGrEr_0dfWweNrY3VjggUYxx9nQtaw and username: v0
-2024-07-07T19:18:37.212+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to login user: Omer
-2024-07-07T19:18:37.212+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : Trying to login user: Omer
-2024-07-07T19:18:37.363+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : User: Omer logged in
-2024-07-07T19:18:37.421+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : User: Omer logged in successfully
-2024-07-07T19:18:39.461+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History
-2024-07-07T19:18:39.467+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store
-2024-07-07T19:19:11.545+03:00  INFO 3008 --- [Trading_System] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
-2024-07-07T19:28:47.206+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
-2024-07-07T19:28:47.206+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
-2024-07-07T19:28:54.784+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying opening store with name: Shufersal
-2024-07-07T19:28:54.784+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.UserServiceImp             : Trying opening store with name: Shufersal
-2024-07-07T19:28:54.784+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.UserServiceImp             : Finished opening store with name: Shufersal
-2024-07-07T19:28:54.784+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Finished opening store with name: Shufersal
-2024-07-07T19:28:56.551+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
-2024-07-07T19:28:56.552+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
-2024-07-07T19:28:57.031+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rOmer
-2024-07-07T19:28:57.034+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rOmer
-2024-07-07T19:30:48.303+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to logout user: rOmer
-2024-07-07T19:30:48.304+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.UserServiceImp             : Trying to logout user: rOmer
-2024-07-07T19:30:48.305+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.UserServiceImp             : User: rOmer logged out
-2024-07-07T19:30:48.305+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : User: rOmer logged out successfully
-2024-07-07T19:30:48.305+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to enter system
-2024-07-07T19:30:48.306+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 1
-2024-07-07T19:30:48.306+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MSIsImlhdCI6MTcyMDM2OTg0OCwiZXhwIjoxNzIwNDA1ODQ4fQ.m0E7X0ldCywsxdRrbkdZGU4Elpwb4gfDa_dY0XGMj94 and username: v1
-2024-07-07T19:30:54.066+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to login user: Omer
-2024-07-07T19:30:54.066+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : Trying to login user: Omer
-2024-07-07T19:30:54.132+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : User: Omer logged in
-2024-07-07T19:30:54.132+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : User: Omer logged in successfully
-2024-07-07T19:31:00.135+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
-2024-07-07T19:31:00.137+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
-2024-07-07T19:31:00.652+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rOmer
-2024-07-07T19:31:00.654+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rOmer
-2024-07-07T19:33:36.198+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History for Store Shufersal
-2024-07-07T19:33:36.200+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store Shufersal
-2024-07-07T19:35:54.656+03:00  WARN 3008 --- [Trading_System] [http-nio-8082-exec-10] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'storeName' for method parameter type String is not present]
-2024-07-07T19:35:54.687+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History for Store Shufersal
-2024-07-07T19:35:54.687+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store Shufersal
-2024-07-07T19:36:13.632+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
-2024-07-07T19:36:13.632+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
-2024-07-07T19:36:14.322+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rOmer
-2024-07-07T19:36:14.335+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rOmer
-2024-07-07T19:36:15.717+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store Shufersal
-2024-07-07T19:36:15.719+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store Shufersal
-2024-07-07T19:36:16.611+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
-2024-07-07T19:36:16.611+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
-2024-07-07T19:36:19.477+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
-2024-07-07T19:36:19.480+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
-2024-07-07T19:36:20.070+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rOmer
-2024-07-07T19:36:20.070+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rOmer
-2024-07-07T19:36:21.449+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History for Store Shufersal
-2024-07-07T19:36:21.449+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store Shufersal
-2024-07-07T19:37:54.102+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History for Store Shufersal
-2024-07-07T19:37:54.102+03:00  INFO 3008 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store Shufersal
-2024-07-07T19:38:09.915+03:00  INFO 3008 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
-2024-07-07T19:38:09.915+03:00  INFO 3008 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7f73ce28]]
-2024-07-07T19:38:09.915+03:00  INFO 3008 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-07-07T18:26:30.252+03:00  INFO 11292 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@68b734a8, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1a464fa3, org.springframework.security.web.context.SecurityContextHolderFilter@7161457, org.springframework.security.web.header.HeaderWriterFilter@62cba181, org.springframework.web.filter.CorsFilter@4215e133, org.springframework.security.web.authentication.logout.LogoutFilter@3d299393, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@629984eb, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7b1e5e55, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5ccb85d6, org.springframework.security.web.access.ExceptionTranslationFilter@6f825516, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@e91b4f4]
+2024-07-07T18:26:30.572+03:00  INFO 11292 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
+2024-07-07T18:26:30.580+03:00  INFO 11292 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-07-07T18:26:30.585+03:00  INFO 11292 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7f73ce28]]
+2024-07-07T18:26:30.586+03:00  INFO 11292 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-07-07T18:26:30.604+03:00  INFO 11292 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 5.722 seconds (process running for 6.61)
+2024-07-07T18:27:30.543+03:00  INFO 11292 --- [Trading_System] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2024-07-07T18:29:25.955+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-07T18:29:25.956+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-07-07T18:29:25.958+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-07-07T18:29:26.085+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to logout user: radiay
+2024-07-07T18:29:26.087+03:00  WARN 11292 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-07T18:29:27.935+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-07T18:29:27.936+03:00  WARN 11292 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : System cannot be opened without at least one admin registered
+2024-07-07T18:29:27.936+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-07T18:29:27.936+03:00  WARN 11292 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : System is not open, entry forbidden
+2024-07-07T18:29:46.176+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to register user: adiay with password : Ac123456 and birthdate : 2002-03-18 
+2024-07-07T18:29:46.348+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : User registered successfully : adiay with password : Ac123456 and birthdate : 2002-03-18
+2024-07-07T18:29:46.399+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-07T18:29:46.399+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : System opened successfully
+2024-07-07T18:29:46.400+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-07T18:29:46.400+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 0
+2024-07-07T18:29:46.510+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MCIsImlhdCI6MTcyMDM2NjE4NiwiZXhwIjoxNzIwNDAyMTg2fQ.ClVNfFwCGdDhz9lZYe_mQqdHL0qfJmacER-tLFyTCnc and username: v0
+2024-07-07T18:29:53.643+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to login user: adiay
+2024-07-07T18:29:53.643+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : Trying to login user: adiay
+2024-07-07T18:29:53.760+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : User: adiay logged in
+2024-07-07T18:29:53.797+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : User: adiay logged in successfully
+2024-07-07T18:29:57.842+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying opening store with name: segsg
+2024-07-07T18:29:57.845+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.UserServiceImp             : Trying opening store with name: segsg
+2024-07-07T18:29:57.848+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.UserServiceImp             : Finished opening store with name: segsg
+2024-07-07T18:29:57.848+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Finished opening store with name: segsg
+2024-07-07T18:29:59.663+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-07T18:29:59.667+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-07T18:30:00.464+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-07T18:30:00.468+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-07T18:30:02.812+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store segsg
+2024-07-07T18:30:02.817+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store segsg
+2024-07-07T18:30:03.458+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-07T18:30:03.463+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-07T18:30:27.239+03:00  WARN 11292 --- [Trading_System] [http-nio-8082-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'category' for method parameter type int is not present]
+2024-07-07T18:30:37.434+03:00  WARN 11292 --- [Trading_System] [http-nio-8082-exec-3] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'category' for method parameter type int is not present]
+2024-07-07T18:30:46.902+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-07T18:30:46.906+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-07T18:30:48.064+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-07T18:30:48.068+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-07T18:31:01.551+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-07T18:31:01.556+03:00  INFO 11292 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-07T18:31:56.993+03:00  INFO 11292 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-07-07T18:31:56.994+03:00  INFO 11292 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7f73ce28]]
+2024-07-07T18:31:56.995+03:00  INFO 11292 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
