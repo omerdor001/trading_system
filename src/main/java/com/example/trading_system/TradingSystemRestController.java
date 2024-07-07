@@ -569,12 +569,132 @@ public class TradingSystemRestController {
         return tradingSystem.addXorDiscount("r"+username, token, storeName);
     }
 
-    @DeleteMapping("/store/{storeName}/discounts/{selectedIndex}")
+    @DeleteMapping("/store/{storeName}/discounts/remove/{selectedIndex}")
     public ResponseEntity<String> removeDiscount(@RequestParam String username,
                                                  @RequestParam String token,
                                                  @PathVariable String storeName,
                                                  @PathVariable int selectedIndex) {
         return tradingSystem.removeDiscount(username, token, storeName, selectedIndex);
+    }
+
+    @PostMapping("/setFirstDiscount/{selectedDiscountIndex}/{selectedFirstIndex}")
+    public ResponseEntity<String> setFirstDiscount(
+            @RequestParam String username,
+            @RequestParam String token,
+            @PathVariable String storeName,
+            @PathVariable int selectedDiscountIndex,
+            @PathVariable int selectedFirstIndex) {
+        return tradingSystem.setFirstDiscount("r" + username, token, storeName, selectedDiscountIndex, selectedFirstIndex);
+    }
+
+    @PostMapping("/setSecondDiscount/{selectedDiscountIndex}/{selectedSecondIndex}")
+    public ResponseEntity<String> setSecondDiscount(
+            @RequestParam String username,
+            @RequestParam String token,
+            @PathVariable String storeName,
+            @PathVariable int selectedDiscountIndex,
+            @PathVariable int selectedSecondIndex) {
+        return tradingSystem.setSecondDiscount("r" + username, token, storeName, selectedDiscountIndex, selectedSecondIndex);
+    }
+
+    @PostMapping("/setFirstCondition/{selectedDiscountIndex}/{selectedSecondIndex}")
+    public ResponseEntity<String> setFirstCondition(
+            @RequestParam String username,
+            @RequestParam String token,
+            @PathVariable String storeName,
+            @PathVariable int selectedDiscountIndex,
+            @PathVariable int selectedSecondIndex) {
+        return tradingSystem.setFirstCondition("r" + username, token, storeName, selectedDiscountIndex, selectedSecondIndex);
+    }
+
+    @PostMapping("/setSecondCondition/{selectedDiscountIndex}/{selectedSecondIndex}")
+    public ResponseEntity<String> setSecondCondition(
+            @RequestParam String username,
+            @RequestParam String token,
+            @PathVariable String storeName,
+            @PathVariable int selectedDiscountIndex,
+            @PathVariable int selectedSecondIndex) {
+        return tradingSystem.setSecondCondition("r" + username, token, storeName, selectedDiscountIndex, selectedSecondIndex);
+    }
+
+    @PostMapping("/setThenDiscount/{selectedDiscountIndex}/{selectedThenIndex}")
+    public ResponseEntity<String> setThenDiscount(
+            @RequestParam String username,
+            @RequestParam String token,
+            @PathVariable String storeName,
+            @PathVariable int selectedDiscountIndex,
+            @PathVariable int selectedThenIndex) {
+        return tradingSystem.setThenDiscount("r" + username, token, storeName, selectedDiscountIndex, selectedThenIndex);
+    }
+
+    @PostMapping("/setCategoryDiscount/{selectedDiscountIndex}/{category}")
+    public ResponseEntity<String> setCategoryDiscount(
+            @RequestParam String username,
+            @RequestParam String token,
+            @PathVariable String storeName,
+            @PathVariable int selectedDiscountIndex,
+            @PathVariable int category) {
+        return tradingSystem.setCategoryDiscount("r" + username, token, storeName, selectedDiscountIndex, category);
+    }
+
+    @PostMapping("/setProductIdDiscount/{selectedDiscountIndex}/{productId}")
+    public ResponseEntity<String> setProductIdDiscount(
+            @RequestParam String username,
+            @RequestParam String token,
+            @PathVariable String storeName,
+            @PathVariable int selectedDiscountIndex,
+            @PathVariable int productId) {
+        return tradingSystem.setProductIdDiscount("r" + username, token, storeName, selectedDiscountIndex, productId);
+    }
+
+    @PostMapping("/setPercentDiscount/{selectedDiscountIndex}/{discountPercent}")
+    public ResponseEntity<String> setPercentDiscount(
+            @RequestParam String username,
+            @RequestParam String token,
+            @PathVariable String storeName,
+            @PathVariable int selectedDiscountIndex,
+            @PathVariable double discountPercent) {
+        return tradingSystem.setPercentDiscount("r" + username, token, storeName, selectedDiscountIndex, discountPercent);
+    }
+
+    @PostMapping("/setDeciderDiscount/{selectedDiscountIndex}/{selectedDeciderIndex}")
+    public ResponseEntity<String> setDeciderDiscount(
+            @RequestParam String username,
+            @RequestParam String token,
+            @PathVariable String storeName,
+            @PathVariable int selectedDiscountIndex,
+            @PathVariable int selectedDeciderIndex) {
+        return tradingSystem.setDeciderDiscount("r" + username, token, storeName, selectedDiscountIndex, selectedDeciderIndex);
+    }
+
+    @PostMapping("/setTotalSum/{selectedConditionIndex}/{newSum}")
+    public ResponseEntity<String> setTotalSum(
+            @RequestParam String username,
+            @RequestParam String token,
+            @PathVariable String storeName,
+            @PathVariable int selectedConditionIndex,
+            @PathVariable double newSum) {
+        return tradingSystem.setTotalSum("r" + username, token, storeName, selectedConditionIndex, newSum);
+    }
+
+    @PostMapping("/setCountCondition/{selectedConditionIndex}/{newCount}")
+    public ResponseEntity<String> setCountCondition(
+            @RequestParam String username,
+            @RequestParam String token,
+            @PathVariable String storeName,
+            @PathVariable int selectedConditionIndex,
+            @PathVariable int newCount) {
+        return tradingSystem.setCountCondition("r" + username, token, storeName, selectedConditionIndex, newCount);
+    }
+
+    @PostMapping("/setCategoryCondition/{selectedConditionIndex}/{newCategory}")
+    public ResponseEntity<String> setCategoryCondition(
+            @RequestParam String username,
+            @RequestParam String token,
+            @PathVariable String storeName,
+            @PathVariable int selectedConditionIndex,
+            @PathVariable int newCategory) {
+        return tradingSystem.setCategoryCondition("r" + username, token, storeName, selectedConditionIndex, newCategory);
     }
     //endregion
 
