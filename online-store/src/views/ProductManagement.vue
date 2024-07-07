@@ -8,8 +8,14 @@
       </div>
       <div v-if="selectedField">
         <h3>{{ selectedField }}</h3>
-        <InputText v-model="newDetail" placeholder="New Detail" />
-        <PrimeButton label="Change" @click="updateField(selectedField)" />
+        <div v-if="selectedField === 'Category'">
+          <PrimeDropdown v-model="selectedCategoryIndex" :options="categoryOptions" optionLabel="label" optionValue="index" placeholder="Select a Category" />
+          <PrimeButton label="Change" @click="updateField(selectedField)" />
+        </div>
+        <div v-else>
+          <InputText v-model="newDetail" placeholder="New Detail" />
+          <PrimeButton label="Change" @click="updateField(selectedField)" />
+        </div>
       </div>
     </div>
     <PrimeToast />
@@ -18,10 +24,11 @@
 
 <script>
 import axios from 'axios';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { InputText } from 'primevue/inputtext';
 import { Button as PrimeButton } from 'primevue/button';
+import { PrimeDropdown } from 'primevue/dropdown';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { useToast } from 'primevue/usetoast';
 
@@ -30,21 +37,27 @@ export default {
   components: {
     InputText,
     PrimeButton,
+    PrimeDropdown,
     SiteHeader
   },
   setup() {
     const fields = ref(['Name', 'Description', 'Price', 'Quantity', 'Rating', 'Category', 'Add Key-Word', 'Remove Key-Word']);
     const selectedField = ref('');
     const newDetail = ref('');
+    const categoryOptions = ref([]);
+    const selectedCategoryIndex = ref(null); 
     const route = useRoute();
     const toast = useToast();
-    const storeName = route.params.storeName;
-    const productId = route.params.productId;
+    const storeName = ref('');
+    const productId = ref('');
     const userName = localStorage.getItem('username');
     const token = localStorage.getItem('token');
 
     const selectField = (field) => {
       selectedField.value = field;
+      if (field === 'Category') {
+        fetchCategories();
+      }
     };
 
     const updateField = async (field) => {
@@ -67,7 +80,7 @@ export default {
             updateFunction = updateProductRating;
             break;
           case 'Category':
-          //  updateFunction = updateProductCategory;
+            updateFunction = updateProductCategory;
             break;
           case 'Add Key-Word':
             updateFunction = addProductKeyword;
@@ -79,26 +92,43 @@ export default {
             alert('Unsupported field');
             return;
         }
-        await updateFunction(newDetail.value);
+        const detail = field === 'Category' ? selectedCategoryIndex.value : newDetail.value;
+        await updateFunction(detail);
         toast.add({ severity: 'success', summary: 'Success', detail: `${field} updated successfully` });
       } catch (error) {
         console.error('Failed to update product field', error);
-        toast.add({ severity: 'error', summary: 'Error', detail: `Failed to update ${field} - ${error.message}`,life:3000 });
+        toast.add({ severity: 'error', summary: 'Error', detail: `Failed to update ${field} - ${error.message}`, life: 3000 });
       }
     };
 
-   const updateProductName = async (newName) => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost:8082/api/trading/categories', {
+          params: {
+            username: userName,
+            token: token,
+          }
+        });
+        const categoryArray = response.data.slice(1, response.data.length - 1).split(',');
+        categoryOptions.value = categoryArray.map((category, index) => ({ label: category, value: category, index: index + 1 }));
+      } catch (error) {
+        console.error('Failed to fetch categories', error);
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch categories' });
+      }
+    };
+
+    const updateProductName = async (newName) => {
       try {
         const response = await axios.post('http://localhost:8082/api/trading/setProductName', null, {
           params: {
-          username: userName,
-          token: token,
-          storeName: storeName,
-          productId: productId,
-          productName: newName
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            productName: newName
           }
         });
-        return response.data; 
+        return response.data;
       } catch (error) {
         throw new Error(`Failed to update product name: ${error.message}`);
       }
@@ -106,36 +136,36 @@ export default {
 
     const updateProductDescription = async (newDescription) => {
       try {
-        const response = await axios.post('http://localhost:8082/api/trading/setProductDescription', null , {
+        const response = await axios.post('http://localhost:8082/api/trading/setProductDescription', null, {
           params: {
-          username: userName,
-          token: token,
-          storeName: storeName,
-          productId: productId,
-          productDescription: newDescription
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            productDescription: newDescription
           }
         });
-        return response.data; 
+        return response.data;
       } catch (error) {
         throw new Error(`Failed to update product description: ${error.message}`);
       }
     };
 
-     const updateProductPrice = async (newPrice) => {
+    const updateProductPrice = async (newPrice) => {
       if (isNaN(parseFloat(newPrice)) || !isFinite(newPrice)) {
         throw new Error('New price must be a valid number');
       }
       try {
-        const response = await axios.post('http://localhost:8082/api/trading/setProductPrice',null,{
+        const response = await axios.post('http://localhost:8082/api/trading/setProductPrice', null, {
           params: {
-          username: userName,
-          token: token,
-          storeName: storeName,
-          productId: productId,
-          productPrice: newPrice
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            productPrice: newPrice
           }
         });
-        return response.data; 
+        return response.data;
       } catch (error) {
         throw new Error(`Failed to update product price: ${error.message}`);
       }
@@ -146,53 +176,70 @@ export default {
         throw new Error('Quantity must be a non-negative integer');
       }
       try {
-        const response = await axios.post('http://localhost:8082/api/trading/setProductQuantity',null, {
+        const response = await axios.post('http://localhost:8082/api/trading/setProductQuantity', null, {
           params: {
-          username: userName,
-          token: token,
-          storeName: storeName,
-          productId: productId,
-          productQuantity: newQuantity
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            productQuantity: newQuantity
           }
         });
-        return response.data; 
+        return response.data;
       } catch (error) {
         throw new Error(`Failed to update product quantity: ${error.message}`);
       }
     };
 
     const updateProductRating = async (newRating) => {
-      if (isNaN(newRating) || newRating < 0 || newRating > 11) {
+      if (isNaN(newRating) || newRating < 0 || newRating > 10) {
         throw new Error('Rating must be a number between 1 and 10');
       }
       try {
-        const response = await axios.post('http://localhost:8082/api/trading/setRating',null,{
-        params: {
-          username: userName,
-          token: token,
-          storeName: storeName,
-          productId: productId,
-          rating: newRating
-        }
+        const response = await axios.post('http://localhost:8082/api/trading/setRating', null, {
+          params: {
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            rating: newRating
+          }
         });
-        return response.data; 
+        return response.data;
       } catch (error) {
         throw new Error(`Failed to update product rating: ${error.message}`);
       }
     };
 
+    const updateProductCategory = async (selectedIndex) => {
+      try {
+        const response = await axios.post('http://localhost:8082/api/trading/setCategory', null, {
+          params: {
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            category: selectedIndex-1,
+          }
+        });
+        return response.data;
+      } catch (error) {
+        throw new Error(`Failed to update product category: ${error.message}`);
+      }
+    };
+
     const addProductKeyword = async (keyword) => {
       try {
-        const response = await axios.post('http://localhost:8082/api/trading/addKeyword',null,{
-        params: {
-          username: userName,
-          token: token,
-          storeName: storeName,
-          productId: productId,
-          keyword: keyword
-        }
+        const response = await axios.post('http://localhost:8082/api/trading/addKeyword', null, {
+          params: {
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            keyword: keyword
+          }
         });
-        return response.data; 
+        return response.data;
       } catch (error) {
         throw new Error(`Failed to add product keyword: ${error.message}`);
       }
@@ -200,22 +247,28 @@ export default {
 
     const removeProductKeyword = async (keyword) => {
       try {
-        const response = await axios.post('http://localhost:8082/api/trading/removeKeyword',null,{
-        params: {
-          username: userName,
-          token: token,
-          storeName: storeName,
-          productId: productId,
-          keyword: keyword
-        }
+        const response = await axios.post('http://localhost:8082/api/trading/removeKeyword', null, {
+          params: {
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            keyword: keyword
+          }
         });
-        return response.data; 
+        return response.data;
       } catch (error) {
         throw new Error(`Failed to remove product keyword: ${error.message}`);
       }
     };
 
-
+    onMounted(() => {
+      storeName.value = route.params.storeName;
+      productId.value = route.params.productId;
+      if (selectedField.value === 'Category') {
+        fetchCategories();
+      }
+    });
 
     return {
       fields,
@@ -223,6 +276,11 @@ export default {
       newDetail,
       selectField,
       updateField,
+      categoryOptions,
+      selectedCategoryIndex, 
+      userName,
+      token,
+      toast
     };
   }
 };
