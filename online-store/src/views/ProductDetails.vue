@@ -19,16 +19,6 @@
               <p><strong>Quantity:</strong> <input type="number" v-model="quantity" /></p>
               <PrimeButton label="Add To Cart" @click="addToCart" class="action-button"/>
               <PrimeButton label="Buy It Now" @click="buyNow" class="action-button"/>
-              <PrimeButton label="Place Bid" @click="priceDialogVisible=true" class="action-button"/>
-              <Dialog header="Place Bid" v-model="priceDialogVisible">
-              <div class="p-field">
-                <label for="bidPrice">Enter Price</label>
-                  <InputNumber v-model="bidPrice" :min="0" mode="currency" currency="USD" locale="en-US" />
-              </div>
-              <div class="p-field">
-                  <PrimeButton label="Submit" @click="submitBid"/>
-              </div>
-              </Dialog>
             </div>
           </div>
           <div class="product-ids">
@@ -49,20 +39,12 @@ import { useRouter } from 'vue-router';
 import { Button as PrimeButton } from 'primevue/button';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
-import  Dialog  from 'primevue/dialog';
-import  InputNumber from 'primevue/inputnumber';
-import axios from 'axios';
-
-
-
 
 export default defineComponent({
   name: 'ProductDetails',
   components: {
     SiteHeader,
     PrimeButton,
-    Dialog,
-    InputNumber,
     Toast
   },
   props: {
@@ -75,8 +57,6 @@ export default defineComponent({
     const router = useRouter();
     const toast = useToast();
     const username = ref(localStorage.getItem('username') || '');
-    var priceDialogVisible = ref(false);
-    const bidPrice = ref(null); // Ensure price is defined
     const product = ref({
       name: 'White Unisex Tee',
       description: 'Sizes: XS, S, M, L, XL, XXL\nType: T-shirt\nFor: Men, Women',
@@ -93,7 +73,6 @@ export default defineComponent({
       router.push({name: 'StoreDetails', params: {storeId: product.value.storeId}});
     };
 
-
     const addToCart = () => {
       // Simulate adding to cart with a success message
       if (quantity.value > 0) {
@@ -107,26 +86,6 @@ export default defineComponent({
       console.log('Buying now:', product.value.name, quantity.value);
     };
 
-    const submitBid = async () => {
-  try {
-    const product_id = product.value.productId
-    const token = localStorage.getItem('token')
-    await axios.post(`/store/${product.value.storeId}/place-bid`, null, {
-      params: {
-        username,
-        token,
-        product_id,
-        bidPrice : bidPrice.value
-      }
-    });
-    priceDialogVisible.value = false;
-    alert('Bid placed successfully!');
-  } catch (error) {
-    console.error('Error placing bid:', error);
-    alert('Failed to place bid. Please try again.');
-  }
-};
-
     const logout = () => {
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('username');
@@ -135,14 +94,12 @@ export default defineComponent({
 
     return {
       username,
-      priceDialogVisible,
       product,
       quantity,
       backToStore,
       addToCart,
       buyNow,
-      logout,
-      submitBid
+      logout
     };
   }
 });
