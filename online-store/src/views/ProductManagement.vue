@@ -70,10 +70,10 @@ export default {
           //  updateFunction = updateProductCategory;
             break;
           case 'Add Key-Word':
-            updateFunction = updateProductPrice;
+            updateFunction = addProductKeyword;
             break;
           case 'Remove Key-Word':
-            updateFunction = updateProductPrice;
+            updateFunction = removeProductKeyword;
             break;
           default:
             alert('Unsupported field');
@@ -180,6 +180,42 @@ export default {
         throw new Error(`Failed to update product rating: ${error.message}`);
       }
     };
+
+    const addProductKeyword = async (keyword) => {
+      try {
+        const response = await axios.post('http://localhost:8082/api/trading/addKeyword',null,{
+        params: {
+          username: userName,
+          token: token,
+          storeName: storeName,
+          productId: productId,
+          keyword: keyword
+        }
+        });
+        return response.data; 
+      } catch (error) {
+        throw new Error(`Failed to add product keyword: ${error.message}`);
+      }
+    };
+
+    const removeProductKeyword = async (keyword) => {
+      try {
+        const response = await axios.post('http://localhost:8082/api/trading/removeKeyword',null,{
+        params: {
+          username: userName,
+          token: token,
+          storeName: storeName,
+          productId: productId,
+          keyword: keyword
+        }
+        });
+        return response.data; 
+      } catch (error) {
+        throw new Error(`Failed to remove product keyword: ${error.message}`);
+      }
+    };
+
+
 
     return {
       fields,

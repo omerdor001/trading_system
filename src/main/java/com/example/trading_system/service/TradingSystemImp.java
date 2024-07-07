@@ -12,8 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -204,7 +206,7 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            keyWordsList = Arrays.asList(keyWords.split(","));
+            keyWordsList = new ArrayList<>(Arrays.asList(keyWords.split(",")));
             marketService.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWordsList);
         } catch (Exception e) {
             logger.error("Error occurred while adding product: {} to store: {}: {}", product_name, store_name, e.getMessage());

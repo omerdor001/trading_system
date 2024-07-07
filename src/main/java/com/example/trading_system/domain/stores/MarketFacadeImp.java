@@ -681,12 +681,15 @@ public class MarketFacadeImp implements MarketFacade {
             }
             user.getRoleByStoreId(storeName).addKeywordToProduct(username, storeName, productId, keyword);
             store.addKeyWordToProduct(productId, keyword);
-        } finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
             return true;
-        }
-    }
+            } catch (Exception e) {
+              lock.unlock();
+              storeLocks.remove(storeName, lock);
+              throw e;
+          }
+       }
 
 
     @Override
