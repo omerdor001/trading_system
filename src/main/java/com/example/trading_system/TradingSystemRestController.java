@@ -577,7 +577,15 @@ public class TradingSystemRestController {
         return tradingSystem.removeDiscount(username, token, storeName, selectedIndex);
     }
 
-    @PostMapping("/setFirstDiscount/{selectedDiscountIndex}/{selectedFirstIndex}")
+    @DeleteMapping("/store/{storeName}/discounts/remove/{selectedIndex}")
+    public ResponseEntity<String> removeCondition(@RequestParam String username,
+                                                 @RequestParam String token,
+                                                 @PathVariable String storeName,
+                                                 @PathVariable int selectedIndex) {
+        return tradingSystem.removeCondition(username, token, storeName, selectedIndex);
+    }
+
+    @PostMapping("/store/{storeName}/discounts/setFirstDiscount/{selectedDiscountIndex}/{selectedFirstIndex}")
     public ResponseEntity<String> setFirstDiscount(
             @RequestParam String username,
             @RequestParam String token,
@@ -587,7 +595,7 @@ public class TradingSystemRestController {
         return tradingSystem.setFirstDiscount("r" + username, token, storeName, selectedDiscountIndex, selectedFirstIndex);
     }
 
-    @PostMapping("/setSecondDiscount/{selectedDiscountIndex}/{selectedSecondIndex}")
+    @PostMapping("/store/{storeName}/discounts/setSecondDiscount/{selectedDiscountIndex}/{selectedSecondIndex}")
     public ResponseEntity<String> setSecondDiscount(
             @RequestParam String username,
             @RequestParam String token,
@@ -597,7 +605,7 @@ public class TradingSystemRestController {
         return tradingSystem.setSecondDiscount("r" + username, token, storeName, selectedDiscountIndex, selectedSecondIndex);
     }
 
-    @PostMapping("/setFirstCondition/{selectedDiscountIndex}/{selectedSecondIndex}")
+    @PostMapping("/store/{storeName}/discounts/setFirstCondition/{selectedDiscountIndex}/{selectedSecondIndex}")
     public ResponseEntity<String> setFirstCondition(
             @RequestParam String username,
             @RequestParam String token,
@@ -607,7 +615,7 @@ public class TradingSystemRestController {
         return tradingSystem.setFirstCondition("r" + username, token, storeName, selectedDiscountIndex, selectedSecondIndex);
     }
 
-    @PostMapping("/setSecondCondition/{selectedDiscountIndex}/{selectedSecondIndex}")
+    @PostMapping("/store/{storeName}/discounts/setSecondCondition/{selectedDiscountIndex}/{selectedSecondIndex}")
     public ResponseEntity<String> setSecondCondition(
             @RequestParam String username,
             @RequestParam String token,
@@ -617,7 +625,7 @@ public class TradingSystemRestController {
         return tradingSystem.setSecondCondition("r" + username, token, storeName, selectedDiscountIndex, selectedSecondIndex);
     }
 
-    @PostMapping("/setThenDiscount/{selectedDiscountIndex}/{selectedThenIndex}")
+    @PostMapping("/store/{storeName}/discounts/setThenDiscount/{selectedDiscountIndex}/{selectedThenIndex}")
     public ResponseEntity<String> setThenDiscount(
             @RequestParam String username,
             @RequestParam String token,
@@ -627,7 +635,7 @@ public class TradingSystemRestController {
         return tradingSystem.setThenDiscount("r" + username, token, storeName, selectedDiscountIndex, selectedThenIndex);
     }
 
-    @PostMapping("/setCategoryDiscount/{selectedDiscountIndex}/{category}")
+    @PostMapping("/store/{storeName}/discounts/setCategoryDiscount/{selectedDiscountIndex}/{category}")
     public ResponseEntity<String> setCategoryDiscount(
             @RequestParam String username,
             @RequestParam String token,
@@ -637,7 +645,7 @@ public class TradingSystemRestController {
         return tradingSystem.setCategoryDiscount("r" + username, token, storeName, selectedDiscountIndex, category);
     }
 
-    @PostMapping("/setProductIdDiscount/{selectedDiscountIndex}/{productId}")
+    @PostMapping("/store/{storeName}/discounts/setProductIdDiscount/{selectedDiscountIndex}/{productId}")
     public ResponseEntity<String> setProductIdDiscount(
             @RequestParam String username,
             @RequestParam String token,
@@ -647,7 +655,7 @@ public class TradingSystemRestController {
         return tradingSystem.setProductIdDiscount("r" + username, token, storeName, selectedDiscountIndex, productId);
     }
 
-    @PostMapping("/setPercentDiscount/{selectedDiscountIndex}/{discountPercent}")
+    @PostMapping("/store/{storeName}/discounts/setPercentDiscount/{selectedDiscountIndex}/{discountPercent}")
     public ResponseEntity<String> setPercentDiscount(
             @RequestParam String username,
             @RequestParam String token,
@@ -657,7 +665,7 @@ public class TradingSystemRestController {
         return tradingSystem.setPercentDiscount("r" + username, token, storeName, selectedDiscountIndex, discountPercent);
     }
 
-    @PostMapping("/setDeciderDiscount/{selectedDiscountIndex}/{selectedDeciderIndex}")
+    @PostMapping("/store/{storeName}/discounts/setDeciderDiscount/{selectedDiscountIndex}/{selectedDeciderIndex}")
     public ResponseEntity<String> setDeciderDiscount(
             @RequestParam String username,
             @RequestParam String token,
@@ -667,7 +675,7 @@ public class TradingSystemRestController {
         return tradingSystem.setDeciderDiscount("r" + username, token, storeName, selectedDiscountIndex, selectedDeciderIndex);
     }
 
-    @PostMapping("/setTotalSum/{selectedConditionIndex}/{newSum}")
+    @PostMapping("/store/{storeName}/discounts/setTotalSum/{selectedConditionIndex}/{newSum}")
     public ResponseEntity<String> setTotalSum(
             @RequestParam String username,
             @RequestParam String token,
@@ -677,7 +685,7 @@ public class TradingSystemRestController {
         return tradingSystem.setTotalSum("r" + username, token, storeName, selectedConditionIndex, newSum);
     }
 
-    @PostMapping("/setCountCondition/{selectedConditionIndex}/{newCount}")
+    @PostMapping("/store/{storeName}/discounts/setCountCondition/{selectedConditionIndex}/{newCount}")
     public ResponseEntity<String> setCountCondition(
             @RequestParam String username,
             @RequestParam String token,
@@ -687,7 +695,7 @@ public class TradingSystemRestController {
         return tradingSystem.setCountCondition("r" + username, token, storeName, selectedConditionIndex, newCount);
     }
 
-    @PostMapping("/setCategoryCondition/{selectedConditionIndex}/{newCategory}")
+    @PostMapping("/store/{storeName}/discounts/setCategoryCondition/{selectedConditionIndex}/{newCategory}")
     public ResponseEntity<String> setCategoryCondition(
             @RequestParam String username,
             @RequestParam String token,
