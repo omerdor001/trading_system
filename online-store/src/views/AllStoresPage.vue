@@ -2,21 +2,22 @@
   <div>
     <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
     <div class="main-content">
-      <h1>Search Results for "{{ $route.query.name }}"</h1>
-      <div v-if="stores.length">
+      <h1>All Stores</h1>
+      <div v-if="stores.length === 0">
+        <p>No stores found.</p>
+      </div>
+      <div v-else>
         <ul>
           <li v-for="store in stores" :key="store.id" class="store-item">
             <img :src="store.image" alt="Store Image" class="store-image">
             <div class="store-details">
               <h3>{{ store.name }}</h3>
               <p>{{ store.description }}</p>
+              <p>Rating: {{ store.rating }}</p>
               <PrimeButton label="View Products" @click="viewProducts(store.id)" class="view-products-button"/>
             </div>
           </li>
         </ul>
-      </div>
-      <div v-else>
-        <p>No stores found with the name "{{ $route.query.name }}".</p>
       </div>
     </div>
     <PrimeToast ref="toast" />
@@ -24,72 +25,77 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue';
+import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
 import PrimeButton from 'primevue/button';
 import PrimeToast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
 
-export default defineComponent({
-  name: 'StoreSearchResults',
+export default {
+  name: 'AllStoresPage',
   components: {
     SiteHeader,
     PrimeButton,
     PrimeToast
   },
-  setup() {
-    const router = useRouter();
-    const toast = useToast();
-    const username = ref(localStorage.getItem('username') || '');
-    const stores = ref([]);
+  data() {
+    return {
+      stores: [],
+      username: localStorage.getItem('username') || ''
+    };
+  },
+  created() {
+    this.fetchStores();
+  },
+  methods: {
+    async fetchStores() {
+      const toast = useToast();
+      const token = localStorage.getItem('token');
+      const username = localStorage.getItem('username');
+      if (!token) {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Invalid token was supplied', life: 3000 });
+        return;
+      }
 
-    onMounted(() => {
-      const storeName = router.currentRoute.value.query.name;
-      fetchStores(storeName);
-    });
-
-    const fetchStores = async (storeName) => {
       try {
-        const response = await axios.get('http://localhost:8082/api/trading/stores/search/name', {
+        const response = await axios.get('http://localhost:8082/api/trading/stores', {
           params: {
-            name: storeName,
-            userName: username.value,
-            token: localStorage.getItem('token')
+            userName: username,
+            token: token
           }
         });
-        stores.value = response.data;
+        this.stores = response.data;
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to load stores', life: 3000 });
-        console.error('Error fetching stores:', error);
       }
-    };
-
-    const viewProducts = (storeId) => {
-      router.push({ name: 'StoreDetails', params: { storeId } });
-    };
-
-    const logout = () => {
+    },
+    viewProducts(storeId) {
+      this.$router.push({ name: 'StoreDetails', params: { storeId } });
+    },
+    logout() {
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('username');
       localStorage.removeItem('token');
-      router.push('/login');
-    };
-
-    return {
-      username,
-      stores,
-      viewProducts,
-      logout
-    };
+      this.$router.push('/login');
+    }
   }
-});
+};
 </script>
 
 <style scoped>
 .main-content {
   padding: 20px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
 }
 
 .store-item {
@@ -108,5 +114,9 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.view-products-button {
+  margin-top: 10px;
 }
 </style>

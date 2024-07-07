@@ -308,7 +308,7 @@ public class TradingSystemRestController {
 
     @GetMapping("/stores")
     public ResponseEntity<String> getAllStores(@RequestParam String userName, @RequestParam String token) {
-        return tradingSystem.getAllStores(userName, token);
+        return tradingSystem.getAllStores("r"+ userName, token);
     }
 
     @GetMapping("/stores-detailed-info")

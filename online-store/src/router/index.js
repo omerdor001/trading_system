@@ -9,6 +9,7 @@ import MyStoresIOwn from '@/views/MyStoresIOwn.vue';
 import CreateSuspension from '@/views/CreateSuspension.vue';
 import EndSuspension from '@/views/EndSuspension.vue';
 import WatchSuspensions from '@/views/WatchSuspensions.vue';
+import AllStoresPage from '@/views/AllStoresPage.vue';
 // import StoreNameInput from '@/views/StoreNameInput.vue'; // Remove this line
 import ProductList from '@/views/ProductListEditor.vue';
 import ProductManagement from '@/views/ProductManagement.vue';
@@ -66,6 +67,7 @@ const routes = [
     { path: '/productsForStore/:storeName', name: 'ProductsForStore', component: ProductsForStore },
     { path: '/edit-discount-policy/:storeName', name: 'EditDiscountPolicy', component: EditDiscountPolicy },
     { path: '/edit-purchase-policy/:storeName', name: 'EditPurchasePolicy', component: EditPurchasePolicy },
+    { path: '/all-stores', name: 'AllStoresPage', component: AllStoresPage },
 ];
 
 const router = createRouter({

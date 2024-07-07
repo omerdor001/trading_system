@@ -4,7 +4,7 @@
     <div class="main-content">
       <div class="sidebar">
         <PrimeButton label="View All Stores" @click="viewAllStores" class="sidebar-button"/>
-      <PrimeButton v-if="isLoggedIn" label="Stores Manager" @click="stores" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn" label="Stores Manager" @click="stores" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Close Store" @click="closeStore" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Approve Ownership" @click="approveOwnership" class="sidebar-button" />
@@ -115,9 +115,8 @@ export default defineComponent({
     };
 
     const viewAllStores = () => {
-      router.push({ name: 'StoreSearchResults' });
+      router.push({ name: 'AllStoresPage' });
     };
-
 
     return {
       isLoggedIn,
