@@ -106,7 +106,6 @@
             <template #header>
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <span class="text-xl font-bold">Discounts</span>
-                    <Button icon="pi pi-refresh" rounded raised />
                 </div>
             </template>
             <Column field="type" header="Type" style="width: 20%;" :headerStyle="{ 'text-align': 'center' }"
@@ -254,7 +253,6 @@
             <template #header>
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <span class="text-xl font-bold">Conditions</span>
-                    <Button icon="pi pi-refresh" rounded raised />
                 </div>
             </template>
             <Column field="type" header="Type" style="width: 20%;" :headerStyle="{ 'text-align': 'center' }"
@@ -497,7 +495,7 @@ export default {
                                 username: username.value,
                                 token: token.value,
                                 storeName: storeName,
-                                discountPercent: newDiscount.value.percent
+                                discountPercent: newDiscount.value.percent / 100
                             }
                         });
                         fetchDiscounts();
@@ -515,7 +513,7 @@ export default {
                                 token: token.value,
                                 storeName: storeName,
                                 category: newDiscount.value.category,
-                                discountPercent: newDiscount.value.percent
+                                discountPercent: newDiscount.value.percent / 100
                             }
                         });
                         fetchDiscounts();
@@ -533,7 +531,7 @@ export default {
                                 token: token.value,
                                 storeName: storeName,
                                 productId: newDiscount.value.category,
-                                discountPercent: newDiscount.value.percent
+                                discountPercent: newDiscount.value.percent / 100
                             }
                         });
                         fetchDiscounts();
@@ -725,11 +723,11 @@ export default {
         const createDetails = (discount) => {
             switch (discount.type) {
                 case 'percentageStore':
-                    return discount.details = `Percentage: ${discount.percent}%`;
+                    return discount.details = `Percentage: ${discount.percent * 100}%`;
                 case 'percentageCategory':
-                    return discount.details = `Category: ${categoryOptions.value.find(opt => opt.value === discount.category)?.label} Percentage: ${discount.percent}%`;
+                    return discount.details = `Category: ${categoryOptions.value.find(opt => opt.value === discount.category)?.label} Percentage: ${discount.percent * 100}%`;
                 case 'percentageProduct':
-                    return discount.details = `Product Id: ${discount.productId} Percentage: ${discount.percent}%`;
+                    return discount.details = `Product Id: ${discount.productId} Percentage: ${discount.percent * 100}%`;
                 case 'additive':
                     return discount.details = `First discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.first)} Second discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.second)}`;
                 case 'max':
@@ -1089,7 +1087,7 @@ export default {
 }
 
 .p-datatable {
-    margin-inline: 24rem;
+    margin-inline: 12rem;
 }
 
 .p-datatable {
