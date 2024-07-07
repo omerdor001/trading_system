@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,6 +39,8 @@ public class Store {
     private LinkedList<Condition> discountConditions;
     private LinkedList<PurchasePolicy> purchasePolicies;
     private LinkedList<Message> messages;
+    private LinkedList<Bid> bids;
+    private HashMap<Integer, ProductLottery> lotteryProducts;
 
     public Store(String nameId, String description, String founder, Double storeRating) {
         this.nameId = nameId;
@@ -54,6 +57,8 @@ public class Store {
         this.purchasePolicies = new LinkedList<>();
         this.isOpen = true;
         this.messages = new LinkedList<>();
+        this.bids = new LinkedList<>();
+        this.lotteryProducts = new HashMap<>();
     }
 
     public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, int category) {
@@ -123,6 +128,7 @@ public class Store {
         for (Product p : products.values()) {
             sb.append(p.toString());
             sb.append(", ");
+
         }
 
         sb.append("]");
@@ -705,6 +711,150 @@ public class Store {
     public void removePurchasePolicy(int selectedIndex) {
         if (selectedIndex >= purchasePolicies.size()) purchasePolicies.remove(selectedIndex - purchasePolicies.size());
         else purchasePolicies.remove(selectedIndex);
+    }
+
+    public void placeBid(String userName, int productID, double price)
+    {
+        Bid newBid = new Bid(userName, productID, price);
+        this.bids.add(newBid);
+    }
+
+    public boolean approveBid(String userName, int productID, String bidUserName)
+    {
+        for ( Bid b : bids )
+        {
+            if(b.getProductID() == productID && b.getUserName().equals(bidUserName))
+            {
+                b.approveBid(userName);
+                if(b.getApprovedBy().containsAll(owners))
+                    b.setAllOwnersApproved(true);
+                return b.getAllOwnersApproved();
+            }
+        }
+        return false;
+    }
+
+    public void rejectBid(String userName, int productID, String bidUserName)
+    {
+        for ( Bid b : bids )
+        {
+            if(b.getProductID() == productID && b.getUserName().equals(bidUserName))
+            {
+                bids.remove(b);
+                break;
+            }
+        }
+    }
+
+    public void counterOffer(String userName, int productID, String bidUserName, double newPrice)
+    {
+        for ( Bid b : bids )
+        {
+            if(b.getProductID() == productID && b.getUserName().equals(bidUserName))
+            {
+                b.setPrice(newPrice);
+            }
+        }
+
+        //TODO: send notification
+    }
+
+    public boolean isBidExist(int productID, String bidUserName) {
+
+        for ( Bid b : bids)
+        {
+            if(b.getProductID() == productID && b.getUserName().equals(bidUserName))
+                return true;
+        }
+        return false;
+    }
+
+    public String getStoreBids() {
+        if(bids.isEmpty())
+            return "{}";
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\n");
+        sb.append("  \"storeName\" : \"").append(nameId).append("\",\n");
+        sb.append("  \"bids\" : ").append(Bid.toJsonList(bids)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    public boolean isBidApproved(String username, int productId, double price) {
+        for ( Bid b : bids)
+        {
+            if(b.getProductID() == productId && b.getUserName().equals(username) && b.getPrice() == price)
+            {
+                if(b.getApprovedBy().containsAll(owners))
+                     return true;
+            }
+        }
+        return false;
+    }
+
+    public String getMyBids(String userName) {
+        LinkedList<Bid> filteredBids = bids.stream()
+                .filter(bid -> userName.equals(bid.getUserName()))
+                .collect(Collectors.toCollection(LinkedList::new));
+        if(filteredBids.isEmpty())
+            return "{}";
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\n");
+        sb.append("  \"storeName\" : \"").append(nameId).append("\",\n");
+        sb.append("  \"bids\" : ").append(Bid.toJsonList(filteredBids)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    public void createProductLottery(int productID, LocalDateTime localDateTime, double price){
+        ProductLottery productLottery = new ProductLottery(localDateTime, price);
+        this.lotteryProducts.put(productID, productLottery);
+    }
+
+    public boolean buyLotteryProductTicket(String userName, int productID, double price) throws Exception{
+        return lotteryProducts.get(productID).buyLotteryProductTicket(userName, price);
+    }
+
+    public String makeLotteryOnProduct(int productID)
+    {
+        return lotteryProducts.get(productID).makeLotteryOnProduct();
+    }
+
+    public boolean isLotteryExist(int productID) {
+        return lotteryProducts.containsKey(productID);
+    }
+
+    public void editProduct(int productId, String productName, String productDescription, double productPrice, int productQuantity) {
+        Product product = getProduct(productId);
+        synchronized (product) {
+            if (product != null) {
+                product.editProduct(productName, productDescription, productPrice, productQuantity);
+            } else throw new IllegalArgumentException("Product with id " + productId + " does not exist");
+        }
+
+    }
+
+
+    public double getBidPrice(String userName, int productID) {
+        for ( Bid b : bids)
+        {
+            if(b.getProductID() == productID && b.getUserName().equals(userName))
+            {
+                return b.getPrice();
+            }
+        }
+        return 0;
+    }
+
+    public void removeBidAccepted(String userName, int productID) {
+        for ( Bid b : bids)
+        {
+            if(b.getProductID() == productID && b.getUserName().equals(userName))
+            {
+                bids.remove(b);
+                break;
+            }
+        }
     }
 
     //endregion

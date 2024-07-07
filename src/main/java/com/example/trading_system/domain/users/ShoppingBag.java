@@ -96,6 +96,7 @@ public class ShoppingBag {
         }
     }
 
+
     public String productsListToJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(products_list.values());

@@ -92,6 +92,8 @@ public abstract class User {
 
     public abstract boolean isManager(String store_name_id);
 
+    public abstract void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery);
+
     public abstract boolean isWatch(String storeName);
 
     public abstract boolean isEditSupply(String storeName);
@@ -100,7 +102,6 @@ public abstract class User {
 
     public abstract boolean isEditDiscountPolicy(String storeName);
 
-    public abstract void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
     public abstract boolean removeWaitingAppoint_Owner(String storeName);
 
@@ -108,7 +109,7 @@ public abstract class User {
 
     public abstract void addManagerRole(String appoint, String store_name_id);
 
-    public abstract void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+    public abstract void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery);
 
     public abstract void addOwnerRole(String appoint, String storeName);
 

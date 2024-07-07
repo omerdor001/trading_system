@@ -69,7 +69,7 @@ public class DiscountPolicyAcceptanceTests {
     @Test
     public void testPercentageByCategory() {
         tradingSystem.addCategoryPercentageDiscount(username, token, storeName, 1, 0.5);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("0.5", result.getBody());
@@ -78,7 +78,7 @@ public class DiscountPolicyAcceptanceTests {
     @Test
     public void testPercentageByCategory_NoMatchingItem() {
         tradingSystem.addCategoryPercentageDiscount(username, token, storeName, 2, 0.5);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("1.0", result.getBody());
@@ -87,7 +87,7 @@ public class DiscountPolicyAcceptanceTests {
     @Test
     public void testPercentageByProduct() {
         tradingSystem.addProductPercentageDiscount(username,token,storeName,0,0.5);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("0.5", result.getBody());
@@ -96,7 +96,7 @@ public class DiscountPolicyAcceptanceTests {
     @Test
     public void testPercentageByProduct_NoMatchingItem() {
         tradingSystem.addProductPercentageDiscount(username,token,storeName,1,0.5);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("1.0", result.getBody());
@@ -105,7 +105,7 @@ public class DiscountPolicyAcceptanceTests {
     @Test
     public void testPercentageByStore() {
         tradingSystem.addStoreDiscount(username,token,storeName,0.5);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("0.5", result.getBody());
@@ -118,7 +118,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addAdditiveDiscount(username,token,storeName);
         tradingSystem.setFirstDiscount(username,token,storeName,2,0);
         tradingSystem.setSecondDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("0.25", result.getBody());
@@ -132,7 +132,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addMaxDiscount(username,token,storeName);
         tradingSystem.setFirstDiscount(username,token,storeName,2,0);
         tradingSystem.setSecondDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("0.5", result.getBody());
@@ -145,7 +145,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addMaxDiscount(username,token,storeName);
         tradingSystem.setFirstDiscount(username,token,storeName,2,0);
         tradingSystem.setSecondDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("0.5", result.getBody());
@@ -158,7 +158,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addConditionalDiscount(username,token,storeName);
         tradingSystem.setFirstCondition(username,token,storeName,1,2);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,2);
+        tradingSystem.addToCart(username,token,0,storeName,2, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("1.0", result.getBody());
@@ -171,7 +171,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addConditionalDiscount(username,token,storeName);
         tradingSystem.setFirstCondition(username,token,storeName,1,2);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("1.0", result.getBody());
@@ -184,7 +184,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addConditionalDiscount(username,token,storeName);
         tradingSystem.setFirstCondition(username,token,storeName,1,2);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("1.0", result.getBody());
@@ -197,7 +197,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addConditionalDiscount(username,token,storeName);
         tradingSystem.setFirstCondition(username,token,storeName,1,2);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("1.0", result.getBody());
@@ -210,7 +210,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addConditionalDiscount(username,token,storeName);
         tradingSystem.setFirstCondition(username,token,storeName,1,2);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,2);
+        tradingSystem.addToCart(username,token,0,storeName,2, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("1.0", result.getBody());
@@ -223,7 +223,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addConditionalDiscount(username,token,storeName);
         tradingSystem.setFirstCondition(username,token,storeName,1,2);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,2);
+        tradingSystem.addToCart(username,token,0,storeName,2, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("2.0", result.getBody());
@@ -238,7 +238,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.setFirstCondition(username,token,storeName,1,2);
         tradingSystem.setSecondCondition(username,token,storeName,1,2);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,3);
+        tradingSystem.addToCart(username,token,0,storeName,3, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("1.5", result.getBody());
@@ -253,7 +253,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.setFirstCondition(username,token,storeName,1,2);
         tradingSystem.setSecondCondition(username,token,storeName,1,2);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,3);
+        tradingSystem.addToCart(username,token,0,storeName,3, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("3.0", result.getBody());
@@ -268,7 +268,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.setFirstCondition(username,token,storeName,1,2);
         tradingSystem.setSecondCondition(username,token,storeName,1,2);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,3);
+        tradingSystem.addToCart(username,token,0,storeName,3, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("3.0", result.getBody());
@@ -283,7 +283,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.setFirstCondition(username,token,storeName,1,2);
         tradingSystem.setSecondCondition(username,token,storeName,1,2);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,3);
+        tradingSystem.addToCart(username,token,0,storeName,3, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("1.5", result.getBody());
@@ -298,7 +298,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.setFirstCondition(username,token,storeName,1,2);
         tradingSystem.setSecondCondition(username,token,storeName,1,2);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,3);
+        tradingSystem.addToCart(username,token,0,storeName,3, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("1.5", result.getBody());
@@ -313,7 +313,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.setFirstCondition(username,token,storeName,1,2);
         tradingSystem.setSecondCondition(username,token,storeName,1,2);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,3);
+        tradingSystem.addToCart(username,token,0,storeName,3, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("1.5", result.getBody());
@@ -328,7 +328,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.setFirstDiscount(username,token,storeName,2,0);
         tradingSystem.setSecondDiscount(username,token,storeName,1,0);
         tradingSystem.setDeciderDiscount(username,token,storeName,0,1);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("0.5", result.getBody());
@@ -343,7 +343,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.setSecondDiscount(username,token,storeName,2,0);
         tradingSystem.setFirstDiscount(username,token,storeName,1,0);
         tradingSystem.setDeciderDiscount(username,token,storeName,0,1);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("0.5", result.getBody());
@@ -358,7 +358,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.setFirstDiscount(username,token,storeName,2,0);
         tradingSystem.setSecondDiscount(username,token,storeName,1,0);
         tradingSystem.setDeciderDiscount(username,token,storeName,0,1);
-        tradingSystem.addToCart(username,token,0,storeName,2);
+        tradingSystem.addToCart(username,token,0,storeName,2, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("1.0", result.getBody());
@@ -373,7 +373,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.setFirstDiscount(username,token,storeName,2,0);
         tradingSystem.setSecondDiscount(username,token,storeName,1,0);
         tradingSystem.setDeciderDiscount(username,token,storeName,0,1);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("0.5", result.getBody());

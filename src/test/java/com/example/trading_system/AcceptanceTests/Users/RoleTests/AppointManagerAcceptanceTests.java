@@ -92,21 +92,21 @@ public class AppointManagerAcceptanceTests {
 
     @Test
     public void GivenStoreNotExist_WhenSuggestManage_ThenThrowException() {
-        ResponseEntity<String> resp = tradingSystemImp.suggestManage(userName, token, userNameManager, "BadStoreName", true, true, true, true);
+        ResponseEntity<String> resp = tradingSystemImp.suggestManage(userName, token, userNameManager, "BadStoreName", true, true, true, true, true, true);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
         Assertions.assertEquals("No store called BadStoreName exist", resp.getBody());
     }
 
     @Test
     public void GivenManagerNotExist_WhenSuggestManage_ThenThrowException() {
-        ResponseEntity<String> resp = tradingSystemImp.suggestManage(userName, token, "badUserName", storeName, true, true, true, true);
+        ResponseEntity<String> resp = tradingSystemImp.suggestManage(userName, token, "badUserName", storeName, true, true, true, true, true, true);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
         Assertions.assertEquals("No user called badUserName exist", resp.getBody());
     }
 
     @Test
     public void GivenAppointerIsNotOwner_WhenSuggestManage_ThenThrowException() {
-        ResponseEntity<String> resp = tradingSystemImp.suggestManage(userNameManager, tokenManager, userNameManager, storeName, true, true, true, true);
+        ResponseEntity<String> resp = tradingSystemImp.suggestManage(userNameManager, tokenManager, userNameManager, storeName, true, true, true, true, true, true);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
         Assertions.assertEquals("Appoint user must be Owner", resp.getBody());
     }
@@ -114,83 +114,83 @@ public class AppointManagerAcceptanceTests {
     @Test
     public void GivenAppointerIsLogout_WhenSuggestManage_ThenThrowException() {
         tradingSystemImp.logout(token, userName);
-        ResponseEntity<String> resp = tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true);
+        ResponseEntity<String> resp = tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true, true, true);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
         Assertions.assertEquals("Appoint user is not logged", resp.getBody());
     }
 
     @Test
     public void GivenNewManagerIsAlreadyManager_WhenSuggestManage_ThenThrowException() {
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true).getStatusCode());
-        ResponseEntity<String> resp = tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true);
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true, true, true).getStatusCode());
+        ResponseEntity<String> resp = tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true, true, true);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
         Assertions.assertEquals("User already Manager of this store", resp.getBody());
     }
 
     @Test
     public void GivenNewManagerIsAlreadyOwner_WhenSuggestManage_ThenThrowException() {
-        ResponseEntity<String> resp = tradingSystemImp.suggestManage(userName, token, userName, storeName, true, true, true, true);
+        ResponseEntity<String> resp = tradingSystemImp.suggestManage(userName, token, userName, storeName, true, true, true, true, true, true);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
-        Assertions.assertEquals("User cannot be owner of this store", resp.getBody());
+        Assertions.assertEquals("User is already owner of this store", resp.getBody());
     }
 
     @Test
     public void GivenValidInput_WhenSuggestManage_ThenSuccess() {
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true,true, true).getStatusCode());
     }
 
     @Test
     public void GivenNotSuggestManage_WhenApproveManage_ThenThrowException() {
-        ResponseEntity<String> res = tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true);
+        ResponseEntity<String> res = tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true, true, true);
         Assertions.assertEquals("No one suggest this user to be a manager", res.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
     }
 
     @Test
     public void GivenStoreNotExist_WhenApproveManage_ThenThrowException() {
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true).getStatusCode());
-        ResponseEntity<String> res = tradingSystemImp.approveManage(userNameManager, tokenManager, "BadStoreName", userName, true, true, true, true);
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true, true, true).getStatusCode());
+        ResponseEntity<String> res = tradingSystemImp.approveManage(userNameManager, tokenManager, "BadStoreName", userName, true, true, true, true, true, true);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
         Assertions.assertEquals("No store called BadStoreName exist", res.getBody());
     }
 
     @Test
     public void GivenNotExistAppointer_WhenApproveManage_ThenThrowException() {
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true).getStatusCode());
-        ResponseEntity<String> res = tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, "BadName", true, true, true, true);
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true, true, true).getStatusCode());
+        ResponseEntity<String> res = tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, "BadName", true, true, true, true, true, true);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
         Assertions.assertEquals("No user called BadName exist", res.getBody());
     }
 
     @Test
     public void GivenAppointerIsNotOwner_WhenApproveManage_ThenThrowException() {
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true).getStatusCode());
-        ResponseEntity<String> res = tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userNameManager, true, true, true, true);
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true, true, true).getStatusCode());
+        ResponseEntity<String> res = tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userNameManager, true, true, true, true, true, true);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
         Assertions.assertEquals("User must be Owner", res.getBody());
     }
 
     @Test
     public void GivenUserIsAlreadyManager_WhenApproveManage_ThenThrowException() {
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true).getStatusCode());
-        ResponseEntity<String> resp = tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true);
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true,true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true,true, true).getStatusCode());
+        ResponseEntity<String> resp = tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true,true, true);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
         Assertions.assertEquals("User already Manager of this store", resp.getBody());
     }
 
     @Test
     public void GivenValidInput_WhenApproveManager_ThenSuccess() {
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true).getStatusCode());
-        ResponseEntity<String> resp = tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true);
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true,true, true).getStatusCode());
+        ResponseEntity<String> resp = tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true,true, true);
         Assertions.assertEquals(HttpStatus.OK, resp.getStatusCode());
         Assertions.assertEquals("Success approving manage", resp.getBody());
     }
 
     @Test
     public void GivenStoreNotExist_WhenRejectManage_ThenThrowException() {
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true,true, true).getStatusCode());
         ResponseEntity<String> res = tradingSystemImp.rejectToManageStore(userNameManager, tokenManager, "BadStoreName", userName);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
         Assertions.assertEquals("No store called BadStoreName exist", res.getBody());
@@ -198,7 +198,7 @@ public class AppointManagerAcceptanceTests {
 
     @Test
     public void GivenAppointerNotExist_WhenRejectManage_ThenThrowException() {
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true, true, true).getStatusCode());
         ResponseEntity<String> res = tradingSystemImp.rejectToManageStore(userNameManager, tokenManager, storeName, "BadUserName");
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
         Assertions.assertEquals("No user called BadUserName exist", res.getBody());
@@ -206,7 +206,7 @@ public class AppointManagerAcceptanceTests {
 
     @Test
     public void GivenAppointerIsNotOwner_WhenRejectManage_ThenThrowException() {
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true,true, true).getStatusCode());
         ResponseEntity<String> res = tradingSystemImp.rejectToManageStore(userNameManager, tokenManager, storeName, userNameManager);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
         Assertions.assertEquals("User must be Owner", res.getBody());
@@ -214,8 +214,8 @@ public class AppointManagerAcceptanceTests {
 
     @Test
     public void GivenAlreadyManager_WhenRejectManage_ThenThrowException() {
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true, true, true).getStatusCode());
         ResponseEntity<String> res = tradingSystemImp.rejectToManageStore(userNameManager, tokenManager, storeName, userName);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
         Assertions.assertEquals("User already Manager of this store", res.getBody());
@@ -230,7 +230,7 @@ public class AppointManagerAcceptanceTests {
 
     @Test
     public void GivenValidInput_WhenRejectManage_ThenSuccess() {
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true, true, true).getStatusCode());
         ResponseEntity<String> response = tradingSystemImp.rejectToManageStore(userNameManager, tokenManager, storeName, userName);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals("Success rejecting manage", response.getBody());

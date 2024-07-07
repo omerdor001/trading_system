@@ -28,6 +28,7 @@ import SuggestOwner from '@/views/SuggestOwner.vue';
 import SuggestManager from '@/views/SuggestManager.vue';
 import ApproveOwner from '@/views/ApproveOwner.vue';
 import ApproveManager from '@/views/ApproveManager.vue';
+import WatchStoreBids from '@/views/WatchStoreBids.vue';
 import PaymentPage from '@/views/PaymentPage.vue';
 import ProductsForStore from '@/views/ProductsForStore.vue';
 import EditDiscountPolicy from '@/views/DiscountManagement.vue'
@@ -62,6 +63,7 @@ const routes = [
     { path: '/suggest-manager/:storeName', name: 'SuggestManager', component: SuggestManager },
     { path: '/approve-owner',name: 'ApproveOwner',component: ApproveOwner },
     { path: '/approve-manager',name: 'ApproveManager',component: ApproveManager},
+    { path: '/get-store-bids', name: 'WatchStoreBids', component: WatchStoreBids},
     { path: '/payment', name: 'PaymentPage', component: PaymentPage },
     { path: '/productsForStore/:storeName', name: 'ProductsForStore', component: ProductsForStore },
     { path: '/edit-discount-policy/:storeName', name: 'EditDiscountPolicy', component: EditDiscountPolicy },
