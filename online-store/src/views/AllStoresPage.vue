@@ -7,7 +7,7 @@
         <p>No stores found.</p>
       </div>
       <div v-else>
-        <ul>
+        <ul class="stores-list">
           <li v-for="store in stores" :key="store.id" class="store-item">
             <img :src="store.image" alt="Store Image" class="store-image">
             <div class="store-details">
@@ -52,6 +52,7 @@ export default {
       const toast = useToast();
       const token = localStorage.getItem('token');
       const username = localStorage.getItem('username');
+
       if (!token) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Invalid token was supplied', life: 3000 });
         return;
@@ -64,13 +65,22 @@ export default {
             token: token
           }
         });
+        console.log(response.data);  // Add this line to check the returned data
         this.stores = response.data;
       } catch (error) {
-        toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to load stores', life: 3000 });
+        if (error.response && error.response.data) {
+          toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+        } else {
+          toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load stores', life: 3000 });
+        }
       }
     },
-    viewProducts(storeId) {
-      this.$router.push({ name: 'StoreDetails', params: { storeId } });
+    viewProducts() {
+/*      if (!storeId) {
+        console.error('Missing storeId');
+        return;
+      }*/
+      this.$router.push({ name: 'StoreDetails', params: { storeId: 'humberger' } });
     },
     logout() {
       localStorage.removeItem('isLoggedIn');
@@ -87,33 +97,31 @@ export default {
   padding: 20px;
 }
 
-ul {
+.stores-list {
   list-style: none;
   padding: 0;
-}
-
-li {
-  margin: 10px 0;
-  display: flex;
-  align-items: center;
 }
 
 .store-item {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #f9f9f9;
 }
 
 .store-image {
   width: 150px;
   height: 150px;
-  margin-right: 10px;
+  margin-right: 20px;
+  border-radius: 10px;
 }
 
 .store-details {
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .view-products-button {

@@ -13,7 +13,7 @@ import AllStoresPage from '@/views/AllStoresPage.vue';
 // import StoreNameInput from '@/views/StoreNameInput.vue'; // Remove this line
 import ProductList from '@/views/ProductListEditor.vue';
 import ProductManagement from '@/views/ProductManagement.vue';
-import StoresPage from '@/views/StoresPage.vue';
+import StoresPageManagerVue from '@/views/StoresPageManagerVue.vue';
 import StoreDetailsEditor from "@/views/StoreDetailsEditor.vue";
 import StoreDetails from '@/views/StoreDetails.vue';
 import ProductDetails from '@/views/ProductDetails.vue';
@@ -47,7 +47,7 @@ const routes = [
     { path: '/create-suspension', name: 'CreateSuspension', component: CreateSuspension },
     { path: '/end-suspension', name: 'EndSuspension', component: EndSuspension },
     { path: '/watch-suspensions', name: 'WatchSuspensions', component: WatchSuspensions },
-    { path: '/stores-page', name: 'StoresPage', component: StoresPage },
+    { path: '/stores-page', name: 'StoresPageManagerVue', component: StoresPageManagerVue },
     { path: '/product/:productId', name: 'ProductDetails', component: ProductDetails, props: true },
     { path: '/cart', name: 'ShoppingCart', component: ShoppingCart },
     { path: '/checkout', name: 'Checkout', component: Checkout },
