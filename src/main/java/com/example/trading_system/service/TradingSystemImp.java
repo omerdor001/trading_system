@@ -12,8 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -204,7 +206,7 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            keyWordsList = Arrays.asList(keyWords.split(","));
+            keyWordsList = new ArrayList<>(Arrays.asList(keyWords.split(",")));
             marketService.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWordsList);
         } catch (Exception e) {
             logger.error("Error occurred while adding product: {} to store: {}: {}", product_name, store_name, e.getMessage());
@@ -334,6 +336,36 @@ public class TradingSystemImp implements TradingSystem {
         }
         logger.info("User {} finished to edit the category : {} to product : {} from store : {}", username, category, product_id, store_name);
         return new ResponseEntity<>("Category was set successfully.", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> addKeywordToProduct(String username, String token, String storeName, int productId, String keyword) {
+        logger.info("User {} is trying to add a keyword : {} to product : {} in store : {}", username, keyword, productId, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.addKeywordToProduct(username,storeName,productId,keyword);
+        } catch (Exception e) {
+            logger.error("Error occurred while adding keyword {} for product id: {} in store: {}: {}", keyword,productId,storeName, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.info("User {} finished to add keyword : {} to product : {} from store : {}", username, keyword, productId, storeName);
+        return new ResponseEntity<>("Keyword was added successfully.", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> removeKeywordFromProduct(String username, String token, String storeName, int productId, String keyword) {
+        logger.info("User {} is trying to remove a keyword : {} to product : {} from store : {}", username, keyword, productId, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.removeKeywordToProduct(username,storeName,productId,keyword);
+        } catch (Exception e) {
+            logger.error("Error occurred while removing keyword {} for product id: {} in store: {}: {}", keyword,productId,storeName, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.info("User {} finished to remove keyword : {} to product : {} from store : {}", username, keyword, productId, storeName);
+        return new ResponseEntity<>("Keyword was removed successfully.", HttpStatus.OK);
     }
 
     @Override
@@ -829,6 +861,48 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(marketService.getProductInfo(userName, store_name, product_Id), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed on Gathering Product Info with Store Id : {} and product ID:{}", e.getMessage(), store_name, product_Id);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getCategories(String username, String token) {
+        logger.info("Trying to Gather Categories");
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Gather Categories");
+            return new ResponseEntity<>(marketService.getCategories(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Categories", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getPurchaseHistoryJSONFormatForStore(String username, String token, String storeName) {
+        logger.info("Trying to Gather Purchase History for Store {}",storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("Finish to Gather Purchase History for Store {}",storeName);
+            return new ResponseEntity<>(marketService.getPurchaseHistoryJSONFormatForStore(username,storeName), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Purchase History for Store {}",storeName, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getPurchaseHistoryJSONFormat(String username, String token) {
+        logger.info("Trying to Gather Purchase History");
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("Finish to Gather Purchase History for Store");
+            return new ResponseEntity<>(marketService.getPurchaseHistoryJSONFormat(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Purchase History for Store", e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

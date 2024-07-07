@@ -3,6 +3,8 @@ package com.example.trading_system.domain.stores;
 import com.example.trading_system.domain.Message;
 import com.example.trading_system.domain.stores.discountPolicies.*;
 import com.example.trading_system.domain.stores.purchasePolicies.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -203,8 +205,22 @@ public class Store {
         if (product != null) {
             product.setCategory(category);
         } else throw new IllegalArgumentException("Product with id " + productId + " does not exist");
-
     }
+
+    public  synchronized void addKeyWordToProduct(int productId, String keyword) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.addKeyWord(keyword);
+        } else throw new IllegalArgumentException("Product with id " + productId + " does not exist");
+    }
+
+    public synchronized void removeKeyWordFromProduct(int productId, String keyword) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.removeKeyWord(keyword);
+        } else throw new IllegalArgumentException("Product with id " + productId + " does not exist");
+    }
+
 
     List<Purchase> getHistoryPurchasesByCustomer(String customerUsername) {
         return salesHistory.getPurchasesByCustomer(customerUsername);
@@ -336,6 +352,45 @@ public class Store {
             }
         }
         return true;
+    }
+
+    private String getProductInSaleListJSONFormat(Collection<ProductInSaleDTO> items){
+        List<Map<String, Object>> productInSaleList = new ArrayList<>();
+        for (ProductInSaleDTO product : items) {
+            Map<String, Object> productMap = new HashMap<>();
+            productMap.put("productId", product.getId());
+            productMap.put("price",product.getPrice());
+            productMap.put("quantity", product.getQuantity());
+            productMap.put("category", Product.getCategoryStringFromInt(product.getCategory()));
+            productInSaleList.add(productMap);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(productInSaleList);
+        } catch (JsonProcessingException e) {
+            logger.error("Error converting products to JSON", e);
+            return "Error converting products to JSON";
+        }
+    }
+
+    public String getPurchaseHistoryJSONFormat(){
+        List<Purchase> purchases=salesHistory.getPurchases();
+        List<Map<String, Object>> purchasesList = new ArrayList<>();
+        for(Purchase purchase:purchases){
+            Map<String, Object> purchaseMap = new HashMap<>();
+            String productInSaleListJSON = getProductInSaleListJSONFormat(purchase.getProductInSaleList());
+            purchaseMap.put("productInSaleList", productInSaleListJSON);
+            purchaseMap.put("customUsername", purchase.getCustomerUsername());
+            purchaseMap.put("totalPrice",purchase.getTotalPrice());
+            purchaseMap.put("storeName", purchase.getStoreName());
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(purchasesList);
+        } catch (JsonProcessingException e) {
+            logger.error("Error converting purchase history to JSON", e);
+            return "Error converting purchase history to JSON";
+        }
     }
 
     public String getPurchaseHistoryString(String username) {

@@ -69,6 +69,14 @@ public class Role {
         roleState.setCategory(username, store_name_id, productId, category);
     }
 
+    public void addKeywordToProduct(String username, String store_name_id, int productId, String keyword) throws IllegalAccessException {
+        roleState.addKeywordToProduct(username,store_name_id,productId,keyword);
+    }
+
+    public void removeKeywordFromProduct(String username, String store_name_id, int productId,String keyword) throws IllegalAccessException {
+        roleState.removeKeywordFromProduct(username,store_name_id,productId,keyword);
+    }
+
     public boolean editDiscounts() throws IllegalAccessException {
         if(roleState.isEditDiscountPolicy())
             return true;

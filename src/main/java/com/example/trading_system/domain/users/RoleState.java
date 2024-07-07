@@ -100,6 +100,10 @@ public abstract class RoleState {
 
     public abstract void setCategory(String username, String store_name_id, int productId, int category) throws IllegalAccessException;
 
+    public abstract void addKeywordToProduct(String username, String store_name_id, int productId,String keyword) throws IllegalAccessException;
+
+    public abstract void removeKeywordFromProduct(String username, String store_name_id, int productId,String keyword) throws IllegalAccessException;
+
     public abstract boolean isManager();
 
     public abstract boolean isOwner();
