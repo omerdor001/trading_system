@@ -60,6 +60,10 @@ public interface MarketFacade {
 
     boolean setCategory(String username, String storeName, int productId, int category) throws IllegalAccessException;
 
+    void addKeywordToProduct(String username, String storeName, int productId,String keyword) throws IllegalAccessException;
+
+    void removeKeywordToProduct(String username, String storeName, int productId,String keyword) throws IllegalAccessException;
+
     String getAllHistoryPurchases(String userName, String storeName) throws IllegalAccessException;
 
     String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) throws IllegalAccessException;

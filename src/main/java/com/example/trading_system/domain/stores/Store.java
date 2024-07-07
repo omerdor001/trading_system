@@ -197,8 +197,22 @@ public class Store {
         if (product != null) {
             product.setCategory(category);
         } else throw new IllegalArgumentException("Product with id " + productId + " does not exist");
-
     }
+
+    public synchronized void addKeyWordToProduct(int productId, String keyword) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.addKeyWord(keyword);
+        } else throw new IllegalArgumentException("Product with id " + productId + " does not exist");
+    }
+
+    public synchronized void removeKeyWordFromProduct(int productId, String keyword) {
+        Product product = getProduct(productId);
+        if (product != null) {
+            product.removeKeyWord(keyword);
+        } else throw new IllegalArgumentException("Product with id " + productId + " does not exist");
+    }
+
 
     List<Purchase> getHistoryPurchasesByCustomer(String customerUsername) {
         return salesHistory.getPurchasesByCustomer(customerUsername);

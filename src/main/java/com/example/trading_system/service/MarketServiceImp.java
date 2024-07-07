@@ -142,6 +142,16 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public void addKeywordToProduct(String username, String storeName, int productId, String keyword) throws IllegalAccessException {
+        marketFacade.addKeywordToProduct(username,storeName,productId,keyword);
+    }
+
+    @Override
+    public void removeKeywordToProduct(String username, String storeName, int productId, String keyword) throws IllegalAccessException {
+       marketFacade.removeKeywordToProduct(username,storeName,productId,keyword);
+    }
+
+    @Override
     public String getDiscountPolicies(String username, String storeName) throws IllegalAccessException {
         return marketFacade.getDiscountPolicies(username, storeName);
     }

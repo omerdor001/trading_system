@@ -320,6 +320,36 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
+    public ResponseEntity<String> addKeywordToProduct(String username, String token, String storeName, int productId, String keyword) {
+        logger.info("User {} is trying to add a keyword : {} to product : {} from store : {}", username, keyword, productId, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.addKeywordToProduct(username,storeName,productId,keyword);
+        } catch (Exception e) {
+            logger.error("Error occurred while adding keyword {} for product id: {} in store: {}: {}", keyword,productId,storeName, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.info("User {} finished to add keyword : {} to product : {} from store : {}", username, keyword, productId, storeName);
+        return new ResponseEntity<>("Keyword was added successfully.", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> removeKeywordFromProduct(String username, String token, String storeName, int productId, String keyword) {
+        logger.info("User {} is trying to remove a keyword : {} to product : {} from store : {}", username, keyword, productId, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.removeKeywordToProduct(username,storeName,productId,keyword);
+        } catch (Exception e) {
+            logger.error("Error occurred while removing keyword {} for product id: {} in store: {}: {}", keyword,productId,storeName, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.info("User {} finished to remove keyword : {} to product : {} from store : {}", username, keyword, productId, storeName);
+        return new ResponseEntity<>("Keyword was removed successfully.", HttpStatus.OK);
+    }
+
+    @Override
     public ResponseEntity<String> login(String token, String usernameV, String username, String password) {
         logger.info("Attempting to login user: {}", username);
         try {

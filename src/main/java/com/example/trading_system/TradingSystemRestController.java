@@ -175,6 +175,24 @@ public class TradingSystemRestController {
         return tradingSystem.setCategory("r"+username, token, storeName, productId, category);
     }
 
+    @PostMapping("/addKeyword")
+    public ResponseEntity<String> addKeywordToProduct(@RequestParam String username,
+                                              @RequestParam String token,
+                                              @RequestParam String storeName,
+                                              @RequestParam int productId,
+                                              @RequestParam String keyword) {
+        return tradingSystem.addKeywordToProduct("r"+username, token, storeName, productId, keyword);
+    }
+
+    @PostMapping("/addKeyword")
+    public ResponseEntity<String> removeKeywordFromProduct(@RequestParam String username,
+                                                      @RequestParam String token,
+                                                      @RequestParam String storeName,
+                                                      @RequestParam int productId,
+                                                      @RequestParam String keyword) {
+        return tradingSystem.removeKeywordFromProduct("r"+username, token, storeName, productId, keyword);
+    }
+
     @GetMapping("/login")
     public ResponseEntity<String> login(@RequestParam String token,
                                         @RequestParam String usernameV,

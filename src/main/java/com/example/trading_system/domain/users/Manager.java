@@ -97,6 +97,16 @@ public class Manager extends RoleState {
     }
 
     @Override
+    public void addKeywordToProduct(String username, String store_name_id, int productId, String keyword) throws IllegalAccessException {
+        if (!this.editSupply) throw new IllegalAccessException("Manager cannot edit products");
+    }
+
+    @Override
+    public void removeKeywordFromProduct(String username, String store_name_id, int productId, String keyword) throws IllegalAccessException {
+        if (!this.editSupply) throw new IllegalAccessException("Manager cannot edit products");
+    }
+
+    @Override
     public void getHistoryPurchasesByCustomer() throws IllegalAccessException {
         if (!this.watch) throw new IllegalAccessException("Manager cannot get history purchases by customer");
 
