@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080") //TODO IP and Port (general)

@@ -7,7 +7,7 @@
         </div>
         <img src="@/assets/logo.png" alt="LASMONY" class="logo">
         <div class="right-buttons">
-          <PrimeButton label="Notifications" icon="pi pi-bell" @click="notifications" />
+          <PrimeButton label="Notifications" icon="pi pi-bell" @click="toggleNotifications" />
           <PrimeButton label="Cart" icon="pi pi-shopping-cart" @click="viewCart" />
         </div>
       </div>
@@ -35,6 +35,12 @@
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       </PrimeCard>
     </div>
+
+    <p-toast v-if="notificationsVisible" :baseZIndex="10000">
+      <template v-for="(notification, index) in notifications" :key="index">
+        <div>{{ notification }}</div> 
+      </template>
+    </p-toast>
   </div>
 </template>
 
@@ -45,6 +51,8 @@ import { Button as PrimeButton } from 'primevue/button';
 import { InputText } from 'primevue/inputtext';
 import { Card as PrimeCard } from 'primevue/card';
 import axios from 'axios';
+import webSocketService from './services/webSocketService';
+import { useToast } from 'primevue/usetoast';
 
 export default defineComponent({
   name: 'LoginModel',
@@ -55,9 +63,13 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
+    const toast = useToast();
     const username = ref('');
     const password = ref('');
     const errorMessage = ref('');
+    const notifications = ref([]);
+    const notificationsVisible = ref(false);
+
     const handleLogin = async () => {
       try {
         const response = await axios.get('http://localhost:8082/api/trading/login', {
@@ -74,6 +86,7 @@ export default defineComponent({
         localStorage.setItem('toPresentUsername', username.value);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('isAdmin', response.data.isAdmin);
+        subscribeToNotifications(username.value);
         router.push('/'); 
       } catch (error) {
         if (error.response) {
@@ -97,8 +110,25 @@ export default defineComponent({
       router.push('/register'); // Navigate to register page using router
     };
 
-    const notifications = () => {
-      // Handle notifications
+    const subscribeToNotifications = (username) => {
+      const webSocketUrl = 'ws://localhost:8080/ws';
+      webSocketService.connect(webSocketUrl);
+      webSocketService.subscribe(handleWebSocketMessage);
+
+      // Send the username to the backend after WebSocket connection is established
+      webSocketService.socket.onopen = () => {
+        webSocketService.socket.send(JSON.stringify({ type: 'subscribe', username }));
+      };
+    };
+
+    const handleWebSocketMessage = (message) => {
+      console.log('Received WebSocket message:', message);
+      notifications.value.push(message);
+      notificationsVisible.value = true;
+    };
+
+    const toggleNotifications = () => {
+      notificationsVisible.value = !notificationsVisible.value;
     };
 
     const viewCart = () => {
@@ -113,6 +143,8 @@ export default defineComponent({
       goBack,
       goToRegister,
       notifications,
+      notificationsVisible,
+      toggleNotifications,
       viewCart
     };
   }
