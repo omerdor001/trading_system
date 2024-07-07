@@ -10,7 +10,7 @@ import PrimeVue from 'primevue/config';
 import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
-import webSocketService from './services/webSocketService';
+import webSocketService from './webSocketService';
 
 export default {
   name: 'App',
@@ -31,7 +31,7 @@ export default {
     handleWebSocketMessage(message) {
       // Handle the incoming WebSocket message
       console.log('Received WebSocket message:', message);
-      notifications.value.push(message);
+      //notifications.value.push(message);
       // Add your custom handling logic here
     }
   }

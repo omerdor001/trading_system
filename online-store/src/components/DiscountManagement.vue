@@ -455,7 +455,10 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                conditions.value = response.data.map(condition => ({
+                    type: getConditionTypeLabel(condition.type),
+                    details: createConditionDetails(condition)
+                }));
             } catch (error) {
                 console.error('Error fetching conditions:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -715,10 +718,20 @@ export default {
                 'conditional': 'Conditional Discount',
                 'and': 'And Discount',
                 'or': 'Or Discount',
-                'xor': 'Xor Discount'
+                'xor': 'Xor Discount',
+                'placeholderDiscount': 'Placeholder Discount'
             };
             return typeMap[type] || type;
         };
+
+        const getConditionTypeLabel = (type) => {
+            const typeMap = {
+                'productCount' : 'Product Count',
+                'totalSum' : 'Total Sum',
+                'categoryCount' : 'Category Count',
+            }
+            return typeMap[type] || type;
+        }
 
         const createDetails = (discount) => {
             switch (discount.type) {
@@ -739,9 +752,25 @@ export default {
                 case 'or':
                     return discount.details = `First condition: ${discount.first} Second condition: ${discount.second} Discount: ${getDiscountTypeLabel(discount.then.type)} ${createDetails(discount.then)}`;
                 case 'xor':
-                    return discount.details = `First discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.first)} Second discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.second)} Decider condition: ${discount.decider}`;
+                    console.log(discount.decider);
+                    return discount.details = `First discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.first)} Second discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.second)} Decider condition: ${createConditionDetails(discount.decider)}`;
+                case 'placeholderDiscount':
+                    return discount.details = 'Placeholder'
             }
         }
+
+        const createConditionDetails = (condition) => {
+            switch (condition.type) {
+                case 'productCount':
+                    return condition.details = `Product ID: ${condition.productId} Count: ${condition.count}`;
+                case 'categoryCount':
+                    return condition.details = `Category: ${categoryOptions.value.find(opt => opt.value === condition.category)?.label} Count: ${condition.count}`;
+                case 'totalSum':
+                    return condition.details = `Required sum ${condition.requiredSum}`;
+                case 'placeholderCondition':
+                    return condition.details = 'Placeholder';
+            }
+        };
 
         const typeTemplate = (rowData) => {
             return getDiscountTypeLabel(rowData.type);
@@ -759,7 +788,7 @@ export default {
 
         const deleteDiscount = async (selectedIndex) => {
             try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/remove/${selectedIndex}`;
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/removeDiscount/${selectedIndex}`;
                 const response = await axios.delete(url, {
                     params: {
                         username: username.value,
@@ -997,7 +1026,7 @@ export default {
 
         const deleteCondition = async (index) => {
             try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/remove/${index}`;
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/removeCondition/${index}`;
                 const response = await axios.delete(url, {
                     params: {
                         username: username.value,

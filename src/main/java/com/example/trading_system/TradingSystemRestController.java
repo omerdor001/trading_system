@@ -592,7 +592,7 @@ public class TradingSystemRestController {
         return tradingSystem.addXorDiscount("r"+username, token, storeName);
     }
 
-    @DeleteMapping("/store/{storeName}/discounts/remove/{selectedIndex}")
+    @DeleteMapping("/store/{storeName}/discounts/removeDiscount/{selectedIndex}")
     public ResponseEntity<String> removeDiscount(@RequestParam String username,
                                                  @RequestParam String token,
                                                  @PathVariable String storeName,
@@ -600,7 +600,7 @@ public class TradingSystemRestController {
         return tradingSystem.removeDiscount(username, token, storeName, selectedIndex);
     }
 
-    @DeleteMapping("/store/{storeName}/discounts/remove/{selectedIndex}")
+    @DeleteMapping("/store/{storeName}/discounts/removeCondition/{selectedIndex}")
     public ResponseEntity<String> removeCondition(@RequestParam String username,
                                                  @RequestParam String token,
                                                  @PathVariable String storeName,
