@@ -109,6 +109,7 @@ public interface MarketService {
 
     void removeDiscount(String username, String storeName, int selectedIndex) throws IllegalAccessException;
 
+    void removeCondition(String username, String storeName, int selectedIndex) throws IllegalAccessException;
     //endregion
 
     //region Discount/Condition editing/manipulation

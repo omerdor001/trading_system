@@ -1570,6 +1570,22 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Override
+    public ResponseEntity<String> removeCondition(String username, String token, String storeName, int selectedIndex) {
+        logger.info("Trying to remove condition for user: {} ,store: {}, index: {}", username, storeName, selectedIndex);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.removeCondition(username, storeName, selectedIndex);
+            return new ResponseEntity<>("Condition removed successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while removing condition for user: {} ,store: {}, index: {}", username, storeName, selectedIndex);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
     //endregion
 
     //region purchase policy

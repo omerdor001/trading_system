@@ -196,6 +196,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> removeDiscount(String username, String token, String storeName, int selectedIndex);
 
+    ResponseEntity<String> removeCondition(String username, String token, String storeName, int selectedIndex);
     //endregion
 
     //region Discount/Condition editing/manipulation

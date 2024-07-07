@@ -1178,6 +1178,14 @@ public class MarketFacadeImp implements MarketFacade {
         storeRepository.getStore(storeName).setCategoryCondition(selectedConditionIndex, newCategory);
     }
 
+    @Override
+    public void removeCondition(String username, String storeName, int selectedIndex) throws IllegalAccessException {
+        validateUserAndStore(username, storeName);
+        User user = userFacade.getUser(username);
+        user.getRoleByStoreId(storeName).editDiscounts();
+        storeRepository.getStore(storeName).removeCondition(selectedIndex);
+    }
+
     //endregion
     //region Purchase Policy Management
     @Override
