@@ -162,91 +162,92 @@
 
                         </Button>
                     </div>
+                    <!-- Edit Percent Dialog -->
+                    <Dialog v-model="showEditPercentDialog" :visible="showEditPercentDialog" header="Edit Percent">
+                        <InputNumber v-model="editPercentValue" />
+                        <Button @click="editDiscountPercent(rowData.index, editPercentValue)">Save</Button>
+                        <Button @click="showEditPercentDialog = false">Cancel</Button>
+                    </Dialog>
+
+                    <!-- Edit Category Dialog -->
+                    <Dialog v-model="showEditCategoryDialog" :visible="showEditCategoryDialog" header="Edit Category">
+                        <Dropdown v-model="editCategoryValue" :options="categoryOptions" optionLabel="label" />
+                        <Button @click="editCategoryDiscountCategory(rowData.index, editCategoryValue)">Save</Button>
+                        <Button @click="showEditCategoryDialog = false">Cancel</Button>
+                    </Dialog>
+
+                    <!-- Edit Product ID Dialog -->
+                    <Dialog v-model="showEditProductDialog" :visible="showEditProductDialog" header="Edit Product ID">
+                        <InputNumber v-model="editProductIDValue" />
+                        <Button @click="editProductDiscountID(rowData.index, editProductDiscountID)">Save</Button>
+                        <Button @click="showEditProductDialog = false">Cancel</Button>
+                    </Dialog>
+
+                    <!-- Edit First Discount Dialog -->
+                    <Dialog v-model="showEditFirstDiscountDialog" :visible="showEditFirstDiscountDialog"
+                        header="Edit First Discount">
+                        <Dropdown v-model="editFirstDiscountIndex" :options=formattedDiscounts() optionLabel="label"
+                            optionValue="value" />
+                        <Button @click="editFirstDiscount(rowData.index, editFirstDiscountIndex)">Save</Button>
+                        <Button @click="showEditFirstDiscountDialog = false">Cancel</Button>
+                    </Dialog>
+
+                    <!-- Edit Second Discount Dialog -->
+                    <Dialog v-model="showEditSecondDiscountDialog" :visible="showEditSecondDiscountDialog"
+                        header="Edit Second Discount">
+                        <Dropdown v-model="editSecondDiscountIndex" :options=formattedDiscounts() optionLabel="label"
+                            optionValue="value" />
+                        <Button @click="editSecondDiscount(rowData.index, editSecondDiscountIndex)">Save</Button>
+                        <Button @click="showEditSecondDiscountDialog = false">Cancel</Button>
+                    </Dialog>
+
+                    <!-- Edit First Condition Dialog -->
+                    <Dialog v-model="showEditFirstConditionDialog" :visible="showEditFirstConditionDialog"
+                        header="Edit First Condition">
+                        <Dropdown v-model="editFirstConditionIndex" :options=formattedConditions() optionLabel="label"
+                            optionValue="value" />
+                        <Button @click="editFirstCondition(rowData.index, editFirstConditionIndex)">Save</Button>
+                        <Button @click="showEditFirstConditionDialog = false">Cancel</Button>
+                    </Dialog>
+
+                    <!-- Edit Second Condition Dialog -->
+                    <Dialog v-model="showEditSecondConditionDialog" :visible="showEditSecondConditionDialog"
+                        header="Edit Second Condition">
+                        <Dropdown v-model="editSecondConditionIndex" :options=formattedConditions() optionLabel="label"
+                            optionValue="value" />
+                        <Button @click="editSecondCondition(rowData.index, editSecondConditionIndex)">Save</Button>
+                        <Button @click="showEditSecondConditionDialog = false">Cancel</Button>
+                    </Dialog>
+
+                    <!-- Edit Then Discount Dialog -->
+                    <Dialog v-model="showEditThenDiscountDialog" :visible="showEditThenDiscountDialog"
+                        header="Edit Then Discount">
+                        <Dropdown v-model="editThenDiscountIndex" :options=formattedDiscounts() optionLabel="label"
+                            optionValue="value" />
+                        <Button @click="editThenDiscount(rowData.index, editThenDiscountIndex)">Save</Button>
+                        <Button @click="showEditThenDiscountDialog = false">Cancel</Button>
+                    </Dialog>
+
+                    <!-- Edit Decider Condition Dialog -->
+                    <Dialog v-model="showEditDeciderConditionDialog" :visible="showEditDeciderConditionDialog"
+                        header="Edit Decider Condition">
+                        <Dropdown v-model="editThenDiscountIndex" :options=formattedConditions() optionLabel="label"
+                            optionValue="value" />
+                        <Button @click="editDeciderCondition(rowData.index, editDeciderConditionIndex)">Save</Button>
+                        <Button @click="showEditDeciderConditionDialog = false">Cancel</Button>
+                    </Dialog>
+
+                    <!-- Delete Discount Dialog -->
+                    <Dialog v-model="showDeleteDiscountDialog" :visible="showDeleteDiscountDialog"
+                        header="Delete Discount">
+                        <Button @click="deleteDiscount(rowData.index)">Save</Button>
+                        <Button @click="showEditDeciderConditionDialog = false">Cancel</Button>
+                    </Dialog>
                 </template>
                 <template #header>
                     <span class="flex-1 text-center"></span>
                 </template>
             </Column>
-            <!-- Edit Percent Dialog -->
-            <Dialog v-model="showEditPercentDialog" :visible="showEditPercentDialog" header="Edit Percent">
-                <InputNumber v-model="editPercentValue" />
-                <Button @click="editDiscountPercent(rowData.index, editPercentValue)">Save</Button>
-                <Button @click="showEditPercentDialog = false">Cancel</Button>
-            </Dialog>
-
-            <!-- Edit Category Dialog -->
-            <Dialog v-model="showEditCategoryDialog" :visible="showEditCategoryDialog" header="Edit Category">
-                <Dropdown v-model="editCategoryValue" :options="categoryOptions" optionLabel="label" />
-                <Button @click="editCategoryDiscountCategory(rowData.index, editCategoryValue)">Save</Button>
-                <Button @click="showEditCategoryDialog = false">Cancel</Button>
-            </Dialog>
-
-            <!-- Edit Product ID Dialog -->
-            <Dialog v-model="showEditProductDialog" :visible="showEditProductDialog" header="Edit Product ID">
-                <InputNumber v-model="editProductIDValue" />
-                <Button @click="editProductDiscountID(rowData.index, editProductDiscountID)">Save</Button>
-                <Button @click="showEditProductDialog = false">Cancel</Button>
-            </Dialog>
-
-            <!-- Edit First Discount Dialog -->
-            <Dialog v-model="showEditFirstDiscountDialog" :visible="showEditFirstDiscountDialog"
-                header="Edit First Discount">
-                <Dropdown v-model="editFirstDiscountIndex" :options=formattedDiscounts() optionLabel="label"
-                    optionValue="value" />
-                <Button @click="editFirstDiscount(rowData.index, editFirstDiscountIndex)">Save</Button>
-                <Button @click="showEditFirstDiscountDialog = false">Cancel</Button>
-            </Dialog>
-
-            <!-- Edit Second Discount Dialog -->
-            <Dialog v-model="showEditSecondDiscountDialog" :visible="showEditSecondDiscountDialog"
-                header="Edit Second Discount">
-                <Dropdown v-model="editSecondDiscountIndex" :options=formattedDiscounts() optionLabel="label"
-                    optionValue="value" />
-                <Button @click="editSecondDiscount(rowData.index, editSecondDiscountIndex)">Save</Button>
-                <Button @click="showEditSecondDiscountDialog = false">Cancel</Button>
-            </Dialog>
-
-            <!-- Edit First Condition Dialog -->
-            <Dialog v-model="showEditFirstConditionDialog" :visible="showEditFirstConditionDialog"
-                header="Edit First Condition">
-                <Dropdown v-model="editFirstConditionIndex" :options=formattedConditions() optionLabel="label"
-                    optionValue="value" />
-                <Button @click="editFirstCondition(rowData.index, editFirstConditionIndex)">Save</Button>
-                <Button @click="showEditFirstConditionDialog = false">Cancel</Button>
-            </Dialog>
-
-            <!-- Edit Second Condition Dialog -->
-            <Dialog v-model="showEditSecondConditionDialog" :visible="showEditSecondConditionDialog"
-                header="Edit Second Condition">
-                <Dropdown v-model="editSecondConditionIndex" :options=formattedConditions() optionLabel="label"
-                    optionValue="value" />
-                <Button @click="editSecondCondition(rowData.index, editSecondConditionIndex)">Save</Button>
-                <Button @click="showEditSecondConditionDialog = false">Cancel</Button>
-            </Dialog>
-
-            <!-- Edit Then Discount Dialog -->
-            <Dialog v-model="showEditThenDiscountDialog" :visible="showEditThenDiscountDialog"
-                header="Edit Then Discount">
-                <Dropdown v-model="editThenDiscountIndex" :options=formattedDiscounts() optionLabel="label"
-                    optionValue="value" />
-                <Button @click="editThenDiscount(rowData.index, editThenDiscountIndex)">Save</Button>
-                <Button @click="showEditThenDiscountDialog = false">Cancel</Button>
-            </Dialog>
-
-            <!-- Edit Decider Condition Dialog -->
-            <Dialog v-model="showEditDeciderConditionDialog" :visible="showEditDeciderConditionDialog"
-                header="Edit Decider Condition">
-                <Dropdown v-model="editThenDiscountIndex" :options=formattedConditions() optionLabel="label"
-                    optionValue="value" />
-                <Button @click="editDeciderCondition(rowData.index, editDeciderConditionIndex)">Save</Button>
-                <Button @click="showEditDeciderConditionDialog = false">Cancel</Button>
-            </Dialog>
-
-            <!-- Delete Discount Dialog -->
-            <Dialog v-model="showDeleteDiscountDialog" :visible="showDeleteDiscountDialog" header="Delete Discount">
-                <Button @click="deleteDiscount(rowData.index)">Save</Button>
-                <Button @click="showEditDeciderConditionDialog = false">Cancel</Button>
-            </Dialog>
         </DataTable>
 
         <DataTable :value="conditions" responsiveLayout="scroll" class="p-mt-3">
@@ -284,49 +285,51 @@
                             Delete Discount
                         </Button>
                     </div>
+                    <!-- Edit Cond Count Dialog -->
+                    <Dialog v-model="showEditCountDialog" :visible="showEditCountDialog" header="Edit Count">
+                        <label for="condCount">Set condition count</label>
+                        <InputNumber id="condCount" v-model="editCountValue" />
+                        <Button @click="editConditionCount(rowData.index, editCountValue)">Save</Button>
+                        <Button @click="showEditCountDialog = false">Cancel</Button>
+                    </Dialog>
+
+                    <!-- Edit Cond Category Dialog -->
+                    <Dialog v-model="showEditCategoryCondDialog" :visible="showEditCategoryCondDialog"
+                        header="Edit Category">
+                        <label for="condCategory">Set condition category</label>
+                        <Dropdown id="condCategory" v-model="editCondCategoryValue" :options="categoryOptions"
+                            optionLabel="label" />
+                        <Button @click="editConditionCategory(rowData.index, editCondCategoryValue)">Save</Button>
+                        <Button @click="showEditCategoryCondDialog = false">Cancel</Button>
+                    </Dialog>
+
+                    <!-- Edit Cond Product ID Dialog -->
+                    <Dialog v-model="showEditProductCondDialog" :visible="showEditProductCondDialog"
+                        header="Edit Product ID">
+                        <label for="condProductId">Set condition product id</label>
+                        <InputNumber id="condProductId" v-model="editCondProductIDValue" />
+                        <Button @click="editConditionProductID(rowData.index, editCondProductIDValue)">Save</Button>
+                        <Button @click="showEditProductCondDialog = false">Cancel</Button>
+                    </Dialog>
+
+                    <!-- Edit Cond Total Sum Dialog -->
+                    <Dialog v-model="showEditTotalSumDialog" :visible="showEditTotalSumDialog" header="Edit Total Sum">
+                        <label for="condTotalSum">Set category count</label>
+                        <InputNumber id="condTotalSum" v-model="editTotalSumValue" />
+                        <Button @click="editConditionTotalSum(rowData.index, editTotalSumValue)">Save</Button>
+                        <Button @click="showEditTotalSumDialog = false">Cancel</Button>
+                    </Dialog>
+
+                    <!-- Delete Cond Dialog -->
+                    <Dialog v-model="showDeleteCondDialog" :visible="showDeleteCondDialog" header="Delete Condition">
+                        <Button @click="deleteCondition(rowData.index)">Save</Button>
+                        <Button @click="showDeleteCondDialog = false">Cancel</Button>
+                    </Dialog>
                 </template>
                 <template #header>
                     <span class="flex-1 text-center"></span>
                 </template>
             </Column>
-            <!-- Edit Cond Count Dialog -->
-            <Dialog v-model="showEditCountDialog" :visible="showEditCountDialog" header="Edit Count">
-                <label for="condCount">Set condition count</label>
-                <InputNumber id="condCount" v-model="editCountValue" />
-                <Button @click="editConditionCount(rowData.index, editCountValue)">Save</Button>
-                <Button @click="showEditCountDialog = false">Cancel</Button>
-            </Dialog>
-
-            <!-- Edit Cond Category Dialog -->
-            <Dialog v-model="showEditCategoryCondDialog" :visible="showEditCategoryCondDialog" header="Edit Category">
-                <label for="condCategory">Set condition category</label>
-                <Dropdown id="condCategory" v-model="editCondCategoryValue" :options="categoryOptions"
-                    optionLabel="label" />
-                <Button @click="editConditionCategory(rowData.index, editCondCategoryValue)">Save</Button>
-                <Button @click="showEditCategoryCondDialog = false">Cancel</Button>
-            </Dialog>
-
-            <!-- Edit Cond Product ID Dialog -->
-            <Dialog v-model="showEditProductCondDialog" :visible="showEditProductCondDialog" header="Edit Product ID">
-                <label for="condProductId">Set condition product id</label>
-                <InputNumber id="condProductId" v-model="editCondProductIDValue" />
-                <Button @click="editConditionProductID(rowData.index, editCondProductIDValue)">Save</Button>
-                <Button @click="showEditProductCondDialog = false">Cancel</Button>
-            </Dialog>
-
-            <!-- Edit Cond Total Sum Dialog -->
-            <Dialog v-model="showEditTotalSumDialog" :visible="showEditTotalSumDialog" header="Edit Total Sum">
-                <label for="condTotalSum">Set category count</label>
-                <InputNumber id="condTotalSum" v-model="editTotalSumValue" />
-                <Button @click="editConditionTotalSum(rowData.index, editTotalSumValue)">Save</Button>
-                <Button @click="showEditTotalSumDialog = false">Cancel</Button>
-            </Dialog>
-
-            <!-- Delete Cond Dialog -->
-            <Dialog v-model="showDeleteCondDialog" :visible="showDeleteCondDialog" header="Delete Condition">
-                <Button @click="deleteCondition(rowData.index)">Save</Button>
-                <Button @click="showDeleteCondDialog = false">Cancel</Button>
-            </Dialog>
         </DataTable>
     </div>
 </template>
