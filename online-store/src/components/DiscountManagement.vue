@@ -756,7 +756,7 @@ export default {
         const deleteDiscount = async (selectedIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/remove/${selectedIndex}`;
-                const response = await axios.get(url, null, {
+                const response = await axios.delete(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -770,15 +770,14 @@ export default {
         }
 
         const formattedDiscounts = () => {
-            return this.discounts.map((discount, index) => ({
+            return discounts.value.map((discount, index) => ({
                 label: discount.details,
                 value: index
             }));
         }
 
-
         const formattedConditions = () => {
-            return this.conditions.map((condition, index) => ({
+            return conditions.value.map((condition, index) => ({
                 label: condition.details,
                 value: index
             }));
@@ -787,7 +786,7 @@ export default {
         const editDiscountPercent = async (index, editPercentValue) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setPercentDiscount/${index}/${editPercentValue}`;
-                const response = await axios.get(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -803,7 +802,7 @@ export default {
         const editCategoryDiscountCategory = async (index, editCategoryValue) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setCategoryDiscount/${index}/${editCategoryValue}`;
-                const response = await axios.get(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -819,7 +818,7 @@ export default {
         const editProductDiscountID = async (index, editProductDiscountID) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setProductIdDiscount/${index}/${editProductDiscountID}`;
-                const response = await axios.get(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -835,7 +834,7 @@ export default {
         const editFirstDiscount = async (index, editFirstDiscountIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setFirstDiscount/${index}/${editFirstDiscountIndex}`;
-                const response = await axios.get(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -851,7 +850,7 @@ export default {
         const editSecondDiscount = async (index, editSecondDiscountIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setSecondDiscount/${index}/${editSecondDiscountIndex}`;
-                const response = await axios.get(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -867,7 +866,7 @@ export default {
         const editFirstCondition = async (index, editFirstConditionIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setFirstCondition/${index}/${editFirstConditionIndex}`;
-                const response = await axios.get(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -883,7 +882,7 @@ export default {
         const editSecondCondition = async (index, editSecondConditionIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setSecondCondition/${index}/${editSecondConditionIndex}`;
-                const response = await axios.get(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -899,7 +898,7 @@ export default {
         const editThenDiscount = async (index, editThenDiscountIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setThenDiscount/${index}/${editThenDiscountIndex}`;
-                const response = await axios.get(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -915,7 +914,7 @@ export default {
         const editDeciderCondition = async (index, editDeciderConditionIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setDeciderDiscount/${index}/${editDeciderConditionIndex}`;
-                const response = await axios.get(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -931,7 +930,7 @@ export default {
         const editConditionCount = async (index, editCountValue) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setCountCondition/${index}/${editCountValue}`;
-                const response = await axios.get(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -947,7 +946,7 @@ export default {
         const editConditionCategory = async (index, editCondCategoryValue) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setCategoryCondition/${index}/${editCondCategoryValue}`;
-                const response = await axios.get(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -963,7 +962,7 @@ export default {
         const editConditionProductID = async (index, editCondProductIDValue) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setProductIdDiscount/${index}/${editCondProductIDValue}`;
-                const response = await axios.get(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -979,7 +978,7 @@ export default {
         const editConditionTotalSum = async (index, editTotalSumValue) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setTotalSum/${index}/${editTotalSumValue}`;
-                const response = await axios.get(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
