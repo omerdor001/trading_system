@@ -175,6 +175,24 @@ public class TradingSystemRestController {
         return tradingSystem.setCategory("r"+username, token, storeName, productId, category);
     }
 
+    @PostMapping("/addKeyword")
+    public ResponseEntity<String> addKeywordToProduct(@RequestParam String username,
+                                              @RequestParam String token,
+                                              @RequestParam String storeName,
+                                              @RequestParam int productId,
+                                              @RequestParam String keyword) {
+        return tradingSystem.addKeywordToProduct("r"+username, token, storeName, productId, keyword);
+    }
+
+    @PostMapping("/removeKeyword")
+    public ResponseEntity<String> removeKeywordFromProduct(@RequestParam String username,
+                                                      @RequestParam String token,
+                                                      @RequestParam String storeName,
+                                                      @RequestParam int productId,
+                                                      @RequestParam String keyword) {
+        return tradingSystem.removeKeywordFromProduct("r"+username, token, storeName, productId, keyword);
+    }
+
     @GetMapping("/login")
     public ResponseEntity<String> login(@RequestParam String token,
                                         @RequestParam String usernameV,
@@ -356,6 +374,23 @@ public class TradingSystemRestController {
                                                  @RequestParam String storeName, @RequestParam int product_Id) {
         return tradingSystem.getProductInfo(userName, token, storeName, product_Id);
     }
+
+    @GetMapping("/categories")
+    public ResponseEntity<String> getCategories(@RequestParam String username, @RequestParam String token) {
+        return tradingSystem.getCategories("r"+username,token);
+    }
+
+    @GetMapping("/store/purchaseHistory")
+    public ResponseEntity<String> getPurchaseHistoryJSONFormatForStore(@RequestParam String username, @RequestParam String token,@RequestParam String storeName) {
+        return tradingSystem.getPurchaseHistoryJSONFormatForStore("r"+username,token,storeName);
+    }
+
+    @GetMapping("/purchaseHistory")
+    public ResponseEntity<String> getPurchaseHistoryJSONFormat(@RequestParam String username, @RequestParam String token) {
+        return tradingSystem.getPurchaseHistoryJSONFormat("r"+username,token);
+    }
+
+
 
     @GetMapping("/store/search/name")
     public ResponseEntity<String> searchNameInStore(@RequestParam String userName, @RequestParam String productName, @RequestParam String token,

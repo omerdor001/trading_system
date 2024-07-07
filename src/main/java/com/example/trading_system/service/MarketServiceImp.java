@@ -56,6 +56,11 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public String getCategories(String username) {
+        return marketFacade.getCategories(username);
+    }
+
+    @Override
     public void openStoreExist(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException {
         marketFacade.openStoreExist(userName, storeName);
     }
@@ -139,6 +144,16 @@ public class MarketServiceImp implements MarketService {
     @Override
     public void setCategory(String username, String store_name, int productId, int category) throws IllegalAccessException {
         marketFacade.setCategory(username, store_name, productId, category);
+    }
+
+    @Override
+    public void addKeywordToProduct(String username, String storeName, int productId, String keyword) throws IllegalAccessException {
+        marketFacade.addKeywordToProduct(username,storeName,productId,keyword);
+    }
+
+    @Override
+    public void removeKeywordToProduct(String username, String storeName, int productId, String keyword) throws IllegalAccessException {
+       marketFacade.removeKeywordToProduct(username,storeName,productId,keyword);
     }
 
     @Override
@@ -380,6 +395,16 @@ public class MarketServiceImp implements MarketService {
     @Override
     public String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) throws IllegalAccessException {
         return marketFacade.getHistoryPurchasesByCustomer(userName, storeName, customerUserName);
+    }
+
+    @Override
+    public String getPurchaseHistoryJSONFormatForStore(String userName,String storeName) {
+        return marketFacade.getPurchaseHistoryJSONFormatForStore(userName,storeName);
+    }
+
+    @Override
+    public String getPurchaseHistoryJSONFormat(String userName) {
+        return marketFacade.getPurchaseHistoryJSONFormat(userName);
     }
 
     @Override

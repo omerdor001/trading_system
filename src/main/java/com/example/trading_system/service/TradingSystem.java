@@ -48,6 +48,10 @@ public interface TradingSystem {
 
     ResponseEntity<String> setCategory(String username, String token, String storeName, int productId, int category);
 
+    ResponseEntity<String> addKeywordToProduct(String username, String token, String storeName, int productId, String keyword);
+
+    ResponseEntity<String> removeKeywordFromProduct(String username, String token, String storeName, int productId, String keyword);
+
     ResponseEntity<String> login(String token, String usernameV, String username, String password);
 
     ResponseEntity<String> sendPendingNotifications(String username, String token);
@@ -103,6 +107,12 @@ public interface TradingSystem {
     ResponseEntity<String> getStoreProducts(String userName, String token, String store_name);
 
     ResponseEntity<String> getProductInfo(String userName, String token, String store_name, int product_Id);
+
+    ResponseEntity<String> getCategories(String username, String token);
+
+    ResponseEntity<String> getPurchaseHistoryJSONFormatForStore(String username, String token,String storeName);
+
+    ResponseEntity<String> getPurchaseHistoryJSONFormat(String username, String token);
 
     //search in specific store
     ResponseEntity<String> searchNameInStore(String userName, String productName, String token, String store_name, Double minPrice, Double maxPrice, Double minRating, int category);

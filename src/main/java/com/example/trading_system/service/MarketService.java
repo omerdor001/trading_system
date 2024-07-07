@@ -18,6 +18,8 @@ public interface MarketService {
 
     String getStoresIOpened(String username);
 
+    String getCategories(String username);
+
     void openStoreExist(String userName, String storeName) throws IllegalAccessException;
 
     void closeStoreExist(String userName, String storeName) throws IllegalAccessException;
@@ -54,9 +56,17 @@ public interface MarketService {
 
     void setCategory(String username, String store_name_id, int productId, int category) throws IllegalAccessException;
 
+    void addKeywordToProduct(String username, String storeName, int productId,String keyword) throws IllegalAccessException;
+
+    void removeKeywordToProduct(String username, String storeName, int productId,String keyword) throws IllegalAccessException;
+
     String getAllHistoryPurchases(String userName, String storeName) throws IllegalAccessException;
 
     String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) throws IllegalAccessException;
+
+    String getPurchaseHistoryJSONFormatForStore(String userName,String storeName);
+
+    String getPurchaseHistoryJSONFormat(String userName);
 
     String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
 

@@ -31,8 +31,8 @@ import ApproveOwner from '@/views/ApproveOwner.vue';
 import ApproveManager from '@/views/ApproveManager.vue';
 import PaymentPage from '@/views/PaymentPage.vue';
 import ProductsForStore from '@/views/ProductsForStore.vue';
-import EditDiscountPolicy from '@/views/DiscountManagement.vue';
-import EditPurchasePolicy from '@/views/PurchacePolicyManagement.vue';
+import EditDiscountPolicy from '@/views/DiscountManagement.vue'
+import EditPurchasePolicy from '@/views/PurchasePolicyManagement.vue'
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },

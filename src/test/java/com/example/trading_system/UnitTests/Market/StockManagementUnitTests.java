@@ -372,7 +372,7 @@ class StockManagementUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
-            marketFacade.addProduct("rtestuser0", 142, "Adidas", "Shirt11", "Sport shirt",
+            marketFacade.addProduct("rtestuser0", 180, "Adidas", "Shirt11", "Sport shirt",
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
@@ -380,7 +380,42 @@ class StockManagementUnitTests {
         }
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> marketFacade.setProductDescription("rtestuser2","Adidas",142,"Sport shirt1"));
         assertEquals("Manager cannot edit products", exception.getMessage());
-        assertEquals(marketFacade.getStore("Adidas").getProduct(142).getCategory().getIntValue(),1);
+        assertEquals(marketFacade.getStore("Adidas").getProduct(180).getCategory().getIntValue(),1);
+    }
+
+    @Test
+    void addKeywordToProduct_Success() {
+        ArrayList<String> keyWords=new ArrayList<>();
+        keyWords.add("Shirt11");
+        try{
+            marketFacade.addProduct("rtestuser0", 181, "Adidas", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
+        assertDoesNotThrow(() -> {
+            marketFacade.addKeywordToProduct("rtestuser0","Adidas",142,"Shirt1");
+        }, "setProductName should not throw any exceptions");
+        assertEquals(marketFacade.getStore("Adidas").getProduct(142).getKeyWords().contains("Shirt1"),true);
+    }
+
+    @Test
+    void removeKeywordToProduct_Success() {
+        ArrayList<String> keyWords=new ArrayList<>();
+        keyWords.add("Shirt11");
+        keyWords.add("Shirt1");
+        try{
+            marketFacade.addProduct("rtestuser0", 142, "Adidas", "Shirt11", "Sport shirt",
+                    100.0, 100, 5.0, 1, keyWords);
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
+        assertDoesNotThrow(() -> {
+            marketFacade.removeKeywordToProduct("rtestuser0","Adidas",142,"Shirt1");
+        }, "setProductName should not throw any exceptions");
+        assertEquals(marketFacade.getStore("Adidas").getProduct(142).getKeyWords().contains("Shirt1"),false);
     }
 
     //Concurrency tests

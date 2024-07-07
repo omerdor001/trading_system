@@ -40,6 +40,16 @@ public class Owner extends RoleState {
     }
 
     @Override
+    public void addKeywordToProduct(String username, String store_name_id, int productId, String keyword) {
+
+    }
+
+    @Override
+    public void removeKeywordFromProduct(String username, String store_name_id, int productId, String keyword) {
+
+    }
+
+    @Override
     public void getHistoryPurchasesByCustomer() {
     }
 
