@@ -19,6 +19,7 @@ import ProductDetails from '@/views/ProductDetails.vue';
 import ShoppingCart from '@/views/ShoppingCart.vue';
 import Checkout from '@/views/CheckoutPage.vue';
 import PurchaseHistory from '@/views/PurchaseHistory.vue';
+import PurchaseHistoryForStore from '@/views/PurchaseHistoryForStore.vue';
 import SearchPage from '@/views/SearchPage.vue';
 import SearchResults from '@/views/SearchResults.vue';
 import StoreSearchPage from '@/views/StoreSearchPage.vue';
@@ -30,8 +31,7 @@ import ApproveOwner from '@/views/ApproveOwner.vue';
 import ApproveManager from '@/views/ApproveManager.vue';
 import PaymentPage from '@/views/PaymentPage.vue';
 import ProductsForStore from '@/views/ProductsForStore.vue';
-import EditDiscountPolicy from '@/views/DiscountManagement.vue'
-import EditPurchasePolicy from '@/views/PurchasePolicyManagement.vue'
+import EditDiscountPolicy from '@/components/DiscountManagement.vue'
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },
@@ -54,6 +54,7 @@ const routes = [
     { path: '/product-list/:storeName/:isEditSupply', name: 'ProductList', component: ProductList, props: true },
     { path: '/product-management/:storeName/:productId', name: 'ProductManagement', component: ProductManagement, props: true },
     { path: '/purchase-history', name: 'PurchaseHistory', component: PurchaseHistory },
+    { path: '/purchase-history/:storeName', name: 'PurchaseHistoryForStore', component: PurchaseHistoryForStore },
     { path: '/search', name: 'SearchPage', component: SearchPage },
     { path: '/search-results', name: 'SearchResults', component: SearchResults },
     { path: '/search-store', name: 'StoreSearchPage', component: StoreSearchPage },
@@ -65,7 +66,6 @@ const routes = [
     { path: '/payment', name: 'PaymentPage', component: PaymentPage },
     { path: '/productsForStore/:storeName', name: 'ProductsForStore', component: ProductsForStore },
     { path: '/edit-discount-policy/:storeName', name: 'EditDiscountPolicy', component: EditDiscountPolicy },
-    { path: '/edit-purchase-policy/:storeName', name: 'EditPurchasePolicy', component: EditPurchasePolicy },
 ];
 
 const router = createRouter({

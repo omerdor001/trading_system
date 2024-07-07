@@ -55,7 +55,7 @@ export default defineComponent({
     const editDiscountPolicy = ref(false);
     const error = ref(null);
     const username = localStorage.getItem('username');
-        const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     const isLoggedIn = ref(!!username.value);
 
     const toast = ref(null);

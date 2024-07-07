@@ -194,7 +194,7 @@ export default defineComponent({
     };
 
     const purchasesHistory = (storeName) => {
-      router.push({ name: 'PurchaseHistory', params: { storeName } });
+      router.push({ name: 'PurchaseHistoryForStore', params: { storeName } });
     };
 
     return {
