@@ -50,7 +50,7 @@ const routes = [
     { path: '/cart', name: 'ShoppingCart', component: ShoppingCart },
     { path: '/checkout', name: 'Checkout', component: Checkout },
     // { path: '/store-name-input', name: 'StoreNameInput', component: StoreNameInput }, // Remove this line
-    { path: '/product-list/:storeName', name: 'ProductList', component: ProductList, props: true },
+    { path: '/product-list/:storeName/:isEditSupply', name: 'ProductList', component: ProductList, props: true },
     { path: '/product-management/:storeName/:productId', name: 'ProductManagement', component: ProductManagement, props: true },
     { path: '/purchase-history', name: 'PurchaseHistory', component: PurchaseHistory },
     { path: '/search', name: 'SearchPage', component: SearchPage },

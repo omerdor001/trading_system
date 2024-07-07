@@ -1,3 +1,4 @@
+
 <template>
     <div class="discount-management">
         <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />

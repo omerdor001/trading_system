@@ -28,7 +28,7 @@
           <div class="details-column">
             <p><strong>Description:</strong> {{ selectedStore.description }}</p>
             <div class="manage-products-link">
-              <p><strong>Products:</strong> <router-link :to="`/product-list/${selectedStore.name}`">View Products</router-link></p>
+              <p><strong>Products:</strong> <router-link :to="`/product-list/${selectedStore.name}/${selectedStore.permissions.isEditSupply}`">View Products</router-link></p>
             </div>
           </div>
           <!-- Right column for founder, isActive, rating, isOpen -->
@@ -86,7 +86,6 @@ export default defineComponent({
             username: username 
           }
         });
-        console.log(response.data);
         stores.value = response.data.map(store => ({
           name: store.name,
           role: store.role,

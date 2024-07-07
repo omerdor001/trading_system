@@ -46,6 +46,11 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public String getProductsFromStoreJSONFormat(String storeName) {
+        return marketFacade.getProductsFromStoreJSONFormat(storeName);
+    }
+
+    @Override
     public String getStoresIOpened(String username) {
         return marketFacade.getStoresIOpened(username);
     }
@@ -134,6 +139,16 @@ public class MarketServiceImp implements MarketService {
     @Override
     public void setCategory(String username, String store_name, int productId, int category) throws IllegalAccessException {
         marketFacade.setCategory(username, store_name, productId, category);
+    }
+
+    @Override
+    public void addKeywordToProduct(String username, String storeName, int productId, String keyword) throws IllegalAccessException {
+        marketFacade.addKeywordToProduct(username,storeName,productId,keyword);
+    }
+
+    @Override
+    public void removeKeywordToProduct(String username, String storeName, int productId, String keyword) throws IllegalAccessException {
+       marketFacade.removeKeywordToProduct(username,storeName,productId,keyword);
     }
 
     @Override

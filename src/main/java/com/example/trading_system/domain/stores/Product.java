@@ -1,6 +1,5 @@
 package com.example.trading_system.domain.stores;
 
-import com.example.trading_system.service.UserServiceImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,6 +100,10 @@ public class Product {
 
     public void addKeyWord(String keyWord) {
         this.keyWords.add(keyWord);
+    }
+
+    public void removeKeyWord(String keyWord) {
+        this.keyWords.remove(keyWord);
     }
 
     public String toString() {

@@ -145,6 +145,34 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
+    public String getProductsFromStoreJSONFormat(String storeName){
+        if (!isStoreExist(storeName)) {
+            throw new IllegalArgumentException("Store is not exist");
+        }
+        Store store=storeRepository.getStore(storeName);
+        List<Map<String, Object>> productList = new ArrayList<>();
+        for(Product product:store.getProducts().values()){
+            Map<String, Object> productMap = new HashMap<>();
+            productMap.put("id",product.getProduct_id());
+            productMap.put("name",product.getProduct_name());
+            productMap.put("description",product.getProduct_description());
+            productMap.put("price",product.getProduct_price());
+            productMap.put("quantity",product.getProduct_quantity());
+            productMap.put("rating",product.getRating());
+            productMap.put("category",Category.getCategoryFromInt(product.getCategory().getIntValue()));
+            productMap.put("keyWords", product.getKeyWords());
+            productList.add(productMap);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(productList);
+        } catch (JsonProcessingException e) {
+            logger.error("Error converting stores to JSON", e);
+            return "Error converting stores to JSON";
+        }
+    }
+
+    @Override
     public String getStoresIOpened(String username){
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
@@ -619,6 +647,75 @@ public class MarketFacadeImp implements MarketFacade {
             }
             user.getRoleByStoreId(storeName).setCategory(username, storeName, productId, category);
             store.setCategory(productId, category);
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            return true;
+        } catch (Exception e) {
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            throw e;
+        }
+    }
+
+    @Override
+    public boolean addKeywordToProduct(String username, String storeName, int productId, String keyword) throws IllegalAccessException {
+        Lock lock = storeLocks.computeIfAbsent(storeName, k -> new ReentrantLock());
+        lock.lock();
+        try {
+            if (!storeRepository.isExist(storeName)) {
+                throw new IllegalArgumentException("Store must exist");
+            }
+            Store store = storeRepository.getStore(storeName);
+            if (!store.getProducts().containsKey(productId)) {
+                throw new IllegalArgumentException("Product must exist");
+            }
+            if (!userFacade.isUserExist(username)) {
+                throw new IllegalArgumentException("User must exist");
+            }
+            if (userFacade.isSuspended(username)) {
+                throw new RuntimeException("User is suspended from the system");
+            }
+            User user = userFacade.getUser(username);
+            if (user.getRoleByStoreId(storeName) == null) {
+                throw new RuntimeException("User with no permission for this store");
+            }
+            user.getRoleByStoreId(storeName).addKeywordToProduct(username, storeName, productId, keyword);
+            store.addKeyWordToProduct(productId, keyword);
+            lock.unlock();
+            storeLocks.remove(storeName, lock);
+            return true;
+            } catch (Exception e) {
+              lock.unlock();
+              storeLocks.remove(storeName, lock);
+              throw e;
+          }
+       }
+
+
+    @Override
+    public boolean removeKeywordToProduct(String username, String storeName, int productId,String keyword) throws IllegalAccessException {
+        Lock lock = storeLocks.computeIfAbsent(storeName, k -> new ReentrantLock());
+        lock.lock();
+        try {
+            if (!storeRepository.isExist(storeName)) {
+                throw new IllegalArgumentException("Store must exist");
+            }
+            Store store = storeRepository.getStore(storeName);
+            if (!store.getProducts().containsKey(productId)) {
+                throw new IllegalArgumentException("Product must exist");
+            }
+            if (!userFacade.isUserExist(username)) {
+                throw new IllegalArgumentException("User must exist");
+            }
+            if (userFacade.isSuspended(username)) {
+                throw new RuntimeException("User is suspended from the system");
+            }
+            User user = userFacade.getUser(username);
+            if (user.getRoleByStoreId(storeName) == null) {
+                throw new RuntimeException("User with no permission for this store");
+            }
+            user.getRoleByStoreId(storeName).removeKeywordFromProduct(username,storeName,productId,keyword);
+            store.removeKeyWordFromProduct(productId,keyword);
             lock.unlock();
             storeLocks.remove(storeName, lock);
             return true;

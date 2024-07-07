@@ -18,6 +18,8 @@ public interface MarketFacade {
 
     String getAllStoresInJSONFormat(String username);
 
+    String getProductsFromStoreJSONFormat(String storeName);
+
     void openStoreExist(String userName, String storeId) throws IllegalAccessException;
 
     void closeStoreExist(String userName, String storeId) throws IllegalAccessException;
@@ -57,6 +59,10 @@ public interface MarketFacade {
     boolean setRating(String username, String storeName, int productId, double rating) throws IllegalAccessException;
 
     boolean setCategory(String username, String storeName, int productId, int category) throws IllegalAccessException;
+
+    boolean addKeywordToProduct(String username, String storeName, int productId,String keyword) throws IllegalAccessException;
+
+    boolean removeKeywordToProduct(String username, String storeName, int productId,String keyword) throws IllegalAccessException;
 
     String getAllHistoryPurchases(String userName, String storeName) throws IllegalAccessException;
 

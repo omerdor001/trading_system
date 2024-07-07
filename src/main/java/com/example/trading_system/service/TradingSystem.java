@@ -32,7 +32,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> openStoreExist(String userName, String token, String storeName);
 
-    ResponseEntity<String> addProduct(String username, String token, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords);
+    ResponseEntity<String> addProduct(String username, String token, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, String keyWords);
 
     ResponseEntity<String> removeProduct(String username, String token, String storeName, int productId);
 
@@ -47,6 +47,10 @@ public interface TradingSystem {
     ResponseEntity<String> setRating(String username, String token, String storeName, int productId, double rating);
 
     ResponseEntity<String> setCategory(String username, String token, String storeName, int productId, int category);
+
+    ResponseEntity<String> addKeywordToProduct(String username, String token, String storeName, int productId, String keyword);
+
+    ResponseEntity<String> removeKeywordFromProduct(String username, String token, String storeName, int productId, String keyword);
 
     ResponseEntity<String> login(String token, String usernameV, String username, String password);
 
@@ -85,6 +89,8 @@ public interface TradingSystem {
     ResponseEntity<String> getAllStores(String userName, String token);
 
     ResponseEntity<String> getAllStoresInJSONFormat(String username, String token);
+
+    ResponseEntity<String> getProductsFromStoreJSONFormat(String username, String token,String storeName);
 
     ResponseEntity<String> getStoresIOpened(String username, String token);
 
