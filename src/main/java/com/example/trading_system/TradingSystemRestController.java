@@ -52,7 +52,7 @@ public class TradingSystemRestController {
 
     @PostMapping("/closeSystem")
     public ResponseEntity<String> closeSystem(@RequestParam String username, @RequestParam String token) {
-        return tradingSystem.closeSystem(username, token);
+        return tradingSystem.closeSystem("r"+username, token);
     }
 
     @GetMapping("/enter")

@@ -70,7 +70,8 @@ export default defineComponent({
         });
         console.log('Login successful:', response.data);
         localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', username.value);
+        localStorage.setItem('username', "r"+username.value);
+        localStorage.setItem('toPresentUsername', username.value);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('isAdmin', response.data.isAdmin);
         router.push('/'); 
