@@ -24,7 +24,7 @@ public interface MarketService {
 
     void closeStoreExist(String userName, String storeName) throws IllegalAccessException;
 
-    String getStoreProducts(String userName, String storeName) throws IllegalAccessException, JsonProcessingException;
+    String getStoreProducts(String userName, String storeName) throws IllegalAccessException;
 
     String getProductInfo(String userName, String storeName, int productId) throws IllegalAccessException;
 

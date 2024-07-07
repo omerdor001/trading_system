@@ -43,7 +43,6 @@ public class PlaceBidAcceptanceTests {
     private String secondOwnerToken;
     private final String password = "123456";
     private final String productName = "Product1";
-    private final LinkedList<String> keyWords = new LinkedList<>(Arrays.asList("CarPlay", "iPhone"));
 
     private final String storeName = "Store1";
     private UserRepository userRepository;
@@ -77,7 +76,7 @@ public class PlaceBidAcceptanceTests {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
         tradingSystem.openStore(ownerUserName, ownerToken, storeName, "General Store");
-        tradingSystem.addProduct(ownerUserName, ownerToken, productID, storeName, productName, productDescription, 15, 5, 6, 1, keyWords);
+        tradingSystem.addProduct(ownerUserName, ownerToken, productID, storeName, productName, productDescription, 15, 5, 6, 1, "[\"CarPlay\", \"iPhone\"]");
 
         tradingSystem.register("regularUser", "password123", LocalDate.now());
         String userToken2 = tradingSystem.enter().getBody();
@@ -151,7 +150,7 @@ public class PlaceBidAcceptanceTests {
         Assertions.assertEquals(HttpStatus.OK,result.getStatusCode());
         Assertions.assertEquals("Placed bid successfully.", result.getBody());
 
-        Assertions.assertEquals(HttpStatus.OK,        tradingSystem.addProduct(ownerUserName,ownerToken,222,storeName,"product2","product2description", 20, 5,6,4,keyWords).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,        tradingSystem.addProduct(ownerUserName,ownerToken,222,storeName,"product2","product2description", 20, 5,6,4,"[\"CarPlay\", \"iPhone\"]").getStatusCode());
         ResponseEntity<String> result2 = tradingSystem.placeBid(regularUserName, regularUserToken, storeName, 222, 10);
         Assertions.assertEquals(HttpStatus.OK,result2.getStatusCode());
         Assertions.assertEquals("Placed bid successfully.", result2.getBody());

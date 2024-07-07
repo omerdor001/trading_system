@@ -30,7 +30,7 @@ public interface MarketFacade {
 
     String getStoresIOpened(String username);
 
-    String getStoreProducts(String userName, String storeName) throws IllegalAccessException, JsonProcessingException;
+    String getStoreProducts(String userName, String storeName) throws IllegalAccessException;
 
     String getProductInfo(String userName, String storeName, int productId) throws IllegalAccessException;
 

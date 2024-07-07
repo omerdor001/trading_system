@@ -76,7 +76,7 @@ public class LotteryAcceptanceTests {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
         tradingSystem.openStore(ownerUserName, ownerToken, storeName, "General Store");
-        tradingSystem.addProduct(ownerUserName, ownerToken, productID, storeName, productName, productDescription, 15, 5, 6, 1, keyWords);
+        tradingSystem.addProduct(ownerUserName, ownerToken, productID, storeName, productName, productDescription, 15, 5, 6, 1, "[\"CarPlay\", \"iPhone\"]");
 
         tradingSystem.register("regularUser", "password123", LocalDate.now());
         String userToken2 = tradingSystem.enter().getBody();

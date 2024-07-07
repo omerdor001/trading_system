@@ -64,7 +64,7 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public String getStoreProducts(String userName, String store_name) throws IllegalAccessException, JsonProcessingException {
+    public String getStoreProducts(String userName, String store_name) throws IllegalAccessException {
         return marketFacade.getStoreProducts(userName, store_name);
     }
 
@@ -390,7 +390,7 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException, JsonProcessingException {
+    public String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException,JsonProcessingException {
         return marketFacade.requestInformationAboutOfficialsInStore(userName, storeName);
     }
 

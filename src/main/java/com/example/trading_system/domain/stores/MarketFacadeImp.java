@@ -191,13 +191,14 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String getStoreProducts(String userName, String storeName) throws IllegalAccessException, JsonProcessingException {
+    public String getStoreProducts(String userName, String storeName) throws IllegalAccessException {
         validateUserAndStore(userName, storeName);
         Store store = storeRepository.getStore(storeName);
         if (!store.isOpen() && !(store.isRoleHolder(userName) || userFacade.isAdmin(userName)))
             throw new IllegalAccessException("When the store is closed only role holders can get products");
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(store);
+
+        return store.toString();
+
 
     }
 

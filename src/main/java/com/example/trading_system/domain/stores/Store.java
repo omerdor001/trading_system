@@ -125,6 +125,8 @@ public class Store {
 
         for (Product p : products.values()) {
             sb.append(p.toString());
+            sb.append(", ");
+
         }
 
         sb.append("]");
@@ -775,6 +777,14 @@ public class Store {
             } else throw new IllegalArgumentException("Product with id " + productId + " does not exist");
         }
 
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public double getStoreRating() {
+        return storeRating;
     }
 
     //endregion
