@@ -2792,3 +2792,29 @@ This generated password is for development use only. Your security configuration
 2024-07-07T23:21:44.989+03:00  INFO 18960 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
 2024-07-07T23:21:44.989+03:00  INFO 18960 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4d93f75b]]
 2024-07-07T23:21:44.989+03:00  INFO 18960 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-07-08T00:51:03.302+03:00  INFO 11008 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 11008 (C:\Users\marti\Documents\University\year 3\Semester 2\trading_system\target\classes started by martin in C:\Users\marti\Documents\University\year 3\Semester 2\trading_system)
+2024-07-08T00:51:03.305+03:00  INFO 11008 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-08T00:51:04.166+03:00  INFO 11008 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : OpenCV is Loaded.
+2024-07-08T00:51:04.449+03:00  INFO 11008 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-08T00:51:04.460+03:00  INFO 11008 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-08T00:51:04.460+03:00  INFO 11008 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-08T00:51:04.518+03:00  INFO 11008 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-08T00:51:04.519+03:00  INFO 11008 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1133 ms
+2024-07-08T00:51:04.815+03:00  WARN 11008 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 93bf85bd-bc9c-4ac7-a543-b48ce8e7ee8f
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-07-08T00:51:05.048+03:00  INFO 11008 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@31f295b6, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7a687d8d, org.springframework.security.web.context.SecurityContextHolderFilter@5f34907b, org.springframework.security.web.header.HeaderWriterFilter@65e22def, org.springframework.web.filter.CorsFilter@4c82b5df, org.springframework.security.web.authentication.logout.LogoutFilter@161dd92a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@16da1abc, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@671ea6ff, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@67eec8e1, org.springframework.security.web.access.ExceptionTranslationFilter@20ead579, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@474179fa]
+2024-07-08T00:51:05.211+03:00  INFO 11008 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
+2024-07-08T00:51:05.213+03:00  INFO 11008 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-07-08T00:51:05.215+03:00  INFO 11008 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@f2b90fc]]
+2024-07-08T00:51:05.215+03:00  INFO 11008 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-07-08T00:51:05.221+03:00  INFO 11008 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 2.478 seconds (process running for 2.933)
+2024-07-08T00:51:26.795+03:00  INFO 11008 --- [Trading_System] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-08T00:51:26.795+03:00  INFO 11008 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-07-08T00:51:26.796+03:00  INFO 11008 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-07-08T00:52:00.630+03:00  INFO 11008 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-07-08T00:52:00.630+03:00  INFO 11008 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@f2b90fc]]
+2024-07-08T00:52:00.630+03:00  INFO 11008 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
