@@ -199,7 +199,7 @@ public class Store {
         } else throw new IllegalArgumentException("Product with id " + productId + " does not exist");
     }
 
-    public synchronized void addKeyWordToProduct(int productId, String keyword) {
+    public  synchronized void addKeyWordToProduct(int productId, String keyword) {
         Product product = getProduct(productId);
         if (product != null) {
             product.addKeyWord(keyword);

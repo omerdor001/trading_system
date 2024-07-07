@@ -321,7 +321,7 @@ public class TradingSystemImp implements TradingSystem {
 
     @Override
     public ResponseEntity<String> addKeywordToProduct(String username, String token, String storeName, int productId, String keyword) {
-        logger.info("User {} is trying to add a keyword : {} to product : {} from store : {}", username, keyword, productId, storeName);
+        logger.info("User {} is trying to add a keyword : {} to product : {} in store : {}", username, keyword, productId, storeName);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();

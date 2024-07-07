@@ -184,7 +184,7 @@ public class TradingSystemRestController {
         return tradingSystem.addKeywordToProduct("r"+username, token, storeName, productId, keyword);
     }
 
-    @PostMapping("/addKeyword")
+    @PostMapping("/removeKeyword")
     public ResponseEntity<String> removeKeywordFromProduct(@RequestParam String username,
                                                       @RequestParam String token,
                                                       @RequestParam String storeName,

@@ -658,7 +658,7 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public void addKeywordToProduct(String username, String storeName, int productId,String keyword) throws IllegalAccessException {
+    public boolean addKeywordToProduct(String username, String storeName, int productId, String keyword) throws IllegalAccessException {
         Lock lock = storeLocks.computeIfAbsent(storeName, k -> new ReentrantLock());
         lock.lock();
         try {
@@ -679,19 +679,18 @@ public class MarketFacadeImp implements MarketFacade {
             if (user.getRoleByStoreId(storeName) == null) {
                 throw new RuntimeException("User with no permission for this store");
             }
-            user.getRoleByStoreId(storeName).addKeywordToProduct(username,storeName,productId,keyword);
-            store.addKeyWordToProduct(productId,keyword);
+            user.getRoleByStoreId(storeName).addKeywordToProduct(username, storeName, productId, keyword);
+            store.addKeyWordToProduct(productId, keyword);
+        } finally {
             lock.unlock();
             storeLocks.remove(storeName, lock);
-        } catch (Exception e) {
-            lock.unlock();
-            storeLocks.remove(storeName, lock);
-            throw e;
+            return true;
         }
     }
 
+
     @Override
-    public void removeKeywordToProduct(String username, String storeName, int productId,String keyword) throws IllegalAccessException {
+    public boolean removeKeywordToProduct(String username, String storeName, int productId,String keyword) throws IllegalAccessException {
         Lock lock = storeLocks.computeIfAbsent(storeName, k -> new ReentrantLock());
         lock.lock();
         try {
@@ -716,6 +715,7 @@ public class MarketFacadeImp implements MarketFacade {
             store.removeKeyWordFromProduct(productId,keyword);
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            return true;
         } catch (Exception e) {
             lock.unlock();
             storeLocks.remove(storeName, lock);
