@@ -56,8 +56,8 @@ class GetPurchaseHistoryAcceptanceTests {
         String address = "1234 Main Street, Springfield, IL, 62704-1234";
         tradingSystem.setAddress(username, token, address);
         tradingSystem.openStore(username, token, storeName, "");
-        tradingSystem.addProduct(username, token, 0, storeName, "product1", "", 1, 5, 1, 1, new LinkedList<>());
-        tradingSystem.addToCart(username, token, 0, storeName, 1, 1);
+        tradingSystem.addProduct(username, token, 0, storeName, "product1", "", 1, 5, 1, 1, "[]");
+        tradingSystem.addToCart(username, token, 0, storeName, 1,1);
         tradingSystem.approvePurchase(username, token);
     }
 

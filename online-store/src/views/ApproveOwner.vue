@@ -1,99 +1,131 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
-    <div>
-    <h2>Approve Owner Requests</h2>
-    <div v-if="approvals.length === 0">No approvals needed.</div>
-    <div v-else>
-      <table>
-        <thead>
-          <tr>
-            <th>Store</th>
-            <th>Appointer</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(approval, index) in approvals" :key="index">
-            <td>{{ approval.store }}</td>
-            <td>{{ approval.appointer }}</td>
-            <td>
-              <button @click="approveOwner(approval.store, approval.appointer)">Approve</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
+    <div class="approve-owner">
+      <h2>Approve Owner Requests</h2>
+      <div v-if="requests.length === 0 && !loading && !error && !ownersLoading">
+        <p>No requests found.</p>
+      </div>
+      <div v-if="requests.length > 0">
+        <table class="owner-requests">
+          <thead>
+            <tr>
+              <th>Store Name</th>
+              <th>Appointer</th>
+              <th>Approve</th>
+              <th>Reject</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(request, index) in requests" :key="index">
+              <td>{{ request.storeName }}</td>
+              <td>{{ request.appointee }}</td> 
+              <td>
+                <PrimeButton label="Click-Approve" type="button" @click="approveOwner(request)" />
+              </td>
+              <td>
+                <PrimeButton label="Click-Reject" type="button" @click="rejectOwner(request)" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div v-if="loading || ownersLoading">
+        <p>Loading...</p>
+      </div>
+      <div v-if="error">
+        <p class="p-error">{{ error }}</p>
+      </div>
+      <PrimeToast ref="toast" position="top-right" :life="3000"></PrimeToast>
     </div>
   </div>
-</div>
 </template>
 
 <script>
 import axios from 'axios';
 import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
-// import { Button as PrimeButton } from 'primevue/button';
-// import { Toast as PrimeToast } from 'primevue/toast';
-import { useRouter } from 'vue-router';
-import { useToast } from 'primevue/usetoast';
+import { Button as PrimeButton } from 'primevue/button';
+import { Toast as PrimeToast } from 'primevue/toast';
 
 export default defineComponent({
   name: 'ApproveOwner',
   components: {
     SiteHeader,
-    // PrimeButton,
-    // PrimeToast,
+    PrimeButton,
+    PrimeToast,
   },
   setup() {
-    const router = useRouter();
     const loading = ref(false);
     const error = ref(null);
     const requests = ref([]);
-    const username=localStorage.getItem('username'); 
+    const toast = ref(null);
+    const username = localStorage.getItem('username'); 
     const token = localStorage.getItem('token'); 
-    const approvals = ref([]);
-    const toast = useToast();
-
-
+  
     const fetchRequests = async () => {
       try {
+        loading.value = true;
         const response = await axios.get(`http://localhost:8082/api/trading/requests-for-ownership`,{
              params : { 
               username: username,
               token: token,
             }
           });
-          approvals.value = Object.entries(response.data).map(([key, value]) => {
-          return { store: key, appointer: value };
-        });
-        } catch (err) {
+        requests.value = response.data.map(request => ({
+          newOwner: request.newOwner,
+          storeName: request.storeName,
+          appointee: request.appointee,
+        })); 
+        loading.value = false;
+      } catch (err) {
+        loading.value = false;
         error.value = err.response?.data?.message || 'An error occurred';
       }
     };
 
-    const approveOwner = async (store, appointer) => {
+    const approveOwner = async (request) => {
       try {
+        loading.value = true;
         const response = await axios.post('http://localhost:8082/api/trading/approveOwner', null, {
           params: {
             newOwner: username,
             token: token,
-            storeName : store,
-            appoint: appointer
-          }});
+            storeName: request.storeName,
+            appoint: request.appointee,
+          }
+        });
         showSuccessToast(response.data.message);
-        // Remove the approved request from the list
+        requests.value = requests.value.filter(req => req !== request);
+        loading.value = false;
       } catch (err) {
+        loading.value = false;
         showErrorToast(err.response?.data?.message || 'An error occurred');
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('username');
-      router.push('/login');
+    const rejectOwner = async (request) => {
+      try {
+        loading.value = true;
+        const response = await axios.post('http://localhost:8082/api/trading/rejectToOwnStore', null, {
+          params: {
+            username: username,
+            token: token,
+            storeName: request.storeName,
+            appoint: request.appointee,
+          }
+        });
+        showSuccessToast(response.data.message);
+        requests.value = requests.value.filter(req => req !== request);
+        loading.value = false;
+      } catch (err) {
+        loading.value = false;
+        showErrorToast(err.response?.data?.message || 'An error occurred');
+      }
     };
 
     const showSuccessToast = (message) => {
-      toast.add({
+      toast.value.add({
         severity: 'success',
         summary: 'Success',
         detail: message,
@@ -102,7 +134,7 @@ export default defineComponent({
     };
 
     const showErrorToast = (message) => {
-      toast.add({
+      toast.value.add({
         severity: 'error',
         summary: 'Error',
         detail: message,
@@ -110,16 +142,16 @@ export default defineComponent({
       });
     };
 
-    // Fetch requests on component mount
     onMounted(fetchRequests);
 
     return {
       loading,
       error,
       requests,
-      approvals,
       approveOwner,
-      logout,
+      rejectOwner,
+      toast,
+      username,
     };
   },
 });
@@ -161,33 +193,5 @@ export default defineComponent({
 .p-error {
   margin-top: 20px;
   color: red;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-thead th, tbody td {
-  padding: 10px;
-  text-align: center;
-  border: 1px solid #ddd;
-}
-thead th {
-  background-color: #f2f2f2;
-}
-
-button {
-  padding: 5px 10px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  border-radius: 5px;
-}
-button:hover {
-  background-color: #45a049;
 }
 </style>

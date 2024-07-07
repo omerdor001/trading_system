@@ -101,6 +101,23 @@ public class Role {
     public void createProductLottery() throws IllegalAccessException{
         roleState.createProductLottery();
     }
+    //Getters of permissions
+    public boolean isWatch(){
+        return roleState.isWatch();
+    }
+
+    public boolean isEditSupply() {
+        return roleState.isEditSupply();
+    }
+
+    public boolean isEditPurchasePolicy(){
+        return roleState.isEditPurchasePolicy();
+    }
+
+    public boolean isEditDiscountPolicy(){
+        return roleState.isEditDiscountPolicy();
+    }
+
 }
 
 

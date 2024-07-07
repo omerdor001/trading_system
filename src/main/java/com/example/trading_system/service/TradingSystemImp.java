@@ -5,6 +5,8 @@ import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 public class TradingSystemImp implements TradingSystem {
@@ -195,12 +198,14 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> addProduct(String username, String token, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords) {
+    public ResponseEntity<String> addProduct(String username, String token, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, String keyWords) {
         logger.info("User {} is trying to add products to store : {} with product Id : {} , product name : {}, product description : {} , product price : {} ," + "product quantity : {} , rating : {} , category : {} , key words : {} ", username, store_name, product_id, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
+        List<String> keyWordsList;
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            marketService.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWords);
+            keyWordsList = Arrays.asList(keyWords.split(","));
+            marketService.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWordsList);
         } catch (Exception e) {
             logger.error("Error occurred while adding product: {} to store: {}: {}", product_name, store_name, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -468,7 +473,7 @@ public class TradingSystemImp implements TradingSystem {
             logger.info("Finished suggesting manager : {} to be a manager in store : {}", newManager, store_name_id);
             return new ResponseEntity<>("Success suggesting manager", HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , while trying to suggest the user : {} to be a manager in store : {}", e.getMessage(), appoint, store_name_id);
+            logger.error("Error occurred : {} , while trying to suggest the user : {} to be a manager in store : {}", e.getMessage(), newManager, store_name_id);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -689,6 +694,34 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
+    public ResponseEntity<String> getAllStoresInJSONFormat(String username, String token) {
+        logger.info("Trying to Gather All Stores Details");
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Gather All Stores Details by JSON format");
+            return new ResponseEntity<>(marketService.getAllStoresInJSONFormat(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Stores Details ", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getProductsFromStoreJSONFormat(String storeName,String username, String token) {
+        logger.info("Trying to Gather All Products Details of store {}",storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Gather All Products Details of store {}",storeName);
+            return new ResponseEntity<>(marketService.getProductsFromStoreJSONFormat(storeName), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Products Details of store {} ",storeName, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public ResponseEntity<String> getStoresIOpened(String username, String token) {
         logger.info("Trying to get all Stores {} created",username);
         try {
@@ -754,6 +787,20 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(userService.getStoresIManage(username), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , Failed on Gathering Stores {} manages Info ",username, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getPermissionsForUserJSONFormat(String username, String token, String storeName) {
+        logger.info("Trying to Get permissions for {}",username);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Get permissions for {}",username);
+            return new ResponseEntity<>(userService.getPermissionsForUserJSONFormat(username,storeName), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering permissions for {} ",username, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

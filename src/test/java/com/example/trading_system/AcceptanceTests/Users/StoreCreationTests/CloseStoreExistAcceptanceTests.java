@@ -63,7 +63,7 @@ public class CloseStoreExistAcceptanceTests {
         }
         tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
         String[] keyWords = {"CarPlay", "iPhone"};
-        tradingSystemImp.addProduct(userName, token, 111, storeName, "CarPlay", "CarPlay for iPhones", 15, 5, 6, 1, new ArrayList<>(Arrays.asList(keyWords)));
+        tradingSystemImp.addProduct(userName, token, 111, storeName, "CarPlay", "CarPlay for iPhones", 15, 5, 6, 1,"[\"CarPlay\", \"iPhone\"]");
     }
 
 

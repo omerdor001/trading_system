@@ -18,7 +18,7 @@ public class Registered extends User {
     private boolean isLogged = false;
     private List<Role> roles;
     private List<Notification> notifications;
-    private HashMap<List<String>, List<Boolean>> managerToApprove;
+    private HashMap<String, HashMap<String,List<Boolean>>> managerToApprove;
     private HashMap<String, String> ownerToApprove;
 
     public Registered(String userName, String encryption, LocalDate birthdate) {
@@ -99,7 +99,7 @@ public class Registered extends User {
         return ownerToApprove;
     }
 
-    public HashMap<List<String>, List<Boolean>> getManagerToApprove() {
+    public HashMap<String, HashMap<String, List<Boolean>>> getManagerToApprove() {
         return managerToApprove;
     }
 
@@ -163,15 +163,57 @@ public class Registered extends User {
     }
 
     public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
-        managerToApprove.put(Arrays.asList(store_name_id,appointee), Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery));
+        HashMap<String, List<Boolean>> permissions = new HashMap<>();
+        permissions.put(appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery));
+        managerToApprove.put(store_name_id, permissions);
+
     }
+
+    public boolean isWatch(String storeName){
+        if (isOwner(storeName))
+            return true;
+        else if(isManager(storeName)){
+            return getRoleByStoreId(storeName).isWatch();
+        }
+        else return false;
+    }
+
+    public boolean isEditSupply(String storeName){
+        if (isOwner(storeName))
+            return true;
+        else if(isManager(storeName)){
+            return getRoleByStoreId(storeName).isEditSupply();
+        }
+        else return false;
+    }
+
+    public boolean isEditPurchasePolicy(String storeName){
+        if (isOwner(storeName))
+            return true;
+        else if(isManager(storeName)){
+            return getRoleByStoreId(storeName).isEditPurchasePolicy();
+        }
+        else return false;
+    }
+
+    public boolean isEditDiscountPolicy(String storeName){
+        if (isOwner(storeName))
+            return true;
+        else if(isManager(storeName)){
+            return getRoleByStoreId(storeName).isEditDiscountPolicy();
+        }
+        else return false;
+    }
+
 
     public void addWaitingAppoint_Owner(String storeName,String appointee) {
         ownerToApprove.put(storeName,appointee);
     }
 
-    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id,String appointee) {
-        return managerToApprove.remove(Arrays.asList(store_name_id,appointee));
+    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id, String appointee) throws IllegalAccessException {
+        HashMap<String,List<Boolean>> removed=managerToApprove.remove(store_name_id);
+        if (removed == null) throw new IllegalAccessException("No one suggest this user to be a manager");
+        return removed.get(appointee);
     }
 
     public boolean removeWaitingAppoint_Owner(String storeName) {

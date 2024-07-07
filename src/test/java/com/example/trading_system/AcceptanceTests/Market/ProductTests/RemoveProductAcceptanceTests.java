@@ -63,7 +63,7 @@ public class RemoveProductAcceptanceTests {
             fail("Setup failed: Unable to extract username and token from JSON response2");
         }
         tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
-        tradingSystemImp.addProduct(userName, token, productID, storeName, "Product1", "ProductDescription", 10, 5, 6, 1, new ArrayList<>(Arrays.asList(keyWords)));
+        tradingSystemImp.addProduct(userName, token, productID, storeName, "Product1", "ProductDescription", 10, 5, 6, 1, "[\"CarPlay\", \"iPhone\"]");
     }
 
     @AfterEach

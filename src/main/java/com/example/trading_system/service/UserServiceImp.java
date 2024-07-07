@@ -286,6 +286,11 @@ public class UserServiceImp implements UserService {
         return userFacade.getUserRequestsManagement(username);
     }
 
+    @Override
+    public String getPermissionsForUserJSONFormat(String username, String storeName) {
+        return userFacade.getPermissionsForUserJSONFormat(username,storeName);
+    }
+
 
 
 }

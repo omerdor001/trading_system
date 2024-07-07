@@ -181,11 +181,11 @@ public class EditManagerPermissionsAcceptanceTests {
     @Test
     public void GivenGoodManagerAndOwner_WhenEditPermissionToManager_ThenSuccesss() //testing EditSupply Permission
     {
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.addProduct(userNameManager, tokenManager, 111, storeName, "Product1", "ProductDescription", 5, 5, 5, 1, new ArrayList<>(Arrays.asList(keyWords))).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.addProduct(userNameManager, tokenManager, 111, storeName, "Product1", "ProductDescription", 5, 5, 5, 1, "[\"CarPlay\", \"iPhone\"]").getStatusCode());
         ResponseEntity<String> resp = tradingSystemImp.editPermissionForManager(userName, token, userNameManager, storeName, true, false, true, true, true, true);
         Assertions.assertEquals(HttpStatus.OK, resp.getStatusCode());
         Assertions.assertEquals("Success edit permission for manager ", resp.getBody());
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST, tradingSystemImp.addProduct(userNameManager, tokenManager, 222, storeName, "Product1", "ProductDescription", 5, 5, 5, 1, new ArrayList<>(Arrays.asList(keyWords))).getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, tradingSystemImp.addProduct(userNameManager, tokenManager, 222, storeName, "Product1", "ProductDescription", 5, 5, 5, 1,"[\"CarPlay\", \"iPhone\"]").getStatusCode());
     } // Test Permission Before and then Test Permission After
 
     @Test

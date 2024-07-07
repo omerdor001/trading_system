@@ -115,7 +115,7 @@ public class FireManagerAcceptanceTests {
         tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, ownerUserName, false, false, false, false, false, false);
         String productName = "Product1";
         int productID = 111;
-        tradingSystemImp.addProduct(ownerUserName, ownerToken, productID, storeName, productName, "oldDescription", 15.0, 6, 1, 1, new ArrayList<>(Arrays.asList(keyWords)));
+        tradingSystemImp.addProduct(ownerUserName, ownerToken, productID, storeName, productName, "oldDescription", 15.0, 6, 1, 1, keyWords.toString());
     }
 
     @AfterEach

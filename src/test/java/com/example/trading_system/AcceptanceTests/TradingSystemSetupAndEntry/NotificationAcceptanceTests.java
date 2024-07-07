@@ -66,7 +66,7 @@ class NotificationAcceptanceTests {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
         tradingSystem.openStore(username, token, storeName, "");
-        tradingSystem.addProduct(username, token, 0, storeName, "product1", "", 1, 5, 1, 1, new LinkedList<>());
+        tradingSystem.addProduct(username, token, 0, storeName, "product1", "", 1, 5, 1, 1, "[]");
     }
 
     @AfterEach

@@ -114,4 +114,5 @@ public interface UserFacade {
 
     String getUserRequestsManagement(String username);
 
+    String getPermissionsForUserJSONFormat(String username,String storeName);
 }

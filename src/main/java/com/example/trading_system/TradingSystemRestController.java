@@ -100,8 +100,8 @@ public class TradingSystemRestController {
                                              @RequestParam int productQuantity,
                                              @RequestParam double rating,
                                              @RequestParam int category,
-                                             @RequestParam List<String> keyWords) {
-        return tradingSystem.addProduct("r" + username, token, productId, storeName, productName, productDescription, productPrice, productQuantity, rating, category, keyWords);
+                                             @RequestParam String keyWords) {
+        return tradingSystem.addProduct("r"+username, token, productId, storeName, productName, productDescription, productPrice, productQuantity, rating, category, keyWords);
     }
 
     @DeleteMapping("/product/remove")
@@ -120,14 +120,14 @@ public class TradingSystemRestController {
 
     }
 
-    //New
+
     @PostMapping("/setProductName")
     public ResponseEntity<String> setProductName(@RequestParam String username,
                                                  @RequestParam String token,
                                                  @RequestParam String storeName,
                                                  @RequestParam int productId,
                                                  @RequestParam String productName) {
-        return tradingSystem.setProductName(username, token, storeName, productId, productName);
+        return tradingSystem.setProductName("r"+username, token, storeName, productId, productName);
     }
 
     @PostMapping("/setProductDescription")
@@ -136,7 +136,7 @@ public class TradingSystemRestController {
                                                         @RequestParam String storeName,
                                                         @RequestParam int productId,
                                                         @RequestParam String productDescription) {
-        return tradingSystem.setProductDescription(username, token, storeName, productId, productDescription);
+        return tradingSystem.setProductDescription("r"+username, token, storeName, productId, productDescription);
     }
 
     @PostMapping("/setProductPrice")
@@ -145,7 +145,7 @@ public class TradingSystemRestController {
                                                   @RequestParam String storeName,
                                                   @RequestParam int productId,
                                                   @RequestParam double productPrice) {
-        return tradingSystem.setProductPrice(username, token, storeName, productId, productPrice);
+        return tradingSystem.setProductPrice("r"+username, token, storeName, productId, productPrice);
     }
 
     @PostMapping("/setProductQuantity")
@@ -154,7 +154,7 @@ public class TradingSystemRestController {
                                                      @RequestParam String storeName,
                                                      @RequestParam int productId,
                                                      @RequestParam int productQuantity) {
-        return tradingSystem.setProductQuantity(username, token, storeName, productId, productQuantity);
+        return tradingSystem.setProductQuantity("r"+username, token, storeName, productId, productQuantity);
     }
 
     @PostMapping("/setRating")
@@ -163,7 +163,7 @@ public class TradingSystemRestController {
                                             @RequestParam String storeName,
                                             @RequestParam int productId,
                                             @RequestParam double rating) {
-        return tradingSystem.setRating(username, token, storeName, productId, rating);
+        return tradingSystem.setRating("r"+username, token, storeName, productId, rating);
     }
 
     @PostMapping("/setCategory")
@@ -172,7 +172,7 @@ public class TradingSystemRestController {
                                               @RequestParam String storeName,
                                               @RequestParam int productId,
                                               @RequestParam int category) {
-        return tradingSystem.setCategory(username, token, storeName, productId, category);
+        return tradingSystem.setCategory("r"+username, token, storeName, productId, category);
     }
 
     @PutMapping("/editProduct")
@@ -277,22 +277,22 @@ public class TradingSystemRestController {
                                                    @RequestParam String token,
                                                    @RequestParam String storeName,
                                                    @RequestParam String appoint) {
-        return tradingSystem.rejectToOwnStore(username, token, storeName, appoint);
+        return tradingSystem.rejectToOwnStore("r"+username, token, storeName, "r"+appoint);
     }
 
     @PostMapping("/rejectToManageStore")
-    public ResponseEntity<String> rejectToManageStore(@RequestParam String userName,
+    public ResponseEntity<String> rejectToManageStore(@RequestParam String username,
                                                       @RequestParam String token,
                                                       @RequestParam String store_name_id,
                                                       @RequestParam String appoint) {
-        return tradingSystem.rejectToManageStore(userName, token, store_name_id, appoint);
+        return tradingSystem.rejectToManageStore("r"+username, token, store_name_id, "r"+appoint);
     }
 
     @PostMapping("/waiverOnOwnership")
-    public ResponseEntity<String> waiverOnOwnership(@RequestParam String userName,
+    public ResponseEntity<String> waiverOnOwnership(@RequestParam String username,
                                                     @RequestParam String token,
                                                     @RequestParam String storeName) {
-        return tradingSystem.waiverOnOwnership("r" + userName, token, storeName);
+        return tradingSystem.waiverOnOwnership("r" + username, token, storeName);
     }
 
     @PostMapping("/fireManager")
@@ -330,6 +330,16 @@ public class TradingSystemRestController {
         return tradingSystem.getAllStores(userName, token);
     }
 
+    @GetMapping("/stores-detailed-info")
+    public ResponseEntity<String> getAllStoresInJSONFormat(@RequestParam String username, @RequestParam String token) {
+        return tradingSystem.getAllStoresInJSONFormat("r"+username, token);
+    }
+
+    @GetMapping("/products_of_store")
+    public ResponseEntity<String> getProductsFromStoreJSONFormat(@RequestParam String storeName,@RequestParam String username, @RequestParam String token) {
+        return tradingSystem.getProductsFromStoreJSONFormat(storeName,"r"+username,token);
+    }
+
     @GetMapping("/stores-I-created")
     public ResponseEntity<String> getStoresIOpened(@RequestParam String userName, @RequestParam String token) {
         return tradingSystem.getStoresIOpened("r"+userName,token);
@@ -353,6 +363,11 @@ public class TradingSystemRestController {
     @GetMapping("/requests-for-management")
     public ResponseEntity<String> getUserRequestsManagement(@RequestParam String username, @RequestParam String token) {
         return tradingSystem.getUserRequestsManagement("r"+username,token);
+    }
+
+    @GetMapping("/permissions-for-user")
+    public ResponseEntity<String> getPermissionsForUserJSONFormat(@RequestParam String username,@RequestParam String storeName, @RequestParam String token) {
+        return tradingSystem.getPermissionsForUserJSONFormat("r"+username,token,storeName);
     }
 
     @GetMapping("/product/info")

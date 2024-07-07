@@ -25,7 +25,7 @@
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <PasswordText v-model="password" id="password" />
+            <input type="password" v-model="password" id="password" class="p-inputtext p-component" />
           </div>
           <div class="button-group">
             <PrimeButton label="Login" icon="pi pi-check" type="submit" class="login-button" />
@@ -43,8 +43,7 @@ import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Button as PrimeButton } from 'primevue/button';
 import { InputText } from 'primevue/inputtext';
-import { PasswordText } from 'primevue/password';
-import { PrimeCard } from 'primevue/card';
+import { Card as PrimeCard } from 'primevue/card';
 import axios from 'axios';
 
 export default defineComponent({
@@ -52,7 +51,6 @@ export default defineComponent({
   components: {
     PrimeButton,
     InputText,
-    PasswordText,
     PrimeCard
   },
   setup() {
@@ -63,7 +61,7 @@ export default defineComponent({
     const handleLogin = async () => {
       try {
         const response = await axios.get('http://localhost:8082/api/trading/login', {
-        params: {
+          params: {
             token: localStorage.getItem('token'),
             usernameV: localStorage.getItem('username'),
             username: username.value,
@@ -74,19 +72,19 @@ export default defineComponent({
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('username', username.value);
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('isAdmin',response.data.isAdmin);
+        localStorage.setItem('isAdmin', response.data.isAdmin);
         router.push('/'); 
       } catch (error) {
         if (error.response) {
-            errorMessage.value = error.response.data || 'Failed to Login';
-            console.error('Server responded with status:', error.response.status);
-          } else if (error.request) {
-            errorMessage.value = 'No response from server';
-            console.error('No response received:', error.request);
-          } else {
-            errorMessage.value = 'Request failed to reach the server';
-            console.error('Error setting up the request:', error.message);
-          }
+          errorMessage.value = error.response.data || 'Failed to Login';
+          console.error('Server responded with status:', error.response.status);
+        } else if (error.request) {
+          errorMessage.value = 'No response from server';
+          console.error('No response received:', error.request);
+        } else {
+          errorMessage.value = 'Request failed to reach the server';
+          console.error('Error setting up the request:', error.message);
+        }
       }
     };
 

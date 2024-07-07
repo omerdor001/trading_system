@@ -19,10 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
@@ -75,7 +71,7 @@ class AddProductToStoreAcceptanceTests {
 
     @Test
     void addProduct_Success() {
-        ResponseEntity<String> result = tradingSystem.addProduct(username, token, 0, "existingStore", "product1", "", 1, 5, 1, 1, new LinkedList<>());
+        ResponseEntity<String> result = tradingSystem.addProduct(username, token, 0, "existingStore", "product1", "", 1, 5, 1, 1, "[]");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Product was added successfully.", result.getBody());
     }
@@ -83,35 +79,35 @@ class AddProductToStoreAcceptanceTests {
 
     @Test
     void addProduct_NonExistentStore() {
-        ResponseEntity<String> result = tradingSystem.addProduct(username, token, 0, "non-existingStore", "product1", "", 1, 5, 1, 1, new LinkedList<>());
+        ResponseEntity<String> result = tradingSystem.addProduct(username, token, 0, "non-existingStore", "product1", "", 1, 5, 1, 1, "[]");
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Store must exist", result.getBody());
     }
 
     @Test
     void addProduct_NegativePrice() {
-        ResponseEntity<String> result = tradingSystem.addProduct(username, token, 0, "existingStore", "product1", "", -1, 5, 1, 1, new LinkedList<>());
+        ResponseEntity<String> result = tradingSystem.addProduct(username, token, 0, "existingStore", "product1", "", -1, 5, 1, 1, "[]");
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Price can't be negative number", result.getBody());
     }
 
     @Test
     void addProduct_NegativeQuantity() {
-        ResponseEntity<String> result = tradingSystem.addProduct(username, token, 0, "existingStore", "product1", "", 1, -1, 1, 1, new LinkedList<>());
+        ResponseEntity<String> result = tradingSystem.addProduct(username, token, 0, "existingStore", "product1", "", 1, -1, 1, 1,"[]");
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Quantity must be natural number", result.getBody());
     }
 
     @Test
     void addProduct_NegativeRating() {
-        ResponseEntity<String> result = tradingSystem.addProduct(username, token, 0, "existingStore", "product1", "", 1, 5, -1, 1, new LinkedList<>());
+        ResponseEntity<String> result = tradingSystem.addProduct(username, token, 0, "existingStore", "product1", "", 1, 5, -1, 1, "[]");
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Rating can't be negative number", result.getBody());
     }
 
     @Test
     void addProduct_NonExistentUser() {
-        ResponseEntity<String> result = tradingSystem.addProduct("owner", token, 0, "existingStore", "product1", "", 1, 5, 1, 1, new LinkedList<>());
+        ResponseEntity<String> result = tradingSystem.addProduct("owner", token, 0, "existingStore", "product1", "", 1, 5, 1, 1, "[]");
         assertEquals(HttpStatus.UNAUTHORIZED, result.getStatusCode());
         assertEquals("Invalid token was supplied", result.getBody());
     }
@@ -143,7 +139,7 @@ class AddProductToStoreAcceptanceTests {
         }
         tradingSystem.suggestManage(username, token, usernameManager, storeName, true, false, true, true, true, true);
         tradingSystem.approveManage(usernameManager, tokenManager, storeName, username, true, false, true, true, true, true);
-        ResponseEntity<String> response2 = tradingSystem.addProduct(usernameManager, tokenManager, 111, storeName, productName, "newDescription", 15.0, 6, 1, 1, new ArrayList<>(Arrays.asList(keyWords)));
+        ResponseEntity<String> response2 = tradingSystem.addProduct(usernameManager, tokenManager, 111, storeName, productName, "newDescription", 15.0, 6, 1, 1, "[\"CarPlay\", \"iPhone\"]");
         Assertions.assertEquals("Manager cannot add products", response2.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response2.getStatusCode());
     }
@@ -174,7 +170,7 @@ class AddProductToStoreAcceptanceTests {
         }
         tradingSystem.suggestManage(username, token, usernameManager, storeName, true, true, true, true, true, true);
         tradingSystem.approveManage(usernameManager, tokenManager, storeName, username, true, true, true, true, true, true);
-        ResponseEntity<String> response2 = tradingSystem.addProduct(usernameManager, tokenManager, 111, storeName, productName, "newDescription", 15.0, 6, 1, 1, new ArrayList<>(Arrays.asList(keyWords)));
+        ResponseEntity<String> response2 = tradingSystem.addProduct(usernameManager, tokenManager, 111, storeName, productName, "newDescription", 15.0, 6, 1, 1,"[\"CarPlay\", \"iPhone\"]");
         Assertions.assertEquals("Product was added successfully.", response2.getBody());
         Assertions.assertEquals(HttpStatus.OK, response2.getStatusCode());
 
@@ -205,7 +201,7 @@ class AddProductToStoreAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        ResponseEntity<String> response2 = tradingSystem.addProduct(regularUser, regularToken, 111, storeName, productName, "newDescription", 15.0, 6, 1, 1, new ArrayList<>(Arrays.asList(keyWords)));
+        ResponseEntity<String> response2 = tradingSystem.addProduct(regularUser, regularToken, 111, storeName, productName, "newDescription", 15.0, 6, 1, 1, "[\"CarPlay\", \"iPhone\"]");
         Assertions.assertEquals("User doesn't have roles", response2.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response2.getStatusCode());
 
@@ -213,10 +209,10 @@ class AddProductToStoreAcceptanceTests {
 
     @Test
     public void givenProductIDExist_WhenAddProduct_ThenThrowException() {
-        ResponseEntity<String> response = tradingSystem.addProduct(username, token, 111, storeName, productName, "newDescription", 15.0, 6, 1, 1, new ArrayList<>(Arrays.asList(keyWords)));
+        ResponseEntity<String> response = tradingSystem.addProduct(username, token, 111, storeName, productName, "newDescription", 15.0, 6, 1, 1, "[\"CarPlay\", \"iPhone\"]");
         Assertions.assertEquals("Product was added successfully.", response.getBody());
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-        ResponseEntity<String> response2 = tradingSystem.addProduct(username, token, 111, storeName, "anotherProduct", "newDescription", 15.0, 6, 1, 1, new ArrayList<>(Arrays.asList(keyWords)));
+        ResponseEntity<String> response2 = tradingSystem.addProduct(username, token, 111, storeName, "anotherProduct", "newDescription", 15.0, 6, 1, 1, "[\"CarPlay\", \"iPhone\"]");
         Assertions.assertEquals("Product with id 111 already exists", response2.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response2.getStatusCode());
     }

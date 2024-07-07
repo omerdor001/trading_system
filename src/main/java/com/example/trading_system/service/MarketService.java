@@ -14,6 +14,10 @@ public interface MarketService {
 
     String getAllStores(String userName);
 
+    String getAllStoresInJSONFormat(String username);
+
+    String getProductsFromStoreJSONFormat(String storeName);
+
     String getStoresIOpened(String username);
 
     void openStoreExist(String userName, String storeName) throws IllegalAccessException;
