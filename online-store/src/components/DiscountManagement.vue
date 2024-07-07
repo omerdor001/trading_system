@@ -1,4 +1,3 @@
-
 <template>
     <div class="discount-management">
         <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
@@ -13,7 +12,7 @@
                 <div class="p-field">
                     <label for="discountType">Select discount type</label>
                     <Dropdown id="discountType" v-model="newDiscount.type" :options="discountTypes" optionLabel="label"
-                        optionValue="value" @change="updateDiscountFields" />
+                        optionValue="value" />
                 </div>
                 <template v-if="newDiscount.type === 'Store'">
                     <div class="p-field">
@@ -71,7 +70,7 @@
                 <div class="p-field">
                     <label for="conditionType">Select condition type</label>
                     <Dropdown id="conditionType" v-model="newCondition.type" :options="conditionTypes"
-                        optionLabel="label" optionValue="value" @change="updateConditionFields" />
+                        optionLabel="label" optionValue="value" />
                 </div>
                 <template v-if="newCondition.type === 'Category count'">
                     <div class="p-field">
@@ -369,6 +368,8 @@ export default {
         const addDiscountDialogVisible = ref(false);
         const addConditionDialogVisible = ref(false);
         const showEditPercentDialog = ref(false);
+        const showEditCategoryDialog = ref(false);
+        const showEditProductDialog = ref(false);
         const showEditFirstDiscountDialog = ref(false);
         const showEditSecondDiscountDialog = ref(false);
         const showEditFirstConditionDialog = ref(false);
@@ -465,7 +466,7 @@ export default {
                 type: '',
                 percent: 0,
                 category: null,
-                productId: '',
+                productId: -1,
             };
             addDiscountDialogVisible.value = true;
         };
@@ -473,9 +474,11 @@ export default {
         const showAddConditionDialog = () => {
             newCondition.value = {
                 type: '',
-                categoryCount: 0,
-                productCount: 0,
-                totalSum: 0
+                category: null,
+                productId: -1,
+                categoryCount: -1,
+                productCount: -1,
+                totalSum: -1
             };
             addConditionDialogVisible.value = true;
         };
@@ -756,7 +759,7 @@ export default {
         const deleteDiscount = async (selectedIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/remove/${selectedIndex}`;
-                const response = await axios.delete(url, null, {
+                const response = await axios.delete(url, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -994,7 +997,7 @@ export default {
         const deleteCondition = async (index) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/remove/${index}`;
-                const response = await axios.delete(url, null, {
+                const response = await axios.delete(url, {
                     params: {
                         username: username.value,
                         token: token.value
@@ -1018,6 +1021,8 @@ export default {
             addDiscountDialogVisible,
             addConditionDialogVisible,
             showEditPercentDialog,
+            showEditCategoryDialog,
+            showEditProductDialog,
             showEditFirstDiscountDialog,
             showEditSecondDiscountDialog,
             showEditFirstConditionDialog,
