@@ -90,6 +90,25 @@ public class Role {
         else throw new IllegalAccessException("Only managers can access isEditPurchasePolicy");
     }
 
+    public void approveBid() throws IllegalAccessException{
+        roleState.approveBid();
+    }
+
+    public void rejectBid() throws IllegalAccessException{
+        roleState.rejectBid();
+    }
+
+    public void placeCounterOffer() throws IllegalAccessException{
+        roleState.placeCounterOffer();
+    }
+
+    public void getStoreBids() throws IllegalAccessException{
+        roleState.getStoreBids();
+    }
+
+    public void createProductLottery() throws IllegalAccessException{
+        roleState.createProductLottery();
+    }
     //Getters of permissions
     public boolean isWatch(){
         return roleState.isWatch();

@@ -12,6 +12,7 @@
         <PrimeButton label="Manage Discount Policy" @click="manageDiscountPolicy" />
         <PrimeButton label="Yield Ownership" @click="yieldOwnership" />
         <PrimeButton label="Purchase History" @click="purchaseHistory" />
+        <PrimeButton label="Watch Store Bids" @click="watchStoreBids" />
       </div>
       <div class="content">
         <h2>Stores I Own</h2>
@@ -174,6 +175,10 @@ export default defineComponent({
       }  
     });
 
+    const watchStoreBids = () => {
+      router.push('/get-store-bids');
+    }
+
     const selectStore = (store) => {
       selectedStore.value = store;
       console.log('Selected Store:', store);
@@ -274,6 +279,7 @@ export default defineComponent({
       manageDiscountPolicy,
       yieldOwnership,
       purchaseHistory,
+      watchStoreBids,
       editWorkers,
       saveWorkers,
       editPermissions,

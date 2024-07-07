@@ -76,8 +76,8 @@ public class PermissionsAcceptanceTests {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
         tradingSystem.openStore(username, token1, "store1", "");
-        tradingSystem.suggestManage(username,token1,username1,"store1",true,true,true,true);
-        tradingSystem.approveManage(username1,token2,"store1",username,true,true,true,true);
+        tradingSystem.suggestManage(username,token1,username1,"store1",true,true,true,true, true, true);
+        tradingSystem.approveManage(username1,token2,"store1",username,true,true,true,true, true, true);
     }
 
     @AfterEach
@@ -93,7 +93,7 @@ public class PermissionsAcceptanceTests {
 
     @Test
     void addProductManager_NoPermission() {
-        tradingSystem.editPermissionForManager(username,token1,username1,"store1",true,false,true,true);
+        tradingSystem.editPermissionForManager(username,token1,username1,"store1",true,false,true,true, true, true);
         ResponseEntity<String> response = tradingSystem.addProduct(username1, token2, 123, "store1", "product1", "description", 10.0, 100, 4.5, 1, "");
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
@@ -106,7 +106,7 @@ public class PermissionsAcceptanceTests {
 
     @Test
     void addDiscountPolicyManager_NoPermission() {
-        tradingSystem.editPermissionForManager(username,token1,username1,"store1",true,true,true,false);
+        tradingSystem.editPermissionForManager(username,token1,username1,"store1",true,true,true,false, true, true);
         ResponseEntity<String> response = tradingSystem.addAdditiveDiscount(username1,token2,"store1");
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
@@ -120,7 +120,7 @@ public class PermissionsAcceptanceTests {
 
     @Test
     void addPurchasePolicyManager_NoPermission() {
-        tradingSystem.editPermissionForManager(username,token1,username1,"store1",true,true,false,true);
+        tradingSystem.editPermissionForManager(username,token1,username1,"store1",true,true,false,true, true, true);
         tradingSystem.addProduct(username1, token2, 123, "store1", "product1", "description", 10.0, 100, 4.5, 1, "");
         ResponseEntity<String> response = tradingSystem.addPurchasePolicyByAge(username1,token2,"store1",20,1);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());

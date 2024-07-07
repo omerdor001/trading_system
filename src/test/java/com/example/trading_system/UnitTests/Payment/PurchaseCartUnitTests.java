@@ -75,7 +75,7 @@ public class PurchaseCartUnitTests {
         userFacade.createStore("r" + username, storeName, "description");
         userFacade.setAddress("r" + username, address);
         marketFacade.addProduct("r" + username, productId, storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
-        userFacade.addToCart("r" + username, productId, storeName, quantity);
+        userFacade.addToCart("r" + username, productId, storeName, quantity, 10.0);
 
         Assertions.assertDoesNotThrow(() -> userFacade.purchaseCart("r" + username));
         assertFalse(marketFacade.getAllHistoryPurchases("r" + username,storeName).isEmpty());
@@ -108,8 +108,8 @@ public class PurchaseCartUnitTests {
         userFacade.createStore("r" + username1, storeName, "description");
 
         marketFacade.addProduct("r" + username1, productId, storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
-        userFacade.addToCart("r" + username1, productId, storeName, quantity);
-        userFacade.addToCart("r" + username2, productId, storeName, quantity);
+        userFacade.addToCart("r" + username1, productId, storeName, quantity, 10.0);
+        userFacade.addToCart("r" + username2, productId, storeName, quantity, 10.0);
 
         Assertions.assertDoesNotThrow(() -> userFacade.purchaseCart("r" + username1));
         Assertions.assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("r" + username2));
@@ -146,8 +146,8 @@ public class PurchaseCartUnitTests {
         userFacade.createStore("r" + username1, storeName, "description");
 
         marketFacade.addProduct("r" + username1, productId, storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
-        userFacade.addToCart("r" + username1, productId, storeName, quantity);
-        userFacade.addToCart("r" + username2, productId, storeName, quantity);
+        userFacade.addToCart("r" + username1, productId, storeName, quantity, 10.0);
+        userFacade.addToCart("r" + username2, productId, storeName, quantity, 10.0);
 
         CountDownLatch latch = new CountDownLatch(1);
         ExecutorService executorService = Executors.newFixedThreadPool(2);
@@ -218,8 +218,8 @@ public class PurchaseCartUnitTests {
         userFacade.createStore("r" + username1, storeName, "description");
 
         marketFacade.addProduct("r" + username1, productId, storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
-        userFacade.addToCart("r" + username1, productId, storeName, quantity);
-        userFacade.addToCart("r" + username2, productId, storeName, quantity);
+        userFacade.addToCart("r" + username1, productId, storeName, quantity, 10.0);
+        userFacade.addToCart("r" + username2, productId, storeName, quantity, 10.0);
 
         CountDownLatch latch = new CountDownLatch(1);
         ExecutorService executorService = Executors.newFixedThreadPool(2);
@@ -402,7 +402,7 @@ public class PurchaseCartUnitTests {
             userFacade.createStore("r" +username, storeName, "description");
             userFacade.setAddress("r" + username,address);
             marketFacade.addProduct("r" + username,productId,storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
-            userFacade.addToCart("r" + username, productId, storeName, quantity);
+            userFacade.addToCart("r" + username, productId, storeName, quantity, 10.0);
         } catch (Exception e) {
             fail("unexpected error: " + e.getMessage());
         }
@@ -430,7 +430,7 @@ public class PurchaseCartUnitTests {
             userFacade.createStore("r" +username, storeName, "description");
             userFacade.setAddress("r" + username,address);
             marketFacade.addProduct("r" + username,productId,storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
-            userFacade.addToCart("r" + username, productId, storeName, quantity);
+            userFacade.addToCart("r" + username, productId, storeName, quantity, 10.0);
         } catch (Exception e) {
             fail("unexpected error: " + e.getMessage());
         }
@@ -467,8 +467,8 @@ public class PurchaseCartUnitTests {
         userFacade.setAddress("r" + username2, address);
         userFacade.createStore("r" + username1, storeName, "description");
         marketFacade.addProduct("r" + username1, productId, storeName, "ProductName", "ProductDescription", 10.0, 10, 4.5, 1, null);
-        userFacade.addToCart("r" + username1, productId, storeName, quantity);
-        userFacade.addToCart("r" + username2, productId, storeName, quantity);
+        userFacade.addToCart("r" + username1, productId, storeName, quantity, 10.0);
+        userFacade.addToCart("r" + username2, productId, storeName, quantity, 10.0);
 
         CountDownLatch latch = new CountDownLatch(1);
         ExecutorService executorService = Executors.newFixedThreadPool(2);

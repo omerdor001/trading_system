@@ -69,7 +69,7 @@ public class PaymentAcceptanceTests {
 
     @Test
     void testRegistered_Success() {
-        tradingSystem.addToCart(username, token, 0, storeName, 1);
+        tradingSystem.addToCart(username, token, 0, storeName, 1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username, token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Purchase approved", result.getBody());
@@ -87,7 +87,7 @@ public class PaymentAcceptanceTests {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
         tradingSystem.setAddress(username, token, address);
-        tradingSystem.addToCart(username, token, 0, storeName, 1);
+        tradingSystem.addToCart(username, token, 0, storeName, 1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username, token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Purchase approved", result.getBody());
@@ -108,7 +108,7 @@ public class PaymentAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystem.addToCart(visitorUsername, visitorToken, 0, storeName, 2);
+        tradingSystem.addToCart(visitorUsername, visitorToken, 0, storeName, 2,1);
         tradingSystem.setProductQuantity(username, token, storeName, 0, 1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(visitorUsername, visitorToken);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
@@ -117,7 +117,7 @@ public class PaymentAcceptanceTests {
 
     @Test
     void testRegistered_ProductNotAvailable() {
-        tradingSystem.addToCart(username, token, 0, storeName, 2);
+        tradingSystem.addToCart(username, token, 0, storeName, 2,1);
         tradingSystem.setProductQuantity(username, token, storeName, 0, 1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username, token);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
