@@ -29,57 +29,70 @@
         </div>
       </div>
     </div>
+    <PrimeToast ref="toast" />
   </div>
 </template>
 
 <script>
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, ref, computed, onMounted } from 'vue';
+import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
 import PrimeButton from 'primevue/button';
 import { useRouter } from 'vue-router';
+import { useToast } from 'primevue/usetoast';
+import PrimeToast from 'primevue/toast';
 
 export default defineComponent({
   name: 'ShoppingCart',
   components: {
     SiteHeader,
-    PrimeButton
+    PrimeButton,
+    PrimeToast
   },
   setup() {
     const router = useRouter();
     const username = ref(localStorage.getItem('username') || '');
-    const cartItems = ref([
-      // Example data, replace with actual data fetching
-      {
-        productId: '119-12',
-        name: 'White Unisex Tee',
-        description: 'Sizes: XS, S, M, L, XL, XXL\nType: T-shirt\nFor: Men, Women',
-        image: 'https://via.placeholder.com/150',
-        quantity: 1,
-        price: 20,
-        storeNumber: 'Store 1'
-      },
-      {
-        productId: '119-13',
-        name: 'Black Unisex Tee',
-        description: 'Sizes: XS, S, M, L, XL, XXL\nType: T-shirt\nFor: Men, Women',
-        image: 'https://via.placeholder.com/150',
-        quantity: 2,
-        price: 15,
-        storeNumber: 'Store 2'
-      }
-    ]);
+    const token = ref(localStorage.getItem('token') || '');
+    const cartItems = ref([]);
+    const toast = useToast();
 
     const totalPrice = computed(() => {
       return cartItems.value.reduce((total, item) => total + item.price * item.quantity, 0);
     });
 
-    const buyCart = () => {
-      router.push('/checkout');
+    onMounted(async () => {
+      try {
+        const response = await axios.get('http://localhost:8082/api/trading/cart/view', {
+          params: {
+            username: username.value,
+            token: token.value,
+          },
+        });
+        const cartData = JSON.parse(response.data);
+        cartItems.value = cartData.items; // Adjust this line based on the actual structure of your API response
+      } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to load cart items', life: 3000 });
+      }
+    });
+
+    const buyCart = async () => {
+      try {
+        await axios.post('http://localhost:8082/api/trading/purchase/approve', null, {
+          params: {
+            username: username.value,
+            token: token.value,
+          },
+        });
+        router.push('/checkout');
+      } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to proceed to checkout', life: 3000 });
+      }
     };
 
     const logout = () => {
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('username');
+      localStorage.removeItem('token');
       router.push('/login');
     };
 
