@@ -287,7 +287,7 @@ public class TradingSystemRestController {
                                                @RequestParam String token,
                                                @RequestParam String storeName,
                                                @RequestParam String appoint) {
-        return tradingSystem.approveOwner("r" + newOwner, token, storeName, appoint);
+        return tradingSystem.approveOwner("r" + newOwner, token, storeName, "r" + appoint);
     }
 
     @PostMapping("/rejectToOwnStore")
