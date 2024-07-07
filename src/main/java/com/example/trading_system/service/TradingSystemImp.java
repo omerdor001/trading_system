@@ -12,8 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -204,7 +206,7 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            keyWordsList = Arrays.asList(keyWords.split(","));
+            keyWordsList = new ArrayList<>(Arrays.asList(keyWords.split(",")));
             marketService.addProduct(username, product_id, store_name, product_name, product_description, product_price, product_quantity, rating, category, keyWordsList);
         } catch (Exception e) {
             logger.error("Error occurred while adding product: {} to store: {}: {}", product_name, store_name, e.getMessage());
@@ -317,6 +319,36 @@ public class TradingSystemImp implements TradingSystem {
         }
         logger.info("User {} finished to edit the category : {} to product : {} from store : {}", username, category, product_id, store_name);
         return new ResponseEntity<>("Category was set successfully.", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> addKeywordToProduct(String username, String token, String storeName, int productId, String keyword) {
+        logger.info("User {} is trying to add a keyword : {} to product : {} in store : {}", username, keyword, productId, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.addKeywordToProduct(username,storeName,productId,keyword);
+        } catch (Exception e) {
+            logger.error("Error occurred while adding keyword {} for product id: {} in store: {}: {}", keyword,productId,storeName, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.info("User {} finished to add keyword : {} to product : {} from store : {}", username, keyword, productId, storeName);
+        return new ResponseEntity<>("Keyword was added successfully.", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> removeKeywordFromProduct(String username, String token, String storeName, int productId, String keyword) {
+        logger.info("User {} is trying to remove a keyword : {} to product : {} from store : {}", username, keyword, productId, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.removeKeywordToProduct(username,storeName,productId,keyword);
+        } catch (Exception e) {
+            logger.error("Error occurred while removing keyword {} for product id: {} in store: {}: {}", keyword,productId,storeName, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.info("User {} finished to remove keyword : {} to product : {} from store : {}", username, keyword, productId, storeName);
+        return new ResponseEntity<>("Keyword was removed successfully.", HttpStatus.OK);
     }
 
     @Override

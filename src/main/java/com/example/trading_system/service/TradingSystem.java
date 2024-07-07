@@ -48,6 +48,10 @@ public interface TradingSystem {
 
     ResponseEntity<String> setCategory(String username, String token, String storeName, int productId, int category);
 
+    ResponseEntity<String> addKeywordToProduct(String username, String token, String storeName, int productId, String keyword);
+
+    ResponseEntity<String> removeKeywordFromProduct(String username, String token, String storeName, int productId, String keyword);
+
     ResponseEntity<String> login(String token, String usernameV, String username, String password);
 
     ResponseEntity<String> sendPendingNotifications(String username, String token);

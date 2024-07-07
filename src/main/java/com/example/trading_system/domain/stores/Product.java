@@ -102,6 +102,10 @@ public class Product {
         this.keyWords.add(keyWord);
     }
 
+    public void removeKeyWord(String keyWord) {
+        this.keyWords.remove(keyWord);
+    }
+
     public String toString() {
         return "{" + "\"product_id\":" + product_id + ", \"store_name\":\"" + store_name + "\"" + ", \"product_name\":\"" + product_name + "\"" + ", \"product_description\":\"" + product_description + "\"" + ", \"product_price\":" + product_price + ", \"product_quantity\":" + product_quantity + ", \"rating\":" + rating + ", \"category\":" + (category != null ? category.toString() : "null") + ", \"keyWords\":" + keyWords + '}';
     }
