@@ -14,10 +14,10 @@
         <AboutSection />
       </div>
       <div class="sidebar2">
-        <PrimeButton v-if="isLoggedIn" label="Create Suspension" @click="createSuspension" class="sidebar-button"/>
-        <PrimeButton v-if="isLoggedIn" label="End Suspension" @click="endSuspension" class="sidebar-button"/>
-        <PrimeButton v-if="isLoggedIn" label="Watch Suspensions" @click="watchSuspensions" class="sidebar-button"/>
-        <PrimeButton v-if="isLoggedIn" label="Purchases History" @click="purchasesHistoryAsSystemManager" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn && isAdmin" label="Create Suspension" @click="createSuspension" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn && isAdmin" label="End Suspension" @click="endSuspension" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn && isAdmin" label="Watch Suspensions" @click="watchSuspensions" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn && isAdmin" label="Purchases History" @click="purchasesHistoryAsSystemManager" class="sidebar-button"/>
       </div>
     </div>
   </div>
