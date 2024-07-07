@@ -1719,3 +1719,6 @@ This generated password is for development use only. Your security configuration
 2024-07-07T17:52:52.544+03:00  INFO 23096 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.UserServiceImp             : Trying to login user: Omer
 2024-07-07T17:52:52.629+03:00  INFO 23096 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.UserServiceImp             : User: Omer logged in
 2024-07-07T17:52:52.654+03:00  INFO 23096 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : User: Omer logged in successfully
+2024-07-07T18:22:44.619+03:00  INFO 23096 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-07-07T18:22:44.619+03:00  INFO 23096 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@251c4280]]
+2024-07-07T18:22:44.619+03:00  INFO 23096 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
