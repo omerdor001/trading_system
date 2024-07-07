@@ -849,6 +849,48 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
+    public ResponseEntity<String> getCategories(String username, String token) {
+        logger.info("Trying to Gather Categories");
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("FINISHED Gather Categories");
+            return new ResponseEntity<>(marketService.getCategories(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Failed on Gathering Categories", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getPurchaseHistoryJSONFormatForStore(String username, String token, String storeName) {
+        logger.info("Trying to Gather Purchase History for Store {}",storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("Finish to Gather Purchase History for Store {}",storeName);
+            return new ResponseEntity<>(marketService.getPurchaseHistoryJSONFormatForStore(username,storeName), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Purchase History for Store {}",storeName, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getPurchaseHistoryJSONFormat(String username, String token) {
+        logger.info("Trying to Gather Purchase History");
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("Finish to Gather Purchase History for Store");
+            return new ResponseEntity<>(marketService.getPurchaseHistoryJSONFormat(username), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , Purchase History for Store", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public ResponseEntity<String> closeStoreExist(String userName, String token, String storeName) {
         logger.info("{} Trying to Close Store Exist : {}", userName, storeName);
         try {

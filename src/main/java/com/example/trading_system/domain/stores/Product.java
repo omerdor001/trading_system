@@ -130,4 +130,14 @@ public class Product {
             throw new RuntimeException("Product quantity is too low");
         }
     }
+
+    public static List<String> getAllCategories() {
+        return Category.getCategoriesString();
+    }
+
+    public static String getCategoryStringFromInt(int category) {
+        return Category.getCategoryFromInt(category).toString();
+    }
+
+
 }

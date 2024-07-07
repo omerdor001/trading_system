@@ -375,6 +375,23 @@ public class TradingSystemRestController {
         return tradingSystem.getProductInfo(userName, token, storeName, product_Id);
     }
 
+    @GetMapping("/categories")
+    public ResponseEntity<String> getCategories(@RequestParam String username, @RequestParam String token) {
+        return tradingSystem.getCategories("r"+username,token);
+    }
+
+    @GetMapping("/store/purchaseHistory")
+    public ResponseEntity<String> getPurchaseHistoryJSONFormatForStore(@RequestParam String username, @RequestParam String token,@RequestParam String storeName) {
+        return tradingSystem.getPurchaseHistoryJSONFormatForStore("r"+username,token,storeName);
+    }
+
+    @GetMapping("/purchaseHistory")
+    public ResponseEntity<String> getPurchaseHistoryJSONFormat(@RequestParam String username, @RequestParam String token) {
+        return tradingSystem.getPurchaseHistoryJSONFormat("r"+username,token);
+    }
+
+
+
     @GetMapping("/store/search/name")
     public ResponseEntity<String> searchNameInStore(@RequestParam String userName, @RequestParam String productName, @RequestParam String token,
                                                     @RequestParam String store_name, @RequestParam Double minPrice, @RequestParam Double maxPrice,
