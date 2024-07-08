@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080") //TODO IP and Port (general)
+@CrossOrigin(origins = "http://localhost:8088") //TODO IP and Port (general)
 @RequestMapping("/api/trading")
 public class TradingSystemRestController {
 
