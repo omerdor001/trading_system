@@ -190,7 +190,7 @@ public class Registered extends User {
     public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
         HashMap<String, List<Boolean>> permissions = new HashMap<>();
         permissions.put(appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery));
-        managerToApprove.put(store_name_id, permissions);
+        managerSuggestions.put(store_name_id, permissions);
 
     }
 
