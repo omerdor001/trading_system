@@ -391,7 +391,7 @@ public class TradingSystemRestController {
     @GetMapping("/product/info")
     public ResponseEntity<String> getProductInfo(@RequestParam String userName, @RequestParam String token,
                                                  @RequestParam String storeName, @RequestParam int product_Id) {
-        return tradingSystem.getProductInfo(userName, token, storeName, product_Id);
+        return tradingSystem.getProductInfo("r"+ userName, token, storeName, product_Id);
     }
 
     @GetMapping("/categories")
@@ -470,7 +470,7 @@ public class TradingSystemRestController {
 
     @PostMapping("/cart/add")
     public ResponseEntity<String> addToCart(@RequestParam String username, @RequestParam String token, @RequestParam int productId, @RequestParam String storeName, @RequestParam int quantity, @RequestParam double price) {
-        return tradingSystem.addToCart(username, token, productId, storeName, quantity, price);
+        return tradingSystem.addToCart("r" + username, token, productId, storeName, quantity, price);
     }
 
     @PostMapping("/cart/remove")
@@ -480,7 +480,7 @@ public class TradingSystemRestController {
 
     @GetMapping("/cart/view")
     public ResponseEntity<String> viewCart(@RequestParam String username, @RequestParam String token) {
-        return tradingSystem.viewCart(username, token);
+        return tradingSystem.viewCart("r" + username, token);
     }
 
     @GetMapping("/purchase/history/all")

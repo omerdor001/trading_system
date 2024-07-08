@@ -6,14 +6,14 @@
         <h2>Shopping Cart</h2>
         <div v-if="cartItems.length">
           <ul class="cart-list">
-            <li v-for="item in cartItems" :key="item.productId" class="cart-item">
-              <img :src="item.image" alt="Product Image" class="product-image">
+            <li v-for="item in cartItems" :key="item.product_id" class="cart-item">
+              <img :src="item.product_image" alt="Product Image" class="product-image">
               <div class="item-details">
-                <h3>{{ item.name }}</h3>
-                <p>{{ item.description }}</p>
-                <p><strong>Quantity:</strong> {{ item.quantity }}</p>
-                <p><strong>Price:</strong> {{ item.price }}</p>
-                <p><strong>Store Number:</strong> {{ item.storeNumber }}</p>
+                <h3>{{ item.product_name }}</h3>
+                <p>{{ item.product_description }}</p>
+                <p><strong>Quantity:</strong> {{ item.product_quantity }}</p>
+                <p><strong>Price:</strong> {{ item.product_price }}</p>
+                <p><strong>Store Number:</strong> {{ item.store_id }}</p>
               </div>
             </li>
           </ul>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed, onMounted } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
 import PrimeButton from 'primevue/button';
@@ -54,11 +54,8 @@ export default defineComponent({
     const username = ref(localStorage.getItem('username') || '');
     const token = ref(localStorage.getItem('token') || '');
     const cartItems = ref([]);
+    const totalPrice = ref(0);
     const toast = useToast();
-
-    const totalPrice = computed(() => {
-      return cartItems.value.reduce((total, item) => total + item.price * item.quantity, 0);
-    });
 
     onMounted(async () => {
       try {
@@ -68,8 +65,9 @@ export default defineComponent({
             token: token.value,
           },
         });
-        const cartData = JSON.parse(response.data);
-        cartItems.value = cartData.items; // Adjust this line based on the actual structure of your API response
+        const data = response.data;
+        cartItems.value = data.items;
+        totalPrice.value = data.total_price;
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to load cart items', life: 3000 });
       }

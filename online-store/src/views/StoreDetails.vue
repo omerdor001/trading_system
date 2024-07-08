@@ -90,7 +90,7 @@ export default defineComponent({
     };
 
     const viewOptions = (productId) => {
-      router.push({ name: 'ProductDetails', params: { productId } });
+      router.push({ name: 'ProductDetails', params: { productId, storeId: store.value.name } });
     };
 
     const backToStores = () => {

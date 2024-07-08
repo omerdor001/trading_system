@@ -10,7 +10,6 @@ import CreateSuspension from '@/views/CreateSuspension.vue';
 import EndSuspension from '@/views/EndSuspension.vue';
 import WatchSuspensions from '@/views/WatchSuspensions.vue';
 import AllStoresPage from '@/views/AllStoresPage.vue';
-// import StoreNameInput from '@/views/StoreNameInput.vue'; // Remove this line
 import ProductList from '@/views/ProductListEditor.vue';
 import ProductManagement from '@/views/ProductManagement.vue';
 import StoresPageManagerVue from '@/views/StoresPageManagerVue.vue';
@@ -24,7 +23,6 @@ import SearchPage from '@/views/SearchPage.vue';
 import SearchResults from '@/views/SearchResults.vue';
 import StoreSearchPage from '@/views/StoreSearchPage.vue';
 import StoreSearchResults from '@/views/StoreSearchResults.vue';
-// import ShowNotifications from '@/views/ShowNotifications.vue';
 import SuggestOwner from '@/views/SuggestOwner.vue';
 import SuggestManager from '@/views/SuggestManager.vue';
 import ApproveOwner from '@/views/ApproveOwner.vue';
@@ -32,8 +30,8 @@ import ApproveManager from '@/views/ApproveManager.vue';
 import WatchStoreBids from '@/views/WatchStoreBids.vue';
 import PaymentPage from '@/views/PaymentPage.vue';
 import ProductsForStore from '@/views/ProductsForStore.vue';
-import EditDiscountPolicy from '@/views/DiscountManagement.vue'
-import EditPurchasePolicy from '@/views/PurchasePolicyManagement.vue'
+import EditDiscountPolicy from '@/views/DiscountManagement.vue';
+import EditPurchasePolicy from '@/views/PurchasePolicyManagement.vue';
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },
@@ -47,12 +45,11 @@ const routes = [
     { path: '/store/:storeId', name: 'StoreDetails', component: StoreDetails, props: true },
     { path: '/create-suspension', name: 'CreateSuspension', component: CreateSuspension },
     { path: '/end-suspension', name: 'EndSuspension', component: EndSuspension },
-    { path: '/watch-suspensions', name: 'WatchSuspensions', component: WatchSuspensions },
+    { path: '/watch-suspensions', name: 'WatchSuspensions' ,component: WatchSuspensions },
     { path: '/stores-page', name: 'StoresPageManagerVue', component: StoresPageManagerVue },
-    { path: '/product/:productId', name: 'ProductDetails', component: ProductDetails, props: true },
+    { path: '/product/:productId/:storeId', name: 'ProductDetails', component: ProductDetails, props: true },
     { path: '/cart', name: 'ShoppingCart', component: ShoppingCart },
     { path: '/checkout', name: 'Checkout', component: Checkout },
-    // { path: '/store-name-input', name: 'StoreNameInput', component: StoreNameInput }, // Remove this line
     { path: '/product-list/:storeName/:isEditSupply', name: 'ProductList', component: ProductList, props: true },
     { path: '/product-management/:storeName/:productId', name: 'ProductManagement', component: ProductManagement, props: true },
     { path: '/purchase-history', name: 'PurchaseHistory', component: PurchaseHistory },
@@ -62,9 +59,9 @@ const routes = [
     { path: '/store-search-results', name: 'StoreSearchResults', component: StoreSearchResults },
     { path: '/suggest-owner/:storeName', name: 'SuggestOwner', component: SuggestOwner },
     { path: '/suggest-manager/:storeName', name: 'SuggestManager', component: SuggestManager },
-    { path: '/approve-owner',name: 'ApproveOwner',component: ApproveOwner },
-    { path: '/approve-manager',name: 'ApproveManager',component: ApproveManager},
-    { path: '/get-store-bids', name: 'WatchStoreBids', component: WatchStoreBids},
+    { path: '/approve-owner', name: 'ApproveOwner', component: ApproveOwner },
+    { path: '/approve-manager', name: 'ApproveManager', component: ApproveManager },
+    { path: '/get-store-bids', name: 'WatchStoreBids', component: WatchStoreBids },
     { path: '/payment', name: 'PaymentPage', component: PaymentPage },
     { path: '/productsForStore/:storeName', name: 'ProductsForStore', component: ProductsForStore },
     { path: '/edit-discount-policy/:storeName', name: 'EditDiscountPolicy', component: EditDiscountPolicy },
