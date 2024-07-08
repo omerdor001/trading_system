@@ -57,7 +57,7 @@ class GetPurchaseHistoryAcceptanceTests {
         tradingSystem.setAddress(username, token, address);
         tradingSystem.openStore(username, token, storeName, "");
         tradingSystem.addProduct(username, token, 0, storeName, "product1", "", 1, 5, 1, 1, "[]");
-        tradingSystem.addToCart(username, token, 0, storeName, 1);
+        tradingSystem.addToCart(username, token, 0, storeName, 1,1);
         tradingSystem.approvePurchase(username, token);
     }
 

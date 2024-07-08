@@ -46,17 +46,17 @@ public interface UserFacade {
 
     void saveUserCart(String username, int productId, String storeName, int quantity);
 
-    void addToCart(String username, int productId, String storeName, int quantity);
+    void addToCart(String username, int productId, String storeName, int quantity, double price);
 
     void createStore(String username, String storeName, String description) throws IllegalAccessException;
 
     void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
 
-    void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException, NoSuchElementException;
+    void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException, NoSuchElementException;
 
     void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
 
-    void approveManager(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
+    void approveManager(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException;
 
     void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException;
 
@@ -72,7 +72,7 @@ public interface UserFacade {
      * @param userId        is the current user that do the update
      * @param managerToEdit is the manager that the update will affect
      **/
-    void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) throws IllegalAccessException;
+    void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException;
 
     String getUserPassword(String username);
 
@@ -80,7 +80,7 @@ public interface UserFacade {
 
     boolean isAdmin(String username);
 
-    String viewCart(String username);
+    String viewCart(String username) throws Exception;
 
     void removeFromCart(String username, int productId, String storeName, int quantity);
 
@@ -115,4 +115,6 @@ public interface UserFacade {
     String getUserRequestsManagement(String username);
 
     String getPermissionsForUserJSONFormat(String username,String storeName);
+
+    void bidPurchase(String userName, String storeName, int productID, double price) throws Exception;
 }

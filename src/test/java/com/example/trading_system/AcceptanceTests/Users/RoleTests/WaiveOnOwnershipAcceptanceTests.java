@@ -124,8 +124,8 @@ public class WaiveOnOwnershipAcceptanceTests {
 
     @Test
     public void GivenValidOwner_WhenWaiveOnOwnerShip_ThenSuccess(){ //check that manager appointment also deleted
-        Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,true,true,true,true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName,true,true,true,true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,true,true,true,true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName,true,true,true,true, true, true).getStatusCode());
         ResponseEntity<String> resp = tradingSystemImp.waiverOnOwnership(ownerUserName,ownerToken,storeName);
         Assertions.assertEquals("Success waiver to own",resp.getBody());
         Assertions.assertEquals(HttpStatus.OK, resp.getStatusCode());
@@ -151,8 +151,8 @@ public class WaiveOnOwnershipAcceptanceTests {
     @Test
     public void GivenNotOwnerUser_WhenWaiveOnOwnership_ThenThrowException()
     {
-        Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,true,true,true,true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName,true,true,true,true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,true,true,true,true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName,true,true,true,true, true, true).getStatusCode());
         ResponseEntity<String> resp = tradingSystemImp.waiverOnOwnership(userNameManager,tokenManager,storeName);
         Assertions.assertEquals("User is not owner of this store",resp.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
@@ -290,20 +290,20 @@ public class WaiveOnOwnershipAcceptanceTests {
         }
 
 
-        Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,true,true,true,true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName,true,true,true,true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName,ownerToken,userNameManager,storeName,true,true,true,true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(userNameManager,tokenManager,storeName,ownerUserName,true,true,true,true, true, true).getStatusCode());
 
         Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestOwner(ownerUserName,ownerToken,secondOwnerUserName,storeName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.approveOwner(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName).getStatusCode());
 
-        Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(secondOwnerUserName, secondOwnerToken, secondManagerUserName, storeName, true, true, true, true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(secondManagerUserName, secondManagerToken, storeName, secondOwnerUserName, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(secondOwnerUserName, secondOwnerToken, secondManagerUserName, storeName, true, true, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(secondManagerUserName, secondManagerToken, storeName, secondOwnerUserName, true, true, true, true, true, true).getStatusCode());
 
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestOwner(secondOwnerUserName,secondOwnerToken,thirdOwnerUserName, storeName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveOwner(thirdOwnerUserName, thirdOwnerToken, storeName, secondOwnerUserName).getStatusCode());
 
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(thirdOwnerUserName, thirdOwnerToken, thirdManagerUserName, storeName, true ,true, true, true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(thirdManagerUserName, thirdManagerToken, storeName, thirdOwnerUserName, true ,true ,true ,true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(thirdOwnerUserName, thirdOwnerToken, thirdManagerUserName, storeName, true ,true, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(thirdManagerUserName, thirdManagerToken, storeName, thirdOwnerUserName, true ,true ,true ,true, true, true).getStatusCode());
 
 
         tradingSystemImp.register("owner4", password, LocalDate.now());

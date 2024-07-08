@@ -72,7 +72,7 @@ public class PurchasePolicyAcceptanceTests {
     @Test
     public void testAddPurchasePolicyByAge_success() {
         tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18, 5);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Purchase approved", result.getBody());
@@ -81,7 +81,7 @@ public class PurchasePolicyAcceptanceTests {
     @Test
     public void testAddPurchasePolicyByAge_fail() {
         tradingSystem.addPurchasePolicyByAge(username, token, storeName, 70, 5);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Products do not meet purchase policies conditions.", result.getBody());
@@ -90,7 +90,7 @@ public class PurchasePolicyAcceptanceTests {
     @Test
     public void testAddPurchasePolicyByCategoryAndDate_success() {
         tradingSystem.addPurchasePolicyByCategoryAndDate(username, token, storeName, 5, LocalDateTime.of(3000,1,1,15,0));
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Purchase approved", result.getBody());
@@ -99,7 +99,7 @@ public class PurchasePolicyAcceptanceTests {
     @Test
     public void testAddPurchasePolicyByCategoryAndDate_fail() {
         tradingSystem.addPurchasePolicyByCategoryAndDate(username, token, storeName, 5, LocalDateTime.of(2000,1,1,23,0));
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Products do not meet purchase policies conditions.", result.getBody());
@@ -108,7 +108,7 @@ public class PurchasePolicyAcceptanceTests {
     @Test
     public void testAddPurchasePolicyByDate_success() {
         tradingSystem.addPurchasePolicyByDate(username, token, storeName,  LocalDateTime.of(2000,1,1,23,0) );
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Purchase approved", result.getBody());
@@ -117,7 +117,7 @@ public class PurchasePolicyAcceptanceTests {
     @Test
     public void testAddPurchasePolicyByDate_fail() {
         tradingSystem.addPurchasePolicyByDate(username, token, storeName,  LocalDateTime.of(3000,1,1,23,0));
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Products do not meet purchase policies conditions.", result.getBody());
@@ -126,7 +126,7 @@ public class PurchasePolicyAcceptanceTests {
     @Test
     public void addPurchasePolicyByProductAndDate_success() {
         tradingSystem.addPurchasePolicyByProductAndDate(username, token, storeName, 0, LocalDateTime.of(2000,1,1,23,0) );
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Purchase approved", result.getBody());
@@ -135,7 +135,7 @@ public class PurchasePolicyAcceptanceTests {
     @Test
     public void addPurchasePolicyByProductAndDate_fail() {
         tradingSystem.addPurchasePolicyByProductAndDate(username, token, storeName, 0, LocalDateTime.of(3000,1,1,23,0));
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Products do not meet purchase policies conditions.", result.getBody());
@@ -144,7 +144,7 @@ public class PurchasePolicyAcceptanceTests {
     @Test
     public void testAddPurchasePolicyByShoppingCartMaxProductsUnit_success() {
         tradingSystem.addPurchasePolicyByShoppingCartMaxProductsUnit(username, token, storeName, 0,3);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Purchase approved", result.getBody());
@@ -153,7 +153,7 @@ public class PurchasePolicyAcceptanceTests {
     @Test
     public void testAddPurchasePolicyByShoppingCartMaxProducts_fail() {
         tradingSystem.addPurchasePolicyByShoppingCartMaxProductsUnit(username, token, storeName, 0, 3);
-        tradingSystem.addToCart(username,token,0,storeName,4);
+        tradingSystem.addToCart(username,token,0,storeName,4,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Products do not meet purchase policies conditions.", result.getBody());
@@ -162,7 +162,7 @@ public class PurchasePolicyAcceptanceTests {
     @Test
     public void testAddPurchasePolicyByShoppingCartMinProducts_success() {
         tradingSystem.addPurchasePolicyByShoppingCartMinProducts(username, token, storeName, 2);
-        tradingSystem.addToCart(username,token,0,storeName,3);
+        tradingSystem.addToCart(username,token,0,storeName,3,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Purchase approved", result.getBody());
@@ -171,7 +171,7 @@ public class PurchasePolicyAcceptanceTests {
     @Test
     public void testAddPurchasePolicyByShoppingCartMinProducts_fail() {
         tradingSystem.addPurchasePolicyByShoppingCartMinProducts(username, token, storeName,  3);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Products do not meet purchase policies conditions.", result.getBody());
@@ -180,7 +180,7 @@ public class PurchasePolicyAcceptanceTests {
     @Test
     public void testAddPurchasePolicyByShoppingCartMinProductsUnit_success() {
         tradingSystem.addPurchasePolicyByShoppingCartMinProductsUnit(username, token, storeName, 0,2);
-        tradingSystem.addToCart(username,token,0,storeName,3);
+        tradingSystem.addToCart(username,token,0,storeName,3,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Purchase approved", result.getBody());
@@ -189,7 +189,7 @@ public class PurchasePolicyAcceptanceTests {
     @Test
     public void testAddPurchasePolicyByShoppingCartMinProductsUnit_fail() {
         tradingSystem.addPurchasePolicyByShoppingCartMinProductsUnit(username, token, storeName, 0, 3);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Products do not meet purchase policies conditions.", result.getBody());
@@ -202,7 +202,7 @@ public class PurchasePolicyAcceptanceTests {
         tradingSystem.addAndPurchasePolicy(username,token,storeName);
         tradingSystem.setFirstPurchasePolicy(username,token,storeName,2,0);
         tradingSystem.setSecondPurchasePolicy(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,3);
+        tradingSystem.addToCart(username,token,0,storeName,3,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Purchase approved", result.getBody());
@@ -215,7 +215,7 @@ public class PurchasePolicyAcceptanceTests {
         tradingSystem.addAndPurchasePolicy(username,token,storeName);
         tradingSystem.setFirstPurchasePolicy(username,token,storeName,2,0);
         tradingSystem.setSecondPurchasePolicy(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Products do not meet purchase policies conditions.", result.getBody());
@@ -228,7 +228,7 @@ public class PurchasePolicyAcceptanceTests {
         tradingSystem.addOrPurchasePolicy(username,token,storeName);
         tradingSystem.setFirstPurchasePolicy(username,token,storeName,2,0);
         tradingSystem.setSecondPurchasePolicy(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Purchase approved", result.getBody());
@@ -241,7 +241,7 @@ public class PurchasePolicyAcceptanceTests {
         tradingSystem.addOrPurchasePolicy(username,token,storeName);
         tradingSystem.setFirstPurchasePolicy(username,token,storeName,2,0);
         tradingSystem.setSecondPurchasePolicy(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,1);
+        tradingSystem.addToCart(username,token,0,storeName,1,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Products do not meet purchase policies conditions.", result.getBody());
@@ -254,7 +254,7 @@ public class PurchasePolicyAcceptanceTests {
         tradingSystem.addConditioningPurchasePolicy(username,token,storeName);
         tradingSystem.setFirstPurchasePolicy(username,token,storeName,2,0);
         tradingSystem.setSecondPurchasePolicy(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,5);
+        tradingSystem.addToCart(username,token,0,storeName,5,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Purchase approved", result.getBody());
@@ -267,7 +267,7 @@ public class PurchasePolicyAcceptanceTests {
         tradingSystem.addConditioningPurchasePolicy(username,token,storeName);
         tradingSystem.setFirstPurchasePolicy(username,token,storeName,2,0);
         tradingSystem.setSecondPurchasePolicy(username,token,storeName,1,0);
-        tradingSystem.addToCart(username,token,0,storeName,3);
+        tradingSystem.addToCart(username,token,0,storeName,3,1);
         ResponseEntity<String> result = tradingSystem.approvePurchase(username,token);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Products do not meet purchase policies conditions.", result.getBody());

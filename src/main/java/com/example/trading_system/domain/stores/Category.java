@@ -1,12 +1,14 @@
 package com.example.trading_system.domain.stores;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum Category {
     Sport(1),
     Art(2),
     Food(3),
     Clothes(4),
     Films(5);
-
 
     private final int intValue;
 
@@ -29,6 +31,14 @@ public enum Category {
             default:
                 throw new IllegalArgumentException("Invalid category integer: " + categoryInt);
         }
+    }
+
+    public static List<String> getCategoriesString(){
+        List<String> categories=new ArrayList<>();
+        for(Category category: Category.values()){
+            categories.add(category.toString());
+        }
+        return categories;
     }
 
     public int getIntValue() {

@@ -64,4 +64,16 @@ public class ProductInSale {
         return quantity * price;
     }
 
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public int getId() {
+        return id;
+    }
 }

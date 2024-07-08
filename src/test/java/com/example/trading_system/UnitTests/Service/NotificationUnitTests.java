@@ -86,7 +86,7 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_SuggestManager_NotLogged() {
         try {
-            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true , true, true, true);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
             assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}]", notifications);
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class NotificationUnitTests {
     public void testNotification_SuggestManager_Logged() {
         try {
             userFacade.getUser(owner2).login();
-            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true, true, true);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
             assertEquals("[]", notifications);
             verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}"));
@@ -139,11 +139,11 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_ApproveManager_NotLogged() {
         try {
-            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true, true, true);
             userFacade.getUser(owner2).setAdmin(true);
             userFacade.getUser(owner1).logout();
             userFacade.getUser(owner2).login();
-            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true);
+            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true, true, true);
             String notifications = userFacade.getPendingUserNotifications(owner2, owner1);
             assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"owner2 accepted your suggestion to become a manager at store: store1\"}]", notifications);
         } catch (Exception e) {
@@ -154,9 +154,9 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_ApproveManager_Logged() {
         try {
-            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true, true, true);
             userFacade.getUser(owner2).login();
-            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true);
+            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true, true, true);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner1);
             assertEquals("[]", notifications);
             verify(mockNotificationSender).sendNotification(eq(owner1), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"owner2 accepted your suggestion to become a manager at store: store1\"}"));
@@ -197,7 +197,7 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_RejectManager_NotLogged() {
         try {
-            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true, true, true);
             userFacade.getUser(owner2).setAdmin(true);
             userFacade.getUser(owner1).logout();
             userFacade.getUser(owner2).login();
@@ -212,7 +212,7 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_RejectManager_Logged() {
         try {
-            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true, true, true);
             userFacade.getUser(owner2).login();
             userFacade.rejectToManageStore(owner2, storeName, owner1);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner1);
@@ -273,9 +273,9 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_FireManager_NotLogged() {
         try {
-            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true, true, true);
             userFacade.getUser(owner2).login();
-            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true);
+            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true, true, true);
             userRepository.getUser(owner2).logout();
             userFacade.fireManager(owner1, storeName, owner2);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
@@ -288,9 +288,9 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_FireManager_Logged() {
         try {
-            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true, true, true);
             userFacade.getUser(owner2).login();
-            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true);
+            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true, true, true);
             userFacade.fireManager(owner1, storeName, owner2);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
             assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}]", notifications);
@@ -333,11 +333,11 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_EditPermission_NotLogged() {
         try {
-            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true, true, true);
             userRepository.getUser(owner2).login();
-            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true);
+            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true, true, true);
             userRepository.getUser(owner2).logout();
-            userFacade.editPermissionForManager(owner1, owner2, storeName, true, true, true, false);
+            userFacade.editPermissionForManager(owner1, owner2, storeName, true, true, true, false, true, true);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
             assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"},{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}]", notifications);
         } catch (Exception e) {
@@ -348,10 +348,10 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_EditPermission_Logged() {
         try {
-            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true, true, true);
             userRepository.getUser(owner2).login();
-            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true);
-            userFacade.editPermissionForManager(owner1, owner2, storeName, true, true, true, false);
+            userFacade.approveManager(owner2, storeName, owner1, true, true, true, true, true, true);
+            userFacade.editPermissionForManager(owner1, owner2, storeName, true, true, true, false, true, true);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
             assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}]", notifications);
             verify(mockNotificationSender).sendNotification(eq(owner2), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}"));
@@ -438,7 +438,7 @@ public class NotificationUnitTests {
     @Test
     public void testNotification_SendPendingNotifications() {
         try {
-            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true);
+            userFacade.suggestManager(owner1, owner2, storeName, true, true, true, true, true, true);
             userRepository.getUser(owner2).login();
             userFacade.sendPendingNotifications(owner2);
             String notifications = userFacade.getPendingUserNotifications(owner1, owner2);

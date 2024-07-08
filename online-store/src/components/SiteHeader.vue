@@ -4,11 +4,12 @@
       <div class="left-buttons">
         <img src="@/assets/logo.png" alt="LASMONY" class="logo">
         <PrimeButton label="Home" @click="goHome" class="p-button-primary" />
-        <PrimeButton label="Search Product" @click="goToSearch" class="p-button-primary" />
+        <PrimeButton label="Search Product" @click="goToSearchProduct" class="p-button-primary" />
+        <PrimeButton label="Search Store" @click="goToSearchStore" class="p-button-primary" /> <!-- New button -->
       </div>
       <div class="right-buttons">
         <template v-if="isLoggedIn">
-          <span class="username">{{ username }}</span>
+          <span class="username">{{userName}}</span>
           <PrimeButton label="Logout" @click="logout" class="p-button-danger" />
         </template>
         <template v-else>
@@ -49,23 +50,24 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    username: {
-      type: String,
-      default: ''
-    }
   },
   setup() {
     const router = useRouter();
     const toast = useToast();
     const notificationsVisible = ref(false);
     const notifications = ref([]);
+    const userName = localStorage.getItem('userName');
 
     const goHome = () => {
       router.push({ name: 'HomePage' });
     };
 
-    const goToSearch = () => {
+    const goToSearchProduct = () => {
       router.push({ name: 'SearchPage' });
+    };
+
+    const goToSearchStore = () => {
+      router.push({ name: 'StoreSearchPage' });
     };
 
     const viewCart = () => {
@@ -108,15 +110,17 @@ export default defineComponent({
     };
 
     return {
+      userName,
       goHome,
-      goToSearch,
+      goToSearchProduct,
+      goToSearchStore, // Include the new function
       viewCart,
       showNotifications,
       logout,
       notificationsVisible,
       notifications
     };
-  },
+  }
 });
 </script>
 

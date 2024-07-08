@@ -65,7 +65,7 @@
           </div>
           <div class="p-field">
             <label for="category">Category </label>
-            <InputText v-model="newProduct.category" required />
+            <PrimeDropdown v-model="selectedCategoryIndex" :options="categoryOptions" optionLabel="label" optionValue="index" placeholder="Select a Category" />
           </div>
           <div class="p-field">
             <label for="keyWords">Keywords </label>
@@ -106,6 +106,7 @@ import { useToast } from 'primevue/usetoast';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
 import PrimeButton from 'primevue/button';
+import { PrimeDropdown } from 'primevue/dropdown';
 
 export default {
   name: 'ProductList',
@@ -113,6 +114,7 @@ export default {
     SiteHeader,
     InputText,
     InputNumber,
+    PrimeDropdown,
     PrimeButton,
   },
   setup() {
@@ -127,6 +129,8 @@ export default {
     const isEditSupply = ref(route.params.isEditSupply);
     const showAddProduct = ref(false);
     const showRemoveProduct = ref(false);
+    const categoryOptions = ref([]);
+    const selectedCategoryIndex = ref(null);
     const newProduct = ref({
       id: '',
       name: '',
@@ -134,7 +138,6 @@ export default {
       price: 0,
       quantity: 0,
       rating: 0,
-      category: '',
       keyWords: '',
     });
     const productIdToRemove = ref('');
@@ -161,6 +164,22 @@ export default {
       }
     };
 
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost:8082/api/trading/categories', {
+          params: {
+            username: username,
+            token: token,
+          }
+        });
+        const categoryArray = response.data.slice(1, response.data.length - 1).split(',');
+        categoryOptions.value = categoryArray.map((category, index) => ({ label: category, value: category, index: index + 1 }));
+      } catch (error) {
+        console.error('Failed to fetch categories', error);
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch categories' });
+      }
+    };
+
     const showProductDetails = (product) => {
       selectedProduct.value = product;
     };
@@ -173,6 +192,7 @@ export default {
 
     const openAddProductModal = () => {
       showAddProduct.value = true;
+      fetchCategories();
     };
 
     const openRemoveProductModal = () => {
@@ -194,7 +214,7 @@ export default {
             productPrice: newProduct.value.price,
             productQuantity: newProduct.value.quantity,
             rating: newProduct.value.rating,
-            category: newProduct.value.category,
+            category: selectedCategoryIndex.value,
             keyWords: keyWordsString,
             photoUrl: newProduct.value.photoUrl,
           }
@@ -247,6 +267,8 @@ export default {
       addProduct,
       removeProduct,
       editProduct,
+      categoryOptions,
+      selectedCategoryIndex,
     };
   },
 };

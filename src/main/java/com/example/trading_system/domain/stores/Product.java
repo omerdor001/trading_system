@@ -1,5 +1,7 @@
 package com.example.trading_system.domain.stores;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,7 +109,25 @@ public class Product {
     }
 
     public String toString() {
-        return "{" + "\"product_id\":" + product_id + ", \"store_name\":\"" + store_name + "\"" + ", \"product_name\":\"" + product_name + "\"" + ", \"product_description\":\"" + product_description + "\"" + ", \"product_price\":" + product_price + ", \"product_quantity\":" + product_quantity + ", \"rating\":" + rating + ", \"category\":" + (category != null ? category.toString() : "null") + ", \"keyWords\":" + keyWords + '}';
+        ObjectMapper objectMapper = new ObjectMapper();
+        String keyWordsJson;
+        try {
+            keyWordsJson = objectMapper.writeValueAsString(keyWords);
+        } catch (JsonProcessingException e) {
+            keyWordsJson = "[]"; // default to empty array in case of error
+        }
+
+        return "{" +
+                "\"product_id\":" + product_id +
+                ", \"store_name\":\"" + store_name + "\"" +
+                ", \"product_name\":\"" + product_name + "\"" +
+                ", \"product_description\":\"" + product_description + "\"" +
+                ", \"product_price\":" + product_price +
+                ", \"product_quantity\":" + product_quantity +
+                ", \"rating\":" + rating +
+                ", \"category\":\"" + (category != null ? category.toString() : "null") + "\"" +
+                ", \"keyWords\":" + keyWordsJson +
+                "}";
     }
 
     public synchronized void releaseReservedProducts(int quantity) {
@@ -130,4 +150,20 @@ public class Product {
             throw new RuntimeException("Product quantity is too low");
         }
     }
+
+    public void editProduct(String productName, String productDescription, double productPrice, int productQuantity) {
+        this.product_name = productName;
+        this.product_description = productDescription;
+        this.product_price = productPrice;
+        this.product_quantity = productQuantity;
+    }
+    public static List<String> getAllCategories() {
+        return Category.getCategoriesString();
+    }
+
+    public static String getCategoryStringFromInt(int category) {
+        return Category.getCategoryFromInt(category).toString();
+    }
+
+
 }

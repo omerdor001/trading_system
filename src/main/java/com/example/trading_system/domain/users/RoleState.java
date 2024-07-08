@@ -60,13 +60,21 @@ public abstract class RoleState {
 
     public abstract void setEditSupply(boolean editSupply);
 
+    public abstract void setAcceptBids(boolean acceptBids);
+
     public abstract boolean isEditPurchasePolicy();
 
     public abstract void setEditPurchasePolicy(boolean editPurchasePolicy);
 
     public abstract boolean isEditDiscountPolicy();
 
+    public abstract boolean isAcceptBids();
+
     public abstract void setEditDiscountPolicy(boolean editDiscountPolicy);
+
+    public abstract void setCreateLottery(boolean createLottery);
+
+    public abstract boolean isCreateLottery();
 
     public abstract void addProduct(String username, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException;
 
@@ -105,5 +113,15 @@ public abstract class RoleState {
 
     public abstract boolean isOwner();
 
+
+    public abstract void approveBid() throws IllegalAccessException;
+
+    public abstract void rejectBid() throws IllegalAccessException;
+
+    public abstract void placeCounterOffer() throws IllegalAccessException;
+
+    public abstract void getStoreBids() throws IllegalAccessException;
+
+    public abstract  void createProductLottery() throws IllegalAccessException;
 
 }
