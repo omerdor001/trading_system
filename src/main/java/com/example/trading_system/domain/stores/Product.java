@@ -131,6 +131,12 @@ public class Product {
         }
     }
 
+    public void editProduct(String productName, String productDescription, double productPrice, int productQuantity) {
+        this.product_name = productName;
+        this.product_description = productDescription;
+        this.product_price = productPrice;
+        this.product_quantity = productQuantity;
+    }
     public static List<String> getAllCategories() {
         return Category.getCategoriesString();
     }

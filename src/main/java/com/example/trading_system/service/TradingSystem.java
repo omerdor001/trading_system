@@ -68,11 +68,11 @@ public interface TradingSystem {
 
     ResponseEntity<String> suggestOwner(String appoint, String token, String newOwner, String storeName);
 
-    ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+    ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery);
 
     ResponseEntity<String> approveOwner(String newOwner, String token, String storeName, String appoint);
 
-    ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+    ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery);
 
     ResponseEntity<String> rejectToOwnStore(String username, String token, String storeName, String appoint);
 
@@ -84,7 +84,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> fireOwner(String ownerAppoint, String token, String storeName, String ownerToFire);
 
-    ResponseEntity<String> editPermissionForManager(String username, String token, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+    ResponseEntity<String> editPermissionForManager(String username, String token, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery);
 
     ResponseEntity<String> getAllStores(String userName, String token);
 
@@ -135,7 +135,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer productBarcode);
 
-    ResponseEntity<String> addToCart(String username, String token, int productId, String storeName, int quantity);
+    ResponseEntity<String> addToCart(String username, String token, int productId, String storeName, int quantity, double price);
 
     ResponseEntity<String> removeFromCart(String username, String token, int productId, String storeName, int quantity);
 
@@ -270,4 +270,23 @@ public interface TradingSystem {
     ResponseEntity<String> getIsEditDiscountPolicyPermission(String username, String token, String manager, String storeName);
 
     ResponseEntity<String> getIsEditPurchasePolicyPermission(String username, String token, String manager, String storeName);
+
+    ResponseEntity<String> placeBid(String userName, String token, String storeName, int productID, double price);
+
+    ResponseEntity<String> approveBid(String userName, String token, String storeName, int productID, String bidUserName);
+
+    ResponseEntity<String> rejectBid(String userName, String token, String storeName, int productID, String bidUserName);
+
+    ResponseEntity<String> placeCounterOffer(String userName, String token, String storeName, int productID, String bidUserName, double newPrice);
+
+
+    ResponseEntity<String> getStoreBids(String userName, String token, String storeName);
+
+    ResponseEntity<String> getMyBids(String userName, String token, String storeName);
+
+    ResponseEntity<String> buyLotteryProductTicket(String userName, String token, String storeName, int productID, double price);
+
+    ResponseEntity<String> createProductLottery(String userName, String token, String storeName, int productID, LocalDateTime localDateTime, double price);
+
+    ResponseEntity<String> editProduct(String username, String token, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity);
 }

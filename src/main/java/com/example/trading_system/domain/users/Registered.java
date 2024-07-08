@@ -139,12 +139,14 @@ public class Registered extends User {
         getRoles().add(manager);
     }
 
-    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editPurchasePolicy, boolean editDiscountPolicy) {
+    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editPurchasePolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
         Role manager = getRoleByStoreId(store_name_id);
         manager.getRoleState().setWatch(watch);
         manager.getRoleState().setEditSupply(editSupply);
         manager.getRoleState().setEditPurchasePolicy(editPurchasePolicy);
         manager.getRoleState().setEditDiscountPolicy(editDiscountPolicy);
+        manager.getRoleState().setAcceptBids(acceptBids);
+        manager.getRoleState().setCreateLottery(createLottery);
     }
 
     public Role getRoleByStoreId(String store_name_id) {
@@ -185,6 +187,13 @@ public class Registered extends User {
         }
     }
 
+    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+        HashMap<String, List<Boolean>> permissions = new HashMap<>();
+        permissions.put(appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery));
+        managerToApprove.put(store_name_id, permissions);
+
+    }
+
     public boolean isWatch(String storeName){
         if (isOwner(storeName))
             return true;
@@ -221,11 +230,6 @@ public class Registered extends User {
         else return false;
     }
 
-    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
-        HashMap<String,List<Boolean>> permissions=new HashMap<>();
-        permissions.put(appointee,Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy));
-        managerSuggestions.put(store_name_id,permissions);
-    }
 
     public void addWaitingAppoint_Owner(String storeName,String appointee) {
         ownerSuggestions.put(storeName,appointee);
