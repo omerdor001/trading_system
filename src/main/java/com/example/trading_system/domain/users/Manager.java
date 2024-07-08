@@ -1,11 +1,28 @@
 package com.example.trading_system.domain.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "manager_roles")
 public class Manager extends RoleState {
+
+    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "watch")
     private boolean watch;
+
+    @Column(name = "edit_supply")
     private boolean editSupply;
+
+    @Column(name = "edit_purchase_policy")
     private boolean editPurchasePolicy;
+
+    @Column(name = "edit_discount_policy")
     private boolean editDiscountPolicy;
     private boolean acceptBids;
     private boolean createLottery;

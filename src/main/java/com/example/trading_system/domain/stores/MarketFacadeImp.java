@@ -234,11 +234,11 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String getPurchaseHistoryJSONFormat(String userName){
-        List<Map<String, Object>> allStoresPurchases = new ArrayList<>();
-        if(userFacade.isUserExist(userName)){
-            throw new IllegalArgumentException("Username is not exist");
+    public String getPurchaseHistoryJSONFormat(String userName) throws IllegalAccessException {
+        if(!userFacade.isUserExist(userName)){
+            throw new IllegalAccessException("Username is not exist");
         }
+        List<Map<String, Object>> allStoresPurchases = new ArrayList<>();
         for(Store store:storeRepository.getAllStoresByStores()){
             Map<String, Object> storePurchaseMap = Map.of(
                     "purchaseHistory", getPurchaseHistoryJSONFormatForStore(userName,store.getNameId())
@@ -1237,6 +1237,13 @@ public class MarketFacadeImp implements MarketFacade {
         storeRepository.getStore(storeName).setCategoryCondition(selectedConditionIndex, newCategory);
     }
 
+    @Override
+    public void removeCondition(String username, String storeName, int selectedIndex) throws IllegalAccessException {
+        validateUserAndStore(username, storeName);
+        User user = userFacade.getUser(username);
+        user.getRoleByStoreId(storeName).editDiscounts();
+        storeRepository.getStore(storeName).removeCondition(selectedIndex);
+    }
     //endregion
     //region Purchase Policy Management
     @Override

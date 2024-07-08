@@ -113,10 +113,10 @@ export default defineComponent({
 
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to load stores', life: 3000 });
-      }  
+      }
     };
 
-    
+
     onMounted(fetchUserCart);
 
     return {
@@ -139,14 +139,17 @@ export default defineComponent({
   justify-content: center;
   padding: 20px;
 }
+
 .content {
   flex: 2;
   padding: 20px;
 }
+
 .cart-list {
   list-style-type: none;
   padding: 0;
 }
+
 .cart-item {
   display: flex;
   align-items: center;
@@ -156,6 +159,7 @@ export default defineComponent({
   border-radius: 8px;
   background-color: #f9f9f9;
 }
+
 .product-image {
   width: 150px;
   height: 150px;
@@ -163,20 +167,24 @@ export default defineComponent({
   border-radius: 8px;
   border: 1px solid #ccc;
 }
+
 .item-details {
   display: flex;
   flex-direction: column;
 }
+
 .total-price {
   text-align: right;
   margin-top: 20px;
   font-size: 1.5em;
 }
+
 .buy-cart {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
 }
+
 .buy-cart-button {
   background-color: #e67e22 !important;
   border: none !important;
@@ -187,6 +195,7 @@ export default defineComponent({
   font-weight: bold !important;
   transition: background-color 0.3s !important;
 }
+
 .buy-cart-button:hover {
   background-color: #d35400 !important;
 }

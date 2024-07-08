@@ -75,9 +75,9 @@ class rejectsOrGiveUpOwnershipUnitTests {
             userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true, false);
         } catch (Exception e) {
         }
-        int sizeB = userFacade.getUser("r" + username2).getManagerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username2).getManagerSuggestions().size();
         assertDoesNotThrow(() -> userFacade.rejectToManageStore("r" + username2, "Adidas", "r" + username1), "rejectToManageStore should not throw any exceptions");
-        int sizeA = userFacade.getUser("r" + username2).getManagerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username2).getManagerSuggestions().size();
         assertEquals(sizeB, sizeA + 1);
     }
 
@@ -87,10 +87,10 @@ class rejectsOrGiveUpOwnershipUnitTests {
             userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true, false);
         } catch (Exception e) {
         }
-        int sizeB = userFacade.getUser("r" + username2).getManagerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username2).getManagerSuggestions().size();
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> userFacade.rejectToManageStore("r" + username2, "Adidas1", "r" + username1));
         assertEquals("No store called Adidas1 exist", exception.getMessage());
-        int sizeA = userFacade.getUser("r" + username2).getManagerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username2).getManagerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
 
@@ -100,10 +100,10 @@ class rejectsOrGiveUpOwnershipUnitTests {
             userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true,false);
         } catch (Exception e) {
         }
-        int sizeB = userFacade.getUser("r" + username2).getManagerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username2).getManagerSuggestions().size();
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> userFacade.rejectToManageStore("r" + "username2", "Adidas", "r" + username1));
         assertEquals("No user called rusername2 exist", exception.getMessage());
-        int sizeA = userFacade.getUser("r" + username2).getManagerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username2).getManagerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
 
@@ -113,12 +113,12 @@ class rejectsOrGiveUpOwnershipUnitTests {
             userFacade.suggestManager("r" + username3, "r" + username2, "Nike", true, false, true, false, true, false);
         } catch (Exception e) {
         }
-        int sizeB = userFacade.getUser("r" + username3).getManagerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username3).getManagerSuggestions().size();
         userFacade.suspendUser("r" + username1, "r" + username3, LocalDateTime.of(2025, 1, 1, 1, 1));
         RuntimeException exception = assertThrows(RuntimeException.class, () -> userFacade.rejectToManageStore("r" + username3, "Nike", "r" + username2));
         assertEquals("User is suspended from the system", exception.getMessage());
         userFacade.endSuspendUser("r" + username1, "r" + username3);
-        int sizeA = userFacade.getUser("r" + username3).getManagerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username3).getManagerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
 
@@ -128,10 +128,10 @@ class rejectsOrGiveUpOwnershipUnitTests {
             userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true, false);
         } catch (Exception e) {
         }
-        int sizeB = userFacade.getUser("r" + username3).getManagerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username3).getManagerSuggestions().size();
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> userFacade.rejectToManageStore("r" + username3, "Adidas", "r" + username2));
         assertEquals("User must be Owner", exception.getMessage());
-        int sizeA = userFacade.getUser("r" + username3).getManagerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username3).getManagerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
 
@@ -141,21 +141,21 @@ class rejectsOrGiveUpOwnershipUnitTests {
             userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true, false);
         } catch (Exception e) {
         }
-        int sizeB = userFacade.getUser("r" + username2).getManagerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username2).getManagerSuggestions().size();
         userFacade.logout(1, "r" + username2);
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> userFacade.rejectToManageStore("r" + username2, "Adidas", "r" + username1));
         assertEquals("New Manager user is not logged", exception.getMessage());
         userFacade.login("v1", username2, username2);
-        int sizeA = userFacade.getUser("r" + username2).getManagerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username2).getManagerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
 
     @Test
     void rejectToManageStore_UserNotForStoreList() {
-        int sizeB = userFacade.getUser("r" + username3).getManagerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username3).getManagerSuggestions().size();
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> userFacade.rejectToManageStore("r" + username3, "Nike", "r" + username2));
         assertEquals("No one suggest this user to be a manager", exception.getMessage());
-        int sizeA = userFacade.getUser("r" + username3).getManagerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username3).getManagerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
 
@@ -166,10 +166,10 @@ class rejectsOrGiveUpOwnershipUnitTests {
             userFacade.getUser("r" + username3).addManagerRole("r" + username2, "Nike");
         } catch (Exception e) {
         }
-        int sizeB = userFacade.getUser("r" + username2).getManagerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username2).getManagerSuggestions().size();
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> userFacade.rejectToManageStore("r" + username3, "Nike", "r" + username2));
         assertEquals("User already Manager of this store", exception.getMessage());
-        int sizeA = userFacade.getUser("r" + username2).getManagerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username2).getManagerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
 
@@ -191,9 +191,9 @@ class rejectsOrGiveUpOwnershipUnitTests {
             userFacade.suggestOwner("r" + username1, "r" + username2, "Adidas");
         } catch (Exception e) {
         }
-        int sizeB = userFacade.getUser("r" + username2).getOwnerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         assertDoesNotThrow(() -> userFacade.rejectToOwnStore("r" + username2, "Adidas", "r" + username1), "rejectToManageStore should not throw any exceptions");
-        int sizeA = userFacade.getUser("r" + username2).getOwnerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         assertEquals(sizeB, sizeA + 1);
     }
 
@@ -203,10 +203,10 @@ class rejectsOrGiveUpOwnershipUnitTests {
             userFacade.suggestOwner("r" + username1, "r" + username2, "Adidas");
         } catch (Exception e) {
         }
-        int sizeB = userFacade.getUser("r" + username2).getOwnerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> userFacade.rejectToOwnStore("r" + username2, "Adidas1", "r" + username1));
         assertEquals("No store called Adidas1 exist", exception.getMessage());
-        int sizeA = userFacade.getUser("r" + username2).getOwnerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
 
@@ -216,10 +216,10 @@ class rejectsOrGiveUpOwnershipUnitTests {
             userFacade.suggestOwner("r" + username1, "r" + username2, "Adidas");
         } catch (Exception e) {
         }
-        int sizeB = userFacade.getUser("r" + username2).getOwnerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> userFacade.rejectToOwnStore("r" + "username2", "Adidas", "r" + username1));
         assertEquals("No user called rusername2 exist", exception.getMessage());
-        int sizeA = userFacade.getUser("r" + username2).getOwnerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
 
@@ -229,12 +229,12 @@ class rejectsOrGiveUpOwnershipUnitTests {
             userFacade.suggestOwner("r" + username3, "r" + username2, "Nike");
         } catch (Exception e) {
         }
-        int sizeB = userFacade.getUser("r" + username3).getOwnerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username3).getOwnerSuggestions().size();
         userFacade.suspendUser("r" + username1, "r" + username3, LocalDateTime.of(2025, 1, 1, 1, 1));
         RuntimeException exception = assertThrows(RuntimeException.class, () -> userFacade.rejectToOwnStore("r" + username3, "Nike", "r" + username2));
         assertEquals("User is suspended from the system", exception.getMessage());
         userFacade.endSuspendUser("r" + username1, "r" + username3);
-        int sizeA = userFacade.getUser("r" + username3).getOwnerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username3).getOwnerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
 
@@ -244,19 +244,19 @@ class rejectsOrGiveUpOwnershipUnitTests {
             userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true, true);
         } catch (Exception e) {
         }
-        int sizeB = userFacade.getUser("r" + username3).getOwnerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username3).getOwnerSuggestions().size();
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> userFacade.rejectToOwnStore("r" + username3, "Adidas", "r" + username2));
         assertEquals("User must be Owner", exception.getMessage());
-        int sizeA = userFacade.getUser("r" + username3).getOwnerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username3).getOwnerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
 
     @Test
     void rejectToOwnStore_UserNotForStoreList() {
-        int sizeB = userFacade.getUser("r" + username3).getOwnerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username3).getOwnerSuggestions().size();
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> userFacade.rejectToOwnStore("r" + username3, "Nike", "r" + username2));
         assertEquals("No one suggest this user to be a owner", exception.getMessage());
-        int sizeA = userFacade.getUser("r" + username3).getOwnerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username3).getOwnerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
 
@@ -266,12 +266,12 @@ class rejectsOrGiveUpOwnershipUnitTests {
             userFacade.suggestOwner("r" + username1, "r" + username2, "Adidas");
         } catch (Exception e) {
         }
-        int sizeB = userFacade.getUser("r" + username2).getOwnerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         userFacade.logout(1, "r" + username2);
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> userFacade.rejectToOwnStore("r" + username2, "Adidas", "r" + username1));
         assertEquals("New owner user is not logged", exception.getMessage());
         userFacade.login("v1", username2, username2);
-        int sizeA = userFacade.getUser("r" + username2).getOwnerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
 
@@ -281,10 +281,10 @@ class rejectsOrGiveUpOwnershipUnitTests {
             userFacade.suggestOwner("r" + username1, "r" + username2, "Adidas");
         } catch (Exception e) {
         }
-        int sizeB = userFacade.getUser("r" + username2).getOwnerToApprove().size();
+        int sizeB = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> userFacade.rejectToManageStore("r" + username1, "Nike", "r" + username1));
         assertEquals("User must be Owner", exception.getMessage());
-        int sizeA = userFacade.getUser("r" + username2).getOwnerToApprove().size();
+        int sizeA = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
 

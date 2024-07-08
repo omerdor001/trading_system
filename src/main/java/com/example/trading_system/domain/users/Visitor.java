@@ -15,12 +15,12 @@ public class Visitor extends User {
     }
 
     @Override
-    public HashMap<String, String> getOwnerToApprove() {
+    public HashMap<String, String> getOwnerSuggestions() {
         return new HashMap<>();
     }
 
     @Override
-    public HashMap<String, HashMap<String, List<Boolean>>> getManagerToApprove() {
+    public HashMap<String, HashMap<String, List<Boolean>>> getManagerSuggestions() {
         return null;
     }
 

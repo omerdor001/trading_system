@@ -19,24 +19,29 @@
         <p>No stores found with the name "{{ $route.query.name }}".</p>
       </div>
     </div>
+    <PrimeToast ref="toast" />
   </div>
 </template>
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
-import { useRouter } from 'vue-router';
 import PrimeButton from 'primevue/button';
+import PrimeToast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'StoreSearchResults',
   components: {
     SiteHeader,
-    PrimeButton
+    PrimeButton,
+    PrimeToast
   },
   setup() {
     const router = useRouter();
+    const toast = useToast();
     const username = ref(localStorage.getItem('username') || '');
     const stores = ref([]);
 
@@ -47,9 +52,16 @@ export default defineComponent({
 
     const fetchStores = async (storeName) => {
       try {
-        const response = await axios.get('/api/stores', { params: { name: storeName } });
+        const response = await axios.get('http://localhost:8082/api/trading/stores/search/name', {
+          params: {
+            name: storeName,
+            userName: username.value,
+            token: localStorage.getItem('token')
+          }
+        });
         stores.value = response.data;
       } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to load stores', life: 3000 });
         console.error('Error fetching stores:', error);
       }
     };
@@ -61,6 +73,7 @@ export default defineComponent({
     const logout = () => {
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('username');
+      localStorage.removeItem('token');
       router.push('/login');
     };
 

@@ -1,13 +1,26 @@
 package com.example.trading_system.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.*;
 
 import java.util.List;
 
+@Entity
 public class Message {
+    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private final String senderId;
+
+    @Column(nullable = false)
     private final String senderUsername;
+
+    @Column(nullable = false, length = 1000)
     private final String content;
 
     public Message(String senderId, String senderUsername, String content){

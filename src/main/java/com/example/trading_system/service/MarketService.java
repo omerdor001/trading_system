@@ -69,7 +69,7 @@ public interface MarketService {
     String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException, JsonProcessingException;
     String getPurchaseHistoryJSONFormatForStore(String userName,String storeName);
 
-    String getPurchaseHistoryJSONFormat(String userName);
+    String getPurchaseHistoryJSONFormat(String userName) throws IllegalAccessException;
 
 
     String requestManagersPermissions(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
@@ -111,6 +111,7 @@ public interface MarketService {
 
     void removeDiscount(String username, String storeName, int selectedIndex) throws IllegalAccessException;
 
+    void removeCondition(String username, String storeName, int selectedIndex) throws IllegalAccessException;
     //endregion
 
     //region Discount/Condition editing/manipulation
