@@ -726,6 +726,15 @@ export default {
             return typeMap[type] || type;
         }
 
+        const getConditionTypeLabel = (type) => {
+            const typeMap = {
+                'productCount' : 'Product Count',
+                'totalSum' : 'Total Sum',
+                'categoryCount' : 'Category Count',
+            }
+            return typeMap[type] || type;
+        }
+
         const createDetails = (discount) => {
             switch (discount.type) {
                 case 'percentageStore':
@@ -770,6 +779,11 @@ export default {
 
         const typeCondTemplate = (rowData) => {
             return getConditionTypeLabel(rowData.data.type);
+        };
+
+        const typeCondTemplate = (rowData) => {
+        alert(rowData);
+            return getConditionTypeLabel(rowData.type);
         };
 
         const valueTemplate = (rowData) => {
