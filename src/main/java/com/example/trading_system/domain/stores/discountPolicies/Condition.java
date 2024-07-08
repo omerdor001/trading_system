@@ -1,17 +1,26 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
-import com.example.trading_system.domain.stores.ProductInSaleDTO;
 
+import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import java.util.Collection;
 
-public interface Condition {
-    boolean isSatisfied(Collection<ProductInSaleDTO> items);
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "policy_type")
+public abstract  class Condition implements ConditionInterface{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
+    public abstract boolean isSatisfied(Collection<ProductInSaleDTO> items);
 
-    void setCategory(int category);
+    public abstract void setCategory(int category);
 
-    void setCount(int count);
+    public abstract void setCount(int count);
 
-    void setSum(double requiredSum);
+    public abstract void setSum(double requiredSum);
 
-    String getInfo();
+    public abstract String getInfo();
 }

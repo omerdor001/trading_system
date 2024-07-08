@@ -1,11 +1,15 @@
 package com.example.trading_system.domain.stores.purchasePolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-
-public class PlaceholderPurchasePolicy implements PurchasePolicy{
+@Entity
+@DiscriminatorValue("PlaceholderPurchasePolicy")
+public class PlaceholderPurchasePolicy extends PurchasePolicy{
 
     public PlaceholderPurchasePolicy() {
     }

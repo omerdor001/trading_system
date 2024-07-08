@@ -1,14 +1,26 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 
 import java.util.Collection;
+@Entity
+@DiscriminatorValue("TotalSumCondition")
 
-public class TotalSumCondition implements Condition {
+public class TotalSumCondition extends Condition {
     private double requiredSum;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
     public TotalSumCondition(double requiredSum) {
         this.requiredSum = requiredSum;
+    }
+
+    public TotalSumCondition() {
+
     }
 
     @Override

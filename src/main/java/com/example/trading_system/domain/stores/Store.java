@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import jakarta.persistence.*;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,27 +19,48 @@ import java.util.stream.Collectors;
 
 @Setter
 @Getter
+@Entity
 public class Store {
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
+    @Getter
+    @Id
     private String nameId;
     private String description;
+    //Added because missing
+    @Getter
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "store_id")
     private HashMap<Integer, Product> products;
+    //Added because missing
     @Getter
+    @ElementCollection
     private List<String> managers;
+    //Added because missing
     @Getter
+    @ElementCollection
     private List<String> owners;
+    @Getter
     private String founder;
     @Getter
     @Setter
     private boolean isActive;
     private boolean isOpen;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private StoreSalesHistory salesHistory;
     @Getter
     @Setter
     private Double storeRating;
+    @Getter
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private LinkedList<DiscountPolicy> discountPolicies;
+    @Getter
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private LinkedList<Condition> discountConditions;
+    @Getter
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private LinkedList<PurchasePolicy> purchasePolicies;
+    @Getter
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private LinkedList<Message> messages;
     private LinkedList<Bid> bids;
     private HashMap<Integer, ProductLottery> lotteryProducts;
@@ -59,6 +82,10 @@ public class Store {
         this.messages = new LinkedList<>();
         this.bids = new LinkedList<>();
         this.lotteryProducts = new HashMap<>();
+    }
+
+    public Store() {
+
     }
 
     public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, int category) {
@@ -208,7 +235,7 @@ public class Store {
         } else throw new IllegalArgumentException("Product with id " + productId + " does not exist");
     }
 
-    public  synchronized void addKeyWordToProduct(int productId, String keyword) {
+    public synchronized void addKeyWordToProduct(int productId, String keyword) {
         Product product = getProduct(productId);
         if (product != null) {
             product.addKeyWord(keyword);
@@ -232,14 +259,6 @@ public class Store {
     }
 
 
-    public String getNameId() {
-        return nameId;
-    }
-
-    public HashMap<Integer, Product> getProducts() {     //Added because missing
-        return products;
-    }
-
     public void setActive(Boolean active) {             //Added because missing
         this.isActive = active;
     }
@@ -256,11 +275,11 @@ public class Store {
         return managers;
     }
 
-    public boolean isOwnerOfStore(String username){
+    public boolean isOwnerOfStore(String username) {
         return owners.contains(username);
     }
 
-    public boolean isManagerOfStore(String username){
+    public boolean isManagerOfStore(String username) {
         return managers.contains(username);
     }
 
@@ -296,27 +315,7 @@ public class Store {
         isOpen = open;
     }
 
-    public String getFounder() {
-        return founder;
-    }
-
-    public LinkedList<DiscountPolicy> getDiscountPolicies() {
-        return discountPolicies;
-    }
-
-    public LinkedList<Condition> getDiscountConditions() {
-        return discountConditions;
-    }
-
-    public LinkedList<PurchasePolicy> getPurchasePolicies() {
-        return purchasePolicies;
-    }
-
-    public LinkedList<Message> getMessages(){
-        return this.messages;
-    }
-
-    public String getMessagesJSON(){
+    public String getMessagesJSON() {
         return Message.toJsonList(this.messages);
     }
 
@@ -355,12 +354,12 @@ public class Store {
         return true;
     }
 
-    private String getProductInSaleListJSONFormat(Collection<ProductInSaleDTO> items){
+    private String getProductInSaleListJSONFormat(Collection<ProductInSaleDTO> items) {
         List<Map<String, Object>> productInSaleList = new ArrayList<>();
         for (ProductInSaleDTO product : items) {
             Map<String, Object> productMap = new HashMap<>();
             productMap.put("productId", product.getId());
-            productMap.put("price",product.getPrice());
+            productMap.put("price", product.getPrice());
             productMap.put("quantity", product.getQuantity());
             productMap.put("category", Product.getCategoryStringFromInt(product.getCategory()));
             productInSaleList.add(productMap);
@@ -374,15 +373,15 @@ public class Store {
         }
     }
 
-    public String getPurchaseHistoryJSONFormat(){
-        List<Purchase> purchases=salesHistory.getPurchases();
+    public String getPurchaseHistoryJSONFormat() {
+        List<Purchase> purchases = salesHistory.getPurchases();
         List<Map<String, Object>> purchasesList = new ArrayList<>();
-        for(Purchase purchase:purchases){
+        for (Purchase purchase : purchases) {
             Map<String, Object> purchaseMap = new HashMap<>();
             String productInSaleListJSON = getProductInSaleListJSONFormat(purchase.getProductInSaleList());
             purchaseMap.put("productInSaleList", productInSaleListJSON);
             purchaseMap.put("customUsername", purchase.getCustomerUsername());
-            purchaseMap.put("totalPrice",purchase.getTotalPrice());
+            purchaseMap.put("totalPrice", purchase.getTotalPrice());
             purchaseMap.put("storeName", purchase.getStoreName());
         }
         ObjectMapper objectMapper = new ObjectMapper();
@@ -398,7 +397,7 @@ public class Store {
         return salesHistory.getPurchaseHistory(username);
     }
 
-    public void receiveMessage(String senderId, String senderUsername, String content){
+    public void receiveMessage(String senderId, String senderUsername, String content) {
         this.messages.add(new Message(senderId, senderUsername, content));
     }
 
@@ -519,36 +518,21 @@ public class Store {
     }
 
     public void setFirstCondition(int selectedDiscountIndex, int selectedSecondIndex) {
-        if (selectedDiscountIndex == selectedSecondIndex)
-            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
-        Condition setDiscount;
-        if (selectedSecondIndex >= discountPolicies.size())
-            setDiscount = discountConditions.remove(selectedSecondIndex - discountPolicies.size());
-        else {
-            if (selectedDiscountIndex < selectedSecondIndex) selectedSecondIndex -= 1;
-            setDiscount = discountPolicies.remove(selectedSecondIndex);
-        }
+        Condition setDiscount = discountConditions.remove(selectedSecondIndex);
         editedDiscount.setFirst(setDiscount);
+
     }
 
     public void setSecondCondition(int selectedDiscountIndex, int selectedSecondIndex) {
-        if (selectedDiscountIndex == selectedSecondIndex)
-            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
-        Condition setDiscount;
-        if (selectedSecondIndex >= discountPolicies.size())
-            setDiscount = discountConditions.remove(selectedSecondIndex - discountPolicies.size());
-        else {
-            if (selectedDiscountIndex < selectedSecondIndex) selectedSecondIndex -= 1;
-            setDiscount = discountPolicies.remove(selectedSecondIndex);
-        }
+        Condition setDiscount = discountConditions.remove(selectedSecondIndex);
         editedDiscount.setSecond(setDiscount);
     }
 
     public void setThenDiscount(int selectedDiscountIndex, int selectedThenIndex) {
-        if (selectedDiscountIndex == selectedThenIndex)
-            throw new IllegalArgumentException("Indexes cannot be the same");
+        if(selectedDiscountIndex == selectedThenIndex)
+            throw new RuntimeException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         DiscountPolicy setDiscount = discountPolicies.remove(selectedThenIndex);
         editedDiscount.setThen(setDiscount);
@@ -572,16 +556,8 @@ public class Store {
     }
 
     public void setDeciderDiscount(int selectedDiscountIndex, int selectedDeciderIndex) {
-        if (selectedDiscountIndex == selectedDeciderIndex)
-            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
-        Condition setDiscount;
-        if (selectedDeciderIndex >= discountPolicies.size())
-            setDiscount = discountConditions.remove(selectedDeciderIndex - discountPolicies.size());
-        else {
-            if (selectedDiscountIndex < selectedDeciderIndex) selectedDeciderIndex -= 1;
-            setDiscount = discountPolicies.remove(selectedDeciderIndex);
-        }
+        Condition setDiscount = discountConditions.remove(selectedDeciderIndex);
         editedDiscount.setDecider(setDiscount);
     }
 
@@ -591,11 +567,15 @@ public class Store {
     }
 
     public void setCountCondition(int selectedConditionIndex, int newCount) {
+        if (newCount < 1)
+            throw new RuntimeException("Count cannot be less than 1");
         Condition setCondition = discountConditions.get(selectedConditionIndex);
         setCondition.setCount(newCount);
     }
 
     public void setCategoryCondition(int selectedConditionIndex, int newCategory) {
+        if (newCategory < 1)
+            throw new RuntimeException("Category cannot be less than 1");
         Condition setCondition = discountConditions.get(selectedConditionIndex);
         setCondition.setCategory(newCategory);
     }
@@ -716,20 +696,16 @@ public class Store {
         else purchasePolicies.remove(selectedIndex);
     }
 
-    public void placeBid(String userName, int productID, double price)
-    {
+    public void placeBid(String userName, int productID, double price) {
         Bid newBid = new Bid(userName, productID, price);
         this.bids.add(newBid);
     }
 
-    public boolean approveBid(String userName, int productID, String bidUserName)
-    {
-        for ( Bid b : bids )
-        {
-            if(b.getProductID() == productID && b.getUserName().equals(bidUserName))
-            {
+    public boolean approveBid(String userName, int productID, String bidUserName) {
+        for (Bid b : bids) {
+            if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) {
                 b.approveBid(userName);
-                if(b.getApprovedBy().containsAll(owners))
+                if (b.getApprovedBy().containsAll(owners))
                     b.setAllOwnersApproved(true);
                 return b.getAllOwnersApproved();
             }
@@ -737,24 +713,18 @@ public class Store {
         return false;
     }
 
-    public void rejectBid(String userName, int productID, String bidUserName)
-    {
-        for ( Bid b : bids )
-        {
-            if(b.getProductID() == productID && b.getUserName().equals(bidUserName))
-            {
+    public void rejectBid(String userName, int productID, String bidUserName) {
+        for (Bid b : bids) {
+            if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) {
                 bids.remove(b);
                 break;
             }
         }
     }
 
-    public void counterOffer(String userName, int productID, String bidUserName, double newPrice)
-    {
-        for ( Bid b : bids )
-        {
-            if(b.getProductID() == productID && b.getUserName().equals(bidUserName))
-            {
+    public void counterOffer(String userName, int productID, String bidUserName, double newPrice) {
+        for (Bid b : bids) {
+            if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) {
                 b.setPrice(newPrice);
             }
         }
@@ -764,16 +734,15 @@ public class Store {
 
     public boolean isBidExist(int productID, String bidUserName) {
 
-        for ( Bid b : bids)
-        {
-            if(b.getProductID() == productID && b.getUserName().equals(bidUserName))
+        for (Bid b : bids) {
+            if (b.getProductID() == productID && b.getUserName().equals(bidUserName))
                 return true;
         }
         return false;
     }
 
     public String getStoreBids() {
-        if(bids.isEmpty())
+        if (bids.isEmpty())
             return "{}";
         StringBuilder sb = new StringBuilder();
         sb.append("{\n");
@@ -784,12 +753,10 @@ public class Store {
     }
 
     public boolean isBidApproved(String username, int productId, double price) {
-        for ( Bid b : bids)
-        {
-            if(b.getProductID() == productId && b.getUserName().equals(username) && b.getPrice() == price)
-            {
-                if(b.getApprovedBy().containsAll(owners))
-                     return true;
+        for (Bid b : bids) {
+            if (b.getProductID() == productId && b.getUserName().equals(username) && b.getPrice() == price) {
+                if (b.getApprovedBy().containsAll(owners))
+                    return true;
             }
         }
         return false;
@@ -799,7 +766,7 @@ public class Store {
         LinkedList<Bid> filteredBids = bids.stream()
                 .filter(bid -> userName.equals(bid.getUserName()))
                 .collect(Collectors.toCollection(LinkedList::new));
-        if(filteredBids.isEmpty())
+        if (filteredBids.isEmpty())
             return "{}";
         StringBuilder sb = new StringBuilder();
         sb.append("{\n");
@@ -809,17 +776,16 @@ public class Store {
         return sb.toString();
     }
 
-    public void createProductLottery(int productID, LocalDateTime localDateTime, double price){
+    public void createProductLottery(int productID, LocalDateTime localDateTime, double price) {
         ProductLottery productLottery = new ProductLottery(localDateTime, price);
         this.lotteryProducts.put(productID, productLottery);
     }
 
-    public boolean buyLotteryProductTicket(String userName, int productID, double price) throws Exception{
+    public boolean buyLotteryProductTicket(String userName, int productID, double price) throws Exception {
         return lotteryProducts.get(productID).buyLotteryProductTicket(userName, price);
     }
 
-    public String makeLotteryOnProduct(int productID)
-    {
+    public String makeLotteryOnProduct(int productID) {
         return lotteryProducts.get(productID).makeLotteryOnProduct();
     }
 
@@ -839,10 +805,8 @@ public class Store {
 
 
     public double getBidPrice(String userName, int productID) {
-        for ( Bid b : bids)
-        {
-            if(b.getProductID() == productID && b.getUserName().equals(userName))
-            {
+        for (Bid b : bids) {
+            if (b.getProductID() == productID && b.getUserName().equals(userName)) {
                 return b.getPrice();
             }
         }
@@ -850,17 +814,15 @@ public class Store {
     }
 
     public void removeBidAccepted(String userName, int productID) {
-        for ( Bid b : bids)
-        {
-            if(b.getProductID() == productID && b.getUserName().equals(userName))
-            {
+        for (Bid b : bids) {
+            if (b.getProductID() == productID && b.getUserName().equals(userName)) {
                 bids.remove(b);
                 break;
             }
         }
     }
 
-    public  List<Product> searchProduct(String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) {
+    public List<Product> searchProduct(String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) {
 
         List<Product> productList = new ArrayList<>(products.values());
 
@@ -879,7 +841,7 @@ public class Store {
                     return true;
                 })
                 .filter(product -> {
-                    if (maxPrice !=0){
+                    if (maxPrice != 0) {
                         return product.getProduct_price() <= maxPrice;
                     }
                     return true;
@@ -891,7 +853,7 @@ public class Store {
                     return true;
                 })
                 .filter(product -> {
-                        return product.getRating() == rating;
+                    return product.getRating() == rating;
                 })
                 .collect(Collectors.toList());
     }

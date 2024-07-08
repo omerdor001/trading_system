@@ -103,7 +103,7 @@ public class DiscountPolicyUnitTests {
         store.addStoreDiscount(0.5);
         store.addCategoryCountCondition(1,1);
         store.addConditionalDiscount();
-        store.setFirstCondition(1,2);
+        store.setFirstCondition(1,0);
         store.setThenDiscount(1,0);
         product.setQuantity(2);
         double price = store.calculatePrice(bag);
@@ -115,7 +115,7 @@ public class DiscountPolicyUnitTests {
         store.addStoreDiscount(0.5);
         store.addCategoryCountCondition(1,1);
         store.addConditionalDiscount();
-        store.setFirstCondition(1,2);
+        store.setFirstCondition(1,0);
         store.setThenDiscount(1,0);
         product.setCategory(2);
         double price = store.calculatePrice(bag);
@@ -127,7 +127,7 @@ public class DiscountPolicyUnitTests {
         store.addStoreDiscount(0.5);
         store.addProductCountCondition(0,1);
         store.addConditionalDiscount();
-        store.setFirstCondition(1,2);
+        store.setFirstCondition(1,0);
         store.setThenDiscount(1,0);
         product.setQuantity(2);
         double price = store.calculatePrice(bag);
@@ -139,7 +139,7 @@ public class DiscountPolicyUnitTests {
         store.addStoreDiscount(0.5);
         store.addProductCountCondition(0,1);
         store.addConditionalDiscount();
-        store.setFirstCondition(1,2);
+        store.setFirstCondition(1,0);
         store.setThenDiscount(1,0);
         product.setQuantity(1);
         double price = store.calculatePrice(bag);
@@ -151,7 +151,7 @@ public class DiscountPolicyUnitTests {
         store.addStoreDiscount(0.5);
         store.addTotalSumCondition(1);
         store.addConditionalDiscount();
-        store.setFirstCondition(1,2);
+        store.setFirstCondition(1,0);
         store.setThenDiscount(1,0);
         product.setQuantity(2);
         double price = store.calculatePrice(bag);
@@ -163,7 +163,7 @@ public class DiscountPolicyUnitTests {
         store.addStoreDiscount(0.5);
         store.addTotalSumCondition(1);
         store.addConditionalDiscount();
-        store.setFirstCondition(1,2);
+        store.setFirstCondition(1,0);
         store.setThenDiscount(1,0);
         double price = store.calculatePrice(bag);
         assertEquals(1.0, price);
@@ -175,8 +175,8 @@ public class DiscountPolicyUnitTests {
         store.addTotalSumCondition(1);
         store.addTotalSumCondition(2);
         store.addAndDiscount();
-        store.setFirstCondition(1,2);
-        store.setSecondCondition(1,2);
+        store.setFirstCondition(1,0);
+        store.setSecondCondition(1,0);
         store.setThenDiscount(1,0);
         product.setQuantity(3);
         double price = store.calculatePrice(bag);
@@ -189,8 +189,8 @@ public class DiscountPolicyUnitTests {
         store.addTotalSumCondition(1);
         store.addTotalSumCondition(3);
         store.addAndDiscount();
-        store.setFirstCondition(1,2);
-        store.setSecondCondition(1,2);
+        store.setFirstCondition(1,0);
+        store.setSecondCondition(1,0);
         store.setThenDiscount(1,0);
         product.setQuantity(3);
         double price = store.calculatePrice(bag);
@@ -203,8 +203,8 @@ public class DiscountPolicyUnitTests {
         store.addTotalSumCondition(3);
         store.addTotalSumCondition(2);
         store.addAndDiscount();
-        store.setFirstCondition(1,2);
-        store.setSecondCondition(1,2);
+        store.setFirstCondition(1,0);
+        store.setSecondCondition(1,0);
         store.setThenDiscount(1,0);
         product.setQuantity(3);
         double price = store.calculatePrice(bag);
@@ -217,8 +217,8 @@ public class DiscountPolicyUnitTests {
         store.addTotalSumCondition(1);
         store.addTotalSumCondition(2);
         store.addOrDiscount();
-        store.setFirstCondition(1,2);
-        store.setSecondCondition(1,2);
+        store.setFirstCondition(1,0);
+        store.setSecondCondition(1,0);
         store.setThenDiscount(1,0);
         product.setQuantity(3);
         double price = store.calculatePrice(bag);
@@ -231,8 +231,8 @@ public class DiscountPolicyUnitTests {
         store.addTotalSumCondition(1);
         store.addTotalSumCondition(3);
         store.addOrDiscount();
-        store.setFirstCondition(1,2);
-        store.setSecondCondition(1,2);
+        store.setFirstCondition(1,0);
+        store.setSecondCondition(1,0);
         store.setThenDiscount(1,0);
         product.setQuantity(3);
         double price = store.calculatePrice(bag);
@@ -245,8 +245,8 @@ public class DiscountPolicyUnitTests {
         store.addTotalSumCondition(3);
         store.addTotalSumCondition(2);
         store.addOrDiscount();
-        store.setFirstCondition(1,2);
-        store.setSecondCondition(1,2);
+        store.setFirstCondition(1,0);
+        store.setSecondCondition(1,0);
         store.setThenDiscount(1,0);
         product.setQuantity(3);
         double price = store.calculatePrice(bag);
@@ -261,7 +261,7 @@ public class DiscountPolicyUnitTests {
         store.addXorDiscount();
         store.setFirstDiscount(2,0);
         store.setSecondDiscount(1,0);
-        store.setDeciderDiscount(0,1);
+        store.setDeciderDiscount(0,0);
         double price = store.calculatePrice(bag);
         assertEquals(0.5, price);
     }
@@ -274,7 +274,7 @@ public class DiscountPolicyUnitTests {
         store.addXorDiscount();
         store.setSecondDiscount(2,0);
         store.setFirstDiscount(1,0);
-        store.setDeciderDiscount(0,1);
+        store.setDeciderDiscount(0,0);
         double price = store.calculatePrice(bag);
         assertEquals(0.5, price);
     }
@@ -287,7 +287,7 @@ public class DiscountPolicyUnitTests {
         store.addXorDiscount();
         store.setFirstDiscount(2,0);
         store.setSecondDiscount(1,0);
-        store.setDeciderDiscount(0,1);
+        store.setDeciderDiscount(0,0);
         double price = store.calculatePrice(bag);
         assertEquals(0.75, price);
     }
@@ -300,7 +300,7 @@ public class DiscountPolicyUnitTests {
         store.addXorDiscount();
         store.setFirstDiscount(2,0);
         store.setSecondDiscount(1,0);
-        store.setDeciderDiscount(0,1);
+        store.setDeciderDiscount(0,0);
         double price = store.calculatePrice(bag);
         assertEquals(0.5, price);
     }

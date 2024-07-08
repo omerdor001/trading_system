@@ -1,11 +1,18 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.Collection;
+@Entity
+@DiscriminatorValue("PlaceholderCondition")
 
-public class PlaceholderCondition implements Condition {
-
+public class PlaceholderCondition extends Condition {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
     public PlaceholderCondition() {
     }
 

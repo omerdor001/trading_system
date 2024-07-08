@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -156,7 +155,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addStoreDiscount(username,token,storeName,0.5);
         tradingSystem.addCategoryCountCondition(username,token,storeName,1,1);
         tradingSystem.addConditionalDiscount(username,token,storeName);
-        tradingSystem.setFirstCondition(username,token,storeName,1,2);
+        tradingSystem.setFirstCondition(username,token,storeName,1,0);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
         tradingSystem.addToCart(username,token,0,storeName,2, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
@@ -208,7 +207,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addStoreDiscount(username,token,storeName,0.5);
         tradingSystem.addTotalSumCondition(username,token,storeName,1);
         tradingSystem.addConditionalDiscount(username,token,storeName);
-        tradingSystem.setFirstCondition(username,token,storeName,1,2);
+        tradingSystem.setFirstCondition(username,token,storeName,1,0);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
         tradingSystem.addToCart(username,token,0,storeName,2, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
@@ -235,8 +234,8 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addTotalSumCondition(username,token,storeName,1);
         tradingSystem.addTotalSumCondition(username,token,storeName,2);
         tradingSystem.addAndDiscount(username,token,storeName);
-        tradingSystem.setFirstCondition(username,token,storeName,1,2);
-        tradingSystem.setSecondCondition(username,token,storeName,1,2);
+        tradingSystem.setFirstCondition(username,token,storeName,1,0);
+        tradingSystem.setSecondCondition(username,token,storeName,1,0);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
         tradingSystem.addToCart(username,token,0,storeName,3, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
@@ -280,8 +279,8 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addTotalSumCondition(username,token,storeName,1);
         tradingSystem.addTotalSumCondition(username,token,storeName,2);
         tradingSystem.addOrDiscount(username,token,storeName);
-        tradingSystem.setFirstCondition(username,token,storeName,1,2);
-        tradingSystem.setSecondCondition(username,token,storeName,1,2);
+        tradingSystem.setFirstCondition(username,token,storeName,1,0);
+        tradingSystem.setSecondCondition(username,token,storeName,1,0);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
         tradingSystem.addToCart(username,token,0,storeName,3, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
@@ -295,8 +294,8 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addTotalSumCondition(username,token,storeName,1);
         tradingSystem.addTotalSumCondition(username,token,storeName,3);
         tradingSystem.addOrDiscount(username,token,storeName);
-        tradingSystem.setFirstCondition(username,token,storeName,1,2);
-        tradingSystem.setSecondCondition(username,token,storeName,1,2);
+        tradingSystem.setFirstCondition(username,token,storeName,1,0);
+        tradingSystem.setSecondCondition(username,token,storeName,1,0);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
         tradingSystem.addToCart(username,token,0,storeName,3, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
@@ -310,8 +309,8 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addTotalSumCondition(username,token,storeName,3);
         tradingSystem.addTotalSumCondition(username,token,storeName,2);
         tradingSystem.addOrDiscount(username,token,storeName);
-        tradingSystem.setFirstCondition(username,token,storeName,1,2);
-        tradingSystem.setSecondCondition(username,token,storeName,1,2);
+        tradingSystem.setFirstCondition(username,token,storeName,1,0);
+        tradingSystem.setSecondCondition(username,token,storeName,1,0);
         tradingSystem.setThenDiscount(username,token,storeName,1,0);
         tradingSystem.addToCart(username,token,0,storeName,3, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
@@ -357,7 +356,7 @@ public class DiscountPolicyAcceptanceTests {
         tradingSystem.addXorDiscount(username,token,storeName);
         tradingSystem.setFirstDiscount(username,token,storeName,2,0);
         tradingSystem.setSecondDiscount(username,token,storeName,1,0);
-        tradingSystem.setDeciderDiscount(username,token,storeName,0,1);
+        tradingSystem.setDeciderDiscount(username,token,storeName,0,0);
         tradingSystem.addToCart(username,token,0,storeName,2, 1);
         ResponseEntity<String> result = tradingSystem.calculatePrice(username,token);
         assertEquals(HttpStatus.OK, result.getStatusCode());

@@ -1,16 +1,23 @@
 package com.example.trading_system.domain.stores;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Entity
 @AllArgsConstructor
 @Getter
 @Setter
 public class StoreSalesHistory {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Purchase> purchases;
 
     public StoreSalesHistory(){
