@@ -998,5 +998,18 @@ public class TradingSystemRestController {
         return tradingSystem.buyLotteryProductTicket(userName, token, storeName, productID, price);
     }
 
+    @GetMapping("/store/searchProducts")
+    public ResponseEntity<String> searchProductsInStores(@RequestParam String userName,
+                                                         @RequestParam String token,
+                                                         @RequestParam String keyWord,
+                                                         @RequestParam double minPrice,
+                                                         @RequestParam double maxPrice,
+                                                         @RequestParam String categories,
+                                                         @RequestParam Double rating
+                                                         ) {
+
+        return tradingSystem.searchProductsInStores("r" + userName, token, keyWord, minPrice, maxPrice, categories, rating);
+    }
+
 
 }
