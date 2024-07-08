@@ -256,6 +256,34 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
 
+    @Override
+    public String searchProductsInStores(String userName, String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) throws JsonProcessingException {
+        if (!userFacade.isUserExist(userName)) {
+            throw new IllegalArgumentException("User must exist");
+        }
+        
+        List<Product> resultProductList = new LinkedList<>();
+
+        StringBuilder sb = new StringBuilder();
+        for (Store store : storeRepository.getAllStoresByStores()) {
+            if (!store.isOpen()) continue;
+            List<Product> products2 = store.searchProduct(keyWord, minPrice, maxPrice, intCategories, rating);
+            if (!products2.isEmpty())//Change to Repo
+            {
+                sb.append(products2.toString());
+
+                resultProductList.addAll(products2);
+            }
+
+        }
+        if (sb.isEmpty()) return "{}";
+
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(resultProductList);
+
+
+    }
+
 
     @Override
     public String searchNameInStore(String userName, String productName, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) throws IllegalAccessException {

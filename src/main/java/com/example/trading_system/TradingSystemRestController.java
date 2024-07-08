@@ -23,7 +23,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080") //TODO IP and Port (general)
@@ -238,7 +241,7 @@ public class TradingSystemRestController {
     public ResponseEntity<String> setAddress(@RequestParam String username,
                                              @RequestParam String token,
                                              @RequestParam String address) {
-        return tradingSystem.setAddress(username, token, address);
+        return tradingSystem.setAddress("r" + username, token, address);
     }
 
     @GetMapping("/watchSuspensions")
@@ -455,7 +458,7 @@ public class TradingSystemRestController {
 
     @PostMapping("/purchase/approve")
     public ResponseEntity<String> approvePurchase(@RequestParam String username, @RequestParam String token) {
-        return tradingSystem.approvePurchase(username, token);
+        return tradingSystem.approvePurchase("r" + username, token);
     }
 
     @GetMapping("/purchase/history")
@@ -470,17 +473,17 @@ public class TradingSystemRestController {
 
     @PostMapping("/cart/add")
     public ResponseEntity<String> addToCart(@RequestParam String username, @RequestParam String token, @RequestParam int productId, @RequestParam String storeName, @RequestParam int quantity, @RequestParam double price) {
-        return tradingSystem.addToCart(username, token, productId, storeName, quantity, price);
+        return tradingSystem.addToCart("r" + username, token, productId, storeName, quantity, price);
     }
 
-    @PostMapping("/cart/remove")
+    @PutMapping("/cart/remove")
     public ResponseEntity<String> removeFromCart(@RequestParam String username, @RequestParam String token, @RequestParam int productId, @RequestParam String storeName, @RequestParam int quantity) {
-        return tradingSystem.removeFromCart(username, token, productId, storeName, quantity);
+        return tradingSystem.removeFromCart("r" + username, token, productId, storeName, quantity);
     }
 
     @GetMapping("/cart/view")
     public ResponseEntity<String> viewCart(@RequestParam String username, @RequestParam String token) {
-        return tradingSystem.viewCart(username, token);
+        return tradingSystem.viewCart("r" + username, token);
     }
 
     @GetMapping("/purchase/history/all")
@@ -792,13 +795,13 @@ public class TradingSystemRestController {
     }
 
 
-    @PostMapping("/store/{storeName}/place-bid")
+    @PostMapping("/store/place-bid")
     public ResponseEntity<String> placeBid(@RequestParam String userName,
                                            @RequestParam String token,
-                                           @PathVariable String storeName,
+                                           @RequestParam String storeName,
                                            @RequestParam int productID,
                                            @RequestParam double price){
-        return tradingSystem.placeBid(userName, token, storeName, productID, price);
+        return tradingSystem.placeBid("r" + userName, token, storeName, productID, price);
     }
 
     @PutMapping("/store/{storeName}/approve-bid")
@@ -870,6 +873,19 @@ public class TradingSystemRestController {
                                                           @RequestParam int productID,
                                                           @RequestParam double price){
         return tradingSystem.buyLotteryProductTicket(userName,token,storeName,productID,price);
+    }
+
+    @GetMapping("/store/searchProducts")
+    public ResponseEntity<String> searchProductsInStores(@RequestParam String userName,
+                                                         @RequestParam String token,
+                                                         @RequestParam String keyWord,
+                                                         @RequestParam double minPrice,
+                                                         @RequestParam double maxPrice,
+                                                         @RequestParam String categories,
+                                                         @RequestParam Double rating
+                                                         ) {
+
+        return tradingSystem.searchProductsInStores("r" + userName, token, keyWord, minPrice, maxPrice, categories, rating);
     }
 
 

@@ -61,7 +61,7 @@ public interface UserService {
 
     void exit(String username) throws Exception;
 
-    String viewCart(String username);
+    String viewCart(String username) throws Exception;
 
     void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException;
 
