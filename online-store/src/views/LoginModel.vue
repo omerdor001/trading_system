@@ -25,7 +25,7 @@
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" v-model="password" id="password" class="p-inputtext p-component" />
+            <InputText type="password" v-model="password" id="password" />
           </div>
           <div class="button-group">
             <PrimeButton label="Login" icon="pi pi-check" type="submit" class="login-button" />
@@ -36,10 +36,11 @@
       </PrimeCard>
     </div>
 
+    <!-- Notifications Toast -->
     <p-toast v-if="notificationsVisible" :baseZIndex="10000">
-      <template v-for="(notification, index) in notifications" :key="index">
-        <div>{{ notification }}</div> 
-      </template>
+      <div v-for="(notification, index) in notifications" :key="index">
+        {{ notification }}
+      </div>
     </p-toast>
   </div>
 </template>
@@ -51,8 +52,7 @@ import { Button as PrimeButton } from 'primevue/button';
 import { InputText } from 'primevue/inputtext';
 import { Card as PrimeCard } from 'primevue/card';
 import axios from 'axios';
-import webSocketService from './services/webSocketService';
-import { useToast } from 'primevue/usetoast';
+import webSocketService from '../webSocketService';
 
 export default defineComponent({
   name: 'LoginModel',
@@ -63,31 +63,41 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
-    const toast = useToast();
     const username = ref('');
     const password = ref('');
     const errorMessage = ref('');
     const notifications = ref([]);
     const notificationsVisible = ref(false);
 
+    // Function to handle login form submission
     const handleLogin = async () => {
       try {
+            console.log(localStorage.getItem("token"));
+            console.log(localStorage.getItem("username"));
+            console.log(username.value);
+            console.log(password.value);
         const response = await axios.get('http://localhost:8082/api/trading/login', {
           params: {
-            token: localStorage.getItem('token'),
-            usernameV: localStorage.getItem('username'),
+            token: localStorage.getItem("token"),
+            usernameV: localStorage.getItem("username"),
             username: username.value,
-            password: password.value
+            password: password.value,
           }
         });
         console.log('Login successful:', response.data);
+        
+        // Store user session information
         localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', "r"+username.value);
-        localStorage.setItem('toPresentUsername', username.value);
+        localStorage.setItem('username', response.data.username);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('isAdmin', response.data.isAdmin);
+        localStorage.setItem('userName', username.value)
+
+        // Subscribe to notifications
         subscribeToNotifications(username.value);
-        router.push('/'); 
+
+        // Redirect to home page
+        router.push('/');
       } catch (error) {
         if (error.response) {
           errorMessage.value = error.response.data || 'Failed to Login';
@@ -102,29 +112,31 @@ export default defineComponent({
       }
     };
 
+    // Function to handle WebSocket notifications
+    const subscribeToNotifications = (/*username*/) => {
+      const webSocketUrl = 'ws://localhost:8080/ws';
+      webSocketService.connect(webSocketUrl);
+      webSocketService.subscribe(handleWebSocketMessage);
+
+      // Send the username to the backend after WebSocket connection is established
+      // webSocketService.socket.onopen = () => {
+      //   webSocketService.socket.send(JSON.stringify({ type: 'subscribe', username }));
+      // };
+    };
+
+    // Function to handle incoming WebSocket messages (notifications)
+    const handleWebSocketMessage = (message) => {
+      console.log('Received WebSocket message:', message);
+      notifications.value.push(message);
+      notificationsVisible.value = true; // Show notifications toast
+    };
+
     const goBack = () => {
       router.go(-1); // Go back to previous page using router
     };
 
     const goToRegister = () => {
       router.push('/register'); // Navigate to register page using router
-    };
-
-    const subscribeToNotifications = (username) => {
-      const webSocketUrl = 'ws://localhost:8080/ws';
-      webSocketService.connect(webSocketUrl);
-      webSocketService.subscribe(handleWebSocketMessage);
-
-      // Send the username to the backend after WebSocket connection is established
-      webSocketService.socket.onopen = () => {
-        webSocketService.socket.send(JSON.stringify({ type: 'subscribe', username }));
-      };
-    };
-
-    const handleWebSocketMessage = (message) => {
-      console.log('Received WebSocket message:', message);
-      notifications.value.push(message);
-      notificationsVisible.value = true;
     };
 
     const toggleNotifications = () => {

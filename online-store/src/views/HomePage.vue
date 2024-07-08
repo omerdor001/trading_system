@@ -29,7 +29,7 @@ import AboutSection from '@/components/AboutSection.vue';
 import { Button as PrimeButton } from 'primevue/button';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import webSocketService from '@/services/webSocketService';
+import webSocketService from '../webSocketService';
 
 export default defineComponent({
   name: 'HomePage',

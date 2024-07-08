@@ -8,7 +8,7 @@
       </div>
       <div class="right-buttons">
         <template v-if="isLoggedIn">
-          <span class="username">{{ username }}</span>
+          <span class="username">{{userName}}</span>
           <PrimeButton label="Logout" @click="logout" class="p-button-danger" />
         </template>
         <template v-else>
@@ -49,16 +49,13 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    username: {
-      type: String,
-      default: ''
-    }
   },
   setup() {
     const router = useRouter();
     const toast = useToast();
     const notificationsVisible = ref(false);
     const notifications = ref([]);
+    const userName = localStorage.getItem('userName');
 
     const goHome = () => {
       router.push({ name: 'HomePage' });
@@ -108,6 +105,7 @@ export default defineComponent({
     };
 
     return {
+      userName,
       goHome,
       goToSearch,
       viewCart,
