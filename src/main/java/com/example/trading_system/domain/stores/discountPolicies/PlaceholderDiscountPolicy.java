@@ -1,11 +1,21 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 
 import java.util.Collection;
+@Entity
+@DiscriminatorValue("PlaceholderDiscountPolicy")
 
-public class PlaceholderDiscountPolicy implements DiscountPolicy, Condition {
+public class PlaceholderDiscountPolicy extends DiscountPolicy  {
 
+    @Id
+    @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    private Long id;
     public PlaceholderDiscountPolicy() {
     }
 

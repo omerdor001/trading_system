@@ -28,7 +28,11 @@ public class Message {
         this.senderUsername = senderUsername;
         this.content = content;
     }
-
+    public Message() {
+        this.senderId = null;
+        this.senderUsername = null;
+        this.content = null;
+    }
     public String getSenderId() {
         return senderId;
     }

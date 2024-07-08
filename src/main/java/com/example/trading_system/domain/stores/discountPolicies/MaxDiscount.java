@@ -1,11 +1,22 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 
 import java.util.Collection;
+@Entity
+@DiscriminatorValue("MAX")
 
-public class MaxDiscount implements DiscountPolicy, Condition {
+public class MaxDiscount extends DiscountPolicy {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
+    @ManyToOne
     private DiscountPolicy first;
+    @ManyToOne
     private DiscountPolicy second;
 
     public MaxDiscount() {

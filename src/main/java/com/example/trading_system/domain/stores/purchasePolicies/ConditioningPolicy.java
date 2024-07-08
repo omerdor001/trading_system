@@ -1,12 +1,18 @@
 package com.example.trading_system.domain.stores.purchasePolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+@Entity
+@DiscriminatorValue("ConditioningPolicy")
 
-public class ConditioningPolicy implements PurchasePolicy {
+public class ConditioningPolicy extends PurchasePolicy {
+    @ManyToOne(cascade = CascadeType.ALL)
     private PurchasePolicy predicateOne;
+    @ManyToOne(cascade = CascadeType.ALL)
     private PurchasePolicy predicateTwo;
 
     public ConditioningPolicy() {

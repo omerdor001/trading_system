@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.persistence.*;
 
+
+@Embeddable
 @Getter
 @Setter
 @Entity
@@ -45,6 +48,10 @@ public class ProductInSale {
         this.price=price;
         this.quantity=quantity;
         this.category=category;
+    }
+
+    public ProductInSale() {
+
     }
 
     @Override

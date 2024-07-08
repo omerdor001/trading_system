@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -16,6 +18,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
+@Service
 public class MarketFacadeImp implements MarketFacade {
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
     private static MarketFacadeImp instance = null;
@@ -24,6 +27,7 @@ public class MarketFacadeImp implements MarketFacade {
     private UserFacade userFacade;
 
 
+    @Autowired
     private MarketFacadeImp(StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
     }
@@ -212,7 +216,6 @@ public class MarketFacadeImp implements MarketFacade {
 
         return store.toString();
 
-
     }
 
     @Override
@@ -261,7 +264,7 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(userName)) {
             throw new IllegalArgumentException("User must exist");
         }
-        
+
         List<Product> resultProductList = new LinkedList<>();
 
         StringBuilder sb = new StringBuilder();
@@ -287,7 +290,6 @@ public class MarketFacadeImp implements MarketFacade {
 
     @Override
     public String searchNameInStore(String userName, String productName, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) throws IllegalAccessException {
-
         if (productName == null) {
             logger.error("No name provided");
             throw new IllegalArgumentException("No name provided");

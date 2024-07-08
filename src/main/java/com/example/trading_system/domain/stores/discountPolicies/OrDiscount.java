@@ -1,12 +1,24 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 
 import java.util.Collection;
+@Entity
+@DiscriminatorValue("OrDiscount")
 
-public class OrDiscount implements DiscountPolicy, Condition {
+public class OrDiscount extends DiscountPolicy {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
+    @ManyToOne
     private Condition first;
+    @ManyToOne
     private Condition second;
+    @ManyToOne
     private DiscountPolicy then;
 
     public OrDiscount() {
