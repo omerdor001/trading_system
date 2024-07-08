@@ -19,6 +19,14 @@
       </div>
       <p-toast></p-toast>
     </div>
+    <PrimeDialog v-model="notificationsVisible" header="Notifications">
+      <ul>
+        <li v-for="(notification, index) in notifications" :key="index">
+          {{ notification.message }}
+        </li>
+      </ul>
+      <Button @click="notificationsVisible = false">Close</Button>
+    </PrimeDialog>
   </header>
 </template>
 
@@ -35,7 +43,6 @@ export default defineComponent({
   components: {
     PrimeButton,
     'p-toast': PrimeToast,
-
   },
   props: {
     isLoggedIn: {
@@ -50,7 +57,9 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const toast = useToast();
-    const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
+    const notificationsVisible = ref(false);
+    const notifications = ref([]);
+
     const goHome = () => {
       router.push({ name: 'HomePage' });
     };
@@ -63,13 +72,24 @@ export default defineComponent({
       router.push({ name: 'ShoppingCart' });
     };
 
-    const notifications = () => {
-      router.push('/show-notifications');
+    const showNotifications = async () => {
+      try {
+        const response = await axios.get('http://localhost:8082/api/notifications', {
+          params: {
+            username: localStorage.getItem('username'),
+            token: localStorage.getItem('token')
+          }
+        });
+        notifications.value = response.data.notifications;
+        notificationsVisible.value = true;
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch notifications.', life: 3000 });
+      }
     };
 
     const logout = async () => {
       try {
-        console.log(localStorage.getItem('token'));
         const response = await axios.get('http://localhost:8082/api/trading/logout', {
           params: {
             token: localStorage.getItem('token'),
@@ -78,12 +98,10 @@ export default defineComponent({
         });
         localStorage.setItem('username', response.data.username);
         localStorage.setItem('token', response.data.token);
-        console.log(localStorage.getItem('token'));
       } catch (error) {
         console.log(error.response.data);
         toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
       }
-      isLoggedIn.value = false;
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('isAdmin');
       router.push('/login');
@@ -93,12 +111,15 @@ export default defineComponent({
       goHome,
       goToSearch,
       viewCart,
-      notifications,
-      logout
+      showNotifications,
+      logout,
+      notificationsVisible,
+      notifications
     };
   },
 });
 </script>
+
 
 <style scoped>
 .header-content {
@@ -152,5 +173,14 @@ export default defineComponent({
 
 .p-button:hover {
   background-color: #d35400 !important;
+}
+
+.p-dialog .p-dialog-content ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.p-dialog .p-dialog-content li {
+  margin-bottom: 10px;
 }
 </style>

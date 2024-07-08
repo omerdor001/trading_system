@@ -1,16 +1,23 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.ProductInSale;
 import com.example.trading_system.domain.stores.StoreRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Embeddable
 public class Cart {
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "shopping_bags", joinColumns = @JoinColumn(name = "cart_id"))
+    @MapKeyColumn(name = "store_id")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private final HashMap<String, ShoppingBag> shoppingBags;
 
     public Cart() {

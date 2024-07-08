@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
+    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
     <div class="suggest-owner">
       <h2>Suggest Owner</h2>
       <form @submit.prevent="suggestOwner">
