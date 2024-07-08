@@ -420,10 +420,10 @@ public class UserFacadeImp implements UserFacade {
         checkProductQuantity(username, productId, storeName, quantity);
         Product p = marketFacade.getStore(storeName).getProduct(productId);
         User user = userRepository.getUser(username);
-        if(p.getProduct_price() == price){
+        if(p.getProduct_price() == price) {
             user.addProductToCart(productId, quantity, storeName, p.getProduct_price(), p.getCategory().getIntValue());
             userRepository.saveUser(user);
-            }
+        }
         else {
             if(marketFacade.getStore(storeName).isBidApproved(username,productId,price)){
                 user.addProductToCart(productId, quantity, storeName, price, p.getCategory().getIntValue());

@@ -497,11 +497,7 @@ public class Store {
     }
 
     public void removeCondition(int selectedIndex) {
-        discountConditions.remove(selectedIndex - discountPolicies.size());
-    }
-
-    public void removeCondition(int selectedIndex) {
-        discountConditions.remove(selectedIndex - discountPolicies.size());
+        discountConditions.remove(selectedIndex);
     }
     //endregion
 
