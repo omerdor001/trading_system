@@ -1,8 +1,13 @@
 package com.example.trading_system.domain.users;
 
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.OneToOne;
+
 import java.util.List;
 
+@MappedSuperclass
 public abstract class RoleState {
+    @OneToOne(mappedBy = "roleState")
     protected Role role;
 
     public Role getRole() {

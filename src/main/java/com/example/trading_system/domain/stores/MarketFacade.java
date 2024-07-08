@@ -38,7 +38,7 @@ public interface MarketFacade {
 
     String getPurchaseHistoryJSONFormatForStore(String userName,String storeName);
 
-    String getPurchaseHistoryJSONFormat(String userName);
+    String getPurchaseHistoryJSONFormat(String userName) throws IllegalAccessException;
 
     String searchNameInStore(String userName, String productName, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) throws IllegalAccessException;
 
@@ -128,6 +128,8 @@ public interface MarketFacade {
     void addXorDiscount(String username, String storeName) throws IllegalAccessException;
 
     void removeDiscount(String username, String storeName, int selectedIndex) throws IllegalAccessException;
+
+    void removeCondition(String username, String storeName, int selectedIndex) throws IllegalAccessException;
 
     //endregion
 
@@ -220,4 +222,6 @@ public interface MarketFacade {
     String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception;
 
     void editProduct(String username, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity) throws Exception;
+
+    String searchProductsInStores(String userName, String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) throws Exception;
 }

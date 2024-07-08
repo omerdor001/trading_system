@@ -2,12 +2,11 @@
   <div>
     <SiteHeader :isLoggedIn="true" :username="username" />
     <div class="main-content">
-      <h2>Purchase History</h2>
-      <div v-for="store in stores" :key="store.storeName" class="store">
-        <h3>Store: {{ store.storeName }}</h3>
-        <p>Customer: {{ store.customUsername }}</p>
-        <p>Total Price: {{ store.totalPrice }}</p>
-        <PrimeButton label="View Products" @click="openModal(store)" class="view-products-button"/>
+      <h2>Purchase History for Store: {{ storeName }}</h2>
+      <div v-if="storeDetails">
+        <p>Customer: {{ storeDetails.customUsername }}</p>
+        <p>Total Price: {{ storeDetails.totalPrice }}</p>
+        <PrimeButton label="View Products" @click="openModal(storeDetails)" class="view-products-button"/>
       </div>
     </div>
     <PrimeDialog header="Purchased Products" v-model="isModalVisible" :modal="true" :style="{ width: '50vw' }" :closable="true">
@@ -31,9 +30,10 @@ import PrimeColumn from 'primevue/column';
 import PrimeDialog from 'primevue/dialog';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { useToast } from 'primevue/usetoast';
+import { useRouter } from 'vue-router';
 
 export default {
-  name: 'PurchaseHistory',
+  name: 'PurchaseHistoryForStore',
   components: {
     PrimeButton,
     PrimeDataTable,
@@ -42,40 +42,38 @@ export default {
     SiteHeader,
   },
   setup() {
+    const router = useRouter();
     const isModalVisible = ref(false);
     const selectedStoreProducts = ref([]);
     const username = ref(localStorage.getItem('username') || '');
     const token = ref(localStorage.getItem('token') || '');
-    const stores = ref([]);
     const toast = useToast();
+    const storeName = ref(router.currentRoute.value.params.storeName);
+    const storeDetails = ref(null);
 
     const fetchPurchaseHistory = async () => {
       try {
-        const response = await axios.get('http://localhost:8082/api/trading/purchaseHistory', {
+        const response = await axios.get(`http://localhost:8082/api/trading/store/purchaseHistory`, {
           params: {
-            username: username.value,
-            token: token.value,
+           username: username.value,
+           token: token.value,
+           storeName: storeName.value
           },
-        });
-        const purchaseData = response.data;
-        const storeMap = new Map();
-        purchaseData.forEach(purchase => {
-          if (!storeMap.has(purchase.storeName)) {
-            storeMap.set(purchase.storeName, {
-              storeName: purchase.storeName,
-              customUsername: purchase.customUsername,
-              totalPrice: purchase.totalPrice,
-              productInSaleList: []
-            });
-          }
-          const store = storeMap.get(purchase.storeName);
-          store.productInSaleList.push(...JSON.parse(purchase.productInSaleList));
-        });
-        stores.value = Array.from(storeMap.values());
-      } catch (error) {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch purchases' });
-      }
+       });
+      const purchaseData = response.data;
+      const storeData = purchaseData.filter(purchase => purchase.storeName === storeName.value);
+      storeDetails.value = {
+      storeName: storeName.value,
+      purchases: storeData.map(purchase => ({
+        customUsername: purchase.customUsername,
+        totalPrice: purchase.totalPrice,
+        productInSaleList: JSON.parse(purchase.productInSaleList)
+      }))
     };
+  } catch (error) {
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch purchase history' });
+  }
+};
 
     const openModal = (store) => {
       selectedStoreProducts.value = store.productInSaleList;
@@ -91,13 +89,14 @@ export default {
     });
 
     return {
-      stores,
+      storeDetails,
       isModalVisible,
       selectedStoreProducts,
       openModal,
       closeModal,
       username,
       token,
+      storeName,
     };
   },
 };
@@ -106,13 +105,6 @@ export default {
 <style scoped>
 .main-content {
   padding: 20px;
-}
-
-.store {
-  margin-bottom: 40px;
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 8px;
 }
 
 .view-products-button {

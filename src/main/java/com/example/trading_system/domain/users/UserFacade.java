@@ -80,7 +80,7 @@ public interface UserFacade {
 
     boolean isAdmin(String username);
 
-    String viewCart(String username);
+    String viewCart(String username) throws Exception;
 
     void removeFromCart(String username, int productId, String storeName, int quantity);
 

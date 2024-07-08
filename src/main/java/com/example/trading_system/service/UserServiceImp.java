@@ -137,7 +137,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public String viewCart(String username) {
+    public String viewCart(String username) throws Exception{
         logger.info("Trying registered : {} view cart ", username);
         String result = userFacade.viewCart(username);
         logger.info("Finished registered view cart: {} ", username);

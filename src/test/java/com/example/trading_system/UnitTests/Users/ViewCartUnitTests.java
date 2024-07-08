@@ -39,9 +39,13 @@ public class ViewCartUnitTests {
         userRepository.getUser(username).setCart(new Cart());
 
         userRepository.getUser(username).getCart().addProductToCart(1, 1, "Store", 10.0, 1);
-
-        String result = userFacadeImp.viewCart(username);
-
+        String result = null;
+        try {
+             result = userFacadeImp.viewCart(username);
+        }
+        catch (Exception e) {
+            Assertions.fail();
+        }
         Assertions.assertNotNull(result);
     }
 

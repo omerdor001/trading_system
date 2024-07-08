@@ -151,6 +151,7 @@ public class Store {
         if (product_quantity <= 0) throw new IllegalArgumentException("Quantity must be natural number");
         if (rating < 0) throw new IllegalArgumentException("Rating can't be negative number");
         Product product = new Product(product_id, product_name, product_description, product_price, product_quantity, rating, Category.getCategoryFromInt(category), keyWords);
+        product.setStore_name(this.nameId);
         products.put(product.getProduct_id(), product);
     }
 
@@ -492,9 +493,11 @@ public class Store {
     }
 
     public void removeDiscount(int selectedIndex) {
-        if (selectedIndex >= discountPolicies.size())
-            discountConditions.remove(selectedIndex - discountPolicies.size());
-        else discountPolicies.remove(selectedIndex);
+        discountPolicies.remove(selectedIndex);
+    }
+
+    public void removeCondition(int selectedIndex) {
+        discountConditions.remove(selectedIndex - discountPolicies.size());
     }
     //endregion
 
@@ -855,6 +858,42 @@ public class Store {
                 break;
             }
         }
+    }
+
+    public  List<Product> searchProduct(String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) {
+
+        List<Product> productList = new ArrayList<>(products.values());
+
+        // Stream the list and apply filters
+        return productList.stream()
+                .filter(product -> {
+                    if (keyWord != null && !keyWord.isEmpty()) {
+                        return product.getKeyWords().contains(keyWord);
+                    }
+                    return true;
+                })
+                .filter(product -> {
+                    if (minPrice != 0) {
+                        return product.getProduct_price() >= minPrice;
+                    }
+                    return true;
+                })
+                .filter(product -> {
+                    if (maxPrice !=0){
+                        return product.getProduct_price() <= maxPrice;
+                    }
+                    return true;
+                })
+                .filter(product -> {
+                    if (intCategories != null && !intCategories.isEmpty()) {
+                        return intCategories.contains(product.getCategory().getIntValue());
+                    }
+                    return true;
+                })
+                .filter(product -> {
+                        return product.getRating() == rating;
+                })
+                .collect(Collectors.toList());
     }
 
     //endregion

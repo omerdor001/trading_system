@@ -16,6 +16,8 @@ import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import PrimeButton from 'primevue/button';
 import { useRouter, useRoute } from 'vue-router';
+import axios from 'axios';
+import { useToast } from 'primevue/usetoast';
 
 export default defineComponent({
   name: 'PaymentPage',
@@ -26,16 +28,48 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute();
-    const username = ref(localStorage.getItem('username') || '');
+    const username = localStorage.getItem('username') ;
+    const token = localStorage.getItem('token');
     const address = ref('');
+    const toast = useToast();
 
+
+    const setAddressCustomer = async() => {
+      try {
+
+        const response = await axios.post('http://localhost:8082/api/trading/setAddress', null, { 
+          params: {
+            username : username,
+            token : token,
+            address : address.value
+          } });
+          toast.add({ severity: 'success', summary: 'Success', detail: response.data, life: 3000 });
+
+      } catch (error) {
+        console.error('Error set address:', error);
+
+      }
+    };
     onMounted(() => {
       address.value = route.query.address || '';
+      setAddressCustomer()
     });
 
-    const completePayment = () => {
-      alert('Payment Successful');
-      router.push('/');
+    const completePayment = async () => {
+
+      try {
+
+const response = await axios.post('http://localhost:8082/api/trading/purchase/approve', null, { 
+  params: {
+    username : username,
+    token : token,
+  } });
+  toast.add({ severity: 'success', summary: 'Success', detail: response.data , life: 3000 });
+} catch (error) {
+console.error('Error fetching products:', error);
+toast.add({ severity: 'error', summary: 'error', detail: error.response?.data || 'Failed to approve purchase' });
+
+}      router.push('/');
     };
 
     const logout = () => {
@@ -47,7 +81,9 @@ export default defineComponent({
     return {
       username,
       address,
+      setAddressCustomer,
       completePayment,
+      token,
       logout
     };
   }

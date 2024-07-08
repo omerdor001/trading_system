@@ -79,6 +79,11 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public String searchProductsInStores(String userName, String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) throws Exception {
+        return marketFacade.searchProductsInStores(userName, keyWord, minPrice, maxPrice, intCategories, rating);
+    }
+
+    @Override
     public String searchNameInStore(String userName, String productName, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) throws IllegalAccessException {
         return marketFacade.searchNameInStore(userName, productName, store_name, minPrice, maxPrice, minRating, category);
     }
@@ -299,6 +304,11 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public void removeCondition(String username, String storeName, int selectedIndex) throws IllegalAccessException {
+        marketFacade.removeCondition(username, storeName, selectedIndex);
+    }
+
+    @Override
     public String getPurchasePoliciesInfo(String username, String storeName) throws IllegalAccessException {
         return marketFacade.getPurchasePoliciesInfo(username, storeName);
     }
@@ -415,7 +425,7 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public String getPurchaseHistoryJSONFormat(String userName) {
+    public String getPurchaseHistoryJSONFormat(String userName) throws IllegalAccessException {
         return marketFacade.getPurchaseHistoryJSONFormat(userName);
     }
 

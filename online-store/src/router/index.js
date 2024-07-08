@@ -3,7 +3,6 @@ import HomePage from '@/views/HomePage.vue';
 import LoginModel from '@/views/LoginModel.vue';
 import OpenStore from '@/views/OpenStore.vue';
 import CloseStore from '@/views/CloseStore.vue';
-import YieldOwnership from '@/views/YieldOwnership.vue';
 import UserRegistration from '@/views/UserRegistration.vue';
 import MyStoresIOwn from '@/views/MyStoresIOwn.vue';
 import CreateSuspension from '@/views/CreateSuspension.vue';
@@ -19,6 +18,7 @@ import ProductDetails from '@/views/ProductDetails.vue';
 import ShoppingCart from '@/views/ShoppingCart.vue';
 import Checkout from '@/views/CheckoutPage.vue';
 import PurchaseHistory from '@/views/PurchaseHistory.vue';
+import PurchaseHistoryForStore from '@/views/PurchaseHistoryForStore.vue';
 import SearchPage from '@/views/SearchPage.vue';
 import SearchResults from '@/views/SearchResults.vue';
 import StoreSearchPage from '@/views/StoreSearchPage.vue';
@@ -30,14 +30,14 @@ import ApproveManager from '@/views/ApproveManager.vue';
 import WatchStoreBids from '@/views/WatchStoreBids.vue';
 import PaymentPage from '@/views/PaymentPage.vue';
 import ProductsForStore from '@/views/ProductsForStore.vue';
-import EditDiscountPolicy from '@/views/DiscountManagement.vue';
+// import EditDiscountPolicy from '@/views/DiscountManagement.vue';
 import EditPurchasePolicy from '@/views/PurchasePolicyManagement.vue';
+import EditDiscountPolicy from '@/components/DiscountManagement.vue'
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },
     { path: '/open-store', name: 'OpenStore', component: OpenStore },
     { path: '/close-store', name: 'CloseStore', component: CloseStore },
-    { path: '/yield-ownership', name: 'YieldOwnership', component: YieldOwnership },
     { path: '/login', name: 'LoginModel', component: LoginModel },
     { path: '/register', name: 'UserRegistration', component: UserRegistration },
     { path: '/my-stores-i-own', name: 'MyStoresIOwn', component: MyStoresIOwn },
@@ -53,6 +53,7 @@ const routes = [
     { path: '/product-list/:storeName/:isEditSupply', name: 'ProductList', component: ProductList, props: true },
     { path: '/product-management/:storeName/:productId', name: 'ProductManagement', component: ProductManagement, props: true },
     { path: '/purchase-history', name: 'PurchaseHistory', component: PurchaseHistory },
+    { path: '/purchase-history/:storeName', name: 'PurchaseHistoryForStore', component: PurchaseHistoryForStore },
     { path: '/search', name: 'SearchPage', component: SearchPage },
     { path: '/search-results', name: 'SearchResults', component: SearchResults },
     { path: '/search-store', name: 'StoreSearchPage', component: StoreSearchPage },

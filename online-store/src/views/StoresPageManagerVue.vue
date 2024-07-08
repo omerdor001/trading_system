@@ -186,15 +186,17 @@ export default defineComponent({
               storeName: store.name,
             }
           });
+          console.log(response.data);
           toast.add({ severity: 'success', summary: 'Success', detail: response.data, life: 3000 });
         } catch (error) {
-          toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+          toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to yield ownership', life: 3000 });
+          console.error('Failed to yield ownership:', error.message);
         }
       }
     };
 
     const purchasesHistory = (storeName) => {
-      router.push({ name: 'PurchaseHistory', params: { storeName } });
+      router.push({ name: 'PurchaseHistoryForStore', params: { storeName } });
     };
 
     return {

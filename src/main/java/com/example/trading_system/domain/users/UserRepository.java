@@ -1,20 +1,25 @@
 package com.example.trading_system.domain.users;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 
 public interface UserRepository {
     void deleteInstance();
+
     User getUser(String username);
 
     boolean isExist(String username);
 
+    boolean isAdmin(String username);
+
+    boolean isAdminRegistered();
+
     HashMap<String, User> getAllUsers();
 
     Collection<User> getAllUsersAsList();
-
-    Collection<String> getAllUsersAsUsernames();
 
     void deleteUser(String username);
 
@@ -23,4 +28,8 @@ public interface UserRepository {
     void addVisitor(String username);
 
     void addRegistered(String userName, String encryption, LocalDate birthdate);
+
+    void saveUser(User user);
+
+    boolean checkIfRegistersEmpty();
 }

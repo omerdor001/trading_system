@@ -234,11 +234,11 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String getPurchaseHistoryJSONFormat(String userName){
-        List<Map<String, Object>> allStoresPurchases = new ArrayList<>();
-        if(userFacade.isUserExist(userName)){
-            throw new IllegalArgumentException("Username is not exist");
+    public String getPurchaseHistoryJSONFormat(String userName) throws IllegalAccessException {
+        if(!userFacade.isUserExist(userName)){
+            throw new IllegalAccessException("Username is not exist");
         }
+        List<Map<String, Object>> allStoresPurchases = new ArrayList<>();
         for(Store store:storeRepository.getAllStoresByStores()){
             Map<String, Object> storePurchaseMap = Map.of(
                     "purchaseHistory", getPurchaseHistoryJSONFormatForStore(userName,store.getNameId())
@@ -255,6 +255,34 @@ public class MarketFacadeImp implements MarketFacade {
 
     }
 
+
+    @Override
+    public String searchProductsInStores(String userName, String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) throws JsonProcessingException {
+        if (!userFacade.isUserExist(userName)) {
+            throw new IllegalArgumentException("User must exist");
+        }
+        
+        List<Product> resultProductList = new LinkedList<>();
+
+        StringBuilder sb = new StringBuilder();
+        for (Store store : storeRepository.getAllStoresByStores()) {
+            if (!store.isOpen()) continue;
+            List<Product> products2 = store.searchProduct(keyWord, minPrice, maxPrice, intCategories, rating);
+            if (!products2.isEmpty())//Change to Repo
+            {
+                sb.append(products2.toString());
+
+                resultProductList.addAll(products2);
+            }
+
+        }
+        if (sb.isEmpty()) return "{}";
+
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(resultProductList);
+
+
+    }
 
 
     @Override
@@ -1209,6 +1237,13 @@ public class MarketFacadeImp implements MarketFacade {
         storeRepository.getStore(storeName).setCategoryCondition(selectedConditionIndex, newCategory);
     }
 
+    @Override
+    public void removeCondition(String username, String storeName, int selectedIndex) throws IllegalAccessException {
+        validateUserAndStore(username, storeName);
+        User user = userFacade.getUser(username);
+        user.getRoleByStoreId(storeName).editDiscounts();
+        storeRepository.getStore(storeName).removeCondition(selectedIndex);
+    }
     //endregion
     //region Purchase Policy Management
     @Override

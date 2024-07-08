@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
+    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
     <div class="suggest-manage">
       <h2>Suggest Manager</h2>
       <form @submit.prevent="suggestManage">
@@ -55,7 +55,7 @@ export default defineComponent({
     const editDiscountPolicy = ref(false);
     const error = ref(null);
     const username = localStorage.getItem('username');
-        const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     const isLoggedIn = ref(!!username.value);
 
     const toast = ref(null);

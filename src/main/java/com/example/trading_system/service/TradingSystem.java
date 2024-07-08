@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -115,6 +116,9 @@ public interface TradingSystem {
     ResponseEntity<String> getPurchaseHistoryJSONFormat(String username, String token);
 
     //search in specific store
+
+    ResponseEntity<String> searchProductsInStores(String userName, String token, String keyWord, double minPrice, double maxPrice, String categories, Double rating);
+
     ResponseEntity<String> searchNameInStore(String userName, String productName, String token, String store_name, Double minPrice, Double maxPrice, Double minRating, int category);
 
     ResponseEntity<String> searchCategoryInStore(String userName, String token, int category, String store_name, Double minPrice, Double maxPrice, Double minRating);
@@ -196,6 +200,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> removeDiscount(String username, String token, String storeName, int selectedIndex);
 
+    ResponseEntity<String> removeCondition(String username, String token, String storeName, int selectedIndex);
     //endregion
 
     //region Discount/Condition editing/manipulation
@@ -288,4 +293,5 @@ public interface TradingSystem {
     ResponseEntity<String> createProductLottery(String userName, String token, String storeName, int productID, LocalDateTime localDateTime, double price);
 
     ResponseEntity<String> editProduct(String username, String token, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity);
+
 }
