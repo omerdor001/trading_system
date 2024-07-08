@@ -117,7 +117,7 @@
                 <template #body="rowData">
                     <div class="action-buttons">
                         <Button
-                            v-if="rowData.type === 'Store Discount' || rowData.type === 'Category Discount' || rowData.type === 'Product Discount'"
+                            v-if="rowData.data.type === 'Store Discount'|| rowData.type === 'percentageStore' || rowData.type === 'Category Discount' || rowData.type === 'Product Discount'"
                             @click="showEditPercentDialog = true">Edit percent
                         </Button>
 
@@ -240,7 +240,7 @@
                     <Dialog v-model="showDeleteDiscountDialog" :visible="showDeleteDiscountDialog"
                         header="Delete Discount">
                         <Button @click="deleteDiscount(rowData.index)">Save</Button>
-                        <Button @click="showEditDeciderConditionDialog = false">Cancel</Button>
+                        <Button @click="showDeleteDiscountDialog = false">Cancel</Button>
                     </Dialog>
                 </template>
                 <template #header>
@@ -256,7 +256,7 @@
                 </div>
             </template>
             <Column field="type" header="Type" style="width: 20%;" :headerStyle="{ 'text-align': 'center' }"
-                :body="typeTemplate">
+                :body="typeCondTemplate">
             </Column>
             <Column field="details" header="Details" style="width: 20%;" :headerStyle="{ 'text-align': 'center' }"
                 :body="valueTemplate"></Column>
@@ -439,7 +439,7 @@ export default {
                     type: getDiscountTypeLabel(discount.type),
                     details: createDetails(discount)
                 }));
-                console.log(discounts.value);
+                console.log(discount.value);
             } catch (error) {
                 console.error('Error fetching discounts:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -491,7 +491,6 @@ export default {
             switch (newDiscount.value.type) {
                 case 'Store':
                     try {
-                        console.log(`${storeName} store discount with value: ${newDiscount.value.percent}`)
                         const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/store`;
                         await axios.post(url, null, {
                             params: {
@@ -639,8 +638,6 @@ export default {
                         return;
                     }
                     break;
-                default:
-                    console.log('Unknown discount type:', newDiscount.value.type);
             }
             addDiscountDialogVisible.value = false;
             toast.add({ severity: 'success', summary: 'Success', detail: 'Discount saved', life: 3000 });
@@ -702,7 +699,6 @@ export default {
                     }
                     break;
                 default:
-                    console.log('Unknown condition type:', newDiscount.value.type);
             }
             addConditionDialogVisible.value = false;
             toast.add({ severity: 'success', summary: 'Success', detail: 'Condition saved', life: 3000 });
@@ -752,7 +748,6 @@ export default {
                 case 'or':
                     return discount.details = `First condition: ${discount.first} Second condition: ${discount.second} Discount: ${getDiscountTypeLabel(discount.then.type)} ${createDetails(discount.then)}`;
                 case 'xor':
-                    console.log(discount.decider);
                     return discount.details = `First discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.first)} Second discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.second)} Decider condition: ${createConditionDetails(discount.decider)}`;
                 case 'placeholderDiscount':
                     return discount.details = 'Placeholder'
@@ -776,6 +771,11 @@ export default {
             return getDiscountTypeLabel(rowData.type);
         };
 
+        const typeCondTemplate = (rowData) => {
+        alert(rowData);
+            return getConditionTypeLabel(rowData.type);
+        };
+
         const valueTemplate = (rowData) => {
             return h('div', {}, [
                 h('span', {}, rowData.details)
@@ -795,7 +795,8 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                showDeleteDiscountDialog.value = false;
             } catch (error) {
                 console.error('Error deleting discount:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -825,7 +826,8 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting discount percent:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -841,7 +843,8 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting discount category:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -857,7 +860,8 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting discount product:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -873,7 +877,8 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting first discount:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -889,7 +894,8 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting second discount:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -905,7 +911,8 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting first condition:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -921,7 +928,8 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting second condition:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -937,7 +945,8 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting then discount:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -953,7 +962,8 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting decider condition:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -969,7 +979,7 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting condition count:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -985,7 +995,7 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting condition category:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -1001,7 +1011,7 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting condition product ID:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -1017,7 +1027,7 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting condition total sum:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -1033,7 +1043,7 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchConditions();
             } catch (error) {
                 console.error('Error deleting condition:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -1072,6 +1082,7 @@ export default {
             saveDiscount,
             saveCondition,
             typeTemplate,
+            typeCondTemplate,
             valueTemplate,
             detailsTemplate,
             deleteDiscount,

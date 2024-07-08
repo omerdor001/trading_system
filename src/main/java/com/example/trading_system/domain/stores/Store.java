@@ -486,9 +486,7 @@ public class Store {
     }
 
     public void removeDiscount(int selectedIndex) {
-        if (selectedIndex >= discountPolicies.size())
-            discountConditions.remove(selectedIndex - discountPolicies.size());
-        else discountPolicies.remove(selectedIndex);
+        discountPolicies.remove(selectedIndex);
     }
 
     public void removeCondition(int selectedIndex) {
