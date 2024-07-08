@@ -73,7 +73,7 @@ public class SearchProductStoresAcceptanceTests {
         tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 1, "");
         ResponseEntity<String> response = tradingSystem.searchNameInStores(username, token, "product1", null, null, null, 1, null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":Sport, \"keyWords\":[]}]",response.getBody());
+        assertEquals("[{\"product_id\":1, \"store_name\":\"store1\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":Sport, \"keyWords\":[]}]",response.getBody());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class SearchProductStoresAcceptanceTests {
         tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 1, "");
         ResponseEntity<String> response = tradingSystem.searchCategoryInStores(username, token, 1, null, null, null, null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":Sport, \"keyWords\":[]}]",response.getBody());
+        assertEquals("[{\"product_id\":1, \"store_name\":\"store1\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":Sport, \"keyWords\":[]}]",response.getBody());
     }
 
     @Test
@@ -91,7 +91,7 @@ public class SearchProductStoresAcceptanceTests {
         tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 1, "keyword");
         ResponseEntity<String> response = tradingSystem.searchKeywordsInStores(username, token, "keyword", null, null, null, 1, null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":Sport, \"keyWords\":[keyword]}]",response.getBody());
+        assertEquals("[{\"product_id\":1, \"store_name\":\"store1\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":Sport, \"keyWords\":[keyword]}]",response.getBody());
     }
 
     @Test

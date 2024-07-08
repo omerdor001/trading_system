@@ -88,7 +88,7 @@ public class GetProductsInfoAcceptanceTests {
         tradingSystem.addProduct(username, token, 2, "store1", "product1", "desc1", 10.0, 100, 4, 10, "");
         ResponseEntity<String> response = tradingSystem.getStoreProducts(username, token,"store1");
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("{\"name_id\":\"store1\", \"description\":\"General Store\", \"products\":[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":Sport, \"keyWords\":[]}, ]}",response.getBody());
+        assertEquals("{\"name_id\":\"store1\", \"description\":\"General Store\", \"products\":[{\"product_id\":1, \"store_name\":\"store1\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":Sport, \"keyWords\":[]}, ]}",response.getBody());
     }
 
     @Test
