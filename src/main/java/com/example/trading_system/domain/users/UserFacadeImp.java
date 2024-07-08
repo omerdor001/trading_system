@@ -361,7 +361,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public synchronized String viewCart(String username) {
+    public synchronized String viewCart(String username) throws Exception{
         if (username == null) {
             logger.error("View Cart - Username is null");
             throw new IllegalArgumentException("Username cannot be null");
@@ -385,7 +385,9 @@ public class UserFacadeImp implements UserFacade {
         //TODO
         // Maybe before getting the information from the user cart,
         // we should check if the products information are up-to-date and correct
-        return user.getShoppingCart_ToString();
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(user.getCart());
+//        return user.getShoppingCart_ToString();
     }
 
     @Override

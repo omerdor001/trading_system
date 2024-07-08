@@ -17,7 +17,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TradingSystemImp implements TradingSystem {
     private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
@@ -939,6 +941,29 @@ public class TradingSystemImp implements TradingSystem {
 
     //region Search functions
     // search in specific store
+
+    @Override
+    public ResponseEntity<String> searchProductsInStores(String userName, String token, String keyWord, double minPrice, double maxPrice, String categories, Double rating){
+        logger.info("{} trying to search products in stores", userName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
+            List<Integer> intCategories = new LinkedList<>();
+            if(!categories.isEmpty())
+                 intCategories = Arrays.stream(categories.split(",")) // Split the string by commas
+                    .map(Integer::parseInt) // Parse each substring to an Integer
+                    .collect(Collectors.toList());
+            String result = marketService.searchProductsInStores(userName, keyWord, minPrice, maxPrice, intCategories , rating);
+            logger.info("Finished Searching products in store");
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {}, while {} trying to search stores", e.getMessage(),  userName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+
     @Override
     public ResponseEntity<String> searchNameInStore(String userName, String productName, String token, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) {
         logger.info("Trying to search products in store : {} with name : {}", store_name, productName);

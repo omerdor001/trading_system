@@ -79,6 +79,11 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public String searchProductsInStores(String userName, String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) throws Exception {
+        return marketFacade.searchProductsInStores(userName, keyWord, minPrice, maxPrice, intCategories, rating);
+    }
+
+    @Override
     public String searchNameInStore(String userName, String productName, String store_name, Double minPrice, Double maxPrice, Double minRating, int category) throws IllegalAccessException {
         return marketFacade.searchNameInStore(userName, productName, store_name, minPrice, maxPrice, minRating, category);
     }

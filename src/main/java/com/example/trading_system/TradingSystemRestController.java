@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8088") //TODO IP and Port (general)
@@ -919,7 +923,7 @@ public class TradingSystemRestController {
                                            @RequestParam String token,
                                            @PathVariable String storeName,
                                            @RequestParam int productID,
-                                           @RequestParam double price) {
+                                           @RequestParam double price){
         return tradingSystem.placeBid(userName, token, storeName, productID, price);
     }
 
@@ -992,6 +996,19 @@ public class TradingSystemRestController {
                                                           @RequestParam int productID,
                                                           @RequestParam double price) {
         return tradingSystem.buyLotteryProductTicket(userName, token, storeName, productID, price);
+    }
+
+    @GetMapping("/store/searchProducts")
+    public ResponseEntity<String> searchProductsInStores(@RequestParam String userName,
+                                                         @RequestParam String token,
+                                                         @RequestParam String keyWord,
+                                                         @RequestParam double minPrice,
+                                                         @RequestParam double maxPrice,
+                                                         @RequestParam String categories,
+                                                         @RequestParam Double rating
+                                                         ) {
+
+        return tradingSystem.searchProductsInStores("r" + userName, token, keyWord, minPrice, maxPrice, categories, rating);
     }
 
 

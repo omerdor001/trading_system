@@ -222,4 +222,6 @@ public interface MarketFacade {
     String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception;
 
     void editProduct(String username, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity) throws Exception;
+
+    String searchProductsInStores(String userName, String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) throws Exception;
 }
