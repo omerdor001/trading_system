@@ -176,7 +176,7 @@ public class DiscountPolicyUnitTests {
         store.addTotalSumCondition(2);
         store.addAndDiscount();
         store.setFirstCondition(1,0);
-        store.setSecondCondition(1,2);
+        store.setSecondCondition(1,0);
         store.setThenDiscount(1,0);
         product.setQuantity(3);
         double price = store.calculatePrice(bag);
@@ -246,7 +246,7 @@ public class DiscountPolicyUnitTests {
         store.addTotalSumCondition(2);
         store.addOrDiscount();
         store.setFirstCondition(1,0);
-        store.setSecondCondition(1,2);
+        store.setSecondCondition(1,0);
         store.setThenDiscount(1,0);
         product.setQuantity(3);
         double price = store.calculatePrice(bag);
