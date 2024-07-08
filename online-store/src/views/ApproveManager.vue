@@ -2,24 +2,48 @@
   <div>
     <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
     <div class="approve-manage">
-      <h2>Approve Manager</h2>
-      <form @submit.prevent="approveManager">
-        <div class="p-field">
-          <label for="newManager">New Manager: </label>
-          <span>{{ newManager }}</span>
-        </div>
-        <div class="p-field">
-          <label for="storeNameId">Store Name: </label>
-          <span>{{ storeNameId }}</span>
-        </div>
-        <div class="p-field">
-          <label for="appointUser">Appointed By: </label>
-          <span>{{ appoint }}</span>
-        </div>
-        <div class="button-group">
-          <PrimeButton label="Approve" type="submit" class="submit-button" />
-        </div>
-      </form>
+      <h2>Approve Manager Requests</h2>
+      <div v-if="requests.length === 0 && !loading && !error && !managerLoading">
+        <p>No requests found.</p>
+      </div>
+      <div v-if="requests.length > 0">
+        <table class="manager-requests">
+          <thead>
+            <tr>
+              <th>Store Name</th>
+              <th>Appointer</th>
+              <th>Watch</th>
+              <th>Edit Supply</th>
+              <th>Edit Buy Policy</th>
+              <th>Edit Discount Policy</th>
+              <th>Approve</th>
+              <th>Reject</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(request, index) in requests" :key="index">
+              <td>{{ request.storeName }}</td>
+              <td>{{ request.appointee }}</td>
+              <td>{{ request.watch ? '✔' : '✘' }}</td>
+              <td>{{ request.editSupply ? '✔' : '✘' }}</td>
+              <td>{{ request.editBuyPolicy ? '✔' : '✘' }}</td>
+              <td>{{ request.editDiscountPolicy ? '✔' : '✘' }}</td>
+              <td>
+                <PrimeButton label="Approve-Click" type="button" @click="approveManager(request)" />
+              </td>
+              <td>
+                <PrimeButton label="Reject-Click" type="button" @click="rejectManager(request)" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div v-if="loading || managerLoading">
+        <p>Loading...</p>
+      </div>
+      <div v-if="error">
+        <p class="p-error">{{ error }}</p>
+      </div>
       <PrimeToast ref="toast" position="top-right" :life="3000"></PrimeToast>
     </div>
   </div>
@@ -27,7 +51,7 @@
 
 <script>
 import axios from 'axios';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { Button as PrimeButton } from 'primevue/button';
 import { Toast as PrimeToast } from 'primevue/toast';
@@ -42,23 +66,78 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
-    const newManager = ref('');
-    const storeNameId = ref('');
-    const appoint = ref('');
-    const username = ref(localStorage.getItem('username') || '');
-    const isLoggedIn = ref(!!username.value);
+    const loading = ref(false);
+    const error = ref(null);
+    const requests = ref([]);
+    const toast = ref(null);
+    const username = localStorage.getItem('username');
+    const token = localStorage.getItem('token');
+    const isLoggedIn = !!username;
 
-    const approveManager = async () => {
+    const fetchRequests = async () => {
       try {
-        const response = await axios.post('/api/approve-manage', {
-          newManager: newManager.value,
-          storeNameId: storeNameId.value,
-          appoint: appoint.value,
+        loading.value = true;
+        const response = await axios.get('http://localhost:8082/api/trading/requests-for-management', {
+          params: {
+            username: username,
+            token: token,
+          },
+        });
+        requests.value = response.data.map(request => ({
+          storeName: request.storeName,
+          appointee: request.appointee,
+          watch: request.watch,
+          editSupply: request.editSupply,
+          editBuyPolicy: request.editBuyPolicy,
+          editDiscountPolicy: request.editDiscountPolicy,
+        }));
+        loading.value = false;
+      } catch (err) {
+        loading.value = false;
+        error.value = err.response?.data?.message || 'An error occurred';
+      }
+    };
+
+    const approveManager = async (request) => {
+      try {
+        loading.value = true;
+        const response = await axios.post('http://localhost:8082/api/trading/approveManage', null, {
+          params: {
+            newManager: username,
+            token: token,
+            store_name_id: request.storeName,
+            appoint: request.appointee,
+            watch: request.watch,
+            editSupply: request.editSupply,
+            editBuyPolicy: request.editBuyPolicy,
+            editDiscountPolicy: request.editDiscountPolicy,
+          }
         });
         showSuccessToast(response.data.message);
-        resetForm();
-
+        requests.value = requests.value.filter(req => req !== request);
+        loading.value = false;
       } catch (err) {
+        loading.value = false;
+        showErrorToast(err.response?.data?.message || 'An error occurred');
+      }
+    };
+
+    const rejectManager = async (request) => {
+      try {
+        loading.value = true;
+        const response = await axios.post('http://localhost:8082/api/trading/rejectToManageStore', null, {
+          params: {
+            username: username,
+            token: token,
+            store_name_id: request.storeName,
+            appoint: request.appointee,
+          }
+        });
+        showSuccessToast(response.data.message);
+        requests.value = requests.value.filter(req => req !== request);
+        loading.value = false;
+      } catch (err) {
+        loading.value = false;
         showErrorToast(err.response?.data?.message || 'An error occurred');
       }
     };
@@ -69,8 +148,7 @@ export default defineComponent({
     };
 
     const showSuccessToast = (message) => {
-      const toast = ref.$refs.toast;
-      toast.add({
+      toast.value.add({
         severity: 'success',
         summary: 'Success',
         detail: message,
@@ -79,8 +157,7 @@ export default defineComponent({
     };
 
     const showErrorToast = (message) => {
-      const toast = ref.$refs.toast;
-      toast.add({
+      toast.value.add({
         severity: 'error',
         summary: 'Error',
         detail: message,
@@ -88,20 +165,18 @@ export default defineComponent({
       });
     };
 
-    const resetForm = () => {
-      newManager.value = '';
-      storeNameId.value = '';
-      appoint.value = '';
-    };
+    onMounted(fetchRequests);
 
     return {
-      username,
       isLoggedIn,
-      newManager,
-      storeNameId,
-      appoint,
+      username,
+      loading,
+      error,
+      requests,
       approveManager,
+      rejectManager,
       logout,
+      toast,
     };
   },
 });
@@ -113,7 +188,7 @@ export default defineComponent({
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  width: 400px;
+  width: 800px; /* Adjust width as needed */
   margin: 0 auto;
   text-align: center;
 }
@@ -123,32 +198,21 @@ export default defineComponent({
   margin-bottom: 20px;
 }
 
-.approve-manage .p-field {
-  margin-bottom: 15px;
-}
-
-.approve-manage label {
-  font-weight: bold;
-}
-
-.button-group {
-  display: flex;
-  justify-content: space-between;
+.manager-requests {
+  width: 100%;
+  border-collapse: collapse;
   margin-top: 20px;
 }
 
-.submit-button {
-  background-color: #e67e22 !important;
-  border: none;
-  padding: 10px 20px;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
+.manager-requests th,
+.manager-requests td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
 }
 
-.submit-button:hover {
-  background-color: #d35400 !important;
+.manager-requests th {
+  background-color: #f2f2f2;
 }
 
 .p-error {

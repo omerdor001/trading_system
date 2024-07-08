@@ -4,8 +4,11 @@ import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.StoreRepository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,6 +44,26 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public String getAllStoresInJSONFormat(String username) {
+        return marketFacade.getAllStoresInJSONFormat(username);
+    }
+
+    @Override
+    public String getProductsFromStoreJSONFormat(String storeName) {
+        return marketFacade.getProductsFromStoreJSONFormat(storeName);
+    }
+
+    @Override
+    public String getStoresIOpened(String username) {
+        return marketFacade.getStoresIOpened(username);
+    }
+
+    @Override
+    public String getCategories(String username) {
+        return marketFacade.getCategories(username);
+    }
+
+    @Override
     public void openStoreExist(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException {
         marketFacade.openStoreExist(userName, storeName);
     }
@@ -53,6 +76,11 @@ public class MarketServiceImp implements MarketService {
     @Override
     public String getProductInfo(String userName, String store_name, int product_Id) throws IllegalAccessException {
         return marketFacade.getProductInfo(userName, store_name, product_Id);
+    }
+
+    @Override
+    public String searchProductsInStores(String userName, String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) throws Exception {
+        return marketFacade.searchProductsInStores(userName, keyWord, minPrice, maxPrice, intCategories, rating);
     }
 
     @Override
@@ -102,6 +130,10 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public void editProduct(String username, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity) throws Exception {
+        marketFacade.editProduct(username, storeName, productId, productName, productDescription, productPrice, productQuantity);
+    }
+    @Override
     public void setProductDescription(String username, String store_name, int productId, String product_description) throws IllegalAccessException {
         marketFacade.setProductDescription(username, store_name, productId, product_description);
     }
@@ -124,6 +156,16 @@ public class MarketServiceImp implements MarketService {
     @Override
     public void setCategory(String username, String store_name, int productId, int category) throws IllegalAccessException {
         marketFacade.setCategory(username, store_name, productId, category);
+    }
+
+    @Override
+    public void addKeywordToProduct(String username, String storeName, int productId, String keyword) throws IllegalAccessException {
+        marketFacade.addKeywordToProduct(username,storeName,productId,keyword);
+    }
+
+    @Override
+    public void removeKeywordToProduct(String username, String storeName, int productId, String keyword) throws IllegalAccessException {
+       marketFacade.removeKeywordToProduct(username,storeName,productId,keyword);
     }
 
     @Override
@@ -262,6 +304,11 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public void removeCondition(String username, String storeName, int selectedIndex) throws IllegalAccessException {
+        marketFacade.removeCondition(username, storeName, selectedIndex);
+    }
+
+    @Override
     public String getPurchasePoliciesInfo(String username, String storeName) throws IllegalAccessException {
         return marketFacade.getPurchasePoliciesInfo(username, storeName);
     }
@@ -368,8 +415,18 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException {
+    public String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException,JsonProcessingException {
         return marketFacade.requestInformationAboutOfficialsInStore(userName, storeName);
+    }
+
+
+    public String getPurchaseHistoryJSONFormatForStore(String userName,String storeName) {
+        return marketFacade.getPurchaseHistoryJSONFormatForStore(userName,storeName);
+    }
+
+    @Override
+    public String getPurchaseHistoryJSONFormat(String userName) throws IllegalAccessException {
+        return marketFacade.getPurchaseHistoryJSONFormat(userName);
     }
 
     @Override
@@ -396,6 +453,51 @@ public class MarketServiceImp implements MarketService {
     public String getStoreMessagesJson(String admin, String storename){
         return marketFacade.getStoreMessagesJson(admin, storename);
     }
+
+    @Override
+    public void placeBid(String userName, String storeName, int productID, double price) throws  IllegalArgumentException {
+        marketFacade.placeBid(userName, storeName, productID, price);
+    }
+
+    @Override
+    public void approveBid(String userName, String storeName, int productID, String bidUserName) throws Exception {
+        marketFacade.approveBid(userName, storeName, productID, bidUserName);
+    }
+
+    @Override
+    public void rejectBid(String userName, String storeName, int productID, String bidUserName) throws IllegalArgumentException, IllegalAccessException{
+        marketFacade.rejectBid(userName, storeName, productID, bidUserName);
+    }
+
+    @Override
+    public void placeCounterOffer(String userName, String storeName, int productID, String bidUserName, double newPrice) throws IllegalAccessException, IllegalArgumentException{
+        marketFacade.placeCounterOffer(userName, storeName, productID, bidUserName, newPrice);
+    }
+
+    @Override
+    public String getStoreBids(String userName, String storeName) throws IllegalAccessException, IllegalArgumentException{
+        return marketFacade.getStoreBids(userName, storeName);
+    }
+
+    @Override
+    public String getMyBids(String userName, String storeName) throws IllegalAccessException, IllegalArgumentException{
+        return marketFacade.getMyBids(userName, storeName);
+    }
+
+    @Override
+    public String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception{
+        return marketFacade.buyLotteryProductTicket(userName, storeName, productID, price);
+    }
+
+    @Override
+    public void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception{
+        marketFacade.createProductLottery(userName, storeName, productID, localDateTime, price);
+    }
+
+
+
+
+
 }
 
 

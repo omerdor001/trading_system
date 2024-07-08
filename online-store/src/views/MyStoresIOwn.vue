@@ -3,20 +3,31 @@
     <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
     <div class="main-content">
       <div class="sidebar">
-        <PrimeButton label="Add Store" @click="addStore" />
+        <PrimeButton label="Manage Products" @click="manageProducts" />
+        <PrimeButton label="Add Product" @click="addProduct" />
+        <PrimeButton label="Remove Product" @click="removeProduct" />
+        <PrimeButton label="Suggest Owner" @click="suggestOwner" />
+        <PrimeButton label="Suggest Manager" @click="suggestManager" />
+        <PrimeButton label="Manage Purchase Policy" @click="managePurchasePolicy" />
+        <PrimeButton label="Manage Discount Policy" @click="manageDiscountPolicy" />
         <PrimeButton label="Yield Ownership" @click="yieldOwnership" />
         <PrimeButton label="Purchase History" @click="purchaseHistory" />
+        <PrimeButton label="Watch Store Bids" @click="watchStoreBids" />
       </div>
       <div class="content">
         <h2>Stores I Own</h2>
-        <div v-for="store in stores" :key="store.id" class="store">
-          <h3 @click="enterStore(store.id)">Store: {{ store.name }}</h3>
-          <PrimeButton label="Enter Store" @click="enterStore(store.id)" />
+        <div class="stores-list">
+          <h3>Stores List</h3>
+          <select v-model="selectedStore" @change="selectStore(selectedStore)">
+            <option v-for="store in stores" :key="store.id" :value="store">{{ store }}</option>
+          </select>
+        </div>
 
-          <div v-if="editingWorkers === store.id">
-            <h4>Edit Workers</h4>
-            <table>
-              <thead>
+        <!-- Edit Workers Section -->
+        <div v-if="editingWorkers === selectedStore">
+          <h4>Edit Workers</h4>
+          <table>
+            <thead>
               <tr>
                 <th>Select</th>
                 <th>Username</th>
@@ -24,48 +35,51 @@
                 <th>Birthdate</th>
                 <th>Address</th>
               </tr>
-              </thead>
-              <tbody>
-              <tr v-for="worker in store.editableWorkers" :key="worker.username">
+            </thead>
+            <tbody>
+              <tr v-for="worker in editableWorkers" :key="worker.username">
                 <td><input type="checkbox" v-model="worker.selected" /></td>
                 <td><input v-model="worker.username" /></td>
                 <td><input v-model="worker.role" /></td>
                 <td><input v-model="worker.birthdate" /></td>
                 <td><input v-model="worker.address" /></td>
               </tr>
-              </tbody>
-            </table>
-            <PrimeButton label="Add Worker" @click="addWorker(store.id)" />
-            <PrimeButton label="Remove Worker" @click="removeWorker(store.id)" />
-            <PrimeButton label="Save" @click="saveWorkers(store.id)" />
-          </div>
-          <div v-else>
-            <h4>Workers</h4>
-            <table>
-              <thead>
+            </tbody>
+          </table>
+          <PrimeButton label="Add Worker" @click="addWorker" />
+          <PrimeButton label="Remove Worker" @click="removeWorker" />
+          <PrimeButton label="Save Workers" @click="saveWorkers" />
+        </div>
+
+        <!-- Display Workers Section -->
+        <div v-else>
+          <h4>Workers</h4>
+          <table>
+            <thead>
               <tr>
                 <th>Username</th>
                 <th>Role</th>
                 <th>Birthdate</th>
                 <th>Address</th>
               </tr>
-              </thead>
-              <tbody>
-              <tr v-for="worker in store.workers" :key="worker.username">
+            </thead>
+            <tbody>
+              <tr v-for="worker in selectedStoreWorkers" :key="worker.username">
                 <td>{{ worker.username }}</td>
                 <td>{{ worker.role }}</td>
                 <td>{{ worker.birthdate }}</td>
                 <td>{{ worker.address }}</td>
               </tr>
-              </tbody>
-            </table>
-            <PrimeButton label="Edit Workers" @click="editWorkers(store.id)" />
-          </div>
+            </tbody>
+          </table>
+          <PrimeButton label="Edit Workers" @click="editWorkers(selectedStore)" />
+        </div>
 
-          <div v-if="editingPermissions === store.id">
-            <h4>Edit Permissions</h4>
-            <table>
-              <thead>
+        <!-- Edit Permissions Section -->
+        <div v-if="editingPermissions === selectedStore">
+          <h4>Edit Permissions</h4>
+          <table>
+            <thead>
               <tr>
                 <th>Username</th>
                 <th>Watch</th>
@@ -73,23 +87,25 @@
                 <th>Edit Store Policy</th>
                 <th>Edit Discount Policy</th>
               </tr>
-              </thead>
-              <tbody>
-              <tr v-for="worker in store.editableWorkers" :key="worker.username">
+            </thead>
+            <tbody>
+              <tr v-for="worker in editableWorkers" :key="worker.username">
                 <td>{{ worker.username }}</td>
                 <td><input type="checkbox" v-model="worker.permissions.watch" /></td>
                 <td><input type="checkbox" v-model="worker.permissions.editSupply" /></td>
                 <td><input type="checkbox" v-model="worker.permissions.editStorePolicy" /></td>
                 <td><input type="checkbox" v-model="worker.permissions.editDiscountPolicy" /></td>
               </tr>
-              </tbody>
-            </table>
-            <PrimeButton label="Save" @click="savePermissions(store.id)" />
-          </div>
-          <div v-else>
-            <h4>Permissions</h4>
-            <table>
-              <thead>
+            </tbody>
+          </table>
+          <PrimeButton label="Save Permissions" @click="savePermissions" />
+        </div>
+
+        <!-- Display Permissions Section -->
+        <div v-else>
+          <h4>Permissions</h4>
+          <table>
+            <thead>
               <tr>
                 <th>Username</th>
                 <th>Watch</th>
@@ -97,90 +113,108 @@
                 <th>Edit Store Policy</th>
                 <th>Edit Discount Policy</th>
               </tr>
-              </thead>
-              <tbody>
-              <tr v-for="worker in store.workers" :key="worker.username">
+            </thead>
+            <tbody>
+              <tr v-for="worker in selectedStoreWorkers" :key="worker.username">
                 <td>{{ worker.username }}</td>
                 <td><input type="checkbox" :checked="worker.permissions.watch" disabled /></td>
                 <td><input type="checkbox" :checked="worker.permissions.editSupply" disabled /></td>
                 <td><input type="checkbox" :checked="worker.permissions.editStorePolicy" disabled /></td>
                 <td><input type="checkbox" :checked="worker.permissions.editDiscountPolicy" disabled /></td>
               </tr>
-              </tbody>
-            </table>
-            <PrimeButton label="Edit Permissions" @click="editPermissions(store.id)" />
-          </div>
+            </tbody>
+          </table>
+          <PrimeButton label="Edit Permissions" @click="editPermissions(selectedStore)" />
         </div>
       </div>
     </div>
-    <footer>
-      <div class="external-links">
-        <h3>External Links</h3>
-        <ul>
-          <li><a href="#">Link 1</a></li>
-          <li><a href="#">Link 2</a></li>
-          <li><a href="#">Link 3</a></li>
-        </ul>
-      </div>
-    </footer>
+    <p-toast></p-toast>
   </div>
 </template>
+
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { useRouter } from 'vue-router';
 import { Button as PrimeButton } from 'primevue/button';
+import { useToast } from 'primevue/usetoast';
+import PrimeToast from 'primevue/toast';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'MyStoresIOwn',
   components: {
     SiteHeader,
-    PrimeButton
+    PrimeButton,
+    'p-toast': PrimeToast,
   },
   setup() {
     const router = useRouter();
     const stores = ref([]);
-    const username = ref(localStorage.getItem('username') || '');
+    const username = localStorage.getItem('username');
+    const token = localStorage.getItem('token');
     const editingWorkers = ref(null);
     const editingPermissions = ref(null);
+    const selectedStore = ref(null);
+    const toast = useToast();
 
-    onMounted(() => {
-      // Fetch stores data here
-      stores.value = [
-        {
-          id: 1,
-          name: 'Store 1',
-          description: 'Description for Store 1',
-          products: [],
-          purchaseHistory: [],
-          workers: [
-            { username: 'user1', role: 'Manager', birthdate: '01-01-1990', address: 'Address 1', permissions: { watch: true, editSupply: true, editStorePolicy: false, editDiscountPolicy: false } },
-            { username: 'user2', role: 'Worker', birthdate: '02-02-1991', address: 'Address 2', permissions: { watch: true, editSupply: false, editStorePolicy: true, editDiscountPolicy: false } }
-          ],
-          editableWorkers: []
-        },
-        {
-          id: 2,
-          name: 'Store 2',
-          description: 'Description for Store 2',
-          products: [],
-          purchaseHistory: [],
-          workers: [
-            { username: 'user3', role: 'Manager', birthdate: '03-03-1992', address: 'Address 3', permissions: { watch: true, editSupply: true, editStorePolicy: true, editDiscountPolicy: true } },
-            { username: 'user4', role: 'Worker', birthdate: '04-04-1993', address: 'Address 4', permissions: { watch: false, editSupply: true, editStorePolicy: false, editDiscountPolicy: true } }
-          ],
-          editableWorkers: []
-        }
-      ];
+    onMounted(
+      async () => {
+      try {
+        const response = await axios.get('http://localhost:8082/api/trading/stores-I-own', {
+           params: {
+            userName: username,
+            token: token,
+          }
+        });
+        console.log(response.data);
+        stores.value = response.data.substring(1,response.data.length-1).split(',');
+      } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to load stores', life: 3000 });
+      }  
     });
+
+    const watchStoreBids = () => {
+      router.push('/get-store-bids');
+    }
+
+    const selectStore = (store) => {
+      selectedStore.value = store;
+      console.log('Selected Store:', store);
+      // You can perform additional actions here based on the selected store
+    };
 
     const enterStore = (storeId) => {
       router.push({ name: 'StoreDetailsEditor', params: { storeId } });
     };
 
-    const addStore = () => {
-      router.push('/open-store');
+    const manageProducts = () => {
+      router.push('/productsForStore/:storeName');
+    };
+
+    const addProduct = () => {
+      router.push('/add-product/');
+    };
+
+    const removeProduct = () => {
+      router.push('/removeProduct/');
+    };
+
+    const suggestOwner = () => {
+      router.push('/suggest-owner');
+    };
+
+    const suggestManager = () => {
+      router.push('/suggest-manager');
+    };
+
+    const managePurchasePolicy = () => {
+      // Change to router
+    };
+
+    const manageDiscountPolicy = () => {
+      // Change to router
     };
 
     const yieldOwnership = () => {
@@ -234,10 +268,18 @@ export default defineComponent({
     return {
       stores,
       username,
+      selectStore,
       enterStore,
-      addStore,
+      manageProducts,
+      addProduct,
+      removeProduct,
+      suggestOwner,
+      suggestManager,
+      managePurchasePolicy,
+      manageDiscountPolicy,
       yieldOwnership,
       purchaseHistory,
+      watchStoreBids,
       editWorkers,
       saveWorkers,
       editPermissions,
@@ -266,45 +308,26 @@ export default defineComponent({
   flex: 2;
   padding: 20px;
 }
-.store {
-  margin-bottom: 40px;
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 8px;
-}
-.workers, .permissions {
+.stores-list {
   margin-bottom: 20px;
 }
-table {
+.stores-list select {
   width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-th, td {
   padding: 10px;
+  font-size: 16px;
   border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: none;
+  background-color: #fff;
+  cursor: pointer;
 }
-footer {
-  background-color: #425965;
-  color: white;
-  padding: 20px;
-  text-align: center;
+.stores-list select:focus {
+  outline: none;
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 2px rgba(38, 132, 255, 0.2);
 }
-.external-links h3 {
+.stores-list h3 {
   margin-bottom: 10px;
 }
-.external-links ul {
-  list-style: none;
-  padding: 0;
-}
-.external-links li {
-  margin-bottom: 5px;
-}
-.external-links a {
-  color: white;
-  text-decoration: none;
-}
-.external-links a:hover {
-  text-decoration: underline;
-}
 </style>
+

@@ -1,6 +1,6 @@
 <template>   
   <div>
-    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
+    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
     <h2>Suspended Users</h2>
     <p-toast></p-toast>
     <p-table :value="suspendedUsers" responsiveLayout="scroll">
@@ -19,6 +19,7 @@
 <script>
 import { ref, defineComponent, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { useToast } from 'primevue/usetoast';
 import PrimeToast from 'primevue/toast';
@@ -33,45 +34,29 @@ export default defineComponent({
     'p-toast': PrimeToast,
     'p-table': PrimeDataTable,
     'p-column': PrimeColumn,
-    PrimeButton
+     PrimeButton
   },
   setup() {
     const suspendedUsers = ref([]);
     const username = ref(localStorage.getItem('username') || '');
+    const token = ref(localStorage.getItem('token') || '');
     const toast = useToast();
     const router = useRouter();
 
-    // Add some test data
-    suspendedUsers.value = [
-      {
-        suspendedUsername: 'user1',
-        suspendedStart: new Date().toLocaleString(),
-        suspensionDays: 3,
-        suspensionHours: 72,
-        suspendedEnd: new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000).toLocaleString()
-      },
-      {
-        suspendedUsername: 'user2',
-        suspendedStart: new Date().toLocaleString(),
-        suspensionDays: 1,
-        suspensionHours: 24,
-        suspendedEnd: new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toLocaleString()
-      }
-    ];
-
     onMounted(async () => {
       try {
-        const response = await fetch('/api/watchSuspensions?admin=username'); 
-        if (!response.ok) {
-          throw new Error('Failed to fetch suspension details');
-        }
-        const data = await response.json();
-        suspendedUsers.value = data.map(user => ({
-          suspendedUsername: user.suspendedUsername,
-          suspendedStart: new Date(user.suspendedStart).toLocaleString(),
-          suspensionDays: user.suspensionDays,
-          suspensionHours: user.suspensionHours,
-          suspendedEnd: new Date(user.suspendedEnd).toLocaleString()
+        const response = await axios.get('http://localhost:8082/api/trading/watchSuspensions', {
+          params: { 
+            token: token.value,
+            admin: username.value 
+          }
+        });
+          suspendedUsers.value = response.data.map(user => ({
+          suspendedUsername: user.Username,
+          suspendedStart: new Date(user["Start of suspension"]).toLocaleString(),
+          suspensionDays: user["Time of suspension (in days)"],
+          suspensionHours: user["Time of suspension (in hours)"],
+          suspendedEnd: new Date(user["End of suspension"]).toLocaleString()
         }));
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });

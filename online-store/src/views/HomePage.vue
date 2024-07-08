@@ -1,71 +1,48 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
+    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" :isAdmin="isAdmin" @logout="logout" />
     <div class="main-content">
       <div class="sidebar">
-        <PrimeButton label="Search Store" @click="navigateToSearchStore" class="sidebar-button"/>
+        <PrimeButton label="View All Stores" @click="viewAllStores" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn" label="Stores Manager" @click="stores" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn" label="Close Store" @click="closeStore" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Approve Ownership" @click="approveOwnership" class="sidebar-button" />
         <PrimeButton v-if="isLoggedIn" label="Approve Management" @click="approveManagement" class="sidebar-button" />
-        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="My Stores" @click="myStoresIOwn" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Suggest Owner" @click="suggestOwner" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Suggest Manager" @click="suggestManager" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Purchases History" @click="navigateToPurchaseHistory" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreOwner && isLoggedIn" label="Close Store" @click="closeStore" class="sidebar-button"/>
       </div>
       <div class="content">
         <AboutSection />
-        <div v-if="activeStores.length" class="active-stores">
-          <h2>Active Stores</h2>
-          <ul>
-            <li v-for="store in activeStores" :key="store.id" class="store-item">
-              <img :src="store.image" alt="Store Image" class="store-image">
-              <div class="store-details">
-                <h3>{{ store.name }}</h3>
-                <PrimeButton label="View Products" @click="viewProducts(store.id)" class="view-products-button"/>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div v-else>
-          <p>No active stores available.</p>
-        </div>
       </div>
       <div class="sidebar2">
-        <PrimeButton v-if="isStoreManager && isLoggedIn" label="My Stores I Manage" @click="myStoresIManage" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreManager && isLoggedIn" label="Add Policy" @click="addPolicy" class="sidebar-button"/>
-        <PrimeButton v-if="isStoreManager && isLoggedIn" label="Edit Policy" @click="editPolicy" class="sidebar-button"/>
-        <PrimeButton v-if="isSystemManager && isLoggedIn" label="Create Suspension" @click="createSuspension" class="sidebar-button"/>
-        <PrimeButton v-if="isSystemManager && isLoggedIn" label="End Suspension" @click="endSuspension" class="sidebar-button"/>
-        <PrimeButton v-if="isSystemManager && isLoggedIn" label="Watch Suspensions" @click="watchSuspensions" class="sidebar-button"/>
-        <PrimeButton v-if="isSystemManager && isLoggedIn" label="Purchases History" @click="purchasesHistoryAsSystemManager" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn && isAdmin" label="Create Suspension" @click="createSuspension" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn && isAdmin" label="End Suspension" @click="endSuspension" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn && isAdmin" label="Watch Suspensions" @click="watchSuspensions" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn && isAdmin" label="Purchases History" @click="purchasesHistoryAsSystemManager" class="sidebar-button"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import AboutSection from '@/components/AboutSection.vue';
 import { Button as PrimeButton } from 'primevue/button';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import webSocketService from '../webSocketService';
 
 export default defineComponent({
   name: 'HomePage',
   components: {
     SiteHeader,
     AboutSection,
-    PrimeButton
+    PrimeButton,
   },
   setup() {
     const router = useRouter();
     const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
-    const roles = JSON.parse(localStorage.getItem('roles') || '[]');
-    const isStoreOwner = ref(roles.includes('storeOwner'));
-    const isStoreManager = ref(roles.includes('storeManager'));
-    const isSystemManager = ref(roles.includes('systemManager'));
+    const isAdmin = ref(localStorage.getItem('isAdmin') === 'true');
     const username = ref(localStorage.getItem('username') || '');
     const activeStores = ref([
       { id: 1, name: 'Colors Store', image: 'https://via.placeholder.com/150', rating: 8.5 },
@@ -73,31 +50,35 @@ export default defineComponent({
       { id: 3, name: 'Laptops Store', image: 'https://via.placeholder.com/150', rating: 8.5 }
     ]);
 
+    const handleWebSocketMessage = (message) => {
+      console.log('WebSocket message received:', message);
+      // Handle the WebSocket message as needed
+    };
 
     const enter = async () => {
       try {
         const res = await axios.get('http://localhost:8082/api/trading/enter');
         localStorage.setItem('username', res.data.username);
         localStorage.setItem('token', res.data.token);
+        localStorage.setItem('isLoggedIn', false);
       } catch (error) {
-        console.error('Error entering:', error);
+        if (error.response.status === 403) {
+          router.push('/register');
+        }
       }
-    }
-
-    // const fetchActiveStores = async () => {
-    //   try {
-    //     console.log(localStorage.getItem('token'))
-    //     const response = await axios.get('http://localhost:8082/api/trading/active-stores');
-    //     activeStores.value = response.data;
-    //   } catch (error) {
-    //     console.error('Error fetching active stores:', error);
-    //   }
-    // };
+    };
 
     onMounted(() => {
-      // console.log("onMounted");
-      enter();
-      // fetchActiveStores();
+      if (!isLoggedIn.value) {
+        enter();
+      }
+      webSocketService.connect('ws://localhost:8082/websocket');
+      webSocketService.subscribe(handleWebSocketMessage);
+    });
+
+    onUnmounted(() => {
+      webSocketService.unsubscribe(handleWebSocketMessage);
+      webSocketService.disconnect();
     });
 
     const viewProducts = (storeId) => {
@@ -107,128 +88,65 @@ export default defineComponent({
     const openStore = () => {
       router.push('/open-store');
     };
-    const navigateToSearchStore = () => {
-      router.push('/search-store');
-    };
+
     const approveOwnership = () => {
-      if (isLoggedIn.value) {
-          router.push('/approve-owner');
-       } else{
-        console.error("Unauthorize");
-      }
-    };
-    const approveManagement = () => {
-      if (isLoggedIn.value) {
-          router.push('/approve-manager');
-       } else{
-        console.error("Unauthorize");
-      }
-    };
-    const myStoresIOwn = () => {
-      router.push('/my-stores-i-own');
-    };
-    const manageProductsAsOwner = () => {
-      router.push('/store-name-input');
-    };
-    const suggestOwner = () => {
-      if (isStoreOwner.value) {
-          router.push('/suggest-owner');
-       } else{
-        console.error("Unauthorize");
-      }
-    };
-    const suggestManager = () => {
-      if (isStoreOwner.value) {
-          router.push('/suggest-manager');
-       } else{
-        console.error("Unauthorize");
-      }
+      router.push('/approve-owner');
     };
 
-    const purchasesHistoryAsOwner = () => {
-      router.push({ name: 'PurchaseHistory' }); 
+    const approveManagement = () => {
+      router.push('/approve-manager');
     };
+
+    const stores = () => {
+      router.push('/stores-page');
+    };
+
     const closeStore = () => {
       router.push('/close-store');
     };
-    const myStoresIManage = () => {
-      router.push('/stores-i-manage');
-    };
-    const manageProductsAsManager = () => {
-      console.log('Managing Products as Manager');
-      router.push('/store-name-input');
-    };
-    const addPolicy = () => {
-      console.log('Adding Policy');
-    };
-    const editPolicy = () => {
-      console.log('Editing Policy');
-    };
+
     const createSuspension = () => {
-      console.log('Creating Suspension');
-      if (isSystemManager.value) {
+      if(isAdmin.value){
         router.push('/create-suspension');
-      } else {
-        console.error('Unauthorized');
       }
     };
+
     const endSuspension = () => {
-      console.log('Ending Suspension');
-      if (isSystemManager.value) {
+      if(isAdmin.value){
         router.push('/end-suspension');
-      } else {
-        console.error('Unauthorized');
       }
     };
+
     const watchSuspensions = () => {
-      if (isSystemManager.value) {
+      if(isAdmin.value){
         router.push('/watch-suspensions');
-      } else {
-        console.error('Unauthorized');
       }
     };
+
     const purchasesHistoryAsSystemManager = () => {
-      console.log('Viewing Purchases History as System Manager');
       router.push({ name: 'PurchaseHistory' });
     };
-    const logout = () => {
-      isLoggedIn.value = false;
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('roles');
-      localStorage.removeItem('username');
-      router.push('/');
+
+    const viewAllStores = () => {
+      router.push({ name: 'AllStoresPage' });
     };
-    const navigateToPurchaseHistory = () => {
-      router.push({ name: 'PurchaseHistory' });
-    };
+
     return {
       isLoggedIn,
-      isStoreOwner,
-      isStoreManager,
-      isSystemManager,
+      isAdmin,
       username,
       activeStores,
       viewProducts,
       openStore,
-      navigateToSearchStore,
       approveOwnership,
       approveManagement,
-      myStoresIOwn,
-      manageProductsAsOwner,
-      purchasesHistoryAsOwner,
+      stores,
       closeStore,
-      myStoresIManage,
-      manageProductsAsManager,
-      suggestOwner,
-      suggestManager,
-      addPolicy,
-      editPolicy,
       createSuspension,
       endSuspension,
       watchSuspensions,
       purchasesHistoryAsSystemManager,
-      logout,
-      navigateToPurchaseHistory
+      viewAllStores, // Include the new function in the return object
     };
   }
 });

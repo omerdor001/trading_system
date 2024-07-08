@@ -13,35 +13,55 @@
         </form>
       </div>
     </div>
+    <PrimeToast ref="toast" />
   </div>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue';
+import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
 import PrimeButton from 'primevue/button';
 import InputText from 'primevue/inputtext';
+import PrimeToast from 'primevue/toast';
 import { useRouter } from 'vue-router';
+import { useToast } from 'primevue/usetoast';
 
 export default defineComponent({
   name: 'CheckoutPage',
   components: {
     SiteHeader,
     PrimeButton,
-    InputText
+    InputText,
+    PrimeToast
   },
   setup() {
     const router = useRouter();
+    const toast = useToast();
     const username = ref(localStorage.getItem('username') || '');
+    const token = ref(localStorage.getItem('token') || '');
     const address = ref('');
 
-    const proceedToCheckout = () => {
-      router.push({ name: 'PaymentPage', query: { address: address.value } });
+    const proceedToCheckout = async () => {
+      try {
+        await axios.post('http://localhost:8082/api/trading/setAddress', null, {
+          params: {
+            username: username.value,
+            token: token.value,
+            address: address.value,
+          },
+        });
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Address saved successfully', life: 3000 });
+        router.push({ name: 'PaymentPage', query: { address: address.value } });
+      } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to save address', life: 3000 });
+      }
     };
 
     const logout = () => {
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('username');
+      localStorage.removeItem('token');
       router.push('/login');
     };
 

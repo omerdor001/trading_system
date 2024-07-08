@@ -1,128 +1,103 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
+    <SiteHeader :isLoggedIn="true" :username="username" />
     <div class="main-content">
       <h2>Purchase History</h2>
-      <div v-for="store in stores" :key="store.id" class="store">
-        <h3>Store: {{ store.name }}</h3>
-        <p>{{ store.description }}</p>
-        <Button label="View Products" @click="toggleProducts(store.id)" class="view-products-button"/>
-        <DataTable v-if="store.id === selectedStoreId" :value="store.purchasedProducts" class="products-table">
-          <Column field="name" header="Product Name" />
-          <Column field="price" header="Price" />
-          <Column field="quantity" header="Quantity" />
-          <Column field="total" header="Total" />
-          <Column field="address" header="Address" />
-          <Column field="purchaseTime" header="Purchase Time" />
-          <Column field="paymentInfo" header="Payment Info" />
-        </DataTable>
+      <div v-for="store in stores" :key="store.storeName" class="store">
+        <h3>Store: {{ store.storeName }}</h3>
+        <p>Customer: {{ store.customUsername }}</p>
+        <p>Total Price: {{ store.totalPrice }}</p>
+        <PrimeButton label="View Products" @click="openModal(store)" class="view-products-button"/>
       </div>
     </div>
-    <PrimeToast ref="toast" position="top-right" :life="3000"></PrimeToast>
+    <PrimeDialog header="Purchased Products" v-model="isModalVisible" :modal="true" :style="{ width: '50vw' }" :closable="true">
+      <PrimeDataTable :value="selectedStoreProducts" class="products-table">
+        <PrimeColumn field="productId" header="Product ID" />
+        <PrimeColumn field="price" header="Price" />
+        <PrimeColumn field="quantity" header="Quantity" />
+        <PrimeColumn field="category" header="Category" />
+      </PrimeDataTable>
+    </PrimeDialog>
+    <PrimeToast />
   </div>
 </template>
 
 <script>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import Button from 'primevue/button';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import PrimeToast from 'primevue/toast';
-import SiteHeader from '@/components/SiteHeader.vue';
 import axios from 'axios';
+import PrimeButton from 'primevue/button';
+import PrimeDataTable from 'primevue/datatable';
+import PrimeColumn from 'primevue/column';
+import PrimeDialog from 'primevue/dialog';
+import SiteHeader from '@/components/SiteHeader.vue';
+import { useToast } from 'primevue/usetoast';
 
 export default {
   name: 'PurchaseHistory',
   components: {
-    Button,
-    DataTable,
-    Column,
-    PrimeToast,
+    PrimeButton,
+    PrimeDataTable,
+    PrimeColumn,
+    PrimeDialog,
     SiteHeader,
   },
   setup() {
-    const stores = ref([]);
-    const selectedStoreId = ref(null);
+    const isModalVisible = ref(false);
+    const selectedStoreProducts = ref([]);
     const username = ref(localStorage.getItem('username') || '');
     const token = ref(localStorage.getItem('token') || '');
-    const toast = ref(null);
-    const router = useRouter();
-
-    const showSuccessToast = (message) => {
-      toast.value.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: message,
-        life: 3000,
-      });
-    };
-
-    const showErrorToast = (message) => {
-      toast.value.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: message,
-        life: 5000,
-      });
-    };
+    const stores = ref([]);
+    const toast = useToast();
 
     const fetchPurchaseHistory = async () => {
       try {
-        const response = await axios.get('http://localhost:8082/api/trading/purchase/history', {
+        const response = await axios.get('http://localhost:8082/api/trading/purchaseHistory', {
           params: {
             username: username.value,
             token: token.value,
-            storeName: '', // Pass the store name if needed or remove it from the API
           },
         });
-
-        if (response.status === 200) {
-          // Assuming response.data contains the purchase history data
-          stores.value = response.data;
-          showSuccessToast('Purchase history fetched successfully');
-        } else {
-          showErrorToast(`Failed to fetch purchase history: ${response.statusText}`);
-        }
-      } catch (error) {
-        showErrorToast(`Error fetching purchase history: ${error.message}`);
-      }
-    };
-
-    const toggleProducts = (storeId) => {
-      if (selectedStoreId.value === storeId) {
-        selectedStoreId.value = null;
-      } else {
-        selectedStoreId.value = storeId;
-      }
-    };
-
-    const logout = async () => {
-      try {
-        await axios.post('http://localhost:8082/api/trading/logout', null, {
-          params: {
-            username: username.value,
-            token: token.value
+        const purchaseData = response.data;
+        const storeMap = new Map();
+        purchaseData.forEach(purchase => {
+          if (!storeMap.has(purchase.storeName)) {
+            storeMap.set(purchase.storeName, {
+              storeName: purchase.storeName,
+              customUsername: purchase.customUsername,
+              totalPrice: purchase.totalPrice,
+              productInSaleList: []
+            });
           }
+          const store = storeMap.get(purchase.storeName);
+          store.productInSaleList.push(...JSON.parse(purchase.productInSaleList));
         });
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('username');
-        localStorage.removeItem('token');
-        router.push('/login');
+        stores.value = Array.from(storeMap.values());
       } catch (error) {
-        showErrorToast(`Error during logout: ${error.message}`);
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch purchases' });
       }
     };
 
-    onMounted(fetchPurchaseHistory);
+    const openModal = (store) => {
+      selectedStoreProducts.value = store.productInSaleList;
+      isModalVisible.value = true;
+    };
+
+    const closeModal = () => {
+      isModalVisible.value = false;
+    };
+
+    onMounted(() => {
+      fetchPurchaseHistory();
+    });
 
     return {
       stores,
-      selectedStoreId,
-      toggleProducts,
+      isModalVisible,
+      selectedStoreProducts,
+      openModal,
+      closeModal,
       username,
-      logout,
-      toast,
+      token,
     };
   },
 };

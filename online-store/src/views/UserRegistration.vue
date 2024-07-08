@@ -31,7 +31,7 @@
           <!-- Birthdate input -->
           <div class="form-group">
             <label for="birthdate">Birthdate</label>
-            <input type="date" id="birthdate" v-model="birthdate" />
+            <PrimeCalendar v-model="birthdate" id="birthdate"/>
           </div>
           <!-- Button group -->
           <div class="button-group">
@@ -39,10 +39,9 @@
             <PrimeButton label="Close" icon="pi pi-times" type="button" @click="closeModal" class="close-button" />
           </div>
         </form>
-        <!-- Error message -->
-        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       </PrimeCard>
     </div>
+    <p-toast></p-toast>
   </div>
 </template>
 
@@ -54,6 +53,9 @@ import { InputText } from 'primevue/inputtext';
 import { PasswordText } from 'primevue/password';
 import { PrimeCard } from 'primevue/card';
 import axios from "axios";
+import { useToast } from 'primevue/usetoast';
+import PrimeToast from 'primevue/toast';
+import { PrimeCalendar } from 'primevue/calendar';
 
 export default defineComponent({
   name: 'UserRegistration',
@@ -61,46 +63,48 @@ export default defineComponent({
     PrimeButton,
     InputText,
     PasswordText,
-    PrimeCard
+    PrimeCard,
+    PrimeCalendar,
+    'p-toast': PrimeToast,
   },
   setup() {
     const router = useRouter();
+    const toast = useToast();
     const username = ref('');
     const password = ref('');
     const birthdate = ref('');
-    const errorMessage = ref('');
 
     const validateInputs = () => {
       if (!username.value) {
-        errorMessage.value = 'Username cannot be empty';
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Username cannot be empty', life: 3000 });
         return false;
       }
       if (username.value.length < 3) {
-        errorMessage.value = 'Username must be at least 3 characters long';
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Username must be at least 3 characters long', life: 3000 });
         return false;
       }
       if (!/^[a-zA-Z0-9]+$/.test(username.value)) {
-        errorMessage.value = 'Username can only contain letters and numbers';
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Username can only contain letters and numbers', life: 3000 });
         return false;
       }
       if (!password.value) {
-        errorMessage.value = 'Password cannot be empty';
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Password cannot be empty', life: 3000 });
         return false;
       }
       if (password.value.length < 6) {
-        errorMessage.value = 'Password must be at least 6 characters long';
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Password must be at least 6 characters long', life: 3000 });
         return false;
       }
       if (!/[A-Z]/.test(password.value) || !/[a-z]/.test(password.value) || !/[0-9]/.test(password.value)) {
-        errorMessage.value = 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Password must contain at least one uppercase letter, one lowercase letter, and one number', life: 3000 });
         return false;
       }
       if (!birthdate.value) {
-        errorMessage.value = 'Birthdate cannot be empty';
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Birthdate cannot be empty', life: 3000 });
         return false;
       }
       if (new Date(birthdate.value) > new Date()) {
-        errorMessage.value = 'Birthdate cannot be in the future';
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Birthdate cannot be in the future', life: 3000 });
         return false;
       }
       return true;
@@ -108,26 +112,23 @@ export default defineComponent({
 
     const register = async () => {
       if (validateInputs()) {
-        const userData = {
+        const formattedBirthdate = new Date(birthdate.value).toISOString().split('T')[0]; // format the date as yyyy-MM-dd
+
+        const params = {
           username: username.value,
           password: password.value,
-          birthdate: birthdate.value,
+          birthday: formattedBirthdate,
         };
 
-        localStorage.setItem('userData', JSON.stringify(userData));
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', userData.username);
-        console.log()
         try {
-          // let string = "http://localhost:8082/api/trading/register?username={}&password={}"
-          const response = await axios.get("http://localhost:8082/api/trading/register?username="+username.value.toString()+"&password="+password.value.toString()+"&birthday="+birthdate.value);
-          console.log(response);
-        } catch (e) {
-          console.log(errorMessage)
-          throw Error(errorMessage)
-
+          const response = await axios.get("http://localhost:8082/api/trading/register", { params });
+          toast.add({ severity: 'success', summary: 'Success', detail: 'Registration successful', life: 3000 });
+          console.log(response.data);
+          router.push('/');
+        } catch (error) {
+          toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to register', life: 3000 });
+          console.error('Registration error:', error);
         }
-        router.push('/');
       }
     };
 
@@ -147,7 +148,6 @@ export default defineComponent({
       username,
       password,
       birthdate,
-      errorMessage,
       register,
       closeModal,
       notifications,
@@ -158,108 +158,102 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-  background-color: #425965;
-  color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  height: 100px;
-}
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #425965;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    height: 100px;
+  }
 
-.logo {
-  height: 80px;
-  width: auto;
-}
+  .logo {
+    height: 80px;
+    width: auto;
+  }
 
-.right-buttons {
-  display: flex;
-  gap: 10px;
-}
+  .right-buttons {
+    display: flex;
+    gap: 10px;
+  }
 
-.registration-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 80vh;
-  background-color: rgba(0, 0, 0, 0.5);
-}
+  .registration-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 
-.registration-form {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  text-align: center;
-}
+  .registration-form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+  }
 
-.registration-form h2 {
-  margin-bottom: 20px;
-  color: #425965;
-}
+  .registration-form h2 {
+    margin-bottom: 20px;
+    color: #425965;
+  }
 
-.form-group {
-  width: 100%;
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  .form-group {
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #333;
-}
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    text-align: left;
+  }
 
-.form-group .p-inputtext {
-  width: 100%;
-}
+  .form-group .p-inputtext,
+  .form-group .p-password,
+  .form-group .p-calendar {
+    /* Assuming these classes are defined elsewhere */
+    /* flex-direction: column; */ /* Not necessary */
+    /* align-items: center; */ /* Not necessary */
+  }
 
-.form-group .p-password {
-  width: 100%;
-}
+  .custom-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 
-.custom-card {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+  .card-body {
+    padding: 1rem;
+    display: block;
+  }
 
-.card-body {
-  padding: 1rem;
-  display: block;
-}
+  .card-footer {
+    background-color: #f0f0f0;
+    padding: 0.5rem;
+    text-align: center;
+  }
 
-.card-footer {
-  background-color: #f0f0f0;
-  padding: 0.5rem;
-  text-align: center;
-}
+  .button-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
 
-.button-group {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.register-button .p-button {
-  width: 100%;
-}
-
-.close-button .p-button {
-  width: 100%;
-}
-
-.error {
-  color: red;
-  margin-top: 10px;
-  font-size: 14px;
-}
+  .register-button .p-button,
+  .close-button .p-button,
+  .goback-button .p-button {
+    width: 100%;
+  }
 </style>
+

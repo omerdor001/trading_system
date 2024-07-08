@@ -7,7 +7,7 @@
         </div>
         <img src="@/assets/logo.png" alt="LASMONY" class="logo">
         <div class="right-buttons">
-          <PrimeButton label="Notifications" icon="pi pi-bell" @click="notifications" />
+          <PrimeButton label="Notifications" icon="pi pi-bell" @click="toggleNotifications" />
           <PrimeButton label="Cart" icon="pi pi-shopping-cart" @click="viewCart" />
         </div>
       </div>
@@ -25,7 +25,7 @@
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <PasswordText v-model="password" id="password" />
+            <InputText type="password" v-model="password" id="password" />
           </div>
           <div class="button-group">
             <PrimeButton label="Login" icon="pi pi-check" type="submit" class="login-button" />
@@ -35,6 +35,13 @@
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       </PrimeCard>
     </div>
+
+    <!-- Notifications Toast -->
+    <p-toast v-if="notificationsVisible" :baseZIndex="10000">
+      <div v-for="(notification, index) in notifications" :key="index">
+        {{ notification }}
+      </div>
+    </p-toast>
   </div>
 </template>
 
@@ -43,15 +50,15 @@ import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Button as PrimeButton } from 'primevue/button';
 import { InputText } from 'primevue/inputtext';
-import { PasswordText } from 'primevue/password';
-import { PrimeCard } from 'primevue/card';
+import { Card as PrimeCard } from 'primevue/card';
+import axios from 'axios';
+import webSocketService from '../webSocketService';
 
 export default defineComponent({
   name: 'LoginModel',
   components: {
     PrimeButton,
     InputText,
-    PasswordText,
     PrimeCard
   },
   setup() {
@@ -59,98 +66,85 @@ export default defineComponent({
     const username = ref('');
     const password = ref('');
     const errorMessage = ref('');
+    const notifications = ref([]);
+    const notificationsVisible = ref(false);
 
-    const authenticate = async (username, password) => {
-      let roles = [];
-      let isAuthenticated = false;
-
-      switch (username) {
-        case 'admin':
-          if (password === 'admin') {
-            roles = ['storeManager', 'commercialManager', 'storeOwner', 'systemManager'];
-            isAuthenticated = true;
+    // Function to handle login form submission
+    const handleLogin = async () => {
+      try {
+            console.log(localStorage.getItem("token"));
+            console.log(localStorage.getItem("username"));
+            console.log(username.value);
+            console.log(password.value);
+        const response = await axios.get('http://localhost:8082/api/trading/login', {
+          params: {
+            token: localStorage.getItem("token"),
+            usernameV: localStorage.getItem("username"),
+            username: username.value,
+            password: password.value,
           }
-          break;
-        case 'manager':
-          if (password === 'manager') {
-            roles = ['storeManager'];
-            isAuthenticated = true;
-          }
-          break;
-        case 'system':
-          if (password === 'system') {
-            roles = ['systemManager'];
-            isAuthenticated = true;
-          }
-          break;
-        case 'commercial':
-          if (password === 'commercial') {
-            roles = ['commercialManager'];
-            isAuthenticated = true;
-          }
-          break;
-        case 'lana':
-          if (password === 'lana') {
-            roles = ['commercialManager', 'systemManager', 'storeOwner'];
-            isAuthenticated = true;
-          }
-          break;
-        case 'user':
-          if (password === 'user') {
-            roles = [];  // No roles for regular user
-            isAuthenticated = true;
-          }
-          break;
-        default:
-          isAuthenticated = false;
-      }
-
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      if (isAuthenticated) {
-        localStorage.setItem('roles', JSON.stringify(roles));
+        });
+        console.log('Login successful:', response.data);
+        
+        // Store user session information
         localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', username);
-        return true;
-      } else {
-        localStorage.removeItem('roles');
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('username');
-        return false;
+        localStorage.setItem('username', response.data.username);
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('isAdmin', response.data.isAdmin);
+        localStorage.setItem('userName', username.value)
+
+        // Subscribe to notifications
+        subscribeToNotifications(username.value);
+
+        // Redirect to home page
+        router.push('/');
+      } catch (error) {
+        if (error.response) {
+          errorMessage.value = error.response.data || 'Failed to Login';
+          console.error('Server responded with status:', error.response.status);
+        } else if (error.request) {
+          errorMessage.value = 'No response from server';
+          console.error('No response received:', error.request);
+        } else {
+          errorMessage.value = 'Request failed to reach the server';
+          console.error('Error setting up the request:', error.message);
+        }
       }
     };
 
-    const handleLogin = async () => {
-      try {
-        const loggedIn = await authenticate(username.value, password.value);
-        if (loggedIn) {
-          router.push('/');
-        } else {
-          errorMessage.value = 'Invalid username or password';
-        }
-      } catch (error) {
-        errorMessage.value = error.message;
-      }
+    // Function to handle WebSocket notifications
+    const subscribeToNotifications = (/*username*/) => {
+      const webSocketUrl = 'ws://localhost:8080/ws';
+      webSocketService.connect(webSocketUrl);
+      webSocketService.subscribe(handleWebSocketMessage);
+
+      // Send the username to the backend after WebSocket connection is established
+      // webSocketService.socket.onopen = () => {
+      //   webSocketService.socket.send(JSON.stringify({ type: 'subscribe', username }));
+      // };
+    };
+
+    // Function to handle incoming WebSocket messages (notifications)
+    const handleWebSocketMessage = (message) => {
+      console.log('Received WebSocket message:', message);
+      notifications.value.push(message);
+      notificationsVisible.value = true; // Show notifications toast
     };
 
     const goBack = () => {
-      router.go(-1);
+      router.go(-1); // Go back to previous page using router
     };
 
     const goToRegister = () => {
-      router.push('/register');
+      router.push('/register'); // Navigate to register page using router
     };
 
-    const notifications = () => {
-      // Handle notifications
+    const toggleNotifications = () => {
+      notificationsVisible.value = !notificationsVisible.value;
     };
 
     const viewCart = () => {
       // Handle viewing cart
-    };
-
-    const goHome = () => {
-      router.push({ name: 'HomePage' });
     };
 
     return {
@@ -161,8 +155,9 @@ export default defineComponent({
       goBack,
       goToRegister,
       notifications,
-      viewCart,
-      goHome
+      notificationsVisible,
+      toggleNotifications,
+      viewCart
     };
   }
 });
@@ -225,23 +220,6 @@ export default defineComponent({
   display: block;
   margin-bottom: 5px;
   color: #333;
-}
-
-.custom-card {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.card-body {
-  padding: 1rem;
-  display: block;
-}
-
-.card-footer {
-  background-color: #f0f0f0;
-  padding: 0.5rem;
-  text-align: center;
 }
 
 .button-group {

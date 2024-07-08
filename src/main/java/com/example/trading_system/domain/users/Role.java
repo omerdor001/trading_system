@@ -1,10 +1,25 @@
 package com.example.trading_system.domain.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "roles")
 public class Role {
+    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "role_state_id", referencedColumnName = "id")
     private RoleState roleState;
+
+    @Column(nullable = false)
     private String store_name_id;
+
+    @Column(nullable = false)
     private String appointedById;
 
     public Role(String store_name_id, String appointedById) {
@@ -69,6 +84,14 @@ public class Role {
         roleState.setCategory(username, store_name_id, productId, category);
     }
 
+    public void addKeywordToProduct(String username, String store_name_id, int productId, String keyword) throws IllegalAccessException {
+        roleState.addKeywordToProduct(username,store_name_id,productId,keyword);
+    }
+
+    public void removeKeywordFromProduct(String username, String store_name_id, int productId,String keyword) throws IllegalAccessException {
+        roleState.removeKeywordFromProduct(username,store_name_id,productId,keyword);
+    }
+
     public boolean editDiscounts() throws IllegalAccessException {
         if(roleState.isEditDiscountPolicy())
             return true;
@@ -81,6 +104,43 @@ public class Role {
         }
         else throw new IllegalAccessException("Only managers can access isEditPurchasePolicy");
     }
+
+    public void approveBid() throws IllegalAccessException{
+        roleState.approveBid();
+    }
+
+    public void rejectBid() throws IllegalAccessException{
+        roleState.rejectBid();
+    }
+
+    public void placeCounterOffer() throws IllegalAccessException{
+        roleState.placeCounterOffer();
+    }
+
+    public void getStoreBids() throws IllegalAccessException{
+        roleState.getStoreBids();
+    }
+
+    public void createProductLottery() throws IllegalAccessException{
+        roleState.createProductLottery();
+    }
+    //Getters of permissions
+    public boolean isWatch(){
+        return roleState.isWatch();
+    }
+
+    public boolean isEditSupply() {
+        return roleState.isEditSupply();
+    }
+
+    public boolean isEditPurchasePolicy(){
+        return roleState.isEditPurchasePolicy();
+    }
+
+    public boolean isEditDiscountPolicy(){
+        return roleState.isEditDiscountPolicy();
+    }
+
 }
 
 

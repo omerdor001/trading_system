@@ -87,7 +87,7 @@ class GetProductsInfoUnitTests {
         marketFacade.addStore(validStoreName, validDescription, validUsername, null);
         marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>());
 
-        String expected = "{\"name_id\":\"ValidStore\", \"description\":\"This is a valid description.\", \"products\":[{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[]}, ]}";
+        String expected = "{\"name_id\":\"ValidStore\", \"description\":\"This is a valid description.\", \"products\":[{\"product_id\":1, \"store_name\":\"ValidStore\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":\"Sport\", \"keyWords\":[]}, ]}";
         String actual = marketFacade.getStoreProducts(validUsername, validStoreName);
         assertEquals(expected, actual);
     }
@@ -98,7 +98,7 @@ class GetProductsInfoUnitTests {
         marketFacade.addStore(validStoreName, validDescription, validUsername, null);
         marketFacade.addProduct(validUsername, 1, validStoreName, "product1", "", 5, 5, 5, 1, new ArrayList<>());
 
-        String expected = "{\"product_id\":1, \"store_name\":\"\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":Sport, \"keyWords\":[]}";
+        String expected = "{\"product_id\":1, \"store_name\":\"ValidStore\", \"product_name\":\"product1\", \"product_description\":\"\", \"product_price\":5.0, \"product_quantity\":5, \"rating\":5.0, \"category\":\"Sport\", \"keyWords\":[]}";
         String actual = marketFacade.getProductInfo(validUsername, validStoreName, 1);
         assertEquals(expected, actual);
     }

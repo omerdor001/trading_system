@@ -15,12 +15,12 @@ public class Visitor extends User {
     }
 
     @Override
-    public List<String> getOwnerToApprove() {
-        return List.of();
+    public HashMap<String, String> getOwnerSuggestions() {
+        return new HashMap<>();
     }
 
     @Override
-    public HashMap<String, List<Boolean>> getManagerToApprove() {
+    public HashMap<String, HashMap<String, List<Boolean>>> getManagerSuggestions() {
         return null;
     }
 
@@ -55,6 +55,21 @@ public class Visitor extends User {
     }
 
     @Override
+    public String getStoresIOwn() {
+        return "";
+    }
+
+    @Override
+    public String getStoresIManage() {
+        return "";
+    }
+
+    @Override
+    public void addWaitingAppoint_Owner(String storeName, String appointee) {
+
+    }
+
+    @Override
     public void login() {
         throw new RuntimeException("Only registered users can login");
     }
@@ -75,17 +90,34 @@ public class Visitor extends User {
     }
 
     @Override
-    public void addWaitingAppoint_Owner(String storeName) {
-    }
-
-    @Override
     public boolean isManager(String store_name_id) {
         return false;
     }
 
     @Override
-    public void addWaitingAppoint_Manager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+
     }
+
+    public boolean isWatch(String storeName) {
+        return false;
+    }
+
+    @Override
+    public boolean isEditSupply(String storeName) {
+        return false;
+    }
+
+    @Override
+    public boolean isEditPurchasePolicy(String storeName) {
+        return false;
+    }
+
+    @Override
+    public boolean isEditDiscountPolicy(String storeName) {
+        return false;
+    }
+
 
     @Override
     public boolean removeWaitingAppoint_Owner(String storeName) {
@@ -93,7 +125,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id) {
+    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id,String appointee) {
         return List.of();
     }
 
@@ -102,7 +134,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
     }
 
     @Override

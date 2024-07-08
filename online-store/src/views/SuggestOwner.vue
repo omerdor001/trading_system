@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
+    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
     <div class="suggest-owner">
       <h2>Suggest Owner</h2>
       <form @submit.prevent="suggestOwner">
@@ -8,16 +8,13 @@
           <label for="newOwner">New Owner: </label>
           <InputText id="newOwner" v-model="newOwner" required />
         </div>
-        <div class="p-field">
-          <label for="storeName">Store Name: </label>
-          <InputText id="storeName" v-model="storeName" required />
-        </div>
         <div class="button-group">
           <PrimeButton label="Submit" type="submit" class="p-mt-2 p-button-primary" />
         </div>
       </form>
       <PrimeToast ref="toast" position="top-right" :life="3000"></PrimeToast>
     </div>
+    <p-toast></p-toast>
   </div>
 </template>
 
@@ -27,6 +24,7 @@ import { defineComponent, ref } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { InputText } from 'primevue/inputtext';
 import { Button as PrimeButton } from 'primevue/button';
+import { useToast } from 'primevue/usetoast';
 import { Toast as PrimeToast } from 'primevue/toast';
 import { useRouter } from 'vue-router';
 
@@ -36,45 +34,35 @@ export default defineComponent({
     SiteHeader,
     InputText,
     PrimeButton,
-    PrimeToast
+    'p-toast': PrimeToast,
   },
   setup() {
     const router = useRouter();
     const appoint = ref('');
     const newOwner = ref('');
-    const storeName = ref('');
+    const storeName = ref(router.currentRoute.value.params.storeName);
     const error = ref(null);
-    const username = ref(localStorage.getItem('username') || '');
+    const username = localStorage.getItem('username');
+    const token = localStorage.getItem('token');
     const isLoggedIn = ref(!!username.value);
+    const toast = useToast();
 
     const suggestOwner = async () => {
       try {
         error.value = null;
-        const response = await axios.post('/api/suggest-owner', {
-          appoint: username,
-          newOwner: newOwner.value,
-          storeName: storeName.value
+        const response = await axios.post('http://localhost:8082/api/trading/suggestOwner',null, {
+          params: {
+            appoint: username,
+            token: token,
+            newOwner: newOwner.value,
+            storeName: storeName.value,
+          }
         });
-        // Display success toast
-        this.$refs.toast.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: response.data.message,
-          life: 3000
-        });
-        // Clear form fields after successful submission
-        appoint.value = '';
+        toast.add({ severity: 'success', summary: 'Success', detail: response.data, life: 3000 });
         newOwner.value = '';
-        storeName.value = '';
       } catch (err) {
-        error.value = err.response?.data?.message || 'An error occurred';
-        // Display error toast
-        this.$refs.toast.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.value,
-          life: 5000
-        });
+        err.value = err.response?.data?.message || 'An error occurred';
+        toast.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
       }
     };
 

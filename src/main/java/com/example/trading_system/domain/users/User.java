@@ -2,24 +2,46 @@ package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.Message;
 import com.example.trading_system.domain.stores.StoreRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+@MappedSuperclass
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User {
     private static final Logger logger = LoggerFactory.getLogger(User.class);
+
+    @Id
+    @Column(nullable = false, unique = true)
     public String username;
+
+    @Embedded
     private Cart cart;
+
+    @Column(nullable = false)
     private boolean suspended;
+
+    @Column
     private LocalDateTime suspendedStart;
+
+    @Column
     private LocalDateTime suspendedEnd;
+
+    @Column(nullable = false)
     private String address;
+
+    @OneToMany(cascade = CascadeType.ALL)
     private LinkedList<Message> messages;
+
+    @Column(nullable = false)
+    private boolean isTimerCancelled;
+
 
     public User(String username) {
         this.username = username;
@@ -29,6 +51,7 @@ public abstract class User {
         this.suspendedEnd = null;
         this.address = "";
         this.messages = new LinkedList<>();
+        this.isTimerCancelled = true;
     }
 
     public String getUsername() {
@@ -87,19 +110,26 @@ public abstract class User {
 
     public abstract boolean isOwner(String store_name_id);
 
-    public abstract void addWaitingAppoint_Owner(String storeName);
-
     public abstract boolean isManager(String store_name_id);
 
-    public abstract void addWaitingAppoint_Manager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+    public abstract void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery);
+
+    public abstract boolean isWatch(String storeName);
+
+    public abstract boolean isEditSupply(String storeName);
+
+    public abstract boolean isEditPurchasePolicy(String storeName);
+
+    public abstract boolean isEditDiscountPolicy(String storeName);
+
 
     public abstract boolean removeWaitingAppoint_Owner(String storeName);
 
-    public abstract List<Boolean> removeWaitingAppoint_Manager(String store_name_id);
+    public abstract List<Boolean> removeWaitingAppoint_Manager(String store_name_id,String appointee) throws IllegalAccessException;
 
     public abstract void addManagerRole(String appoint, String store_name_id);
 
-    public abstract void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+    public abstract void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery);
 
     public abstract void addOwnerRole(String appoint, String storeName);
 
@@ -135,9 +165,9 @@ public abstract class User {
 
     public abstract boolean getLogged();
 
-    public abstract List<String> getOwnerToApprove();
+    public abstract HashMap<String, String> getOwnerSuggestions();
 
-    public abstract HashMap<String, List<Boolean>> getManagerToApprove();
+    public abstract HashMap<String, HashMap<String, List<Boolean>>> getManagerSuggestions();
 
     public abstract List<Notification> getNotifications();
 
@@ -151,6 +181,12 @@ public abstract class User {
 
     public abstract int getAge();
 
+    public abstract String getStoresIOwn();
+
+    public abstract String getStoresIManage();
+
+    public abstract void addWaitingAppoint_Owner(String storeName,String appointee);
+
     public void addProductToCart(int productId, int quantity, String storeName, double price, int category) {
         this.cart.addProductToCart(productId, quantity, storeName, price, category);
     }
@@ -158,7 +194,6 @@ public abstract class User {
     public void removeProductFromCart(int productId, int quantity, String storeName) {
         this.cart.removeProductFromCart(productId, quantity, storeName);
     }
-
 
     public String getShoppingCart_ToString() {
         return cart.toString();
@@ -194,5 +229,12 @@ public abstract class User {
 
     public void receiveMessage(String senderId, String senderUsername, String content){
         this.messages.add(new Message(senderId, senderUsername, content));
+    }
+    public boolean isTimerCancelled() {
+        return isTimerCancelled;
+    }
+
+    public void setTimerCancelled(boolean timerCancelled) {
+        isTimerCancelled = timerCancelled;
     }
 }

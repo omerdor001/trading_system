@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
+    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
     <div class="container">
       <h2>Choose What To Change</h2>
       <div class="fields">
@@ -8,168 +8,267 @@
       </div>
       <div v-if="selectedField">
         <h3>{{ selectedField }}</h3>
-        <InputText v-model="newDetail" placeholder="New Detail" />
-        <PrimeButton label="Change" @click="updateField" />
+        <div v-if="selectedField === 'Category'">
+          <PrimeDropdown v-model="selectedCategoryIndex" :options="categoryOptions" optionLabel="label" optionValue="index" placeholder="Select a Category" />
+          <PrimeButton label="Change" @click="updateField(selectedField)" />
+        </div>
+        <div v-else>
+          <InputText v-model="newDetail" placeholder="New Detail" />
+          <PrimeButton label="Change" @click="updateField(selectedField)" />
+        </div>
       </div>
-      <div class="button-group">
-        <PrimeButton label="Finish" @click="finish" class="finish-button" />
-      </div>
-      <PrimeToast ref="toast" position="top-right" :life="3000"></PrimeToast>
     </div>
+    <PrimeToast />
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import { InputText } from 'primevue/inputtext';
 import { Button as PrimeButton } from 'primevue/button';
-import { Toast as PrimeToast } from 'primevue/toast';
+import { PrimeDropdown } from 'primevue/dropdown';
 import SiteHeader from '@/components/SiteHeader.vue';
-import axios from 'axios';
+import { useToast } from 'primevue/usetoast';
 
 export default {
   name: 'ProductManagement',
   components: {
     InputText,
     PrimeButton,
-    PrimeToast,
+    PrimeDropdown,
     SiteHeader
   },
   setup() {
-    const fields = ref(['Name', 'Description', 'Price', 'Quantity']);
+    const fields = ref(['Name', 'Description', 'Price', 'Quantity', 'Rating', 'Category', 'Add Key-Word', 'Remove Key-Word']);
     const selectedField = ref('');
     const newDetail = ref('');
+    const categoryOptions = ref([]);
+    const selectedCategoryIndex = ref(null); 
     const route = useRoute();
-    const router = useRouter();
-    const toast = ref(null);
-    const username = localStorage.getItem('username');
+    const toast = useToast();
+    const storeName = ref('');
+    const productId = ref('');
+    const userName = localStorage.getItem('username');
     const token = localStorage.getItem('token');
 
     const selectField = (field) => {
       selectedField.value = field;
+      if (field === 'Category') {
+        fetchCategories();
+      }
     };
 
-    const showSuccessToast = (message) => {
-      toast.value.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: message,
-        life: 3000,
-      });
-    };
-
-    const showErrorToast = (message) => {
-      toast.value.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: message,
-        life: 5000,
-      });
-    };
-
-    const updateField = async () => {
-      const storeName = route.params.storeName;
-      const productId = route.params.productId;
-
+    const updateField = async (field) => {
       try {
-        let response;
-        switch (selectedField.value) {
+        let updateFunction;
+        switch (field) {
           case 'Name':
-            response = await setProductName(username, token, storeName, productId, newDetail.value);
+            updateFunction = updateProductName;
             break;
           case 'Description':
-            response = await setProductDescription(username, token, storeName, productId, newDetail.value);
+            updateFunction = updateProductDescription;
             break;
           case 'Price':
-            response = await setProductPrice(username, token, storeName, productId, parseFloat(newDetail.value));
+            updateFunction = updateProductPrice;
             break;
           case 'Quantity':
-            response = await setProductQuantity(username, token, storeName, productId, parseInt(newDetail.value, 10));
+            updateFunction = updateProductQuantity;
+            break;
+          case 'Rating':
+            updateFunction = updateProductRating;
+            break;
+          case 'Category':
+            updateFunction = updateProductCategory;
+            break;
+          case 'Add Key-Word':
+            updateFunction = addProductKeyword;
+            break;
+          case 'Remove Key-Word':
+            updateFunction = removeProductKeyword;
             break;
           default:
-            showErrorToast('Invalid field selected');
+            alert('Unsupported field');
             return;
         }
-        if (response.status === 200) {
-          showSuccessToast(`Product ${selectedField.value.toLowerCase()} updated successfully`);
-        } else {
-          showErrorToast(`Failed to update product ${selectedField.value.toLowerCase()}: ${response.statusText}`);
-        }
+        const detail = field === 'Category' ? selectedCategoryIndex.value : newDetail.value;
+        await updateFunction(detail);
+        toast.add({ severity: 'success', summary: 'Success', detail: `${field} updated successfully` });
       } catch (error) {
-        showErrorToast(`Failed to update product field: ${error.message}`);
+        console.error('Failed to update product field', error);
+        toast.add({ severity: 'error', summary: 'Error', detail: `Failed to update ${field} - ${error.message}`, life: 3000 });
       }
     };
 
-    const finish = () => {
-      const storeName = route.params.storeName;
-      router.push({ name: 'ProductList', params: { storeName } });
-    };
-
-    const setProductName = (username, token, storeName, productId, productName) => {
-      return axios.post('http://localhost:8082/api/trading/setProductName', null, {
-        params: {
-          username,
-          token,
-          storeName,
-          productId,
-          productName
-        }
-      });
-    };
-
-    const setProductDescription = (username, token, storeName, productId, productDescription) => {
-      return axios.post('http://localhost:8082/api/trading/setProductDescription', null, {
-        params: {
-          username,
-          token,
-          storeName,
-          productId,
-          productDescription
-        }
-      });
-    };
-
-    const setProductPrice = (username, token, storeName, productId, productPrice) => {
-      return axios.post('http://localhost:8082/api/trading/setProductPrice', null, {
-        params: {
-          username,
-          token,
-          storeName,
-          productId,
-          productPrice
-        }
-      });
-    };
-
-    const setProductQuantity = (username, token, storeName, productId, productQuantity) => {
-      return axios.post('http://localhost:8082/api/trading/setProductQuantity', null, {
-        params: {
-          username,
-          token,
-          storeName,
-          productId,
-          productQuantity
-        }
-      });
-    };
-
-    const logout = async () => {
+    const fetchCategories = async () => {
       try {
-        await axios.post('http://localhost:8082/api/trading/logout', null, {
+        const response = await axios.get('http://localhost:8082/api/trading/categories', {
           params: {
-            username: username.value,
-            token: token.value
+            username: userName,
+            token: token,
           }
         });
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('username');
-        localStorage.removeItem('token');
-        router.push('/login');
+        const categoryArray = response.data.slice(1, response.data.length - 1).split(',');
+        categoryOptions.value = categoryArray.map((category, index) => ({ label: category, value: category, index: index + 1 }));
       } catch (error) {
-        showErrorToast(`Error during logout: ${error.message}`);
+        console.error('Failed to fetch categories', error);
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch categories' });
       }
     };
+
+    const updateProductName = async (newName) => {
+      try {
+        const response = await axios.post('http://localhost:8082/api/trading/setProductName', null, {
+          params: {
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            productName: newName
+          }
+        });
+        return response.data;
+      } catch (error) {
+        throw new Error(`Failed to update product name: ${error.message}`);
+      }
+    };
+
+    const updateProductDescription = async (newDescription) => {
+      try {
+        const response = await axios.post('http://localhost:8082/api/trading/setProductDescription', null, {
+          params: {
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            productDescription: newDescription
+          }
+        });
+        return response.data;
+      } catch (error) {
+        throw new Error(`Failed to update product description: ${error.message}`);
+      }
+    };
+
+    const updateProductPrice = async (newPrice) => {
+      if (isNaN(parseFloat(newPrice)) || !isFinite(newPrice)) {
+        throw new Error('New price must be a valid number');
+      }
+      try {
+        const response = await axios.post('http://localhost:8082/api/trading/setProductPrice', null, {
+          params: {
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            productPrice: newPrice
+          }
+        });
+        return response.data;
+      } catch (error) {
+        throw new Error(`Failed to update product price: ${error.message}`);
+      }
+    };
+
+    const updateProductQuantity = async (newQuantity) => {
+      if (!Number.isInteger(newQuantity) || newQuantity < 0) {
+        throw new Error('Quantity must be a non-negative integer');
+      }
+      try {
+        const response = await axios.post('http://localhost:8082/api/trading/setProductQuantity', null, {
+          params: {
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            productQuantity: newQuantity
+          }
+        });
+        return response.data;
+      } catch (error) {
+        throw new Error(`Failed to update product quantity: ${error.message}`);
+      }
+    };
+
+    const updateProductRating = async (newRating) => {
+      if (isNaN(newRating) || newRating < 0 || newRating > 10) {
+        throw new Error('Rating must be a number between 1 and 10');
+      }
+      try {
+        const response = await axios.post('http://localhost:8082/api/trading/setRating', null, {
+          params: {
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            rating: newRating
+          }
+        });
+        return response.data;
+      } catch (error) {
+        throw new Error(`Failed to update product rating: ${error.message}`);
+      }
+    };
+
+    const updateProductCategory = async (selectedIndex) => {
+      try {
+        const response = await axios.post('http://localhost:8082/api/trading/setCategory', null, {
+          params: {
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            category: selectedIndex-1,
+          }
+        });
+        return response.data;
+      } catch (error) {
+        throw new Error(`Failed to update product category: ${error.message}`);
+      }
+    };
+
+    const addProductKeyword = async (keyword) => {
+      try {
+        const response = await axios.post('http://localhost:8082/api/trading/addKeyword', null, {
+          params: {
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            keyword: keyword
+          }
+        });
+        return response.data;
+      } catch (error) {
+        throw new Error(`Failed to add product keyword: ${error.message}`);
+      }
+    };
+
+    const removeProductKeyword = async (keyword) => {
+      try {
+        const response = await axios.post('http://localhost:8082/api/trading/removeKeyword', null, {
+          params: {
+            username: userName,
+            token: token,
+            storeName: storeName.value,
+            productId: productId.value,
+            keyword: keyword
+          }
+        });
+        return response.data;
+      } catch (error) {
+        throw new Error(`Failed to remove product keyword: ${error.message}`);
+      }
+    };
+
+    onMounted(() => {
+      storeName.value = route.params.storeName;
+      productId.value = route.params.productId;
+      if (selectedField.value === 'Category') {
+        fetchCategories();
+      }
+    });
 
     return {
       fields,
@@ -177,8 +276,10 @@ export default {
       newDetail,
       selectField,
       updateField,
-      finish,
-      logout,
+      categoryOptions,
+      selectedCategoryIndex, 
+      userName,
+      token,
       toast
     };
   }
@@ -188,21 +289,12 @@ export default {
 <style scoped>
 .container {
   padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .fields {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.button-group {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.finish-button {
-  width: 100px;
+  gap: 20px;
 }
 </style>

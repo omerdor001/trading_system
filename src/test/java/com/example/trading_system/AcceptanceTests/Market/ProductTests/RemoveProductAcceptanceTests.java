@@ -63,7 +63,7 @@ public class RemoveProductAcceptanceTests {
             fail("Setup failed: Unable to extract username and token from JSON response2");
         }
         tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
-        tradingSystemImp.addProduct(userName, token, productID, storeName, "Product1", "ProductDescription", 10, 5, 6, 1, new ArrayList<>(Arrays.asList(keyWords)));
+        tradingSystemImp.addProduct(userName, token, productID, storeName, "Product1", "ProductDescription", 10, 5, 6, 1, "[\"CarPlay\", \"iPhone\"]");
     }
 
     @AfterEach
@@ -141,8 +141,8 @@ public class RemoveProductAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, false, true, true);
-        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, false, true, true);
+        tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, false, true, true, true, true);
+        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, false, true, true, true, true);
         ResponseEntity<String> response2 = tradingSystemImp.removeProduct(userNameManager, tokenManager, storeName, productID);
         Assertions.assertEquals("Manager cannot remove products", response2.getBody());
         Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response2.getStatusCode());
@@ -172,8 +172,8 @@ public class RemoveProductAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true);
-        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true);
+        tradingSystemImp.suggestManage(userName, token, userNameManager, storeName, true, true, true, true, true, true);
+        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true, true, true);
         ResponseEntity<String> response2 = tradingSystemImp.removeProduct(userNameManager, tokenManager, storeName, productID);
         Assertions.assertEquals("Product was removed successfully.", response2.getBody());
         Assertions.assertEquals(HttpStatus.OK, response2.getStatusCode());

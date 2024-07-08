@@ -1,16 +1,12 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
+    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
     <div class="suggest-manage">
       <h2>Suggest Manager</h2>
       <form @submit.prevent="suggestManage">
         <div class="p-field">
           <label for="newManager">New Manager: </label>
           <InputText id="newManager" v-model="newManager" required />
-        </div>
-        <div class="p-field">
-          <label for="storeNameId">Store Name: </label>
-          <InputText id="storeNameId" v-model="storeNameId" required />
         </div>
         <div class="p-field">
           <label>Options:</label>
@@ -36,7 +32,7 @@ import { defineComponent, ref } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { InputText } from 'primevue/inputtext';
 import { Button as PrimeButton } from 'primevue/button';
-import { ToggleButton } from 'primevue/togglebutton'; // Import ToggleButton from PrimeVue
+import { ToggleButton } from 'primevue/togglebutton';
 import { Toast as PrimeToast } from 'primevue/toast';
 import { useRouter } from 'vue-router';
 
@@ -47,47 +43,46 @@ export default defineComponent({
     InputText,
     PrimeButton,
     PrimeToast,
-    ToggleButton // Use ToggleButton instead of Checkbox
+    ToggleButton,
   },
   setup() {
     const router = useRouter();
     const newManager = ref('');
-    const storeNameId = ref('');
+    const storeName = ref(router.currentRoute.value.params.storeName);
     const watch = ref(false);
     const editSupply = ref(false);
     const editBuyPolicy = ref(false);
     const editDiscountPolicy = ref(false);
     const error = ref(null);
-    const username = ref(localStorage.getItem('username') || '');
+    const username = localStorage.getItem('username');
+    const token = localStorage.getItem('token');
     const isLoggedIn = ref(!!username.value);
+
+    const toast = ref(null);
 
     const suggestManage = async () => {
       try {
         error.value = null;
-        const response = await axios.post('/api/suggest-manage', {
+        const response = await axios.post('http://localhost:8082/api/trading/suggestManage',null, {
+          params: {
+          appoint: username,
+          token: token, 
           newManager: newManager.value,
-          storeNameId: storeNameId.value,
+          store_name_id: storeName.value,
           watch: watch.value,
           editSupply: editSupply.value,
           editBuyPolicy: editBuyPolicy.value,
-          editDiscountPolicy: editDiscountPolicy.value
-          // Add other options here
+          editDiscountPolicy: editDiscountPolicy.value,
+          }
         });
-
-        // Display success toast
         showSuccessToast(response.data.message);
-        
-        // Reset form fields
         newManager.value = '';
-        storeNameId.value = '';
         watch.value = false;
         editSupply.value = false;
         editBuyPolicy.value = false;
         editDiscountPolicy.value = false;
-        // Reset other options here
       } catch (err) {
         error.value = err.response?.data?.message || 'An error occurred';
-        // Display error toast
         showErrorToast(error.value);
       }
     };
@@ -98,31 +93,22 @@ export default defineComponent({
     };
 
     const showSuccessToast = (message) => {
-      // Display success toast
       showCustomToast('success', 'Success', message);
     };
 
     const showErrorToast = (message) => {
-      // Display error toast
       showCustomToast('error', 'Error', message);
     };
 
     const showCustomToast = (severity, summary, detail) => {
-      // Display custom toast
-      const toast = ref.$refs.toast;
-      toast.add({
-        severity: severity,
-        summary: summary,
-        detail: detail,
-        life: 3000
-      });
+      toast.value.add({ severity, summary, detail, life: 3000 });
     };
 
     return {
       username,
       isLoggedIn,
       newManager,
-      storeNameId,
+      storeName,
       watch,
       editSupply,
       editBuyPolicy,
@@ -130,6 +116,7 @@ export default defineComponent({
       error,
       suggestManage,
       logout,
+      toast,  
     };
   },
 });
@@ -181,7 +168,7 @@ export default defineComponent({
 }
 
 .small-toggle .p-button {
-  padding: 0.5rem 1rem; /* Adjust padding for smaller size */
-  font-size: 0.9rem; /* Adjust font size for smaller size */
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
 }
 </style>

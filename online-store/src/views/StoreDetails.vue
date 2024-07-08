@@ -18,66 +18,79 @@
                 <h4>{{ product.name }}</h4>
                 <p>{{ product.description }}</p>
                 <p class="price">{{ product.price }}</p>
-                <PrimeButton label="View Options" @click="viewOptions(product.id, store.name)"
-                  class="view-options-button" />
+                <PrimeButton label="View Options" @click="viewOptions(product.id)" class="view-options-button"/>
               </div>
             </li>
           </ul>
         </div>
       </div>
     </div>
+    <PrimeToast ref="toast" />
   </div>
 </template>
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
-import { useRouter } from 'vue-router';
-import { Button as PrimeButton } from 'primevue/button';
+import { useRouter, useRoute } from 'vue-router';
+import PrimeButton from 'primevue/button';
+import PrimeToast from 'primevue/toast';
+import axios from 'axios';
+import { useToast } from 'primevue/usetoast';
 
 export default defineComponent({
   name: 'StoreDetails',
   components: {
     SiteHeader,
-    PrimeButton
+    PrimeButton,
+    PrimeToast
   },
-  props: {
-    storeId: {
-      type: String,
-      required: true
-    }
-  },
-  setup(props) {
+  setup() {
     const router = useRouter();
+    const route = useRoute();
     const username = ref(localStorage.getItem('username') || '');
     const store = ref({
       name: '',
       description: '',
-      products: [],
-      purchaseHistory: []
+      products: []
     });
+    const toast = useToast();
 
     onMounted(() => {
-      fetchStoreDetails(props.storeId);
+      fetchStoreDetails(route.params.storeId);
     });
 
-    const fetchStoreDetails = (storeId) => {
-      store.value = {
-        name: `Store ${storeId}`,
-        description: 'This is an example store description.',
-        products: [
-          { id: 1, name: 'Smartwatch Pro', description: 'Water resistant, Built-in GPS', price: '$90', image: 'https://via.placeholder.com/150' },
-          { id: 2, name: 'TechZone Tablet', description: '10-inch display, Wi-Fi enabled', price: '$200', image: 'https://via.placeholder.com/150' }
-        ],
-        purchaseHistory: [
-          { id: 1, date: '2024-01-01', amount: '$90', buyer: 'Buyer 1' },
-          { id: 2, date: '2024-02-01', amount: '$200', buyer: 'Buyer 2' }
-        ]
-      };
+    const fetchStoreDetails = async (storeId) => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Invalid token was supplied', life: 3000 });
+        return;
+      }
+      try {
+        const response = await axios.get('http://localhost:8082/api/trading/products_of_store', {
+          params: {
+            storeName: storeId,
+            username: username.value,
+            token: token
+          }
+        });
+        const storeProducts = response.data;
+        store.value = {
+          name: storeId,
+          description: 'Store description here...', // Replace with actual description if available
+          products: storeProducts
+        };
+      } catch (error) {
+        if (error.response && error.response.data) {
+          toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+        } else {
+          toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load store details', life: 3000 });
+        }
+      }
     };
 
-    const viewOptions = (productId, storeName) => {
-      router.push({ name: 'ProductDetails', params: { storeName, productId } });
+    const viewOptions = (productId) => {
+      router.push({ name: 'ProductDetails', params: { productId, storeId: store.value.name } });
     };
 
     const backToStores = () => {
@@ -87,6 +100,7 @@ export default defineComponent({
     const logout = () => {
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('username');
+      localStorage.removeItem('token');
       router.push('/login');
     };
 
@@ -105,46 +119,38 @@ export default defineComponent({
 .main-content {
   display: flex;
 }
-
 .sidebar {
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 20px;
 }
-
 .content {
   flex: 2;
   padding: 20px;
 }
-
 .store-details {
   padding: 20px;
 }
-
 .product-item {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
 }
-
 .product-image {
   width: 150px;
   height: 150px;
   margin-right: 10px;
 }
-
 .product-details {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-
 .price {
   font-weight: bold;
   margin-top: 5px;
 }
-
 .sidebar-button {
   width: 100%;
   max-width: 150px;

@@ -50,7 +50,7 @@ public class AddCartUnitTests {
         Cart shoppingCart = new Cart();
         userRepository.getUser(username).setCart(shoppingCart);
 
-        Assertions.assertDoesNotThrow(() -> userFacadeImp.addToCart(username, productId, storeName, quantity));
+        Assertions.assertDoesNotThrow(() -> userFacadeImp.addToCart(username, productId, storeName, quantity, 10.0));
 
         Assertions.assertEquals(quantity, shoppingCart.getShoppingBags().get(storeName).getProducts_list().get(productId).getQuantity());
     }
@@ -62,7 +62,7 @@ public class AddCartUnitTests {
         String storeName = "StoreName";
         int quantity = 5;
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.addToCart(null, productId, storeName, quantity));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.addToCart(null, productId, storeName, quantity, 1));
     }
 
     @Test
@@ -72,7 +72,7 @@ public class AddCartUnitTests {
         String storeName = "StoreName";
         int quantity = 5;
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity, 1));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class AddCartUnitTests {
         String storeName = "StoreName";
         int quantity = 5;
 
-        Assertions.assertThrows(NoSuchElementException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity));
+        Assertions.assertThrows(NoSuchElementException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity, 1));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class AddCartUnitTests {
 
         userRepository.addRegistered(username, "encrypted_password", LocalDate.now());
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.addToCart(username, productId, null, quantity));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.addToCart(username, productId, null, quantity, 1));
     }
 
     @Test
@@ -106,7 +106,7 @@ public class AddCartUnitTests {
 
         userRepository.addRegistered(username, "encrypted_password", LocalDate.now());
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity, 1));
     }
 
     @Test
@@ -118,7 +118,7 @@ public class AddCartUnitTests {
 
         userRepository.addRegistered(username, "encrypted_password", LocalDate.now());
 
-        Assertions.assertThrows(NoSuchElementException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity));
+        Assertions.assertThrows(NoSuchElementException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity, 1));
     }
 
     @Test
@@ -131,7 +131,7 @@ public class AddCartUnitTests {
         userRepository.addRegistered(username, "encrypted_password", LocalDate.now());
         marketFacade.addStore(storeName, "description", username, 4.5);
 
-        Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity));
+        Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity, 1));
     }
 
     @Test
@@ -151,6 +151,6 @@ public class AddCartUnitTests {
         Cart shoppingCart = new Cart();
         userRepository.getUser(username).setCart(shoppingCart);
 
-        Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity));
+        Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.addToCart(username, productId, storeName, quantity, 10.0));
     }
 }

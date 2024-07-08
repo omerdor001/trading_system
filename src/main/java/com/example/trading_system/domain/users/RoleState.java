@@ -1,8 +1,13 @@
 package com.example.trading_system.domain.users;
 
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.OneToOne;
+
 import java.util.List;
 
+@MappedSuperclass
 public abstract class RoleState {
+    @OneToOne(mappedBy = "roleState")
     protected Role role;
 
     public Role getRole() {
@@ -51,11 +56,11 @@ public abstract class RoleState {
 
     public abstract void setWatch(boolean watch);
 
-    public boolean isEditSupply() throws IllegalAccessException {
-        throw new IllegalAccessException("Only managers can access isEditSupply");
-    }
+    public abstract boolean isEditSupply();
 
     public abstract void setEditSupply(boolean editSupply);
+
+    public abstract void setAcceptBids(boolean acceptBids);
 
     public abstract boolean isEditPurchasePolicy();
 
@@ -63,7 +68,13 @@ public abstract class RoleState {
 
     public abstract boolean isEditDiscountPolicy();
 
+    public abstract boolean isAcceptBids();
+
     public abstract void setEditDiscountPolicy(boolean editDiscountPolicy);
+
+    public abstract void setCreateLottery(boolean createLottery);
+
+    public abstract boolean isCreateLottery();
 
     public abstract void addProduct(String username, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException;
 
@@ -94,9 +105,23 @@ public abstract class RoleState {
 
     public abstract void setCategory(String username, String store_name_id, int productId, int category) throws IllegalAccessException;
 
+    public abstract void addKeywordToProduct(String username, String store_name_id, int productId,String keyword) throws IllegalAccessException;
+
+    public abstract void removeKeywordFromProduct(String username, String store_name_id, int productId,String keyword) throws IllegalAccessException;
+
     public abstract boolean isManager();
 
     public abstract boolean isOwner();
 
+
+    public abstract void approveBid() throws IllegalAccessException;
+
+    public abstract void rejectBid() throws IllegalAccessException;
+
+    public abstract void placeCounterOffer() throws IllegalAccessException;
+
+    public abstract void getStoreBids() throws IllegalAccessException;
+
+    public abstract  void createProductLottery() throws IllegalAccessException;
 
 }

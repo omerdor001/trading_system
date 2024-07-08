@@ -1,12 +1,27 @@
 package com.example.trading_system.domain.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.persistence.*;
 import java.util.TimeZone;
 
+@Entity
+@Table(name = "notifications")
 public class Notification {
+    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String senderUsername;
+
+    @Column(nullable = false)
     private String receiverUsername;
+
+    @Column(nullable = false)
     private String textContent;
 
     public Notification(String senderUsername, String receiverUsername, String textContent) {

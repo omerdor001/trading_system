@@ -48,8 +48,8 @@ class SuspensionUnitTests {
             userFacade.createStore("rtestuser0","Nike","sport shop");
             userFacade.suggestOwner("rtestuser0","rtestuser1","Adidas");
             userFacade.approveOwner("rtestuser1","Adidas","rtestuser0");
-            userFacade.suggestManager("rtestuser0","rtestuser2","Adidas",false,false,false,false);
-            userFacade.approveManager("rtestuser2","Adidas","rtestuser0",false,false,false,false);
+            userFacade.suggestManager("rtestuser0","rtestuser2","Adidas",false,false,false,false, false, false);
+            userFacade.approveManager("rtestuser2","Adidas","rtestuser0",false,false,false,false, false, false);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -157,19 +157,18 @@ class SuspensionUnitTests {
 
     @Test
     void watchSuspensions_success() {
-        userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,8,1,1,1));
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        userFacade.suspendUser("rtestuser0", "rtestuser2", LocalDateTime.of(2024, 8, 1, 1, 1));
         assertDoesNotThrow(() -> {
             userFacade.watchSuspensions("rtestuser0");
         }, "watchSuspensions should not throw any exceptions");
-        String result=userFacade.watchSuspensions("rtestuser0");
-        long duration_hours=Math.abs(Duration.between(LocalDateTime.now(), LocalDateTime.of(2024,8,1,1,1)).toHours());
-        long duration_days=Math.abs(Duration.between(LocalDateTime.now(), LocalDateTime.of(2024,8,1,1,1)).toDays());
-        assertEquals(result,"Username - testuser2\n" +
-                "Start of suspension - "+ LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS) +"\n" +
-                "Time of suspension (in days) - "+duration_days+"\n"+
-                "Time of suspension (in hours) - "+ duration_hours+"\n" +
-                "End of suspension - 2024-08-01T01:01");
+        String result = userFacade.watchSuspensions("rtestuser0");
+        long duration_hours = Math.abs(Duration.between(currentDateTime, LocalDateTime.of(2024, 8, 1, 1, 1)).toHours());
+        long duration_days = Math.abs(Duration.between(currentDateTime, LocalDateTime.of(2024, 8, 1, 1, 1)).toDays());
+        String expectedJson = "[{\"End of suspension\":\"2024-08-01T01:01\",\"Username\":\"testuser2\",\"Time of suspension (in days)\":" + duration_days + ",\"Start of suspension\":\"" + currentDateTime.truncatedTo(ChronoUnit.SECONDS) + "\",\"Time of suspension (in hours)\":" + duration_hours + "}]";
+        assertEquals(expectedJson, result);
     }
+
 
     @Test
     void watchSuspensions_AdminNotExist() {

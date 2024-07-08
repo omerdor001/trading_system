@@ -63,7 +63,7 @@ public class CloseStoreExistAcceptanceTests {
         }
         tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
         String[] keyWords = {"CarPlay", "iPhone"};
-        tradingSystemImp.addProduct(userName, token, 111, storeName, "CarPlay", "CarPlay for iPhones", 15, 5, 6, 1, new ArrayList<>(Arrays.asList(keyWords)));
+        tradingSystemImp.addProduct(userName, token, 111, storeName, "CarPlay", "CarPlay for iPhones", 15, 5, 6, 1,"[\"CarPlay\", \"iPhone\"]");
     }
 
 
@@ -100,8 +100,8 @@ public class CloseStoreExistAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemImp.suggestManage(userName, token, userNameOwner, storeName, true, true, true, true);
-        tradingSystemImp.approveManage(userNameOwner, tokenOwner, storeName, userName, true, true, true, true);
+        tradingSystemImp.suggestManage(userName, token, userNameOwner, storeName, true, true, true, true, true, true);
+        tradingSystemImp.approveManage(userNameOwner, tokenOwner, storeName, userName, true, true, true, true, true, true);
         String response2 = tradingSystemImp.closeStoreExist(userNameOwner, tokenOwner, storeName).getBody();
 
         Assertions.assertEquals("Only founder can close store exist", response2);
