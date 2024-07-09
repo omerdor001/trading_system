@@ -16,8 +16,9 @@ public class PurchasePolicyByAge extends PurchasePolicy {
     @Column(name = "category_id")
     private int categoryId;
 
-    public PurchasePolicyByAge() {
-
+    public PurchasePolicyByAge(int ageToCheck, int categoryId) {
+        this.ageToCheck = ageToCheck;
+        this.categoryId = categoryId;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.example.trading_system.domain.stores;
 
-import com.example.trading_system.domain.users.UserDatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;

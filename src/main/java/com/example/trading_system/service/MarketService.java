@@ -3,7 +3,7 @@ package com.example.trading_system.service;
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -76,9 +76,9 @@ public interface MarketService {
 
     String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
 
-    void sendMessageUserToStore(String sender, String storeName, String content);
-
-    void sendMessageStoreToUser(String owner, String receiver, String storeName, String content);
+//    void sendMessageUserToStore(String sender, String storeName, String content);
+//
+//    void sendMessageStoreToUser(String owner, String receiver, String storeName, String content);
 
     //region Discount creation
     String getDiscountPolicies(String username, String storeName) throws IllegalAccessException;
@@ -179,7 +179,7 @@ public interface MarketService {
     void removePurchasePolicy(String username, String storeName, int selectedIndex) throws IllegalAccessException;
     //endregion
 
-    String getStoreMessagesJson(String admin, String storeName);
+//    String getStoreMessagesJson(String admin, String storeName);
 
     void placeBid(String userName, String storeName, int productID, double price) throws IllegalArgumentException;
 

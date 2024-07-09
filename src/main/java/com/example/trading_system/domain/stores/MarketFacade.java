@@ -199,11 +199,11 @@ public interface MarketFacade {
 
     void removePurchasePolicy(String username, String storeName, int selectedIndex) throws IllegalAccessException;
 
-    void sendMessageUserToStore(String sender, String storeName, String content);
-
-    void sendMessageStoreToUser(String owner, String receiver, String storeName, String content);
-
-    String getStoreMessagesJson(String admin, String storeName);
+//    void sendMessageUserToStore(String sender, String storeName, String content);
+//
+//    void sendMessageStoreToUser(String owner, String receiver, String storeName, String content);
+//
+//    String getStoreMessagesJson(String admin, String storeName);
 
     void placeBid(String userName, String storeName, int productID, double price) throws IllegalArgumentException;
 

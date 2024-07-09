@@ -439,20 +439,20 @@ public class MarketServiceImp implements MarketService {
         return marketFacade.requestInformationAboutSpecificOfficialInStore(userName, storeName, officialUserName);
     }
 
-    @Override
-    public void sendMessageUserToStore(String sender, String storeName, String content){
-        marketFacade.sendMessageUserToStore(sender, storeName, content);
-    }
-
-    @Override
-    public void sendMessageStoreToUser(String owner, String receiver, String storeName, String content){
-        marketFacade.sendMessageStoreToUser(owner, receiver, storeName, content);
-    }
-
-    @Override
-    public String getStoreMessagesJson(String admin, String storename){
-        return marketFacade.getStoreMessagesJson(admin, storename);
-    }
+//    @Override
+//    public void sendMessageUserToStore(String sender, String storeName, String content){
+//        marketFacade.sendMessageUserToStore(sender, storeName, content);
+//    }
+//
+//    @Override
+//    public void sendMessageStoreToUser(String owner, String receiver, String storeName, String content){
+//        marketFacade.sendMessageStoreToUser(owner, receiver, storeName, content);
+//    }
+//
+//    @Override
+//    public String getStoreMessagesJson(String admin, String storename){
+//        return marketFacade.getStoreMessagesJson(admin, storename);
+//    }
 
     @Override
     public void placeBid(String userName, String storeName, int productID, double price) throws  IllegalArgumentException {

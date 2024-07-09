@@ -40,8 +40,8 @@ public class TradingSystemRestController {
     private StoreRepository storeRepository;
 
     @Autowired
-    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository,StoreDatabaseRepository storeDatabaseRepositor) {
-        storeRepository = StoreMemoryRepository.getInstance(storeDatabaseRepositor);    //TODO: change it on version 3
+    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository,StoreRepository storeRepository) {
+        storeRepository = StoreMemoryRepository.getInstance();    //TODO: change it on version 3
         tradingSystem = TradingSystemImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
     }
 

@@ -1,66 +1,68 @@
 package com.example.trading_system.domain.stores;
 
-import com.example.trading_system.domain.users.UserMemoryRepository;
-import com.example.trading_system.service.MarketServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.HashMap;
 
-@Service
+//@Service
 public class StoreMemoryRepository implements StoreRepository {
     private static StoreMemoryRepository instance = null;
+    private HashMap<String, Store> stores;
 
-    private final StoreDatabaseRepository storeDatabaseRepository;
-
-    public StoreMemoryRepository(StoreDatabaseRepository storeDatabaseRepository) {
-        this.storeDatabaseRepository = storeDatabaseRepository;
+    //@Autowired
+    private StoreMemoryRepository() {
+        stores = new HashMap<>();
     }
 
-    public static StoreMemoryRepository getInstance(StoreDatabaseRepository storeDatabaseRepository) {
-        if (instance == null) instance = new StoreMemoryRepository(storeDatabaseRepository);
+    public static StoreMemoryRepository getInstance() {
+        if (instance == null) instance = new StoreMemoryRepository();
         return instance;
     }
 
-
-    @Override
     public void deleteInstance() {
-        storeDatabaseRepository.deleteInstance();
+        if(stores!=null){
+            this.stores.clear();
+        }
+        instance = null;
     }
 
     @Override
     public Store getStore(String storeName) {
-        return storeDatabaseRepository.getStore(storeName);
+        return stores.get(storeName);
     }
 
     @Override
     public boolean isExist(String storeName) {
-        return storeDatabaseRepository.isExist(storeName);
+        return stores.containsKey(storeName);
     }
 
     @Override
     public HashMap<String, Store> getAllStores() {
-        return storeDatabaseRepository.getAllStores();
+        return stores;
     }
 
     @Override
     public void deleteStore(String storeName) {
-        storeDatabaseRepository.deleteStore(storeName);
+        stores.remove(storeName);
     }
 
     @Override
     public Collection<Store> getAllStoresByStores() {
-        return storeDatabaseRepository.getAllStoresByStores();
+        return stores.values();
     }
 
     @Override
     public boolean isEmpty() {
-        return storeDatabaseRepository.isEmpty();
+        return stores.isEmpty();
     }
 
+
     @Override
-    public void addStore(String storeName, String description, String founder, Double storeRating) {
-        storeDatabaseRepository.addStore(storeName, description, founder, storeRating);
+    public void addStore(String storeName, String description, String founder,Double storeRating) {
+        Store store=new Store(storeName,description,founder,storeRating);
+        stores.put(storeName, store);
+        store.addOwner(founder);
     }
 }

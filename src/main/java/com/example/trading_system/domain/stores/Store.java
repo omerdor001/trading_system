@@ -62,8 +62,8 @@ public class Store {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchasePolicy> purchasePolicies = new LinkedList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Message> messages = new LinkedList<>();
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Message> messages = new LinkedList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "store_id")
@@ -88,7 +88,7 @@ public class Store {
         this.discountConditions = new LinkedList<>();
         this.purchasePolicies = new LinkedList<>();
         this.isOpen = true;
-        this.messages = new LinkedList<>();
+        //this.messages = new LinkedList<>();
         this.bids = new LinkedList<>();
        // this.lotteryProducts = new HashMap<>();
     }
@@ -324,9 +324,9 @@ public class Store {
         isOpen = open;
     }
 
-    public String getMessagesJSON() {
-        return Message.toJsonList(this.messages);
-    }
+//    public String getMessagesJSON() {
+//        return Message.toJsonList(this.messages);
+//    }
 
     public synchronized void releaseReservedProducts(int productId, int quantity) {
         getProduct(productId).releaseReservedProducts(quantity);
@@ -406,9 +406,9 @@ public class Store {
         return salesHistory.getPurchaseHistory(username);
     }
 
-    public void receiveMessage(String senderId, String senderUsername, String content) {
-        this.messages.add(new Message(senderId, senderUsername, content));
-    }
+//    public void receiveMessage(String senderId, String senderUsername, String content) {
+//        this.messages.add(new Message(senderId, senderUsername, content));
+//    }
 
     //region Discount creation
     public String getDiscountPoliciesInfo() {
@@ -612,6 +612,7 @@ public class Store {
         if (ageToCheck <= 0)
             throw new IllegalArgumentException("Parameter " + ageToCheck + " cannot be negative or zero");
         if (category <= 0) throw new IllegalArgumentException("Parameter " + category + " cannot be negative or zero");
+        purchasePolicies.add(new PurchasePolicyByAge(ageToCheck, category));
     }
 
     public void addPurchasePolicyByCategoryAndDate(int category, LocalDateTime dateTime) {
@@ -803,12 +804,12 @@ public class Store {
 
     public void editProduct(int productId, String productName, String productDescription, double productPrice, int productQuantity) {
         Product product = getProduct(productId);
-        synchronized (product) {
-            if (product != null) {
+        if(product == null)
+            throw new IllegalArgumentException("Product with id " + productId + " does not exist");
+        else
+            synchronized (product) {
                 product.editProduct(productName, productDescription, productPrice, productQuantity);
-            } else throw new IllegalArgumentException("Product with id " + productId + " does not exist");
         }
-
     }
 
 

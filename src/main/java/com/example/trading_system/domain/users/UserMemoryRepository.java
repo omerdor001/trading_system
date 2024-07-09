@@ -1,26 +1,23 @@
 package com.example.trading_system.domain.users;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 
-@Service
+//@Service
 public class UserMemoryRepository implements UserRepository {
     private static UserMemoryRepository instance = null;
     private HashMap<String, User> users;
-    private final UserDatabaseRepository userDatabaseRepository;
 
-    @Autowired
-    private UserMemoryRepository(UserDatabaseRepository userDatabaseRepository) {
-        this.userDatabaseRepository = userDatabaseRepository;
+    //@Autowired
+    private UserMemoryRepository() {
         users = new HashMap<>();
     }
 
-    public static UserMemoryRepository getInstance(UserDatabaseRepository userDatabaseRepository) {
-        if (instance == null) instance = new UserMemoryRepository(userDatabaseRepository);
+    public static UserMemoryRepository getInstance() {
+        if (instance == null) instance = new UserMemoryRepository();
         return instance;
     }
 
@@ -31,66 +28,51 @@ public class UserMemoryRepository implements UserRepository {
             this.users = null;
         }
         instance = null;
-        userDatabaseRepository.deleteInstance();
     }
 
     @Override
     public User getUser(String username) {
-        if (users.containsKey(username)) {
-            return users.get(username);
-        } else {
-            return userDatabaseRepository.getUser(username);
-        }
+        return users.get(username);
     }
 
     @Override
     public boolean isExist(String username) {
-        if (users.containsKey(username)) {
-            return true;
-        } else {
-            return userDatabaseRepository.isExist(username);
-        }
+        return users.containsKey(username);
     }
 
     @Override
     public boolean isAdmin(String username) {
-        if (isExist(username)) return getUser(username).isAdmin();
+        if (isExist(username)) return users.get(username).isAdmin();
         return false;
     }
 
     @Override
     public boolean isAdminRegistered() {
-        for (User r : users.values()) {
+        for (User r : users.values())
             if (r.isAdmin()) {
                 return true;
             }
-        }
-        return userDatabaseRepository.isAdminRegistered();
+        return false;
     }
 
     @Override
     public HashMap<String, User> getAllUsers() {
-        HashMap<String, User> allUsers = new HashMap<>(users);
-        allUsers.putAll(userDatabaseRepository.getAllUsers());
-        return allUsers;
+        return users;
     }
 
     @Override
     public Collection<User> getAllUsersAsList() {
-        Collection<User> allUsers = users.values();
-        allUsers.addAll(userDatabaseRepository.getAllUsersAsList());
-        return allUsers;
+        return users.values();
     }
 
     @Override
     public void deleteUser(String username) {
         users.remove(username);
-        userDatabaseRepository.deleteUser(username);
     }
 
     @Override
     public boolean isEmpty() {
-        return users.isEmpty() && userDatabaseRepository.isEmpty();
+        return users.isEmpty();
     }
 
     @Override
@@ -100,14 +82,11 @@ public class UserMemoryRepository implements UserRepository {
 
     @Override
     public void addRegistered(String userName, String encryption, LocalDate birthdate) {
-        users.put(userName, new Registered(userName, encryption, birthdate));
-        userDatabaseRepository.addRegistered(userName, encryption, birthdate);
+        users.put(userName, new Registered(userName.substring(1), encryption, birthdate));
     }
 
     @Override
     public void saveUser(User user) {
-        users.put(user.getUsername(), user);
-        userDatabaseRepository.saveUser(user);
     }
 
     @Override
@@ -115,6 +94,6 @@ public class UserMemoryRepository implements UserRepository {
         for (String username : users.keySet()) {
             if (username.startsWith("r")) return false;
         }
-        return userDatabaseRepository.checkIfRegistersEmpty();
+        return true;
     }
 }
