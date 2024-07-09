@@ -1,11 +1,34 @@
 package com.example.trading_system.domain.stores;
 import java.util.*;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Entity
+@Getter
+@Setter
+@Table(name = "bids")
 public class Bid {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String userName;
+
+    @Column(nullable = false)
     private int productID;
+
+    @Column(nullable = false)
     private double price;
-    private LinkedList<String> approvedBy;
+
+    @ElementCollection
+    @CollectionTable(name = "bid_approved_by", joinColumns = @JoinColumn(name = "bid_id"))
+    @Column(name = "approved_by")
+    private List<String> approvedBy = new LinkedList<>();
+
+    @Column(nullable = false)
     private boolean allOwnersApproved;
 
     public Bid(String userName, int productID, double price) {
@@ -14,6 +37,10 @@ public class Bid {
         this.price = price;
         approvedBy = new LinkedList<>();
         allOwnersApproved = false;
+    }
+
+    public Bid() {
+
     }
 
 
@@ -35,7 +62,7 @@ public class Bid {
     }
 
     public LinkedList<String> getApprovedBy() {
-        return approvedBy;
+        return (LinkedList<String>) approvedBy;
     }
 
 

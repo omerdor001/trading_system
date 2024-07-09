@@ -6,21 +6,24 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.*;
 
 import java.util.Collection;
+
+
 @Entity
-@DiscriminatorValue("XorDiscount")
-
+@DiscriminatorValue("XOR")
 public class XorDiscount extends DiscountPolicy {
+
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
-    @ManyToOne
+
+    @OneToOne
     private DiscountPolicy first;
-    @ManyToOne
 
+    @OneToOne
     private DiscountPolicy second;
-    @ManyToOne
 
+    @OneToOne
     private Condition decider;
 
     public XorDiscount() {

@@ -484,18 +484,18 @@ public class MarketServiceImp implements MarketService {
         return marketFacade.getMyBids(userName, storeName);
     }
 
-    @Override
-    public String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception{
-        return marketFacade.buyLotteryProductTicket(userName, storeName, productID, price);
-    }
-
-    @Override
-    public void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception{
-        marketFacade.createProductLottery(userName, storeName, productID, localDateTime, price);
-    }
-
-
-
+//    @Override
+//    public String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception{
+//        return marketFacade.buyLotteryProductTicket(userName, storeName, productID, price);
+//    }
+//
+//    @Override
+//    public void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception{
+//        marketFacade.createProductLottery(userName, storeName, productID, localDateTime, price);
+//    }
+//
+//
+//
 
 
 }

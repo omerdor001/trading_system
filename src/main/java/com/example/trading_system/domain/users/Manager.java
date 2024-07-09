@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "manager_roles")
+@DiscriminatorValue("MANAGER")
+
 public class Manager extends RoleState {
 
     @JsonIgnore

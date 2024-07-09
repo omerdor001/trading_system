@@ -288,9 +288,9 @@ public interface TradingSystem {
 
     ResponseEntity<String> getMyBids(String userName, String token, String storeName);
 
-    ResponseEntity<String> buyLotteryProductTicket(String userName, String token, String storeName, int productID, double price);
-
-    ResponseEntity<String> createProductLottery(String userName, String token, String storeName, int productID, LocalDateTime localDateTime, double price);
+//    ResponseEntity<String> buyLotteryProductTicket(String userName, String token, String storeName, int productID, double price);
+//
+//    ResponseEntity<String> createProductLottery(String userName, String token, String storeName, int productID, LocalDateTime localDateTime, double price);
 
     ResponseEntity<String> editProduct(String username, String token, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity);
 

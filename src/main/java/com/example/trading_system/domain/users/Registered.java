@@ -11,7 +11,6 @@ import java.time.Period;
 import java.util.*;
 
 @Entity
-@Table(name = "registered_users")
 public class Registered extends User {
     @Column(nullable = false)
     private String encrypted_pass;
@@ -56,6 +55,10 @@ public class Registered extends User {
         this.roles = new ArrayList<>();
         this.managerSuggestions = new HashMap<>();
         this.ownerSuggestions = new HashMap<>();
+    }
+
+    public Registered() {
+
     }
 
     public void openStore(String storeName) {

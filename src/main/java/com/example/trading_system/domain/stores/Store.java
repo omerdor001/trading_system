@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import jakarta.persistence.*;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,50 +19,60 @@ import java.util.stream.Collectors;
 @Setter
 @Getter
 @Entity
+@Table(name = "stores")
 public class Store {
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
-    @Getter
+
     @Id
+    @Column(name = "name_id")
     private String nameId;
+
     private String description;
-    //Added because missing
-    @Getter
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "store_id")
-    private HashMap<Integer, Product> products;
-    //Added because missing
-    @Getter
+    private Map<Integer, Product> products = new HashMap<>();
+
     @ElementCollection
-    private List<String> managers;
-    //Added because missing
-    @Getter
+    @CollectionTable(name = "store_managers", joinColumns = @JoinColumn(name = "store_id"))
+    @Column(name = "manager")
+    private List<String> managers = new LinkedList<>();
+
     @ElementCollection
-    private List<String> owners;
-    @Getter
+    @CollectionTable(name = "store_owners", joinColumns = @JoinColumn(name = "store_id"))
+    @Column(name = "owner")
+    private List<String> owners = new LinkedList<>();
+
     private String founder;
-    @Getter
-    @Setter
     private boolean isActive;
     private boolean isOpen;
+
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    private StoreSalesHistory salesHistory;
-    @Getter
-    @Setter
+    @JoinColumn(name = "sales_history_id", referencedColumnName = "id")
+    private StoreSalesHistory salesHistory = new StoreSalesHistory();
+
     private Double storeRating;
-    @Getter
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private LinkedList<DiscountPolicy> discountPolicies;
-    @Getter
+    private List<DiscountPolicy> discountPolicies = new LinkedList<>();
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private LinkedList<Condition> discountConditions;
-    @Getter
+    private List<Condition> discountConditions = new LinkedList<>();
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private LinkedList<PurchasePolicy> purchasePolicies;
-    @Getter
+    private List<PurchasePolicy> purchasePolicies = new LinkedList<>();
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private LinkedList<Message> messages;
-    private LinkedList<Bid> bids;
-    private HashMap<Integer, ProductLottery> lotteryProducts;
+    private List<Message> messages = new LinkedList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "store_id")
+    private List<Bid> bids;
+
+//    @ElementCollection
+//    @CollectionTable(name = "store_lottery_products", joinColumns = @JoinColumn(name = "store_id"))
+//    @MapKeyColumn(name = "product_id")
+//    private HashMap<Integer, ProductLottery> lotteryProducts = new HashMap<>();
 
     public Store(String nameId, String description, String founder, Double storeRating) {
         this.nameId = nameId;
@@ -81,7 +90,7 @@ public class Store {
         this.isOpen = true;
         this.messages = new LinkedList<>();
         this.bids = new LinkedList<>();
-        this.lotteryProducts = new HashMap<>();
+       // this.lotteryProducts = new HashMap<>();
     }
 
     public Store() {
@@ -603,7 +612,6 @@ public class Store {
         if (ageToCheck <= 0)
             throw new IllegalArgumentException("Parameter " + ageToCheck + " cannot be negative or zero");
         if (category <= 0) throw new IllegalArgumentException("Parameter " + category + " cannot be negative or zero");
-        purchasePolicies.add(new PurchasePolicyByAge(ageToCheck, category));
     }
 
     public void addPurchasePolicyByCategoryAndDate(int category, LocalDateTime dateTime) {
@@ -775,23 +783,23 @@ public class Store {
         sb.append("}");
         return sb.toString();
     }
-
-    public void createProductLottery(int productID, LocalDateTime localDateTime, double price) {
-        ProductLottery productLottery = new ProductLottery(localDateTime, price);
-        this.lotteryProducts.put(productID, productLottery);
-    }
-
-    public boolean buyLotteryProductTicket(String userName, int productID, double price) throws Exception {
-        return lotteryProducts.get(productID).buyLotteryProductTicket(userName, price);
-    }
-
-    public String makeLotteryOnProduct(int productID) {
-        return lotteryProducts.get(productID).makeLotteryOnProduct();
-    }
-
-    public boolean isLotteryExist(int productID) {
-        return lotteryProducts.containsKey(productID);
-    }
+//
+//    public void createProductLottery(int productID, LocalDateTime localDateTime, double price) {
+//        ProductLottery productLottery = new ProductLottery(localDateTime, price);
+//        this.lotteryProducts.put(productID, productLottery);
+//    }
+//
+//    public boolean buyLotteryProductTicket(String userName, int productID, double price) throws Exception {
+//        return lotteryProducts.get(productID).buyLotteryProductTicket(userName, price);
+//    }
+//
+//    public String makeLotteryOnProduct(int productID) {
+//        return lotteryProducts.get(productID).makeLotteryOnProduct();
+//    }
+//
+//    public boolean isLotteryExist(int productID) {
+//        return lotteryProducts.containsKey(productID);
+//    }
 
     public void editProduct(int productId, String productName, String productDescription, double productPrice, int productQuantity) {
         Product product = getProduct(productId);

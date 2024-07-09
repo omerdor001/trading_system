@@ -2023,34 +2023,34 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-    @Override
-    public ResponseEntity<String> buyLotteryProductTicket(String userName, String token, String storeName, int productID, double price) {
-        logger.info("{} is trying to buy lottery product ticket for product {} in store {} at price {}", userName, productID, storeName, price);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
-            String result = marketService.buyLotteryProductTicket(userName, storeName, productID, price);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while {} trying to buy lottery product ticket for product {} in store {} ", userName, productID, storeName);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
-    public ResponseEntity<String> createProductLottery(String userName, String token, String storeName, int productID, LocalDateTime localDateTime, double price) {
-        logger.info("{} is trying to get create product lottery for product {} in store {} at price {} until {} ", userName, productID, storeName, price, localDateTime);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
-            marketService.createProductLottery(userName, storeName, productID, localDateTime, price);
-            return new ResponseEntity<>("Created product lottery successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while {} trying to create product lottery for product {} in store {}", userName, productID, storeName);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
+//
+//    @Override
+//    public ResponseEntity<String> buyLotteryProductTicket(String userName, String token, String storeName, int productID, double price) {
+//        logger.info("{} is trying to buy lottery product ticket for product {} in store {} at price {}", userName, productID, storeName, price);
+//        try {
+//            if (checkSystemClosed()) return systemClosedResponse();
+//            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
+//           // String result = marketService.buyLotteryProductTicket(userName, storeName, productID, price);
+//            return new ResponseEntity<>(result, HttpStatus.OK);
+//        } catch (Exception e) {
+//            logger.error("Error occurred while {} trying to buy lottery product ticket for product {} in store {} ", userName, productID, storeName);
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
+//    @Override
+//    public ResponseEntity<String> createProductLottery(String userName, String token, String storeName, int productID, LocalDateTime localDateTime, double price) {
+//        logger.info("{} is trying to get create product lottery for product {} in store {} at price {} until {} ", userName, productID, storeName, price, localDateTime);
+//        try {
+//            if (checkSystemClosed()) return systemClosedResponse();
+//            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
+//            marketService.createProductLottery(userName, storeName, productID, localDateTime, price);
+//            return new ResponseEntity<>("Created product lottery successfully", HttpStatus.OK);
+//        } catch (Exception e) {
+//            logger.error("Error occurred while {} trying to create product lottery for product {} in store {}", userName, productID, storeName);
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
 
 }

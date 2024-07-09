@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,12 +27,10 @@ public class MarketFacadeImp implements MarketFacade {
     private StoreRepository storeRepository;
     private UserFacade userFacade;
 
-
     @Autowired
-    private MarketFacadeImp(StoreRepository storeRepository) {
+    public MarketFacadeImp(@Qualifier("storeDatabaseRepository") StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
     }
-
     public static MarketFacadeImp getInstance(StoreRepository storeRepository) {
         if (instance == null) instance = new MarketFacadeImp(storeRepository);
         return instance;
@@ -1544,32 +1543,32 @@ public class MarketFacadeImp implements MarketFacade {
 
     }
 
-    @Override
-    public void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception{
-        validateUserAndStore(userName, storeName);
-        Store store = storeRepository.getStore(storeName);
-        if(!store.isProductExist(productID))
-            throw new IllegalArgumentException("Product must exist in store");
-        if(localDateTime.isBefore(LocalDateTime.now()) || localDateTime.isEqual(LocalDateTime.now()))
-            throw new Exception("Cant create lottery for past or present");
-        User user = userFacade.getUser(userName);
-        user.getRoleByStoreId(storeName).createProductLottery();
-        store.createProductLottery(productID,localDateTime,price);
-    }
-
-    @Override
-    public String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception{
-        validateUserAndStore(userName, storeName);
-        Store store = storeRepository.getStore(storeName);
-        if(!store.isLotteryExist(productID))
-            throw new Exception("Lottery does not exist");
-        if(store.buyLotteryProductTicket(userName, productID, price)){
-            return store.makeLotteryOnProduct(productID) + " won the product " + productID;
-        }
-        else
-            return "Ticket Bought Successfully";
-
-    }
+//    @Override
+//    public void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception{
+//        validateUserAndStore(userName, storeName);
+//        Store store = storeRepository.getStore(storeName);
+//        if(!store.isProductExist(productID))
+//            throw new IllegalArgumentException("Product must exist in store");
+//        if(localDateTime.isBefore(LocalDateTime.now()) || localDateTime.isEqual(LocalDateTime.now()))
+//            throw new Exception("Cant create lottery for past or present");
+//        User user = userFacade.getUser(userName);
+//        user.getRoleByStoreId(storeName).createProductLottery();
+//      //  store.createProductLottery(productID,localDateTime,price);
+//    }
+//
+//    @Override
+//    public String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception{
+//        validateUserAndStore(userName, storeName);
+//        Store store = storeRepository.getStore(storeName);
+//        if(!store.isLotteryExist(productID))
+//            throw new Exception("Lottery does not exist");
+//        if(store.buyLotteryProductTicket(userName, productID, price)){
+//            return store.makeLotteryOnProduct(productID) + " won the product " + productID;
+//        }
+//        else
+//            return "Ticket Bought Successfully";
+//
+//    }
 
 
 

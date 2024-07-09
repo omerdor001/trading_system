@@ -1,13 +1,15 @@
 package com.example.trading_system.domain.users;
 
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import java.util.List;
 
-@MappedSuperclass
+@Entity
 public abstract class RoleState {
-    @OneToOne(mappedBy = "roleState")
+    @Id
+    private Long id; // Add an ID field if it does not already exist
+
+    @Transient
     protected Role role;
 
     public Role getRole() {
