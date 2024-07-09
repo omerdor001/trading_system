@@ -519,14 +519,14 @@ public class TradingSystemRestController {
     public ResponseEntity<String> getDiscountPolicies(@RequestParam String username,
                                                       @RequestParam String token,
                                                       @PathVariable String storeName) {
-        return tradingSystem.getDiscountPolicies("r" + username, token, storeName);
+        return tradingSystem.getDiscountPolicies(username, token, storeName);
     }
 
     @GetMapping("/store/{storeName}/discount-conditions")
     public ResponseEntity<String> getDiscountConditions(@RequestParam String username,
                                                         @RequestParam String token,
                                                         @PathVariable String storeName) {
-        return tradingSystem.getDiscountConditions("r" + username, token, storeName);
+        return tradingSystem.getDiscountConditions(username, token, storeName);
     }
 
     @PostMapping("/store/{storeName}/discounts/category-percentage")
@@ -535,7 +535,7 @@ public class TradingSystemRestController {
                                                                 @PathVariable String storeName,
                                                                 @RequestParam int category,
                                                                 @RequestParam double discountPercent) {
-        return tradingSystem.addCategoryPercentageDiscount("r" + username, token, storeName, category, discountPercent);
+        return tradingSystem.addCategoryPercentageDiscount(username, token, storeName, category, discountPercent);
     }
 
     @PostMapping("/store/{storeName}/discounts/product-percentage")
@@ -544,7 +544,7 @@ public class TradingSystemRestController {
                                                                @PathVariable String storeName,
                                                                @RequestParam int productId,
                                                                @RequestParam double discountPercent) {
-        return tradingSystem.addProductPercentageDiscount("r" + username, token, storeName, productId, discountPercent);
+        return tradingSystem.addProductPercentageDiscount(username, token, storeName, productId, discountPercent);
     }
 
     @PostMapping("/store/{storeName}/discounts/store")
@@ -552,28 +552,28 @@ public class TradingSystemRestController {
                                                    @RequestParam String token,
                                                    @PathVariable String storeName,
                                                    @RequestParam double discountPercent) {
-        return tradingSystem.addStoreDiscount("r" + username, token, storeName, discountPercent);
+        return tradingSystem.addStoreDiscount(username, token, storeName, discountPercent);
     }
 
     @PostMapping("/store/{storeName}/discounts/conditional")
     public ResponseEntity<String> addConditionalDiscount(@RequestParam String username,
                                                          @RequestParam String token,
                                                          @PathVariable String storeName) {
-        return tradingSystem.addConditionalDiscount("r" + username, token, storeName);
+        return tradingSystem.addConditionalDiscount(username, token, storeName);
     }
 
     @PostMapping("/store/{storeName}/discounts/additive")
     public ResponseEntity<String> addAdditiveDiscount(@RequestParam String username,
                                                       @RequestParam String token,
                                                       @PathVariable String storeName) {
-        return tradingSystem.addAdditiveDiscount("r" + username, token, storeName);
+        return tradingSystem.addAdditiveDiscount(username, token, storeName);
     }
 
     @PostMapping("/store/{storeName}/discounts/max")
     public ResponseEntity<String> addMaxDiscount(@RequestParam String username,
                                                  @RequestParam String token,
                                                  @PathVariable String storeName) {
-        return tradingSystem.addMaxDiscount("r" + username, token, storeName);
+        return tradingSystem.addMaxDiscount(username, token, storeName);
     }
 
     @PostMapping("/store/{storeName}/conditions/category-count")
@@ -582,7 +582,7 @@ public class TradingSystemRestController {
                                                             @PathVariable String storeName,
                                                             @RequestParam int category,
                                                             @RequestParam int count) {
-        return tradingSystem.addCategoryCountCondition("r" + username, token, storeName, category, count);
+        return tradingSystem.addCategoryCountCondition(username, token, storeName, category, count);
     }
 
     @PostMapping("/store/{storeName}/conditions/total-sum")
@@ -590,7 +590,7 @@ public class TradingSystemRestController {
                                                        @RequestParam String token,
                                                        @PathVariable String storeName,
                                                        @RequestParam double requiredSum) {
-        return tradingSystem.addTotalSumCondition("r" + username, token, storeName, requiredSum);
+        return tradingSystem.addTotalSumCondition(username, token, storeName, requiredSum);
     }
 
     @PostMapping("/store/{storeName}/conditions/product-count")
@@ -599,28 +599,28 @@ public class TradingSystemRestController {
                                                            @PathVariable String storeName,
                                                            @RequestParam int productId,
                                                            @RequestParam int count) {
-        return tradingSystem.addProductCountCondition("r" + username, token, storeName, productId, count);
+        return tradingSystem.addProductCountCondition(username, token, storeName, productId, count);
     }
 
     @PostMapping("/store/{storeName}/discounts/and")
     public ResponseEntity<String> addAndDiscount(@RequestParam String username,
                                                  @RequestParam String token,
                                                  @PathVariable String storeName) {
-        return tradingSystem.addAndDiscount("r" + username, token, storeName);
+        return tradingSystem.addAndDiscount(username, token, storeName);
     }
 
     @PostMapping("/store/{storeName}/discounts/or")
     public ResponseEntity<String> addOrDiscount(@RequestParam String username,
                                                 @RequestParam String token,
                                                 @PathVariable String storeName) {
-        return tradingSystem.addOrDiscount("r" + username, token, storeName);
+        return tradingSystem.addOrDiscount(username, token, storeName);
     }
 
     @PostMapping("/store/{storeName}/discounts/xor")
     public ResponseEntity<String> addXorDiscount(@RequestParam String username,
                                                  @RequestParam String token,
                                                  @PathVariable String storeName) {
-        return tradingSystem.addXorDiscount("r" + username, token, storeName);
+        return tradingSystem.addXorDiscount(username, token, storeName);
     }
 
     @DeleteMapping("/store/{storeName}/discounts/removeDiscount/{selectedIndex}")
@@ -628,7 +628,7 @@ public class TradingSystemRestController {
                                                  @RequestParam String token,
                                                  @PathVariable String storeName,
                                                  @PathVariable int selectedIndex) {
-        return tradingSystem.removeDiscount("r"+username, token, storeName, selectedIndex);
+        return tradingSystem.removeDiscount(username, token, storeName, selectedIndex);
     }
 
     @DeleteMapping("/store/{storeName}/discounts/removeCondition/{selectedIndex}")
