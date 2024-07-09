@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8088") //TODO IP and Port (general)
+@CrossOrigin(origins = "http://localhost:8080") //TODO IP and Port (general)
 @RequestMapping("/api/trading")
 public class TradingSystemRestController {
 
@@ -391,6 +391,18 @@ public class TradingSystemRestController {
     public ResponseEntity<String> getProductInfo(@RequestParam String userName, @RequestParam String token,
                                                  @RequestParam String storeName, @RequestParam int product_Id) {
         return tradingSystem.getProductInfo("r"+ userName, token, storeName, product_Id);
+    }
+
+    @GetMapping("/store/get-owners")
+    public ResponseEntity<String> getOwnersOfStore(@RequestParam String username, @RequestParam String token,
+                                                 @RequestParam String storeName) {
+        return tradingSystem.getOwnersOfStore(username,token,storeName);
+    }
+
+    @GetMapping("/store/get-managers")
+    public ResponseEntity<String> getManagersOfStore(@RequestParam String username, @RequestParam String token,
+                                                   @RequestParam String storeName) {
+        return tradingSystem.getManagersOfStore(username,token,storeName);
     }
 
     @GetMapping("/categories")

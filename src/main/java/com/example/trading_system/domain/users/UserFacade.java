@@ -116,5 +116,7 @@ public interface UserFacade {
 
     String getPermissionsForUserJSONFormat(String username,String storeName);
 
+    String getManagersOfStore(String username, String storeName);
+
     void bidPurchase(String userName, String storeName, int productID, double price) throws Exception;
 }

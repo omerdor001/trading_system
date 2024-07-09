@@ -151,6 +151,28 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
+    public String getOwnersOfStore(String username,String storeName){
+        validateUserAndStore(username,storeName);
+        List<Map<String, Object>> ownersList = new ArrayList<>();
+        for(String user:storeRepository.getStore(storeName).getOwners()){
+            Map<String, Object> ownerMap = new HashMap<>();
+            if(storeRepository.getStore(storeName).getFounder().equals(user))
+                ownerMap.put("founder",true);
+            else
+                ownerMap.put("founder",true);
+            ownerMap.put("username",user);
+            ownersList.add(ownerMap);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(ownersList);
+        } catch (JsonProcessingException e) {
+            logger.error("Error converting stores to JSON", e);
+            return "Error converting stores to JSON";
+        }
+    }
+
+    @Override
     public String getCategories(String username){
         if (!userFacade.isUserExist(username)) {
             throw new IllegalArgumentException("User must exist");
@@ -1570,6 +1592,8 @@ public class MarketFacadeImp implements MarketFacade {
             return "Ticket Bought Successfully";
 
     }
+
+
 
 
 

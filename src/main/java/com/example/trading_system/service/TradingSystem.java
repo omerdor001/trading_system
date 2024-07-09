@@ -115,6 +115,10 @@ public interface TradingSystem {
 
     ResponseEntity<String> getPurchaseHistoryJSONFormat(String username, String token);
 
+    ResponseEntity<String> getManagersOfStore(String username,String token, String storeName);
+
+    ResponseEntity<String> getOwnersOfStore(String username,String token,String storeName);
+
     //search in specific store
 
     ResponseEntity<String> searchProductsInStores(String userName, String token, String keyWord, double minPrice, double maxPrice, String categories, Double rating);

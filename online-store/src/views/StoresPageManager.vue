@@ -27,9 +27,10 @@
           <!-- Left column for description and products -->
           <div class="details-column">
             <p><strong>Description:</strong> {{ selectedStore.description }}</p>
-            <div class="manage-products-link">
-              <p><strong>Products:</strong> <router-link :to="`/product-list/${selectedStore.name}/${selectedStore.permissions.isEditSupply}`">View Products</router-link></p>
-            </div>
+            <p><strong>Products:</strong></p>
+            <PrimeButton class="option-button primary" @click="navigateToProductsInStore(selectedStore.name,selectedStore.permissions.isEditSupply)">View Products</PrimeButton>
+            <p><strong>Workers:</strong></p>
+            <PrimeButton class="option-button primary" @click="navigateToWorkersInStore(selectedStore.name)">View Workers</PrimeButton>
           </div>
           <!-- Right column for founder, isActive, rating, isOpen -->
           <div class="details-column">
@@ -64,7 +65,7 @@ import PrimeButton from 'primevue/button';
 import axios from 'axios';
 
 export default defineComponent({
-  name: 'MyStoresIOwn',
+  name: 'StoresPageManager',
   components: {
     SiteHeader,
     'p-toast': PrimeToast,
@@ -133,18 +134,16 @@ export default defineComponent({
       selectedStore.value = null;
     };
 
-    const viewProducts = (storeName) => {
-      router.push({ name: 'ProductList', params: { storeName } });
+    const navigateToProductsInStore = (storeName,isEditSupply) => {
+      router.push({ name: 'ProductList', params: { storeName,isEditSupply } });
+    };
+
+    const navigateToWorkersInStore = (storeName) => {
+      router.push({ name: 'WorkersInStore', params: { storeName } });
     };
 
     const getStatusText = (status) => {
       return status ? 'Active' : 'Inactive';
-    };
-
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      router.push('/login');
     };
 
     const suggestOwner = (storeName) => {
@@ -205,9 +204,9 @@ export default defineComponent({
       token,
       showStoreDetails,
       selectedStore,
-      viewProducts,
+      navigateToProductsInStore,
+      navigateToWorkersInStore,
       getStatusText,
-      logout,
       closeModal,
       suggestOwner,
       suggestManager,
@@ -228,14 +227,14 @@ export default defineComponent({
 .content {
   width: 80%;
   padding: 15px;
-  margin: auto; 
+  margin: auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .store-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px; 
+  gap: 20px;
 }
 
 .store-item {
@@ -244,7 +243,7 @@ export default defineComponent({
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .store-content {
@@ -265,7 +264,7 @@ export default defineComponent({
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); 
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -276,25 +275,25 @@ export default defineComponent({
   background-color: #fefefe;
   padding: 30px;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   max-width: 80%;
   max-height: 80%;
   overflow-y: auto;
   position: relative;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .store-details {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
-  font-family: inherit; 
+  font-family: inherit;
 }
 
 .details-column {
   flex: 1;
   margin-right: 20px;
-  font-family: inherit; 
+  font-family: inherit;
 }
 
 .close-button {
@@ -304,24 +303,24 @@ export default defineComponent({
   color: #aaa;
   cursor: pointer;
   font-size: 24px;
-  font-family: inherit; 
+  font-family: inherit;
 }
 
-.close-button:hover {
+close-button:hover {
   color: #555;
 }
 
 .manage-products-link {
   margin-top: 10px;
-  margin-left: 5px; 
-  font-family: inherit; 
+  margin-left: 5px;
+  font-family: inherit;
 }
 
 .manage-products-link a {
   margin-bottom: 0;
   text-decoration: none;
-  color: #007bff; 
-  font-family: inherit; 
+  color: #007bff;
+  font-family: inherit;
 }
 
 .options-container {
@@ -329,27 +328,27 @@ export default defineComponent({
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
-  font-family: inherit; 
+  font-family: inherit;
 }
 
 .option-button {
-  background-color: #007bff; 
+  background-color: #007bff;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  font-family: inherit; 
+  font-family: inherit;
 }
 
 .option-button:hover {
-  background-color: #0056b3; 
+  background-color: #0056b3;
 }
 
 .primary {
-  background-color: #cce5ff; 
-  color: black; 
-  font-family: inherit; 
+  background-color: #cce5ff;
+  color: black;
+  font-family: inherit;
 }
 
 .primary:hover {

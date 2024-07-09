@@ -59,6 +59,11 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public String getOwnersOfStore(String username, String storeName) {
+        return marketFacade.getOwnersOfStore(username,storeName);
+    }
+
+    @Override
     public String getCategories(String username) {
         return marketFacade.getCategories(username);
     }
