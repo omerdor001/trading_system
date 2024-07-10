@@ -118,6 +118,16 @@ public class Visitor extends User {
         return false;
     }
 
+    @Override
+    public boolean isAcceptBids(String storeName) {
+        return false;
+    }
+
+    @Override
+    public boolean isCreateLottery(String storeName) {
+        return false;
+    }
+
 
     @Override
     public boolean removeWaitingAppoint_Owner(String storeName) {

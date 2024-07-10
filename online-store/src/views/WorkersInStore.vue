@@ -11,11 +11,11 @@
 
       <!-- Data Table -->
       <div class="data-table">
-        <h2 v-if="selectedRole === 'owners'">Owners of Store: {{ storeName }}</h2>
-        <h2 v-if="selectedRole === 'managers'">Managers of Store: {{ storeName }}</h2>
+        <h2 v-if="selectedRole.value === 'owners'">Owners of Store: {{ storeName }}</h2>
+        <h2 v-if="selectedRole.value === 'managers'">Managers of Store: {{ storeName }}</h2>
 
         <!-- Owners Table -->
-        <PrimeDataTable v-if="selectedRole === 'owners' && owners.length > 0" :value="owners" responsive :paginator="true" :rows="10">
+        <PrimeDataTable v-if="selectedRole.value === 'owners' && owners.length > 0" :value="owners" responsive :paginator="true" :rows="10">
           <PrimeColumn field="username" header="Username"></PrimeColumn>
           <PrimeColumn field="founder" header="Founder">
             <template #body="slotProps">
@@ -23,12 +23,12 @@
             </template>
           </PrimeColumn>
         </PrimeDataTable>
-        <div v-if="selectedRole === 'owners' && owners.length === 0">
+        <div v-if="selectedRole.value === 'owners' && owners.length === 0">
           <p>No owners found.</p>
         </div>
 
         <!-- Managers Table -->
-        <PrimeDataTable v-if="selectedRole === 'managers' && managers.length > 0" :value="managers" responsive :paginator="true" :rows="10">
+        <PrimeDataTable v-if="selectedRole.value === 'managers' && managers.length > 0" :value="managers" responsive :paginator="true" :rows="10">
           <PrimeColumn field="username" header="Username"></PrimeColumn>
           <PrimeColumn field="watch" header="Watch Permission">
             <template #body="slotProps">
@@ -50,12 +50,67 @@
               <i :class="['pi', slotProps.data.editDiscountPolicy ? 'pi-check' : 'pi-times']"></i>
             </template>
           </PrimeColumn>
+          <PrimeColumn field="acceptBids" header="Accept Bids">
+            <template #body="slotProps">
+              <i :class="['pi', slotProps.data.acceptBids ? 'pi-check' : 'pi-times']"></i>
+            </template>
+          </PrimeColumn>
+          <PrimeColumn field="createLottery" header="Create Lottery">
+            <template #body="slotProps">
+              <i :class="['pi', slotProps.data.createLottery ? 'pi-check' : 'pi-times']"></i>
+            </template>
+          </PrimeColumn>
+          <PrimeColumn header="Actions">
+            <template #body="slotProps">
+              <PrimeButton icon="pi pi-pencil" @click="editPermissions(slotProps.data)" />
+            </template>
+          </PrimeColumn>
         </PrimeDataTable>
-        <div v-if="selectedRole === 'managers' && managers.length === 0">
+        <div v-if="selectedRole.value === 'managers' && managers.length === 0">
           <p>No managers found.</p>
         </div>
       </div>
     </div>
+
+    <PrimeDialog header="Edit Permissions" :visible="editDialogVisible" :modal="true" @hide="closeDialog">
+      <div class="edit-permissions-form">
+        <h3>Edit Permissions for: {{ selectedManager.username }}</h3>
+        <div>
+          <label>
+            <input type="checkbox" v-model="selectedManager.watch" /> Watch Permission
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" v-model="selectedManager.editSupply" /> Edit Supply Permission
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" v-model="selectedManager.editBuyPolicy" /> Edit Buy Policy Permission
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" v-model="selectedManager.editDiscountPolicy" /> Edit Discount Policy Permission
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" v-model="selectedManager.acceptBids" /> Accept Bids
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" v-model="selectedManager.createLottery" /> Create Lottery
+          </label>
+        </div>
+        <div class="dialog-footer">
+          <PrimeButton label="Save" icon="pi pi-check" @click="savePermissions" />
+          <PrimeButton label="Cancel" icon="pi pi-times" class="p-button-secondary" @click="closeDialog" />
+        </div>
+      </div>
+    </PrimeDialog>
 
     <PrimeToast ref="toast" :position="'top-right'" :life="3000"></PrimeToast>
   </div>
@@ -65,9 +120,11 @@
 import axios from 'axios';
 import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
-import { PrimeDropdown } from 'primevue/dropdown';
-import { PrimeDataTable, PrimeColumn } from 'primevue/datatable';
-import { PrimeToast } from 'primevue/toast';
+import { Dropdown as PrimeDropdown } from 'primevue/dropdown';
+import { DataTable as PrimeDataTable, Column as PrimeColumn } from 'primevue/datatable';
+import { Button as PrimeButton } from 'primevue/button';
+import { Dialog as PrimeDialog } from 'primevue/dialog';
+import { Toast as PrimeToast } from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
 
@@ -78,6 +135,8 @@ export default defineComponent({
     PrimeDropdown,
     PrimeDataTable,
     PrimeColumn,
+    PrimeButton,
+    PrimeDialog,
     PrimeToast,
   },
   setup() {
@@ -88,7 +147,9 @@ export default defineComponent({
     const username = localStorage.getItem('username');
     const token = localStorage.getItem('token');
     const toast = useToast();
-    const selectedRole = ref('managers'); // Default selected role
+    const selectedRole = ref('');
+    const editDialogVisible = ref(false);
+    const selectedManager = ref({});
 
     const fetchData = async () => {
       try {
@@ -105,8 +166,11 @@ export default defineComponent({
           watch: manager.watch,
           editSupply: manager.editSupply,
           editBuyPolicy: manager.editBuyPolicy,
-          editDiscountPolicy: manager.editDiscountPolicy
+          editDiscountPolicy: manager.editDiscountPolicy,
+          acceptBids: manager.acceptBids,
+          createLottery: manager.createLottery,
         }));
+        console.log('Managers:', managers.value);
 
         // Fetch owners
         const ownersResponse = await axios.get(`http://localhost:8082/api/trading/store/get-owners`, {
@@ -120,6 +184,7 @@ export default defineComponent({
           founder: owner.founder,
           username: owner.username,
         }));
+        console.log('Owners:', owners.value);
       } catch (err) {
         toast.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
       }
@@ -129,16 +194,40 @@ export default defineComponent({
       fetchData();
     });
 
+    const editPermissions = (manager) => {
+      selectedManager.value = { ...manager };
+      editDialogVisible.value = true;
+    };
+
+    const savePermissions = async () => {
+      try {
+        await axios.put(`http://localhost:8082/api/trading/store/edit-permission-for-manager`, {
+          userId: username,
+          managerToEdit: selectedManager.value.username,
+          storeName: storeName.value,
+          watch: selectedManager.value.watch,
+          editSupply: selectedManager.value.editSupply,
+          editBuyPolicy: selectedManager.value.editBuyPolicy,
+          editDiscountPolicy: selectedManager.value.editDiscountPolicy,
+          acceptBids: selectedManager.value.acceptBids,
+          createLottery: selectedManager.value.createLottery,
+        });
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Permissions updated successfully', life: 3000 });
+        fetchData();
+        closeDialog();
+      } catch (err) {
+        toast.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
+      }
+    };
+
+    const closeDialog = () => {
+      editDialogVisible.value = false;
+    };
+
     const roleOptions = [
       { label: 'Managers', value: 'managers' },
       { label: 'Owners', value: 'owners' }
     ];
-
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
 
     return {
       username,
@@ -147,7 +236,11 @@ export default defineComponent({
       owners,
       selectedRole,
       roleOptions,
-      logout,
+      editDialogVisible,
+      selectedManager,
+      editPermissions,
+      savePermissions,
+      closeDialog,
     };
   },
 });
@@ -179,5 +272,20 @@ export default defineComponent({
   margin-top: 20px;
   color: red;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.edit-permissions-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-permissions-form div {
+  margin-bottom: 10px;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 </style>

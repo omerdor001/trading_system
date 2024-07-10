@@ -160,7 +160,7 @@ public class MarketFacadeImp implements MarketFacade {
                 ownerMap.put("founder",true);
             else
                 ownerMap.put("founder",true);
-            ownerMap.put("username",user);
+            ownerMap.put("username",user.substring(1));
             ownersList.add(ownerMap);
         }
         ObjectMapper objectMapper = new ObjectMapper();

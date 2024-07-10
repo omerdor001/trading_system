@@ -1232,6 +1232,8 @@ public class UserFacadeImp implements UserFacade {
         approveMap.put("editSupply", permissions.get(1));
         approveMap.put("editBuyPolicy", permissions.get(2));
         approveMap.put("editDiscountPolicy", permissions.get(3));
+        approveMap.put("editAcceptBids",permissions.get(4));
+        approveMap.put("editCreateLottery",permissions.get(5));
         return approveMap;
     }
 
@@ -1251,6 +1253,8 @@ public class UserFacadeImp implements UserFacade {
         permissions.put("editSupply", user.isEditSupply(storeName));
         permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
         permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
+        permissions.put("editAcceptBids", user.isAcceptBids(storeName));
+        permissions.put("editCreateLottery", user.isCreateLottery(storeName));
         try {
             return mapper.writeValueAsString(permissions);
         } catch (JsonProcessingException e) {
@@ -1270,12 +1274,17 @@ public class UserFacadeImp implements UserFacade {
         List<Map<String, Object>> managers = new ArrayList<>();
         for (User user : userRepository.getAllUsersAsList()) {
             Map<String, Object> permissions = new HashMap<>();
-            permissions.put("username", user.getUsername());
-            permissions.put("watch", user.isWatch(storeName));
-            permissions.put("editSupply", user.isEditSupply(storeName));
-            permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
-            permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
-            managers.add(permissions);
+            if(!user.getUsername().equals(username)){
+                permissions.put("username", user.getUsername());
+                permissions.put("username", user.getUsername());
+                permissions.put("watch", user.isWatch(storeName));
+                permissions.put("editSupply", user.isEditSupply(storeName));
+                permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
+                permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
+                permissions.put("editAcceptBids", user.isAcceptBids(storeName));
+                permissions.put("editCreateLottery", user.isCreateLottery(storeName));
+                managers.add(permissions);
+            }
         }
         try {
             return mapper.writeValueAsString(managers);

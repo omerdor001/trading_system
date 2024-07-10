@@ -141,6 +141,14 @@ public class Role {
         return roleState.isEditDiscountPolicy();
     }
 
+    public boolean isAcceptBids(){
+        return roleState.isAcceptBids();
+    }
+
+    public boolean isCreateLottery(){
+        return roleState.isCreateLottery();
+    }
+
 }
 
 
