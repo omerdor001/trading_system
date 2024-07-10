@@ -36,6 +36,10 @@ public class ShoppingBag {
         products_list = new HashMap<>();
     }
 
+    public ShoppingBag() {
+
+    }
+
     public String getStoreId() {
         return storeId;
     }

@@ -6,13 +6,17 @@ import jakarta.persistence.*;
 
 import java.util.Collection;
 @Entity
-@DiscriminatorValue("PercentageDiscountByStore")
-public class PercentageDiscountByStore extends  DiscountPolicy {
-    private double discountPercent;
+@DiscriminatorValue("PERCENTAGE_STORE")
+public class PercentageDiscountByStore extends DiscountPolicy {
+
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
+
+    @Column(name = "discount_percent")
+    private double discountPercent;
+
     public PercentageDiscountByStore(double discountPercent) {
         this.discountPercent = discountPercent;
     }

@@ -5,15 +5,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Collection;
-@Entity
-@DiscriminatorValue("PercentageDiscountByCategory")
 
-public class PercentageDiscountByCategory extends  DiscountPolicy {
+@Entity
+@DiscriminatorValue("PERCENTAGE_CATEGORY")
+public class PercentageDiscountByCategory extends DiscountPolicy {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private  long id;
+    private Long id;
+
+    @Column(name = "discounted_category")
     private int discountedCategory;
+
+    @Column(name = "discount_percent")
     private double discountPercent;
 
     public PercentageDiscountByCategory(int discountedCategory, double discountPercent) {
@@ -22,14 +27,15 @@ public class PercentageDiscountByCategory extends  DiscountPolicy {
     }
 
     public PercentageDiscountByCategory() {
-
     }
 
     @Override
     public double calculateDiscount(Collection<ProductInSaleDTO> items) {
         double discount = 0;
         for (ProductInSaleDTO p : items) {
-            if (p.getCategory() == discountedCategory) discount += p.getPrice() * discountPercent * p.getQuantity();
+            if (p.getCategory() == discountedCategory) {
+                discount += p.getPrice() * discountPercent * p.getQuantity();
+            }
         }
         return discount;
     }
@@ -97,5 +103,9 @@ public class PercentageDiscountByCategory extends  DiscountPolicy {
     @Override
     public String getInfo() {
         return "{ \"type\": \"percentageCategory\", \"category\": " + discountedCategory + ", \"percent\": " + discountPercent + " }";
+    }
+
+    public Long getId() {
+        return id;
     }
 }

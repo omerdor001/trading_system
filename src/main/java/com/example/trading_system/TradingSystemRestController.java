@@ -13,10 +13,13 @@ package com.example.trading_system;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +36,7 @@ public class TradingSystemRestController {
     private StoreRepository storeRepository;
 
     @Autowired
-    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository) {
+    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository,StoreRepository storeRepository) {
         storeRepository = StoreMemoryRepository.getInstance();    //TODO: change it on version 3
         tradingSystem = TradingSystemImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
     }
@@ -975,24 +978,24 @@ public class TradingSystemRestController {
         return tradingSystem.getMyBids(userName, token, storeName);
     }
 
-    @PostMapping("/store/{storeName}/create-product-lottery")
-    public ResponseEntity<String> createProductLottery(@RequestParam String userName,
-                                                       @RequestParam String token,
-                                                       @PathVariable String storeName,
-                                                       @RequestParam int productID,
-                                                       @RequestParam LocalDateTime localDateTime,
-                                                       @RequestParam double price) {
-        return tradingSystem.createProductLottery(userName, token, storeName, productID, localDateTime, price);
-    }
-
-    @PostMapping("/store/{storeName}/buy-lottery-ticket")
-    public ResponseEntity<String> buyLotteryProductTicket(@RequestParam String userName,
-                                                          @RequestParam String token,
-                                                          @PathVariable String storeName,
-                                                          @RequestParam int productID,
-                                                          @RequestParam double price) {
-        return tradingSystem.buyLotteryProductTicket(userName, token, storeName, productID, price);
-    }
+//    @PostMapping("/store/{storeName}/create-product-lottery")
+//    public ResponseEntity<String> createProductLottery(@RequestParam String userName,
+//                                                       @RequestParam String token,
+//                                                       @PathVariable String storeName,
+//                                                       @RequestParam int productID,
+//                                                       @RequestParam LocalDateTime localDateTime,
+//                                                       @RequestParam double price) {
+//        return tradingSystem.createProductLottery(userName, token, storeName, productID, localDateTime, price);
+//    }
+//
+//    @PostMapping("/store/{storeName}/buy-lottery-ticket")
+//    public ResponseEntity<String> buyLotteryProductTicket(@RequestParam String userName,
+//                                                          @RequestParam String token,
+//                                                          @PathVariable String storeName,
+//                                                          @RequestParam int productID,
+//                                                          @RequestParam double price) {
+//        return tradingSystem.buyLotteryProductTicket(userName, token, storeName, productID, price);
+//    }
 
     @GetMapping("/store/searchProducts")
     public ResponseEntity<String> searchProductsInStores(@RequestParam String userName,

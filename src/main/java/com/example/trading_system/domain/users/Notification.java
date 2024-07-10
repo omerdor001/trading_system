@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 import java.util.TimeZone;
 
 @Entity
-@Table(name = "notifications")
 public class Notification {
     @JsonIgnore
     @Id
@@ -28,6 +27,10 @@ public class Notification {
         this.senderUsername = senderUsername;
         this.receiverUsername = receiverUsername;
         this.textContent = textContent;
+    }
+
+    public Notification() {
+
     }
 
     public static Notification fromString(String str) {

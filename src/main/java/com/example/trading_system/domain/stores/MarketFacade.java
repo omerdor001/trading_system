@@ -199,11 +199,11 @@ public interface MarketFacade {
 
     void removePurchasePolicy(String username, String storeName, int selectedIndex) throws IllegalAccessException;
 
-    void sendMessageUserToStore(String sender, String storeName, String content);
-
-    void sendMessageStoreToUser(String owner, String receiver, String storeName, String content);
-
-    String getStoreMessagesJson(String admin, String storeName);
+//    void sendMessageUserToStore(String sender, String storeName, String content);
+//
+//    void sendMessageStoreToUser(String owner, String receiver, String storeName, String content);
+//
+//    String getStoreMessagesJson(String admin, String storeName);
 
     void placeBid(String userName, String storeName, int productID, double price) throws IllegalArgumentException;
 
@@ -217,9 +217,9 @@ public interface MarketFacade {
 
     String getMyBids(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
 
-    void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception;
-
-    String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception;
+//    void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception;
+//
+//    String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception;
 
     void editProduct(String username, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity) throws Exception;
 
