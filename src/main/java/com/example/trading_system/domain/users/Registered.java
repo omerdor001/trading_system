@@ -191,7 +191,6 @@ public class Registered extends User {
         HashMap<String, List<Boolean>> permissions = new HashMap<>();
         permissions.put(appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery));
         managerSuggestions.put(store_name_id, permissions);
-
     }
 
     public boolean isWatch(String storeName){
@@ -229,7 +228,6 @@ public class Registered extends User {
         }
         else return false;
     }
-
 
     public void addWaitingAppoint_Owner(String storeName,String appointee) {
         ownerSuggestions.put(storeName,appointee);

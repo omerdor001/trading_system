@@ -419,14 +419,20 @@ public class UserFacadeImp implements UserFacade {
         }
         checkProductQuantity(username, productId, storeName, quantity);
         Product p = marketFacade.getStore(storeName).getProduct(productId);
-        if(p.getProduct_price() == price)
-            userRepository.getUser(username).addProductToCart(productId, quantity, storeName, p.getProduct_price(), p.getCategory().getIntValue());
+        User user = userRepository.getUser(username);
+        if(p.getProduct_price() == price) {
+            user.addProductToCart(productId, quantity, storeName, p.getProduct_price(), p.getCategory().getIntValue());
+            userRepository.saveUser(user);
+        }
         else {
-            if(marketFacade.getStore(storeName).isBidApproved(username,productId,price))
-                userRepository.getUser(username).addProductToCart(productId, quantity, storeName, price, p.getCategory().getIntValue());
+            if(marketFacade.getStore(storeName).isBidApproved(username,productId,price)){
+                user.addProductToCart(productId, quantity, storeName, price, p.getCategory().getIntValue());
+                userRepository.saveUser(user);
+            }
             else
                 throw new IllegalArgumentException("This bid has not approved by all owners or there is no bid with this price");
         }
+        //TODO save product in store?
     }
 
 

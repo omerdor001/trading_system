@@ -23,13 +23,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8088") //TODO IP and Port (general)
+@CrossOrigin(origins = "http://localhost:8080") //TODO IP and Port (general)
 @RequestMapping("/api/trading")
 public class TradingSystemRestController {
 
@@ -265,7 +261,7 @@ public class TradingSystemRestController {
                                                 @RequestParam boolean watch,
                                                 @RequestParam boolean editSupply,
                                                 @RequestParam boolean editBuyPolicy,
-                                                @RequestParam boolean editDiscountPolicy){
+                                                @RequestParam boolean editDiscountPolicy) {
         return tradingSystem.suggestManage(appoint, token, "r" + newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, false, false);
     }
 
@@ -344,7 +340,7 @@ public class TradingSystemRestController {
 
     @GetMapping("/stores")
     public ResponseEntity<String> getAllStores(@RequestParam String userName, @RequestParam String token) {
-        return tradingSystem.getAllStores("r"+ userName, token);
+        return tradingSystem.getAllStores("r" + userName, token);
     }
 
     @GetMapping("/stores-detailed-info")
@@ -390,7 +386,7 @@ public class TradingSystemRestController {
     @GetMapping("/product/info")
     public ResponseEntity<String> getProductInfo(@RequestParam String userName, @RequestParam String token,
                                                  @RequestParam String storeName, @RequestParam int product_Id) {
-        return tradingSystem.getProductInfo("r"+ userName, token, storeName, product_Id);
+        return tradingSystem.getProductInfo("r" + userName, token, storeName, product_Id);
     }
 
     @GetMapping("/categories")
@@ -765,7 +761,7 @@ public class TradingSystemRestController {
     //endregion
 
     // Purchase Policies
-    @GetMapping("/store/{storeName}/purchase-policies")
+    @GetMapping("/store/purchase-policies/info")
     public ResponseEntity<String> getPurchasePoliciesInfo(@RequestParam String username,
                                                           @RequestParam String token,
                                                           @RequestParam String storeName) {
@@ -778,7 +774,7 @@ public class TradingSystemRestController {
                                                          @RequestParam String storeName,
                                                          @RequestParam int ageToCheck,
                                                          @RequestParam int category) {
-        return tradingSystem.addPurchasePolicyByAge(username, token, storeName, ageToCheck, category);
+        return tradingSystem.addPurchasePolicyByAge("r"+username, token, storeName, ageToCheck, category);
     }
 
 
@@ -788,7 +784,7 @@ public class TradingSystemRestController {
                                                                      @RequestParam String storeName,
                                                                      @RequestParam int category,
                                                                      @RequestParam LocalDateTime dateTime) {
-        return tradingSystem.addPurchasePolicyByCategoryAndDate(username, token, storeName, category, dateTime);
+        return tradingSystem.addPurchasePolicyByCategoryAndDate("r"+username, token, storeName, category, dateTime);
     }
 
     @PostMapping("/store/purchase-policies/addPurchasePolicyByDate")
@@ -796,7 +792,7 @@ public class TradingSystemRestController {
                                                           @RequestParam String token,
                                                           @RequestParam String storeName,
                                                           @RequestParam LocalDateTime dateTime) {
-        return tradingSystem.addPurchasePolicyByDate(username, token, storeName, dateTime);
+        return tradingSystem.addPurchasePolicyByDate("r"+username, token, storeName, dateTime);
     }
 
     @PostMapping("/store/purchase-policies/addPurchasePolicyByProductAndDate")
@@ -805,7 +801,7 @@ public class TradingSystemRestController {
                                                                     @RequestParam String storeName,
                                                                     @RequestParam int productId,
                                                                     @RequestParam LocalDateTime dateTime) {
-        return tradingSystem.addPurchasePolicyByProductAndDate(username, token, storeName, productId, dateTime);
+        return tradingSystem.addPurchasePolicyByProductAndDate("r"+username, token, storeName, productId, dateTime);
     }
 
     @PostMapping("/store/purchase-policies/addPurchasePolicyByShoppingCartMaxProductsUnit")
@@ -814,7 +810,7 @@ public class TradingSystemRestController {
                                                                                  @RequestParam String storeName,
                                                                                  @RequestParam int productId,
                                                                                  @RequestParam int numOfQuantity) {
-        return tradingSystem.addPurchasePolicyByShoppingCartMaxProductsUnit(username, token, storeName, productId, numOfQuantity);
+        return tradingSystem.addPurchasePolicyByShoppingCartMaxProductsUnit("r"+username, token, storeName, productId, numOfQuantity);
     }
 
     @PostMapping("/store/purchase-policies/addPurchasePolicyByShoppingCartMinProducts")
@@ -831,7 +827,7 @@ public class TradingSystemRestController {
                                                                                  @RequestParam String storeName,
                                                                                  @RequestParam int productId,
                                                                                  @RequestParam int numOfQuantity) {
-        return tradingSystem.addPurchasePolicyByShoppingCartMinProductsUnit(username, token, storeName, productId, numOfQuantity);
+        return tradingSystem.addPurchasePolicyByShoppingCartMinProductsUnit("r"+username, token, storeName, productId, numOfQuantity);
     }
 
     @PostMapping("/store/purchase-policies/addAndPurchasePolicy")
@@ -861,7 +857,7 @@ public class TradingSystemRestController {
                                                              @RequestParam String storeName,
                                                              @RequestParam int selectedIndex,
                                                              @RequestParam int productId) {
-        return tradingSystem.setPurchasePolicyProductId(username, token, storeName, selectedIndex, productId);
+        return tradingSystem.setPurchasePolicyProductId("r"+username, token, storeName, selectedIndex, productId);
     }
 
     @PutMapping("/store/purchase-policies/setPurchasePolicyNumOfQuantity")
@@ -870,7 +866,7 @@ public class TradingSystemRestController {
                                                                  @RequestParam String storeName,
                                                                  @RequestParam int selectedIndex,
                                                                  @RequestParam int numOfQuantity) {
-        return tradingSystem.setPurchasePolicyNumOfQuantity(username, token, storeName, selectedIndex, numOfQuantity);
+        return tradingSystem.setPurchasePolicyNumOfQuantity("r"+username, token, storeName, selectedIndex, numOfQuantity);
     }
 
     @PutMapping("/store/purchase-policies/setPurchasePolicyDateTime")
@@ -879,7 +875,7 @@ public class TradingSystemRestController {
                                                             @RequestParam String storeName,
                                                             @RequestParam int selectedIndex,
                                                             @RequestParam LocalDateTime dateTime) {
-        return tradingSystem.setPurchasePolicyDateTime(username, token, storeName, selectedIndex, dateTime);
+        return tradingSystem.setPurchasePolicyDateTime("r"+username, token, storeName, selectedIndex, dateTime);
     }
 
     @PutMapping("/store/purchase-policies/setPurchasePolicyAge")
@@ -888,7 +884,7 @@ public class TradingSystemRestController {
                                                        @RequestParam String storeName,
                                                        @RequestParam int selectedIndex,
                                                        @RequestParam int age) {
-        return tradingSystem.setPurchasePolicyAge(username, token, storeName, selectedIndex, age);
+        return tradingSystem.setPurchasePolicyAge("r"+username, token, storeName, selectedIndex, age);
     }
 
     @PutMapping("/store/purchase-policies/setFirstPurchasePolicy")
@@ -897,7 +893,7 @@ public class TradingSystemRestController {
                                                          @RequestParam String storeName,
                                                          @RequestParam int selectedDiscountIndex,
                                                          @RequestParam int selectedFirstIndex) {
-        return tradingSystem.setFirstPurchasePolicy(username, token, storeName, selectedDiscountIndex, selectedFirstIndex);
+        return tradingSystem.setFirstPurchasePolicy("r"+username, token, storeName, selectedDiscountIndex, selectedFirstIndex);
     }
 
     @PutMapping("/store/purchase-policies/setSecondPurchasePolicy")
@@ -906,7 +902,7 @@ public class TradingSystemRestController {
                                                           @RequestParam String storeName,
                                                           @RequestParam int selectedDiscountIndex,
                                                           @RequestParam int selectedSecondIndex) {
-        return tradingSystem.setSecondPurchasePolicy(username, token, storeName, selectedDiscountIndex, selectedSecondIndex);
+        return tradingSystem.setSecondPurchasePolicy("r"+username, token, storeName, selectedDiscountIndex, selectedSecondIndex);
     }
 
     @DeleteMapping("/store/purchase-policies/removePurchasePolicy")
@@ -923,7 +919,7 @@ public class TradingSystemRestController {
                                            @RequestParam String token,
                                            @RequestParam String storeName,
                                            @RequestParam int productID,
-                                           @RequestParam double price){
+                                           @RequestParam double price) {
         return tradingSystem.placeBid("r" + userName, token, storeName, productID, price);
     }
 
@@ -1006,10 +1002,7 @@ public class TradingSystemRestController {
                                                          @RequestParam double maxPrice,
                                                          @RequestParam String categories,
                                                          @RequestParam Double rating
-                                                         ) {
-
+    ) {
         return tradingSystem.searchProductsInStores("r" + userName, token, keyWord, minPrice, maxPrice, categories, rating);
     }
-
-
 }

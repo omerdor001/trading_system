@@ -20,7 +20,7 @@ export default {
     this.$root.$primevue = PrimeVue;
     const webSocketUrl = 'ws://localhost:8080/ws';
     webSocketService.connect(webSocketUrl);
-    
+
     webSocketService.subscribe(this.handleWebSocketMessage);
   },
   beforeDestroy() {

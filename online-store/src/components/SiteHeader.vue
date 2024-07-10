@@ -54,7 +54,6 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const toast = useToast();
-
     const notificationsVisible = ref(false);
     const notifications = ref([]);
     const userName = localStorage.getItem('userName');

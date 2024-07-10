@@ -14,10 +14,14 @@
         <AboutSection />
       </div>
       <div class="sidebar2">
-        <PrimeButton v-if="isLoggedIn && isAdmin" label="Create Suspension" @click="createSuspension" class="sidebar-button"/>
-        <PrimeButton v-if="isLoggedIn && isAdmin" label="End Suspension" @click="endSuspension" class="sidebar-button"/>
-        <PrimeButton v-if="isLoggedIn && isAdmin" label="Watch Suspensions" @click="watchSuspensions" class="sidebar-button"/>
-        <PrimeButton v-if="isLoggedIn && isAdmin" label="Purchases History" @click="purchasesHistoryAsSystemManager" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn && isAdmin" label="Create Suspension" @click="createSuspension"
+          class="sidebar-button" />
+        <PrimeButton v-if="isLoggedIn && isAdmin" label="End Suspension" @click="endSuspension"
+          class="sidebar-button" />
+        <PrimeButton v-if="isLoggedIn && isAdmin" label="Watch Suspensions" @click="watchSuspensions"
+          class="sidebar-button" />
+        <PrimeButton v-if="isLoggedIn && isAdmin" label="Purchases History" @click="purchasesHistoryAsSystemManager"
+          class="sidebar-button" />
       </div>
     </div>
   </div>
@@ -106,19 +110,19 @@ export default defineComponent({
     };
 
     const createSuspension = () => {
-      if(isAdmin.value){
+      if (isAdmin.value) {
         router.push('/create-suspension');
       }
     };
 
     const endSuspension = () => {
-      if(isAdmin.value){
+      if (isAdmin.value) {
         router.push('/end-suspension');
       }
     };
 
     const watchSuspensions = () => {
-      if(isAdmin.value){
+      if (isAdmin.value) {
         router.push('/watch-suspensions');
       }
     };
@@ -159,7 +163,8 @@ export default defineComponent({
   padding: 20px;
 }
 
-.sidebar, .sidebar2 {
+.sidebar,
+.sidebar2 {
   display: flex;
   flex-direction: column;
   gap: 10px;
