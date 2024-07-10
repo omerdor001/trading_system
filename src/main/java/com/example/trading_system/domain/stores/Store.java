@@ -42,15 +42,17 @@ public class Store {
     @CollectionTable(name = "store_owners", joinColumns = @JoinColumn(name = "store_id"))
     @Column(name = "owner")
     private List<String> owners = new LinkedList<>();
-
+    @Column(name ="founder")
     private String founder;
+    @Column(name = "ActivtionStatus")
     private boolean isActive;
+    @Column(name =" openingStatus")
     private boolean isOpen;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "sales_history_id", referencedColumnName = "id")
     private StoreSalesHistory salesHistory = new StoreSalesHistory();
-
+    @Column(name = "rating")
     private Double storeRating;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
