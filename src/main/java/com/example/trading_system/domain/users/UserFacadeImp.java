@@ -1248,13 +1248,15 @@ public class UserFacadeImp implements UserFacade {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> permissions = new HashMap<>();
         User user = userRepository.getUser(username);
-        permissions.put("username",username);
-        permissions.put("watch", user.isWatch(storeName));
-        permissions.put("editSupply", user.isEditSupply(storeName));
-        permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
-        permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
-        permissions.put("editAcceptBids", user.isAcceptBids(storeName));
-        permissions.put("editCreateLottery", user.isCreateLottery(storeName));
+        if(!user.getUsername().equals(username) && user.isManager(storeName)){
+            permissions.put("username",username);
+            permissions.put("watch", user.isWatch(storeName));
+            permissions.put("editSupply", user.isEditSupply(storeName));
+            permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
+            permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
+            permissions.put("editAcceptBids", user.isAcceptBids(storeName));
+            permissions.put("editCreateLottery", user.isCreateLottery(storeName));
+        }
         try {
             return mapper.writeValueAsString(permissions);
         } catch (JsonProcessingException e) {
@@ -1274,8 +1276,7 @@ public class UserFacadeImp implements UserFacade {
         List<Map<String, Object>> managers = new ArrayList<>();
         for (User user : userRepository.getAllUsersAsList()) {
             Map<String, Object> permissions = new HashMap<>();
-            if(!user.getUsername().equals(username)){
-                permissions.put("username", user.getUsername());
+            if(!user.getUsername().equals(username) && user.isManager(storeName)){
                 permissions.put("username", user.getUsername());
                 permissions.put("watch", user.isWatch(storeName));
                 permissions.put("editSupply", user.isEditSupply(storeName));

@@ -72,7 +72,8 @@
       </div>
     </div>
 
-    <PrimeDialog header="Edit Permissions" :visible="editDialogVisible" :modal="true" @hide="closeDialog">
+    <!-- Regular Dialog for Edit Permissions -->
+    <div class="edit-dialog" v-if="editDialogVisible">
       <div class="edit-permissions-form">
         <h3>Edit Permissions for: {{ selectedManager.username }}</h3>
         <div>
@@ -105,12 +106,12 @@
             <input type="checkbox" v-model="selectedManager.createLottery" /> Create Lottery
           </label>
         </div>
-        <div class="dialog-footer">
-          <PrimeButton label="Save" icon="pi pi-check" @click="savePermissions" />
-          <PrimeButton label="Cancel" icon="pi pi-times" class="p-button-secondary" @click="closeDialog" />
+        <div class="dialog-buttons">
+          <button @click="savePermissions">Save</button>
+          <button @click="closeDialog">Cancel</button>
         </div>
       </div>
-    </PrimeDialog>
+    </div>
 
     <PrimeToast ref="toast" :position="'top-right'" :life="3000"></PrimeToast>
   </div>
@@ -123,8 +124,6 @@ import SiteHeader from '@/components/SiteHeader.vue';
 import { Dropdown as PrimeDropdown } from 'primevue/dropdown';
 import { DataTable as PrimeDataTable, Column as PrimeColumn } from 'primevue/datatable';
 import { Button as PrimeButton } from 'primevue/button';
-import { Dialog as PrimeDialog } from 'primevue/dialog';
-import { Toast as PrimeToast } from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
 
@@ -136,8 +135,6 @@ export default defineComponent({
     PrimeDataTable,
     PrimeColumn,
     PrimeButton,
-    PrimeDialog,
-    PrimeToast,
   },
   setup() {
     const router = useRouter();
@@ -170,7 +167,6 @@ export default defineComponent({
           acceptBids: manager.acceptBids,
           createLottery: manager.createLottery,
         }));
-        console.log('Managers:', managers.value);
 
         // Fetch owners
         const ownersResponse = await axios.get(`http://localhost:8082/api/trading/store/get-owners`, {
@@ -184,7 +180,6 @@ export default defineComponent({
           founder: owner.founder,
           username: owner.username,
         }));
-        console.log('Owners:', owners.value);
       } catch (err) {
         toast.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
       }
@@ -201,8 +196,9 @@ export default defineComponent({
 
     const savePermissions = async () => {
       try {
-        await axios.put(`http://localhost:8082/api/trading/store/edit-permission-for-manager`, {
-          userId: username,
+        await axios.post(`http://localhost:8082/api/trading/store/manager/permission/edit`, {
+          username: username,
+          token: token,
           managerToEdit: selectedManager.value.username,
           storeName: storeName.value,
           watch: selectedManager.value.watch,
@@ -212,6 +208,7 @@ export default defineComponent({
           acceptBids: selectedManager.value.acceptBids,
           createLottery: selectedManager.value.createLottery,
         });
+
         toast.add({ severity: 'success', summary: 'Success', detail: 'Permissions updated successfully', life: 3000 });
         fetchData();
         closeDialog();
@@ -274,18 +271,30 @@ export default defineComponent({
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.edit-permissions-form {
-  display: flex;
-  flex-direction: column;
+.edit-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  z-index: 1000;
 }
 
-.edit-permissions-form div {
+.edit-dialog label {
+  display: block;
   margin-bottom: 10px;
 }
 
-.dialog-footer {
+.dialog-buttons {
+  margin-top: 10px;
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+}
+
+.dialog-buttons button {
+  margin-left: 10px;
 }
 </style>
