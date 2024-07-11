@@ -129,23 +129,23 @@ public class WsepClient {
         }
     }
 
-//     Example usage
-//    public static void main(String[] args) throws IOException {
-//        WsepClient apiClient = new WsepClient();
-//
-//        // Test each API call
-//        System.out.println("Handshake Response: " + apiClient.handshake());
-//
-//        String payResponse = apiClient.pay("1000", "USD", "2222333344445555", "4", "2021", "Israel Israelovice", "262", "20444444");
-//        System.out.println("Pay Response: " + payResponse);
-//
-//        String cancelPayResponse = apiClient.cancelPay("20123");
-//        System.out.println("Cancel Pay Response: " + cancelPayResponse);
-//
-//        String supplyResponse = apiClient.supply("Israel Israelovice", "RagerBlvd12", "BeerSheva", "Israel", "8458527");
-//        System.out.println("Supply Response: " + supplyResponse);
-//
-//        String cancelSupplyResponse = apiClient.cancelSupply("30525");
-//        System.out.println("Cancel Supply Response: " + cancelSupplyResponse);
-//    }
+//  check responses
+    public static void main(String[] args) throws IOException {
+        WsepClient apiClient = new WsepClient();
+
+        // Test each API call
+        System.out.println("Handshake Response: " + apiClient.handshake());
+
+        String payResponse = apiClient.pay("1000", "a", "2222333344445555", "4", "2021", "Israel", "262", "20444444");
+        System.out.println("Pay Response: " + payResponse);
+
+        String cancelPayResponse = apiClient.cancelPay("20123");
+        System.out.println("Cancel Pay Response: " + cancelPayResponse);
+
+        String supplyResponse = apiClient.supply("Israel", "RagerBlvd12", "BeerSheva", "Israel", "8458527");
+        System.out.println("Supply Response: " + supplyResponse);
+
+        String cancelSupplyResponse = apiClient.cancelSupply("30525");
+        System.out.println("Cancel Supply Response: " + cancelSupplyResponse);
+    }
 }

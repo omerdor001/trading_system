@@ -52,7 +52,7 @@ public class WsepClientTests {
         // Assuming response will contain either a transaction id or -1
         boolean isTransactionId = response.matches("\\d{5,6}"); // Matches a transaction id in the range [10000, 100000]
         boolean isFailure = response.equals("-1");
-        assertEquals(true, isTransactionId || isFailure);
+        assertEquals(true, isFailure);
     }
 
     @Test
