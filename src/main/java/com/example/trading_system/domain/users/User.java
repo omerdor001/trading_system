@@ -2,24 +2,45 @@ package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.Message;
 import com.example.trading_system.domain.stores.StoreRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+@MappedSuperclass
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class User {
     private static final Logger logger = LoggerFactory.getLogger(User.class);
+
+    @Id
+    @Column(nullable = false, unique = true)
     public String username;
+
+    @Embedded
     private Cart cart;
+
+    @Column(nullable = false)
     private boolean suspended;
+
+    @Column
     private LocalDateTime suspendedStart;
+
+    @Column
     private LocalDateTime suspendedEnd;
+
+    @Column(nullable = false)
     private String address;
+
+    @OneToMany(cascade = CascadeType.ALL)
     private LinkedList<Message> messages;
+
+    @Column(nullable = false)
     private boolean isTimerCancelled;
 
 
@@ -32,6 +53,9 @@ public abstract class User {
         this.address = "";
         this.messages = new LinkedList<>();
         this.isTimerCancelled = true;
+    }
+
+    public User() {
     }
 
     public String getUsername() {
@@ -92,6 +116,8 @@ public abstract class User {
 
     public abstract boolean isManager(String store_name_id);
 
+    public abstract void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery);
+
     public abstract boolean isWatch(String storeName);
 
     public abstract boolean isEditSupply(String storeName);
@@ -100,7 +126,6 @@ public abstract class User {
 
     public abstract boolean isEditDiscountPolicy(String storeName);
 
-    public abstract void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
 
     public abstract boolean removeWaitingAppoint_Owner(String storeName);
 
@@ -108,7 +133,7 @@ public abstract class User {
 
     public abstract void addManagerRole(String appoint, String store_name_id);
 
-    public abstract void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy);
+    public abstract void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery);
 
     public abstract void addOwnerRole(String appoint, String storeName);
 
@@ -144,9 +169,9 @@ public abstract class User {
 
     public abstract boolean getLogged();
 
-    public abstract HashMap<String, String> getOwnerToApprove();
+    public abstract HashMap<String, String> getOwnerSuggestions();
 
-    public abstract HashMap<String, HashMap<String, List<Boolean>>> getManagerToApprove();
+    public abstract HashMap<String, HashMap<String, List<Boolean>>> getManagerSuggestions();
 
     public abstract List<Notification> getNotifications();
 
@@ -173,7 +198,6 @@ public abstract class User {
     public void removeProductFromCart(int productId, int quantity, String storeName) {
         this.cart.removeProductFromCart(productId, quantity, storeName);
     }
-
 
     public String getShoppingCart_ToString() {
         return cart.toString();

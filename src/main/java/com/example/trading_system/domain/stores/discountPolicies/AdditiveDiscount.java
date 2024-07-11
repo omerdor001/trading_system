@@ -1,11 +1,20 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import java.util.Collection;
 
-public class AdditiveDiscount implements DiscountPolicy, Condition {
+@Entity
+@DiscriminatorValue("Additive")
+public class AdditiveDiscount extends DiscountPolicy {
+
+    @OneToOne
+    @JoinColumn(name = "first_discount_id")
     private DiscountPolicy first;
+
+    @OneToOne
+    @JoinColumn(name = "second_discount_id")
     private DiscountPolicy second;
 
     public AdditiveDiscount() {
@@ -18,47 +27,49 @@ public class AdditiveDiscount implements DiscountPolicy, Condition {
         return first.calculateDiscount(items) + second.calculateDiscount(items);
     }
 
+    @Override
     public void setFirst(DiscountPolicy first) {
         this.first = first;
     }
 
+    @Override
     public void setSecond(DiscountPolicy second) {
         this.second = second;
     }
 
     @Override
     public void setFirst(Condition first) {
-        throw new RuntimeException("Action not allowed for additive discount");
+        throw new UnsupportedOperationException("Action not allowed for additive discount");
     }
 
     @Override
     public void setSecond(Condition second) {
-        throw new RuntimeException("Action not allowed for additive discount");
+        throw new UnsupportedOperationException("Action not allowed for additive discount");
     }
 
     @Override
     public void setThen(DiscountPolicy then) {
-        throw new RuntimeException("Action not allowed for additive discount");
+        throw new UnsupportedOperationException("Action not allowed for additive discount");
     }
 
     @Override
     public void setCategory(int discountedCategory) {
-        throw new RuntimeException("Action not allowed for additive discount");
+        throw new UnsupportedOperationException("Action not allowed for additive discount");
     }
 
     @Override
     public void setProductId(int productId) {
-        throw new RuntimeException("Action not allowed for additive discount");
+        throw new UnsupportedOperationException("Action not allowed for additive discount");
     }
 
     @Override
     public void setPercent(double discountPercent) {
-        throw new RuntimeException("Action not allowed for additive discount");
+        throw new UnsupportedOperationException("Action not allowed for additive discount");
     }
 
     @Override
     public void setDecider(Condition decider) {
-        throw new RuntimeException("Action not allowed for additive discount");
+        throw new UnsupportedOperationException("Action not allowed for additive discount");
     }
 
     @Override
@@ -68,12 +79,12 @@ public class AdditiveDiscount implements DiscountPolicy, Condition {
 
     @Override
     public void setCount(int count) {
-        throw new RuntimeException("Action not allowed for additive discount");
+        throw new UnsupportedOperationException("Action not allowed for additive discount");
     }
 
     @Override
     public void setSum(double requiredSum) {
-        throw new RuntimeException("Action not allowed for additive discount");
+        throw new UnsupportedOperationException("Action not allowed for additive discount");
     }
 
     @Override

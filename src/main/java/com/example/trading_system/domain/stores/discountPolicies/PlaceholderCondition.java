@@ -1,13 +1,20 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.Collection;
 
-public class PlaceholderCondition implements Condition {
+@Entity
+@DiscriminatorValue("PLACEHOLDER")
+public class PlaceholderCondition extends Condition {
 
-    public PlaceholderCondition() {
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
+
 
     @Override
     public boolean isSatisfied(Collection<ProductInSaleDTO> items) {

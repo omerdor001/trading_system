@@ -1,12 +1,27 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.Collection;
 
-public class OrDiscount implements DiscountPolicy, Condition {
+@Entity
+@DiscriminatorValue("OR")
+public class OrDiscount extends DiscountPolicy {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Condition first;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Condition second;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private DiscountPolicy then;
 
     public OrDiscount() {
@@ -41,20 +56,22 @@ public class OrDiscount implements DiscountPolicy, Condition {
         throw new RuntimeException("Action not allowed for or discount");
     }
 
-
     @Override
     public void setSum(double requiredSum) {
         throw new RuntimeException("Action not allowed for or discount");
     }
 
+    @Override
     public void setFirst(Condition first) {
         this.first = first;
     }
 
+    @Override
     public void setSecond(Condition second) {
         this.second = second;
     }
 
+    @Override
     public void setThen(DiscountPolicy then) {
         this.then = then;
     }
@@ -79,10 +96,15 @@ public class OrDiscount implements DiscountPolicy, Condition {
         throw new RuntimeException("Action not allowed for or discount");
     }
 
+    @Override
     public String getInfo() {
         String firstInfo = first.getInfo();
         String secondInfo = second.getInfo();
         String thenInfo = then.getInfo();
         return "{ \"type\": \"or\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + ", \"then\": " + thenInfo + " }";
+    }
+
+    public Long getId() {
+        return id;
     }
 }

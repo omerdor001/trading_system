@@ -1,11 +1,24 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.Collection;
 
-public class PercentageDiscountByCategory implements DiscountPolicy, Condition {
+@Entity
+@DiscriminatorValue("PERCENTAGE_CATEGORY")
+public class PercentageDiscountByCategory extends DiscountPolicy {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
+
+    @Column(name = "discounted_category")
     private int discountedCategory;
+
+    @Column(name = "discount_percent")
     private double discountPercent;
 
     public PercentageDiscountByCategory(int discountedCategory, double discountPercent) {
@@ -13,11 +26,16 @@ public class PercentageDiscountByCategory implements DiscountPolicy, Condition {
         this.discountPercent = discountPercent;
     }
 
+    public PercentageDiscountByCategory() {
+    }
+
     @Override
     public double calculateDiscount(Collection<ProductInSaleDTO> items) {
         double discount = 0;
         for (ProductInSaleDTO p : items) {
-            if (p.getCategory() == discountedCategory) discount += p.getPrice() * discountPercent * p.getQuantity();
+            if (p.getCategory() == discountedCategory) {
+                discount += p.getPrice() * discountPercent * p.getQuantity();
+            }
         }
         return discount;
     }
@@ -85,5 +103,9 @@ public class PercentageDiscountByCategory implements DiscountPolicy, Condition {
     @Override
     public String getInfo() {
         return "{ \"type\": \"percentageCategory\", \"category\": " + discountedCategory + ", \"percent\": " + discountPercent + " }";
+    }
+
+    public Long getId() {
+        return id;
     }
 }

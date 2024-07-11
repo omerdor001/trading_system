@@ -1,18 +1,34 @@
 package com.example.trading_system.domain.stores;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
+import jakarta.persistence.*;
 
 import java.util.List;
 
 @Getter
-
+@Entity
+@Table(name = "purchases")
 public class Purchase {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
+
+    @ElementCollection
+    @CollectionTable(name = "product_in_sale_list", joinColumns = @JoinColumn(name = "purchase_id"))
     private List<ProductInSaleDTO> productInSaleList;
+
     @Getter
+    @Column(nullable = false)
     private String customerUsername;
+
+    @Column(nullable = false)
     private double totalPrice;
+
+    @Column(nullable = false)
     @Getter
     private String storeName;
 
@@ -22,6 +38,10 @@ public class Purchase {
         this.productInSaleList = productInSaleList;
         this.totalPrice = totalPrice;
         this.storeName = storeName;
+    }
+
+    public Purchase() {
+
     }
 
     public void addProduct(ProductInSaleDTO product) {

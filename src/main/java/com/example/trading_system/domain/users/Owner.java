@@ -1,10 +1,24 @@
 package com.example.trading_system.domain.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import java.util.List;
 
+@Entity
+@DiscriminatorValue("OWNER")
+
 public class Owner extends RoleState {
+    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     public Owner(Role role) {
         this.role = role;
+    }
+
+    public Owner() {
+
     }
 
     @Override
@@ -54,7 +68,7 @@ public class Owner extends RoleState {
     }
 
     @Override
-    public void getAllHistoryPurchases(){
+    public void getAllHistoryPurchases() {
     }
 
     @Override
@@ -88,6 +102,26 @@ public class Owner extends RoleState {
     }
 
     @Override
+    public void setCreateLottery(boolean createLottery) {
+
+    }
+
+    @Override
+    public void setAcceptBids(boolean acceptBids) {
+
+    }
+
+    @Override
+    public boolean isAcceptBids() {
+        return true;
+    }
+
+    @Override
+    public boolean isCreateLottery(){
+        return true;
+}
+
+    @Override
     public void requestManagersPermissions() {
     }
 
@@ -96,22 +130,45 @@ public class Owner extends RoleState {
     }
 
     @Override
-    public boolean isWatch(){
+    public boolean isWatch() {
         return true;
     }
 
     @Override
-    public boolean isEditSupply(){
+    public boolean isEditSupply() {
         return true;
     }
 
     @Override
-    public boolean isEditPurchasePolicy(){
+    public boolean isEditPurchasePolicy() {
         return true;
     }
 
     @Override
-    public boolean isEditDiscountPolicy(){
+    public boolean isEditDiscountPolicy() {
         return true;
     }
+
+    @Override
+    public void approveBid() {
+    }
+
+    @Override
+    public void rejectBid() {
+    }
+
+    @Override
+    public void placeCounterOffer() {
+
+    }
+
+    @Override
+    public void getStoreBids() {
+    }
+
+    @Override
+    public void createProductLottery(){
+
+    }
+
 }

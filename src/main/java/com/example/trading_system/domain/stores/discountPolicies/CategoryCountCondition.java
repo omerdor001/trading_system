@@ -1,16 +1,32 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.Collection;
 
-public class CategoryCountCondition implements Condition {
+@Entity
+@DiscriminatorValue("CATEGORYCOUNT")
+public class CategoryCountCondition extends Condition {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
+
+    @Column(name = "category")
     private int category;
+
+    @Column(name = "count")
     private int count;
 
     public CategoryCountCondition(int category, int count) {
         this.category = category;
         this.count = count;
+    }
+
+    public CategoryCountCondition() {
     }
 
     @Override
@@ -22,10 +38,12 @@ public class CategoryCountCondition implements Condition {
         return amount > this.count;
     }
 
+    @Override
     public void setCategory(int category) {
         this.category = category;
     }
 
+    @Override
     public void setCount(int count) {
         this.count = count;
     }

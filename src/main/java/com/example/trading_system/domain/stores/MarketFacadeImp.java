@@ -5,8 +5,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,6 +19,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
+@Service
 public class MarketFacadeImp implements MarketFacade {
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
     private static MarketFacadeImp instance = null;
@@ -21,11 +27,10 @@ public class MarketFacadeImp implements MarketFacade {
     private StoreRepository storeRepository;
     private UserFacade userFacade;
 
-
-    private MarketFacadeImp(StoreRepository storeRepository) {
+    @Autowired
+    public MarketFacadeImp(@Qualifier("storeDatabaseRepository") StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
     }
-
     public static MarketFacadeImp getInstance(StoreRepository storeRepository) {
         if (instance == null) instance = new MarketFacadeImp(storeRepository);
         return instance;
@@ -231,11 +236,11 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String getPurchaseHistoryJSONFormat(String userName){
-        List<Map<String, Object>> allStoresPurchases = new ArrayList<>();
-        if(userFacade.isUserExist(userName)){
-            throw new IllegalArgumentException("Username is not exist");
+    public String getPurchaseHistoryJSONFormat(String userName) throws IllegalAccessException {
+        if(!userFacade.isUserExist(userName)){
+            throw new IllegalAccessException("Username is not exist");
         }
+        List<Map<String, Object>> allStoresPurchases = new ArrayList<>();
         for(Store store:storeRepository.getAllStoresByStores()){
             Map<String, Object> storePurchaseMap = Map.of(
                     "purchaseHistory", getPurchaseHistoryJSONFormatForStore(userName,store.getNameId())
@@ -253,10 +258,37 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
 
+    @Override
+    public String searchProductsInStores(String userName, String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) throws JsonProcessingException {
+        if (!userFacade.isUserExist(userName)) {
+            throw new IllegalArgumentException("User must exist");
+        }
+
+        List<Product> resultProductList = new LinkedList<>();
+
+        StringBuilder sb = new StringBuilder();
+        for (Store store : storeRepository.getAllStoresByStores()) {
+            if (!store.isOpen()) continue;
+            List<Product> products2 = store.searchProduct(keyWord, minPrice, maxPrice, intCategories, rating);
+            if (!products2.isEmpty())//Change to Repo
+            {
+                sb.append(products2.toString());
+
+                resultProductList.addAll(products2);
+            }
+
+        }
+        if (sb.isEmpty()) return "{}";
+
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(resultProductList);
+
+
+    }
+
 
     @Override
     public String searchNameInStore(String userName, String productName, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) throws IllegalAccessException {
-
         if (productName == null) {
             logger.error("No name provided");
             throw new IllegalArgumentException("No name provided");
@@ -523,6 +555,31 @@ public class MarketFacadeImp implements MarketFacade {
             storeLocks.remove(storeName, lock);
             throw e;
         }
+    }
+
+    @Override
+    public void editProduct(String username, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity) throws Exception{
+        if (!storeRepository.isExist(storeName)) {
+            throw new IllegalArgumentException("Store must exist");
+        }
+        Store store = storeRepository.getStore(storeName);
+        if (!store.getProducts().containsKey(productId)) {
+            throw new IllegalArgumentException("Product must exist");
+        }
+        if (!userFacade.isUserExist(username)) {
+            throw new IllegalArgumentException("User must exist");
+        }
+        if (userFacade.isSuspended(username)) {
+            throw new RuntimeException("User is suspended from the system");
+        }
+        User user = userFacade.getUser(username);
+        if (user.getRoleByStoreId(storeName) == null) {
+            throw new RuntimeException("User with no permission for this store");
+        }
+        if (productPrice < 0) throw new IllegalArgumentException("Price can't be negative number");
+        if (productQuantity <= 0) throw new IllegalArgumentException("Quantity must be natural number");
+
+        store.editProduct(productId, productName, productDescription, productPrice, productQuantity);
     }
 
     @Override
@@ -813,7 +870,7 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException {
+    public String requestInformationAboutOfficialsInStore(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException, JsonProcessingException {
         validateUserAndStore(userName, storeName);
         User user = userFacade.getUser(userName);
         Store store = storeRepository.getStore(storeName);
@@ -836,7 +893,10 @@ public class MarketFacadeImp implements MarketFacade {
             User user2 = userFacade.getUser(manager);
             result.append("Manager ").append(user2.getUsername()).append(" ").append(manager).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append("\n");
         }
-        return result.toString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(result);
+
     }
 
     /**
@@ -862,7 +922,7 @@ public class MarketFacadeImp implements MarketFacade {
         for (String manager : storeManagers) {
             User user2 = userFacade.getUser(manager);
             RoleState managerRole = user2.getRoleByStoreId(storeName).getRoleState();
-            result.append(user2.getUsername()).append(" ").append(manager).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append('\n');
+            result.append(user2.getUsername()).append(" ").append(manager).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append(" ").append(managerRole.isCreateLottery()).append('\n');
         }
         return result.toString();
     }
@@ -903,7 +963,7 @@ public class MarketFacadeImp implements MarketFacade {
             User user2 = userFacade.getUser(officialUserName);
             RoleState managerRole = user2.getRoleByStoreId(storeName).getRoleState();
             result.append("Role id username address birthdate watch editSupply editPurchasePolicy editDiscountPolicy").append("\n");
-            result.append("Manager ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append("\n");
+            result.append("Manager ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append(" ").append(managerRole.isCreateLottery()).append("\n");
         } else throw new IllegalArgumentException("User is not employed in this store.");
 
         return result.toString();
@@ -1178,6 +1238,13 @@ public class MarketFacadeImp implements MarketFacade {
         storeRepository.getStore(storeName).setCategoryCondition(selectedConditionIndex, newCategory);
     }
 
+    @Override
+    public void removeCondition(String username, String storeName, int selectedIndex) throws IllegalAccessException {
+        validateUserAndStore(username, storeName);
+        User user = userFacade.getUser(username);
+        user.getRoleByStoreId(storeName).editDiscounts();
+        storeRepository.getStore(storeName).removeCondition(selectedIndex);
+    }
     //endregion
     //region Purchase Policy Management
     @Override
@@ -1330,63 +1397,178 @@ public class MarketFacadeImp implements MarketFacade {
     }
 //endregion
 
+//    @Override
+//    public void sendMessageUserToStore(String sender, String storeName, String content) {
+//        if (!userFacade.isUserExist(sender))
+//            throw new RuntimeException("Message sender user must exist");
+//        if (!isStoreExist(storeName))
+//            throw new RuntimeException("Message receiver store must exist");
+//        if (content.isEmpty())
+//            throw new RuntimeException("Message content cannot be empty");
+//        Store store = storeRepository.getStore(storeName);
+//        String username = "";
+//        if (sender.charAt(0) == 'v')
+//            username = "visitor " + sender;
+//        else if (sender.charAt(0) == 'r')
+//            username = sender.substring(1);
+//        store.receiveMessage(sender, username, content);
+//        if (sender.charAt(0) == 'r')
+//            userFacade.sendNotificationToStoreOwners(sender, store.getOwners(), "Store: " + storeName + " received a message from user: " + sender);
+//        else
+//            userFacade.sendNotificationToStoreOwners(sender, store.getOwners(), "Store: " + storeName + " received a message from a visitor");
+//    }
+
+//    @Override
+//    public void sendMessageStoreToUser(String owner, String receiver, String storeName, String content) {
+//        if (!userFacade.isUserExist(receiver)) {
+//            if (receiver.charAt(0) == 'r')
+//                throw new RuntimeException("Message receiver user must exist");
+//            else if (receiver.charAt(0) == 'v')
+//                throw new RuntimeException("Visitor no longer exists, no need to reply");
+//        }
+//        if (!userFacade.isUserExist(owner)) {
+//            throw new RuntimeException("Message sender user must exist");
+//        }
+//        if (!isStoreExist(storeName))
+//            throw new RuntimeException("Message sender store must exist");
+//        if (content.isEmpty())
+//            throw new RuntimeException("Message content cannot be empty");
+//        User receiverUser = userFacade.getUser(receiver);
+//        User ownerUser = userFacade.getUser(owner);
+//        if (!ownerUser.isOwner(storeName)){
+//            throw new RuntimeException("Message sender must be an owner of the store");
+//        }
+//        receiverUser.receiveMessage(storeName, storeName, content);
+//        userFacade.sendNotification(owner, receiver, "Owner: " + ownerUser.getUsername() + " from store: " + storeName + " has replied to your message");
+//    }
+
+//    @Override
+//    public String  getStoreMessagesJson(String admin, String storeName){
+//        if (!userFacade.isUserExist(admin)) {
+//            throw new IllegalArgumentException("Admin user doesn't exist in the system");
+//        }
+//        if (!storeRepository.isExist(storeName)) {
+//            throw new IllegalArgumentException("Store doesn't exist in the system");
+//        }
+//        if (!userFacade.isAdmin(admin)) {
+//            throw new IllegalArgumentException("Only admin user can get user notifications");
+//        }
+//        Store store = storeRepository.getStore(storeName);
+//        return store.getMessagesJSON();
+//    }
+
     @Override
-    public void sendMessageUserToStore(String sender, String storeName, String content) {
-        if (!userFacade.isUserExist(sender))
-            throw new RuntimeException("Message sender user must exist");
-        if (!isStoreExist(storeName))
-            throw new RuntimeException("Message receiver store must exist");
-        if (content.isEmpty())
-            throw new RuntimeException("Message content cannot be empty");
+    public void placeBid(String userName, String storeName, int productID, double price) throws IllegalArgumentException {
+        validateUserAndStore(userName, storeName);
         Store store = storeRepository.getStore(storeName);
-        String username = "";
-        if (sender.charAt(0) == 'v')
-            username = "visitor " + sender;
-        else if (sender.charAt(0) == 'r')
-            username = sender.substring(1);
-        store.receiveMessage(sender, username, content);
-        if (sender.charAt(0) == 'r')
-            userFacade.sendNotificationToStoreOwners(sender, store.getOwners(), "Store: " + storeName + " received a message from user: " + sender);
-        else
-            userFacade.sendNotificationToStoreOwners(sender, store.getOwners(), "Store: " + storeName + " received a message from a visitor");
+        if(!store.getProducts().containsKey(productID))
+            throw new IllegalArgumentException("Product must exist");
+        store.placeBid(userName, productID, price);
+
+        for (String owner : store.getOwners())
+            userFacade.sendNotification(userName, owner, userName + " is placed a bid for product " + productID + " in store " + storeName + " with price " + price);
+        for (String manager : store.getManagers())
+            userFacade.sendNotification(userName, manager, userName + " is placed a bid for product " + productID + " in store " + storeName + " with price " + price);
     }
 
     @Override
-    public void sendMessageStoreToUser(String owner, String receiver, String storeName, String content) {
-        if (!userFacade.isUserExist(receiver)) {
-            if (receiver.charAt(0) == 'r')
-                throw new RuntimeException("Message receiver user must exist");
-            else if (receiver.charAt(0) == 'v')
-                throw new RuntimeException("Visitor no longer exists, no need to reply");
+    public void approveBid(String userName, String storeName, int productID, String bidUserName) throws Exception {
+        validateUserAndStore(userName, storeName);
+        Store store = storeRepository.getStore(storeName);
+        if(!store.getProducts().containsKey(productID))
+            throw new IllegalArgumentException("Product must exist");
+        if(!store.isBidExist(productID, bidUserName))
+            throw new IllegalArgumentException("Bid must exist");
+        User user = userFacade.getUser(userName);
+        user.getRoleByStoreId(storeName).approveBid();
+
+        boolean allOwnersApproved = store.approveBid(userName, productID, bidUserName);
+        if(allOwnersApproved)
+        {
+            userFacade.sendNotification(userName, bidUserName, "Your bid on product " + store.getProducts().get(productID).getProduct_name() + " in store " + storeName + " is approved");
+            userFacade.bidPurchase(bidUserName, storeName, productID, store.getBidPrice(bidUserName, productID));
+            store.removeBidAccepted(bidUserName, productID);
         }
-        if (!userFacade.isUserExist(owner)) {
-            throw new RuntimeException("Message sender user must exist");
-        }
-        if (!isStoreExist(storeName))
-            throw new RuntimeException("Message sender store must exist");
-        if (content.isEmpty())
-            throw new RuntimeException("Message content cannot be empty");
-        User receiverUser = userFacade.getUser(receiver);
-        User ownerUser = userFacade.getUser(owner);
-        if (!ownerUser.isOwner(storeName)){
-            throw new RuntimeException("Message sender must be an owner of the store");
-        }
-        receiverUser.receiveMessage(storeName, storeName, content);
-        userFacade.sendNotification(owner, receiver, "Owner: " + ownerUser.getUsername() + " from store: " + storeName + " has replied to your message");
+
     }
 
     @Override
-    public String  getStoreMessagesJson(String admin, String storeName){
-        if (!userFacade.isUserExist(admin)) {
-            throw new IllegalArgumentException("Admin user doesn't exist in the system");
-        }
-        if (!storeRepository.isExist(storeName)) {
-            throw new IllegalArgumentException("Store doesn't exist in the system");
-        }
-        if (!userFacade.isAdmin(admin)) {
-            throw new IllegalArgumentException("Only admin user can get user notifications");
-        }
+    public void rejectBid(String userName, String storeName, int productID, String bidUserName) throws IllegalArgumentException, IllegalAccessException{
+        validateUserAndStore(userName, storeName);
         Store store = storeRepository.getStore(storeName);
-        return store.getMessagesJSON();
+        if(!store.getProducts().containsKey(productID))
+            throw new IllegalArgumentException("Product must exist");
+        if(!store.isBidExist(productID, bidUserName))
+            throw new IllegalArgumentException("Bid must exist");
+        User user = userFacade.getUser(userName);
+        user.getRoleByStoreId(storeName).rejectBid();
+
+        store.rejectBid(userName, productID, bidUserName);
+
+        userFacade.sendNotification(userName, bidUserName, "Your bid on product " + store.getProducts().get(productID).getProduct_name() + " in store " + storeName + " is rejected");
     }
+
+    @Override
+    public void placeCounterOffer(String userName, String storeName, int productID, String bidUserName, double newPrice) throws IllegalArgumentException, IllegalAccessException{
+        validateUserAndStore(userName, storeName);
+        Store store = storeRepository.getStore(storeName);
+        if(!store.getProducts().containsKey(productID))
+            throw new IllegalArgumentException("Product must exist");
+        if(!store.isBidExist(productID, bidUserName))
+            throw new IllegalArgumentException("Bid must exist");
+        User user = userFacade.getUser(userName);
+        user.getRoleByStoreId(storeName).placeCounterOffer();
+
+        store.counterOffer(userName,productID,bidUserName,newPrice);
+
+        userFacade.sendNotification(userName, bidUserName, "Your bid on product " + store.getProducts().get(productID).getProduct_name() + " in store " + storeName + " is got counter offer by " + userName + " of " + newPrice);
+    }
+
+    @Override
+    public String getStoreBids(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException {
+        validateUserAndStore(userName, storeName);
+        User user = userFacade.getUser(userName);
+        user.getRoleByStoreId(storeName).getStoreBids();
+        Store store = storeRepository.getStore(storeName);
+        return store.getStoreBids();
+    }
+
+    @Override
+    public String getMyBids(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException {
+        validateUserAndStore(userName, storeName);
+        Store store = storeRepository.getStore(storeName);
+        return store.getMyBids(userName);
+
+    }
+
+//    @Override
+//    public void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception{
+//        validateUserAndStore(userName, storeName);
+//        Store store = storeRepository.getStore(storeName);
+//        if(!store.isProductExist(productID))
+//            throw new IllegalArgumentException("Product must exist in store");
+//        if(localDateTime.isBefore(LocalDateTime.now()) || localDateTime.isEqual(LocalDateTime.now()))
+//            throw new Exception("Cant create lottery for past or present");
+//        User user = userFacade.getUser(userName);
+//        user.getRoleByStoreId(storeName).createProductLottery();
+//      //  store.createProductLottery(productID,localDateTime,price);
+//    }
+//
+//    @Override
+//    public String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception{
+//        validateUserAndStore(userName, storeName);
+//        Store store = storeRepository.getStore(storeName);
+//        if(!store.isLotteryExist(productID))
+//            throw new Exception("Lottery does not exist");
+//        if(store.buyLotteryProductTicket(userName, productID, price)){
+//            return store.makeLotteryOnProduct(productID) + " won the product " + productID;
+//        }
+//        else
+//            return "Ticket Bought Successfully";
+//
+//    }
+
+
+
+
 }

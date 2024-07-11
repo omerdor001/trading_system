@@ -1,18 +1,40 @@
 package com.example.trading_system.domain.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import java.util.List;
 
+@Entity
+@DiscriminatorValue("MANAGER")
+
 public class Manager extends RoleState {
+
+    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "watch")
     private boolean watch;
+
+    @Column(name = "edit_supply")
     private boolean editSupply;
+
+    @Column(name = "edit_purchase_policy")
     private boolean editPurchasePolicy;
+
+    @Column(name = "edit_discount_policy")
     private boolean editDiscountPolicy;
+    private boolean acceptBids;
+    private boolean createLottery;
 
     public Manager() {
         this.watch = false;
         this.editPurchasePolicy = false;
         this.editDiscountPolicy = false;
         this.editSupply = false;
+        this.acceptBids = false;
+        this.createLottery = false;
     }
 
     @Override
@@ -53,6 +75,27 @@ public class Manager extends RoleState {
     @Override
     public void setEditDiscountPolicy(boolean editDiscountPolicy) {
         this.editDiscountPolicy = editDiscountPolicy;
+    }
+
+    @Override
+    public void setAcceptBids(boolean acceptBids){
+        this.acceptBids = acceptBids;
+    }
+
+    @Override
+    public boolean isAcceptBids(){
+        return acceptBids;
+    }
+
+    @Override
+    public void setCreateLottery(boolean createLottery){
+        this.createLottery = createLottery;
+    }
+
+    @Override
+    public boolean isCreateLottery()
+    {
+        return createLottery;
     }
 
 
@@ -126,4 +169,31 @@ public class Manager extends RoleState {
     public boolean isOwner() {
         return false;
     }
+
+    @Override
+    public void approveBid()  throws IllegalAccessException{
+        if(!this.acceptBids) throw new IllegalAccessException("Manager cannot approve bid");
+    }
+
+    @Override
+    public void rejectBid()  throws IllegalAccessException{
+        if(!this.acceptBids) throw new IllegalAccessException("Manager cannot reject bid");
+    }
+
+    @Override
+    public void placeCounterOffer() throws IllegalAccessException{
+        if(!this.acceptBids) throw new IllegalAccessException("Manager cannot place counter offer");
+    }
+
+    @Override
+    public void getStoreBids() throws IllegalAccessException {
+        if(!this.acceptBids) throw new IllegalAccessException("Manager cannot view store bids");
+
+    }
+
+    @Override
+    public void createProductLottery() throws IllegalAccessException{
+        if(!this.createLottery) throw new IllegalAccessException("Manager has not permission for create product lottery");
+    }
+
 }

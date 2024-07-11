@@ -40,7 +40,7 @@ public class SuggestManagerAcceptanceTest {
 
     @Test
     void testSuggestManager_WhenSystemIsClosed_GetError() {
-        ResponseEntity<String> response = tradingSystemImp.suggestManage("appointer", "123", "newManager", "Store1", true, true, true, true);
+        ResponseEntity<String> response = tradingSystemImp.suggestManage("appointer", "123", "newManager", "Store1", true, true, true, true, true, true);
         Assertions.assertEquals("System is not open. Only registration is allowed.", response.getBody());
     }
 
@@ -48,7 +48,7 @@ public class SuggestManagerAcceptanceTest {
     void testSuggestManager_WhenInvalidToken_GetError() {
         tradingSystemImp.register("admin", "123456", LocalDate.now());
         tradingSystemImp.openSystem(storeRepository);
-        tradingSystemImp.suggestManage("admin", "123", "newManager", "Store1", true, true, true, true);
+        tradingSystemImp.suggestManage("admin", "123", "newManager", "Store1", true, true, true, true, true, true);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class SuggestManagerAcceptanceTest {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemImp.suggestManage(userName, token, "newManager", "Store1", true, true, true, true);
+        tradingSystemImp.suggestManage(userName, token, "newManager", "Store1", true, true, true, true, true, true);
     }
 
     @Test

@@ -25,58 +25,72 @@
         </div>
       </div>
     </div>
+    <PrimeToast ref="toast" />
   </div>
 </template>
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
-import { useRouter } from 'vue-router';
-import { Button as PrimeButton } from 'primevue/button';
+import { useRouter, useRoute } from 'vue-router';
+import PrimeButton from 'primevue/button';
+import PrimeToast from 'primevue/toast';
+import axios from 'axios';
+import { useToast } from 'primevue/usetoast';
 
 export default defineComponent({
   name: 'StoreDetails',
   components: {
     SiteHeader,
-    PrimeButton
+    PrimeButton,
+    PrimeToast
   },
-  props: {
-    storeId: {
-      type: String,
-      required: true
-    }
-  },
-  setup(props) {
+  setup() {
     const router = useRouter();
+    const route = useRoute();
     const username = ref(localStorage.getItem('username') || '');
     const store = ref({
       name: '',
       description: '',
-      products: [],
-      purchaseHistory: []
+      products: []
     });
+    const toast = useToast();
 
     onMounted(() => {
-      fetchStoreDetails(props.storeId);
+      fetchStoreDetails(route.params.storeId);
     });
 
-    const fetchStoreDetails = (storeId) => {
-      store.value = {
-        name: `Store ${storeId}`,
-        description: 'This is an example store description.',
-        products: [
-          { id: 1, name: 'Smartwatch Pro', description: 'Water resistant, Built-in GPS', price: '$90', image: 'https://via.placeholder.com/150' },
-          { id: 2, name: 'TechZone Tablet', description: '10-inch display, Wi-Fi enabled', price: '$200', image: 'https://via.placeholder.com/150' }
-        ],
-        purchaseHistory: [
-          { id: 1, date: '2024-01-01', amount: '$90', buyer: 'Buyer 1' },
-          { id: 2, date: '2024-02-01', amount: '$200', buyer: 'Buyer 2' }
-        ]
-      };
+    const fetchStoreDetails = async (storeId) => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Invalid token was supplied', life: 3000 });
+        return;
+      }
+      try {
+        const response = await axios.get('http://localhost:8082/api/trading/products_of_store', {
+          params: {
+            storeName: storeId,
+            username: username.value,
+            token: token
+          }
+        });
+        const storeProducts = response.data;
+        store.value = {
+          name: storeId,
+          description: 'Store description here...', // Replace with actual description if available
+          products: storeProducts
+        };
+      } catch (error) {
+        if (error.response && error.response.data) {
+          toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+        } else {
+          toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load store details', life: 3000 });
+        }
+      }
     };
 
     const viewOptions = (productId) => {
-      router.push({ name: 'ProductDetails', params: { productId } });
+      router.push({ name: 'ProductDetails', params: { productId, storeId: store.value.name } });
     };
 
     const backToStores = () => {
@@ -86,6 +100,7 @@ export default defineComponent({
     const logout = () => {
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('username');
+      localStorage.removeItem('token');
       router.push('/login');
     };
 

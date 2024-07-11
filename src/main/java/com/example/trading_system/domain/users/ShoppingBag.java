@@ -1,21 +1,43 @@
 package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.stores.MarketFacadeImp;
-import com.example.trading_system.domain.stores.ProductInSale;
 import com.example.trading_system.domain.stores.StoreRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.persistence.*;
 import java.io.IOException;
 import java.util.HashMap;
 
+@Entity
 public class ShoppingBag {
+    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String storeId;
+
+    @ElementCollection
+    @CollectionTable(name = "products_in_sale",
+            joinColumns = @JoinColumn(name = "shopping_bag_id"))
+    @MapKeyColumn(name = "product_id")
+    @AttributeOverrides({
+            @AttributeOverride(name = "price", column = @Column(name = "price")),
+            @AttributeOverride(name = "quantity", column = @Column(name = "quantity")),
+            @AttributeOverride(name = "category", column = @Column(name = "category"))
+    })
     private HashMap<Integer, ProductInSale> products_list;
 
     public ShoppingBag(String storeId) {
         this.storeId = storeId;
         products_list = new HashMap<>();
+    }
+
+    public ShoppingBag() {
+
     }
 
     public String getStoreId() {
@@ -95,6 +117,7 @@ public class ShoppingBag {
             throw new RuntimeException("error converting shopping bag to json");
         }
     }
+
 
     public String productsListToJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();

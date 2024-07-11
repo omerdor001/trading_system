@@ -1,16 +1,24 @@
 package com.example.trading_system.domain.stores.purchasePolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
-
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-public class PurchasePolicyByAge implements PurchasePolicy {
+
+@Entity
+@DiscriminatorValue("AGE")
+public class PurchasePolicyByAge extends PurchasePolicy {
+
+    @Column(name = "age_to_check")
     private int ageToCheck;
+
+    @Column(name = "category_id")
     private int categoryId;
-    public PurchasePolicyByAge(int age, int productId){
-        this.categoryId=productId;
-        this.ageToCheck=age;
+
+    public PurchasePolicyByAge(int ageToCheck, int categoryId) {
+        this.ageToCheck = ageToCheck;
+        this.categoryId = categoryId;
     }
 
     @Override

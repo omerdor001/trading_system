@@ -1,15 +1,34 @@
 package com.example.trading_system.domain.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "roles")
 public class Role {
+    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "role_state_id", referencedColumnName = "id")
     private RoleState roleState;
+
+    @Column(nullable = false)
     private String store_name_id;
+
+    @Column(nullable = false)
     private String appointedById;
 
     public Role(String store_name_id, String appointedById) {
         this.store_name_id = store_name_id;
         this.appointedById = appointedById;
+    }
+
+    public Role() {
+
     }
 
     public String getStoreId() {
@@ -90,6 +109,25 @@ public class Role {
         else throw new IllegalAccessException("Only managers can access isEditPurchasePolicy");
     }
 
+    public void approveBid() throws IllegalAccessException{
+        roleState.approveBid();
+    }
+
+    public void rejectBid() throws IllegalAccessException{
+        roleState.rejectBid();
+    }
+
+    public void placeCounterOffer() throws IllegalAccessException{
+        roleState.placeCounterOffer();
+    }
+
+    public void getStoreBids() throws IllegalAccessException{
+        roleState.getStoreBids();
+    }
+
+    public void createProductLottery() throws IllegalAccessException{
+        roleState.createProductLottery();
+    }
     //Getters of permissions
     public boolean isWatch(){
         return roleState.isWatch();

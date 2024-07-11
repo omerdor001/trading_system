@@ -1,16 +1,29 @@
 package com.example.trading_system.domain.stores.purchasePolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+@Entity
+@DiscriminatorValue("PurchasePolicyByShoppingCartMaxProductsUnit")
+public class PurchasePolicyByShoppingCartMaxProductsUnit extends PurchasePolicy {
+    @Column(name = "productId")
 
-public class PurchasePolicyByShoppingCartMaxProductsUnit implements PurchasePolicy {
     private int productId;
+    @Column(name = "numOfQuantity")
+
     private int numOfQuantity;
     public PurchasePolicyByShoppingCartMaxProductsUnit(int productId,int numOfQuantity){
         this.productId=productId;
         this.numOfQuantity=numOfQuantity;
+    }
+
+    public PurchasePolicyByShoppingCartMaxProductsUnit() {
+
     }
 
     @Override

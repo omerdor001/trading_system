@@ -1,14 +1,21 @@
 package com.example.trading_system.domain.stores.purchasePolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-public class ConditioningPolicy implements PurchasePolicy {
-    private PurchasePolicy predicateOne;
-    private PurchasePolicy predicateTwo;
+@Entity
+@DiscriminatorValue("CONDITIONING")
+public class ConditioningPolicy extends PurchasePolicy {
 
+    @OneToOne
+    private PurchasePolicy predicateOne;
+
+    @OneToOne
+    private PurchasePolicy predicateTwo;
     public ConditioningPolicy() {
         predicateOne = new PlaceholderPurchasePolicy();
         predicateTwo = new PlaceholderPurchasePolicy();

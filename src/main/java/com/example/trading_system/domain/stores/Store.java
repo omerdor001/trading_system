@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import jakarta.persistence.*;
+
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -16,28 +18,63 @@ import java.util.stream.Collectors;
 
 @Setter
 @Getter
+@Entity
+@Table(name = "stores")
 public class Store {
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
+
+    @Id
+    @Column(name = "name_id")
     private String nameId;
+
     private String description;
-    private HashMap<Integer, Product> products;
-    @Getter
-    private List<String> managers;
-    @Getter
-    private List<String> owners;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "store_id")
+    private Map<Integer, Product> products = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "store_managers", joinColumns = @JoinColumn(name = "store_id"))
+    @Column(name = "manager")
+    private List<String> managers = new LinkedList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "store_owners", joinColumns = @JoinColumn(name = "store_id"))
+    @Column(name = "owner")
+    private List<String> owners = new LinkedList<>();
+    @Column(name ="founder")
     private String founder;
-    @Getter
-    @Setter
+    @Column(name = "ActivtionStatus")
     private boolean isActive;
+    @Column(name =" openingStatus")
     private boolean isOpen;
-    private StoreSalesHistory salesHistory;
-    @Getter
-    @Setter
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "sales_history_id", referencedColumnName = "id")
+    private StoreSalesHistory salesHistory = new StoreSalesHistory();
+    @Column(name = "rating")
     private Double storeRating;
-    private LinkedList<DiscountPolicy> discountPolicies;
-    private LinkedList<Condition> discountConditions;
-    private LinkedList<PurchasePolicy> purchasePolicies;
-    private LinkedList<Message> messages;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DiscountPolicy> discountPolicies = new LinkedList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Condition> discountConditions = new LinkedList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PurchasePolicy> purchasePolicies = new LinkedList<>();
+
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Message> messages = new LinkedList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "store_id")
+    private List<Bid> bids;
+
+//    @ElementCollection
+//    @CollectionTable(name = "store_lottery_products", joinColumns = @JoinColumn(name = "store_id"))
+//    @MapKeyColumn(name = "product_id")
+//    private HashMap<Integer, ProductLottery> lotteryProducts = new HashMap<>();
 
     public Store(String nameId, String description, String founder, Double storeRating) {
         this.nameId = nameId;
@@ -53,7 +90,13 @@ public class Store {
         this.discountConditions = new LinkedList<>();
         this.purchasePolicies = new LinkedList<>();
         this.isOpen = true;
-        this.messages = new LinkedList<>();
+        //this.messages = new LinkedList<>();
+        this.bids = new LinkedList<>();
+       // this.lotteryProducts = new HashMap<>();
+    }
+
+    public Store() {
+
     }
 
     public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, int category) {
@@ -123,6 +166,7 @@ public class Store {
         for (Product p : products.values()) {
             sb.append(p.toString());
             sb.append(", ");
+
         }
 
         sb.append("]");
@@ -145,6 +189,7 @@ public class Store {
         if (product_quantity <= 0) throw new IllegalArgumentException("Quantity must be natural number");
         if (rating < 0) throw new IllegalArgumentException("Rating can't be negative number");
         Product product = new Product(product_id, product_name, product_description, product_price, product_quantity, rating, Category.getCategoryFromInt(category), keyWords);
+        product.setStore_name(this.nameId);
         products.put(product.getProduct_id(), product);
     }
 
@@ -201,7 +246,7 @@ public class Store {
         } else throw new IllegalArgumentException("Product with id " + productId + " does not exist");
     }
 
-    public  synchronized void addKeyWordToProduct(int productId, String keyword) {
+    public synchronized void addKeyWordToProduct(int productId, String keyword) {
         Product product = getProduct(productId);
         if (product != null) {
             product.addKeyWord(keyword);
@@ -225,14 +270,6 @@ public class Store {
     }
 
 
-    public String getNameId() {
-        return nameId;
-    }
-
-    public HashMap<Integer, Product> getProducts() {     //Added because missing
-        return products;
-    }
-
     public void setActive(Boolean active) {             //Added because missing
         this.isActive = active;
     }
@@ -249,11 +286,11 @@ public class Store {
         return managers;
     }
 
-    public boolean isOwnerOfStore(String username){
+    public boolean isOwnerOfStore(String username) {
         return owners.contains(username);
     }
 
-    public boolean isManagerOfStore(String username){
+    public boolean isManagerOfStore(String username) {
         return managers.contains(username);
     }
 
@@ -289,29 +326,9 @@ public class Store {
         isOpen = open;
     }
 
-    public String getFounder() {
-        return founder;
-    }
-
-    public LinkedList<DiscountPolicy> getDiscountPolicies() {
-        return discountPolicies;
-    }
-
-    public LinkedList<Condition> getDiscountConditions() {
-        return discountConditions;
-    }
-
-    public LinkedList<PurchasePolicy> getPurchasePolicies() {
-        return purchasePolicies;
-    }
-
-    public LinkedList<Message> getMessages(){
-        return this.messages;
-    }
-
-    public String getMessagesJSON(){
-        return Message.toJsonList(this.messages);
-    }
+//    public String getMessagesJSON() {
+//        return Message.toJsonList(this.messages);
+//    }
 
     public synchronized void releaseReservedProducts(int productId, int quantity) {
         getProduct(productId).releaseReservedProducts(quantity);
@@ -348,12 +365,12 @@ public class Store {
         return true;
     }
 
-    private String getProductInSaleListJSONFormat(Collection<ProductInSaleDTO> items){
+    private String getProductInSaleListJSONFormat(Collection<ProductInSaleDTO> items) {
         List<Map<String, Object>> productInSaleList = new ArrayList<>();
         for (ProductInSaleDTO product : items) {
             Map<String, Object> productMap = new HashMap<>();
             productMap.put("productId", product.getId());
-            productMap.put("price",product.getPrice());
+            productMap.put("price", product.getPrice());
             productMap.put("quantity", product.getQuantity());
             productMap.put("category", Product.getCategoryStringFromInt(product.getCategory()));
             productInSaleList.add(productMap);
@@ -367,15 +384,15 @@ public class Store {
         }
     }
 
-    public String getPurchaseHistoryJSONFormat(){
-        List<Purchase> purchases=salesHistory.getPurchases();
+    public String getPurchaseHistoryJSONFormat() {
+        List<Purchase> purchases = salesHistory.getPurchases();
         List<Map<String, Object>> purchasesList = new ArrayList<>();
-        for(Purchase purchase:purchases){
+        for (Purchase purchase : purchases) {
             Map<String, Object> purchaseMap = new HashMap<>();
             String productInSaleListJSON = getProductInSaleListJSONFormat(purchase.getProductInSaleList());
             purchaseMap.put("productInSaleList", productInSaleListJSON);
             purchaseMap.put("customUsername", purchase.getCustomerUsername());
-            purchaseMap.put("totalPrice",purchase.getTotalPrice());
+            purchaseMap.put("totalPrice", purchase.getTotalPrice());
             purchaseMap.put("storeName", purchase.getStoreName());
         }
         ObjectMapper objectMapper = new ObjectMapper();
@@ -391,9 +408,9 @@ public class Store {
         return salesHistory.getPurchaseHistory(username);
     }
 
-    public void receiveMessage(String senderId, String senderUsername, String content){
-        this.messages.add(new Message(senderId, senderUsername, content));
-    }
+//    public void receiveMessage(String senderId, String senderUsername, String content) {
+//        this.messages.add(new Message(senderId, senderUsername, content));
+//    }
 
     //region Discount creation
     public String getDiscountPoliciesInfo() {
@@ -486,9 +503,11 @@ public class Store {
     }
 
     public void removeDiscount(int selectedIndex) {
-        if (selectedIndex >= discountPolicies.size())
-            discountConditions.remove(selectedIndex - discountPolicies.size());
-        else discountPolicies.remove(selectedIndex);
+        discountPolicies.remove(selectedIndex);
+    }
+
+    public void removeCondition(int selectedIndex) {
+        discountConditions.remove(selectedIndex);
     }
     //endregion
 
@@ -510,36 +529,21 @@ public class Store {
     }
 
     public void setFirstCondition(int selectedDiscountIndex, int selectedSecondIndex) {
-        if (selectedDiscountIndex == selectedSecondIndex)
-            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
-        Condition setDiscount;
-        if (selectedSecondIndex >= discountPolicies.size())
-            setDiscount = discountConditions.remove(selectedSecondIndex - discountPolicies.size());
-        else {
-            if (selectedDiscountIndex < selectedSecondIndex) selectedSecondIndex -= 1;
-            setDiscount = discountPolicies.remove(selectedSecondIndex);
-        }
+        Condition setDiscount = discountConditions.remove(selectedSecondIndex);
         editedDiscount.setFirst(setDiscount);
+
     }
 
     public void setSecondCondition(int selectedDiscountIndex, int selectedSecondIndex) {
-        if (selectedDiscountIndex == selectedSecondIndex)
-            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
-        Condition setDiscount;
-        if (selectedSecondIndex >= discountPolicies.size())
-            setDiscount = discountConditions.remove(selectedSecondIndex - discountPolicies.size());
-        else {
-            if (selectedDiscountIndex < selectedSecondIndex) selectedSecondIndex -= 1;
-            setDiscount = discountPolicies.remove(selectedSecondIndex);
-        }
+        Condition setDiscount = discountConditions.remove(selectedSecondIndex);
         editedDiscount.setSecond(setDiscount);
     }
 
     public void setThenDiscount(int selectedDiscountIndex, int selectedThenIndex) {
-        if (selectedDiscountIndex == selectedThenIndex)
-            throw new IllegalArgumentException("Indexes cannot be the same");
+        if(selectedDiscountIndex == selectedThenIndex)
+            throw new RuntimeException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         DiscountPolicy setDiscount = discountPolicies.remove(selectedThenIndex);
         editedDiscount.setThen(setDiscount);
@@ -563,16 +567,8 @@ public class Store {
     }
 
     public void setDeciderDiscount(int selectedDiscountIndex, int selectedDeciderIndex) {
-        if (selectedDiscountIndex == selectedDeciderIndex)
-            throw new IllegalArgumentException("Indexes cannot be the same");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
-        Condition setDiscount;
-        if (selectedDeciderIndex >= discountPolicies.size())
-            setDiscount = discountConditions.remove(selectedDeciderIndex - discountPolicies.size());
-        else {
-            if (selectedDiscountIndex < selectedDeciderIndex) selectedDeciderIndex -= 1;
-            setDiscount = discountPolicies.remove(selectedDeciderIndex);
-        }
+        Condition setDiscount = discountConditions.remove(selectedDeciderIndex);
         editedDiscount.setDecider(setDiscount);
     }
 
@@ -582,11 +578,15 @@ public class Store {
     }
 
     public void setCountCondition(int selectedConditionIndex, int newCount) {
+        if (newCount < 1)
+            throw new RuntimeException("Count cannot be less than 1");
         Condition setCondition = discountConditions.get(selectedConditionIndex);
         setCondition.setCount(newCount);
     }
 
     public void setCategoryCondition(int selectedConditionIndex, int newCategory) {
+        if (newCategory < 1)
+            throw new RuntimeException("Category cannot be less than 1");
         Condition setCondition = discountConditions.get(selectedConditionIndex);
         setCondition.setCategory(newCategory);
     }
@@ -705,6 +705,168 @@ public class Store {
     public void removePurchasePolicy(int selectedIndex) {
         if (selectedIndex >= purchasePolicies.size()) purchasePolicies.remove(selectedIndex - purchasePolicies.size());
         else purchasePolicies.remove(selectedIndex);
+    }
+
+    public void placeBid(String userName, int productID, double price) {
+        Bid newBid = new Bid(userName, productID, price);
+        this.bids.add(newBid);
+    }
+
+    public boolean approveBid(String userName, int productID, String bidUserName) {
+        for (Bid b : bids) {
+            if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) {
+                b.approveBid(userName);
+                if (b.getApprovedBy().containsAll(owners))
+                    b.setAllOwnersApproved(true);
+                return b.getAllOwnersApproved();
+            }
+        }
+        return false;
+    }
+
+    public void rejectBid(String userName, int productID, String bidUserName) {
+        for (Bid b : bids) {
+            if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) {
+                bids.remove(b);
+                break;
+            }
+        }
+    }
+
+    public void counterOffer(String userName, int productID, String bidUserName, double newPrice) {
+        for (Bid b : bids) {
+            if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) {
+                b.setPrice(newPrice);
+            }
+        }
+
+        //TODO: send notification
+    }
+
+    public boolean isBidExist(int productID, String bidUserName) {
+
+        for (Bid b : bids) {
+            if (b.getProductID() == productID && b.getUserName().equals(bidUserName))
+                return true;
+        }
+        return false;
+    }
+
+    public String getStoreBids() {
+        if (bids.isEmpty())
+            return "{}";
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\n");
+        sb.append("  \"storeName\" : \"").append(nameId).append("\",\n");
+        sb.append("  \"bids\" : ").append(Bid.toJsonList(bids)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    public boolean isBidApproved(String username, int productId, double price) {
+        for (Bid b : bids) {
+            if (b.getProductID() == productId && b.getUserName().equals(username) && b.getPrice() == price) {
+                if (b.getApprovedBy().containsAll(owners))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public String getMyBids(String userName) {
+        LinkedList<Bid> filteredBids = bids.stream()
+                .filter(bid -> userName.equals(bid.getUserName()))
+                .collect(Collectors.toCollection(LinkedList::new));
+        if (filteredBids.isEmpty())
+            return "{}";
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\n");
+        sb.append("  \"storeName\" : \"").append(nameId).append("\",\n");
+        sb.append("  \"bids\" : ").append(Bid.toJsonList(filteredBids)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+//
+//    public void createProductLottery(int productID, LocalDateTime localDateTime, double price) {
+//        ProductLottery productLottery = new ProductLottery(localDateTime, price);
+//        this.lotteryProducts.put(productID, productLottery);
+//    }
+//
+//    public boolean buyLotteryProductTicket(String userName, int productID, double price) throws Exception {
+//        return lotteryProducts.get(productID).buyLotteryProductTicket(userName, price);
+//    }
+//
+//    public String makeLotteryOnProduct(int productID) {
+//        return lotteryProducts.get(productID).makeLotteryOnProduct();
+//    }
+//
+//    public boolean isLotteryExist(int productID) {
+//        return lotteryProducts.containsKey(productID);
+//    }
+
+    public void editProduct(int productId, String productName, String productDescription, double productPrice, int productQuantity) {
+        Product product = getProduct(productId);
+        if(product == null)
+            throw new IllegalArgumentException("Product with id " + productId + " does not exist");
+        else
+            synchronized (product) {
+                product.editProduct(productName, productDescription, productPrice, productQuantity);
+        }
+    }
+
+
+    public double getBidPrice(String userName, int productID) {
+        for (Bid b : bids) {
+            if (b.getProductID() == productID && b.getUserName().equals(userName)) {
+                return b.getPrice();
+            }
+        }
+        return 0;
+    }
+
+    public void removeBidAccepted(String userName, int productID) {
+        for (Bid b : bids) {
+            if (b.getProductID() == productID && b.getUserName().equals(userName)) {
+                bids.remove(b);
+                break;
+            }
+        }
+    }
+
+    public List<Product> searchProduct(String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) {
+
+        List<Product> productList = new ArrayList<>(products.values());
+
+        // Stream the list and apply filters
+        return productList.stream()
+                .filter(product -> {
+                    if (keyWord != null && !keyWord.isEmpty()) {
+                        return product.getKeyWords().contains(keyWord);
+                    }
+                    return true;
+                })
+                .filter(product -> {
+                    if (minPrice != 0) {
+                        return product.getProduct_price() >= minPrice;
+                    }
+                    return true;
+                })
+                .filter(product -> {
+                    if (maxPrice != 0) {
+                        return product.getProduct_price() <= maxPrice;
+                    }
+                    return true;
+                })
+                .filter(product -> {
+                    if (intCategories != null && !intCategories.isEmpty()) {
+                        return intCategories.contains(product.getCategory().getIntValue());
+                    }
+                    return true;
+                })
+                .filter(product -> {
+                    return product.getRating() == rating;
+                })
+                .collect(Collectors.toList());
     }
 
     //endregion

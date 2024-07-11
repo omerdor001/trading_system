@@ -1,12 +1,30 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.Collection;
 
-public class AndDiscount implements DiscountPolicy, Condition {
+@Entity
+@DiscriminatorValue("AND")
+public class AndDiscount extends DiscountPolicy {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "first_condition_id")
     private Condition first;
+
+    @OneToOne
+    @JoinColumn(name = "second_condition_id")
     private Condition second;
+
+    @OneToOne
+    @JoinColumn(name = "then_discount_policy_id")
     private DiscountPolicy then;
 
     public AndDiscount() {
@@ -17,8 +35,11 @@ public class AndDiscount implements DiscountPolicy, Condition {
 
     @Override
     public double calculateDiscount(Collection<ProductInSaleDTO> items) {
-        if (first.isSatisfied(items) && second.isSatisfied(items)) return then.calculateDiscount(items);
-        else return 0;
+        if (first.isSatisfied(items) && second.isSatisfied(items)) {
+            return then.calculateDiscount(items);
+        } else {
+            return 0;
+        }
     }
 
     @Override

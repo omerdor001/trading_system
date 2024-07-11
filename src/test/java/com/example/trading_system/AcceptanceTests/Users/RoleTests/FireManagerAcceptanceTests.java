@@ -111,8 +111,8 @@ public class FireManagerAcceptanceTests {
         tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
         tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName);
         tradingSystemImp.approveOwner(ownerUserName, ownerToken, storeName, userName);
-        tradingSystemImp.suggestManage(ownerUserName, ownerToken, userNameManager, storeName, false, false, false, false);
-        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, ownerUserName, false, false, false, false);
+        tradingSystemImp.suggestManage(ownerUserName, ownerToken, userNameManager, storeName, false, false, false, false, false, false);
+        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, ownerUserName, false, false, false, false, false, false);
         String productName = "Product1";
         int productID = 111;
         tradingSystemImp.addProduct(ownerUserName, ownerToken, productID, storeName, productName, "oldDescription", 15.0, 6, 1, 1, keyWords.toString());

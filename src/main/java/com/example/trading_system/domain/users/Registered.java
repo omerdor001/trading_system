@@ -5,21 +5,45 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
+@Entity
 public class Registered extends User {
+    @Column(nullable = false)
     private String encrypted_pass;
+
+    @Column(nullable = false)
     private LocalDate birthdate;
+
+    @Column(nullable = false)
     private boolean isAdmin;
+
+    @Column(nullable = false)
     @Getter
     @Setter
-    private boolean isLogged = false;
+    private boolean isLogged;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "registered_username", referencedColumnName = "username")
     private List<Role> roles;
+
+    @OneToMany(mappedBy = "receiverUsername", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications;
-    private HashMap<String, HashMap<String,List<Boolean>>> managerToApprove;
-    private HashMap<String, String> ownerToApprove;
+
+    @ElementCollection
+    @CollectionTable(name = "manager_suggestions", joinColumns = @JoinColumn(name = "registered_id"))
+    @MapKeyColumn(name = "store_name")
+    @Column(name = "suggestion_map")
+    private HashMap<String, HashMap<String,List<Boolean>>> managerSuggestions;
+
+    @ElementCollection
+    @CollectionTable(name = "owner_suggestions", joinColumns = @JoinColumn(name = "registered_id"))
+    @MapKeyColumn(name = "store_name")
+    @Column(name = "owner_suggestion")
+    private HashMap<String, String> ownerSuggestions;
 
     public Registered(String userName, String encryption, LocalDate birthdate) {
         super(userName);
@@ -29,8 +53,12 @@ public class Registered extends User {
         this.isLogged = false;
         this.notifications = new LinkedList<>();
         this.roles = new ArrayList<>();
-        this.managerToApprove = new HashMap<>();
-        this.ownerToApprove = new HashMap<>();
+        this.managerSuggestions = new HashMap<>();
+        this.ownerSuggestions = new HashMap<>();
+    }
+
+    public Registered() {
+
     }
 
     public void openStore(String storeName) {
@@ -95,12 +123,12 @@ public class Registered extends User {
         this.notifications.clear();
     }
 
-    public HashMap<String, String> getOwnerToApprove() {
-        return ownerToApprove;
+    public HashMap<String, String> getOwnerSuggestions() {
+        return ownerSuggestions;
     }
 
-    public HashMap<String, HashMap<String, List<Boolean>>> getManagerToApprove() {
-        return managerToApprove;
+    public HashMap<String, HashMap<String, List<Boolean>>> getManagerSuggestions() {
+        return managerSuggestions;
     }
 
     @Override
@@ -114,12 +142,14 @@ public class Registered extends User {
         getRoles().add(manager);
     }
 
-    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editPurchasePolicy, boolean editDiscountPolicy) {
+    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editPurchasePolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
         Role manager = getRoleByStoreId(store_name_id);
         manager.getRoleState().setWatch(watch);
         manager.getRoleState().setEditSupply(editSupply);
         manager.getRoleState().setEditPurchasePolicy(editPurchasePolicy);
         manager.getRoleState().setEditDiscountPolicy(editDiscountPolicy);
+        manager.getRoleState().setAcceptBids(acceptBids);
+        manager.getRoleState().setCreateLottery(createLottery);
     }
 
     public Role getRoleByStoreId(String store_name_id) {
@@ -160,6 +190,12 @@ public class Registered extends User {
         }
     }
 
+    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+        HashMap<String, List<Boolean>> permissions = new HashMap<>();
+        permissions.put(appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery));
+        managerSuggestions.put(store_name_id, permissions);
+    }
+
     public boolean isWatch(String storeName){
         if (isOwner(storeName))
             return true;
@@ -196,24 +232,18 @@ public class Registered extends User {
         else return false;
     }
 
-    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
-        HashMap<String,List<Boolean>> permissions=new HashMap<>();
-        permissions.put(appointee,Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy));
-        managerToApprove.put(store_name_id,permissions);
-    }
-
     public void addWaitingAppoint_Owner(String storeName,String appointee) {
-        ownerToApprove.put(storeName,appointee);
+        ownerSuggestions.put(storeName,appointee);
     }
 
     public List<Boolean> removeWaitingAppoint_Manager(String store_name_id, String appointee) throws IllegalAccessException {
-        HashMap<String,List<Boolean>> removed=managerToApprove.remove(store_name_id);
+        HashMap<String,List<Boolean>> removed= managerSuggestions.remove(store_name_id);
         if (removed == null) throw new IllegalAccessException("No one suggest this user to be a manager");
         return removed.get(appointee);
     }
 
     public boolean removeWaitingAppoint_Owner(String storeName) {
-        return ownerToApprove.remove(storeName)!=null;
+        return ownerSuggestions.remove(storeName)!=null;
     }
 
     public List<Role> getRoles() {

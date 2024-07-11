@@ -15,12 +15,12 @@ public class Visitor extends User {
     }
 
     @Override
-    public HashMap<String, String> getOwnerToApprove() {
+    public HashMap<String, String> getOwnerSuggestions() {
         return new HashMap<>();
     }
 
     @Override
-    public HashMap<String, HashMap<String, List<Boolean>>> getManagerToApprove() {
+    public HashMap<String, HashMap<String, List<Boolean>>> getManagerSuggestions() {
         return null;
     }
 
@@ -95,6 +95,10 @@ public class Visitor extends User {
     }
 
     @Override
+    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+
+    }
+
     public boolean isWatch(String storeName) {
         return false;
     }
@@ -114,9 +118,6 @@ public class Visitor extends User {
         return false;
     }
 
-    @Override
-    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
-    }
 
     @Override
     public boolean removeWaitingAppoint_Owner(String storeName) {
@@ -133,7 +134,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy) {
+    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
     }
 
     @Override

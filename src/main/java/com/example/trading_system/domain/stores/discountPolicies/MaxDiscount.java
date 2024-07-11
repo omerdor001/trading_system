@@ -1,11 +1,26 @@
 package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.Collection;
 
-public class MaxDiscount implements DiscountPolicy, Condition {
+@Entity
+@DiscriminatorValue("MAX")
+public class MaxDiscount extends DiscountPolicy {
+
+    @Getter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private DiscountPolicy first;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private DiscountPolicy second;
 
     public MaxDiscount() {
@@ -18,10 +33,12 @@ public class MaxDiscount implements DiscountPolicy, Condition {
         return Math.max(first.calculateDiscount(items), second.calculateDiscount(items));
     }
 
+    @Override
     public void setFirst(DiscountPolicy first) {
         this.first = first;
     }
 
+    @Override
     public void setSecond(DiscountPolicy second) {
         this.second = second;
     }
@@ -82,4 +99,5 @@ public class MaxDiscount implements DiscountPolicy, Condition {
         String secondInfo = second.getInfo();
         return "{ \"type\": \"max\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + " }";
     }
+
 }

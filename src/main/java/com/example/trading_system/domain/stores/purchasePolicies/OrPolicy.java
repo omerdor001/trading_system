@@ -1,13 +1,17 @@
 package com.example.trading_system.domain.stores.purchasePolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-
-public class OrPolicy implements PurchasePolicy{
-
+@Entity
+@DiscriminatorValue(("OrPolicy"))
+public class OrPolicy extends PurchasePolicy{
+    @OneToOne(cascade = CascadeType.ALL)
     private PurchasePolicy predicateOne;
+    @OneToOne(cascade = CascadeType.ALL)
     private PurchasePolicy predicateTwo;
 
     public OrPolicy() {
