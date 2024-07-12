@@ -161,10 +161,10 @@
                     <!-- Edit Units Dialog -->
                     <Dialog v-model="showEditUnitsDialog" :visible="showEditUnitsDialog" header="Edit Units" 
                             :closable="false" blockScroll :draggable="false" modal>
-                        <InputNumber v-model="editQuantityValue" />
+                        <InputNumber v-model="editUnitsValue" />
                         <div class="dialog-footer">
                             <Button @click="showEditUnitsDialog = false">Cancel</Button>
-                            <Button @click="editPolicyUnits(selectedIndex, editQuantityValue)">Save</Button>
+                            <Button @click="editPolicyUnits(selectedIndex)">Save</Button>
                         </div>
                     </Dialog>
 
@@ -230,13 +230,14 @@ export default {
         const editAgeValue = ref(null);
         const editDateValue = ref(null);
         const editProductIdValue = ref(null);
+        const editUnitsValue = ref(null);
         const newPolicy = ref({
             type: '',
-            ageToCheck: 0,
+            ageToCheck: '',
             category: null,
             dateTime: '',
-            productId: -1,
-            numOfQuantity: 0
+            productId: '',
+            numOfQuantity: ''
         });
         const policyTypes = ref([
             { label: 'By Age and Category', value: 'By Age and Category' },
@@ -291,17 +292,17 @@ export default {
 
         const showAddPolicyDialog = () => {
             newPolicy.value = {
-                type: '',
-                ageToCheck: 0,
+                type: null,
+                ageToCheck: null,
                 category: null,
-                dateTime: '',
-                productId: -1,
-                numOfQuantity: 0
+                dateTime: null,
+                productId: null,
+                numOfQuantity: null
             };
             addPolicyDialogVisible.value = true;
         };
 
-   const savePolicy = async () => {
+const savePolicy = async () => {
     // Format the dateTime to ISO string without trailing 'Z'
     const formattedDateTime = newPolicy.value.dateTime
         ? new Date(newPolicy.value.dateTime).toISOString().slice(0, -1)
@@ -328,13 +329,37 @@ export default {
         return true;
     };
 
+    const validateProductId = () => {
+        if (newPolicy.value.productId===null) {
+            toast.add({ severity: 'warn', summary: 'Warning', detail: 'Product ID cannot be empty', life: 3000 });
+            return false;
+        }
+        return true;
+    };
+
+    const validateQuantity = () => {
+        if (newPolicy.value.numOfQuantity===null) {
+            toast.add({ severity: 'warn', summary: 'Warning', detail: 'Quantity cannot be empty', life: 3000 });
+            return false;
+        }
+        return true;
+    };
+
+    const validateAge = () => {
+        if (!newPolicy.value.ageToCheck) {
+            toast.add({ severity: 'warn', summary: 'Warning', detail: 'Age cannot be empty', life: 3000 });
+            return false;
+        }
+        return true;
+    };
+
     switch (newPolicy.value.type) {
         // Handle the different types of policies here
         case 'By Age and Category':
-            if (!validateCategory()) return;
+            if (!validateCategory() || !validateAge()) return;
             try {
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByAge`;
-                await axios.post(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value,
@@ -343,9 +368,10 @@ export default {
                         category: newPolicy.value.category
                     }
                 });
+                console.log(response.data);
                 fetchPolicies();
             } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add age and category policy', life: 3000 });
                 return;
             }
             break;
@@ -353,7 +379,7 @@ export default {
             if (!validateCategory() || !validateDate()) return;
             try {
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByCategoryAndDate`;
-                await axios.post(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value,
@@ -362,9 +388,10 @@ export default {
                         dateTime: formattedDateTime
                     }
                 });
+                console.log(response.data);
                 fetchPolicies();
             } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add category and date policy', life: 3000 });
                 return;
             }
             break;
@@ -372,7 +399,7 @@ export default {
             if (!validateDate()) return;
             try {
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByDate`;
-                await axios.post(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value,
@@ -380,17 +407,18 @@ export default {
                         dateTime: formattedDateTime
                     }
                 });
+                console.log(response.data);
                 fetchPolicies();
             } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add date policy', life: 3000 });
                 return;
             }
             break;
         case 'By Product and Date':
-            if (!validateDate()) return;
+            if (!validateProductId() || !validateDate()) return;
             try {
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByProductAndDate`;
-                await axios.post(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value,
@@ -399,16 +427,18 @@ export default {
                         dateTime: formattedDateTime
                     }
                 });
+                console.log(response.data);
                 fetchPolicies();
             } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add product and date policy', life: 3000 });
                 return;
             }
             break;
         case 'By Shopping Cart Max Products Unit':
+            if (!validateProductId() || !validateQuantity()) return;
             try {
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByShoppingCartMaxProductsUnit`;
-                await axios.post(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value,
@@ -417,16 +447,18 @@ export default {
                         numOfQuantity: newPolicy.value.numOfQuantity
                     }
                 });
+                console.log(response.data);
                 fetchPolicies();
             } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add maximum product units policy', life: 3000 });
                 return;
             }
             break;
         case 'By Shopping Cart Min Products':
+            if (!validateQuantity()) return;
             try {
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByShoppingCartMinProducts`;
-                await axios.post(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value,
@@ -434,16 +466,18 @@ export default {
                         numOfQuantity: newPolicy.value.numOfQuantity
                     }
                 });
+                console.log(response.data);
                 fetchPolicies();
             } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add minimum units policy', life: 3000 });
                 return;
             }
             break;
         case 'By Shopping Cart Min Products Unit':
+            if (!validateProductId() || !validateQuantity()) return;
             try {
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByShoppingCartMinProductsUnit`;
-                await axios.post(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value,
@@ -452,57 +486,61 @@ export default {
                         numOfQuantity: newPolicy.value.numOfQuantity
                     }
                 });
+                console.log(response.data);
                 fetchPolicies();
             } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add minimum product units policy', life: 3000 });
                 return;
             }
             break;
         case 'And':
             try {
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/addAndPurchasePolicy`;
-                await axios.post(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value,
                         storeName: storeName,
                     }
                 });
+                console.log(response.data);
                 fetchPolicies();
             } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add and policy', life: 3000 });
                 return;
             }
             break;
         case 'Or':
             try {
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/addOrPurchasePolicy`;
-                await axios.post(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value,
                         storeName: storeName,
                     }
                 });
+                console.log(response.data);
                 fetchPolicies();
             } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add or policy', life: 3000 });
                 return;
             }
             break;
         case 'Conditioning':
             try {
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/addConditioningPurchasePolicy`;
-                await axios.post(url, null, {
+                const response = await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value,
                         storeName: storeName,
                     }
                 });
+                console.log(response.data);
                 fetchPolicies();
             } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add conditioning policy', life: 3000 });
                 return;
             }
             break;
@@ -513,7 +551,6 @@ export default {
     addPolicyDialogVisible.value = false;
     toast.add({ severity: 'success', summary: 'Success', detail: 'Policy saved', life: 3000 });
 };
-
 
 
         const getPolicyTypeLabel = (type) => {
@@ -573,6 +610,10 @@ export default {
 
         const editPolicyAge = async (index) => {
             try {
+                if (!editAgeValue.value) {
+                    toast.add({ severity: 'warn', summary: 'Warning', detail: 'Age value cannot be empty', life: 3000 });
+                    return;
+                }
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/setPurchasePolicyAge`;
                 const response = await axios.put(url, null, {
                     params: {
@@ -623,6 +664,10 @@ export default {
 
         const editPolicyDate = async (index) => {
             try {
+                  if (!editDateValue.value) {
+                        toast.add({ severity: 'warn', summary: 'Warning', detail: 'Date cannot be empty', life: 3000 });
+                        return false;
+                    }
                 const formattedDate = new Date(editDateValue.value).toISOString().slice(0, -1);
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/setPurchasePolicyDateTime`;
                 const response = await axios.put(url, null, {
@@ -647,6 +692,10 @@ export default {
 
         const editPolicyProduct = async (index) => {
             try {
+                if (editProductIdValue.value === null) {
+                    toast.add({ severity: 'warn', summary: 'Warning', detail: 'Product Id value cannot be empty', life: 3000 });
+                    return;
+                }
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/setPurchasePolicyProductId`;
                 const response = await axios.put(url, null, {
                     params: {
@@ -668,8 +717,12 @@ export default {
             }
         };
 
-        const editPolicyUnits = async (index, numOfQuantity) => {
+        const editPolicyUnits = async (index) => {
             try {
+                if (editUnitsValue.value === null) {
+                    toast.add({ severity: 'warn', summary: 'Warning', detail: 'Units value cannot be empty', life: 3000 });
+                    return;
+                }
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/setPurchasePolicyNumOfQuantity`;
                 const response = await axios.put(url, null, {
                     params: {
@@ -677,11 +730,12 @@ export default {
                         token: token.value,
                         storeName: storeName,
                         selectedIndex: index,
-                        numOfQuantity: numOfQuantity
+                        numOfQuantity: editUnitsValue.value
                     }
                 });
                 console.log(response.data);
                 fetchPolicies();
+                editUnitsValue.value = null;
                 showEditUnitsDialog.value = false;
                 toast.add({ severity: 'success', summary: 'Success', detail: 'Quantity updated', life: 3000 });
             } catch (error) {
@@ -760,6 +814,7 @@ export default {
             editAgeValue,
             editDateValue,
             editProductIdValue,
+            editUnitsValue,
             showAddPolicyDialog,
             savePolicy,
             typeTemplate,
@@ -831,4 +886,3 @@ export default {
     margin-left: 10px;
 }
 </style>
-how can i clear the contents in the stuff inside the edit dialogs after cancel/save?
