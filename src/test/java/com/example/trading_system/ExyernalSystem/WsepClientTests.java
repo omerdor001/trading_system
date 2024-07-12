@@ -17,6 +17,7 @@ public class WsepClientTests {
         assertEquals("OK", response.trim());
     }
 
+
     @Test
     @Disabled
     public void testPay() throws IOException {
