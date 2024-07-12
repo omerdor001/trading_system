@@ -93,13 +93,13 @@ export default defineComponent({
       router.push('/open-store');
     };
 
-    const approveOwnership = () => {
-      router.push('/approve-owner');
-    };
+     const approveOwnership = () => {
+          router.push('/approve-owner');
+        };
 
-    const approveManagement = () => {
-      router.push('/approve-manager');
-    };
+     const approveManagement = () => {
+        router.push('/approve-manager');
+      };
 
     const stores = () => {
       router.push('/stores-page');
@@ -150,7 +150,7 @@ export default defineComponent({
       endSuspension,
       watchSuspensions,
       purchasesHistoryAsSystemManager,
-      viewAllStores, // Include the new function in the return object
+      viewAllStores,
     };
   }
 });

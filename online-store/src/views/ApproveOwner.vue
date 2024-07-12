@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
@@ -19,7 +20,7 @@
           <tbody>
             <tr v-for="(request, index) in requests" :key="index">
               <td>{{ request.storeName }}</td>
-              <td>{{ request.appointee }}</td> 
+              <td>{{ request.appointee }}</td>
               <td>
                 <PrimeButton label="Click-Approve" type="button" @click="approveOwner(request)" />
               </td>
@@ -60,14 +61,14 @@ export default defineComponent({
     const error = ref(null);
     const requests = ref([]);
     const toast = ref(null);
-    const username = localStorage.getItem('username'); 
-    const token = localStorage.getItem('token'); 
-  
+    const username = localStorage.getItem('username');
+    const token = localStorage.getItem('token');
+
     const fetchRequests = async () => {
       try {
         loading.value = true;
         const response = await axios.get(`http://localhost:8082/api/trading/requests-for-ownership`,{
-             params : { 
+             params : {
               username: username,
               token: token,
             }
@@ -76,7 +77,7 @@ export default defineComponent({
           newOwner: request.newOwner,
           storeName: request.storeName,
           appointee: request.appointee,
-        })); 
+        }));
         loading.value = false;
       } catch (err) {
         loading.value = false;

@@ -1238,6 +1238,8 @@ public class UserFacadeImp implements UserFacade {
         approveMap.put("editSupply", permissions.get(1));
         approveMap.put("editBuyPolicy", permissions.get(2));
         approveMap.put("editDiscountPolicy", permissions.get(3));
+        approveMap.put("editAcceptBids",permissions.get(4));
+        approveMap.put("editCreateLottery",permissions.get(5));
         return approveMap;
     }
 
@@ -1252,12 +1254,47 @@ public class UserFacadeImp implements UserFacade {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> permissions = new HashMap<>();
         User user = userRepository.getUser(username);
-        permissions.put("watch", user.isWatch(storeName));
-        permissions.put("editSupply", user.isEditSupply(storeName));
-        permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
-        permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
+        if(!user.getUsername().equals(username) && user.isManager(storeName)){
+            permissions.put("username",username);
+            permissions.put("watch", user.isWatch(storeName));
+            permissions.put("editSupply", user.isEditSupply(storeName));
+            permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
+            permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
+            permissions.put("editAcceptBids", user.isAcceptBids(storeName));
+            permissions.put("editCreateLottery", user.isCreateLottery(storeName));
+        }
         try {
             return mapper.writeValueAsString(permissions);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public String getManagersOfStore(String username, String storeName) {
+        if (!userRepository.isExist(username)) {
+            throw new IllegalArgumentException("User doesn't exist in the system");
+        }
+        if (!marketFacade.isStoreExist(storeName)) {
+            throw new IllegalArgumentException("Store doesn't exist in the system");
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        List<Map<String, Object>> managers = new ArrayList<>();
+        for (User user : userRepository.getAllUsersAsList()) {
+            Map<String, Object> permissions = new HashMap<>();
+            if(!user.getUsername().equals(username) && user.isManager(storeName)){
+                permissions.put("username", user.getUsername());
+                permissions.put("watch", user.isWatch(storeName));
+                permissions.put("editSupply", user.isEditSupply(storeName));
+                permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
+                permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
+                permissions.put("editAcceptBids", user.isAcceptBids(storeName));
+                permissions.put("editCreateLottery", user.isCreateLottery(storeName));
+                managers.add(permissions);
+            }
+        }
+        try {
+            return mapper.writeValueAsString(managers);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
         }

@@ -87,11 +87,6 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     const showSuccessToast = (message) => {
       showCustomToast('success', 'Success', message);
     };
@@ -115,7 +110,6 @@ export default defineComponent({
       editDiscountPolicy,
       error,
       suggestManage,
-      logout,
       toast,  
     };
   },

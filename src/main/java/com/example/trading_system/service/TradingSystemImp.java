@@ -907,6 +907,34 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
+    public ResponseEntity<String> getManagersOfStore(String username, String token, String storeName) {
+        logger.info("Trying to Gather Information of Managers of the Store");
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("Finish to Gather Information of Managers of the Store");
+            return new ResponseEntity<>(userService.getManagersOfStore(username,storeName), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to get Information of Managers of the Store", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getOwnersOfStore(String username, String token, String storeName) {
+        logger.info("Trying to Gather Information of Owners of the Store");
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("Finish to Gather Information of Owners of the Store");
+            return new ResponseEntity<>(marketService.getOwnersOfStore(username,storeName), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to get Information of Owners of the Store", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public ResponseEntity<String> closeStoreExist(String userName, String token, String storeName) {
         logger.info("{} Trying to Close Store Exist : {}", userName, storeName);
         try {

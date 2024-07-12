@@ -331,14 +331,14 @@ public class TradingSystemRestController {
     public ResponseEntity<String> editPermissionForManager(@RequestParam String username,
                                                            @RequestParam String token,
                                                            @RequestParam String managerToEdit,
-                                                           @RequestParam String storeNameId,
+                                                           @RequestParam String storeName,
                                                            @RequestParam boolean watch,
                                                            @RequestParam boolean editSupply,
                                                            @RequestParam boolean editBuyPolicy,
                                                            @RequestParam boolean editDiscountPolicy,
                                                            @RequestParam boolean acceptBids,
                                                            @RequestParam boolean createLottery) {
-        return tradingSystem.editPermissionForManager(username, token, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+        return tradingSystem.editPermissionForManager(username, token, "r"+managerToEdit, storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
     }
 
     @GetMapping("/stores")
@@ -390,6 +390,18 @@ public class TradingSystemRestController {
     public ResponseEntity<String> getProductInfo(@RequestParam String userName, @RequestParam String token,
                                                  @RequestParam String storeName, @RequestParam int product_Id) {
         return tradingSystem.getProductInfo("r" + userName, token, storeName, product_Id);
+    }
+
+    @GetMapping("/store/get-owners")
+    public ResponseEntity<String> getOwnersOfStore(@RequestParam String username, @RequestParam String token,
+                                                 @RequestParam String storeName) {
+        return tradingSystem.getOwnersOfStore(username,token,storeName);
+    }
+
+    @GetMapping("/store/get-managers")
+    public ResponseEntity<String> getManagersOfStore(@RequestParam String username, @RequestParam String token,
+                                                   @RequestParam String storeName) {
+        return tradingSystem.getManagersOfStore(username,token,storeName);
     }
 
     @GetMapping("/categories")

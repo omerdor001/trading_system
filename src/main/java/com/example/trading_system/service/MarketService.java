@@ -20,6 +20,8 @@ public interface MarketService {
 
     String getStoresIOpened(String username);
 
+    String getOwnersOfStore(String username,String storeName);
+
     String getCategories(String username);
 
     void openStoreExist(String userName, String storeName) throws IllegalAccessException;

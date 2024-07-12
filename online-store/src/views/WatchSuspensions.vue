@@ -18,7 +18,6 @@
 
 <script>
 import { ref, defineComponent, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { useToast } from 'primevue/usetoast';
@@ -41,7 +40,6 @@ export default defineComponent({
     const username = ref(localStorage.getItem('username') || '');
     const token = ref(localStorage.getItem('token') || '');
     const toast = useToast();
-    const router = useRouter();
 
     onMounted(async () => {
       try {
@@ -63,19 +61,9 @@ export default defineComponent({
       }
     });
 
-    const logout = () => {
-      router.push('/login');
-    };
-
-    const goBack = () => {
-      router.push('/');
-    };
-
     return {
       username,
       suspendedUsers,
-      logout,
-      goBack,
     };
   }
 });
