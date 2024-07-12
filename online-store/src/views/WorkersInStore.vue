@@ -52,12 +52,12 @@
           </PrimeColumn>
           <PrimeColumn field="acceptBids" header="Accept Bids">
             <template #body="slotProps">
-              <i :class="['pi', slotProps.data.acceptBids ? 'pi-check' : 'pi-times']"></i>
+              <i :class="['pi', slotProps.data.editAcceptBids ? 'pi-check' : 'pi-times']"></i>
             </template>
           </PrimeColumn>
           <PrimeColumn field="createLottery" header="Create Lottery">
             <template #body="slotProps">
-              <i :class="['pi', slotProps.data.createLottery ? 'pi-check' : 'pi-times']"></i>
+              <i :class="['pi', slotProps.data.editCreateLottery ? 'pi-check' : 'pi-times']"></i>
             </template>
           </PrimeColumn>
           <PrimeColumn header="Actions">
@@ -78,22 +78,22 @@
         <h3>Edit Permissions for: {{ selectedManager.username }}</h3>
         <div>
           <label>
-            <input type="checkbox" v-model="selectedManager.watch" /> Watch Permission
+            <input type="checkbox" v-model="selectedManager.watch" /> Watch
           </label>
         </div>
         <div>
           <label>
-            <input type="checkbox" v-model="selectedManager.editSupply" /> Edit Supply Permission
+            <input type="checkbox" v-model="selectedManager.editSupply" /> Edit Supply
           </label>
         </div>
         <div>
           <label>
-            <input type="checkbox" v-model="selectedManager.editBuyPolicy" /> Edit Buy Policy Permission
+            <input type="checkbox" v-model="selectedManager.editBuyPolicy" /> Edit Buy Policy
           </label>
         </div>
         <div>
           <label>
-            <input type="checkbox" v-model="selectedManager.editDiscountPolicy" /> Edit Discount Policy Permission
+            <input type="checkbox" v-model="selectedManager.editDiscountPolicy" /> Edit Discount Policy
           </label>
         </div>
         <div>
@@ -158,15 +158,21 @@ export default defineComponent({
             storeName: storeName.value,
           }
         });
+
+        console.log(managersResponse.data);
+
         managers.value = managersResponse.data.map(manager => ({
           username: manager.username,
           watch: manager.watch,
           editSupply: manager.editSupply,
           editBuyPolicy: manager.editBuyPolicy,
           editDiscountPolicy: manager.editDiscountPolicy,
-          acceptBids: manager.acceptBids,
-          createLottery: manager.createLottery,
+          editAcceptBids: manager.editAcceptBids,
+          editCreateLottery: manager.editCreateLottery,
         }));
+
+        console.log(managers.value);
+
 
         // Fetch owners
         const ownersResponse = await axios.get(`http://localhost:8082/api/trading/store/get-owners`, {
@@ -196,19 +202,20 @@ export default defineComponent({
 
     const savePermissions = async () => {
       try {
-        await axios.post(`http://localhost:8082/api/trading/store/manager/permission/edit`, {
-          username: username,
-          token: token,
-          managerToEdit: selectedManager.value.username,
-          storeName: storeName.value,
-          watch: selectedManager.value.watch,
-          editSupply: selectedManager.value.editSupply,
-          editBuyPolicy: selectedManager.value.editBuyPolicy,
-          editDiscountPolicy: selectedManager.value.editDiscountPolicy,
-          acceptBids: selectedManager.value.acceptBids,
-          createLottery: selectedManager.value.createLottery,
+        await axios.post('http://localhost:8082/api/trading/store/manager/permission/edit', null, {
+          params: {
+            username: username,
+            token: token,
+            managerToEdit: selectedManager.value.username,
+            storeName: storeName.value,
+            watch: selectedManager.value.watch ? true : false,
+            editSupply: selectedManager.value.editSupply ? true : false,
+            editBuyPolicy: selectedManager.value.editBuyPolicy ? true : false,
+            editDiscountPolicy: selectedManager.value.editDiscountPolicy ? true : false,
+            acceptBids: selectedManager.value.acceptBids ? true : false,
+            createLottery: selectedManager.value.createLottery ? true : false,
+          }
         });
-
         toast.add({ severity: 'success', summary: 'Success', detail: 'Permissions updated successfully', life: 3000 });
         fetchData();
         closeDialog();
@@ -221,23 +228,31 @@ export default defineComponent({
       editDialogVisible.value = false;
     };
 
+    const logout = () => {
+      localStorage.removeItem('username');
+      localStorage.removeItem('token');
+      router.push('/');
+    };
+
     const roleOptions = [
       { label: 'Managers', value: 'managers' },
-      { label: 'Owners', value: 'owners' }
+      { label: 'Owners', value: 'owners' },
     ];
 
     return {
-      username,
       storeName,
       managers,
       owners,
+      username,
       selectedRole,
-      roleOptions,
       editDialogVisible,
       selectedManager,
+      fetchData,
       editPermissions,
       savePermissions,
       closeDialog,
+      logout,
+      roleOptions,
     };
   },
 });
@@ -245,30 +260,11 @@ export default defineComponent({
 
 <style scoped>
 .toggle-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  margin-top: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.toggle-dropdown {
-  margin-bottom: 20px;
-}
-
-.toggle-dropdown label {
-  margin-right: 10px;
+  margin: 20px;
 }
 
 .data-table {
-  width: 80%;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.p-error {
   margin-top: 20px;
-  color: red;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .edit-dialog {
@@ -277,24 +273,63 @@ export default defineComponent({
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  width: 400px;
   z-index: 1000;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.edit-permissions-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-dialog h3 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-color, #007ad9);
 }
 
 .edit-dialog label {
-  display: block;
+  display: flex;
+  align-items: center;
   margin-bottom: 10px;
+  font-size: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.edit-dialog label input {
+  margin-right: 10px;
 }
 
 .dialog-buttons {
-  margin-top: 10px;
+  margin-top: 20px;
   display: flex;
   justify-content: flex-end;
 }
 
 .dialog-buttons button {
   margin-left: 10px;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--primary-color, #007ad9);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dialog-buttons button:hover {
+  background-color: var(--primary-color-dark, #005f9e);
+}
+
+.dialog-buttons button:focus {
+  outline: none;
 }
 </style>
+
+

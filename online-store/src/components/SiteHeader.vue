@@ -114,7 +114,7 @@ export default defineComponent({
       userName,
       goHome,
       goToSearchProduct,
-      goToSearchStore, // Include the new function
+      goToSearchStore,
       viewCart,
       showNotifications,
       logout,
