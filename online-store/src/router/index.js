@@ -25,7 +25,8 @@ import StoreSearchPage from '@/views/StoreSearchPage.vue';
 import StoreSearchResults from '@/views/StoreSearchResults.vue';
 import SuggestOwner from '@/views/SuggestOwner.vue';
 import SuggestManager from '@/views/SuggestManager.vue';
-import ApproveRoles from '@/views/Approves.vue';
+import ApproveOwner from '@/views/ApproveOwner.vue';
+import ApproveManager from '@/views/ApproveManager.vue';
 import WatchStoreBids from '@/views/WatchStoreBids.vue';
 import PaymentPage from '@/views/PaymentPage.vue';
 import ProductsForStore from '@/views/ProductsForStore.vue';
@@ -58,7 +59,8 @@ const routes = [
     { path: '/store-search-results', name: 'StoreSearchResults', component: StoreSearchResults },
     { path: '/suggest-owner/:storeName', name: 'SuggestOwner', component: SuggestOwner },
     { path: '/suggest-manager/:storeName', name: 'SuggestManager', component: SuggestManager },
-    { path: '/approve-roles', name: 'ApproveRoles', component: ApproveRoles },
+    { path: '/approve-owner', name: 'ApproveOwner', component: ApproveOwner },
+    { path: '/approve-manager', name: 'ApproveManager', component: ApproveManager },
     { path: '/get-store-bids', name: 'WatchStoreBids', component: WatchStoreBids },
     { path: '/payment', name: 'PaymentPage', component: PaymentPage },
     { path: '/productsForStore/:storeName', name: 'ProductsForStore', component: ProductsForStore },
