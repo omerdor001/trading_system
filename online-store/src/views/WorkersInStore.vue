@@ -228,12 +228,6 @@ export default defineComponent({
       editDialogVisible.value = false;
     };
 
-    const logout = () => {
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      router.push('/');
-    };
-
     const roleOptions = [
       { label: 'Managers', value: 'managers' },
       { label: 'Owners', value: 'owners' },
@@ -251,7 +245,6 @@ export default defineComponent({
       editPermissions,
       savePermissions,
       closeDialog,
-      logout,
       roleOptions,
     };
   },

@@ -97,19 +97,11 @@ export default defineComponent({
       router.push({ name: 'HomePage' });
     };
 
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      router.push('/login');
-    };
-
     return {
       username,
       store,
       viewOptions,
       backToStores,
-      logout
     };
   }
 });

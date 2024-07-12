@@ -71,14 +71,6 @@ export default defineComponent({
     const showDialog = ref(false);
     const selectedNotification = ref(null);
 
-    const logout = () => {
-      isLoggedIn.value = false;
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('roles');
-      localStorage.removeItem('username');
-      router.push('/');
-    };
-
     const openDialog = (notification) => {
       selectedNotification.value = notification;
       showDialog.value = true;
@@ -92,7 +84,6 @@ export default defineComponent({
       isLoggedIn,
       username,
       notifications,
-      logout,
       showDialog,
       selectedNotification,
       openDialog,

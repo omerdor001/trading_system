@@ -7,8 +7,7 @@
         <PrimeButton v-if="isLoggedIn" label="Stores Manager" @click="stores" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Close Store" @click="closeStore" class="sidebar-button"/>
-        <PrimeButton v-if="isLoggedIn" label="Approve Ownership" @click="approveOwnership" class="sidebar-button" />
-        <PrimeButton v-if="isLoggedIn" label="Approve Management" @click="approveManagement" class="sidebar-button" />
+        <PrimeButton v-if="isLoggedIn" label="Approve Authorities" @click="approves" class="sidebar-button" />
       </div>
       <div class="content">
         <AboutSection />
@@ -89,12 +88,8 @@ export default defineComponent({
       router.push('/open-store');
     };
 
-    const approveOwnership = () => {
-      router.push('/approve-owner');
-    };
-
-    const approveManagement = () => {
-      router.push('/approve-manager');
+    const approves = () => {
+      router.push('/approve-roles');
     };
 
     const stores = () => {
@@ -138,15 +133,14 @@ export default defineComponent({
       activeStores,
       viewProducts,
       openStore,
-      approveOwnership,
-      approveManagement,
+      approves,
       stores,
       closeStore,
       createSuspension,
       endSuspension,
       watchSuspensions,
       purchasesHistoryAsSystemManager,
-      viewAllStores, // Include the new function in the return object
+      viewAllStores,
     };
   }
 });

@@ -66,11 +66,6 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     return {
       username,
       isLoggedIn,
@@ -79,7 +74,6 @@ export default defineComponent({
       storeName,
       error,
       suggestOwner,
-      logout,
     };
   },
 });
