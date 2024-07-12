@@ -73,6 +73,6 @@ public class PurchasePolicyByShoppingCartMinProducts extends PurchasePolicy {
 
     @Override
     public String getPurchasePolicyInfo() {
-        return "{ \"type\": \"ShoppingCart high weight\", \"weight_limit\": " + numOfQuantity +  " }";
+        return "{ \"type\": \"Minimum items in shopping bag Policy\", \"units\": " + numOfQuantity +  " }";
     }
 }

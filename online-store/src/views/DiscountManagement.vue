@@ -36,7 +36,7 @@
                 <template v-else-if="newDiscount.type === 'Product'">
                     <div class="p-field">
                         <label for="productId">Set product ID</label>
-                        <InputText id="productId" v-model="newDiscount.productId" />
+                        <InputNumber id="productId" v-model="newDiscount.productId" />
                     </div>
                     <div class="p-field">
                         <label for="productPercent">Set discount percent</label>
@@ -63,17 +63,20 @@
                 <Button label="Save" icon="pi pi-check" @click="saveDiscount" />
             </template>
         </Dialog>
-         <Dialog header="Add Condition" v-model="addConditionDialogVisible" :visible="addConditionDialogVisible"
+        <Dialog header="Add Condition" v-model="addConditionDialogVisible" style="width: 20%;"
+            :headerStyle="{ 'text-align': 'center' }" :visible="addConditionDialogVisible"
             @hide="addConditionDialogVisible = false" :closable="false" blockScroll :draggable="false" modal>
             <div class="p-fluid">
                 <div class="p-field">
                     <label for="conditionType">Select condition type</label>
-                    <Dropdown id="conditionType" v-model="newCondition.type" :options="conditionTypes" optionLabel="label" optionValue="value" />
+                    <Dropdown id="conditionType" v-model="newCondition.type" :options="conditionTypes"
+                        optionLabel="label" optionValue="value" />
                 </div>
-                <template v-if="newCondition.type === 'Category Count'">
+                <template v-if="newCondition.type === 'Category count'">
                     <div class="p-field">
                         <label for="categorySelect">Select category</label>
-                        <Dropdown id="categorySelect" v-model="newCondition.category" :options="categoryOptions" optionLabel="label" optionValue="value" />
+                        <Dropdown id="categorySelect" v-model="newCondition.category" :options="categoryOptions"
+                            optionLabel="label" optionValue="value" />
                         <label for="categoryCount">Set category count</label>
                         <InputNumber id="categoryCount" v-model="newCondition.categoryCount" mode="decimal" min="0" />
                     </div>
@@ -94,7 +97,8 @@
                 </template>
             </div>
             <template #footer>
-                <Button label="Cancel" icon="pi pi-times" @click="addConditionDialogVisible = false" class="p-button-text" />
+                <Button label="Cancel" icon="pi pi-times" @click="addConditionDialogVisible = false"
+                    class="p-button-text" />
                 <Button label="Save" icon="pi pi-check" @click="saveCondition" />
             </template>
         </Dialog>
@@ -113,43 +117,43 @@
                 <template #body="rowData">
                     <div class="action-buttons">
                         <Button
-                            v-if="rowData.type === 'Store Discount' || rowData.type === 'Category Discount' || rowData.type === 'Product Discount'"
+                            v-if="rowData.data.type === 'Store Discount' || rowData.data.type === 'percentageStore' || rowData.data.type === 'Category Discount' || rowData.data.type === 'Product Discount'"
                             @click="showEditPercentDialog = true">Edit percent
                         </Button>
 
-                        <Button v-if="rowData.type === 'Category Discount'" @click="showEditCategoryDialog = true">Edit
+                        <Button v-if="rowData.data.type === 'Category Discount'" @click="showEditCategoryDialog = true">Edit
                             category
                         </Button>
 
-                        <Button v-if="rowData.type === 'Product Discount'" @click="showEditProductDialog = true">Edit
+                        <Button v-if="rowData.data.type === 'Product Discount'" @click="showEditProductDialog = true">Edit
                             product ID
                         </Button>
 
                         <Button
-                            v-if="rowData.type === 'Additive Discount' || rowData.type === 'Maximum Discount' || rowData.type === 'Xor Discount'"
+                            v-if="rowData.data.type === 'Additive Discount' || rowData.data.type === 'Maximum Discount' || rowData.data.type === 'Xor Discount'"
                             @click="showEditFirstDiscountDialog = true">Edit first discount
                         </Button>
 
                         <Button
-                            v-if="rowData.type === 'Additive Discount' || rowData.type === 'Maximum Discount' || rowData.type === 'Xor Discount'"
+                            v-if="rowData.data.type === 'Additive Discount' || rowData.data.type === 'Maximum Discount' || rowData.data.type === 'Xor Discount'"
                             @click="showEditSecondDiscountDialog = true">Edit second discount
                         </Button>
 
                         <Button
-                            v-if="rowData.type === 'Conditional Discount' || rowData.type === 'And Discount' || rowData.type === 'Or Discount'"
+                            v-if="rowData.data.type === 'Conditional Discount' || rowData.data.type === 'And Discount' || rowData.data.type === 'Or Discount'"
                             @click="showEditFirstConditionDialog = true">Edit first condition
                         </Button>
 
                         <Button
-                            v-if="rowData.type === 'Conditional Discount' || rowData.type === 'Or Discount' || rowData.type === 'And Discount'"
+                            v-if="rowData.data.type === 'Conditional Discount' || rowData.data.type === 'Or Discount' || rowData.data.type === 'And Discount'"
                             @click="showEditThenDiscountDialog = true">Edit discount
                         </Button>
 
-                        <Button v-if="rowData.type === 'And Discount' || rowData.type === 'Or Discount'"
+                        <Button v-if="rowData.data.type === 'And Discount' || rowData.data.type === 'Or Discount'"
                             @click="showEditSecondConditionDialog = true">Edit second condition
                         </Button>
 
-                        <Button v-if="rowData.type === 'Xor Discount'"
+                        <Button v-if="rowData.data.type === 'Xor Discount'"
                             @click="showEditDeciderConditionDialog = true">Edit decider condition
                         </Button>
 
@@ -158,7 +162,7 @@
                         </Button>
                     </div>
                     <!-- Edit Percent Dialog -->
-                    <Dialog v-model="showEditPercentDialog" :visible="showEditPercentDialog" header="Edit Percent">
+                    <Dialog v-model="showEditPercentDialog" :visible="showEditPercentDialog" header="Edit Percent" closable="false">
                         <InputNumber v-model="editPercentValue" />
                         <Button @click="editDiscountPercent(rowData.index, editPercentValue)">Save</Button>
                         <Button @click="showEditPercentDialog = false">Cancel</Button>
@@ -231,11 +235,13 @@
                         <Button @click="editDeciderCondition(rowData.index, editDeciderConditionIndex)">Save</Button>
                         <Button @click="showEditDeciderConditionDialog = false">Cancel</Button>
                     </Dialog>
-                <!-- Delete Discount Dialog -->
-                <Dialog v-model="showDeleteDiscountDialog" :visible="showDeleteDiscountDialog" header="Delete Discount" :closable="false" :draggable="false" blockScroll modal>
-                    <Button @click="deleteDiscount(rowData.index)">Save</Button>
-                    <Button @click="showDeleteDiscountDialog = false">Cancel</Button>
-                </Dialog>
+
+                    <!-- Delete Discount Dialog -->
+                    <Dialog v-model="showDeleteDiscountDialog" :visible="showDeleteDiscountDialog"
+                        header="Delete Discount">
+                        <Button @click="deleteDiscount(rowData.index)">Save</Button>
+                        <Button @click="showDeleteDiscountDialog = false">Cancel</Button>
+                    </Dialog>
                 </template>
                 <template #header>
                     <span class="flex-1 text-center"></span>
@@ -250,31 +256,31 @@
                 </div>
             </template>
             <Column field="type" header="Type" style="width: 20%;" :headerStyle="{ 'text-align': 'center' }"
-                :body="typeTemplate">
+                :body="typeCondTemplate">
             </Column>
             <Column field="details" header="Details" style="width: 20%;" :headerStyle="{ 'text-align': 'center' }"
                 :body="valueTemplate"></Column>
             <Column header="Actions" style="width: 30%;">
                 <template #body="rowData">
                     <div class="action-buttons">
-                        <Button v-if="rowData.type === 'Category Count' || rowData.type === 'Product Count'"
+                        <Button v-if="rowData.data.type === 'Category Count' || rowData.data.type === 'Product Count'"
                             @click="showEditCountDialog = true">Edit count
                         </Button>
 
-                        <Button v-if="rowData.type === 'Category Count'" @click="showEditCategoryCondDialog = true">Edit
+                        <Button v-if="rowData.data.type === 'Category Count'" @click="showEditCategoryCondDialog = true">Edit
                             category
                         </Button>
 
-                        <Button v-if="rowData.type === 'Product Count'" @click="showEditProductCondDialog = true">
+                        <Button v-if="rowData.data.type === 'Product Count'" @click="showEditProductCondDialog = true">
                             Edit product ID
                         </Button>
 
-                        <Button v-if="rowData.type === 'Total Sum'" @click="showEditTotalSumDialog = true">Edit
+                        <Button v-if="rowData.data.type === 'Total Sum'" @click="showEditTotalSumDialog = true">Edit
                             total sum
                         </Button>
 
                         <Button @click="showDeleteCondDialog = true">
-                            Delete Discount
+                            Delete Condition
                         </Button>
                     </div>
                     <!-- Edit Cond Count Dialog -->
@@ -336,7 +342,6 @@ import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Dropdown from 'primevue/dropdown';
-import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
 import Dialog from 'primevue/dialog';
 
@@ -347,7 +352,6 @@ export default {
         DataTable,
         Column,
         Dropdown,
-        InputText,
         InputNumber,
         Dialog
     },
@@ -433,7 +437,6 @@ export default {
                     type: getDiscountTypeLabel(discount.type),
                     details: createDetails(discount)
                 }));
-                console.log(discounts.value);
             } catch (error) {
                 console.error('Error fetching discounts:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -449,7 +452,10 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                conditions.value = response.data.map(condition => ({
+                    type: getConditionTypeLabel(condition.type),
+                    details: createConditionDetails(condition)
+                }));
             } catch (error) {
                 console.error('Error fetching conditions:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -482,7 +488,6 @@ export default {
             switch (newDiscount.value.type) {
                 case 'Store':
                     try {
-                        console.log(`${storeName} store discount with value: ${newDiscount.value.percent}`)
                         const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/store`;
                         await axios.post(url, null, {
                             params: {
@@ -524,7 +529,7 @@ export default {
                                 username: username.value,
                                 token: token.value,
                                 storeName: storeName,
-                                productId: newDiscount.value.category,
+                                productId: newDiscount.value.productId,
                                 discountPercent: newDiscount.value.percent / 100
                             }
                         });
@@ -630,8 +635,6 @@ export default {
                         return;
                     }
                     break;
-                default:
-                    console.log('Unknown discount type:', newDiscount.value.type);
             }
             addDiscountDialogVisible.value = false;
             toast.add({ severity: 'success', summary: 'Success', detail: 'Discount saved', life: 3000 });
@@ -693,7 +696,6 @@ export default {
                     }
                     break;
                 default:
-                    console.log('Unknown condition type:', newDiscount.value.type);
             }
             addConditionDialogVisible.value = false;
             toast.add({ severity: 'success', summary: 'Success', detail: 'Condition saved', life: 3000 });
@@ -709,10 +711,20 @@ export default {
                 'conditional': 'Conditional Discount',
                 'and': 'And Discount',
                 'or': 'Or Discount',
-                'xor': 'Xor Discount'
+                'xor': 'Xor Discount',
+                'placeholderDiscount': 'Placeholder Discount'
             };
             return typeMap[type] || type;
         };
+
+        const getConditionTypeLabel = (type) => {
+            const typeMap = {
+                'productCount' : 'Product Count',
+                'totalSum' : 'Total Sum',
+                'categoryCount' : 'Category Count',
+            }
+            return typeMap[type] || type;
+        }
 
         const createDetails = (discount) => {
             switch (discount.type) {
@@ -727,18 +739,37 @@ export default {
                 case 'max':
                     return discount.details = `First discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.first)} Second discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.second)}`;
                 case 'conditional':
-                    return discount.details = `Condition: ${discount.first} discount: ${getDiscountTypeLabel(discount.second.type)} ${createDetails(discount.second)}`;
+                    return discount.details = `Condition: ${createConditionDetails(discount.condition)} discount: ${getDiscountTypeLabel(discount.then.type)} ${createDetails(discount.then)}`;
                 case 'and':
-                    return discount.details = `First condition: ${discount.first} Second condition: ${discount.second} Discount: ${getDiscountTypeLabel(discount.then.type)} ${createDetails(discount.then)}`;
+                    return discount.details = `First condition: ${createConditionDetails(discount.first)} Second condition: ${createConditionDetails(discount.second)} Discount: ${getDiscountTypeLabel(discount.then.type)} ${createDetails(discount.then)}`;
                 case 'or':
-                    return discount.details = `First condition: ${discount.first} Second condition: ${discount.second} Discount: ${getDiscountTypeLabel(discount.then.type)} ${createDetails(discount.then)}`;
+                    return discount.details = `First condition: ${createConditionDetails(discount.first)} Second condition: ${createConditionDetails(discount.second)} Discount: ${getDiscountTypeLabel(discount.then.type)} ${createDetails(discount.then)}`;
                 case 'xor':
-                    return discount.details = `First discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.first)} Second discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.second)} Decider condition: ${discount.decider}`;
+                    return discount.details = `First discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.first)} Second discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.second)} Decider condition: ${createConditionDetails(discount.decider)}`;
+                case 'placeholderDiscount':
+                    return discount.details = 'Placeholder'
             }
         }
 
+        const createConditionDetails = (condition) => {
+            switch (condition.type) {
+                case 'productCount':
+                    return condition.details = `Product ID: ${condition.productId} Count: ${condition.count}`;
+                case 'categoryCount':
+                    return condition.details = `Category: ${categoryOptions.value.find(opt => opt.value === condition.category)?.label} Count: ${condition.count}`;
+                case 'totalSum':
+                    return condition.details = `Required sum ${condition.requiredSum}`;
+                case 'placeholderCondition':
+                    return condition.details = 'Placeholder';
+            }
+        };
+
         const typeTemplate = (rowData) => {
-            return getDiscountTypeLabel(rowData.type);
+            return getDiscountTypeLabel(rowData.data.type);
+        };
+
+        const typeCondTemplate = (rowData) => {
+            return getConditionTypeLabel(rowData.data.type);
         };
 
         const valueTemplate = (rowData) => {
@@ -754,13 +785,14 @@ export default {
         const deleteDiscount = async (selectedIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/removeDiscount/${selectedIndex}`;
-                const response = await axios.delete(url, {
+                await axios.delete(url, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                showDeleteDiscountDialog.value = false;
             } catch (error) {
                 console.error('Error deleting discount:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -784,13 +816,14 @@ export default {
         const editDiscountPercent = async (index, editPercentValue) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setPercentDiscount/${index}/${editPercentValue}`;
-                const response = await axios.post(url, null, {
+                await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting discount percent:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -800,13 +833,14 @@ export default {
         const editCategoryDiscountCategory = async (index, editCategoryValue) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setCategoryDiscount/${index}/${editCategoryValue}`;
-                const response = await axios.post(url, null, {
+                await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting discount category:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -816,13 +850,14 @@ export default {
         const editProductDiscountID = async (index, editProductDiscountID) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setProductIdDiscount/${index}/${editProductDiscountID}`;
-                const response = await axios.post(url, null, {
+                await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting discount product:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -832,13 +867,14 @@ export default {
         const editFirstDiscount = async (index, editFirstDiscountIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setFirstDiscount/${index}/${editFirstDiscountIndex}`;
-                const response = await axios.post(url, null, {
+                await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting first discount:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -848,13 +884,14 @@ export default {
         const editSecondDiscount = async (index, editSecondDiscountIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setSecondDiscount/${index}/${editSecondDiscountIndex}`;
-                const response = await axios.post(url, null, {
+                await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting second discount:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -864,13 +901,14 @@ export default {
         const editFirstCondition = async (index, editFirstConditionIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setFirstCondition/${index}/${editFirstConditionIndex}`;
-                const response = await axios.post(url, null, {
+                await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting first condition:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -880,13 +918,14 @@ export default {
         const editSecondCondition = async (index, editSecondConditionIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setSecondCondition/${index}/${editSecondConditionIndex}`;
-                const response = await axios.post(url, null, {
+                await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting second condition:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -896,13 +935,14 @@ export default {
         const editThenDiscount = async (index, editThenDiscountIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setThenDiscount/${index}/${editThenDiscountIndex}`;
-                const response = await axios.post(url, null, {
+                await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting then discount:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -912,13 +952,14 @@ export default {
         const editDeciderCondition = async (index, editDeciderConditionIndex) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setDeciderDiscount/${index}/${editDeciderConditionIndex}`;
-                const response = await axios.post(url, null, {
+                await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchDiscounts();
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting decider condition:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -928,13 +969,13 @@ export default {
         const editConditionCount = async (index, editCountValue) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setCountCondition/${index}/${editCountValue}`;
-                const response = await axios.post(url, null, {
+                await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting condition count:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -944,13 +985,13 @@ export default {
         const editConditionCategory = async (index, editCondCategoryValue) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setCategoryCondition/${index}/${editCondCategoryValue}`;
-                const response = await axios.post(url, null, {
+                await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting condition category:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -960,13 +1001,13 @@ export default {
         const editConditionProductID = async (index, editCondProductIDValue) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setProductIdDiscount/${index}/${editCondProductIDValue}`;
-                const response = await axios.post(url, null, {
+                await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting condition product ID:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -976,13 +1017,13 @@ export default {
         const editConditionTotalSum = async (index, editTotalSumValue) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setTotalSum/${index}/${editTotalSumValue}`;
-                const response = await axios.post(url, null, {
+                await axios.post(url, null, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchConditions();
             } catch (error) {
                 console.error('Error setting condition total sum:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -991,14 +1032,14 @@ export default {
 
         const deleteCondition = async (index) => {
             try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/removeConditions/${index}`;
-                const response = await axios.delete(url, {
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/removeCondition/${index}`;
+                await axios.delete(url, {
                     params: {
                         username: username.value,
                         token: token.value
                     }
                 });
-                conditions.value = response.data;
+                fetchConditions();
             } catch (error) {
                 console.error('Error deleting condition:', error);
                 toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -1037,6 +1078,7 @@ export default {
             saveDiscount,
             saveCondition,
             typeTemplate,
+            typeCondTemplate,
             valueTemplate,
             detailsTemplate,
             deleteDiscount,
@@ -1078,10 +1120,11 @@ export default {
 
 .action-buttons button {
     margin-right: 12px;
+    margin-top: 12px;
 }
 
 .p-datatable {
-    margin-inline: 12rem;
+    margin-inline: 4rem;
 }
 
 .p-datatable {

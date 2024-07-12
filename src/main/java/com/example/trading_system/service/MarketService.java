@@ -172,6 +172,8 @@ public interface MarketService {
 
     void setPurchasePolicyAge(String username, String storeName, int selectedIndex, int age) throws IllegalAccessException;
 
+    void setPurchasePolicyCategory(String username, String storeName, int selectedIndex, int category) throws IllegalAccessException;
+
     void setFirstPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedFirstIndex) throws IllegalAccessException;
 
     void setSecondPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;

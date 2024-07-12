@@ -76,6 +76,6 @@ public class PurchasePolicyByCategoryAndDate extends PurchasePolicy {
 
     @Override
     public String getPurchasePolicyInfo() {
-        return "{ \"type\": \"ShoppingCart category and date after now\", \"dateTime_limit\": " + dateTime+", \"categoryId\": " + category +  " }";
+        return "{ \"type\": \"Category and Date Policy\", \"date\": \"" + dateTime.toLocalDate().toString() + "\", \"category\": " + category + " }";
     }
 }

@@ -260,9 +260,11 @@ public interface TradingSystem {
 
     ResponseEntity<String> setPurchasePolicyAge(String username, String token, String storeName, int selectedIndex, int age);
 
-    ResponseEntity<String> setFirstPurchasePolicy(String username, String token, String storeName, int selectedDiscountIndex, int selectedFirstIndex);
+    ResponseEntity<String> setPurchasePolicyCategory(String username, String token, String storeName, int selectedIndex, int category);
 
-    ResponseEntity<String> setSecondPurchasePolicy(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex);
+    ResponseEntity<String> setFirstPurchasePolicy(String username, String token, String storeName, int selectedPolicyIndex, int selectedFirstIndex);
+
+    ResponseEntity<String> setSecondPurchasePolicy(String username, String token, String storeName, int selectedPolicyIndex, int selectedSecondIndex);
 
     ResponseEntity<String> removePurchasePolicy(String username, String token, String storeName, int selectedIndex);
     //endregion

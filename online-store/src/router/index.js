@@ -31,7 +31,7 @@ import WatchStoreBids from '@/views/WatchStoreBids.vue';
 import PaymentPage from '@/views/PaymentPage.vue';
 import ProductsForStore from '@/views/ProductsForStore.vue';
 import EditPurchasePolicy from '@/views/PurchasePolicyManagement.vue';
-import EditDiscountPolicy from '@/components/DiscountManagement.vue'
+import EditDiscountPolicy from '@/views/DiscountManagement.vue'
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },

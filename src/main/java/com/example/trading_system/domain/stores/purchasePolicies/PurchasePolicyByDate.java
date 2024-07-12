@@ -68,6 +68,7 @@ public class PurchasePolicyByDate extends PurchasePolicy{
 
     @Override
     public String getPurchasePolicyInfo() {
-        return "{ \"type\": \"ShoppingCart date after now\", \"dateTime_limit\": " + dateTime+  " }";
+        return "{ \"type\": \"Date Policy\", \"date\": \"" + dateTime.toLocalDate().toString() + "\" }";
     }
+
 }

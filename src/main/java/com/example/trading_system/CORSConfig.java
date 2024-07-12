@@ -11,6 +11,6 @@ public class CORSConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedOrigins("http://localhost:8088"); // This is only for dev.
+                .allowedOrigins("http://localhost:8080"); // This is only for dev.
     }
 }

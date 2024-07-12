@@ -193,11 +193,15 @@ public interface MarketFacade {
 
     void setPurchasePolicyAge(String username, String storeName, int selectedIndex, int age) throws IllegalAccessException;
 
+    void setPurchasePolicyCategory(String username, String storeName, int selectedIndex, int category) throws IllegalAccessException;
+
     void setFirstPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedFirstIndex) throws IllegalAccessException;
 
     void setSecondPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
 
     void removePurchasePolicy(String username, String storeName, int selectedIndex) throws IllegalAccessException;
+
+    //end region
 
     void sendMessageUserToStore(String sender, String storeName, String content);
 

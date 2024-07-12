@@ -51,7 +51,7 @@ public class PurchasePolicyByProductAndDate extends PurchasePolicy {
 
     @Override
     public void setPurchasePolicyProduct(int productID) {
-        if(productID<=0 )
+        if(productID<0)
             throw new IllegalArgumentException("Parameter "+productID+" cannot be negative or zero");
         this.productId=productID;
     }
@@ -75,6 +75,6 @@ public class PurchasePolicyByProductAndDate extends PurchasePolicy {
 
     @Override
     public String getPurchasePolicyInfo() {
-        return "{ \"type\": \"ShoppingCart product and date after now\", \"dateTime_limit\": " + dateTime+", \"productId\": " + productId +  " }";
+        return "{ \"type\": \"Product and Date Policy\", \"date\": \"" + dateTime.toLocalDate().toString() + "\", \"productId\": " + productId + " }";
     }
 }

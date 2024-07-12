@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8088") //TODO IP and Port (general)
+@CrossOrigin(origins = "http://localhost:8080") //TODO IP and Port (general)
 @RequestMapping("/api/trading")
 public class TradingSystemRestController {
 
@@ -765,7 +765,7 @@ public class TradingSystemRestController {
     //endregion
 
     // Purchase Policies
-    @GetMapping("/store/{storeName}/purchase-policies")
+    @GetMapping("/store/purchase-policies/getPurchasePoliciesInfo")
     public ResponseEntity<String> getPurchasePoliciesInfo(@RequestParam String username,
                                                           @RequestParam String token,
                                                           @RequestParam String storeName) {
@@ -891,22 +891,31 @@ public class TradingSystemRestController {
         return tradingSystem.setPurchasePolicyAge(username, token, storeName, selectedIndex, age);
     }
 
+    @PutMapping("/store/purchase-policies/setPurchasePolicyCategory")
+    public ResponseEntity<String> setPurchasePolicyCategory(@RequestParam String username,
+                                                       @RequestParam String token,
+                                                       @RequestParam String storeName,
+                                                       @RequestParam int selectedIndex,
+                                                       @RequestParam int category) {
+        return tradingSystem.setPurchasePolicyCategory(username, token, storeName, selectedIndex, category);
+    }
+
     @PutMapping("/store/purchase-policies/setFirstPurchasePolicy")
     public ResponseEntity<String> setFirstPurchasePolicy(@RequestParam String username,
                                                          @RequestParam String token,
                                                          @RequestParam String storeName,
-                                                         @RequestParam int selectedDiscountIndex,
+                                                         @RequestParam int selectedPolicyIndex,
                                                          @RequestParam int selectedFirstIndex) {
-        return tradingSystem.setFirstPurchasePolicy(username, token, storeName, selectedDiscountIndex, selectedFirstIndex);
+        return tradingSystem.setFirstPurchasePolicy(username, token, storeName, selectedPolicyIndex, selectedFirstIndex);
     }
 
     @PutMapping("/store/purchase-policies/setSecondPurchasePolicy")
     public ResponseEntity<String> setSecondPurchasePolicy(@RequestParam String username,
                                                           @RequestParam String token,
                                                           @RequestParam String storeName,
-                                                          @RequestParam int selectedDiscountIndex,
+                                                          @RequestParam int selectedPolicyIndex,
                                                           @RequestParam int selectedSecondIndex) {
-        return tradingSystem.setSecondPurchasePolicy(username, token, storeName, selectedDiscountIndex, selectedSecondIndex);
+        return tradingSystem.setSecondPurchasePolicy(username, token, storeName, selectedPolicyIndex, selectedSecondIndex);
     }
 
     @DeleteMapping("/store/purchase-policies/removePurchasePolicy")
