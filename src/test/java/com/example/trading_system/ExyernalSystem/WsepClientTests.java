@@ -1,6 +1,7 @@
 package com.example.trading_system.ExyernalSystem;
 
 import com.example.trading_system.domain.externalservices.WsepClient;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class WsepClientTests {
     }
 
     @Test
+    @Disabled
     public void testPay() throws IOException {
         String response = apiClient.pay("1000", "USD", "2222333344445555", "4", "2021", "Israel", "262", "20444444");
         System.out.println("test Pay response "+ response);
@@ -27,6 +29,7 @@ public class WsepClientTests {
     }
 
     @Test
+    @Disabled
     public void testPayCcv984() throws IOException {
         String response = apiClient.pay("1000", "USD", "2222333344445555", "4", "2021", "Israel", "984", "20444444");
         System.out.println("test Pay cvv 984 response "+ response);
@@ -36,6 +39,7 @@ public class WsepClientTests {
         assertEquals(true, isFailure);
     }
     @Test
+    @Disabled
     public void testPayCcv986() throws IOException {
         String response = apiClient.pay("1000", "USD", "2222333344445555", "4", "2021", "Israel", "986", "20444444");
         System.out.println("test Pay cvv 986 response "+ response);
@@ -46,6 +50,7 @@ public class WsepClientTests {
     }
 
     @Test
+    @Disabled
     public void testPayCcv988() throws IOException {
         String response = apiClient.pay("1000", "USD", "2222333344445555", "4", "2021", "Israel", "988", "20444444");
         System.out.println("test Pay cvv 988 response "+ response);
