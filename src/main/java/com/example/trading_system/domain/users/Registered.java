@@ -232,6 +232,26 @@ public class Registered extends User {
         else return false;
     }
 
+    @Override
+    public boolean isAcceptBids(String storeName) {
+        if (isOwner(storeName))
+            return true;
+        else if(isManager(storeName)){
+            return getRoleByStoreId(storeName).isAcceptBids();
+        }
+        else return false;
+    }
+
+    @Override
+    public boolean isCreateLottery(String storeName) {
+        if (isOwner(storeName))
+            return true;
+        else if(isManager(storeName)){
+            return getRoleByStoreId(storeName).isCreateLottery();
+        }
+        else return false;
+    }
+
 
     public void addWaitingAppoint_Owner(String storeName,String appointee) {
         ownerSuggestions.put(storeName,appointee);

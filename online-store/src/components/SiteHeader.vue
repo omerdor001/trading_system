@@ -9,7 +9,7 @@
       </div>
       <div class="right-buttons">
         <template v-if="isLoggedIn">
-          <span class="username">{{ userName }}</span>
+          <span class="username">{{userName}}</span>
           <PrimeButton label="Logout" @click="logout" class="p-button-danger" />
         </template>
         <template v-else>
@@ -45,17 +45,12 @@ export default defineComponent({
   components: {
     PrimeButton,
     'p-toast': PrimeToast,
-
   },
   props: {
     isLoggedIn: {
       type: Boolean,
       default: false
     },
-    username: {
-      type: String,
-      default: ''
-    }
   },
   setup() {
     const router = useRouter();
@@ -68,8 +63,12 @@ export default defineComponent({
       router.push({ name: 'HomePage' });
     };
 
-    const goToSearch = () => {
+    const goToSearchProduct = () => {
       router.push({ name: 'SearchPage' });
+    };
+
+    const goToSearchStore = () => {
+      router.push({ name: 'StoreSearchPage' });
     };
 
     const viewCart = () => {
@@ -106,7 +105,6 @@ export default defineComponent({
         console.log(error.response.data);
         toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
       }
-      isLoggedIn.value = false;
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('isAdmin');
       router.push('/login');
@@ -135,20 +133,20 @@ export default defineComponent({
         });
 
 
-    return {
-      userName,
-      goHome,
-      goToSearchProduct,
-      goToSearchStore, // Include the new function
-      viewCart,
-      showNotifications,
-      logout,
-      notificationsVisible,
-      notifications
-    };
-  }
-});
-</script>
+   return {
+         userName,
+         goHome,
+         goToSearchProduct,
+         goToSearchStore, // Include the new function
+         viewCart,
+         showNotifications,
+         logout,
+         notificationsVisible,
+         notifications
+       };
+     }
+   });
+   </script>
 
 
 <style scoped>
