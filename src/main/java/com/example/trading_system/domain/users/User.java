@@ -14,6 +14,7 @@ import java.util.List;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class User {
     private static final Logger logger = LoggerFactory.getLogger(User.class);
 
@@ -52,6 +53,9 @@ public abstract class User {
         this.address = "";
         this.messages = new LinkedList<>();
         this.isTimerCancelled = true;
+    }
+
+    public User() {
     }
 
     public String getUsername() {

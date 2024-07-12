@@ -11,7 +11,6 @@ import java.time.Period;
 import java.util.*;
 
 @Entity
-@Table(name = "registered_users")
 public class Registered extends User {
     @Column(nullable = false)
     private String encrypted_pass;
@@ -56,6 +55,10 @@ public class Registered extends User {
         this.roles = new ArrayList<>();
         this.managerSuggestions = new HashMap<>();
         this.ownerSuggestions = new HashMap<>();
+    }
+
+    public Registered() {
+
     }
 
     public void openStore(String storeName) {
@@ -191,7 +194,6 @@ public class Registered extends User {
         HashMap<String, List<Boolean>> permissions = new HashMap<>();
         permissions.put(appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery));
         managerSuggestions.put(store_name_id, permissions);
-
     }
 
     public boolean isWatch(String storeName){
@@ -226,26 +228,6 @@ public class Registered extends User {
             return true;
         else if(isManager(storeName)){
             return getRoleByStoreId(storeName).isEditDiscountPolicy();
-        }
-        else return false;
-    }
-
-    @Override
-    public boolean isAcceptBids(String storeName) {
-        if (isOwner(storeName))
-            return true;
-        else if(isManager(storeName)){
-            return getRoleByStoreId(storeName).isAcceptBids();
-        }
-        else return false;
-    }
-
-    @Override
-    public boolean isCreateLottery(String storeName) {
-        if (isOwner(storeName))
-            return true;
-        else if(isManager(storeName)){
-            return getRoleByStoreId(storeName).isCreateLottery();
         }
         else return false;
     }

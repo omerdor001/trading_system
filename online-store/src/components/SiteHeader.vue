@@ -4,11 +4,12 @@
       <div class="left-buttons">
         <img src="@/assets/logo.png" alt="LASMONY" class="logo">
         <PrimeButton label="Home" @click="goHome" class="p-button-primary" />
-        <PrimeButton label="Search Product" @click="goToSearch" class="p-button-primary" />
+        <PrimeButton label="Search Product" @click="goToSearchProduct" class="p-button-primary" />
+        <PrimeButton label="Search Store" @click="goToSearchStore" class="p-button-primary" /> <!-- New button -->
       </div>
       <div class="right-buttons">
         <template v-if="isLoggedIn">
-          <span class="username">{{ username }}</span>
+          <span class="username">{{ userName }}</span>
           <PrimeButton label="Logout" @click="logout" class="p-button-danger" />
         </template>
         <template v-else>
@@ -19,6 +20,14 @@
       </div>
       <p-toast></p-toast>
     </div>
+    <PrimeDialog v-model="notificationsVisible" header="Notifications">
+      <ul>
+        <li v-for="(notification, index) in notifications" :key="index">
+          {{ notification.message }}
+        </li>
+      </ul>
+      <Button @click="notificationsVisible = false">Close</Button>
+    </PrimeDialog>
   </header>
 </template>
 
@@ -51,7 +60,10 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const toast = useToast();
-    const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
+    const notificationsVisible = ref(false);
+    const notifications = ref([]);
+    const userName = localStorage.getItem('userName');
+
     const goHome = () => {
       router.push({ name: 'HomePage' });
     };
@@ -64,8 +76,20 @@ export default defineComponent({
       router.push({ name: 'ShoppingCart' });
     };
 
-    const notifications = () => {
-      router.push('/show-notifications');
+    const showNotifications = async () => {
+      try {
+        const response = await axios.get('http://localhost:8082/api/notifications', {
+          params: {
+            username: localStorage.getItem('username'),
+            token: localStorage.getItem('token')
+          }
+        });
+        notifications.value = response.data.notifications;
+        notificationsVisible.value = true;
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch notifications.', life: 3000 });
+      }
     };
 
     const logout = async () => {
@@ -78,7 +102,6 @@ export default defineComponent({
         });
         localStorage.setItem('username', response.data.username);
         localStorage.setItem('token', response.data.token);
-        console.log(localStorage.getItem('token'));
       } catch (error) {
         console.log(error.response.data);
         toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
@@ -113,15 +136,20 @@ export default defineComponent({
 
 
     return {
+      userName,
       goHome,
-      goToSearch,
+      goToSearchProduct,
+      goToSearchStore, // Include the new function
       viewCart,
-      notifications,
-      logout
+      showNotifications,
+      logout,
+      notificationsVisible,
+      notifications
     };
-  },
+  }
 });
 </script>
+
 
 <style scoped>
 .header-content {

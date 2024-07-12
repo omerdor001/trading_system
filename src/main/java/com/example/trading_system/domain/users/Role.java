@@ -27,6 +27,10 @@ public class Role {
         this.appointedById = appointedById;
     }
 
+    public Role() {
+
+    }
+
     public String getStoreId() {
         return store_name_id;
     }

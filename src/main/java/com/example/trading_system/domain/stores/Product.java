@@ -3,27 +3,45 @@ package com.example.trading_system.domain.stores;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
-
+@Getter
 @Entity
+@Table(name = "products")
 public class Product {
+    private static final Logger logger = LoggerFactory.getLogger(Product.class);
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true)
     private int product_id;
+
+    @Column(nullable = false)
     private String store_name;
+
+    @Column(nullable = false)
     private String product_name;
+
+    @Column
     private String product_description;
+
+    @Column(nullable = false)
     private double product_price;
+
+    @Column
     private volatile int product_quantity;
+
+    @Column
     private double rating;
+
     @Enumerated(EnumType.STRING)
     private Category category;
 
     @ElementCollection
+    @CollectionTable(name = "product_keywords", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "keyword")
     private List<String> keyWords;
-    private static final Logger logger = LoggerFactory.getLogger(Product.class);
 
 
     public Product(int product_id, String product_name, String product_description, double product_price, int product_quantity, double rating, Category category, List<String> keyWords) {
@@ -42,72 +60,36 @@ public class Product {
 
     }
 
-    public int getProduct_id() {
-        return product_id;
-    }
-
     public void setProduct_id(int product_id) {
         this.product_id = product_id;
-    }
-
-    public String getProduct_name() {
-        return product_name;
     }
 
     public void setProduct_name(String product_name) {
         this.product_name = product_name;
     }
 
-    public String getProduct_description() {
-        return product_description;
-    }
-
     public void setProduct_description(String product_description) {
         this.product_description = product_description;
-    }
-
-    public double getProduct_price() {
-        return product_price;
     }
 
     public void setProduct_price(double product_price) {
         this.product_price = product_price;
     }
 
-    public int getProduct_quantity() {
-        return product_quantity;
-    }
-
     public void setProduct_quantity(int product_quantity) {
         this.product_quantity = product_quantity;
-    }
-
-    public double getRating() {
-        return rating;
     }
 
     public void setRating(double rating) {
         this.rating = rating;
     }
 
-    public String getStore_name() {
-        return store_name;
-    }
-
     public void setStore_name(String store_name) {
         this.store_name = store_name;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
     public void setCategory(int category) {
         this.category = Category.values()[category];
-    }
-
-    public List<String> getKeyWords() {
-        return keyWords;
     }
 
     public void addKeyWord(String keyWord) {

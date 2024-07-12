@@ -8,7 +8,7 @@ import java.util.Collection;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "policy_type")
+@DiscriminatorColumn(name = "type")
 public abstract  class Condition implements ConditionInterface{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

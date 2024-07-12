@@ -163,15 +163,15 @@ public interface TradingSystem {
 
     ResponseEntity<String> calculatePrice(String username, String token);
 
-    ResponseEntity<String> sendMessageUserToUser(String sender, String token, String receiver, String content);
-
-    ResponseEntity<String> sendMessageUserToStore(String sender, String token, String storeName, String content);
-
-    ResponseEntity<String> sendMessageStoreToUser(String owner, String token, String receiver, String storeName, String content);
-
-    ResponseEntity<String> getUserMessagesJson(String admin, String token, String username);
-
-    ResponseEntity<String> getStoreMessagesJson(String admin, String token, String storeName);
+//    ResponseEntity<String> sendMessageUserToUser(String sender, String token, String receiver, String content);
+//
+//    ResponseEntity<String> sendMessageUserToStore(String sender, String token, String storeName, String content);
+//
+//    ResponseEntity<String> sendMessageStoreToUser(String owner, String token, String receiver, String storeName, String content);
+//
+//    ResponseEntity<String> getUserMessagesJson(String admin, String token, String username);
+//
+//    ResponseEntity<String> getStoreMessagesJson(String admin, String token, String storeName);
 
     //region Discount creation
     ResponseEntity<String> getDiscountPolicies(String username, String token, String storeName);
@@ -287,14 +287,13 @@ public interface TradingSystem {
 
     ResponseEntity<String> placeCounterOffer(String userName, String token, String storeName, int productID, String bidUserName, double newPrice);
 
-
     ResponseEntity<String> getStoreBids(String userName, String token, String storeName);
 
     ResponseEntity<String> getMyBids(String userName, String token, String storeName);
 
-    ResponseEntity<String> buyLotteryProductTicket(String userName, String token, String storeName, int productID, double price);
-
-    ResponseEntity<String> createProductLottery(String userName, String token, String storeName, int productID, LocalDateTime localDateTime, double price);
+//    ResponseEntity<String> buyLotteryProductTicket(String userName, String token, String storeName, int productID, double price);
+//
+//    ResponseEntity<String> createProductLottery(String userName, String token, String storeName, int productID, LocalDateTime localDateTime, double price);
 
     ResponseEntity<String> editProduct(String username, String token, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity);
 

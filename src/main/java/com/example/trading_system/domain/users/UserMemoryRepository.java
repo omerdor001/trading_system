@@ -6,11 +6,12 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 
-@Service
+//@Service
 public class UserMemoryRepository implements UserRepository {
     private static UserMemoryRepository instance = null;
     private HashMap<String, User> users;
 
+    //@Autowired
     private UserMemoryRepository() {
         users = new HashMap<>();
     }

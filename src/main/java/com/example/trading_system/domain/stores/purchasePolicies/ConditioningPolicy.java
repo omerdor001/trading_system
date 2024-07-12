@@ -6,15 +6,16 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+
 @Entity
-@DiscriminatorValue("ConditioningPolicy")
-
+@DiscriminatorValue("CONDITIONING")
 public class ConditioningPolicy extends PurchasePolicy {
-    @ManyToOne(cascade = CascadeType.ALL)
-    private PurchasePolicy predicateOne;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private PurchasePolicy predicateTwo;
 
+    @OneToOne
+    private PurchasePolicy predicateOne;
+
+    @OneToOne
+    private PurchasePolicy predicateTwo;
     public ConditioningPolicy() {
         predicateOne = new PlaceholderPurchasePolicy();
         predicateTwo = new PlaceholderPurchasePolicy();

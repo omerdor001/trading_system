@@ -5,16 +5,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Collection;
-@Entity
-@DiscriminatorValue("PlaceholderCondition")
 
+@Entity
+@DiscriminatorValue("PLACEHOLDER")
 public class PlaceholderCondition extends Condition {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
-    public PlaceholderCondition() {
-    }
+
 
     @Override
     public boolean isSatisfied(Collection<ProductInSaleDTO> items) {

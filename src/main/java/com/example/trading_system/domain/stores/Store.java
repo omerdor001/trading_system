@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import jakarta.persistence.*;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,50 +19,62 @@ import java.util.stream.Collectors;
 @Setter
 @Getter
 @Entity
+@Table(name = "stores")
 public class Store {
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
-    @Getter
+
     @Id
+    @Column(name = "name_id")
     private String nameId;
+
     private String description;
-    //Added because missing
-    @Getter
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "store_id")
-    private HashMap<Integer, Product> products;
-    //Added because missing
-    @Getter
+    private Map<Integer, Product> products = new HashMap<>();
+
     @ElementCollection
-    private List<String> managers;
-    //Added because missing
-    @Getter
+    @CollectionTable(name = "store_managers", joinColumns = @JoinColumn(name = "store_id"))
+    @Column(name = "manager")
+    private List<String> managers = new LinkedList<>();
+
     @ElementCollection
-    private List<String> owners;
-    @Getter
+    @CollectionTable(name = "store_owners", joinColumns = @JoinColumn(name = "store_id"))
+    @Column(name = "owner")
+    private List<String> owners = new LinkedList<>();
+    @Column(name ="founder")
     private String founder;
-    @Getter
-    @Setter
+    @Column(name = "ActivtionStatus")
     private boolean isActive;
+    @Column(name =" openingStatus")
     private boolean isOpen;
+
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    private StoreSalesHistory salesHistory;
-    @Getter
-    @Setter
+    @JoinColumn(name = "sales_history_id", referencedColumnName = "id")
+    private StoreSalesHistory salesHistory = new StoreSalesHistory();
+    @Column(name = "rating")
     private Double storeRating;
-    @Getter
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private LinkedList<DiscountPolicy> discountPolicies;
-    @Getter
+    private List<DiscountPolicy> discountPolicies = new LinkedList<>();
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private LinkedList<Condition> discountConditions;
-    @Getter
+    private List<Condition> discountConditions = new LinkedList<>();
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private LinkedList<PurchasePolicy> purchasePolicies;
-    @Getter
+    private List<PurchasePolicy> purchasePolicies = new LinkedList<>();
+
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Message> messages = new LinkedList<>();
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private LinkedList<Message> messages;
-    private LinkedList<Bid> bids;
-    private HashMap<Integer, ProductLottery> lotteryProducts;
+    @JoinColumn(name = "store_id")
+    private List<Bid> bids;
+
+//    @ElementCollection
+//    @CollectionTable(name = "store_lottery_products", joinColumns = @JoinColumn(name = "store_id"))
+//    @MapKeyColumn(name = "product_id")
+//    private HashMap<Integer, ProductLottery> lotteryProducts = new HashMap<>();
 
     public Store(String nameId, String description, String founder, Double storeRating) {
         this.nameId = nameId;
@@ -79,9 +90,9 @@ public class Store {
         this.discountConditions = new LinkedList<>();
         this.purchasePolicies = new LinkedList<>();
         this.isOpen = true;
-        this.messages = new LinkedList<>();
+        //this.messages = new LinkedList<>();
         this.bids = new LinkedList<>();
-        this.lotteryProducts = new HashMap<>();
+       // this.lotteryProducts = new HashMap<>();
     }
 
     public Store() {
@@ -315,9 +326,9 @@ public class Store {
         isOpen = open;
     }
 
-    public String getMessagesJSON() {
-        return Message.toJsonList(this.messages);
-    }
+//    public String getMessagesJSON() {
+//        return Message.toJsonList(this.messages);
+//    }
 
     public synchronized void releaseReservedProducts(int productId, int quantity) {
         getProduct(productId).releaseReservedProducts(quantity);
@@ -397,9 +408,9 @@ public class Store {
         return salesHistory.getPurchaseHistory(username);
     }
 
-    public void receiveMessage(String senderId, String senderUsername, String content) {
-        this.messages.add(new Message(senderId, senderUsername, content));
-    }
+//    public void receiveMessage(String senderId, String senderUsername, String content) {
+//        this.messages.add(new Message(senderId, senderUsername, content));
+//    }
 
     //region Discount creation
     public String getDiscountPoliciesInfo() {
@@ -496,7 +507,7 @@ public class Store {
     }
 
     public void removeCondition(int selectedIndex) {
-        discountConditions.remove(selectedIndex - discountPolicies.size());
+        discountConditions.remove(selectedIndex);
     }
     //endregion
 
@@ -775,32 +786,32 @@ public class Store {
         sb.append("}");
         return sb.toString();
     }
-
-    public void createProductLottery(int productID, LocalDateTime localDateTime, double price) {
-        ProductLottery productLottery = new ProductLottery(localDateTime, price);
-        this.lotteryProducts.put(productID, productLottery);
-    }
-
-    public boolean buyLotteryProductTicket(String userName, int productID, double price) throws Exception {
-        return lotteryProducts.get(productID).buyLotteryProductTicket(userName, price);
-    }
-
-    public String makeLotteryOnProduct(int productID) {
-        return lotteryProducts.get(productID).makeLotteryOnProduct();
-    }
-
-    public boolean isLotteryExist(int productID) {
-        return lotteryProducts.containsKey(productID);
-    }
+//
+//    public void createProductLottery(int productID, LocalDateTime localDateTime, double price) {
+//        ProductLottery productLottery = new ProductLottery(localDateTime, price);
+//        this.lotteryProducts.put(productID, productLottery);
+//    }
+//
+//    public boolean buyLotteryProductTicket(String userName, int productID, double price) throws Exception {
+//        return lotteryProducts.get(productID).buyLotteryProductTicket(userName, price);
+//    }
+//
+//    public String makeLotteryOnProduct(int productID) {
+//        return lotteryProducts.get(productID).makeLotteryOnProduct();
+//    }
+//
+//    public boolean isLotteryExist(int productID) {
+//        return lotteryProducts.containsKey(productID);
+//    }
 
     public void editProduct(int productId, String productName, String productDescription, double productPrice, int productQuantity) {
         Product product = getProduct(productId);
-        synchronized (product) {
-            if (product != null) {
+        if(product == null)
+            throw new IllegalArgumentException("Product with id " + productId + " does not exist");
+        else
+            synchronized (product) {
                 product.editProduct(productName, productDescription, productPrice, productQuantity);
-            } else throw new IllegalArgumentException("Product with id " + productId + " does not exist");
         }
-
     }
 
 

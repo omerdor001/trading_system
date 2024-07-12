@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,12 +27,10 @@ public class MarketFacadeImp implements MarketFacade {
     private StoreRepository storeRepository;
     private UserFacade userFacade;
 
-
     @Autowired
-    private MarketFacadeImp(StoreRepository storeRepository) {
+    public MarketFacadeImp(@Qualifier("storeDatabaseRepository") StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
     }
-
     public static MarketFacadeImp getInstance(StoreRepository storeRepository) {
         if (instance == null) instance = new MarketFacadeImp(storeRepository);
         return instance;
@@ -1420,65 +1419,65 @@ public class MarketFacadeImp implements MarketFacade {
     }
 //endregion
 
-    @Override
-    public void sendMessageUserToStore(String sender, String storeName, String content) {
-        if (!userFacade.isUserExist(sender))
-            throw new RuntimeException("Message sender user must exist");
-        if (!isStoreExist(storeName))
-            throw new RuntimeException("Message receiver store must exist");
-        if (content.isEmpty())
-            throw new RuntimeException("Message content cannot be empty");
-        Store store = storeRepository.getStore(storeName);
-        String username = "";
-        if (sender.charAt(0) == 'v')
-            username = "visitor " + sender;
-        else if (sender.charAt(0) == 'r')
-            username = sender.substring(1);
-        store.receiveMessage(sender, username, content);
-        if (sender.charAt(0) == 'r')
-            userFacade.sendNotificationToStoreOwners(sender, store.getOwners(), "Store: " + storeName + " received a message from user: " + sender);
-        else
-            userFacade.sendNotificationToStoreOwners(sender, store.getOwners(), "Store: " + storeName + " received a message from a visitor");
-    }
+//    @Override
+//    public void sendMessageUserToStore(String sender, String storeName, String content) {
+//        if (!userFacade.isUserExist(sender))
+//            throw new RuntimeException("Message sender user must exist");
+//        if (!isStoreExist(storeName))
+//            throw new RuntimeException("Message receiver store must exist");
+//        if (content.isEmpty())
+//            throw new RuntimeException("Message content cannot be empty");
+//        Store store = storeRepository.getStore(storeName);
+//        String username = "";
+//        if (sender.charAt(0) == 'v')
+//            username = "visitor " + sender;
+//        else if (sender.charAt(0) == 'r')
+//            username = sender.substring(1);
+//        store.receiveMessage(sender, username, content);
+//        if (sender.charAt(0) == 'r')
+//            userFacade.sendNotificationToStoreOwners(sender, store.getOwners(), "Store: " + storeName + " received a message from user: " + sender);
+//        else
+//            userFacade.sendNotificationToStoreOwners(sender, store.getOwners(), "Store: " + storeName + " received a message from a visitor");
+//    }
 
-    @Override
-    public void sendMessageStoreToUser(String owner, String receiver, String storeName, String content) {
-        if (!userFacade.isUserExist(receiver)) {
-            if (receiver.charAt(0) == 'r')
-                throw new RuntimeException("Message receiver user must exist");
-            else if (receiver.charAt(0) == 'v')
-                throw new RuntimeException("Visitor no longer exists, no need to reply");
-        }
-        if (!userFacade.isUserExist(owner)) {
-            throw new RuntimeException("Message sender user must exist");
-        }
-        if (!isStoreExist(storeName))
-            throw new RuntimeException("Message sender store must exist");
-        if (content.isEmpty())
-            throw new RuntimeException("Message content cannot be empty");
-        User receiverUser = userFacade.getUser(receiver);
-        User ownerUser = userFacade.getUser(owner);
-        if (!ownerUser.isOwner(storeName)){
-            throw new RuntimeException("Message sender must be an owner of the store");
-        }
-        receiverUser.receiveMessage(storeName, storeName, content);
-        userFacade.sendNotification(owner, receiver, "Owner: " + ownerUser.getUsername() + " from store: " + storeName + " has replied to your message");
-    }
+//    @Override
+//    public void sendMessageStoreToUser(String owner, String receiver, String storeName, String content) {
+//        if (!userFacade.isUserExist(receiver)) {
+//            if (receiver.charAt(0) == 'r')
+//                throw new RuntimeException("Message receiver user must exist");
+//            else if (receiver.charAt(0) == 'v')
+//                throw new RuntimeException("Visitor no longer exists, no need to reply");
+//        }
+//        if (!userFacade.isUserExist(owner)) {
+//            throw new RuntimeException("Message sender user must exist");
+//        }
+//        if (!isStoreExist(storeName))
+//            throw new RuntimeException("Message sender store must exist");
+//        if (content.isEmpty())
+//            throw new RuntimeException("Message content cannot be empty");
+//        User receiverUser = userFacade.getUser(receiver);
+//        User ownerUser = userFacade.getUser(owner);
+//        if (!ownerUser.isOwner(storeName)){
+//            throw new RuntimeException("Message sender must be an owner of the store");
+//        }
+//        receiverUser.receiveMessage(storeName, storeName, content);
+//        userFacade.sendNotification(owner, receiver, "Owner: " + ownerUser.getUsername() + " from store: " + storeName + " has replied to your message");
+//    }
 
-    @Override
-    public String  getStoreMessagesJson(String admin, String storeName){
-        if (!userFacade.isUserExist(admin)) {
-            throw new IllegalArgumentException("Admin user doesn't exist in the system");
-        }
-        if (!storeRepository.isExist(storeName)) {
-            throw new IllegalArgumentException("Store doesn't exist in the system");
-        }
-        if (!userFacade.isAdmin(admin)) {
-            throw new IllegalArgumentException("Only admin user can get user notifications");
-        }
-        Store store = storeRepository.getStore(storeName);
-        return store.getMessagesJSON();
-    }
+//    @Override
+//    public String  getStoreMessagesJson(String admin, String storeName){
+//        if (!userFacade.isUserExist(admin)) {
+//            throw new IllegalArgumentException("Admin user doesn't exist in the system");
+//        }
+//        if (!storeRepository.isExist(storeName)) {
+//            throw new IllegalArgumentException("Store doesn't exist in the system");
+//        }
+//        if (!userFacade.isAdmin(admin)) {
+//            throw new IllegalArgumentException("Only admin user can get user notifications");
+//        }
+//        Store store = storeRepository.getStore(storeName);
+//        return store.getMessagesJSON();
+//    }
 
     @Override
     public void placeBid(String userName, String storeName, int productID, double price) throws IllegalArgumentException {
@@ -1492,8 +1491,6 @@ public class MarketFacadeImp implements MarketFacade {
             userFacade.sendNotification(userName, owner, userName + " is placed a bid for product " + productID + " in store " + storeName + " with price " + price);
         for (String manager : store.getManagers())
             userFacade.sendNotification(userName, manager, userName + " is placed a bid for product " + productID + " in store " + storeName + " with price " + price);
-
-
     }
 
     @Override
@@ -1566,32 +1563,32 @@ public class MarketFacadeImp implements MarketFacade {
 
     }
 
-    @Override
-    public void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception{
-        validateUserAndStore(userName, storeName);
-        Store store = storeRepository.getStore(storeName);
-        if(!store.isProductExist(productID))
-            throw new IllegalArgumentException("Product must exist in store");
-        if(localDateTime.isBefore(LocalDateTime.now()) || localDateTime.isEqual(LocalDateTime.now()))
-            throw new Exception("Cant create lottery for past or present");
-        User user = userFacade.getUser(userName);
-        user.getRoleByStoreId(storeName).createProductLottery();
-        store.createProductLottery(productID,localDateTime,price);
-    }
-
-    @Override
-    public String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception{
-        validateUserAndStore(userName, storeName);
-        Store store = storeRepository.getStore(storeName);
-        if(!store.isLotteryExist(productID))
-            throw new Exception("Lottery does not exist");
-        if(store.buyLotteryProductTicket(userName, productID, price)){
-            return store.makeLotteryOnProduct(productID) + " won the product " + productID;
-        }
-        else
-            return "Ticket Bought Successfully";
-
-    }
+//    @Override
+//    public void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception{
+//        validateUserAndStore(userName, storeName);
+//        Store store = storeRepository.getStore(storeName);
+//        if(!store.isProductExist(productID))
+//            throw new IllegalArgumentException("Product must exist in store");
+//        if(localDateTime.isBefore(LocalDateTime.now()) || localDateTime.isEqual(LocalDateTime.now()))
+//            throw new Exception("Cant create lottery for past or present");
+//        User user = userFacade.getUser(userName);
+//        user.getRoleByStoreId(storeName).createProductLottery();
+//      //  store.createProductLottery(productID,localDateTime,price);
+//    }
+//
+//    @Override
+//    public String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception{
+//        validateUserAndStore(userName, storeName);
+//        Store store = storeRepository.getStore(storeName);
+//        if(!store.isLotteryExist(productID))
+//            throw new Exception("Lottery does not exist");
+//        if(store.buyLotteryProductTicket(userName, productID, price)){
+//            return store.makeLotteryOnProduct(productID) + " won the product " + productID;
+//        }
+//        else
+//            return "Ticket Bought Successfully";
+//
+//    }
 
 
 
