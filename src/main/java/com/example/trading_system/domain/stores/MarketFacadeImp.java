@@ -156,8 +156,9 @@ public class MarketFacadeImp implements MarketFacade {
             if(storeRepository.getStore(storeName).getFounder().equals(user))
                 ownerMap.put("founder",true);
             else
-                ownerMap.put("founder",true);
+                ownerMap.put("founder",false);
             ownerMap.put("username",user.substring(1));
+            ownerMap.put("appointer",userFacade.getUserAppointer(user, storeName));
             ownersList.add(ownerMap);
         }
         ObjectMapper objectMapper = new ObjectMapper();
@@ -942,7 +943,7 @@ public class MarketFacadeImp implements MarketFacade {
         for (String manager : storeManagers) {
             User user2 = userFacade.getUser(manager);
             RoleState managerRole = user2.getRoleByStoreId(storeName).getRoleState();
-            result.append(user2.getUsername()).append(" ").append(manager).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append(" ").append(managerRole.isCreateLottery()).append('\n');
+            result.append(user2.getUsername()).append(" ").append(manager).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append('\n');
         }
         return result.toString();
     }
@@ -983,7 +984,7 @@ public class MarketFacadeImp implements MarketFacade {
             User user2 = userFacade.getUser(officialUserName);
             RoleState managerRole = user2.getRoleByStoreId(storeName).getRoleState();
             result.append("Role id username address birthdate watch editSupply editPurchasePolicy editDiscountPolicy").append("\n");
-            result.append("Manager ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append(" ").append(managerRole.isCreateLottery()).append("\n");
+            result.append("Manager ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append("\n");
         } else throw new IllegalArgumentException("User is not employed in this store.");
 
         return result.toString();

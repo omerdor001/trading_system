@@ -495,12 +495,12 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+    public ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
         logger.info("Trying to suggest user : {} to be a manager in store : {}", newManager, store_name_id);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(appoint, token)) return invalidTokenResponse();
-            userService.suggestManage(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+            userService.suggestManage(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
             logger.info("Finished suggesting manager : {} to be a manager in store : {}", newManager, store_name_id);
             return new ResponseEntity<>("Success suggesting manager", HttpStatus.OK);
         } catch (Exception e) {
@@ -525,12 +525,12 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+    public ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
         logger.info("Trying to approve manage to store : {}", store_name_id);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(newManager, token)) return invalidTokenResponse();
-            userService.approveManage(newManager, store_name_id, appoint,watch,editSupply,editBuyPolicy,editDiscountPolicy, acceptBids, createLottery);
+            userService.approveManage(newManager, store_name_id, appoint,watch,editSupply,editBuyPolicy,editDiscountPolicy, acceptBids);
             logger.info("Finished approving manage to store : {}", store_name_id);
             return new ResponseEntity<>("Success approving manage", HttpStatus.OK);
         } catch (Exception e) {
@@ -616,12 +616,12 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> editPermissionForManager(String username, String token, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+    public ResponseEntity<String> editPermissionForManager(String username, String token, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
         logger.info("{} is Trying to edit permission for manager : {} in store : {}", username, managerToEdit, storeNameId);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            userService.editPermissionForManager(username, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+            userService.editPermissionForManager(username, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
             logger.info("Finished edit permission to manager : {}  in store : {}", managerToEdit, storeNameId);
             return new ResponseEntity<>("Success edit permission for manager ", HttpStatus.OK);
         } catch (Exception e) {

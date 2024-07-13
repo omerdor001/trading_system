@@ -17,6 +17,7 @@
               <th>Edit Supply</th>
               <th>Edit Buy Policy</th>
               <th>Edit Discount Policy</th>
+              <th>Accept Bids</th>
               <th>Approve</th>
               <th>Reject</th>
             </tr>
@@ -29,6 +30,7 @@
               <td>{{ request.editSupply ? '✔' : '✘' }}</td>
               <td>{{ request.editBuyPolicy ? '✔' : '✘' }}</td>
               <td>{{ request.editDiscountPolicy ? '✔' : '✘' }}</td>
+              <td>{{ request.acceptBids ? '✔' : '✘' }}</td>
               <td>
                 <PrimeButton label="Approve-Click" type="button" @click="approveManager(request)" />
               </td>
@@ -91,6 +93,7 @@ export default defineComponent({
           editSupply: request.editSupply,
           editBuyPolicy: request.editBuyPolicy,
           editDiscountPolicy: request.editDiscountPolicy,
+          acceptBids: request.acceptBids
         }));
         loading.value = false;
       } catch (err) {
@@ -112,6 +115,7 @@ export default defineComponent({
             editSupply: request.editSupply,
             editBuyPolicy: request.editBuyPolicy,
             editDiscountPolicy: request.editDiscountPolicy,
+            acceptBids: request.acceptBids
           }
         });
         showSuccessToast(response.data.message);

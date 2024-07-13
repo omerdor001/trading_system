@@ -69,11 +69,11 @@ public interface TradingSystem {
 
     ResponseEntity<String> suggestOwner(String appoint, String token, String newOwner, String storeName);
 
-    ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery);
+    ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids);
 
     ResponseEntity<String> approveOwner(String newOwner, String token, String storeName, String appoint);
 
-    ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery);
+    ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids);
 
     ResponseEntity<String> rejectToOwnStore(String username, String token, String storeName, String appoint);
 
@@ -85,7 +85,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> fireOwner(String ownerAppoint, String token, String storeName, String ownerToFire);
 
-    ResponseEntity<String> editPermissionForManager(String username, String token, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery);
+    ResponseEntity<String> editPermissionForManager(String username, String token, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids);
 
     ResponseEntity<String> getAllStores(String userName, String token);
 

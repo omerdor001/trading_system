@@ -260,8 +260,9 @@ public class TradingSystemRestController {
                                                 @RequestParam boolean watch,
                                                 @RequestParam boolean editSupply,
                                                 @RequestParam boolean editBuyPolicy,
-                                                @RequestParam boolean editDiscountPolicy) {
-        return tradingSystem.suggestManage(appoint, token, "r" + newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, false, false);
+                                                @RequestParam boolean editDiscountPolicy,
+                                                @RequestParam boolean acceptBids) {
+        return tradingSystem.suggestManage(appoint, token, "r" + newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
     }
 
     @PostMapping("/approveManage")
@@ -272,8 +273,9 @@ public class TradingSystemRestController {
                                                 @RequestParam boolean watch,
                                                 @RequestParam boolean editSupply,
                                                 @RequestParam boolean editBuyPolicy,
-                                                @RequestParam boolean editDiscountPolicy) {
-        return tradingSystem.approveManage(newManager, token, store_name_id, "r" + appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy, false, false);
+                                                @RequestParam boolean editDiscountPolicy,
+                                                @RequestParam boolean acceptBids) {
+        return tradingSystem.approveManage(newManager, token, store_name_id, "r" + appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
     }
 
     @PostMapping("/approveOwner")
@@ -312,7 +314,7 @@ public class TradingSystemRestController {
                                               @RequestParam String token,
                                               @RequestParam String storeName,
                                               @RequestParam String manager) {
-        return tradingSystem.fireManager(owner, token, storeName, manager);
+        return tradingSystem.fireManager(owner, token, storeName, "r" + manager);
     }
 
     @PostMapping("/fireOwner")
@@ -320,7 +322,7 @@ public class TradingSystemRestController {
                                             @RequestParam String token,
                                             @RequestParam String storeName,
                                             @RequestParam String ownerToFire) {
-        return tradingSystem.fireOwner(ownerAppoint, token, storeName, ownerToFire);
+        return tradingSystem.fireOwner(ownerAppoint, token, storeName, "r" + ownerToFire);
     }
 
     @PostMapping("/store/manager/permission/edit")
@@ -332,9 +334,9 @@ public class TradingSystemRestController {
                                                            @RequestParam boolean editSupply,
                                                            @RequestParam boolean editBuyPolicy,
                                                            @RequestParam boolean editDiscountPolicy,
-                                                           @RequestParam boolean acceptBids,
-                                                           @RequestParam boolean createLottery) {
-        return tradingSystem.editPermissionForManager(username, token, "r"+managerToEdit, storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+                                                           @RequestParam boolean acceptBids
+                                                           ) {
+        return tradingSystem.editPermissionForManager(username, token, "r"+managerToEdit, storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
     }
 
     @GetMapping("/stores")

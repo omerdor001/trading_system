@@ -52,11 +52,11 @@ public interface UserFacade {
 
     void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
 
-    void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException, NoSuchElementException;
+    void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException, NoSuchElementException;
 
     void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
 
-    void approveManager(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException;
+    void approveManager(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException;
 
     void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException;
 
@@ -72,7 +72,7 @@ public interface UserFacade {
      * @param userId        is the current user that do the update
      * @param managerToEdit is the manager that the update will affect
      **/
-    void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException;
+    void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException;
 
     String getUserPassword(String username);
 
@@ -119,4 +119,6 @@ public interface UserFacade {
     String getManagersOfStore(String username, String storeName);
 
     void bidPurchase(String userName, String storeName, int productID, double price) throws Exception;
+
+    String getUserAppointer(String user, String storeName);
 }

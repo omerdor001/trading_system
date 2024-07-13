@@ -152,9 +152,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException {
+    public void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException {
         logger.info("Trying to suggest user : {} to be a manager in store : {}", newManager, store_name_id);
-        userFacade.suggestManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+        userFacade.suggestManager(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
         logger.info("Finished suggesting manager : {} to be a manager in store : {}", newManager, store_name_id);
     }
 
@@ -166,9 +166,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void approveManage(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException {
+    public void approveManage(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException {
         logger.info("Trying to approve manage to store : {}", store_name_id);
-        userFacade.approveManager(newManager, store_name_id, appoint,watch, editSupply, editBuyPolicy,  editDiscountPolicy, acceptBids, createLottery);
+        userFacade.approveManager(newManager, store_name_id, appoint,watch, editSupply, editBuyPolicy,  editDiscountPolicy, acceptBids);
         logger.info("Finished approving manage to store : {}", store_name_id);
     }
 
@@ -202,9 +202,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException {
+    public void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException {
         logger.info("{} is Trying to edit permission for manager : {} in store : {}", userId, managerToEdit, storeNameId);
-        userFacade.editPermissionForManager(userId, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+        userFacade.editPermissionForManager(userId, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
         logger.info("Finished edit permission to manager : {}  in store : {}", managerToEdit, storeNameId);
     }
 
