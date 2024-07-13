@@ -110,6 +110,10 @@
                         <Button v-if="rowData.data.type === 'Date Policy' || rowData.data.type === 'Category and Date Policy' || rowData.data.type === 'Product and Date Policy'" @click="() => confirmEditDatePolicy(rowData.data.index)">Edit Date</Button>
                         <Button v-if="rowData.data.type === 'Product and Date Policy' || rowData.data.type === 'Maximum product units in shopping bag Policy' || rowData.data.type === 'Minimum product units in shopping bag Policy'" @click="() => confirmEditProductPolicy(rowData.data.index)">Edit Product</Button>
                         <Button v-if="rowData.data.type === 'Minimum items in shopping bag Policy' || rowData.data.type === 'Maximum product units in shopping bag Policy' || rowData.data.type === 'Minimum product units in shopping bag Policy'" @click="() => confirmEditUnitsPolicy(rowData.data.index)">Edit Units</Button>
+                        <Button v-if="rowData.data.type === 'And Policy' || rowData.data.type === 'Or Policy'" @click="() => confirmEditFirstPolicy(rowData.data.index)">Edit First Policy</Button>
+                        <Button v-if="rowData.data.type === 'And Policy' || rowData.data.type === 'Or Policy'" @click="() => confirmEditSecondPolicy(rowData.data.index)">Edit Second Policy</Button>
+                        <Button v-if="rowData.data.type === 'Conditioning Policy'" @click="() => confirmEditIfPolicy(rowData.data.index)">Edit If Policy</Button>
+                        <Button v-if="rowData.data.type === 'Conditioning Policy'" @click="() => confirmEditThenPolicy(rowData.data.index)">Edit Then Policy</Button>
                         <Button @click="() => confirmDeletePolicy(rowData.data.index)">Delete Policy</Button>
                     </div>
 
@@ -118,14 +122,14 @@
                         @hide="showEditAgeDialog = false" :closable="false" blockScroll :draggable="false" modal>
                         <InputNumber id="editAge" v-model="editAgeValue" />
                         <div class="dialog-footer">
-                            <Button @click="showEditAgeDialog = false">Cancel</Button>
+                            <Button @click="cancelEditAge">Cancel</Button>
                             <Button @click="editPolicyAge(selectedIndex)">Save</Button>
                         </div>
                     </Dialog>
             
                     <!-- Edit Category Dialog -->
                     <Dialog header="Edit Category" v-model="showEditCategoryDialog" :visible="showEditCategoryDialog" 
-                            @hide="howEditCategoryDialog = false" :closable="false" blockScroll :draggable="false" modal>
+                            @hide="showEditCategoryDialog = false" :closable="false" blockScroll :draggable="false" modal>
                         <div class="p-fluid">
                             <div class="p-field">
                                 <label for="editCategory">Select category</label>
@@ -133,7 +137,7 @@
                             </div>
                         </div>
                         <div class="dialog-footer">
-                            <Button @click="showEditCategoryDialog = false">Cancel</Button>
+                            <Button @click="cancelEditCategory">Cancel</Button>
                             <Button @click="editPolicyCategory(selectedIndex)">Save</Button>
                         </div>
                     </Dialog>
@@ -143,7 +147,7 @@
                             :closable="false" blockScroll :draggable="false" modal>
                         <PrimeCalendar v-model="editDateValue" />
                         <div class="dialog-footer">
-                            <Button @click="showEditDateDialog = false">Cancel</Button>
+                            <Button @click="cancelEditDate">Cancel</Button>
                             <Button @click="editPolicyDate(selectedIndex)">Save</Button>
                         </div>
                     </Dialog>
@@ -153,7 +157,7 @@
                             :closable="false" blockScroll :draggable="false" modal>
                         <InputNumber v-model="editProductIdValue" />
                         <div class="dialog-footer">
-                            <Button @click="showEditProductDialog = false">Cancel</Button>
+                            <Button @click="cancelEditProduct">Cancel</Button>
                             <Button @click="editPolicyProduct(selectedIndex)">Save</Button>
                         </div>
                     </Dialog>
@@ -163,10 +167,70 @@
                             :closable="false" blockScroll :draggable="false" modal>
                         <InputNumber v-model="editUnitsValue" />
                         <div class="dialog-footer">
-                            <Button @click="showEditUnitsDialog = false">Cancel</Button>
+                            <Button @click="cancelEditUnits">Cancel</Button>
                             <Button @click="editPolicyUnits(selectedIndex)">Save</Button>
                         </div>
                     </Dialog>
+
+                    <!-- Edit First Policy Dialog -->
+                    <Dialog v-model="showEditFirstDialog" :visible="showEditFirstDialog" header="Edit First Policy" 
+                            :closable="false" blockScroll :draggable="false" modal>
+                        <div class="p-fluid">
+                            <div class="p-field">
+                                <label for="firstPolicy">Select First Policy</label>
+                                <Dropdown id="firstPolicy" v-model="editFirstPolicyValue" :options="policyIndexes" optionLabel="label" optionValue="value" />
+                            </div>
+                        </div>
+                        <div class="dialog-footer">
+                            <Button @click="cancelEditFirst">Cancel</Button>
+                            <Button @click="editPolicyFirst(selectedIndex)">Save</Button>
+                        </div>
+                    </Dialog>
+
+                    <!-- Edit Second Policy Dialog -->
+                    <Dialog v-model="showEditSecondDialog" :visible="showEditSecondDialog" header="Edit Second Policy" 
+                            :closable="false" blockScroll :draggable="false" modal>
+                        <div class="p-fluid">
+                            <div class="p-field">
+                                <label for="secondPolicy">Select Second Policy</label>
+                                <Dropdown id="secondPolicy" v-model="editSecondPolicyValue" :options="policyIndexes" optionLabel="label" optionValue="value" />
+                            </div>
+                        </div>
+                        <div class="dialog-footer">
+                            <Button @click="cancelEditSecond">Cancel</Button>
+                            <Button @click="editPolicySecond(selectedIndex)">Save</Button>
+                        </div>
+                    </Dialog>
+
+                    <!-- Edit If Policy Dialog -->
+<Dialog v-model="showEditIfDialog" :visible="showEditIfDialog" header="Edit If Policy" 
+        :closable="false" blockScroll :draggable="false" modal>
+    <div class="p-fluid">
+        <div class="p-field">
+            <label for="ifPolicy">Select If Policy</label>
+            <Dropdown id="ifPolicy" v-model="editFirstPolicyValue" :options="policyIndexes" optionLabel="label" optionValue="value" />
+        </div>
+    </div>
+    <div class="dialog-footer">
+        <Button @click="cancelEditFirst">Cancel</Button>
+        <Button @click="editPolicyFirst(selectedIndex)">Save</Button>
+    </div>
+</Dialog>
+
+<!-- Edit Then Policy Dialog -->
+<Dialog v-model="showEditThenDialog" :visible="showEditThenDialog" header="Edit Then Policy" 
+        :closable="false" blockScroll :draggable="false" modal>
+    <div class="p-fluid">
+        <div class="p-field">
+            <label for="thenPolicy">Select Then Policy</label>
+            <Dropdown id="thenPolicy" v-model="editSecondPolicyValue" :options="policyIndexes" optionLabel="label" optionValue="value" />
+        </div>
+    </div>
+    <div class="dialog-footer">
+        <Button @click="cancelEditSecond">Cancel</Button>
+        <Button @click="editPolicySecond(selectedIndex)">Save</Button>
+    </div>
+</Dialog>
 
                     <!-- Delete Policy Dialog -->
                     <Dialog v-model="showDeletePolicyDialog" :visible="showDeletePolicyDialog" header="Delete Policy" 
@@ -224,6 +288,10 @@ export default {
         const showEditDateDialog = ref(false);
         const showEditProductDialog = ref(false);
         const showEditUnitsDialog = ref(false);
+        const showEditFirstDialog = ref(false);
+        const showEditSecondDialog = ref(false);
+        const showEditIfDialog = ref(false);
+        const showEditThenDialog = ref(false);
         const showDeletePolicyDialog = ref(false);
         const selectedIndex = ref(null);
         const editCategoryValue = ref(null);
@@ -231,6 +299,8 @@ export default {
         const editDateValue = ref(null);
         const editProductIdValue = ref(null);
         const editUnitsValue = ref(null);
+        const editFirstPolicyValue = ref(null);
+        const editSecondPolicyValue = ref(null);
         const newPolicy = ref({
             type: '',
             ageToCheck: '',
@@ -258,6 +328,7 @@ export default {
             { label: 'Clothes', value: 4 },
             { label: 'Films', value: 5 }
         ]);
+        const policyIndexes = ref([]);
 
         onMounted(async () => {
             await fetchPolicies();
@@ -279,6 +350,12 @@ export default {
                         index: policy.index,
                         type: getPolicyTypeLabel(policy.policy.type),
                         details: createDetails(policy.policy)
+                    }));
+
+                    // Update policyIndexes after fetching policies
+                    policyIndexes.value = policies.value.map(policy => ({
+                        label: `Policy ${policy.index}`,
+                        value: policy.index
                     }));
                 } else {
                     console.error('Unexpected response format:', response.data);
@@ -302,256 +379,255 @@ export default {
             addPolicyDialogVisible.value = true;
         };
 
-const savePolicy = async () => {
-    // Format the dateTime to ISO string without trailing 'Z'
-    const formattedDateTime = newPolicy.value.dateTime
-        ? new Date(newPolicy.value.dateTime).toISOString().slice(0, -1)
-        : null;
+        const savePolicy = async () => {
+            // Format the dateTime to ISO string without trailing 'Z'
+            const formattedDateTime = newPolicy.value.dateTime
+                ? new Date(newPolicy.value.dateTime).toISOString().slice(0, -1)
+                : null;
 
-    if (!newPolicy.value.type) {
-        toast.add({ severity: 'warn', summary: 'Warning', detail: 'Policy type cannot be empty or unknown', life: 3000 });
-        return;
-    }
+            if (!newPolicy.value.type) {
+                toast.add({ severity: 'warn', summary: 'Warning', detail: 'Policy type cannot be empty or unknown', life: 3000 });
+                return;
+            }
 
-    const validateCategory = () => {
-        if (!newPolicy.value.category) {
-            toast.add({ severity: 'warn', summary: 'Warning', detail: 'Category cannot be empty', life: 3000 });
-            return false;
-        }
-        return true;
-    };
+            const validateCategory = () => {
+                if (!newPolicy.value.category) {
+                    toast.add({ severity: 'warn', summary: 'Warning', detail: 'Category cannot be empty', life: 3000 });
+                    return false;
+                }
+                return true;
+            };
 
-    const validateDate = () => {
-        if (!newPolicy.value.dateTime) {
-            toast.add({ severity: 'warn', summary: 'Warning', detail: 'Date cannot be empty', life: 3000 });
-            return false;
-        }
-        return true;
-    };
+            const validateDate = () => {
+                if (!newPolicy.value.dateTime) {
+                    toast.add({ severity: 'warn', summary: 'Warning', detail: 'Date cannot be empty', life: 3000 });
+                    return false;
+                }
+                return true;
+            };
 
-    const validateProductId = () => {
-        if (newPolicy.value.productId===null) {
-            toast.add({ severity: 'warn', summary: 'Warning', detail: 'Product ID cannot be empty', life: 3000 });
-            return false;
-        }
-        return true;
-    };
+            const validateProductId = () => {
+                if (newPolicy.value.productId === null) {
+                    toast.add({ severity: 'warn', summary: 'Warning', detail: 'Product ID cannot be empty', life: 3000 });
+                    return false;
+                }
+                return true;
+            };
 
-    const validateQuantity = () => {
-        if (newPolicy.value.numOfQuantity===null) {
-            toast.add({ severity: 'warn', summary: 'Warning', detail: 'Quantity cannot be empty', life: 3000 });
-            return false;
-        }
-        return true;
-    };
+            const validateQuantity = () => {
+                if (newPolicy.value.numOfQuantity === null) {
+                    toast.add({ severity: 'warn', summary: 'Warning', detail: 'Quantity cannot be empty', life: 3000 });
+                    return false;
+                }
+                return true;
+            };
 
-    const validateAge = () => {
-        if (!newPolicy.value.ageToCheck) {
-            toast.add({ severity: 'warn', summary: 'Warning', detail: 'Age cannot be empty', life: 3000 });
-            return false;
-        }
-        return true;
-    };
+            const validateAge = () => {
+                if (!newPolicy.value.ageToCheck) {
+                    toast.add({ severity: 'warn', summary: 'Warning', detail: 'Age cannot be empty', life: 3000 });
+                    return false;
+                }
+                return true;
+            };
 
-    switch (newPolicy.value.type) {
-        // Handle the different types of policies here
-        case 'By Age and Category':
-            if (!validateCategory() || !validateAge()) return;
-            try {
-                const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByAge`;
-                const response = await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value,
-                        storeName: storeName,
-                        ageToCheck: newPolicy.value.ageToCheck,
-                        category: newPolicy.value.category
+            switch (newPolicy.value.type) {
+                // Handle the different types of policies here
+                case 'By Age and Category':
+                    if (!validateCategory() || !validateAge()) return;
+                    try {
+                        const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByAge`;
+                        const response = await axios.post(url, null, {
+                            params: {
+                                username: username.value,
+                                token: token.value,
+                                storeName: storeName,
+                                ageToCheck: newPolicy.value.ageToCheck,
+                                category: newPolicy.value.category
+                            }
+                        });
+                        console.log(response.data);
+                        fetchPolicies();
+                    } catch (error) {
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add age and category policy', life: 3000 });
+                        return;
                     }
-                });
-                console.log(response.data);
-                fetchPolicies();
-            } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add age and category policy', life: 3000 });
-                return;
-            }
-            break;
-        case 'By Category and Date':
-            if (!validateCategory() || !validateDate()) return;
-            try {
-                const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByCategoryAndDate`;
-                const response = await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value,
-                        storeName: storeName,
-                        category: newPolicy.value.category,
-                        dateTime: formattedDateTime
+                    break;
+                case 'By Category and Date':
+                    if (!validateCategory() || !validateDate()) return;
+                    try {
+                        const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByCategoryAndDate`;
+                        const response = await axios.post(url, null, {
+                            params: {
+                                username: username.value,
+                                token: token.value,
+                                storeName: storeName,
+                                category: newPolicy.value.category,
+                                dateTime: formattedDateTime
+                            }
+                        });
+                        console.log(response.data);
+                        fetchPolicies();
+                    } catch (error) {
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add category and date policy', life: 3000 });
+                        return;
                     }
-                });
-                console.log(response.data);
-                fetchPolicies();
-            } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add category and date policy', life: 3000 });
-                return;
-            }
-            break;
-        case 'By Date':
-            if (!validateDate()) return;
-            try {
-                const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByDate`;
-                const response = await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value,
-                        storeName: storeName,
-                        dateTime: formattedDateTime
+                    break;
+                case 'By Date':
+                    if (!validateDate()) return;
+                    try {
+                        const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByDate`;
+                        const response = await axios.post(url, null, {
+                            params: {
+                                username: username.value,
+                                token: token.value,
+                                storeName: storeName,
+                                dateTime: formattedDateTime
+                            }
+                        });
+                        console.log(response.data);
+                        fetchPolicies();
+                    } catch (error) {
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add date policy', life: 3000 });
+                        return;
                     }
-                });
-                console.log(response.data);
-                fetchPolicies();
-            } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add date policy', life: 3000 });
-                return;
-            }
-            break;
-        case 'By Product and Date':
-            if (!validateProductId() || !validateDate()) return;
-            try {
-                const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByProductAndDate`;
-                const response = await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value,
-                        storeName: storeName,
-                        productId: newPolicy.value.productId,
-                        dateTime: formattedDateTime
+                    break;
+                case 'By Product and Date':
+                    if (!validateProductId() || !validateDate()) return;
+                    try {
+                        const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByProductAndDate`;
+                        const response = await axios.post(url, null, {
+                            params: {
+                                username: username.value,
+                                token: token.value,
+                                storeName: storeName,
+                                productId: newPolicy.value.productId,
+                                dateTime: formattedDateTime
+                            }
+                        });
+                        console.log(response.data);
+                        fetchPolicies();
+                    } catch (error) {
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add product and date policy', life: 3000 });
+                        return;
                     }
-                });
-                console.log(response.data);
-                fetchPolicies();
-            } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add product and date policy', life: 3000 });
-                return;
-            }
-            break;
-        case 'By Shopping Cart Max Products Unit':
-            if (!validateProductId() || !validateQuantity()) return;
-            try {
-                const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByShoppingCartMaxProductsUnit`;
-                const response = await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value,
-                        storeName: storeName,
-                        productId: newPolicy.value.productId,
-                        numOfQuantity: newPolicy.value.numOfQuantity
+                    break;
+                case 'By Shopping Cart Max Products Unit':
+                    if (!validateProductId() || !validateQuantity()) return;
+                    try {
+                        const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByShoppingCartMaxProductsUnit`;
+                        const response = await axios.post(url, null, {
+                            params: {
+                                username: username.value,
+                                token: token.value,
+                                storeName: storeName,
+                                productId: newPolicy.value.productId,
+                                numOfQuantity: newPolicy.value.numOfQuantity
+                            }
+                        });
+                        console.log(response.data);
+                        fetchPolicies();
+                    } catch (error) {
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add maximum product units policy', life: 3000 });
+                        return;
                     }
-                });
-                console.log(response.data);
-                fetchPolicies();
-            } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add maximum product units policy', life: 3000 });
-                return;
-            }
-            break;
-        case 'By Shopping Cart Min Products':
-            if (!validateQuantity()) return;
-            try {
-                const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByShoppingCartMinProducts`;
-                const response = await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value,
-                        storeName: storeName,
-                        numOfQuantity: newPolicy.value.numOfQuantity
+                    break;
+                case 'By Shopping Cart Min Products':
+                    if (!validateQuantity()) return;
+                    try {
+                        const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByShoppingCartMinProducts`;
+                        const response = await axios.post(url, null, {
+                            params: {
+                                username: username.value,
+                                token: token.value,
+                                storeName: storeName,
+                                numOfQuantity: newPolicy.value.numOfQuantity
+                            }
+                        });
+                        console.log(response.data);
+                        fetchPolicies();
+                    } catch (error) {
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add minimum units policy', life: 3000 });
+                        return;
                     }
-                });
-                console.log(response.data);
-                fetchPolicies();
-            } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add minimum units policy', life: 3000 });
-                return;
-            }
-            break;
-        case 'By Shopping Cart Min Products Unit':
-            if (!validateProductId() || !validateQuantity()) return;
-            try {
-                const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByShoppingCartMinProductsUnit`;
-                const response = await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value,
-                        storeName: storeName,
-                        productId: newPolicy.value.productId,
-                        numOfQuantity: newPolicy.value.numOfQuantity
+                    break;
+                case 'By Shopping Cart Min Products Unit':
+                    if (!validateProductId() || !validateQuantity()) return;
+                    try {
+                        const url = `http://localhost:8082/api/trading/store/purchase-policies/addPurchasePolicyByShoppingCartMinProductsUnit`;
+                        const response = await axios.post(url, null, {
+                            params: {
+                                username: username.value,
+                                token: token.value,
+                                storeName: storeName,
+                                productId: newPolicy.value.productId,
+                                numOfQuantity: newPolicy.value.numOfQuantity
+                            }
+                        });
+                        console.log(response.data);
+                        fetchPolicies();
+                    } catch (error) {
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add minimum product units policy', life: 3000 });
+                        return;
                     }
-                });
-                console.log(response.data);
-                fetchPolicies();
-            } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add minimum product units policy', life: 3000 });
-                return;
-            }
-            break;
-        case 'And':
-            try {
-                const url = `http://localhost:8082/api/trading/store/purchase-policies/addAndPurchasePolicy`;
-                const response = await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value,
-                        storeName: storeName,
+                    break;
+                case 'And':
+                    try {
+                        const url = `http://localhost:8082/api/trading/store/purchase-policies/addAndPurchasePolicy`;
+                        const response = await axios.post(url, null, {
+                            params: {
+                                username: username.value,
+                                token: token.value,
+                                storeName: storeName,
+                            }
+                        });
+                        console.log(response.data);
+                        fetchPolicies();
+                    } catch (error) {
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add and policy', life: 3000 });
+                        return;
                     }
-                });
-                console.log(response.data);
-                fetchPolicies();
-            } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add and policy', life: 3000 });
-                return;
-            }
-            break;
-        case 'Or':
-            try {
-                const url = `http://localhost:8082/api/trading/store/purchase-policies/addOrPurchasePolicy`;
-                const response = await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value,
-                        storeName: storeName,
+                    break;
+                case 'Or':
+                    try {
+                        const url = `http://localhost:8082/api/trading/store/purchase-policies/addOrPurchasePolicy`;
+                        const response = await axios.post(url, null, {
+                            params: {
+                                username: username.value,
+                                token: token.value,
+                                storeName: storeName,
+                            }
+                        });
+                        console.log(response.data);
+                        fetchPolicies();
+                    } catch (error) {
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add or policy', life: 3000 });
+                        return;
                     }
-                });
-                console.log(response.data);
-                fetchPolicies();
-            } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add or policy', life: 3000 });
-                return;
-            }
-            break;
-        case 'Conditioning':
-            try {
-                const url = `http://localhost:8082/api/trading/store/purchase-policies/addConditioningPurchasePolicy`;
-                const response = await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value,
-                        storeName: storeName,
+                    break;
+                case 'Conditioning':
+                    try {
+                        const url = `http://localhost:8082/api/trading/store/purchase-policies/addConditioningPurchasePolicy`;
+                        const response = await axios.post(url, null, {
+                            params: {
+                                username: username.value,
+                                token: token.value,
+                                storeName: storeName,
+                            }
+                        });
+                        console.log(response.data);
+                        fetchPolicies();
+                    } catch (error) {
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add conditioning policy', life: 3000 });
+                        return;
                     }
-                });
-                console.log(response.data);
-                fetchPolicies();
-            } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to add conditioning policy', life: 3000 });
-                return;
+                    break;
+                default:
+                    toast.add({ severity: 'warn', summary: 'Warning', detail: 'Unknown policy type', life: 3000 });
+                    return;
             }
-            break;
-        default:
-            toast.add({ severity: 'warn', summary: 'Warning', detail: 'Unknown policy type', life: 3000 });
-            return;
-    }
-    addPolicyDialogVisible.value = false;
-    toast.add({ severity: 'success', summary: 'Success', detail: 'Policy saved', life: 3000 });
-};
-
+            addPolicyDialogVisible.value = false;
+            toast.add({ severity: 'success', summary: 'Success', detail: 'Policy saved', life: 3000 });
+        };
 
         const getPolicyTypeLabel = (type) => {
             const typeMap = {
@@ -608,6 +684,73 @@ const savePolicy = async () => {
             ]);
         };
 
+        // Reset functions for each dialog
+        const resetEditAge = () => {
+            editAgeValue.value = null;
+        };
+
+        const resetEditCategory = () => {
+            editCategoryValue.value = null;
+        };
+
+        const resetEditDate = () => {
+            editDateValue.value = null;
+        };
+
+        const resetEditProduct = () => {
+            editProductIdValue.value = null;
+        };
+
+        const resetEditUnits = () => {
+            editUnitsValue.value = null;
+        };
+
+        const resetEditFirst = () => {
+            editFirstPolicyValue.value = null;
+        };
+
+        const resetEditSecond = () => {
+            editSecondPolicyValue.value = null;
+        };
+
+        // Cancel methods for each dialog
+        const cancelEditAge = () => {
+            resetEditAge();
+            showEditAgeDialog.value = false;
+        };
+
+        const cancelEditCategory = () => {
+            resetEditCategory();
+            showEditCategoryDialog.value = false;
+        };
+
+        const cancelEditDate = () => {
+            resetEditDate();
+            showEditDateDialog.value = false;
+        };
+
+        const cancelEditProduct = () => {
+            resetEditProduct();
+            showEditProductDialog.value = false;
+        };
+
+        const cancelEditUnits = () => {
+            resetEditUnits();
+            showEditUnitsDialog.value = false;
+        };
+
+        const cancelEditFirst = () => {
+            resetEditFirst();
+            showEditFirstDialog.value = false;
+            showEditIfDialog.value = false;
+        };
+
+        const cancelEditSecond = () => {
+            resetEditSecond();
+            showEditSecondDialog.value = false;
+            showEditThenDialog.value = false;
+        };
+
         const editPolicyAge = async (index) => {
             try {
                 if (!editAgeValue.value) {
@@ -626,7 +769,7 @@ const savePolicy = async () => {
                 });
                 console.log(response.data);
                 fetchPolicies();
-                editAgeValue.value = null;
+                resetEditAge();
                 showEditAgeDialog.value = false;
                 toast.add({ severity: 'success', summary: 'Success', detail: 'Age updated', life: 3000 });
             } catch (error) {
@@ -653,7 +796,7 @@ const savePolicy = async () => {
                 });
                 console.log(response.data);
                 fetchPolicies();
-                editCategoryValue.value = null;
+                resetEditCategory();
                 showEditCategoryDialog.value = false;
                 toast.add({ severity: 'success', summary: 'Success', detail: 'Category updated', life: 3000 });
             } catch (error) {
@@ -664,10 +807,10 @@ const savePolicy = async () => {
 
         const editPolicyDate = async (index) => {
             try {
-                  if (!editDateValue.value) {
-                        toast.add({ severity: 'warn', summary: 'Warning', detail: 'Date cannot be empty', life: 3000 });
-                        return false;
-                    }
+                if (!editDateValue.value) {
+                    toast.add({ severity: 'warn', summary: 'Warning', detail: 'Date cannot be empty', life: 3000 });
+                    return false;
+                }
                 const formattedDate = new Date(editDateValue.value).toISOString().slice(0, -1);
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/setPurchasePolicyDateTime`;
                 const response = await axios.put(url, null, {
@@ -681,12 +824,12 @@ const savePolicy = async () => {
                 });
                 console.log(response.data);
                 fetchPolicies();
-                editDateValue.value = null;
+                resetEditDate();
                 showEditDateDialog.value = false;
                 toast.add({ severity: 'success', summary: 'Success', detail: 'Date updated', life: 3000 });
             } catch (error) {
                 console.error('Error updating date:', error);
-                toast.add({ severity: 'error', summary: 'Error',detail: error.response.data || 'Failed to update date', life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to update date', life: 3000 });
             }
         };
 
@@ -708,7 +851,7 @@ const savePolicy = async () => {
                 });
                 console.log(response.data);
                 fetchPolicies();
-                editProductIdValue.value = null;
+                resetEditProduct();
                 showEditProductDialog.value = false;
                 toast.add({ severity: 'success', summary: 'Success', detail: 'Product ID updated', life: 3000 });
             } catch (error) {
@@ -735,15 +878,62 @@ const savePolicy = async () => {
                 });
                 console.log(response.data);
                 fetchPolicies();
-                editUnitsValue.value = null;
+                resetEditUnits();
                 showEditUnitsDialog.value = false;
                 toast.add({ severity: 'success', summary: 'Success', detail: 'Quantity updated', life: 3000 });
             } catch (error) {
                 console.error('Error updating quantity:', error);
-                toast.add({ severity: 'error', summary: 'Error',  detail: error.response.data || 'Failed to update units', life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to update units', life: 3000 });
             }
         };
 
+        const editPolicyFirst = async (index) => {
+            try {
+                const url = `http://localhost:8082/api/trading/store/purchase-policies/setFirstPurchasePolicy`;
+                const response = await axios.put(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value,
+                        storeName: storeName,
+                        selectedPolicyIndex: index,
+                        selectedFirstIndex: editFirstPolicyValue.value
+                    }
+                });
+                console.log(response.data);
+                fetchPolicies();
+                resetEditFirst();
+                showEditFirstDialog.value = false;
+                showEditIfDialog.value = false;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'First policy updated', life: 3000 });
+            } catch (error) {
+                console.error('Error updating first policy:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to update first policy', life: 3000 });
+            }
+        };
+
+        const editPolicySecond = async (index) => {
+            try {
+                const url = `http://localhost:8082/api/trading/store/purchase-policies/setSecondPurchasePolicy`;
+                const response = await axios.put(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value,
+                        storeName: storeName,
+                        selectedPolicyIndex: index,
+                        selectedSecondIndex: editSecondPolicyValue.value
+                    }
+                });
+                console.log(response.data);
+                fetchPolicies();
+                resetEditSecond();
+                showEditSecondDialog.value = false;
+                showEditThenDialog.value = false;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Second policy updated', life: 3000 });
+            } catch (error) {
+                console.error('Error updating second policy:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to update second policy', life: 3000 });
+            }
+        };
 
         const confirmDeletePolicy = (index) => {
             selectedIndex.value = index;
@@ -759,7 +949,7 @@ const savePolicy = async () => {
             selectedIndex.value = index;
             showEditCategoryDialog.value = true;
         };
-        
+
         const confirmEditDatePolicy = (index) => {
             selectedIndex.value = index;
             showEditDateDialog.value = true;
@@ -774,7 +964,28 @@ const savePolicy = async () => {
             selectedIndex.value = index;
             showEditUnitsDialog.value = true;
         };
-       
+
+        const confirmEditFirstPolicy = (index) => {
+            selectedIndex.value = index;
+            showEditFirstDialog.value = true;
+        };
+
+        const confirmEditSecondPolicy = (index) => {
+            selectedIndex.value = index;
+            showEditSecondDialog.value = true;
+        };
+
+        const confirmEditIfPolicy = (index) => {
+            selectedIndex.value = index;
+            showEditIfDialog.value = true;
+        };
+
+        const confirmEditThenPolicy = (index) => {
+            selectedIndex.value = index;
+            showEditThenDialog.value = true;
+        };
+
+
         const deletePolicy = async (index) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/removePurchasePolicy`;
@@ -801,12 +1012,17 @@ const savePolicy = async () => {
             policies,
             policyTypes,
             categoryOptions,
+            policyIndexes,
             addPolicyDialogVisible,
             showEditAgeDialog,
             showEditCategoryDialog,
             showEditDateDialog,
             showEditProductDialog,
             showEditUnitsDialog,
+            showEditFirstDialog,
+            showEditSecondDialog,
+            showEditIfDialog,
+            showEditThenDialog,
             showDeletePolicyDialog,
             newPolicy,
             selectedIndex,
@@ -815,6 +1031,8 @@ const savePolicy = async () => {
             editDateValue,
             editProductIdValue,
             editUnitsValue,
+            editFirstPolicyValue,
+            editSecondPolicyValue,
             showAddPolicyDialog,
             savePolicy,
             typeTemplate,
@@ -824,13 +1042,26 @@ const savePolicy = async () => {
             editPolicyDate,
             editPolicyProduct,
             editPolicyUnits,
+            editPolicyFirst,
+            editPolicySecond,
             confirmDeletePolicy,
             confirmEditAgePolicy,
             confirmEditCategoryPolicy,
             confirmEditDatePolicy,
             confirmEditProductPolicy,
             confirmEditUnitsPolicy,
+            confirmEditFirstPolicy,
+            confirmEditSecondPolicy,
+            confirmEditIfPolicy,
+            confirmEditThenPolicy,
             deletePolicy,
+            cancelEditAge,
+            cancelEditCategory,
+            cancelEditDate,
+            cancelEditProduct,
+            cancelEditUnits,
+            cancelEditFirst,
+            cancelEditSecond
         };
     }
 };

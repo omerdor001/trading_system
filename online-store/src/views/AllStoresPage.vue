@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
+    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
     <div class="main-content">
       <h1>All Stores</h1>
       <div v-if="stores.length === 0">
@@ -30,6 +30,7 @@ import SiteHeader from '@/components/SiteHeader.vue';
 import PrimeButton from 'primevue/button';
 import PrimeToast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
+import { ref, onMounted } from 'vue';
 
 export default {
   name: 'AllStoresPage',
@@ -38,20 +39,14 @@ export default {
     PrimeButton,
     PrimeToast
   },
-  data() {
-    return {
-      stores: [],
-      username: localStorage.getItem('username') || ''
-    };
-  },
-  created() {
-    this.fetchStores();
-  },
-  methods: {
-    async fetchStores() {
-      const toast = useToast();
+  setup() {
+    const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
+    const stores = ref([]);
+    const username = ref(localStorage.getItem('username') || '');
+    const toast = useToast();
+
+    const fetchStores = async () => {
       const token = localStorage.getItem('token');
-      const username = localStorage.getItem('username');
 
       if (!token) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Invalid token was supplied', life: 3000 });
@@ -61,12 +56,12 @@ export default {
       try {
         const response = await axios.get('http://localhost:8082/api/trading/stores-detailed-info', {
           params: {
-            username: username,
+            username: username.value,
             token: token
           }
         });
         console.log(response.data);  // Add this line to check the returned data
-        this.stores = response.data.map(store => ({
+        stores.value = response.data.map(store => ({
           name: store.name,
           image: 'default-image-url', // Replace with actual image URL if available
           description: store.description,
@@ -79,10 +74,23 @@ export default {
           toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load stores', life: 3000 });
         }
       }
-    },
-    viewProducts(storeId) {
+    };
+
+    const viewProducts = (storeId) => {
       this.$router.push({ name: 'StoreDetails', params: { storeId } });
-    },
+    };
+
+    onMounted(() => {
+      fetchStores();
+    });
+
+    return {
+      isLoggedIn,
+      stores,
+      username,
+      fetchStores,
+      viewProducts
+    };
   }
 };
 </script>
