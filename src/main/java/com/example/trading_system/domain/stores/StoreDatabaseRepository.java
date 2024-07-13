@@ -9,17 +9,17 @@ import jakarta.persistence.PersistenceContext;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-@Primary
-@Repository
+//@Primary
+//@Repository
 public class StoreDatabaseRepository implements StoreRepository {
 
     private HashMap<String, Store> memoryStores = new HashMap<>();
     private static StoreDatabaseRepository instance = null;
 
-    @PersistenceContext
+//    @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
+//    @Autowired
     public StoreDatabaseRepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }

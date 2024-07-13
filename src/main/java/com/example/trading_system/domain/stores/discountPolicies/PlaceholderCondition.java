@@ -37,6 +37,11 @@ public class PlaceholderCondition extends Condition {
     }
 
     @Override
+    public void setProductId(int productId) {
+        throw new RuntimeException("Action not allowed for placeholder condition");
+    }
+
+    @Override
     public String getInfo() {
         return "{ \"type\": \"placeholderCondition\" }";
     }

@@ -231,6 +231,8 @@ public interface TradingSystem {
     ResponseEntity<String> setCountCondition(String username, String token, String storeName, int selectedConditionIndex, int newCount);
 
     ResponseEntity<String> setCategoryCondition(String username, String token, String storeName, int selectedConditionIndex, int newCategory);
+
+    ResponseEntity<String> setProductIdCondition(String username, String token, String storeName, int selectedConditionIndex, int newId);
     //endregion
 
     //region purchase policy

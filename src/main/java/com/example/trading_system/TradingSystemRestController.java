@@ -13,13 +13,9 @@ package com.example.trading_system;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.stores.StoreDatabaseRepository;
-import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
-import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,11 +29,11 @@ import java.time.LocalDateTime;
 public class TradingSystemRestController {
 
     private final TradingSystemImp tradingSystem;
-    private StoreRepository storeRepository;
+    private final StoreRepository storeRepository;
 
     @Autowired
     public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository,StoreRepository storeRepository) {
-        storeRepository = StoreMemoryRepository.getInstance();    //TODO: change it on version 3
+        this.storeRepository = storeRepository;
         tradingSystem = TradingSystemImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
     }
 
@@ -772,6 +768,16 @@ public class TradingSystemRestController {
             @PathVariable int selectedConditionIndex,
             @PathVariable int newCategory) {
         return tradingSystem.setCategoryCondition(username, token, storeName, selectedConditionIndex, newCategory);
+    }
+
+    @PostMapping("/store/{storeName}/discounts/setProductIdCondition/{selectedConditionIndex}/{newId}")
+    public ResponseEntity<String> setProductIdCondition(
+            @RequestParam String username,
+            @RequestParam String token,
+            @PathVariable String storeName,
+            @PathVariable int selectedConditionIndex,
+            @PathVariable int newId) {
+        return tradingSystem.setProductIdCondition(username, token, storeName, selectedConditionIndex, newId);
     }
     //endregion
 
