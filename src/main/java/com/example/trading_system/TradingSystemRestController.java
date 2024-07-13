@@ -260,8 +260,10 @@ public class TradingSystemRestController {
                                                 @RequestParam boolean watch,
                                                 @RequestParam boolean editSupply,
                                                 @RequestParam boolean editBuyPolicy,
-                                                @RequestParam boolean editDiscountPolicy) {
-        return tradingSystem.suggestManage(appoint, token, "r" + newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, false, false);
+                                                @RequestParam boolean editDiscountPolicy,
+                                                @RequestParam boolean acceptBids,
+                                                @RequestParam boolean createLottery) {
+        return tradingSystem.suggestManage(appoint, token, "r" + newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
     }
 
     @PostMapping("/approveManage")
@@ -272,8 +274,10 @@ public class TradingSystemRestController {
                                                 @RequestParam boolean watch,
                                                 @RequestParam boolean editSupply,
                                                 @RequestParam boolean editBuyPolicy,
-                                                @RequestParam boolean editDiscountPolicy) {
-        return tradingSystem.approveManage(newManager, token, store_name_id, "r" + appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy, false, false);
+                                                @RequestParam boolean editDiscountPolicy,
+                                                @RequestParam boolean acceptBids,
+                                                @RequestParam boolean createLottery) {
+        return tradingSystem.approveManage(newManager, token, store_name_id, "r" + appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
     }
 
     @PostMapping("/approveOwner")
