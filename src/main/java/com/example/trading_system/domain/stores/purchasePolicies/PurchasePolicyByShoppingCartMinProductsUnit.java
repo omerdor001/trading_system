@@ -52,7 +52,7 @@ public class PurchasePolicyByShoppingCartMinProductsUnit extends PurchasePolicy 
 
     @Override
     public void setPurchasePolicyProduct(int productID) {
-        if(productID<=0 )
+        if(productID<0)
             throw new IllegalArgumentException("Parameter "+productID+" cannot be negative or zero");
        this.productId=productID;
     }
@@ -76,6 +76,6 @@ public class PurchasePolicyByShoppingCartMinProductsUnit extends PurchasePolicy 
 
     @Override
     public String getPurchasePolicyInfo() {
-        return "{ \"type\": \"ShoppingCart low quantity\", \"productId\": " + productId+ ", \"numOfQuantity_limit\": " + numOfQuantity + " }";
+        return "{ \"type\": \"Minimum product units in shopping bag Policy\", \"productId\": " + productId + ", \"units\": " + numOfQuantity + " }";
     }
 }

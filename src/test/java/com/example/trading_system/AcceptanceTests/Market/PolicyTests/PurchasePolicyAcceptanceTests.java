@@ -278,7 +278,197 @@ public class PurchasePolicyAcceptanceTests {
         tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18,5);
         ResponseEntity<String> result = tradingSystem.getPurchasePoliciesInfo(username, token, storeName);
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[ { \"type\": \"ShoppingCart age and category\", \"category\": 5, \"ageToCheck\": 18 } ]", result.getBody());
+        assertEquals("[ { \"index\": 0, \"policy\": { \"type\": \"Age and Category Policy\", \"category\": 5, \"age\": 18 } } ]", result.getBody());
+    }
+
+    @Test
+    public void testSetPurchasePolicyProductId_success() {
+        tradingSystem.addPurchasePolicyByShoppingCartMaxProductsUnit(username, token, storeName, 0,5);
+        tradingSystem.addProduct(username, token, 1, storeName, "product2", "", 1, 5, 1, 5, "[]");
+        ResponseEntity<String> response = tradingSystem.setPurchasePolicyProductId(username, token, storeName, 0, 1);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Product ID set for purchase policy successfully", response.getBody());
+    }
+
+    @Test
+    public void testSetPurchasePolicyProductIdIInvalidToken_fail() {
+        tradingSystem.addPurchasePolicyByShoppingCartMaxProductsUnit(username, token, storeName, 0,5);
+        ResponseEntity<String> response = tradingSystem.setPurchasePolicyProductId(username, "invalidToken", storeName, 0, 1);
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertTrue(response.getBody().contains("Invalid token"));
+    }
+
+    @Test
+    public void testSetPurchasePolicyProductIdNotExists_fail() {
+        tradingSystem.addPurchasePolicyByShoppingCartMaxProductsUnit(username, token, storeName, 0,5);
+        ResponseEntity<String> response = tradingSystem.setPurchasePolicyProductId(username, token, storeName, 0, 3);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Product with id 3 does not exists", response.getBody());
+    }
+
+    @Test
+    public void testSetPurchasePolicyNumOfQuantity_success() {
+        tradingSystem.addPurchasePolicyByShoppingCartMaxProductsUnit(username, token, storeName, 0,5);
+        ResponseEntity<String> response = tradingSystem.setPurchasePolicyNumOfQuantity(username, token, storeName, 0, 10);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Number of quantity set for purchase policy successfully", response.getBody());
+    }
+
+    @Test
+    public void testSetPurchasePolicyNumOfQuantityInvalidToken_fail() {
+        tradingSystem.addPurchasePolicyByShoppingCartMaxProductsUnit(username, token, storeName, 0,5);
+        ResponseEntity<String> response = tradingSystem.setPurchasePolicyNumOfQuantity(username, "invalidToken", storeName, 0, 10);
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertTrue(response.getBody().contains("Invalid token"));
+    }
+
+    @Test
+    public void testSetPurchasePolicyNumOfQuantityInvalidUnits_fail() {
+        tradingSystem.addPurchasePolicyByShoppingCartMaxProductsUnit(username, token, storeName, 0,5);
+        ResponseEntity<String> response = tradingSystem.setPurchasePolicyNumOfQuantity(username, token, storeName, 0, 0);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Parameter units cannot be negative or zero", response.getBody());
+    }
+
+    @Test
+    public void testSetPurchasePolicyDateTime_success() {
+        tradingSystem.addPurchasePolicyByDate(username, token, storeName, LocalDateTime.now());
+        ResponseEntity<String> response = tradingSystem.setPurchasePolicyDateTime(username, token, storeName, 0, LocalDateTime.now());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Date time set for purchase policy successfully", response.getBody());
+    }
+
+    @Test
+    public void testSetPurchasePolicyDateTime_fail() {
+        ResponseEntity<String> response = tradingSystem.setPurchasePolicyDateTime(username, "invalidToken", storeName, 0, LocalDateTime.now());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertTrue(response.getBody().contains("Invalid token"));
+    }
+
+    @Test
+    public void testSetPurchasePolicyAge_success() {
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18,5);
+        ResponseEntity<String> response = tradingSystem.setPurchasePolicyAge(username, token, storeName, 0, 21);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Age set for purchase policy successfully", response.getBody());
+    }
+
+    @Test
+    public void testSetPurchasePolicyAgeInvalidToken_fail() {
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18,5);
+        ResponseEntity<String> response = tradingSystem.setPurchasePolicyAge(username, "invalidToken", storeName, 0, 18);
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertTrue(response.getBody().contains("Invalid token"));
+    }
+
+    @Test
+    public void testSetPurchasePolicyAgeInvalidAge_fail() {
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18,5);
+        ResponseEntity<String> response = tradingSystem.setPurchasePolicyAge(username, token, storeName, 0, 0);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Parameter age cannot be negative or zero", response.getBody());
+    }
+
+    @Test
+    public void testSetPurchasePolicyCategory_success() {
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18,5);
+        ResponseEntity<String> response = tradingSystem.setPurchasePolicyCategory(username, token, storeName, 0, 4);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Category set for purchase policy successfully", response.getBody());
+    }
+
+    @Test
+    public void testSetPurchasePolicyCategoryInvalidToken_fail() {
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18,5);
+        ResponseEntity<String> response = tradingSystem.setPurchasePolicyCategory(username, "invalidToken", storeName, 0, 5);
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertTrue(response.getBody().contains("Invalid token"));
+    }
+
+    @Test
+    public void testSetPurchasePolicyCategoryInvalidCategory_fail() {
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18,5);
+        ResponseEntity<String> response = tradingSystem.setPurchasePolicyCategory(username, token, storeName, 0, 6);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Invalid category integer: 6", response.getBody());
+    }
+
+    @Test
+    public void testSetFirstPurchasePolicy_success() {
+        tradingSystem.addOrPurchasePolicy(username, token, storeName);
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18,5);
+        ResponseEntity<String> response = tradingSystem.setFirstPurchasePolicy(username, token, storeName, 0, 1);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("First purchase policy set successfully", response.getBody());
+    }
+
+    @Test
+    public void testSetFirstPurchasePolicy_fail() {
+        tradingSystem.addOrPurchasePolicy(username, token, storeName);
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18,5);
+        ResponseEntity<String> response = tradingSystem.setFirstPurchasePolicy(username, "invalidToken", storeName, 1, 0);
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertTrue(response.getBody().contains("Invalid token"));
+    }
+
+    @Test
+    public void testSetFirstPurchasePolicyInvalidIndex_fail() {
+        tradingSystem.addOrPurchasePolicy(username, token, storeName);
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18,5);
+        ResponseEntity<String> response = tradingSystem.setFirstPurchasePolicy(username, token, storeName, 0, 3);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Invalid index: 3", response.getBody());
+    }
+
+    @Test
+    public void testSetSecondPurchasePolicy_success() {
+        tradingSystem.addOrPurchasePolicy(username, token, storeName);
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18,5);
+        ResponseEntity<String> response = tradingSystem.setSecondPurchasePolicy(username, token, storeName, 0, 1);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Second purchase policy set successfully", response.getBody());
+    }
+
+    @Test
+    public void testSetSecondPurchasePolicy_fail() {
+        tradingSystem.addOrPurchasePolicy(username, token, storeName);
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18,5);
+        ResponseEntity<String> response = tradingSystem.setSecondPurchasePolicy(username, "invalidToken", storeName, 1, 0);
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertTrue(response.getBody().contains("Invalid token"));
+    }
+
+    @Test
+    public void testSetSecondPurchasePolicyInvalidIndex_fail() {
+        tradingSystem.addOrPurchasePolicy(username, token, storeName);
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18,5);
+        ResponseEntity<String> response = tradingSystem.setSecondPurchasePolicy(username, token, storeName, 0, 3);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Invalid index: 3", response.getBody());
+    }
+
+    @Test
+    public void testRemovePurchasePolicy_success() {
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18, 5);
+        ResponseEntity<String> response = tradingSystem.removePurchasePolicy(username, token, storeName, 0);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Purchase policy removed successfully", response.getBody());
+    }
+
+    @Test
+    public void testRemovePurchasePolicy_fail() {
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18, 5);
+        ResponseEntity<String> response = tradingSystem.removePurchasePolicy(username, "invalidToken", storeName, 0);
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertTrue(response.getBody().contains("Invalid token"));
+    }
+
+    @Test
+    public void testRemovePurchasePolicyInvalidIndex_fail() {
+        tradingSystem.addPurchasePolicyByAge(username, token, storeName, 18, 5);
+        ResponseEntity<String> response = tradingSystem.removePurchasePolicy(username, token, storeName, 3);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Invalid index: 3", response.getBody());
     }
 
 }

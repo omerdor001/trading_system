@@ -221,8 +221,8 @@ export default defineComponent({
   .form-group .p-password,
   .form-group .p-calendar {
     /* Assuming these classes are defined elsewhere */
-    /* flex-direction: column; */ /* Not necessary */
-    /* align-items: center; */ /* Not necessary */
+    /* flex-direction: column; / / Not necessary */
+    /* align-items: center; / / Not necessary */
   }
 
   .custom-card {
@@ -254,6 +254,5 @@ export default defineComponent({
   .close-button .p-button,
   .goback-button .p-button {
     width: 100%;
-  }
+    }
 </style>
-

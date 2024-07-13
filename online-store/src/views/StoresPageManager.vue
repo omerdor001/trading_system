@@ -118,6 +118,7 @@ export default defineComponent({
              token: token,
           }
        });
+       console.log(response.data);
        const permissions = response.data; 
        store.permissions.isOwner = store.role === 'Owner';
        store.permissions.isWatch = permissions.watch;

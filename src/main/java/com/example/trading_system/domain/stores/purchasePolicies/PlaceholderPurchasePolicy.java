@@ -56,6 +56,6 @@ public class PlaceholderPurchasePolicy extends PurchasePolicy{
 
     @Override
     public String getPurchasePolicyInfo() {
-        return "{ \"type\": \"placeholderPurchasePolicy\" }";
+        return "{ \"type\": \"Placeholder Policy\" }";
     }
 }
