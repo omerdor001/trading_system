@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "owner_roles")
+@DiscriminatorValue("OWNER")
+
 public class Owner extends RoleState {
     @JsonIgnore
     @Id
@@ -14,6 +15,10 @@ public class Owner extends RoleState {
 
     public Owner(Role role) {
         this.role = role;
+    }
+
+    public Owner() {
+
     }
 
     @Override

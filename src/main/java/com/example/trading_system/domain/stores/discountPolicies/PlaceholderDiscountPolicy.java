@@ -6,15 +6,14 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.*;
 
 import java.util.Collection;
-@Entity
-@DiscriminatorValue("PlaceholderDiscountPolicy")
 
-public class PlaceholderDiscountPolicy extends DiscountPolicy  {
+@Entity
+@DiscriminatorValue("PLACEHOLDER")
+public class PlaceholderDiscountPolicy extends DiscountPolicy {
 
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @JsonIgnore
     private Long id;
     public PlaceholderDiscountPolicy() {
     }

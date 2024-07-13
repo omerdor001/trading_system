@@ -34,6 +34,8 @@ public interface MarketFacade {
 
     String getProductInfo(String userName, String storeName, int productId) throws IllegalAccessException;
 
+    String getOwnersOfStore(String username,String storeName);
+
     String getCategories(String username);
 
     String getPurchaseHistoryJSONFormatForStore(String userName,String storeName);
@@ -158,6 +160,8 @@ public interface MarketFacade {
     void setCountCondition(String username, String storeName, int selectedConditionIndex, int newCount) throws IllegalAccessException;
 
     void setCategoryCondition(String username, String storeName, int selectedConditionIndex, int newCategory) throws IllegalAccessException;
+
+    void setProductIdCondition(String username, String storeName, int selectedConditionIndex, int newId) throws IllegalAccessException;
     //endregion
 
     //purchase_policy
@@ -201,13 +205,11 @@ public interface MarketFacade {
 
     void removePurchasePolicy(String username, String storeName, int selectedIndex) throws IllegalAccessException;
 
-    //end region
-
-    void sendMessageUserToStore(String sender, String storeName, String content);
-
-    void sendMessageStoreToUser(String owner, String receiver, String storeName, String content);
-
-    String getStoreMessagesJson(String admin, String storeName);
+//    void sendMessageUserToStore(String sender, String storeName, String content);
+//
+//    void sendMessageStoreToUser(String owner, String receiver, String storeName, String content);
+//
+//    String getStoreMessagesJson(String admin, String storeName);
 
     void placeBid(String userName, String storeName, int productID, double price) throws IllegalArgumentException;
 
@@ -221,9 +223,9 @@ public interface MarketFacade {
 
     String getMyBids(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
 
-    void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception;
-
-    String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception;
+//    void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception;
+//
+//    String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception;
 
     void editProduct(String username, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity) throws Exception;
 

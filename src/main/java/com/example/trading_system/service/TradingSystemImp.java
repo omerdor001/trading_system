@@ -5,14 +5,11 @@ import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -910,6 +907,34 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
+    public ResponseEntity<String> getManagersOfStore(String username, String token, String storeName) {
+        logger.info("Trying to Gather Information of Managers of the Store");
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("Finish to Gather Information of Managers of the Store");
+            return new ResponseEntity<>(userService.getManagersOfStore(username,storeName), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to get Information of Managers of the Store", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getOwnersOfStore(String username, String token, String storeName) {
+        logger.info("Trying to Gather Information of Owners of the Store");
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            logger.info("Finish to Gather Information of Owners of the Store");
+            return new ResponseEntity<>(marketService.getOwnersOfStore(username,storeName), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred : {} , while trying to get Information of Owners of the Store", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public ResponseEntity<String> closeStoreExist(String userName, String token, String storeName) {
         logger.info("{} Trying to Close Store Exist : {}", userName, storeName);
         try {
@@ -1163,75 +1188,75 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
-    @Override
-    public ResponseEntity<String> sendMessageUserToUser(String sender, String token, String receiver, String content) {
-        logger.info("Trying to send message to user: {} from user: {} with content: {}", receiver, sender, content);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(sender, token)) return invalidTokenResponse();
-            userService.sendMessageUserToUser(sender, receiver, content);
-            return new ResponseEntity<>("Message sent successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed to send message to user", e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
-    public ResponseEntity<String> sendMessageUserToStore(String sender, String token, String storeName, String content) {
-        logger.info("Trying to send message to store: {} from user: {} with content: {}", storeName, sender, content);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(sender, token)) return invalidTokenResponse();
-            marketService.sendMessageUserToStore(sender, storeName, content);
-            return new ResponseEntity<>("Message sent successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed to send message to store", e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
-    public ResponseEntity<String> sendMessageStoreToUser(String owner, String token, String receiver, String storeName, String content) {
-        logger.info("Trying to send message to user: {} from store: {} by owner: {} with content: {}", receiver, storeName, owner, content);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(owner, token)) return invalidTokenResponse();
-            marketService.sendMessageStoreToUser(owner, receiver, storeName, content);
-            return new ResponseEntity<>("Message sent successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed to send message from store to user", e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
-    public ResponseEntity<String> getUserMessagesJson(String admin, String token, String username){
-        logger.info("Trying to get messages of user: {}", username);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(admin, token)) return invalidTokenResponse();
-            String result = userService.getUserMessagesJson(admin, username);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while trying to get messages of user: {}", username);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
-    public ResponseEntity<String> getStoreMessagesJson(String admin, String token, String storeName){
-        logger.info("Trying to get messages of store: {}", storeName);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(admin, token)) return invalidTokenResponse();
-            String result = marketService.getStoreMessagesJson(admin, storeName);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while trying to get messages of store: {}", storeName);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @Override
+//    public ResponseEntity<String> sendMessageUserToUser(String sender, String token, String receiver, String content) {
+//        logger.info("Trying to send message to user: {} from user: {} with content: {}", receiver, sender, content);
+//        try {
+//            if (checkSystemClosed()) return systemClosedResponse();
+//            if (checkInvalidToken(sender, token)) return invalidTokenResponse();
+//            userService.sendMessageUserToUser(sender, receiver, content);
+//            return new ResponseEntity<>("Message sent successfully", HttpStatus.OK);
+//        } catch (Exception e) {
+//            logger.error("Error occurred : {} , Failed to send message to user", e.getMessage());
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
+//    @Override
+//    public ResponseEntity<String> sendMessageUserToStore(String sender, String token, String storeName, String content) {
+//        logger.info("Trying to send message to store: {} from user: {} with content: {}", storeName, sender, content);
+//        try {
+//            if (checkSystemClosed()) return systemClosedResponse();
+//            if (checkInvalidToken(sender, token)) return invalidTokenResponse();
+//            marketService.sendMessageUserToStore(sender, storeName, content);
+//            return new ResponseEntity<>("Message sent successfully", HttpStatus.OK);
+//        } catch (Exception e) {
+//            logger.error("Error occurred : {} , Failed to send message to store", e.getMessage());
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
+//    @Override
+//    public ResponseEntity<String> sendMessageStoreToUser(String owner, String token, String receiver, String storeName, String content) {
+//        logger.info("Trying to send message to user: {} from store: {} by owner: {} with content: {}", receiver, storeName, owner, content);
+//        try {
+//            if (checkSystemClosed()) return systemClosedResponse();
+//            if (checkInvalidToken(owner, token)) return invalidTokenResponse();
+//            marketService.sendMessageStoreToUser(owner, receiver, storeName, content);
+//            return new ResponseEntity<>("Message sent successfully", HttpStatus.OK);
+//        } catch (Exception e) {
+//            logger.error("Error occurred : {} , Failed to send message from store to user", e.getMessage());
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
+//    @Override
+//    public ResponseEntity<String> getUserMessagesJson(String admin, String token, String username){
+//        logger.info("Trying to get messages of user: {}", username);
+//        try {
+//            if (checkSystemClosed()) return systemClosedResponse();
+//            if (checkInvalidToken(admin, token)) return invalidTokenResponse();
+//            String result = userService.getUserMessagesJson(admin, username);
+//            return new ResponseEntity<>(result, HttpStatus.OK);
+//        } catch (Exception e) {
+//            logger.error("Error occurred while trying to get messages of user: {}", username);
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
+//    @Override
+//    public ResponseEntity<String> getStoreMessagesJson(String admin, String token, String storeName){
+//        logger.info("Trying to get messages of store: {}", storeName);
+//        try {
+//            if (checkSystemClosed()) return systemClosedResponse();
+//            if (checkInvalidToken(admin, token)) return invalidTokenResponse();
+//            String result = marketService.getStoreMessagesJson(admin, storeName);
+//            return new ResponseEntity<>(result, HttpStatus.OK);
+//        } catch (Exception e) {
+//            logger.error("Error occurred while trying to get messages of store: {}", storeName);
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
     //region Discount management
 
@@ -1609,6 +1634,20 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>("Category condition set successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while setting category condition for user: {} ,store: {}, conditionIndex: {}, category: {}", username, storeName, selectedConditionIndex, newCategory);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> setProductIdCondition(String username, String token, String storeName, int selectedConditionIndex, int newId) {
+        logger.info("Trying to set product id in condition for user: {} ,store: {}, conditionIndex: {}, product id: {}", username, storeName, selectedConditionIndex, newId);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.setProductIdCondition(username, storeName, selectedConditionIndex, newId);
+            return new ResponseEntity<>("Product id set successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while setting product id in  condition for user: {} ,store: {}, conditionIndex: {}, product id: {}", username, storeName, selectedConditionIndex, newId);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -2057,34 +2096,34 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-    @Override
-    public ResponseEntity<String> buyLotteryProductTicket(String userName, String token, String storeName, int productID, double price) {
-        logger.info("{} is trying to buy lottery product ticket for product {} in store {} at price {}", userName, productID, storeName, price);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
-            String result = marketService.buyLotteryProductTicket(userName, storeName, productID, price);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while {} trying to buy lottery product ticket for product {} in store {} ", userName, productID, storeName);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
-    public ResponseEntity<String> createProductLottery(String userName, String token, String storeName, int productID, LocalDateTime localDateTime, double price) {
-        logger.info("{} is trying to get create product lottery for product {} in store {} at price {} until {} ", userName, productID, storeName, price, localDateTime);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
-            marketService.createProductLottery(userName, storeName, productID, localDateTime, price);
-            return new ResponseEntity<>("Created product lottery successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while {} trying to create product lottery for product {} in store {}", userName, productID, storeName);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
+//
+//    @Override
+//    public ResponseEntity<String> buyLotteryProductTicket(String userName, String token, String storeName, int productID, double price) {
+//        logger.info("{} is trying to buy lottery product ticket for product {} in store {} at price {}", userName, productID, storeName, price);
+//        try {
+//            if (checkSystemClosed()) return systemClosedResponse();
+//            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
+//           // String result = marketService.buyLotteryProductTicket(userName, storeName, productID, price);
+//            return new ResponseEntity<>(result, HttpStatus.OK);
+//        } catch (Exception e) {
+//            logger.error("Error occurred while {} trying to buy lottery product ticket for product {} in store {} ", userName, productID, storeName);
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
+//    @Override
+//    public ResponseEntity<String> createProductLottery(String userName, String token, String storeName, int productID, LocalDateTime localDateTime, double price) {
+//        logger.info("{} is trying to get create product lottery for product {} in store {} at price {} until {} ", userName, productID, storeName, price, localDateTime);
+//        try {
+//            if (checkSystemClosed()) return systemClosedResponse();
+//            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
+//            marketService.createProductLottery(userName, storeName, productID, localDateTime, price);
+//            return new ResponseEntity<>("Created product lottery successfully", HttpStatus.OK);
+//        } catch (Exception e) {
+//            logger.error("Error occurred while {} trying to create product lottery for product {} in store {}", userName, productID, storeName);
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
 
 }

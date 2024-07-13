@@ -5,17 +5,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Collection;
+
 @Entity
-@DiscriminatorValue("ProductCountCondition")
-
+@DiscriminatorValue("PRODUCT_COUNT")
 public class ProductCountCondition extends Condition {
-    private int productId;
-    private int count;
-    @Id
-    @JsonIgnore
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
+
+    @Column(name = "product_id")
+    private int productId;
+
+    @Column(name = "count")
+    private int count;
 
     public ProductCountCondition(int productId, int amount) {
         this.productId = productId;
@@ -48,6 +52,7 @@ public class ProductCountCondition extends Condition {
         this.count = count;
     }
 
+    @Override
     public void setProductId(int productId) {
         this.productId = productId;
     }

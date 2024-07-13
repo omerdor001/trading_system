@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />

@@ -32,8 +32,9 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import PrimeButton from 'primevue/button';
+
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import PrimeToast from 'primevue/toast';
@@ -54,7 +55,6 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const toast = useToast();
-
     const notificationsVisible = ref(false);
     const notifications = ref([]);
     const userName = localStorage.getItem('userName');
@@ -110,20 +110,43 @@ export default defineComponent({
       router.push('/login');
     };
 
-    return {
-      userName,
-      goHome,
-      goToSearchProduct,
-      goToSearchStore, // Include the new function
-      viewCart,
-      showNotifications,
-      logout,
-      notificationsVisible,
-      notifications
-    };
-  }
-});
-</script>
+    onMounted(() => {
+          window.addEventListener('popstate', handlePopState);
+        });
+
+        const handlePopState = () => {
+          const username = localStorage.getItem('username');
+          const currentPath = router.currentRoute.value.path;
+          if (typeof username === 'string' && username.startsWith('v')) {
+            if (currentPath != '/login') {
+              console.log("Redirecting to home page because the previous route was /login");
+              router.push('/');
+            }
+          }
+        };
+
+        window.addEventListener('beforeunload', () => {
+          localStorage.removeItem('isLoggedIn');
+          localStorage.removeItem('isAdmin');
+          localStorage.removeItem('username');
+          localStorage.removeItem('token');
+        });
+
+
+   return {
+         userName,
+         goHome,
+         goToSearchProduct,
+         goToSearchStore, // Include the new function
+         viewCart,
+         showNotifications,
+         logout,
+         notificationsVisible,
+         notifications
+       };
+     }
+   });
+   </script>
 
 
 <style scoped>
@@ -178,14 +201,5 @@ export default defineComponent({
 
 .p-button:hover {
   background-color: #d35400 !important;
-}
-
-.p-dialog .p-dialog-content ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.p-dialog .p-dialog-content li {
-  margin-bottom: 10px;
 }
 </style>

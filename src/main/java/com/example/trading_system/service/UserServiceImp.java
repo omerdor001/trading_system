@@ -291,6 +291,10 @@ public class UserServiceImp implements UserService {
         return userFacade.getPermissionsForUserJSONFormat(username,storeName);
     }
 
+    @Override
+    public String getManagersOfStore(String username, String storeName) {
+        return userFacade.getManagersOfStore(username,storeName);
+    }
 
 
 }

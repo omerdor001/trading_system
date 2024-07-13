@@ -8,13 +8,15 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.function.Predicate;
 @Entity
-@DiscriminatorValue("AndPolicy")
-
+@DiscriminatorValue("AND")
 public class AndPolicy extends PurchasePolicy {
-    @ManyToOne(cascade = CascadeType.ALL)
+
+    @OneToOne
     private PurchasePolicy predicateOne;
-    @ManyToOne(cascade = CascadeType.ALL)
+
+    @OneToOne
     private PurchasePolicy predicateTwo;
+
     public AndPolicy() {
         predicateOne = new PlaceholderPurchasePolicy();
         predicateTwo = new PlaceholderPurchasePolicy();

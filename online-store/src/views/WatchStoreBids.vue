@@ -45,12 +45,6 @@
       console.error('Error fetching store bids:', error);
     }
   };
-
-  const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
   
   onMounted(fetchStoreBids);
   </script>

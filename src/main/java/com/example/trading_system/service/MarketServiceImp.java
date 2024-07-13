@@ -59,6 +59,11 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public String getOwnersOfStore(String username, String storeName) {
+        return marketFacade.getOwnersOfStore(username,storeName);
+    }
+
+    @Override
     public String getCategories(String username) {
         return marketFacade.getCategories(username);
     }
@@ -304,6 +309,11 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public void setProductIdCondition(String username, String storeName, int selectedConditionIndex, int newId) throws IllegalAccessException {
+        marketFacade.setProductIdCondition(username, storeName, selectedConditionIndex, newId);
+    }
+
+    @Override
     public void removeCondition(String username, String storeName, int selectedIndex) throws IllegalAccessException {
         marketFacade.removeCondition(username, storeName, selectedIndex);
     }
@@ -445,20 +455,20 @@ public class MarketServiceImp implements MarketService {
         return marketFacade.requestInformationAboutSpecificOfficialInStore(userName, storeName, officialUserName);
     }
 
-    @Override
-    public void sendMessageUserToStore(String sender, String storeName, String content){
-        marketFacade.sendMessageUserToStore(sender, storeName, content);
-    }
-
-    @Override
-    public void sendMessageStoreToUser(String owner, String receiver, String storeName, String content){
-        marketFacade.sendMessageStoreToUser(owner, receiver, storeName, content);
-    }
-
-    @Override
-    public String getStoreMessagesJson(String admin, String storename){
-        return marketFacade.getStoreMessagesJson(admin, storename);
-    }
+//    @Override
+//    public void sendMessageUserToStore(String sender, String storeName, String content){
+//        marketFacade.sendMessageUserToStore(sender, storeName, content);
+//    }
+//
+//    @Override
+//    public void sendMessageStoreToUser(String owner, String receiver, String storeName, String content){
+//        marketFacade.sendMessageStoreToUser(owner, receiver, storeName, content);
+//    }
+//
+//    @Override
+//    public String getStoreMessagesJson(String admin, String storename){
+//        return marketFacade.getStoreMessagesJson(admin, storename);
+//    }
 
     @Override
     public void placeBid(String userName, String storeName, int productID, double price) throws  IllegalArgumentException {
@@ -490,18 +500,18 @@ public class MarketServiceImp implements MarketService {
         return marketFacade.getMyBids(userName, storeName);
     }
 
-    @Override
-    public String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception{
-        return marketFacade.buyLotteryProductTicket(userName, storeName, productID, price);
-    }
-
-    @Override
-    public void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception{
-        marketFacade.createProductLottery(userName, storeName, productID, localDateTime, price);
-    }
-
-
-
+//    @Override
+//    public String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception{
+//        return marketFacade.buyLotteryProductTicket(userName, storeName, productID, price);
+//    }
+//
+//    @Override
+//    public void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception{
+//        marketFacade.createProductLottery(userName, storeName, productID, localDateTime, price);
+//    }
+//
+//
+//
 
 
 }

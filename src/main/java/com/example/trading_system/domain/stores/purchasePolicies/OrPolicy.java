@@ -9,9 +9,9 @@ import java.util.Collection;
 @Entity
 @DiscriminatorValue(("OrPolicy"))
 public class OrPolicy extends PurchasePolicy{
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private PurchasePolicy predicateOne;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private PurchasePolicy predicateTwo;
 
     public OrPolicy() {

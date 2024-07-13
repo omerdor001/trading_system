@@ -17,16 +17,16 @@ public abstract class DiscountPolicy implements DiscountPolicyInterface {
     @JsonIgnore
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JsonIgnore
     private DiscountPolicy first;
 
-    @ManyToOne
+    @OneToOne
     @JsonIgnore
 
     private DiscountPolicy second;
 
-    @ManyToOne
+    @OneToOne
 
     private DiscountPolicy then;
 

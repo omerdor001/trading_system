@@ -9,15 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 @Entity
-@AllArgsConstructor
+@Table(name = "store_history")
 @Getter
 @Setter
 public class StoreSalesHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
+    @Column(nullable = false, unique = true)
     private Long id;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "store_history_id")
     private List<Purchase> purchases;
 
     public StoreSalesHistory(){

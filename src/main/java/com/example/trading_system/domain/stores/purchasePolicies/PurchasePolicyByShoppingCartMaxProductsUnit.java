@@ -1,6 +1,7 @@
 package com.example.trading_system.domain.stores.purchasePolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
@@ -10,7 +11,11 @@ import java.util.Collection;
 @Entity
 @DiscriminatorValue("PurchasePolicyByShoppingCartMaxProductsUnit")
 public class PurchasePolicyByShoppingCartMaxProductsUnit extends PurchasePolicy {
+    @Column(name = "productId")
+
     private int productId;
+    @Column(name = "numOfQuantity")
+
     private int numOfQuantity;
     public PurchasePolicyByShoppingCartMaxProductsUnit(int productId,int numOfQuantity){
         this.productId=productId;

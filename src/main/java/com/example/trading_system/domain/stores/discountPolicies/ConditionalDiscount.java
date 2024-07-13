@@ -2,20 +2,25 @@ package com.example.trading_system.domain.stores.discountPolicies;
 
 import com.example.trading_system.domain.stores.ProductInSaleDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.Collection;
-@Entity
 
+@Entity
+@DiscriminatorValue("CONDITIONAL")
 public class ConditionalDiscount extends DiscountPolicy {
+
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
-    @ManyToOne
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Condition condition;
-    @ManyToOne
+
+    @OneToOne(cascade = CascadeType.ALL)
     private DiscountPolicy then;
 
     public ConditionalDiscount() {
@@ -95,4 +100,5 @@ public class ConditionalDiscount extends DiscountPolicy {
         String thenInfo = then.getInfo();
         return "{ \"type\": \"conditional\", \"condition\": " + conditionInfo + ", \"then\": " + thenInfo + " }";
     }
+
 }

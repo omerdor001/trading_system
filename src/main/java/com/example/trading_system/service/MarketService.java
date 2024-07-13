@@ -3,7 +3,7 @@ package com.example.trading_system.service;
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,6 +19,8 @@ public interface MarketService {
     String getProductsFromStoreJSONFormat(String storeName);
 
     String getStoresIOpened(String username);
+
+    String getOwnersOfStore(String username,String storeName);
 
     String getCategories(String username);
 
@@ -76,9 +78,9 @@ public interface MarketService {
 
     String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
 
-    void sendMessageUserToStore(String sender, String storeName, String content);
-
-    void sendMessageStoreToUser(String owner, String receiver, String storeName, String content);
+//    void sendMessageUserToStore(String sender, String storeName, String content);
+//
+//    void sendMessageStoreToUser(String owner, String receiver, String storeName, String content);
 
     //region Discount creation
     String getDiscountPolicies(String username, String storeName) throws IllegalAccessException;
@@ -139,6 +141,8 @@ public interface MarketService {
 
     void setCategoryCondition(String username, String storeName, int selectedConditionIndex, int newCategory) throws IllegalAccessException;
 
+    void setProductIdCondition(String username, String storeName, int selectedConditionIndex, int newId) throws IllegalAccessException;
+
     //endregion
 
     //region purchase policy
@@ -181,7 +185,7 @@ public interface MarketService {
     void removePurchasePolicy(String username, String storeName, int selectedIndex) throws IllegalAccessException;
     //endregion
 
-    String getStoreMessagesJson(String admin, String storeName);
+//    String getStoreMessagesJson(String admin, String storeName);
 
     void placeBid(String userName, String storeName, int productID, double price) throws IllegalArgumentException;
 
@@ -194,10 +198,10 @@ public interface MarketService {
     String getStoreBids(String userName, String storeName) throws IllegalAccessException, IllegalArgumentException;
 
     String getMyBids(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
-
-    void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception;
-
-    String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception;
+//
+//    void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception;
+//
+//    String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception;
 
     void editProduct(String username, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity) throws Exception;
 

@@ -27,6 +27,10 @@ public class Role {
         this.appointedById = appointedById;
     }
 
+    public Role() {
+
+    }
+
     public String getStoreId() {
         return store_name_id;
     }
@@ -139,6 +143,14 @@ public class Role {
 
     public boolean isEditDiscountPolicy(){
         return roleState.isEditDiscountPolicy();
+    }
+
+    public boolean isAcceptBids(){
+        return roleState.isAcceptBids();
+    }
+
+    public boolean isCreateLottery(){
+        return roleState.isCreateLottery();
     }
 
 }

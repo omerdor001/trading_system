@@ -65,5 +65,4 @@ public class StoreMemoryRepository implements StoreRepository {
         stores.put(storeName, store);
         store.addOwner(founder);
     }
-
 }

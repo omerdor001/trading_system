@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import jakarta.persistence.*;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,50 +19,62 @@ import java.util.stream.Collectors;
 @Setter
 @Getter
 @Entity
+@Table(name = "stores")
 public class Store {
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
-    @Getter
+
     @Id
+    @Column(name = "name_id")
     private String nameId;
+
     private String description;
-    //Added because missing
-    @Getter
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "store_id")
-    private HashMap<Integer, Product> products;
-    //Added because missing
-    @Getter
+    private Map<Integer, Product> products = new HashMap<>();
+
     @ElementCollection
-    private List<String> managers;
-    //Added because missing
-    @Getter
+    @CollectionTable(name = "store_managers", joinColumns = @JoinColumn(name = "store_id"))
+    @Column(name = "manager")
+    private List<String> managers = new LinkedList<>();
+
     @ElementCollection
-    private List<String> owners;
-    @Getter
+    @CollectionTable(name = "store_owners", joinColumns = @JoinColumn(name = "store_id"))
+    @Column(name = "owner")
+    private List<String> owners = new LinkedList<>();
+    @Column(name = "founder")
     private String founder;
-    @Getter
-    @Setter
+    @Column(name = "ActivtionStatus")
     private boolean isActive;
+    @Column(name = " openingStatus")
     private boolean isOpen;
+
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    private StoreSalesHistory salesHistory;
-    @Getter
-    @Setter
+    @JoinColumn(name = "sales_history_id", referencedColumnName = "id")
+    private StoreSalesHistory salesHistory = new StoreSalesHistory();
+    @Column(name = "rating")
     private Double storeRating;
-    @Getter
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private LinkedList<DiscountPolicy> discountPolicies;
-    @Getter
+    private List<DiscountPolicy> discountPolicies = new LinkedList<>();
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private LinkedList<Condition> discountConditions;
-    @Getter
+    private List<Condition> discountConditions = new LinkedList<>();
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private LinkedList<PurchasePolicy> purchasePolicies;
-    @Getter
+    private List<PurchasePolicy> purchasePolicies = new LinkedList<>();
+
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Message> messages = new LinkedList<>();
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private LinkedList<Message> messages;
-    private LinkedList<Bid> bids;
-    private HashMap<Integer, ProductLottery> lotteryProducts;
+    @JoinColumn(name = "store_id")
+    private List<Bid> bids;
+
+//    @ElementCollection
+//    @CollectionTable(name = "store_lottery_products", joinColumns = @JoinColumn(name = "store_id"))
+//    @MapKeyColumn(name = "product_id")
+//    private HashMap<Integer, ProductLottery> lotteryProducts = new HashMap<>();
 
     public Store(String nameId, String description, String founder, Double storeRating) {
         this.nameId = nameId;
@@ -79,9 +90,9 @@ public class Store {
         this.discountConditions = new LinkedList<>();
         this.purchasePolicies = new LinkedList<>();
         this.isOpen = true;
-        this.messages = new LinkedList<>();
+        //this.messages = new LinkedList<>();
         this.bids = new LinkedList<>();
-        this.lotteryProducts = new HashMap<>();
+        // this.lotteryProducts = new HashMap<>();
     }
 
     public Store() {
@@ -315,9 +326,9 @@ public class Store {
         isOpen = open;
     }
 
-    public String getMessagesJSON() {
-        return Message.toJsonList(this.messages);
-    }
+//    public String getMessagesJSON() {
+//        return Message.toJsonList(this.messages);
+//    }
 
     public synchronized void releaseReservedProducts(int productId, int quantity) {
         getProduct(productId).releaseReservedProducts(quantity);
@@ -397,9 +408,9 @@ public class Store {
         return salesHistory.getPurchaseHistory(username);
     }
 
-    public void receiveMessage(String senderId, String senderUsername, String content) {
-        this.messages.add(new Message(senderId, senderUsername, content));
-    }
+//    public void receiveMessage(String senderId, String senderUsername, String content) {
+//        this.messages.add(new Message(senderId, senderUsername, content));
+//    }
 
     //region Discount creation
     public String getDiscountPoliciesInfo() {
@@ -439,16 +450,19 @@ public class Store {
     public void addCategoryPercentageDiscount(int category, double discountPercent) {
         if (discountPercent < 0 || discountPercent > 1)
             throw new IllegalArgumentException("Discount percent must be between 0 and 1");
+        if (!Category.isValidCategory(category)) throw new IllegalArgumentException("Invalid category");
         discountPolicies.add(new PercentageDiscountByCategory(category, discountPercent));
     }
 
     public void addProductPercentageDiscount(int productId, double discountPercent) {
-        if (discountPercent < 0) throw new IllegalArgumentException("Discount percent must be between 0 and 1");
+        if (discountPercent < 0 || discountPercent > 1)
+            throw new IllegalArgumentException("Discount percent must be between 0 and 1");
         discountPolicies.add(new PercentageDiscountByProduct(discountPercent, productId));
     }
 
     public void addStoreDiscount(double discountPercent) {
-        if (discountPercent < 0) throw new IllegalArgumentException("Discount percent must be between 0 and 1");
+        if (discountPercent < 0 || discountPercent > 1)
+            throw new IllegalArgumentException("Discount percent must be between 0 and 1");
         discountPolicies.add(new PercentageDiscountByStore(discountPercent));
     }
 
@@ -466,6 +480,7 @@ public class Store {
 
     public void addCategoryCountCondition(int category, int count) {
         if (count < 0) throw new IllegalArgumentException("Category item count cannot be less than 0");
+        if (!Category.isValidCategory(category)) throw new IllegalArgumentException("Invalid category");
         discountConditions.add(new CategoryCountCondition(category, count));
     }
 
@@ -475,6 +490,7 @@ public class Store {
     }
 
     public void addProductCountCondition(int productId, int count) {
+        if (productId < 0) throw new IllegalArgumentException("Product id cannot be negative");
         if (count < 0) throw new IllegalArgumentException("Product count cannot be less than 0");
         discountConditions.add(new ProductCountCondition(productId, count));
     }
@@ -492,11 +508,15 @@ public class Store {
     }
 
     public void removeDiscount(int selectedIndex) {
+        if (selectedIndex < 0 || selectedIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid discount index");
         discountPolicies.remove(selectedIndex);
     }
 
     public void removeCondition(int selectedIndex) {
-        discountConditions.remove(selectedIndex - discountPolicies.size());
+        if (selectedIndex < 0 || selectedIndex > discountConditions.size())
+            throw new IllegalArgumentException("Invalid condition index");
+        discountConditions.remove(selectedIndex);
     }
     //endregion
 
@@ -504,6 +524,10 @@ public class Store {
     public void setFirstDiscount(int selectedDiscountIndex, int selectedFirstIndex) {
         if (selectedDiscountIndex == selectedFirstIndex)
             throw new IllegalArgumentException("Indexes cannot be the same");
+        if (selectedDiscountIndex < 0 || selectedDiscountIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid selected discount index");
+        if (selectedFirstIndex < 0 || selectedFirstIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid selected first discount index");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         DiscountPolicy setDiscount = discountPolicies.remove(selectedFirstIndex);
         editedDiscount.setFirst(setDiscount);
@@ -512,43 +536,66 @@ public class Store {
     public void setSecondDiscount(int selectedDiscountIndex, int selectedSecondIndex) {
         if (selectedDiscountIndex == selectedSecondIndex)
             throw new IllegalArgumentException("Indexes cannot be the same");
+        if (selectedDiscountIndex < 0 || selectedDiscountIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid selected discount index");
+        if (selectedSecondIndex < 0 || selectedSecondIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid selected second discount index");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         DiscountPolicy setDiscount = discountPolicies.remove(selectedSecondIndex);
         editedDiscount.setSecond(setDiscount);
     }
 
-    public void setFirstCondition(int selectedDiscountIndex, int selectedSecondIndex) {
+    public void setFirstCondition(int selectedDiscountIndex, int selectedFirstIndex) {
+        if (selectedDiscountIndex < 0 || selectedDiscountIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid selected discount index");
+        if (selectedFirstIndex < 0 || selectedFirstIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid selected first Condition index");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
-        Condition setDiscount = discountConditions.remove(selectedSecondIndex);
+        Condition setDiscount = discountConditions.remove(selectedFirstIndex);
         editedDiscount.setFirst(setDiscount);
 
     }
 
     public void setSecondCondition(int selectedDiscountIndex, int selectedSecondIndex) {
+        if (selectedDiscountIndex < 0 || selectedDiscountIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid selected discount index");
+        if (selectedSecondIndex < 0 || selectedSecondIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid selected second Condition index");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         Condition setDiscount = discountConditions.remove(selectedSecondIndex);
         editedDiscount.setSecond(setDiscount);
     }
 
     public void setThenDiscount(int selectedDiscountIndex, int selectedThenIndex) {
-        if(selectedDiscountIndex == selectedThenIndex)
-            throw new RuntimeException("Indexes cannot be the same");
+        if (selectedDiscountIndex == selectedThenIndex) throw new RuntimeException("Indexes cannot be the same");
+        if (selectedDiscountIndex < 0 || selectedDiscountIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid selected discount index");
+        if (selectedThenIndex < 0 || selectedThenIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid selected then Discount index");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         DiscountPolicy setDiscount = discountPolicies.remove(selectedThenIndex);
         editedDiscount.setThen(setDiscount);
     }
 
     public void setCategoryDiscount(int selectedDiscountIndex, int category) {
+        if (selectedDiscountIndex < 0 || selectedDiscountIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid selected discount index");
+        if (!Category.isValidCategory(category)) throw new IllegalArgumentException("Invalid category");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         editedDiscount.setCategory(category);
     }
 
     public void setProductIdDiscount(int selectedDiscountIndex, int productId) {
+        if (selectedDiscountIndex < 0 || selectedDiscountIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid selected discount index");
+        if (productId < 0) throw new IllegalArgumentException("Product id cannot be negative");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         editedDiscount.setProductId(productId);
     }
 
     public void setPercentDiscount(int selectedDiscountIndex, double discountPercent) {
+        if (selectedDiscountIndex < 0 || selectedDiscountIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid selected discount index");
         if (discountPercent < 0 || discountPercent > 1)
             throw new IllegalArgumentException("Discount percent must be between 0 and 1");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
@@ -556,28 +603,46 @@ public class Store {
     }
 
     public void setDeciderDiscount(int selectedDiscountIndex, int selectedDeciderIndex) {
+        if (selectedDiscountIndex < 0 || selectedDiscountIndex > discountPolicies.size())
+            throw new IllegalArgumentException("Invalid selected discount index");
+        if (selectedDeciderIndex < 0 || selectedDeciderIndex > discountConditions.size())
+            throw new IllegalArgumentException("Invalid selected decider index");
         DiscountPolicy editedDiscount = discountPolicies.get(selectedDiscountIndex);
         Condition setDiscount = discountConditions.remove(selectedDeciderIndex);
         editedDiscount.setDecider(setDiscount);
     }
 
     public void setTotalSum(int selectedConditionIndex, double newSum) {
+        if (selectedConditionIndex < 0 || selectedConditionIndex > discountConditions.size())
+            throw new IllegalArgumentException("Invalid selected condition index");
+        if (newSum < 0) throw new IllegalArgumentException("required sum cannot be less than 0");
         Condition setCondition = discountConditions.get(selectedConditionIndex);
         setCondition.setSum(newSum);
     }
 
     public void setCountCondition(int selectedConditionIndex, int newCount) {
-        if (newCount < 1)
-            throw new RuntimeException("Count cannot be less than 1");
+        if (selectedConditionIndex < 0 || selectedConditionIndex > discountConditions.size())
+            throw new IllegalArgumentException("Invalid selected condition index");
+        if (newCount < 0) throw new RuntimeException("Count cannot be less than 0");
         Condition setCondition = discountConditions.get(selectedConditionIndex);
         setCondition.setCount(newCount);
     }
 
     public void setCategoryCondition(int selectedConditionIndex, int newCategory) {
-        if (newCategory < 1)
-            throw new RuntimeException("Category cannot be less than 1");
+        if (selectedConditionIndex < 0 || selectedConditionIndex > discountConditions.size())
+            throw new IllegalArgumentException("Invalid selected condition index");
+        if (!Category.isValidCategory(newCategory)) throw new IllegalArgumentException("Invalid category");
         Condition setCondition = discountConditions.get(selectedConditionIndex);
         setCondition.setCategory(newCategory);
+    }
+
+    public void setProductIdCondition(int selectedConditionIndex, int newId) {
+        if (selectedConditionIndex < 0 || selectedConditionIndex > discountConditions.size())
+            throw new IllegalArgumentException("Invalid selected condition index");
+        if(newId < 0)
+            throw new IllegalArgumentException("Product id cannot be less than 0");
+        Condition setCondition = discountConditions.get(selectedConditionIndex);
+        setCondition.setProductId(newId);
     }
     //endregion
 
@@ -741,8 +806,7 @@ public class Store {
         for (Bid b : bids) {
             if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) {
                 b.approveBid(userName);
-                if (b.getApprovedBy().containsAll(owners))
-                    b.setAllOwnersApproved(true);
+                if (b.getApprovedBy().containsAll(owners)) b.setAllOwnersApproved(true);
                 return b.getAllOwnersApproved();
             }
         }
@@ -771,15 +835,13 @@ public class Store {
     public boolean isBidExist(int productID, String bidUserName) {
 
         for (Bid b : bids) {
-            if (b.getProductID() == productID && b.getUserName().equals(bidUserName))
-                return true;
+            if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) return true;
         }
         return false;
     }
 
     public String getStoreBids() {
-        if (bids.isEmpty())
-            return "{}";
+        if (bids.isEmpty()) return "{}";
         StringBuilder sb = new StringBuilder();
         sb.append("{\n");
         sb.append("  \"storeName\" : \"").append(nameId).append("\",\n");
@@ -791,19 +853,15 @@ public class Store {
     public boolean isBidApproved(String username, int productId, double price) {
         for (Bid b : bids) {
             if (b.getProductID() == productId && b.getUserName().equals(username) && b.getPrice() == price) {
-                if (b.getApprovedBy().containsAll(owners))
-                    return true;
+                if (b.getApprovedBy().containsAll(owners)) return true;
             }
         }
         return false;
     }
 
     public String getMyBids(String userName) {
-        LinkedList<Bid> filteredBids = bids.stream()
-                .filter(bid -> userName.equals(bid.getUserName()))
-                .collect(Collectors.toCollection(LinkedList::new));
-        if (filteredBids.isEmpty())
-            return "{}";
+        LinkedList<Bid> filteredBids = bids.stream().filter(bid -> userName.equals(bid.getUserName())).collect(Collectors.toCollection(LinkedList::new));
+        if (filteredBids.isEmpty()) return "{}";
         StringBuilder sb = new StringBuilder();
         sb.append("{\n");
         sb.append("  \"storeName\" : \"").append(nameId).append("\",\n");
@@ -811,32 +869,30 @@ public class Store {
         sb.append("}");
         return sb.toString();
     }
-
-    public void createProductLottery(int productID, LocalDateTime localDateTime, double price) {
-        ProductLottery productLottery = new ProductLottery(localDateTime, price);
-        this.lotteryProducts.put(productID, productLottery);
-    }
-
-    public boolean buyLotteryProductTicket(String userName, int productID, double price) throws Exception {
-        return lotteryProducts.get(productID).buyLotteryProductTicket(userName, price);
-    }
-
-    public String makeLotteryOnProduct(int productID) {
-        return lotteryProducts.get(productID).makeLotteryOnProduct();
-    }
-
-    public boolean isLotteryExist(int productID) {
-        return lotteryProducts.containsKey(productID);
-    }
+//
+//    public void createProductLottery(int productID, LocalDateTime localDateTime, double price) {
+//        ProductLottery productLottery = new ProductLottery(localDateTime, price);
+//        this.lotteryProducts.put(productID, productLottery);
+//    }
+//
+//    public boolean buyLotteryProductTicket(String userName, int productID, double price) throws Exception {
+//        return lotteryProducts.get(productID).buyLotteryProductTicket(userName, price);
+//    }
+//
+//    public String makeLotteryOnProduct(int productID) {
+//        return lotteryProducts.get(productID).makeLotteryOnProduct();
+//    }
+//
+//    public boolean isLotteryExist(int productID) {
+//        return lotteryProducts.containsKey(productID);
+//    }
 
     public void editProduct(int productId, String productName, String productDescription, double productPrice, int productQuantity) {
         Product product = getProduct(productId);
-        synchronized (product) {
-            if (product != null) {
-                product.editProduct(productName, productDescription, productPrice, productQuantity);
-            } else throw new IllegalArgumentException("Product with id " + productId + " does not exist");
+        if (product == null) throw new IllegalArgumentException("Product with id " + productId + " does not exist");
+        else synchronized (product) {
+            product.editProduct(productName, productDescription, productPrice, productQuantity);
         }
-
     }
 
 
@@ -863,35 +919,29 @@ public class Store {
         List<Product> productList = new ArrayList<>(products.values());
 
         // Stream the list and apply filters
-        return productList.stream()
-                .filter(product -> {
-                    if (keyWord != null && !keyWord.isEmpty()) {
-                        return product.getKeyWords().contains(keyWord);
-                    }
-                    return true;
-                })
-                .filter(product -> {
-                    if (minPrice != 0) {
-                        return product.getProduct_price() >= minPrice;
-                    }
-                    return true;
-                })
-                .filter(product -> {
-                    if (maxPrice != 0) {
-                        return product.getProduct_price() <= maxPrice;
-                    }
-                    return true;
-                })
-                .filter(product -> {
-                    if (intCategories != null && !intCategories.isEmpty()) {
-                        return intCategories.contains(product.getCategory().getIntValue());
-                    }
-                    return true;
-                })
-                .filter(product -> {
-                    return product.getRating() == rating;
-                })
-                .collect(Collectors.toList());
+        return productList.stream().filter(product -> {
+            if (keyWord != null && !keyWord.isEmpty()) {
+                return product.getKeyWords().contains(keyWord);
+            }
+            return true;
+        }).filter(product -> {
+            if (minPrice != 0) {
+                return product.getProduct_price() >= minPrice;
+            }
+            return true;
+        }).filter(product -> {
+            if (maxPrice != 0) {
+                return product.getProduct_price() <= maxPrice;
+            }
+            return true;
+        }).filter(product -> {
+            if (intCategories != null && !intCategories.isEmpty()) {
+                return intCategories.contains(product.getCategory().getIntValue());
+            }
+            return true;
+        }).filter(product -> {
+            return product.getRating() == rating;
+        }).collect(Collectors.toList());
     }
 
 //    public List<PurchasePolicy> getPurchasePolicies() {

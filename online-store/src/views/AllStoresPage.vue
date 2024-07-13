@@ -83,12 +83,6 @@ export default {
     viewProducts(storeId) {
       this.$router.push({ name: 'StoreDetails', params: { storeId } });
     },
-    logout() {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      this.$router.push('/login');
-    }
   }
 };
 </script>
