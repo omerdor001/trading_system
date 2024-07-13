@@ -1611,6 +1611,20 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
+    public ResponseEntity<String> setProductIdCondition(String username, String token, String storeName, int selectedConditionIndex, int newId) {
+        logger.info("Trying to set product id in condition for user: {} ,store: {}, conditionIndex: {}, product id: {}", username, storeName, selectedConditionIndex, newId);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(username, token)) return invalidTokenResponse();
+            marketService.setProductIdCondition(username, storeName, selectedConditionIndex, newId);
+            return new ResponseEntity<>("Product id set successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while setting product id in  condition for user: {} ,store: {}, conditionIndex: {}, product id: {}", username, storeName, selectedConditionIndex, newId);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public ResponseEntity<String> removeCondition(String username, String token, String storeName, int selectedIndex) {
         logger.info("Trying to remove condition for user: {} ,store: {}, index: {}", username, storeName, selectedIndex);
         try {

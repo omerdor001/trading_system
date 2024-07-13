@@ -304,6 +304,11 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public void setProductIdCondition(String username, String storeName, int selectedConditionIndex, int newId) throws IllegalAccessException {
+        marketFacade.setProductIdCondition(username, storeName, selectedConditionIndex, newId);
+    }
+
+    @Override
     public void removeCondition(String username, String storeName, int selectedIndex) throws IllegalAccessException {
         marketFacade.removeCondition(username, storeName, selectedIndex);
     }

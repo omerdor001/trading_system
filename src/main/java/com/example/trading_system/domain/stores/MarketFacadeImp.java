@@ -6,12 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,7 +26,7 @@ public class MarketFacadeImp implements MarketFacade {
     private UserFacade userFacade;
 
     @Autowired
-    public MarketFacadeImp(@Qualifier("storeDatabaseRepository") StoreRepository storeRepository) {
+    public MarketFacadeImp(/*@Qualifier("storeDatabaseRepository")*/ StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
     }
     public static MarketFacadeImp getInstance(StoreRepository storeRepository) {
@@ -1236,6 +1234,14 @@ public class MarketFacadeImp implements MarketFacade {
         User user = userFacade.getUser(username);
         user.getRoleByStoreId(storeName).editDiscounts();
         storeRepository.getStore(storeName).setCategoryCondition(selectedConditionIndex, newCategory);
+    }
+
+    @Override
+    public void setProductIdCondition(String username, String storeName, int selectedConditionIndex, int newId) throws IllegalAccessException {
+        validateUserAndStore(username, storeName);
+        User user = userFacade.getUser(username);
+        user.getRoleByStoreId(storeName).editDiscounts();
+        storeRepository.getStore(storeName).setProductIdCondition(selectedConditionIndex, newId);
     }
 
     @Override

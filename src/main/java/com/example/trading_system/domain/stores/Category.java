@@ -44,4 +44,13 @@ public enum Category {
     public int getIntValue() {
         return intValue;
     }
+
+    public static boolean isValidCategory(int category) {
+        for (Category c : Category.values()) {
+            if (c.getIntValue() == category) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

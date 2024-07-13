@@ -139,6 +139,8 @@ public interface MarketService {
 
     void setCategoryCondition(String username, String storeName, int selectedConditionIndex, int newCategory) throws IllegalAccessException;
 
+    void setProductIdCondition(String username, String storeName, int selectedConditionIndex, int newId) throws IllegalAccessException;
+
     //endregion
 
     //region purchase policy

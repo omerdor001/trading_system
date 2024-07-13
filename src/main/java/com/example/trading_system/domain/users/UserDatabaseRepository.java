@@ -12,16 +12,16 @@
     import java.time.LocalDate;
     import java.util.*;
 
-    @Primary
-    @Repository
+//    @Primary
+//    @Repository
     public class UserDatabaseRepository implements UserRepository {
 
         private HashMap<String, User> visitors = new HashMap<>();
 
-        @PersistenceContext
+//        @PersistenceContext
         private EntityManager entityManager;
 
-        @Autowired
+//        @Autowired
         public UserDatabaseRepository(EntityManager entityManager) {
             this.entityManager = entityManager;
         }

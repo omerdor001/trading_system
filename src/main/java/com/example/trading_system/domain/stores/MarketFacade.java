@@ -158,6 +158,8 @@ public interface MarketFacade {
     void setCountCondition(String username, String storeName, int selectedConditionIndex, int newCount) throws IllegalAccessException;
 
     void setCategoryCondition(String username, String storeName, int selectedConditionIndex, int newCategory) throws IllegalAccessException;
+
+    void setProductIdCondition(String username, String storeName, int selectedConditionIndex, int newId) throws IllegalAccessException;
     //endregion
 
     //purchase_policy
