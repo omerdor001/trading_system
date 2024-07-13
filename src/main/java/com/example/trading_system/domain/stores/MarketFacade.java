@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public interface MarketFacade {
     StoreRepository getStoreRepository();
@@ -224,4 +225,30 @@ public interface MarketFacade {
     void editProduct(String username, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity) throws Exception;
 
     String searchProductsInStores(String userName, String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) throws Exception;
+
+    boolean isStoreFounder(String storeName, String userName);
+
+    void removeWorkers(String storeName, Set<String> influecnedUsers);
+
+    void addOwner(String storeName, String newOwner);
+
+    int checkProductQuantity(String storeName, int productID);
+
+    void addManager(String storeName, String newManager);
+
+    String getPurchaseHistoryString(String storeName, String username);
+
+    double getProductPrice(String storeName, int productId);
+
+    int getProductCategory(String storeName, int productId);
+
+    boolean isStoreOpen(String storeName);
+
+    boolean validateBidPurchasePolicies(String storeName, int productID, int quantity, int age, double price);
+
+    void checkAvailabilityAndConditions(int id, int quantity, String storeId);
+
+    void addBidPurchase(String userName, String storeName, int productID, double price, int quantity) throws JsonProcessingException;
+
+    boolean isBidApproved(String storeName, String username, int productId, double price);
 }

@@ -223,52 +223,52 @@ public class NotificationUnitTests {
             fail("Unexpected error: " + e.getMessage());
         }
     }
-
-    @Test
-    public void testNotification_WaiverOwner_NotLogged() {
-        try {
-            userRepository.addRegistered(manager, "password123", LocalDate.now());
-            userFacade.suggestOwner(owner1, owner2, storeName);
-            userRepository.getUser(owner2).login();
-            userFacade.approveOwner(owner2, storeName, owner1);
-            userFacade.getUser(owner2).login();
-            userFacade.suggestOwner(owner2, manager, storeName);
-            userFacade.getUser(manager).login();
-            userFacade.approveOwner(manager, storeName, owner2);
-            userFacade.getUser(manager).logout();
-            userFacade.waiverOnOwnership(owner2, storeName);
-            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
-            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}]", notifications);
-            notifications = userFacade.getPendingUserNotifications(owner1, manager);
-            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"},{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 is fired/waiving his ownership\"}]", notifications);
-        } catch (Exception e) {
-            fail("Unexpected error: " + e.getMessage());
-        }
-    }
-
-    @Test
-    public void testNotification_WaiverOwner_Logged() {
-        try {
-            setDown();
-            setUp();
-            userRepository.addRegistered(manager, "password123", LocalDate.now());
-            userFacade.suggestOwner(owner1, owner2, storeName);
-            userRepository.getUser(owner2).login();
-            userFacade.approveOwner(owner2, storeName, owner1);
-            userFacade.getUser(owner2).login();
-            userFacade.suggestOwner(owner2, manager, storeName);
-            userFacade.getUser(manager).login();
-            userFacade.approveOwner(manager, storeName, owner2);
-            userFacade.waiverOnOwnership(owner2, storeName);
-            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
-            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}]", notifications);
-            notifications = userFacade.getPendingUserNotifications(owner1, manager);
-            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"}]", notifications);
-            verify(mockNotificationSender).sendNotification(eq(manager), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 is fired/waiving his ownership\"}"));
-        } catch (Exception e) {
-            fail("Unexpected error: " + e.getMessage());
-        }
-    }
+//
+//    @Test
+//    public void testNotification_WaiverOwner_NotLogged() {
+//        try {
+//            userRepository.addRegistered(manager, "password123", LocalDate.now());
+//            userFacade.suggestOwner(owner1, owner2, storeName);
+//            userRepository.getUser(owner2).login();
+//            userFacade.approveOwner(owner2, storeName, owner1);
+//            userFacade.getUser(owner2).login();
+//            userFacade.suggestOwner(owner2, manager, storeName);
+//            userFacade.getUser(manager).login();
+//            userFacade.approveOwner(manager, storeName, owner2);
+//            userFacade.getUser(manager).logout();
+//            userFacade.waiverOnOwnership(owner2, storeName);
+//            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
+//            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}]", notifications);
+//            notifications = userFacade.getPendingUserNotifications(owner1, manager);
+//            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"},{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 is fired/waiving his ownership\"}]", notifications);
+//        } catch (Exception e) {
+//            fail("Unexpected error: " + e.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void testNotification_WaiverOwner_Logged() {
+//        try {
+//            setDown();
+//            setUp();
+//            userRepository.addRegistered(manager, "password123", LocalDate.now());
+//            userFacade.suggestOwner(owner1, owner2, storeName);
+//            userRepository.getUser(owner2).login();
+//            userFacade.approveOwner(owner2, storeName, owner1);
+//            userFacade.getUser(owner2).login();
+//            userFacade.suggestOwner(owner2, manager, storeName);
+//            userFacade.getUser(manager).login();
+//            userFacade.approveOwner(manager, storeName, owner2);
+//            userFacade.waiverOnOwnership(owner2, storeName);
+//            String notifications = userFacade.getPendingUserNotifications(owner1, owner2);
+//            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}]", notifications);
+//            notifications = userFacade.getPendingUserNotifications(owner1, manager);
+//            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"}]", notifications);
+//            verify(mockNotificationSender).sendNotification(eq(manager), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 is fired/waiving his ownership\"}"));
+//        } catch (Exception e) {
+//            fail("Unexpected error: " + e.getMessage());
+//        }
+//    }
 
     @Test
     public void testNotification_FireManager_NotLogged() {

@@ -3,7 +3,10 @@ package com.example.trading_system.domain.users;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.stores.*;
+//import com.example.trading_system.domain.stores.*;
+import com.example.trading_system.domain.stores.MarketFacadeImp;
+import com.example.trading_system.domain.stores.MarketFacade;
+import com.example.trading_system.domain.stores.StoreRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -18,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -352,9 +356,8 @@ public class UserFacadeImp implements UserFacade {
             if (isSuspended(username)) {
                 throw new RuntimeException("User is suspended from the system");
             }
-            Product p = marketFacade.getStore(storeName).getProduct(productId);
-            double price = p.getProduct_price();
-            int category = p.getCategory().getIntValue();
+            double price = marketFacade.getProductPrice(storeName,productId);
+            int category = marketFacade.getProductCategory(storeName, productId);
             userRepository.getUser(username).getCart().addProductToCart(productId, quantity, storeName, price, category);
         }
         checkProductQuantity(username, productId, storeName, quantity);
@@ -411,22 +414,23 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Store not found: " + storeName);
             throw new NoSuchElementException("Store not found: " + storeName);
         }
-        if (!marketFacade.getStore(storeName).isOpen())
+        if(!marketFacade.isStoreOpen(storeName))
             throw new IllegalArgumentException("When store is closed you cant add to cart from this store");
         if (username.charAt(0) == 'r' && !userRepository.getUser(username).getLogged()) {
             logger.error("User is not logged in: " + username);
             throw new RuntimeException("User is not logged in: " + username);
         }
         checkProductQuantity(username, productId, storeName, quantity);
-        Product p = marketFacade.getStore(storeName).getProduct(productId);
+        double productPrice = marketFacade.getProductPrice(storeName, productId);
+        int productCategory = marketFacade.getProductCategory(storeName,productId);
         User user = userRepository.getUser(username);
-        if(p.getProduct_price() == price) {
-            user.addProductToCart(productId, quantity, storeName, p.getProduct_price(), p.getCategory().getIntValue());
+        if(productPrice == price) {
+            user.addProductToCart(productId, quantity, storeName, productPrice, productCategory);
             userRepository.saveUser(user);
         }
         else {
-            if(marketFacade.getStore(storeName).isBidApproved(username,productId,price)){
-                user.addProductToCart(productId, quantity, storeName, price, p.getCategory().getIntValue());
+            if(marketFacade.isBidApproved(storeName,username,productId,price)){
+                user.addProductToCart(productId, quantity, storeName, price, productCategory);
                 userRepository.saveUser(user);
             }
             else
@@ -445,18 +449,7 @@ public class UserFacadeImp implements UserFacade {
         if (isSuspended(username)) {
             throw new RuntimeException("User is suspended from the system");
         }
-        Store store = marketFacade.getStore(storeName);
-        if (store == null) {
-            logger.error("Store not found: " + storeName);
-            throw new NoSuchElementException("Store not found: " + storeName);
-        }
-        if (!store.isOpen()) throw new IllegalArgumentException("When store is closed cant to check product quantity");
-        Product product = store.getProducts().get(productId);
-        if (product == null) {
-            logger.error("Product not found: " + productId);
-            throw new NoSuchElementException("Product not found: " + productId);
-        }
-        int quantityInStore = product.getProduct_quantity();
+        int quantityInStore = marketFacade.checkProductQuantity(storeName, productId);
         int quantityInShoppingBag = userRepository.getUser(username).checkProductQuantity(productId, storeName);
         if (quantity + quantityInShoppingBag > quantityInStore) {
             logger.error("Insufficient product quantity in store for product ID: {}", productId);
@@ -584,7 +577,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException {
+    public void approveOwner(String newOwner, String storeName, String appoint) throws Exception {
         if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userRepository.isExist(newOwner)) {
@@ -609,13 +602,10 @@ public class UserFacadeImp implements UserFacade {
         }
         if (!newOwnerUser.removeWaitingAppoint_Owner(storeName))
             throw new IllegalAccessException("No one suggest this user to be a owner");
-        Store store = marketFacade.getStore(storeName);
-        if (store.getManagers().contains(newOwner)) {
-            newOwnerUser.removeManagerRole(storeName);
-            store.removeManager(newOwner);
-        }
+
+        marketFacade.addOwner(storeName, newOwner);
         newOwnerUser.addOwnerRole(appoint, storeName);
-        store.addOwner(newOwner);
+        appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getRegistered(newOwner));
         sendNotification(newOwner, appoint, newOwnerUser.getUsername() + " accepted your suggestion to become an owner at store: " + storeName);
         userRepository.saveUser(newOwnerUser);
         userRepository.saveUser(appointUser);
@@ -623,7 +613,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void approveManager(String newManager, String storeName, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException {
+    public void approveManager(String newManager, String storeName, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws Exception {
         if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userRepository.isExist(newManager)) {
@@ -652,7 +642,9 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.removeWaitingAppoint_Manager(storeName, appoint) == null)
             throw new RuntimeException("No appointment requests in this store.");
         newManagerUser.addManagerRole(appoint, storeName);
-        marketFacade.getStore(storeName).addManager(newManager);
+        appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getRegistered(newManager));
+
+        marketFacade.addManager(storeName,newManager);
         newManagerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
         sendNotification(newManager, appoint, newManagerUser.getUsername() + " accepted your suggestion to become a manager at store: " + storeName);
         userRepository.saveUser(newManagerUser);
@@ -705,44 +697,22 @@ public class UserFacadeImp implements UserFacade {
             throw new NoSuchElementException("No user called " + userName + "is registered");
         }
         User owner = userRepository.getUser(userName);
-        Store store = marketFacade.getStore(storeName);
         if (!owner.isOwner(storeName)) {
             throw new IllegalAccessException("User is not owner of this store");
         }
-        if (store.getFounder().equals(userName)) throw new IllegalAccessException("Founder cant waive on ownership");
+        if(marketFacade.isStoreFounder(storeName,userName))
+            throw new IllegalAccessException("Founder cant waive his ownership");
 
         cancelOwnerShip(userName, storeName);
     }
 
-    private void cancelOwnerShip(String userName, String storeName) {
-        Store store = marketFacade.getStore(storeName);
-        User ownerUser = userRepository.getUser(userName);
-        List<String> storeOwners = store.getOwners();
-        List<String> storeManagers = store.getManagers();
+    private void cancelOwnerShip(String userName, String storeName) throws IllegalAccessException{
+        User user = getUser(userName);
+        Set<String> influencedUsers = user.cancelOwnerShip(storeName);
+        influencedUsers.add(userName);
+        marketFacade.removeWorkers(storeName, influencedUsers);
 
-
-        for (String storeOwner : storeOwners) {
-            User user = userRepository.getUser(storeOwner);
-            if (user.getRoleByStoreId(storeName).getAppointedById().equals(userName)) {
-                cancelOwnerShip(storeOwner, storeName);
-                sendNotification(userName, "r" + user.getUsername(), "You are no longer an owner at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
-            }
-            userRepository.saveUser(user);
-        }
-
-        for (String storeManager : storeManagers) {
-            User user = userRepository.getUser(storeManager);
-            if (user.getRoleByStoreId(storeName).getAppointedById().equals(userName)) {
-                user.removeManagerRole(storeName);
-                store.removeManager(storeManager);
-                sendNotification(userName, "r" + user.getUsername(), "You are no longer a manager at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
-            }
-            userRepository.saveUser(user);
-        }
-        userRepository.getUser(userName).removeOwnerRole(storeName);
-        marketFacade.getStore(storeName).removeOwner(userName);
-        userRepository.saveUser(ownerUser);
-        //TODO save store
+        userRepository.saveUsers(influencedUsers.stream().map(this::getUser).collect(Collectors.toList()));
     }
 
     @Override
@@ -773,8 +743,7 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("Owner cant fire manager that he/she didn't appointed");
         }
         managerUser.removeManagerRole(storeName);
-        Store store = marketFacade.getStore(storeName);
-        store.removeManager(manager);
+        marketFacade.removeWorkers(storeName, new HashSet<>(Set.of(manager)));
         sendNotification(owner, manager, "You are no longer a manager at store: " + storeName + " due to being fired by " + ownerUser.getUsername());
         userRepository.saveUser(managerUser);
         //TODO call save store
@@ -956,7 +925,7 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Store {} does not exist", storeName);
             throw new RuntimeException("Store does not exist");
         }
-        return marketFacade.getStore(storeName).getPurchaseHistoryString(username);
+        return marketFacade.getPurchaseHistoryString(storeName,username);
     }
 
     private boolean checkAvailabilityAndConditions(String username) {
@@ -976,21 +945,12 @@ public class UserFacadeImp implements UserFacade {
     public void bidPurchase(String userName, String storeName, int productID, double price) throws Exception {
         // quantity = 1
         User user = userRepository.getUser(userName);
-        Store store = marketFacade.getStore(storeName);
-        Product product = store.getProduct(productID);
-        synchronized (product)
-        {
-            if(product.getProduct_quantity() == 0)
-                throw new IllegalArgumentException("Dont have enough from this product");
-            else
-                marketFacade.getStore(storeName).removeReservedProducts(productID, 1);
-        }
+        // user exist, not suspended, is logged in
+        marketFacade.checkAvailabilityAndConditions(productID,1,storeName);
+        marketFacade.removeReservedProducts(productID,1,storeName);
 
-        LinkedList<ProductInSaleDTO> products = new LinkedList<>();
-        ProductInSaleDTO productInSaleDTO = new ProductInSaleDTO(storeName,productID,price,1,product.getCategory().getIntValue());
-         products.add(productInSaleDTO);
         int userAge = getUser(userName).getAge();
-        store.validatePurchasePolicies(products, userAge);
+        marketFacade.validateBidPurchasePolicies(storeName, productID, 1, userAge, price);
         int deliveryId;
         String address = user.getAddress();
         try {
@@ -999,7 +959,7 @@ public class UserFacadeImp implements UserFacade {
             throw new Exception("Error in Delivery");
         }
         if (deliveryId < 0) {
-            store.releaseReservedProducts(productID,1);
+            marketFacade.releaseReservedProducts(productID,1,storeName);
             throw new Exception("Error in Delivery");
         }
         int paymentId;
@@ -1007,20 +967,16 @@ public class UserFacadeImp implements UserFacade {
             paymentId = paymentService.makePayment(price);
         } catch (Exception e) {
             deliveryService.cancelDelivery(deliveryId);
-            store.releaseReservedProducts(productID,1);
+            marketFacade.releaseReservedProducts(productID, 1, storeName);
             throw new Exception("Error in Payment");
         }
         if (paymentId < 0) {
             deliveryService.cancelDelivery(deliveryId);
-            store.releaseReservedProducts(productID,1);
+            marketFacade.releaseReservedProducts(productID,1,storeName);
             throw new Exception("Error in Payment");
         }
-         HashMap<Integer, ProductInSale> products_list = new HashMap<>();
-        products_list.put(productID,new ProductInSale(storeName,productID,price,1,product.getCategory().getIntValue()));
-        ObjectMapper objectMapper = new ObjectMapper();
-        String a = objectMapper.writeValueAsString(products_list.values());
-        marketFacade.addPurchase(userName,a,price,storeName);
 
+        marketFacade.addBidPurchase(userName,storeName,productID,price,1);
 
     }
 

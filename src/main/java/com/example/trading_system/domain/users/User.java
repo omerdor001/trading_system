@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -240,5 +241,9 @@ public abstract class User {
 
     public void setTimerCancelled(boolean timerCancelled) {
         isTimerCancelled = timerCancelled;
+    }
+
+    public Set<String> cancelOwnerShip(String storeName){
+        throw new RuntimeException("Only registered users can be owners.");
     }
 }

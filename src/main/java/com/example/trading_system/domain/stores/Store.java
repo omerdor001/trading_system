@@ -869,6 +869,15 @@ public class Store {
                 .collect(Collectors.toList());
     }
 
+    public void removeWorkers(Set<String> influecnedUsers) {
+        for(String userName : influecnedUsers){
+            if (owners.contains(userName))
+                owners.remove(userName);
+            else
+                managers.remove(userName);
+        }
+    }
+
     //endregion
 
 }
