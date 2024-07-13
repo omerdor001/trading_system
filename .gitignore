@@ -30,4 +30,5 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-
+trading_system.log
+trading_system.log.*.gz
