@@ -783,3 +783,8 @@ This generated password is for development use only. Your security configuration
 2024-07-14T01:09:12.060+03:00  INFO 5820 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Managers of the Store
 2024-07-14T01:09:12.067+03:00  INFO 5820 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Owners of the Store
 2024-07-14T01:09:12.069+03:00  INFO 5820 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Owners of the Store
+2024-07-14T01:16:17.989+03:00  INFO 5820 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-14T01:16:18.001+03:00  WARN 5820 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-14T01:16:18.001+03:00  INFO 5820 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-14T01:16:18.002+03:00  INFO 5820 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 9
+2024-07-14T01:16:18.068+03:00  INFO 5820 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2OSIsImlhdCI6MTcyMDkwODk3OCwiZXhwIjoxNzIwOTQ0OTc4fQ.FPhQcLV8e70XV1cGLEUvp1l-A6RZCvr5Eo0Ri-1odYU and username: v9
