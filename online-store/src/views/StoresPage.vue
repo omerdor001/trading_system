@@ -47,6 +47,7 @@
           <PrimeButton v-if="selectedStore.permissions.isEditPurchasePolicy" class="option-button primary" @click="editPurchasePolicy(selectedStore.name)">Edit Purchase Policy</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isEditDiscountPolicy" class="option-button primary" @click="editDiscountPolicy(selectedStore.name)">Edit Discount Policy</PrimeButton>
           <PrimeButton class="option-button primary" @click="purchasesHistory(selectedStore.name)">Purchases History</PrimeButton>
+          <PrimeButton v-if="selectedStore.permissions.isAcceptBids" class="option-button primary" @click="watchBids(selectedStore.name)">Watch Store Bids</PrimeButton>
         </div>
       </div>
     </div>
@@ -99,6 +100,7 @@ export default defineComponent({
             isEditSupply: false,
             isEditPurchasePolicy: false,
             isEditDiscountPolicy: false,
+            isAcceptBids : false,
             isOwner: false,
           }
         }));
@@ -123,6 +125,7 @@ export default defineComponent({
        store.permissions.isEditSupply = permissions.editSupply;
        store.permissions.isEditPurchasePolicy = permissions.editBuyPolicy;
        store.permissions.isEditDiscountPolicy = permissions.editDiscountPolicy;
+       store.permissions.isAcceptBids = permissions.acceptBids;
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch permissions', life: 3000 });
         console.error('Error fetching permissions:', error);
@@ -175,6 +178,13 @@ export default defineComponent({
       }
     };
 
+    const watchBids = (storeName) => {
+      const store = selectedStore.value;
+      if (store && store.permissions.isAcceptBids) {
+        router.push({ name: 'WatchStoreBids', params: { storeName } });
+      }
+    };
+
     const yieldOwnership = async () => {
       const store = selectedStore.value;
       if (store && store.permissions.isOwner) {
@@ -211,6 +221,7 @@ export default defineComponent({
       suggestManager,
       editPurchasePolicy,
       editDiscountPolicy,
+      watchBids,
       yieldOwnership,
       purchasesHistory
     };

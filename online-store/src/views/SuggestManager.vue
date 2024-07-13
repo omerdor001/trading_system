@@ -15,6 +15,7 @@
             <ToggleButton id="editSupply" v-model="editSupply" onIcon="pi pi-check" offIcon="pi pi-times" onLabel="Edit Supply" offLabel="Edit Supply" class="small-toggle" />
             <ToggleButton id="editBuyPolicy" v-model="editBuyPolicy" onIcon="pi pi-check" offIcon="pi pi-times" onLabel="Edit Buy Policy" offLabel="Edit Buy Policy" class="small-toggle" />
             <ToggleButton id="editDiscountPolicy" v-model="editDiscountPolicy" onIcon="pi pi-check" offIcon="pi pi-times" onLabel="Edit Discount Policy" offLabel="Edit Discount Policy" class="small-toggle" />
+            <ToggleButton id="acceptBids" v-model="acceptBids" onIcon="pi pi-check" offIcon="pi pi-times" onLabel="Accept Bids" offLabel="Accept Bids" class="small-toggle" />
           </div>
         </div>
         <div class="button-group">
@@ -53,6 +54,7 @@ export default defineComponent({
     const editSupply = ref(false);
     const editBuyPolicy = ref(false);
     const editDiscountPolicy = ref(false);
+    const acceptBids = ref(false);
     const error = ref(null);
     const username = localStorage.getItem('username');
         const token = localStorage.getItem('token');
@@ -73,6 +75,7 @@ export default defineComponent({
           editSupply: editSupply.value,
           editBuyPolicy: editBuyPolicy.value,
           editDiscountPolicy: editDiscountPolicy.value,
+          acceptBids: acceptBids.value
           }
         });
         showSuccessToast(response.data.message);
@@ -81,6 +84,7 @@ export default defineComponent({
         editSupply.value = false;
         editBuyPolicy.value = false;
         editDiscountPolicy.value = false;
+        acceptBids.value = false;
       } catch (err) {
         error.value = err.response?.data?.message || 'An error occurred';
         showErrorToast(error.value);
@@ -113,6 +117,7 @@ export default defineComponent({
       editSupply,
       editBuyPolicy,
       editDiscountPolicy,
+      acceptBids,
       error,
       suggestManage,
       logout,

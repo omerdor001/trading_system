@@ -114,14 +114,13 @@ public class Registered extends User {
         getRoles().add(manager);
     }
 
-    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editPurchasePolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editPurchasePolicy, boolean editDiscountPolicy, boolean acceptBids) {
         Role manager = getRoleByStoreId(store_name_id);
         manager.getRoleState().setWatch(watch);
         manager.getRoleState().setEditSupply(editSupply);
         manager.getRoleState().setEditPurchasePolicy(editPurchasePolicy);
         manager.getRoleState().setEditDiscountPolicy(editDiscountPolicy);
         manager.getRoleState().setAcceptBids(acceptBids);
-        manager.getRoleState().setCreateLottery(createLottery);
     }
 
     public Role getRoleByStoreId(String store_name_id) {
@@ -162,9 +161,9 @@ public class Registered extends User {
         }
     }
 
-    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
         HashMap<String, List<Boolean>> permissions = new HashMap<>();
-        permissions.put(appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery));
+        permissions.put(appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids));
         managerToApprove.put(store_name_id, permissions);
 
     }

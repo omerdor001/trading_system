@@ -115,7 +115,7 @@ const TradingSystemService = {
         return axios.post(`${API_BASE_URL}/suggestOwner`, { appoint, token, newOwner, storeName });
     },
 
-    suggestManage(appoint, token, newManager, storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy) {
+    suggestManage(appoint, token, newManager, storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids) {
         return axios.post(`${API_BASE_URL}/suggestManage`, {
             appoint,
             token,
@@ -124,11 +124,12 @@ const TradingSystemService = {
             watch,
             editSupply,
             editBuyPolicy,
-            editDiscountPolicy
+            editDiscountPolicy,
+            acceptBids
         });
     },
 
-    approveManage(newManager, token, storeName, appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy) {
+    approveManage(newManager, token, storeName, appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids) {
         return axios.post(`${API_BASE_URL}/approveManage`, {
             newManager,
             token,
@@ -137,7 +138,8 @@ const TradingSystemService = {
             watch,
             editSupply,
             editBuyPolicy,
-            editDiscountPolicy
+            editDiscountPolicy,
+            acceptBids
         });
     },
 
@@ -164,7 +166,7 @@ const TradingSystemService = {
         return axios.post(`${API_BASE_URL}/fireOwner`, { ownerAppoint, token, storeName, ownerToFire });
     },
 
-    editPermissionForManager(username, token, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy) {
+    editPermissionForManager(username, token, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids) {
         return axios.post(`${API_BASE_URL}/store/manager/permission/edit`, {
             username,
             token,
@@ -173,7 +175,8 @@ const TradingSystemService = {
             watch,
             editSupply,
             editBuyPolicy,
-            editDiscountPolicy
+            editDiscountPolicy,
+            acceptBids
         });
     },
 

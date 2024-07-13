@@ -496,12 +496,12 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+    public ResponseEntity<String> suggestManage(String appoint, String token, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
         logger.info("Trying to suggest user : {} to be a manager in store : {}", newManager, store_name_id);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(appoint, token)) return invalidTokenResponse();
-            userService.suggestManage(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+            userService.suggestManage(appoint, newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
             logger.info("Finished suggesting manager : {} to be a manager in store : {}", newManager, store_name_id);
             return new ResponseEntity<>("Success suggesting manager", HttpStatus.OK);
         } catch (Exception e) {
@@ -526,12 +526,12 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+    public ResponseEntity<String> approveManage(String newManager, String token, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
         logger.info("Trying to approve manage to store : {}", store_name_id);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(newManager, token)) return invalidTokenResponse();
-            userService.approveManage(newManager, store_name_id, appoint,watch,editSupply,editBuyPolicy,editDiscountPolicy, acceptBids, createLottery);
+            userService.approveManage(newManager, store_name_id, appoint,watch,editSupply,editBuyPolicy,editDiscountPolicy, acceptBids);
             logger.info("Finished approving manage to store : {}", store_name_id);
             return new ResponseEntity<>("Success approving manage", HttpStatus.OK);
         } catch (Exception e) {
@@ -617,12 +617,12 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> editPermissionForManager(String username, String token, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+    public ResponseEntity<String> editPermissionForManager(String username, String token, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
         logger.info("{} is Trying to edit permission for manager : {} in store : {}", username, managerToEdit, storeNameId);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            userService.editPermissionForManager(username, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+            userService.editPermissionForManager(username, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
             logger.info("Finished edit permission to manager : {}  in store : {}", managerToEdit, storeNameId);
             return new ResponseEntity<>("Success edit permission for manager ", HttpStatus.OK);
         } catch (Exception e) {
@@ -1981,34 +1981,6 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while {} trying to get all his bids for store", userName, storeName);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
-    public ResponseEntity<String> buyLotteryProductTicket(String userName, String token, String storeName, int productID, double price) {
-        logger.info("{} is trying to buy lottery product ticket for product {} in store {} at price {}", userName, productID, storeName, price);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
-            String result = marketService.buyLotteryProductTicket(userName, storeName, productID, price);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while {} trying to buy lottery product ticket for product {} in store {} ", userName, productID, storeName);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
-    public ResponseEntity<String> createProductLottery(String userName, String token, String storeName, int productID, LocalDateTime localDateTime, double price) {
-        logger.info("{} is trying to get create product lottery for product {} in store {} at price {} until {} ", userName, productID, storeName, price, localDateTime);
-        try {
-            if (checkSystemClosed()) return systemClosedResponse();
-            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
-            marketService.createProductLottery(userName, storeName, productID, localDateTime, price);
-            return new ResponseEntity<>("Created product lottery successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error occurred while {} trying to create product lottery for product {} in store {}", userName, productID, storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

@@ -29,6 +29,7 @@
               <td>{{ request.editSupply ? '✔' : '✘' }}</td>
               <td>{{ request.editBuyPolicy ? '✔' : '✘' }}</td>
               <td>{{ request.editDiscountPolicy ? '✔' : '✘' }}</td>
+              <td>{{ request.acceptBids ? '✔' : '✘' }}</td>
               <td>
                 <PrimeButton label="Reject" type="button" @click="rejectManager(request)" />
               </td>
@@ -87,6 +88,7 @@ export default defineComponent({
           editSupply: request.editSupply,
           editBuyPolicy: request.editBuyPolicy,
           editDiscountPolicy: request.editDiscountPolicy,
+          acceptBids: request.acceptBids
         }));
         loading.value = false;
       } catch (err) {
@@ -108,6 +110,7 @@ export default defineComponent({
             editSupply: request.editSupply,
             editBuyPolicy: request.editBuyPolicy,
             editDiscountPolicy: request.editDiscountPolicy,
+            acceptBids: request.acceptBids
           }
         });
         showSuccessToast(response.data.message);

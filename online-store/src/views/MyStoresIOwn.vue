@@ -86,6 +86,7 @@
                 <th>Edit Supply</th>
                 <th>Edit Store Policy</th>
                 <th>Edit Discount Policy</th>
+                <th>Accept Bids</th>
               </tr>
             </thead>
             <tbody>
@@ -95,6 +96,7 @@
                 <td><input type="checkbox" v-model="worker.permissions.editSupply" /></td>
                 <td><input type="checkbox" v-model="worker.permissions.editStorePolicy" /></td>
                 <td><input type="checkbox" v-model="worker.permissions.editDiscountPolicy" /></td>
+                <td><input type="checkbox" v-model="worker.permissions.acceptBids" /></td>
               </tr>
             </tbody>
           </table>
@@ -112,6 +114,7 @@
                 <th>Edit Supply</th>
                 <th>Edit Store Policy</th>
                 <th>Edit Discount Policy</th>
+                <th>Accept Bids</th>
               </tr>
             </thead>
             <tbody>
@@ -121,6 +124,7 @@
                 <td><input type="checkbox" :checked="worker.permissions.editSupply" disabled /></td>
                 <td><input type="checkbox" :checked="worker.permissions.editStorePolicy" disabled /></td>
                 <td><input type="checkbox" :checked="worker.permissions.editDiscountPolicy" disabled /></td>
+                <td><input type="checkbox" :checked="worker.permissions.acceptBids" disabled /></td>
               </tr>
             </tbody>
           </table>
@@ -251,7 +255,7 @@ export default defineComponent({
 
     const addWorker = (storeId) => {
       const store = stores.value.find(store => store.id === storeId);
-      store.editableWorkers.push({ username: '', role: '', birthdate: '', address: '', permissions: { watch: false, editSupply: false, editStorePolicy: false, editDiscountPolicy: false }, selected: false });
+      store.editableWorkers.push({ username: '', role: '', birthdate: '', address: '', permissions: { watch: false, editSupply: false, editStorePolicy: false, editDiscountPolicy: false, acceptBids: false }, selected: false });
     };
 
     const removeWorker = (storeId) => {

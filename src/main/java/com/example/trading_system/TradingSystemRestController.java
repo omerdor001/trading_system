@@ -263,9 +263,9 @@ public class TradingSystemRestController {
                                                 @RequestParam boolean editSupply,
                                                 @RequestParam boolean editBuyPolicy,
                                                 @RequestParam boolean editDiscountPolicy,
-                                                @RequestParam boolean acceptBids,
-                                                @RequestParam boolean createLottery) {
-        return tradingSystem.suggestManage("r" + appoint, token, "r" + newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+                                                @RequestParam boolean acceptBids
+                                                ) {
+        return tradingSystem.suggestManage("r" + appoint, token, "r" + newManager, store_name_id, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
     }
 
     @PostMapping("/approveManage")
@@ -277,9 +277,9 @@ public class TradingSystemRestController {
                                                 @RequestParam boolean editSupply,
                                                 @RequestParam boolean editBuyPolicy,
                                                 @RequestParam boolean editDiscountPolicy,
-                                                @RequestParam boolean acceptBids,
-                                                @RequestParam boolean createLottery) {
-        return tradingSystem.approveManage("r" + newManager, token, store_name_id, appoint,watch,editSupply,editBuyPolicy,editDiscountPolicy, acceptBids, createLottery);
+                                                @RequestParam boolean acceptBids
+                                                ) {
+        return tradingSystem.approveManage("r" + newManager, token, store_name_id, "r" + appoint,watch,editSupply,editBuyPolicy,editDiscountPolicy, acceptBids);
     }
 
     @PostMapping("/approveOwner")
@@ -338,9 +338,9 @@ public class TradingSystemRestController {
                                                            @RequestParam boolean editSupply,
                                                            @RequestParam boolean editBuyPolicy,
                                                            @RequestParam boolean editDiscountPolicy,
-                                                           @RequestParam boolean acceptBids,
-                                                           @RequestParam boolean createLottery) {
-        return tradingSystem.editPermissionForManager(username, token, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+                                                           @RequestParam boolean acceptBids
+                                                           ) {
+        return tradingSystem.editPermissionForManager(username, token, managerToEdit, storeNameId, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
     }
 
     @GetMapping("/stores")
@@ -853,24 +853,24 @@ public class TradingSystemRestController {
         return tradingSystem.getMyBids(userName, token, storeName);
     }
 
-    @PostMapping("/store/{storeName}/create-product-lottery")
-    public ResponseEntity<String> createProductLottery(@RequestParam String userName,
-                                                       @RequestParam String token,
-                                                       @PathVariable String storeName,
-                                                       @RequestParam int productID,
-                                                       @RequestParam LocalDateTime localDateTime,
-                                                       @RequestParam double price){
-        return tradingSystem.createProductLottery(userName, token, storeName, productID, localDateTime, price);
-    }
-
-    @PostMapping("/store/{storeName}/buy-lottery-ticket")
-    public ResponseEntity<String> buyLotteryProductTicket(@RequestParam String userName,
-                                                          @RequestParam String token,
-                                                          @PathVariable String storeName,
-                                                          @RequestParam int productID,
-                                                          @RequestParam double price){
-        return tradingSystem.buyLotteryProductTicket(userName,token,storeName,productID,price);
-    }
+//    @PostMapping("/store/{storeName}/create-product-lottery")
+//    public ResponseEntity<String> createProductLottery(@RequestParam String userName,
+//                                                       @RequestParam String token,
+//                                                       @PathVariable String storeName,
+//                                                       @RequestParam int productID,
+//                                                       @RequestParam LocalDateTime localDateTime,
+//                                                       @RequestParam double price){
+//        return tradingSystem.createProductLottery(userName, token, storeName, productID, localDateTime, price);
+//    }
+//
+//    @PostMapping("/store/{storeName}/buy-lottery-ticket")
+//    public ResponseEntity<String> buyLotteryProductTicket(@RequestParam String userName,
+//                                                          @RequestParam String token,
+//                                                          @PathVariable String storeName,
+//                                                          @RequestParam int productID,
+//                                                          @RequestParam double price){
+//        return tradingSystem.buyLotteryProductTicket(userName,token,storeName,productID,price);
+    //}
 
 
 }

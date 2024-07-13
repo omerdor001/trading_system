@@ -8,7 +8,6 @@ public class Manager extends RoleState {
     private boolean editPurchasePolicy;
     private boolean editDiscountPolicy;
     private boolean acceptBids;
-    private boolean createLottery;
 
     public Manager() {
         this.watch = false;
@@ -16,7 +15,6 @@ public class Manager extends RoleState {
         this.editDiscountPolicy = false;
         this.editSupply = false;
         this.acceptBids = false;
-        this.createLottery = false;
     }
 
     @Override
@@ -69,16 +67,6 @@ public class Manager extends RoleState {
         return acceptBids;
     }
 
-    @Override
-    public void setCreateLottery(boolean createLottery){
-        this.createLottery = createLottery;
-    }
-
-    @Override
-    public boolean isCreateLottery()
-    {
-        return createLottery;
-    }
 
 
     @Override
@@ -171,11 +159,6 @@ public class Manager extends RoleState {
     public void getStoreBids() throws IllegalAccessException {
         if(!this.acceptBids) throw new IllegalAccessException("Manager cannot view store bids");
 
-    }
-
-    @Override
-    public void createProductLottery() throws IllegalAccessException{
-        if(!this.createLottery) throw new IllegalAccessException("Manager has not permission for create product lottery");
     }
 
 }

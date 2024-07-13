@@ -40,7 +40,6 @@ public class Store {
     private LinkedList<PurchasePolicy> purchasePolicies;
     private LinkedList<Message> messages;
     private LinkedList<Bid> bids;
-    private HashMap<Integer, ProductLottery> lotteryProducts;
 
     public Store(String nameId, String description, String founder, Double storeRating) {
         this.nameId = nameId;
@@ -58,7 +57,6 @@ public class Store {
         this.isOpen = true;
         this.messages = new LinkedList<>();
         this.bids = new LinkedList<>();
-        this.lotteryProducts = new HashMap<>();
     }
 
     public List<Product> filterProducts(List<Product> productList, Double minPrice, Double maxPrice, Double minRating, int category) {
@@ -806,23 +804,6 @@ public class Store {
         return sb.toString();
     }
 
-    public void createProductLottery(int productID, LocalDateTime localDateTime, double price){
-        ProductLottery productLottery = new ProductLottery(localDateTime, price);
-        this.lotteryProducts.put(productID, productLottery);
-    }
-
-    public boolean buyLotteryProductTicket(String userName, int productID, double price) throws Exception{
-        return lotteryProducts.get(productID).buyLotteryProductTicket(userName, price);
-    }
-
-    public String makeLotteryOnProduct(int productID)
-    {
-        return lotteryProducts.get(productID).makeLotteryOnProduct();
-    }
-
-    public boolean isLotteryExist(int productID) {
-        return lotteryProducts.containsKey(productID);
-    }
 
     public void editProduct(int productId, String productName, String productDescription, double productPrice, int productQuantity) {
         Product product = getProduct(productId);

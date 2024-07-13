@@ -215,9 +215,5 @@ public interface MarketFacade {
 
     String getMyBids(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
 
-    void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception;
-
-    String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception;
-
     void editProduct(String username, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity) throws Exception;
 }

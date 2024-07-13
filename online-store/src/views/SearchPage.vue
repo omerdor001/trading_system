@@ -15,9 +15,9 @@
       <div class="categories">
         <h2>Categories</h2>
         <div class="category-checkboxes">
-          <div v-for="category in categories" :key="category.name" class="category-item">
+          <div v-for="category in categories" :key="category.value" class="category-item">
             <input type="checkbox" v-model="category.checked" />
-            <label>{{ category.name }}</label>
+            <label>{{ category.value }}</label>
           </div>
         </div>
       </div>
@@ -33,9 +33,11 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import SiteHeader from '@/components/SiteHeader.vue';
+import axios from 'axios';
+
 
 export default {
   name: 'SearchPage',
@@ -44,17 +46,12 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const username = ref(localStorage.getItem('username') || '');
+    const username = localStorage.getItem('username');
+    const token = localStorage.getItem('token');
     const searchQuery = ref('');
     const priceMin = ref('');
     const priceMax = ref('');
-    const categories = ref([
-      { name: 'Fashion', checked: true },
-      { name: 'Electronics', checked: true },
-      { name: 'Toys', checked: true },
-      { name: 'Books', checked: true },
-      { name: 'Home', checked: true }
-    ]);
+    const categories = ref([]);
     const selectedRating = ref(0);
 
     const search = () => {
@@ -62,7 +59,7 @@ export default {
         query: searchQuery.value,
         priceMin: priceMin.value,
         priceMax: priceMax.value,
-        categories: categories.value.filter(category => category.checked).map(category => category.name),
+        categories: categories.value.filter(category => category.checked).map(category => category.value),
         rating: selectedRating.value
       };
       router.push({ name: 'SearchResults', query: filters });
@@ -86,13 +83,36 @@ export default {
       router.push('/login');
     };
 
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost:8082/api/trading/categories', {
+          params: {
+            username: username,
+            token: token,
+          }
+        });
+        const categoryArray = response.data.slice(1, response.data.length - 1).split(',');
+        categories.value = categoryArray.map((category, index) => ({ label: category, value: category, index: index + 1 }));
+      } catch (error) {
+        console.error('Failed to fetch categories', error);
+      }
+    };
+
+    onMounted(() => {
+        fetchCategories();
+      }
+    );
+
+
     return {
       username,
+      token,
       searchQuery,
       priceMin,
       priceMax,
       categories,
       selectedRating,
+      fetchCategories,
       search,
       selectRating,
       resetFilters,

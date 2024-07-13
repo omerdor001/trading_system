@@ -893,7 +893,7 @@ public class MarketFacadeImp implements MarketFacade {
         for (String manager : storeManagers) {
             User user2 = userFacade.getUser(manager);
             RoleState managerRole = user2.getRoleByStoreId(storeName).getRoleState();
-            result.append(user2.getUsername()).append(" ").append(manager).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append(" ").append(managerRole.isCreateLottery()).append('\n');
+            result.append(user2.getUsername()).append(" ").append(manager).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append('\n');
         }
         return result.toString();
     }
@@ -934,7 +934,7 @@ public class MarketFacadeImp implements MarketFacade {
             User user2 = userFacade.getUser(officialUserName);
             RoleState managerRole = user2.getRoleByStoreId(storeName).getRoleState();
             result.append("Role id username address birthdate watch editSupply editPurchasePolicy editDiscountPolicy").append("\n");
-            result.append("Manager ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append(" ").append(managerRole.isCreateLottery()).append("\n");
+            result.append("Manager ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append("\n");
         } else throw new IllegalArgumentException("User is not employed in this store.");
 
         return result.toString();
@@ -1507,32 +1507,6 @@ public class MarketFacadeImp implements MarketFacade {
 
     }
 
-    @Override
-    public void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception{
-        validateUserAndStore(userName, storeName);
-        Store store = storeRepository.getStore(storeName);
-        if(!store.isProductExist(productID))
-            throw new IllegalArgumentException("Product must exist in store");
-        if(localDateTime.isBefore(LocalDateTime.now()) || localDateTime.isEqual(LocalDateTime.now()))
-            throw new Exception("Cant create lottery for past or present");
-        User user = userFacade.getUser(userName);
-        user.getRoleByStoreId(storeName).createProductLottery();
-        store.createProductLottery(productID,localDateTime,price);
-    }
-
-    @Override
-    public String buyLotteryProductTicket(String userName, String storeName, int productID, double price) throws Exception{
-        validateUserAndStore(userName, storeName);
-        Store store = storeRepository.getStore(storeName);
-        if(!store.isLotteryExist(productID))
-            throw new Exception("Lottery does not exist");
-        if(store.buyLotteryProductTicket(userName, productID, price)){
-            return store.makeLotteryOnProduct(productID) + " won the product " + productID;
-        }
-        else
-            return "Ticket Bought Successfully";
-
-    }
 
 
 
