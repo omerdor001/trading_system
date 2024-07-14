@@ -4,13 +4,13 @@ import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.*;
-import com.example.trading_system.domain.users.UserFacade;
-import com.example.trading_system.domain.users.UserFacadeImp;
-import com.example.trading_system.domain.users.UserMemoryRepository;
-import com.example.trading_system.domain.users.UserRepository;
+import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,8 +19,14 @@ import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-
+@SpringBootTest
+@Transactional
 class PermissionsUnitTests {
+    @Autowired
+    private UserDatabaseRepository userRepository;
+
+    @Autowired
+    private StoreDatabaseRepository storeRepository;
     private UserFacade userFacade;
     private MarketFacade marketFacade;
     private String username1;
@@ -29,8 +35,7 @@ class PermissionsUnitTests {
 
     @BeforeEach
     public void setUp() {
-        StoreRepository storeRepository = StoreMemoryRepository.getInstance();
-        UserRepository userRepository = UserMemoryRepository.getInstance();
+
         userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
         marketFacade= MarketFacadeImp.getInstance(storeRepository);
         username1 = "testuser1";

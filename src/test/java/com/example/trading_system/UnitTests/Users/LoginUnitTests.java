@@ -3,29 +3,35 @@ package com.example.trading_system.UnitTests.Users;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-
+@SpringBootTest
+@Transactional
 class LoginUnitTests {
 
     private UserFacade userFacade;
-    private UserRepository userRepository;
-    private StoreRepository storeRepository;
+    @Autowired
+    private UserDatabaseRepository userRepository;
+
+    @Autowired
+    private StoreDatabaseRepository storeRepository;
 
     @BeforeEach
     void setUp() {
-        userRepository= UserMemoryRepository.getInstance();    //May be change later
-        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
-        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
+        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
         try {
             userFacade.register("testvisitor", "password123", LocalDate.now());
         } catch (Exception e) {

@@ -1,24 +1,26 @@
 package com.example.trading_system.domain.users;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Entity
-public abstract class RoleState {
-    @Id
-    private Long id; // Add an ID field if it does not already exist
 
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "role_type")
+public abstract class RoleState {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Setter
+    @Getter
     @Transient
     protected Role role;
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 
     private void addProduct(int storeId, String product_details) {
     }

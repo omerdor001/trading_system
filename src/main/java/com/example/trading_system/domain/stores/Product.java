@@ -17,16 +17,16 @@ public class Product {
     @Column(nullable = false, unique = true)
     private int product_id;
 
-    @Column(nullable = false)
+    @Column
     private String store_name;
 
-    @Column(nullable = false)
+    @Column
     private String product_name;
 
     @Column
     private String product_description;
 
-    @Column(nullable = false)
+    @Column
     private double product_price;
 
     @Column
@@ -37,6 +37,10 @@ public class Product {
 
     @Enumerated(EnumType.STRING)
     private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
 
     @ElementCollection
     @CollectionTable(name = "product_keywords", joinColumns = @JoinColumn(name = "product_id"))

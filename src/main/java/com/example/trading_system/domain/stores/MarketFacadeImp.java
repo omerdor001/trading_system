@@ -5,9 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -16,20 +16,22 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
+@Transactional
 
 @Service
 public class MarketFacadeImp implements MarketFacade {
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
     private static MarketFacadeImp instance = null;
     private final ConcurrentHashMap<String, Lock> storeLocks = new ConcurrentHashMap<>();
-    private StoreRepository storeRepository;
+    private StoreDatabaseRepository storeRepository;
     private UserFacade userFacade;
 
     @Autowired
-    public MarketFacadeImp(/*@Qualifier("storeDatabaseRepository")*/ StoreRepository storeRepository) {
+    public MarketFacadeImp(/*@Qualifier("storeDatabaseRepository")*/ StoreDatabaseRepository storeRepository) {
         this.storeRepository = storeRepository;
     }
-    public static MarketFacadeImp getInstance(StoreRepository storeRepository) {
+    public static MarketFacadeImp getInstance(StoreDatabaseRepository
+                                                      storeRepository) {
         if (instance == null) instance = new MarketFacadeImp(storeRepository);
         return instance;
     }
@@ -51,7 +53,7 @@ public class MarketFacadeImp implements MarketFacade {
         }
     }
 
-    public StoreRepository getStoreRepository() {
+    public StoreDatabaseRepository getStoreRepository() {
         return storeRepository;
     }
 

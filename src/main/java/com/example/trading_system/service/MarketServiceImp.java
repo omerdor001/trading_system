@@ -2,6 +2,7 @@ package com.example.trading_system.service;
 
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,11 +23,11 @@ public class MarketServiceImp implements MarketService {
 
     private MarketFacade marketFacade;
 
-    private MarketServiceImp(StoreRepository storeRepository) {
+    private MarketServiceImp(StoreDatabaseRepository storeRepository) {
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
     }
 
-    public static MarketServiceImp getInstance(StoreRepository storeRepository) {
+    public static MarketServiceImp getInstance(StoreDatabaseRepository storeRepository) {
         if (instance == null) instance = new MarketServiceImp(storeRepository);
         return instance;
     }

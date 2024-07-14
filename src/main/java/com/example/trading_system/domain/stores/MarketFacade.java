@@ -4,13 +4,12 @@ import com.example.trading_system.domain.users.UserFacade;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
 public interface MarketFacade {
-    StoreRepository getStoreRepository();
+    StoreDatabaseRepository getStoreRepository();
 
     void deleteInstance();
 

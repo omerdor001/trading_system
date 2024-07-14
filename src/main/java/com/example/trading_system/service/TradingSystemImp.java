@@ -3,7 +3,9 @@ package com.example.trading_system.service;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,13 +28,14 @@ public class TradingSystemImp implements TradingSystem {
     public int counter_user = 0;
     private boolean systemOpen;
 
-    private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
+    private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender,
+                             UserDatabaseRepository userRepository, StoreDatabaseRepository storeRepository) {
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
         this.marketService = MarketServiceImp.getInstance(storeRepository);
     }
 
-    public static TradingSystemImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
+    public static TradingSystemImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserDatabaseRepository userRepository, StoreDatabaseRepository storeRepository) {
         if (instance == null)
             instance = new TradingSystemImp(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
         return instance;
@@ -90,7 +93,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> openSystem(StoreRepository storeRepository) {
+    public ResponseEntity<String> openSystem(StoreDatabaseRepository storeRepository) {
         logger.info("Attempting to open system");
         if (systemOpen) {
             logger.warn("System attempted to open twice");
@@ -153,9 +156,9 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (checkSystemClosed()) {
                 logger.warn("System is not open, entry forbidden");
-               return new ResponseEntity<>("System is not open, entry forbidden", HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>("System is not open, entry forbidden", HttpStatus.FORBIDDEN);
             }
-            logger.info("Trying enter to system as a visitor , with id : {}", counter_user);
+            logger.info("Trying to enter the system as a visitor, with id: {}", counter_user);
             String username = userService.enter(counter_user);
             counter_user++;
             String token = Security.generateToken(username);

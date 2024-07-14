@@ -5,9 +5,12 @@ import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.domain.users.*;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -19,7 +22,10 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import jakarta.transaction.*;
 
+@SpringBootTest
+@Transactional
 public class PurchaseCartUnitTests {
 
     MarketFacadeImp marketFacade;
@@ -28,15 +34,17 @@ public class PurchaseCartUnitTests {
     DeliveryService deliveryService;
     @Mock
     PaymentService paymentService;
-    private UserRepository userRepository;
-    private StoreRepository storeRepository;
+    @Autowired
+    private UserDatabaseRepository userRepository;
+
+    @Autowired
+    private StoreDatabaseRepository storeRepository;
 
     @BeforeEach
     public void init() throws NoSuchFieldException, IllegalAccessException {
         MockitoAnnotations.openMocks(this);
         // Re-instantiate singletons
-        storeRepository = StoreMemoryRepository.getInstance();
-        userRepository = UserMemoryRepository.getInstance();
+
         marketFacade = spy(MarketFacadeImp.getInstance(storeRepository)); // Manually create the spy
         java.lang.reflect.Field instance = MarketFacadeImp.class.getDeclaredField("instance");
         instance.setAccessible(true);

@@ -3,14 +3,17 @@ package com.example.trading_system.AcceptanceTests.Users.StoreCreationTests;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -19,18 +22,24 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Fail.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import jakarta.transaction.*;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
+@Transactional
 public class OpenStoreAcceptanceTests {
     private TradingSystemImp tradingSystem;
     private String token;
     private String username;
-    private UserRepository userRepository;
-    private StoreRepository storeRepository;
+    @Autowired
+    private UserDatabaseRepository userRepository;
+
+    @Autowired
+    private StoreDatabaseRepository storeRepository;
 
     @BeforeEach
     public void setUp() {
-        userRepository= UserMemoryRepository.getInstance();    //May be change later
-        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
+      //May be change later
         tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.register("manager", "password123", LocalDate.now());

@@ -3,30 +3,32 @@ package com.example.trading_system.UnitTests.Market;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.stores.MarketFacade;
-import com.example.trading_system.domain.stores.MarketFacadeImp;
-import com.example.trading_system.domain.stores.StoreMemoryRepository;
-import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserFacade;
-import com.example.trading_system.domain.users.UserFacadeImp;
-import com.example.trading_system.domain.users.UserMemoryRepository;
-import com.example.trading_system.domain.users.UserRepository;
+import com.example.trading_system.domain.stores.*;
+import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import jakarta.transaction.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
+@Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StockManagementUnitTests {
     MarketFacade marketFacade;
     UserFacade userFacade;
+    @Autowired
+    private UserDatabaseRepository userRepository;
 
+    @Autowired
+    private StoreDatabaseRepository storeRepository;
     @BeforeAll
     void setUp() {
-        StoreRepository storeRepository = StoreMemoryRepository.getInstance();
-        UserRepository userRepository = UserMemoryRepository.getInstance();
+
         PaymentService paymentService=mock(PaymentService.class);
         DeliveryService deliveryService=mock(DeliveryService.class);
         userFacade= UserFacadeImp.getInstance(paymentService,deliveryService, mock(NotificationSender.class), userRepository, storeRepository);

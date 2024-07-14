@@ -6,7 +6,6 @@ import java.util.List;
 
 @Entity
 @DiscriminatorValue("MANAGER")
-
 public class Manager extends RoleState {
 
     @JsonIgnore
@@ -25,7 +24,11 @@ public class Manager extends RoleState {
 
     @Column(name = "edit_discount_policy")
     private boolean editDiscountPolicy;
+
+    @Column(name = "accept_bids")
     private boolean acceptBids;
+
+    @Column(name = "create_lottery")
     private boolean createLottery;
 
     public Manager() {

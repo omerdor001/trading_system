@@ -3,15 +3,12 @@ package com.example.trading_system.UnitTests.Users;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.stores.MarketFacade;
-import com.example.trading_system.domain.stores.MarketFacadeImp;
-import com.example.trading_system.domain.stores.StoreMemoryRepository;
-import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserFacade;
-import com.example.trading_system.domain.users.UserFacadeImp;
-import com.example.trading_system.domain.users.UserMemoryRepository;
-import com.example.trading_system.domain.users.UserRepository;
+import com.example.trading_system.domain.stores.*;
+import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -20,18 +17,21 @@ import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-
+@SpringBootTest
+@Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SuspensionUnitTests {
     MarketFacade marketFacade;
     UserFacade userFacade;
-    private UserRepository userRepository;
-    private StoreRepository storeRepository;
+    @Autowired
+    private UserDatabaseRepository userRepository;
+
+    @Autowired
+    private StoreDatabaseRepository storeRepository;
 
     @BeforeAll
     void setUpBA() {
-        storeRepository= StoreMemoryRepository.getInstance();
-        userRepository = UserMemoryRepository.getInstance();
+
         userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
         marketFacade= MarketFacadeImp.getInstance(storeRepository);
         try {

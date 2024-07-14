@@ -3,30 +3,37 @@ package com.example.trading_system.UnitTests.Service;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
 import com.example.trading_system.service.UserService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-
+@SpringBootTest
+@Transactional
 class OpenSystemUnitTests {
     private TradingSystemImp facade;
     private UserService userService;
-    private StoreRepository storeRepository;
+    @Autowired
+    private UserDatabaseRepository userRepository;
 
+    @Autowired
+    private StoreDatabaseRepository storeRepository;
     @BeforeEach
     public void setUp() {
-        storeRepository= StoreMemoryRepository.getInstance();
-        UserRepository userRepository = UserMemoryRepository.getInstance();
         userService = mock(UserService.class);
         facade = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class), userRepository,storeRepository);
         facade.userService = userService;

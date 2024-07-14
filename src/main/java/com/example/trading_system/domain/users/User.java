@@ -1,6 +1,7 @@
 package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.Message;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 
 import org.slf4j.Logger;
@@ -13,19 +14,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User {
     private static final Logger logger = LoggerFactory.getLogger(User.class);
 
     @Id
     @Column(nullable = false, unique = true)
-    public String username;
+    private String username;
 
-    @Embedded
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id", referencedColumnName = "id")
     private Cart cart;
 
-    @Column(nullable = false)
+    @Column
     private boolean suspended;
 
     @Column
@@ -34,15 +35,14 @@ public abstract class User {
     @Column
     private LocalDateTime suspendedEnd;
 
-    @Column(nullable = false)
+    @Column
     private String address;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private LinkedList<Message> messages;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> messages;
 
     @Column(nullable = false)
     private boolean isTimerCancelled;
-
 
     public User(String username) {
         this.username = username;
@@ -163,7 +163,7 @@ public abstract class User {
     }
 
     public LinkedList<Message> getMessages(){
-        return this.messages;
+        return (LinkedList<Message>) this.messages;
     }
 
     public String getMessagesJSON(){
@@ -210,15 +210,15 @@ public abstract class User {
         return cart.checkProductQuantity(productId, storeName);
     }
 
-    public void removeReservedProducts(StoreRepository storeRepository) {
+    public void removeReservedProducts(StoreDatabaseRepository storeRepository) {
         cart.removeReservedProducts(storeRepository);
     }
 
-    public void releaseReservedProducts(StoreRepository storeRepository) {
+    public void releaseReservedProducts(StoreDatabaseRepository storeRepository) {
         cart.releaseReservedProducts(storeRepository);
     }
 
-    public void checkAvailabilityAndConditions(StoreRepository storeRepository) {
+    public void checkAvailabilityAndConditions(StoreDatabaseRepository storeRepository) {
         if (cart == null || cart.getShoppingBags().isEmpty()) {
             logger.error("Cart is empty or null");
             throw new RuntimeException("Cart is empty or null");
@@ -230,7 +230,7 @@ public abstract class User {
         cart.checkAvailabilityAndConditions(storeRepository);
     }
 
-    public void addPurchase(StoreRepository storeRepository,String username) {
+    public void addPurchase(StoreDatabaseRepository storeRepository,String username) {
         cart.addPurchase(storeRepository,username);
     }
 

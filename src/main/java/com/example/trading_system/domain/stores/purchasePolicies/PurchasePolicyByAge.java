@@ -21,6 +21,10 @@ public class PurchasePolicyByAge extends PurchasePolicy {
         this.categoryId = categoryId;
     }
 
+    public PurchasePolicyByAge() {
+
+    }
+
     @Override
     public boolean isPurchasePolicySatisfied(Collection<ProductInSaleDTO> items, int age) {
         for (ProductInSaleDTO productInSaleDTO:items){

@@ -4,10 +4,7 @@ import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.*;
-import com.example.trading_system.domain.users.User;
-import com.example.trading_system.domain.users.UserFacadeImp;
-import com.example.trading_system.domain.users.UserMemoryRepository;
-import com.example.trading_system.domain.users.UserRepository;
+import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -19,23 +16,27 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import jakarta.transaction.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
+@Transactional
 @ExtendWith(MockitoExtension.class)
 public class GetPurchaseHistoryUnitTests {
     @Mock
     Purchase purchase;
     MarketFacadeImp marketFacade;
     UserFacadeImp userFacadeImp;
-    private UserRepository userRepository;
-    private StoreRepository storeRepository;
+    @Autowired
+    private UserDatabaseRepository userRepository;
 
+    @Autowired
+    private StoreDatabaseRepository storeRepository;
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
 
-        // Re-instantiate singletons
-        storeRepository = StoreMemoryRepository.getInstance();
-        userRepository = UserMemoryRepository.getInstance();
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
         userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
     }

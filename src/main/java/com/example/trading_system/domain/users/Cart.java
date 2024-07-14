@@ -1,24 +1,28 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Embeddable
+@Entity
+@Table(name = "cart")
 public class Cart {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "shopping_bags", joinColumns = @JoinColumn(name = "cart_id"))
+    @CollectionTable(name = "cart_shopping_bags", joinColumns = @JoinColumn(name = "cart_id"))
     @MapKeyColumn(name = "store_id")
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private final HashMap<String, ShoppingBag> shoppingBags;
+    @Column(name = "shoppingBags_id")
+    private Map<String, ShoppingBag> shoppingBags = new HashMap<>();
 
     public Cart() {
         shoppingBags = new HashMap<>();
@@ -30,7 +34,7 @@ public class Cart {
     }
 
     public HashMap<String, ShoppingBag> getShoppingBags() {
-        return shoppingBags;
+        return (HashMap<String, ShoppingBag>) shoppingBags;
     }
 
     public void addShoppingBag(ShoppingBag shoppingBag, String storeId) {
@@ -93,9 +97,9 @@ public class Cart {
     }
 
     private List<ProductInSale> getProductsToList() {
-        List list = new ArrayList<>();
+        List<ProductInSale> list = new ArrayList<>();
         for (ShoppingBag shoppingBag : shoppingBags.values()) {
-            list.add(shoppingBag.getProducts_list().values());
+            list.addAll(shoppingBag.getProducts_list().values());
         }
         return list;
     }
@@ -111,27 +115,35 @@ public class Cart {
         return shoppingBags.get(storeName).checkProductQuantity(productId);
     }
 
-    public void removeReservedProducts(StoreRepository storeRepository) {
+    public void removeReservedProducts(StoreDatabaseRepository storeRepository) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
             shoppingBagInStore.removeReservedProducts(storeRepository);
         }
     }
 
-    public void releaseReservedProducts(StoreRepository storeRepository) {
+    public void releaseReservedProducts(StoreDatabaseRepository storeRepository) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
             shoppingBagInStore.releaseReservedProducts(storeRepository);
         }
     }
 
-    public void checkAvailabilityAndConditions(StoreRepository storeRepository) {
+    public void checkAvailabilityAndConditions(StoreDatabaseRepository storeRepository) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
             shoppingBagInStore.checkAvailabilityAndConditions(storeRepository);
         }
     }
 
-    public void addPurchase(StoreRepository storeRepository,String username) {
+    public void addPurchase(StoreDatabaseRepository storeRepository, String username) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
-            shoppingBagInStore.addPurchase(storeRepository,username);
+            shoppingBagInStore.addPurchase(storeRepository, username);
         }
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

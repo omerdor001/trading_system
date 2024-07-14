@@ -1,6 +1,6 @@
 package com.example.trading_system.service;
 
-import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> getPendingUserNotifications(String admin, String token, String username);
 
-    ResponseEntity<String> openSystem(StoreRepository storeRepository);
+    ResponseEntity<String> openSystem(StoreDatabaseRepository storeRepository);
 
     ResponseEntity<String> closeSystem(String username, String token);
 

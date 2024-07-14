@@ -23,13 +23,17 @@ public class Bid {
     @Column(nullable = false)
     private double price;
 
+
     @ElementCollection
-    @CollectionTable(name = "bid_approved_by", joinColumns = @JoinColumn(name = "bid_id"))
-    @Column(name = "approved_by")
+    @CollectionTable(name = "bid_approvals", joinColumns = @JoinColumn(name = "bid_id"))
+    @Column(name = "owner")
     private List<String> approvedBy = new LinkedList<>();
 
     @Column(nullable = false)
     private boolean allOwnersApproved;
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
 
     public Bid(String userName, int productID, double price) {
         this.userName = userName;

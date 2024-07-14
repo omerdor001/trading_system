@@ -1,35 +1,36 @@
 package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.stores.MarketFacadeImp;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 @Entity
+@Table(name = "shopping_bags")
 public class ShoppingBag {
-    @JsonIgnore
     @Id
+    @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
+    @Getter
     @Column(nullable = false)
     private String storeId;
 
-    @ElementCollection
-    @CollectionTable(name = "products_in_sale",
-            joinColumns = @JoinColumn(name = "shopping_bag_id"))
-    @MapKeyColumn(name = "product_id")
-    @AttributeOverrides({
-            @AttributeOverride(name = "price", column = @Column(name = "price")),
-            @AttributeOverride(name = "quantity", column = @Column(name = "quantity")),
-            @AttributeOverride(name = "category", column = @Column(name = "category"))
-    })
-    private HashMap<Integer, ProductInSale> products_list;
+    @OneToMany(mappedBy = "shoppingBag", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Map<Integer, ProductInSale> products_list = new HashMap<>();
+
 
     public ShoppingBag(String storeId) {
         this.storeId = storeId;
@@ -40,16 +41,9 @@ public class ShoppingBag {
 
     }
 
-    public String getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(String storeId) {
-        this.storeId = storeId;
-    }
 
     public HashMap<Integer, ProductInSale> getProducts_list() {
-        return products_list;
+        return (HashMap<Integer, ProductInSale>) products_list;
     }
 
     public synchronized void addProduct(int productId, int quantity, double price, int category) {
@@ -92,25 +86,25 @@ public class ShoppingBag {
         return products_list.get(productId).getQuantity();
     }
 
-    public void removeReservedProducts(StoreRepository storeRepository) {
+    public void removeReservedProducts(StoreDatabaseRepository storeRepository) {
         for (ProductInSale product : products_list.values()) {
             MarketFacadeImp.getInstance(storeRepository).removeReservedProducts(product.getId(), product.getQuantity(), product.getStoreId());
         }
     }
 
-    public void releaseReservedProducts(StoreRepository storeRepository) {
+    public void releaseReservedProducts(StoreDatabaseRepository storeRepository) {
         for (ProductInSale product : products_list.values()) {
             MarketFacadeImp.getInstance(storeRepository).releaseReservedProducts(product.getId(), product.getQuantity(), product.getStoreId());
         }
     }
 
-    public void checkAvailabilityAndConditions(StoreRepository storeRepository) {
+    public void checkAvailabilityAndConditions(StoreDatabaseRepository storeRepository) {
         for (ProductInSale product : products_list.values()) {
             MarketFacadeImp.getInstance(storeRepository).checkAvailabilityAndConditions(product.getId(), product.getQuantity(), product.getStoreId());
         }
     }
 
-    public void addPurchase(StoreRepository storeRepository, String username) {
+    public void addPurchase(StoreDatabaseRepository storeRepository, String username) {
         try {
             MarketFacadeImp.getInstance(storeRepository).addPurchase(username, productsListToJson(), calculateTotalPrice(), storeId);
         } catch (IOException e) {

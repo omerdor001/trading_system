@@ -42,16 +42,20 @@ public class Store {
     @CollectionTable(name = "store_owners", joinColumns = @JoinColumn(name = "store_id"))
     @Column(name = "owner")
     private List<String> owners = new LinkedList<>();
+
     @Column(name = "founder")
     private String founder;
+
     @Column(name = "ActivtionStatus")
     private boolean isActive;
-    @Column(name = " openingStatus")
+
+    @Column(name = "openingStatus")
     private boolean isOpen;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "sales_history_id", referencedColumnName = "id")
     private StoreSalesHistory salesHistory = new StoreSalesHistory();
+
     @Column(name = "rating")
     private Double storeRating;
 
@@ -64,12 +68,8 @@ public class Store {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchasePolicy> purchasePolicies = new LinkedList<>();
 
-//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Message> messages = new LinkedList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "store_id")
-    private List<Bid> bids;
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bid> bids = new LinkedList<>();
 
 //    @ElementCollection
 //    @CollectionTable(name = "store_lottery_products", joinColumns = @JoinColumn(name = "store_id"))

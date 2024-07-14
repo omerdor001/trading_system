@@ -4,6 +4,7 @@ import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.*;
@@ -15,7 +16,12 @@ import org.mockito.*;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+import jakarta.transaction.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
+@Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GetProductsInfoUnitTests {
 
@@ -28,14 +34,16 @@ class GetProductsInfoUnitTests {
     String validUsername = "validUser";
     String validStoreName = "ValidStore";
     String validDescription = "This is a valid description.";
-    private UserRepository userRepository;
-    private StoreRepository storeRepository;
+    @Autowired
+    private UserDatabaseRepository userRepository;
+
+    @Autowired
+    private StoreDatabaseRepository storeRepository;
 
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
-        storeRepository= StoreMemoryRepository.getInstance();
-        userRepository = UserMemoryRepository.getInstance();
+
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
         userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
         userFacade.getUsers().put(validUsername, user);
