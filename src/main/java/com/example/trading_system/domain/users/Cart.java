@@ -18,10 +18,8 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "cart_shopping_bags", joinColumns = @JoinColumn(name = "cart_id"))
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @MapKeyColumn(name = "store_id")
-    @Column(name = "shoppingBags_id")
     private Map<String, ShoppingBag> shoppingBags = new HashMap<>();
 
     public Cart() {

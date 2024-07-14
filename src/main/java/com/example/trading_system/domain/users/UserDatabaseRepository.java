@@ -117,6 +117,10 @@ public class UserDatabaseRepository implements UserRepository {
 
     @Override
     public void saveUser(User user) {
+        for (Role role : ((Registered) user).getRoles()) {
+            entityManager.persist(role.getRoleState());
+            entityManager.persist(role);
+        }
         entityManager.persist(user);
     }
 

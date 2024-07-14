@@ -28,6 +28,10 @@ public class ShoppingBag {
     @Column(nullable = false)
     private String storeId;
 
+    @ManyToOne
+    @JoinColumn(name = "cart_id", nullable = false)
+    private Cart cart;
+
     @OneToMany(mappedBy = "shoppingBag", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Map<Integer, ProductInSale> products_list = new HashMap<>();
 
