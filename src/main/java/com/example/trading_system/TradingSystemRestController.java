@@ -20,6 +20,7 @@ import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
 import jakarta.persistence.EntityManager;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +33,10 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/trading")
 public class TradingSystemRestController {
 
+    @Getter
     private final TradingSystemImp tradingSystem;
     private StoreRepository storeRepository;
+
 
     @Autowired
     public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository,StoreRepository storeRepository) {

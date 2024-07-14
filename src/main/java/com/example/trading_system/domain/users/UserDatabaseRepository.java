@@ -8,6 +8,7 @@
     import org.springframework.context.annotation.Primary;
     import org.springframework.stereotype.Repository;
     import org.springframework.stereotype.Service;
+    import org.springframework.transaction.annotation.Transactional;
 
     import java.time.LocalDate;
     import java.util.*;
@@ -125,6 +126,7 @@
             visitors.put(username, new Visitor(username.substring(1)));
         }
 
+        @Transactional
         @Override
         public void addRegistered(String userName, String encryption, LocalDate birthdate) {
             Registered user = new Registered(userName, encryption, birthdate);
