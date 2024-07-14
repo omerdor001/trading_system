@@ -217,6 +217,11 @@ public class TradingSystemRestController {
         return tradingSystem.logout(token, username);
     }
 
+    @GetMapping("/sendPendingNotifications")
+    public ResponseEntity<String> sendPendingNotifications(@RequestParam String username, @RequestParam String token){
+        return tradingSystem.sendPendingNotifications(username,token);
+    }
+
     @PutMapping("/suspendUser")
     public ResponseEntity<String> suspendUser(@RequestParam String token,
                                               @RequestParam String admin,
