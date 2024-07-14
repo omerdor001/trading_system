@@ -7,12 +7,6 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("MANAGER")
 public class Manager extends RoleState {
-
-    @JsonIgnore
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "watch")
     private boolean watch;
 

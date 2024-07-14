@@ -17,10 +17,10 @@ public class Role {
     @JoinColumn(name = "role_state_id")
     private RoleState roleState;
 
-    @Column()
+    @Column
     private String store_name_id;
 
-    @Column()
+    @Column
     private String appointedById;
     public Role(String store_name_id, String appointedById) {
         this.store_name_id = store_name_id;

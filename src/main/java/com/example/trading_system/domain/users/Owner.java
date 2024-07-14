@@ -9,10 +9,6 @@ import java.util.List;
 @DiscriminatorValue("OWNER")
 public class Owner extends RoleState {
 
-    @JsonIgnore
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     public Owner(Role role) {
         this.role = role;

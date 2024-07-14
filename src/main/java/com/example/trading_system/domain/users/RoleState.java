@@ -7,9 +7,10 @@ import lombok.Setter;
 import java.util.List;
 
 
+
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "role_type")
+@DiscriminatorColumn(name = "role_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class RoleState {
 
     @Id
