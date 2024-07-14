@@ -513,9 +513,13 @@ public class UserFacadeImp implements UserFacade {
         }
         try {
             marketFacade.addStore(storeName, description, username, null);
+            logger.info("111111111111111111");
             User user = userRepository.getUser(username);
+            logger.info("222222222222222222");
             user.openStore(storeName);
+            logger.info("333333333333333333");
             userRepository.saveUser(user);
+            logger.info("444444444444444444");
         } catch (Exception e) {
             logger.error("Failed to open store: {}", e.getMessage());
             throw new IllegalArgumentException("Failed to open store", e);

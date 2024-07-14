@@ -2,6 +2,8 @@ package com.example.trading_system.domain.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Setter;
+
 import java.util.List;
 
 @Entity
@@ -22,6 +24,11 @@ public class Role {
 
     @Column
     private String appointedById;
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "registered_username", referencedColumnName = "username", nullable = false)
+    private Registered registeredUser;
+
     public Role(String store_name_id, String appointedById) {
         this.store_name_id = store_name_id;
         this.appointedById = appointedById;

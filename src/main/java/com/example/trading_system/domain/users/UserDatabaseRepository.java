@@ -117,13 +117,16 @@ public class UserDatabaseRepository implements UserRepository {
 
     @Override
     public void saveUser(User user) {
-        for (Role role : ((Registered) user).getRoles()) {
-            entityManager.persist(role.getRoleState());
-            entityManager.persist(role);
+        if (user instanceof Registered) {
+            Registered registeredUser = (Registered) user;
+            for (Role role : registeredUser.getRoles()) {
+                role.setRegisteredUser(registeredUser); // Ensure each role is associated with the user
+                entityManager.persist(role.getRoleState());
+                entityManager.persist(role);
+            }
+            entityManager.persist(registeredUser);
         }
-        entityManager.persist(user);
     }
-
     @Override
     public boolean checkIfRegistersEmpty() {
         Long count = entityManager.createQuery("SELECT COUNT(u) FROM Registered u", Long.class).getSingleResult();
