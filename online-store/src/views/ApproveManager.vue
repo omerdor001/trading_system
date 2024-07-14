@@ -34,10 +34,10 @@
               <td>{{ request.acceptBids ? '✔' : '✘' }}</td>
               <td>{{ request.createLottery ? '✔' : '✘' }}</td>
               <td>
-                <PrimeButton label="Approve-Click" type="button" @click="approveManager(request)" />
+                <PrimeButton label="Approve" type="button" @click="approveManager(request)" />
               </td>
               <td>
-                <PrimeButton label="Reject-Click" type="button" @click="rejectManager(request)" />
+                <PrimeButton label="Reject" type="button" @click="rejectManager(request)" />
               </td>
             </tr>
           </tbody>
