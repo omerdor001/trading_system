@@ -47,6 +47,7 @@ import { InputText } from 'primevue/inputtext';
 import { Card as PrimeCard } from 'primevue/card';
 import axios from 'axios';
 import WebSocketService from '../WebSocketService';
+import { useToast } from 'primevue/usetoast';
 
 export default defineComponent({
   name: 'LoginModel',
@@ -60,6 +61,7 @@ export default defineComponent({
     const username = ref('');
     const password = ref('');
     const errorMessage = ref('');
+    const toast = useToast();
 
     const handleLogin = async () => {
       try {
@@ -79,6 +81,13 @@ export default defineComponent({
         localStorage.setItem('userName', username.value)
 
         WebSocketService.connect(response.data.username, onMessageReceived);
+
+        await axios.get(`http://localhost:8082/api/trading/sendPendingNotifications`, {
+          params: {
+            username: response.data.username,
+            token: response.data.token,
+          }
+        });
 
         router.push('/');
       } catch (error) {
@@ -100,6 +109,7 @@ export default defineComponent({
       let messages = JSON.parse(localStorage.getItem('websocketMessages')) || [];
       messages.push(textContent);
       localStorage.setItem('websocketMessages', JSON.stringify(messages));
+      toast.add({ severity: 'info', summary: 'New Notification', detail: textContent, life: 3000 });
       console.log('Received message:', textContent);
     }
 
