@@ -4,12 +4,31 @@
     <div class="main-content">
       <div class="content">
         <h2>Checkout</h2>
-        <form @submit.prevent="proceedToCheckout">
+        <p>Please enter your address details:</p>
+
+        <form @submit.prevent="proceedToPayment">
           <div class="form-group">
-            <label for="address">Delivery Address</label>
-            <InputText v-model="address" id="address" required />
+            <label for="street">Street</label>
+            <InputText v-model="street" id="street" placeholder="e.g., 1234 El Street" required />
           </div>
-          <PrimeButton label="Proceed to Checkout" type="submit" class="submit-order-button" />
+          <div class="form-group">
+            <label for="city">City</label>
+            <InputText v-model="city" id="city" placeholder="e.g., Springfield" required />
+          </div>
+          <div class="form-group">
+            <label for="state">State</label>
+            <InputText v-model="state" id="state" placeholder="e.g., IL" required />
+          </div>
+          <div class="form-group">
+            <label for="postalCode">Postal Code</label>
+            <InputText v-model="postalCode" id="postalCode" placeholder="e.g., 62704-5678" required />
+          </div>
+          <div class="form-group">
+            <label for="country">Country</label>
+            <InputText v-model="country" id="country" placeholder="e.g., USA" required />
+          </div>
+
+          <PrimeButton label="Proceed to Payment" type="submit" class="submit-order-button" />
         </form>
       </div>
     </div>
@@ -40,19 +59,25 @@ export default defineComponent({
     const toast = useToast();
     const username = ref(localStorage.getItem('username') || '');
     const token = ref(localStorage.getItem('token') || '');
-    const address = ref('');
+    const street = ref('');
+    const city = ref('');
+    const state = ref('');
+    const postalCode = ref('');
+    const country = ref('');
 
-    const proceedToCheckout = async () => {
+    const proceedToPayment = async () => {
+      const address = `${street.value}, ${city.value}, ${state.value}, ${postalCode.value}, ${country.value}`;
+
       try {
         await axios.post('http://localhost:8082/api/trading/setAddress', null, {
           params: {
             username: username.value,
             token: token.value,
-            address: address.value,
+            address: address,
           },
         });
         toast.add({ severity: 'success', summary: 'Success', detail: 'Address saved successfully', life: 3000 });
-        router.push({ name: 'PaymentPage', query: { address: address.value } });
+        router.push({ name: 'PaymentPage', query: { address: address } });
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to save address', life: 3000 });
       }
@@ -67,8 +92,12 @@ export default defineComponent({
 
     return {
       username,
-      address,
-      proceedToCheckout,
+      street,
+      city,
+      state,
+      postalCode,
+      country,
+      proceedToPayment,
       logout
     };
   }
