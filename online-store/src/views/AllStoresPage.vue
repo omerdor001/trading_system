@@ -9,10 +9,9 @@
       <div v-else>
         <ul class="stores-list">
           <li v-for="store in stores" :key="store.name" class="store-item">
-            <img :src="store.image" alt="Store Image" class="store-image">
             <div class="store-details">
-              <h3>{{ store.name }}</h3>
-              <p>{{ store.description }}</p>
+              <h3>Store Name: {{ store.name }}</h3>
+              <p>Description: {{ store.description }}</p>
               <p>Rating: {{ store.rating }}</p>
               <PrimeButton label="View Products" @click="viewProducts(store.name)" class="view-products-button"/>
             </div>
@@ -31,6 +30,7 @@ import PrimeButton from 'primevue/button';
 import PrimeToast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'AllStoresPage',
@@ -44,6 +44,7 @@ export default {
     const stores = ref([]);
     const username = ref(localStorage.getItem('username') || '');
     const toast = useToast();
+    const router = useRouter();
 
     const fetchStores = async () => {
       const token = localStorage.getItem('token');
@@ -63,7 +64,6 @@ export default {
         console.log(response.data);  // Add this line to check the returned data
         stores.value = response.data.map(store => ({
           name: store.name,
-          image: 'default-image-url', // Replace with actual image URL if available
           description: store.description,
           rating: store.rating
         }));
@@ -77,7 +77,7 @@ export default {
     };
 
     const viewProducts = (storeId) => {
-      this.$router.push({ name: 'StoreDetails', params: { storeId } });
+      router.push({ name: 'StoreDetails', params: { storeId } });
     };
 
     onMounted(() => {
@@ -113,13 +113,6 @@ export default {
   border: 1px solid #ddd;
   border-radius: 10px;
   background-color: #f9f9f9;
-}
-
-.store-image {
-  width: 150px;
-  height: 150px;
-  margin-right: 20px;
-  border-radius: 10px;
 }
 
 .store-details {

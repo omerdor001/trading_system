@@ -54,7 +54,7 @@ export default defineComponent({
 
     const handleCreateStore = async () => {
       try {
-        const response = await axios.put('http://localhost:8082/api/trading/create-store',null, {
+        const response = await axios.post('http://localhost:8082/api/trading/create-store',null, {
             params : { 
             username: username,
             token: token,

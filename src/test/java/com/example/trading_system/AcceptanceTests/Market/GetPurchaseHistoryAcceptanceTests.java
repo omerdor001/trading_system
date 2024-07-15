@@ -28,6 +28,14 @@ class GetPurchaseHistoryAcceptanceTests {
     private final String storeName = "Store1";
     private UserRepository userRepository;
     private StoreRepository storeRepository;
+    private final String amount = "100.00";
+    private final String currency = "USD";
+    private final String cardNumber = "4111111111111111";
+    private final String month = "12";
+    private final String year = "2025";
+    private final String holder = "John Doe";
+    private final String ccv = "123";
+    private final String id = "123456789";
 
     @BeforeEach
     void setUp() {
@@ -58,7 +66,7 @@ class GetPurchaseHistoryAcceptanceTests {
         tradingSystem.openStore(username, token, storeName, "");
         tradingSystem.addProduct(username, token, 0, storeName, "product1", "", 1, 5, 1, 1, "[]");
         tradingSystem.addToCart(username, token, 0, storeName, 1,1);
-        tradingSystem.approvePurchase(username, token);
+        tradingSystem.approvePurchase(username, token, address, amount, currency, cardNumber, month, year, holder, ccv, id);
     }
 
     @AfterEach

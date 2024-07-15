@@ -24,7 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080") //TODO IP and Port (general)
+@CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/api/trading")
 public class TradingSystemRestController {
 
@@ -78,7 +78,7 @@ public class TradingSystemRestController {
         return tradingSystem.openStoreExist(username, token, storeName);
     }
 
-    @PutMapping("/create-store")
+    @PostMapping("/create-store")
     public ResponseEntity<String> openStore(@RequestParam String username,
                                             @RequestParam String token,
                                             @RequestParam String storeName,
@@ -113,7 +113,7 @@ public class TradingSystemRestController {
     public ResponseEntity<String> getStoreProducts(@RequestParam String userName,
                                                    @RequestParam String token,
                                                    @RequestParam String store_name) {
-        return tradingSystem.getStoreProducts("r" + userName, token, store_name);
+        return tradingSystem.getStoreProducts(userName, token, store_name);
 
     }
 
@@ -182,7 +182,7 @@ public class TradingSystemRestController {
                                               @RequestParam double productPrice,
                                               @RequestParam int productQuantity
     ) {
-        return tradingSystem.editProduct("r" + username, token, storeName, productId, productName, productDescription, productPrice, productQuantity);
+        return tradingSystem.editProduct(username, token, storeName, productId, productName, productDescription, productPrice, productQuantity);
 
     }
 
@@ -215,6 +215,11 @@ public class TradingSystemRestController {
     @GetMapping("/logout")
     public ResponseEntity<String> logout(@RequestParam String token, @RequestParam String username) {
         return tradingSystem.logout(token, username);
+    }
+
+    @GetMapping("/sendPendingNotifications")
+    public ResponseEntity<String> sendPendingNotifications(@RequestParam String username, @RequestParam String token){
+        return tradingSystem.sendPendingNotifications(username,token);
     }
 
     @PutMapping("/suspendUser")
@@ -460,19 +465,27 @@ public class TradingSystemRestController {
     }
 
     @PostMapping("/purchase/approve")
-    public ResponseEntity<String> approvePurchase(@RequestParam String username, @RequestParam String token) {
-        return tradingSystem.approvePurchase("r" + username, token);
+    public ResponseEntity<String> approvePurchase(
+            @RequestParam String username,
+            @RequestParam String token,
+            @RequestParam String address,
+            @RequestParam String amount,
+            @RequestParam String currency,
+            @RequestParam String cardNumber,
+            @RequestParam String month,
+            @RequestParam String year,
+            @RequestParam String holder,
+            @RequestParam String ccv,
+            @RequestParam String id) {
+        return tradingSystem.approvePurchase(username, token, address, amount, currency, cardNumber, month, year, holder, ccv, id);
     }
+
 
     @GetMapping("/purchase/history")
     public ResponseEntity<String> getPurchaseHistory(@RequestParam String username, @RequestParam String token, @RequestParam String storeName) {
         return tradingSystem.getPurchaseHistory(username, token, storeName);
     }
 
-    @GetMapping("/stores/purchase/history")
-    public ResponseEntity<String> getStoresPurchaseHistory(@RequestParam String username, @RequestParam String token, @RequestParam String storeName, @RequestParam Integer productBarcode) {
-        return tradingSystem.getStoresPurchaseHistory(username, token, storeName, productBarcode);
-    }
 
     @PostMapping("/cart/add")
     public ResponseEntity<String> addToCart(@RequestParam String username, @RequestParam String token, @RequestParam int productId, @RequestParam String storeName, @RequestParam int quantity, @RequestParam double price) {
@@ -481,7 +494,7 @@ public class TradingSystemRestController {
 
     @PutMapping("/cart/remove")
     public ResponseEntity<String> removeFromCart(@RequestParam String username, @RequestParam String token, @RequestParam int productId, @RequestParam String storeName, @RequestParam int quantity) {
-        return tradingSystem.removeFromCart("r" + username, token, productId, storeName, quantity);
+        return tradingSystem.removeFromCart(username, token, productId, storeName, quantity);
     }
 
     @GetMapping("/cart/view")
@@ -951,7 +964,7 @@ public class TradingSystemRestController {
                                            @RequestParam String storeName,
                                            @RequestParam int productID,
                                            @RequestParam double price) {
-        return tradingSystem.placeBid(userName, token, storeName, productID, price);
+        return tradingSystem.placeBid( userName, token, storeName, productID, price);
     }
 
     @PostMapping("/store/approve-bid")
@@ -959,8 +972,17 @@ public class TradingSystemRestController {
                                              @RequestParam String token,
                                              @RequestParam String storeName,
                                              @RequestParam int productID,
-                                             @RequestParam String bidUserName) {
-        return tradingSystem.approveBid(userName, token, storeName, productID, bidUserName);
+                                             @RequestParam String bidUserName,
+                                             @RequestParam String address,
+                                             @RequestParam String amount,
+                                             @RequestParam String currency,
+                                             @RequestParam String cardNumber,
+                                             @RequestParam String month,
+                                             @RequestParam String year,
+                                             @RequestParam String holder,
+                                             @RequestParam String ccv,
+                                             @RequestParam String id) {
+        return tradingSystem.approveBid(userName, token, storeName, productID, bidUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
     }
 
     @PostMapping("/store/reject-bid")
@@ -1034,6 +1056,6 @@ public class TradingSystemRestController {
                                                          @RequestParam String categories,
                                                          @RequestParam Double rating
     ) {
-        return tradingSystem.searchProductsInStores(userName, token, keyWord, minPrice, maxPrice, categories, rating);
+        return tradingSystem.searchProductsInStores( userName, token, keyWord, minPrice, maxPrice, categories, rating);
     }
 }
