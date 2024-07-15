@@ -871,4 +871,12 @@ public class Store {
 
     //endregion
 
+    public boolean isPurchaseExist(){
+        return salesHistory.isPurchaseExitFromStore(nameId);
+    }
+
+    public boolean isPurchaseOfUserExist(String username){
+        return salesHistory.isPurchaseExitFromStore(username);
+    }
+
 }

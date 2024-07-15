@@ -56,6 +56,24 @@ public class StoreSalesHistory {
                 .collect(Collectors.joining("\n"));
     }
 
+    public boolean isPurchaseExitFromStore(String storeName){
+        for(Purchase purchase:purchases){
+            if(purchase.getStoreName().equals(storeName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isPurchaseExitOfUser(String username){
+        for(Purchase purchase:purchases){
+            if(purchase.getCustomerUsername().equals(username)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 }
 
