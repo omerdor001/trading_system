@@ -282,7 +282,7 @@ class NotificationAcceptanceTests {
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rmanager");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"}]", result.getBody());
-        verify(mockNotificationSender).sendNotification(eq("rmanager"), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 is fired/waiving his ownership\"}"));
+        verify(mockNotificationSender).sendNotification(eq("rmanager"), eq("{\"senderUsername\":\"owner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 is fired/waiving his ownership\"}"));
     }
 
     @Test
@@ -305,8 +305,8 @@ class NotificationAcceptanceTests {
         tradingSystem.fireManager(username, token, storeName, "rowner2");
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, owner2Username);
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}]", result.getBody());
-        verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You are no longer a manager at store: store1 due to being fired by owner1\"}"));
+        assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"rowner1 suggests you to become a store manager at store1\"}]", result.getBody());
+        verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"owner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You are no longer a manager at store: store1 due to being fired by owner1\"}"));
     }
 
     @Test

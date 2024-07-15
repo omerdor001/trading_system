@@ -17,6 +17,7 @@ public class Registered extends User {
     @Column(nullable = false)
     private String encrypted_pass;
 
+    @Getter
     @Column(nullable = false)
     private LocalDate birthdate;
 
@@ -24,21 +25,22 @@ public class Registered extends User {
     private boolean isAdmin;
 
     @Column
-    @Getter
     @Setter
     private boolean isLogged;
 
+    @Getter
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "registered_username", referencedColumnName = "username")
     private List<Role> roles;
 
     @OneToMany(mappedBy = "receiverUsername", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications;
-
+    @Getter
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "registered_id")
     private List<ManagerSuggestion> managerSuggestions;
 
+    @Getter
     @ElementCollection
     @CollectionTable(name = "owner_suggestions", joinColumns = @JoinColumn(name = "registered_id"))
     @MapKeyColumn(name = "store_name")
@@ -78,20 +80,7 @@ public class Registered extends User {
     public void removeManagerRole(String storeName) {
         roles.remove(getRoleByStoreId(storeName));
     }
-    public HashMap<String, String> getOwnerSuggestions() {
-        return (HashMap<String, String>) ownerSuggestions;
-    }
 
-    @Override
-    public HashMap<String, HashMap<String, List<Boolean>>> getManagerSuggestions() {
-        Map<String, HashMap<String, List<Boolean>>> result = new HashMap<>();
-        for (ManagerSuggestion managerSuggestion : managerSuggestions) {
-            HashMap<String, List<Boolean>> values = new HashMap<>();
-            values.put(managerSuggestion.getSuggestionKey(), managerSuggestion.getSuggestionValues());
-            result.put(managerSuggestion.getId().toString(), values);
-        }
-        return (HashMap<String, HashMap<String, List<Boolean>>>) result;
-    }
 
     @Override
     public String getPass() {
@@ -253,26 +242,23 @@ public class Registered extends User {
         ownerSuggestions.put(storeName, appointee);
     }
 
-    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id, String appointee) throws IllegalAccessException {
-        for (ManagerSuggestion managerSuggestion : managerSuggestions) {
-            if (managerSuggestion.getSuggestionKey().equals(appointee) && managerSuggestion.getId().equals(store_name_id)) {
-                managerSuggestions.remove(managerSuggestion);
-                return managerSuggestion.getSuggestionValues();
+    public List<Boolean> removeWaitingAppoint_Manager(String storeName, String appoint) {
+        Iterator<ManagerSuggestion> iterator = managerSuggestions.iterator();
+        System.out.println("888888888888888");
+        while (iterator.hasNext()) {
+            System.out.println("7777777777777777777");
+            ManagerSuggestion suggestion = iterator.next();
+            if (suggestion.getSuggestionKey().equals(storeName + ":" + appoint)) {
+                iterator.remove();
+                return suggestion.getSuggestionValues();
             }
         }
-        throw new IllegalAccessException("No one suggests this user to be a manager");
+        return null;
     }
+
 
     public boolean removeWaitingAppoint_Owner(String storeName) {
         return ownerSuggestions.remove(storeName) != null;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public LocalDate getBirthdate() {
-        return birthdate;
     }
 
     @Override

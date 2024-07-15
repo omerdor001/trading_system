@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @MappedSuperclass
 //@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -172,9 +173,9 @@ public abstract class User {
 
     public abstract boolean getLogged();
 
-    public abstract HashMap<String, String> getOwnerSuggestions();
+    public abstract Map<String, String> getOwnerSuggestions();
 
-    public abstract HashMap<String, HashMap<String, List<Boolean>>> getManagerSuggestions();
+    public abstract List<ManagerSuggestion> getManagerSuggestions();
 
     public abstract List<Notification> getNotifications();
 

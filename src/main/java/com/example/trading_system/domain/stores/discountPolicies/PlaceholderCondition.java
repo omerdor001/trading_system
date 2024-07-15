@@ -10,10 +10,6 @@ import java.util.Collection;
 @DiscriminatorValue("PLACEHOLDER")
 public class PlaceholderCondition extends Condition {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long id;
 
 
     @Override

@@ -818,7 +818,6 @@ public class UserFacadeImp implements UserFacade {
         userRepository.saveUser(ownerUser);
         //TODO save store
     }
-
     @Override
     public void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException {
         if (!marketFacade.isStoreExist(storeName))
@@ -832,8 +831,10 @@ public class UserFacadeImp implements UserFacade {
         if (isSuspended(userName)) {
             throw new RuntimeException("User is suspended from the system");
         }
+
         User appointUser = userRepository.getUser(appoint);
         User newManagerUser = userRepository.getUser(userName);
+
         if (!newManagerUser.getLogged()) {
             throw new IllegalAccessException("New Manager user is not logged");
         }
@@ -846,8 +847,14 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User is already owner of this store");
         }
+
+
         List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName, appoint);
+        if (perm == null) {
+            throw new IllegalAccessException("No one suggests this user to be a manager");
+        }
         sendNotification(userName, appoint, newManagerUser.getUsername() + " rejected your suggestion to become a manager at store: " + storeName);
+
         userRepository.saveUser(newManagerUser);
         userRepository.saveUser(appointUser);
     }
@@ -1221,16 +1228,22 @@ public class UserFacadeImp implements UserFacade {
     private List<Map<String, Object>> getMapsForManagement(String username) {
         User user = userRepository.getUser(username);
         List<Map<String, Object>> toApproves = new ArrayList<>();
-        for (Map.Entry<String, HashMap<String, List<Boolean>>> entry : user.getManagerSuggestions().entrySet()) {
-            String storeName = entry.getKey();
-            HashMap<String, List<Boolean>> appointeesPermissions = entry.getValue();
-            for (Map.Entry<String, List<Boolean>> appointeeEntry : appointeesPermissions.entrySet()) {
-                Map<String, Object> approveMap = getStringObjectMap(appointeeEntry, storeName);
-                toApproves.add(approveMap);
-            }
+
+        for (ManagerSuggestion suggestion : user.getManagerSuggestions()) {
+            String storeName = suggestion.getSuggestionKey();
+            List<Boolean> permissions = suggestion.getSuggestionValues();
+
+            Map<String, Object> approveMap = new HashMap<>();
+            approveMap.put("storeName", storeName);
+            approveMap.put("appointee", suggestion.getSuggestionKey());
+            approveMap.put("permissions", permissions);
+
+            toApproves.add(approveMap);
         }
+
         return toApproves;
     }
+
 
     private Map<String, Object> getStringObjectMap(Map.Entry<String, List<Boolean>> appointeeEntry, String storeName) {
         String appointee = appointeeEntry.getKey();

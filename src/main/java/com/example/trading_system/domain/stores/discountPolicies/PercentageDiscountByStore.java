@@ -9,10 +9,6 @@ import java.util.Collection;
 @DiscriminatorValue("PERCENTAGE_STORE")
 public class PercentageDiscountByStore extends DiscountPolicy {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long id;
 
     @Column(name = "discount_percent")
     private double discountPercent;
