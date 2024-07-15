@@ -123,10 +123,10 @@ export default defineComponent({
         try {
           const response = await axios.get("http://localhost:8082/api/trading/register", { params });
           toast.add({ severity: 'success', summary: 'Success', detail: 'Registration successful', life: 3000 });
-          console.log(response.data);
+          console.log(response);
           router.push('/');
         } catch (error) {
-          toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to register', life: 3000 });
+          toast.add({ severity: 'error', summary: 'Error', detail: error.response || 'Failed to register', life: 3000 });
           console.error('Registration error:', error);
         }
       }
