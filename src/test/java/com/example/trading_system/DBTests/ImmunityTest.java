@@ -221,7 +221,7 @@ public class ImmunityTest {
         }
         tradingSystemRestController.getTradingSystem().addToCart("v2",user1Token,1,"storeName",5,100.0);
         tradingSystemRestController.getTradingSystem().addToCart("v2",user1Token,2,"storeName",5,100.0);
-        //tradingSystemRestController.getTradingSystem().approvePurchase("v2",user1Token);
+        tradingSystemRestController.getTradingSystem().approvePurchase("v2",user1Token,"1234 Main Street, Springfield, IL, 62704-1234","100.00","USD","4111111111111111","12","2025","John Doe","123","123456789");
         tradingSystemRestController.getTradingSystem().exit(user1Token,"v2");
         TradingSystemApplication.restart();
         try {
@@ -258,10 +258,10 @@ public class ImmunityTest {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemRestController.getTradingSystem().openStore(username, token, "storeName", "");
-        tradingSystemRestController.getTradingSystem().addProduct(username,token,1,"storeName","product1","aaa",100.0,100,5,1,"");
-        tradingSystemRestController.getTradingSystem().addProduct(username,token,2,"storeName","product2","bbb",100.0,100,5,1,"");
-        String exitAdmin=tradingSystemRestController.getTradingSystem().logout(adminToken,"admin").getBody();
+        tradingSystemRestController.getTradingSystem().openStore("r"+username, token, "storeName", "");
+        tradingSystemRestController.getTradingSystem().addProduct("r"+username,token,1,"storeName","product1","aaa",100.0,100,5,1,"");
+        tradingSystemRestController.getTradingSystem().addProduct("r"+username,token,2,"storeName","product2","bbb",100.0,100,5,1,"");
+        String exitAdmin=tradingSystemRestController.getTradingSystem().logout(adminToken,"r"+"admin").getBody();
         tradingSystemRestController.getTradingSystem().exit(exitAdmin,"v1");
         String user1Token = tradingSystemRestController.getTradingSystem().enter().getBody();
         try {
@@ -280,9 +280,9 @@ public class ImmunityTest {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemRestController.getTradingSystem().addToCart("v2",user1Token,1,"storeName",5,100.0);
-        tradingSystemRestController.getTradingSystem().addToCart("v2",user1Token,2,"storeName",5,100.0);
-       // tradingSystemRestController.getTradingSystem().approvePurchase("v2",user1Token);
+        tradingSystemRestController.getTradingSystem().addToCart("ruser1",user1Token,1,"storeName",5,100.0);
+        tradingSystemRestController.getTradingSystem().addToCart("ruser1",user1Token,2,"storeName",5,100.0);
+        tradingSystemRestController.getTradingSystem().approvePurchase("ruser1",user1Token,"1234 Main Street, Springfield, IL, 62704-1234","100.00","USD","4111111111111111","12","2025","John Doe","123","123456789");
         tradingSystemRestController.getTradingSystem().exit(user1Token,"v2");
         TradingSystemApplication.restart();
         try {
