@@ -60,9 +60,9 @@ export default defineComponent({
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('isLoggedIn', false);
       } catch (error) {
-        if (error.response.status === 403) {
-          router.push('/register');
-        }
+        console.log(error);
+        router.push('/register');
+
       }
     };
 
