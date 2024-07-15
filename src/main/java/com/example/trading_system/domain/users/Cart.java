@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,8 @@ import java.util.Map;
 @Table(name = "cart")
 public class Cart {
 
+    @Getter
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +26,8 @@ public class Cart {
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @MapKeyColumn(name = "store_id")
     private Map<String, ShoppingBag> shoppingBags = new HashMap<>();
+
+
 
     public Cart() {
         shoppingBags = new HashMap<>();
@@ -71,9 +76,17 @@ public class Cart {
         shoppingBags.remove(storeName);
     }
 
-    public void saveCart() {
-        //TODO when connecting to database.
-    }
+
+//
+//    public void saveCart() {
+//        if (entityManager != null) {
+//            entityManager.getTransaction().begin();
+//            entityManager.persist(this);
+//            entityManager.getTransaction().commit();
+//        } else {
+//            throw new IllegalStateException("EntityManager is not set.");
+//        }
+//    }
 
     @Override
     public String toString() {
@@ -136,11 +149,4 @@ public class Cart {
         }
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
 }

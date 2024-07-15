@@ -67,6 +67,10 @@ public class UserDatabaseRepository implements UserRepository {
         }
         return false;
     }
+    public void saveCart(User user) {
+        entityManager.merge(user.getCart());
+
+    }
 
     @Override
     public HashMap<String, User> getAllUsers() {
