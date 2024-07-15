@@ -8,7 +8,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -1253,20 +1252,20 @@ public class UserFacadeImp implements UserFacade {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> permissions = new HashMap<>();
         User user = userRepository.getUser(username);
-        if(!user.getUsername().equals(username) && user.isManager(storeName)){
-            permissions.put("username",username);
+        if (user.isOwner(storeName) || user.isManager(storeName)) {
+            permissions.put("username", username);
             permissions.put("watch", user.isWatch(storeName));
             permissions.put("editSupply", user.isEditSupply(storeName));
             permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
             permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
             permissions.put("acceptBids", user.isAcceptBids(storeName));
         }
-        try {
-            return mapper.writeValueAsString(permissions);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+            try {
+                return mapper.writeValueAsString(permissions);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+            }
         }
-    }
 
     @Override
     public String getUserAppointer(String user, String storeName) {

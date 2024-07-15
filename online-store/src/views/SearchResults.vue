@@ -17,6 +17,7 @@
             <th>Category</th>
             <th>KeyWords</th>
             <th>Price</th>
+            <th>Quantity</th>
             <th>Add To Cart</th>
             <th>Place Bid</th>
           </tr>
@@ -30,8 +31,10 @@
             <td>{{ product.category}}</td>
             <td>{{ product.keyWords}}</td>
             <td>{{ product.product_price}}</td>
+            <td>{{ product.product_quantity }}</td>
             <td>
-              <button @click="addToCart(product.product_id, product.store_name, 1, product.product_price)">Add To Cart</button>
+              <input type="number" v-model="quantity[index]" placeholder="Enter Quantity" />
+              <button @click="addToCart(product.product_id, product.store_name, quantity[index], product.product_price)">Add To Cart</button>
             </td>
             <td>
               <input type="number" v-model="bidPrices[index]" placeholder="Enter bid" />
@@ -67,6 +70,7 @@ export default defineComponent({
     const token = localStorage.getItem('token');
     const toast = useToast();
     const bidPrices = ref([]);
+    const quantity = ref([]);
     const products = ref([]);
 
     onMounted(() => {
@@ -98,6 +102,7 @@ export default defineComponent({
         
         toast.add({ severity: 'success', summary: 'Success', detail: products.value});
         bidPrices.value = products.value.map(() => 0);
+        quantity.value = products.value.map(() => 0);
 
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -164,7 +169,8 @@ export default defineComponent({
       logout,
       addToCart,
       placeBid,
-      bidPrices
+      bidPrices,
+      quantity
     };
   }
 });

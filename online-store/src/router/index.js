@@ -61,7 +61,7 @@ const routes = [
     { path: '/suggest-manager/:storeName', name: 'SuggestManager', component: SuggestManager },
     { path: '/approve-owner', name: 'ApproveOwner', component: ApproveOwner },
     { path: '/approve-manager', name: 'ApproveManager', component: ApproveManager },
-    { path: '/get-store-bids', name: 'WatchStoreBids', component: WatchStoreBids },
+    { path: '/get-store-bids/:storeName', name: 'WatchStoreBids', component: WatchStoreBids },
     { path: '/payment', name: 'PaymentPage', component: PaymentPage },
     { path: '/productsForStore/:storeName', name: 'ProductsForStore', component: ProductsForStore },
     { path: '/edit-discount-policy/:storeName', name: 'EditDiscountPolicy', component: EditDiscountPolicy },

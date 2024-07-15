@@ -4,15 +4,37 @@
     <div class="store-bids">
       <h1>{{ storeName }}</h1>
       <div v-if="bids.length">
-        <div class="bid" v-for="(bid, index) in bids" :key="index">
-          <h2>Bid {{ index + 1 }}</h2>
-          <p><strong>User Name:</strong> {{ bid.userName }}</p>
-          <p><strong>Product ID:</strong> {{ bid.productID }}</p>
-          <p><strong>Price:</strong> {{ bid.price }}</p>
-          <p><strong>All Owners Approve:</strong> {{ bid.allOwnersApprove ? 'Yes' : 'No' }}</p>
-          <p><strong>Approved By:</strong> {{ bid.approvedBy.join(', ') }}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>
+                User Name
+              </th>
+              <th>
+                Product ID
+              </th>
+              <th>Price</th>
+              <th>Approved By</th>
+              <th>Approve</th>
+              <th>Reject</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="bid in bids" :key="bid.userName + '-' + bid.productID">
+              <td> {{ bid.userName }}</td>
+              <td> {{ bid.productID }}</td>
+              <td> {{ bid.price }}</td>
+              <td> {{  bid.approvedBy.length > 0 ? bid.approvedBy.join(',') : 'No approvals yet' }}</td>
+              <td>
+                  <Button v-if="!isApprovedByUser(bid)" @click="approveBid(bid)">Approve</Button>
+              </td>
+              <td>
+                  <Button v-if="!isApprovedByUser(bid)" @click="rejectBid(bid)">Reject</Button>
+              </td>
+            </tr>
+          </tbody>
+          </table>
         </div>
-      </div>
       <div v-else>
         <p>No bids available.</p>
       </div>
@@ -20,33 +42,126 @@
     </div>
   </template>
   
-  <script setup>
+  <script>
   import SiteHeader from '@/components/SiteHeader.vue';
-  import { ref, onMounted } from 'vue';
+  import { ref, defineComponent, onMounted } from 'vue';
   import axios from 'axios';
-  import { useRouter } from 'vue-router';
-  
-  const storeName = ref('');
-  const bids = ref([]);
-  
-  const router = useRouter();
-  const userName = 'yourUserName'; // Replace with actual userName
-  const token = 'yourToken'; // Replace with actual token
-  
-  const fetchStoreBids = async () => {
+  import { useRoute } from 'vue-router';
+  import { useToast } from 'primevue/usetoast';
+  import Button from 'primevue/button';
+
+
+
+  export default defineComponent({
+  name: 'WatchStoreBids',
+  components: {
+    SiteHeader,
+    Button
+  },
+  setup() {
+    const route = useRoute();
+    const storeName = route.params.storeName;
+    const username = localStorage.getItem('username');
+    const token = localStorage.getItem('token');
+    const isLoggedIn = ref(!!username.value);
+    const bids = ref([]);
+    const error = ref(null);
+    const toast = useToast();
+
+
+
+const isApprovedByUser =  (bid) => {
+
+  if(bid.approvedBy.length != 0)
+{
+  return bid.approvedBy.includes(username);
+}
+  else
+  {
+    return false;
+  }
+};
+
+
+
+    const fetchStoreBids = async () => {
+      toast.add({ severity : 'success', summary: 'success', detail: storeName, life: 3000 });
+
     try {
-      const response = await axios.get(`/store/${router.params.storeName}/get-store-bids`, {
-        params: { userName, token }
+      const response = await axios.get('http://localhost:8082/api/trading/store/get-store-bids', {
+        params: {
+           userName : username, 
+           token : token,
+           storeName : storeName
+          } 
       });
       const data = response.data;
-      storeName.value = data.storeName;
       bids.value = data.bids;
+      toast.add({ severity : 'success', summary: 'success', detail: bids.value, life: 3000 });
+
     } catch (error) {
       console.error('Error fetching store bids:', error);
     }
   };
-  
+
+  const approveBid = async (bid) => {
+  try {
+      const response = await axios.post('http://localhost:8082/api/trading/store/approve-bid', null, {
+        params: {
+           userName : username, 
+           token : token,
+           storeName : storeName,
+           productID : bid.productID,
+           bidUserName: bid.userName
+          } 
+      });
+      toast.add({ severity : 'success', summary: 'success', detail: "Approve bid succeessed", life: 3000 });
+      toast.add({ severity : 'success', summary: 'success', detail:  response.data, life: 3000 });
+
+      fetchStoreBids();
+
+    } catch (error) {
+      console.error('Error fetching store bids:', error);
+    }
+};
+
+const rejectBid = async (bid) => {
+  try {
+      const response = await axios.put('http://localhost:8082/api/trading/store/reject-bid', {
+        params: {
+           userName : username, 
+           token : token,
+           storeName : storeName,
+           productID : bid.productID,
+           bidUserName: bid.userName
+          } 
+      });
+      toast.add({ severity : 'success', summary: 'success', detail: "Approve bid succeessed", life: 3000 });
+      toast.add({ severity : 'success', summary: 'success', detail:  response.data, life: 3000 });
+
+      fetchStoreBids();
+
+    } catch (error) {
+      console.error('Error fetching store bids:', error);
+    }
+};
+
   onMounted(fetchStoreBids);
+
+    return {
+      username,
+      isLoggedIn,
+      storeName,
+      error,
+      bids,
+      fetchStoreBids,
+      toast,
+      isApprovedByUser,
+      approveBid,
+      rejectBid
+    };
+  },
+});
   </script>
   
   <style scoped>
@@ -92,5 +207,20 @@
   .bid strong {
     color: #444;
   }
+
+  table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+thead th, tbody td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+thead th {
+  background-color: #f2f2f2;
+}
   </style>
   

@@ -58,7 +58,6 @@ import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { Button as PrimeButton } from 'primevue/button';
 import { Toast as PrimeToast } from 'primevue/toast';
-import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'ApproveManager',
@@ -68,7 +67,6 @@ export default defineComponent({
     PrimeToast,
   },
   setup() {
-    const router = useRouter();
     const loading = ref(false);
     const error = ref(null);
     const requests = ref([]);
@@ -95,6 +93,7 @@ export default defineComponent({
           editDiscountPolicy: request.editDiscountPolicy,
           acceptBids: request.acceptBids
         }));
+        console.log(requests.value);
         loading.value = false;
       } catch (err) {
         loading.value = false;
@@ -147,11 +146,6 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     const showSuccessToast = (message) => {
       toast.value.add({
         severity: 'success',
@@ -180,7 +174,6 @@ export default defineComponent({
       requests,
       approveManager,
       rejectManager,
-      logout,
       toast,
     };
   },
