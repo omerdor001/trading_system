@@ -29,7 +29,7 @@ public class TradingSystemImp implements TradingSystem {
     private boolean systemOpen;
 
     private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender,
-                             UserDatabaseRepository userRepository, StoreDatabaseRepository storeRepository) {
+                             UserRepository userRepository, StoreRepository storeRepository) {
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
         this.marketService = MarketServiceImp.getInstance(storeRepository);

@@ -25,17 +25,22 @@ public class MarketFacadeImp implements MarketFacade {
     private static MarketFacadeImp instance = null;
     private final ConcurrentHashMap<String, Lock> storeLocks = new ConcurrentHashMap<>();
     @Getter
-    private StoreDatabaseRepository storeRepository;
+    private StoreRepository storeRepository;
     private UserFacade userFacade;
 
     @Autowired
-    public MarketFacadeImp(/*@Qualifier("storeDatabaseRepository")*/ StoreDatabaseRepository storeRepository) {
+    public MarketFacadeImp(StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
     }
-    public static MarketFacadeImp getInstance(StoreDatabaseRepository
+    public static MarketFacadeImp getInstance(StoreRepository
                                                       storeRepository) {
         if (instance == null) instance = new MarketFacadeImp(storeRepository);
         return instance;
+    }
+
+    @Override
+    public StoreRepository getStoreRepository(){
+        return this.storeRepository;
     }
 
     @Override

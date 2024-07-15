@@ -209,15 +209,15 @@ public abstract class User {
         return cart.checkProductQuantity(productId, storeName);
     }
 
-    public void removeReservedProducts(StoreDatabaseRepository storeRepository) {
+    public void removeReservedProducts(StoreRepository storeRepository) {
         cart.removeReservedProducts(storeRepository);
     }
 
-    public void releaseReservedProducts(StoreDatabaseRepository storeRepository) {
+    public void releaseReservedProducts(StoreRepository storeRepository) {
         cart.releaseReservedProducts(storeRepository);
     }
 
-    public void checkAvailabilityAndConditions(StoreDatabaseRepository storeRepository) {
+    public void checkAvailabilityAndConditions(StoreRepository storeRepository) {
         if (cart == null || cart.getShoppingBags().isEmpty()) {
             logger.error("Cart is empty or null");
             throw new RuntimeException("Cart is empty or null");
@@ -229,7 +229,7 @@ public abstract class User {
         cart.checkAvailabilityAndConditions(storeRepository);
     }
 
-    public void addPurchase(StoreDatabaseRepository storeRepository,String username) {
+    public void addPurchase(StoreRepository storeRepository,String username) {
         cart.addPurchase(storeRepository,username);
     }
 

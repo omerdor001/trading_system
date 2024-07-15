@@ -1,9 +1,7 @@
 package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.stores.MarketFacadeImp;
-import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -88,25 +86,25 @@ public class ShoppingBag {
         return products_list.get(productId).getQuantity();
     }
 
-    public void removeReservedProducts(StoreDatabaseRepository storeRepository) {
+    public void removeReservedProducts(StoreRepository storeRepository) {
         for (ProductInSale product : products_list.values()) {
             MarketFacadeImp.getInstance(storeRepository).removeReservedProducts(product.getId(), product.getQuantity(), product.getStoreId());
         }
     }
 
-    public void releaseReservedProducts(StoreDatabaseRepository storeRepository) {
+    public void releaseReservedProducts(StoreRepository storeRepository) {
         for (ProductInSale product : products_list.values()) {
             MarketFacadeImp.getInstance(storeRepository).releaseReservedProducts(product.getId(), product.getQuantity(), product.getStoreId());
         }
     }
 
-    public void checkAvailabilityAndConditions(StoreDatabaseRepository storeRepository) {
+    public void checkAvailabilityAndConditions(StoreRepository storeRepository) {
         for (ProductInSale product : products_list.values()) {
             MarketFacadeImp.getInstance(storeRepository).checkAvailabilityAndConditions(product.getId(), product.getQuantity(), product.getStoreId());
         }
     }
 
-    public void addPurchase(StoreDatabaseRepository storeRepository, String username) {
+    public void addPurchase(StoreRepository storeRepository, String username) {
         try {
             MarketFacadeImp.getInstance(storeRepository).addPurchase(username, productsListToJson(), calculateTotalPrice(), storeId);
         } catch (IOException e) {
