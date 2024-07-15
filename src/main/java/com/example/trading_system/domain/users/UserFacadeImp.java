@@ -862,16 +862,22 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("User is already owner of this store");
         }
 
-
-        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName);
+        String suggestionKey = storeName + ":" + appoint;
+        System.out.println("Attempting to remove waiting appointment for: " + suggestionKey);
+        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(suggestionKey);
         if (perm == null) {
             throw new IllegalAccessException("No one suggests this user to be a manager");
         }
+        System.out.println("Removed waiting appointment for: " + suggestionKey);
+
         sendNotification(userName, appoint, newManagerUser.getUsername() + " rejected your suggestion to become a manager at store: " + storeName);
+        System.out.println("Notification sent to " + appoint);
 
         userRepository.saveUser(newManagerUser);
         userRepository.saveUser(appointUser);
+        System.out.println("Users saved successfully.");
     }
+
 
     @Override
     public void editPermissionForManager(String userId, String managerToEdit, String storeName, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException, NoSuchElementException {
