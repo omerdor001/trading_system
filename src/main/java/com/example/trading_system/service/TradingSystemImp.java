@@ -3,9 +3,7 @@ package com.example.trading_system.service;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +33,7 @@ public class TradingSystemImp implements TradingSystem {
         this.marketService = MarketServiceImp.getInstance(storeRepository);
     }
 
-    public static TradingSystemImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserDatabaseRepository userRepository, StoreDatabaseRepository storeRepository) {
+    public static TradingSystemImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         if (instance == null)
             instance = new TradingSystemImp(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
         return instance;
@@ -93,7 +91,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> openSystem(StoreDatabaseRepository storeRepository) {
+    public ResponseEntity<String> openSystem(StoreRepository storeRepository) {
         logger.info("Attempting to open system");
         if (systemOpen) {
             logger.warn("System attempted to open twice");

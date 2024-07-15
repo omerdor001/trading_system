@@ -30,10 +30,10 @@ import java.time.LocalDateTime;
 public class TradingSystemRestController {
 
     private final TradingSystemImp tradingSystem;
-    private final StoreDatabaseRepository storeRepository;
+    private final StoreRepository storeRepository;
 
     @Autowired
-    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserDatabaseRepository userRepository, StoreDatabaseRepository storeRepository) {
+    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
         tradingSystem = TradingSystemImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
     }

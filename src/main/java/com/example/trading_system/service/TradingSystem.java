@@ -1,13 +1,11 @@
 package com.example.trading_system.service;
 
-import com.example.trading_system.domain.stores.StoreDatabaseRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.LinkedList;
-import java.util.List;
 
 @Service
 public interface TradingSystem {
@@ -17,7 +15,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> getPendingUserNotifications(String admin, String token, String username);
 
-    ResponseEntity<String> openSystem(StoreDatabaseRepository storeRepository);
+    ResponseEntity<String> openSystem(StoreRepository storeRepository);
 
     ResponseEntity<String> closeSystem(String username, String token);
 
