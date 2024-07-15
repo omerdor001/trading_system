@@ -2,49 +2,61 @@
   <header>
     <div class="header-content">
       <div class="left-buttons">
-        <img src="@/assets/logo.png" alt="LASMONY" class="logo">
+        <img src="@/assets/logo.png" alt="LSMAONY" class="logo">
         <PrimeButton label="Home" @click="goHome" class="p-button-primary" />
         <PrimeButton label="Search Product" @click="goToSearchProduct" class="p-button-primary" />
-        <PrimeButton label="Search Store" @click="goToSearchStore" class="p-button-primary" /> <!-- New button -->
+        <PrimeButton label="Search Store" @click="goToSearchStore" class="p-button-primary" />
       </div>
       <div class="right-buttons">
         <template v-if="isLoggedIn">
-          <span class="username">{{userName}}</span>
+          <span class="username">{{ userName }}</span>
           <PrimeButton label="Logout" @click="logout" class="p-button-danger" />
         </template>
         <template v-else>
           <PrimeButton label="Login" @click="$router.push('/login')" />
         </template>
-        <PrimeButton label="Notifications" @click="notifications" icon="pi pi-bell" />
+        <PrimeButton label="Notifications" @click="loadNotifications()" icon="pi pi-bell" />
         <PrimeButton label="Cart" @click="viewCart" icon="pi pi-shopping-cart" />
       </div>
-      <p-toast></p-toast>
     </div>
-    <PrimeDialog v-model="notificationsVisible" header="Notifications">
-      <ul>
-        <li v-for="(notification, index) in notifications" :key="index">
-          {{ notification.message }}
-        </li>
-      </ul>
-      <Button @click="notificationsVisible = false">Close</Button>
+    <PrimeDialog v-model="notificationsVisible" :visible="notificationsVisible" header="Notifications"
+      :draggable="false" :closable="false" modal>
+      <div v-if="notifications.length > 0">
+        <p>{{ notifications.length }} Notifications</p>
+        <div class="notification-grid">
+          <div class="notification-item" v-for="(notification, index) in paginatedNotifications" :key="index">
+            <div class="notification-content">
+              <p>{{ notification }}</p>
+              <span class="remove-notification" @click="removeNotification(index)">x</span>
+            </div>
+          </div>
+        </div>
+        <div class="pagination">
+          <PrimePaginator v-model="currentPage" :totalRecords="notifications.length" :rows="notificationsPerPage"
+            @onPageChange="onPageChange" />
+        </div>
+      </div>
+      <PrimeButton @click="notificationsVisible = false">Close</PrimeButton>
     </PrimeDialog>
   </header>
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
 import PrimeButton from 'primevue/button';
-
+import PrimeDialog from 'primevue/dialog';
+import PrimePaginator from 'primevue/paginator';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
-import PrimeToast from 'primevue/toast';
 import axios from 'axios';
+import WebSocketService from '@/WebSocketService';
 
 export default defineComponent({
   name: 'SiteHeader',
   components: {
     PrimeButton,
-    'p-toast': PrimeToast,
+    PrimeDialog,
+    PrimePaginator,
   },
   props: {
     isLoggedIn: {
@@ -57,6 +69,8 @@ export default defineComponent({
     const toast = useToast();
     const notificationsVisible = ref(false);
     const notifications = ref([]);
+    const currentPage = ref(1);
+    const notificationsPerPage = 5;
     const userName = localStorage.getItem('userName');
 
     const goHome = () => {
@@ -75,20 +89,10 @@ export default defineComponent({
       router.push({ name: 'ShoppingCart' });
     };
 
-    const showNotifications = async () => {
-      try {
-        const response = await axios.get('http://localhost:8082/api/notifications', {
-          params: {
-            username: localStorage.getItem('username'),
-            token: localStorage.getItem('token')
-          }
-        });
-        notifications.value = response.data.notifications;
-        notificationsVisible.value = true;
-      } catch (error) {
-        console.error('Error fetching notifications:', error);
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch notifications.', life: 3000 });
-      }
+    const loadNotifications = () => {
+      const storedNotifications = JSON.parse(localStorage.getItem('websocketMessages')) || [];
+      notifications.value = storedNotifications;
+      notificationsVisible.value = true;
     };
 
     const logout = async () => {
@@ -105,49 +109,50 @@ export default defineComponent({
         console.log(error.response.data);
         toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
       }
+
+      WebSocketService.unsubscribe();
+
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('isAdmin');
+      localStorage.removeItem('websocketMessages');
+
       router.push('/login');
     };
 
-    onMounted(() => {
-          window.addEventListener('popstate', handlePopState);
-        });
+    const onPageChange = (event) => {
+      currentPage.value = event.page + 1;
+    };
 
-        const handlePopState = () => {
-          const username = localStorage.getItem('username');
-          const currentPath = router.currentRoute.value.path;
-          if (typeof username === 'string' && username.startsWith('v')) {
-            if (currentPath != '/login') {
-              console.log("Redirecting to home page because the previous route was /login");
-              router.push('/');
-            }
-          }
-        };
+    const paginatedNotifications = computed(() => {
+      const startIndex = (currentPage.value - 1) * notificationsPerPage;
+      const endIndex = startIndex + notificationsPerPage;
+      return notifications.value.slice(startIndex, endIndex);
+    });
 
-        window.addEventListener('beforeunload', () => {
-          localStorage.removeItem('isLoggedIn');
-          localStorage.removeItem('isAdmin');
-          localStorage.removeItem('username');
-          localStorage.removeItem('token');
-        });
+    const removeNotification = (index) => {
+      notifications.value.splice(index, 1);
+      localStorage.setItem('websocketMessages', JSON.stringify(notifications.value));
+    };
 
-
-   return {
-         userName,
-         goHome,
-         goToSearchProduct,
-         goToSearchStore, // Include the new function
-         viewCart,
-         showNotifications,
-         logout,
-         notificationsVisible,
-         notifications
-       };
-     }
-   });
-   </script>
-
+    return {
+      notificationsVisible,
+      notifications,
+      currentPage,
+      notificationsPerPage,
+      paginatedNotifications,
+      userName,
+      goHome,
+      goToSearchProduct,
+      goToSearchStore,
+      viewCart,
+      loadNotifications,
+      logout,
+      onPageChange,
+      removeNotification,
+    };
+  },
+});
+</script>
 
 <style scoped>
 .header-content {
@@ -199,7 +204,52 @@ export default defineComponent({
   background-color: #007bff !important;
 }
 
+.p-button-danger {
+  background-color: #dc3545 !important;
+}
+
 .p-button:hover {
   background-color: #d35400 !important;
+}
+
+.notification-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.notification-item {
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+}
+
+.notification-text {
+  flex: 1;
+  margin-right: 20px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.remove-notification {
+  cursor: pointer;
+  color: #dc3545;
+  font-size: 1.5rem;
+  margin-left: 10px;
+}
+
+.remove-notification:hover {
+  color: #a71d2a;
+}
+
+.pagination {
+  margin-top: 10px;
 }
 </style>
