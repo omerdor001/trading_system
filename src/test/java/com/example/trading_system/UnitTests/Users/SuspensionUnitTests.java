@@ -1,4 +1,4 @@
-package com.example.trading_system.UnitTests.Users;
+package com.example.trading_system.UnitTests.users;
 
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
@@ -75,10 +75,10 @@ class SuspensionUnitTests {
 
     @Test
     void suspendUser_Success() {
-        boolean suspended=userFacade.isSuspended("rtestuser2");
-        assertDoesNotThrow(() -> userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,8,1,1,1)), "suspendUser should not throw any exceptions");
-        assertEquals(suspended,userFacade.isSuspended("rtestuser2"));
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("rtestuser2"));
+        boolean suspended = userFacade.isSuspended("rtestuser2");
+        assertDoesNotThrow(() -> userFacade.suspendUser("rtestuser0", "rtestuser2", LocalDateTime.of(2024, 8, 1, 1, 1)), "suspendUser should not throw any exceptions");
+        assertEquals(suspended, userFacade.isSuspended("rtestuser2"));
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("rtestuser2", "1234 El Street, Springfield, IL, 62704-5678", "100.00", "USD", "4111111111111111", "12", "2025", "John Doe", "123", "123456789"));
         assertEquals("User is suspended from the system", exception.getMessage());
     }
 
@@ -118,7 +118,7 @@ class SuspensionUnitTests {
         boolean suspended=userFacade.isSuspended("rtestuser2");
         assertDoesNotThrow(() -> userFacade.endSuspendUser("rtestuser0","rtestuser2"), "endSuspendUser should not throw any exceptions");
         assertEquals(!suspended,userFacade.isSuspended("rtestuser2"));
-        Exception exception = assertThrows(Exception.class, () -> userFacade.purchaseCart("rtestuser2"));
+        Exception exception = assertThrows(Exception.class, () -> userFacade.purchaseCart("rtestuser2", "1234 El Street, Springfield, IL, 62704-5678", "100.00", "USD", "4111111111111111", "12", "2025", "John Doe", "123", "123456789"));
         assertNotEquals("User is suspended from the system", exception.getMessage());
     }
 
