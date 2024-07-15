@@ -4,6 +4,7 @@ import com.example.trading_system.domain.Message;
 import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jakarta.persistence.*;
@@ -19,6 +20,7 @@ import java.util.Map;
 public abstract class User {
     private static final Logger logger = LoggerFactory.getLogger(User.class);
 
+    @Getter
     @Id
     @Column(nullable = false, unique = true)
     private String username;
@@ -57,10 +59,6 @@ public abstract class User {
     }
 
     public User() {
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public void setId(String username) {

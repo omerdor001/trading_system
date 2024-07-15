@@ -743,7 +743,7 @@ public class UserFacadeImp implements UserFacade {
             User user = userRepository.getUser(storeOwner);
             if (user.getRoleByStoreId(storeName).getAppointedById().equals(userName)) {
                 cancelOwnerShip(storeOwner, storeName);
-                sendNotification(userName, "r" + user.getUsername(), "You are no longer an owner at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
+                sendNotification(userName,  user.getUsername(), "You are no longer an owner at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
             }
             userRepository.saveUser(user);
         }
@@ -753,7 +753,7 @@ public class UserFacadeImp implements UserFacade {
             if (user.getRoleByStoreId(storeName).getAppointedById().equals(userName)) {
                 user.removeManagerRole(storeName);
                 store.removeManager(storeManager);
-                sendNotification(userName, "r" + user.getUsername(), "You are no longer a manager at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
+                sendNotification(userName,  user.getUsername(), "You are no longer a manager at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
             }
             userRepository.saveUser(user);
         }
