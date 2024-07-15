@@ -880,14 +880,14 @@ public class TradingSystemImp implements TradingSystem {
 
     @Override
     public ResponseEntity<String> getPurchaseHistoryJSONFormatForStore(String username, String token, String storeName) {
-        logger.info("Trying to Gather Purchase History for Store {}",storeName);
+        logger.info("Trying to Gather Purchase History for Store {}", storeName);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            logger.info("Finish to Gather Purchase History for Store {}",storeName);
-            return new ResponseEntity<>(marketService.getPurchaseHistoryJSONFormatForStore(username,storeName), HttpStatus.OK);
+            logger.info("Finish to Gather Purchase History for Store {}", storeName);
+            return new ResponseEntity<>(marketService.getPurchaseHistoryJSONFormatForStore(username, storeName), HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , Purchase History for Store {}",storeName, e.getMessage());
+            logger.error("Error occurred : {} , Purchase History for Store {}", storeName, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -1082,18 +1082,19 @@ public class TradingSystemImp implements TradingSystem {
     //endregion
 
     @Override
-    public ResponseEntity<String> approvePurchase(String username, String token) {
+    public ResponseEntity<String> approvePurchase(String username, String token, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) {
         logger.info("Approving purchase for registered user with ID: {} ", username);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            this.userService.approvePurchase(username);
+            this.userService.approvePurchase(username, address, amount, currency, cardNumber, month, year, holder, ccv, id);
             return new ResponseEntity<>("Purchase approved", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error approving purchase for registered user with ID: {}, error: {}", username, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
 
     @Override
     public ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName) {
@@ -1109,10 +1110,6 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
-    @Override
-    public ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer productBarcode) {
-        return null;
-    }
 
 
     @Override
@@ -2027,14 +2024,14 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> approveBid(String userName, String token, String storeName, int productID, String bidUserName){
+    public ResponseEntity<String> approveBid(String userName, String token, String storeName, int productID, String bidUserName, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) {
         logger.info("{} is trying to approve bid by user {} for product {} in store {}", userName, bidUserName, productID, storeName);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(userName, token)) return invalidTokenResponse();
-            marketService.approveBid(userName, storeName, productID, bidUserName);
+            marketService.approveBid(userName, storeName, productID, bidUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
             return new ResponseEntity<>("Approved bid successfully.", HttpStatus.OK);
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.error("Error occurred while {} trying to approved a bid by user {} for product {} in store {}", userName, bidUserName, productID, storeName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
