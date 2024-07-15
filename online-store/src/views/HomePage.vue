@@ -4,11 +4,11 @@
     <div class="main-content">
       <div class="sidebar">
         <PrimeButton label="View All Stores" @click="viewAllStores" class="sidebar-button"/>
-        <PrimeButton v-if="isLoggedIn" label="Stores Manager" @click="stores" class="sidebar-button"/>
+        <PrimeButton v-if="isLoggedIn" label="Stores Management" @click="stores" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Open Store" @click="openStore" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="Close Store" @click="closeStore" class="sidebar-button"/>
-        <PrimeButton v-if="isLoggedIn" label="Approve Ownership" @click="approveOwnership" class="sidebar-button" />
-        <PrimeButton v-if="isLoggedIn" label="Approve Management" @click="approveManagement" class="sidebar-button" />
+        <PrimeButton v-if="isLoggedIn" label="View Ownership Suggestions" @click="approveOwnership" class="sidebar-button" />
+        <PrimeButton v-if="isLoggedIn" label="View Management Suggestions" @click="approveManagement" class="sidebar-button" />
       </div>
       <div class="content">
         <AboutSection />
@@ -28,13 +28,12 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
+import { defineComponent, ref, onMounted} from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import AboutSection from '@/components/AboutSection.vue';
 import { Button as PrimeButton } from 'primevue/button';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import webSocketService from '../webSocketService';
 
 export default defineComponent({
   name: 'HomePage',
@@ -54,11 +53,6 @@ export default defineComponent({
       { id: 3, name: 'Laptops Store', image: 'https://via.placeholder.com/150', rating: 8.5 }
     ]);
 
-    const handleWebSocketMessage = (message) => {
-      console.log('WebSocket message received:', message);
-      // Handle the WebSocket message as needed
-    };
-
     const enter = async () => {
       try {
         const res = await axios.get('http://localhost:8082/api/trading/enter');
@@ -66,9 +60,9 @@ export default defineComponent({
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('isLoggedIn', false);
       } catch (error) {
-        if (error.response.status === 403) {
-          router.push('/register');
-        }
+        console.log(error);
+        router.push('/register');
+
       }
     };
 
@@ -76,13 +70,6 @@ export default defineComponent({
       if (!isLoggedIn.value) {
         enter();
       }
-      webSocketService.connect('ws://localhost:8082/websocket');
-      webSocketService.subscribe(handleWebSocketMessage);
-    });
-
-    onUnmounted(() => {
-      webSocketService.unsubscribe(handleWebSocketMessage);
-      webSocketService.disconnect();
     });
 
     const viewProducts = (storeId) => {

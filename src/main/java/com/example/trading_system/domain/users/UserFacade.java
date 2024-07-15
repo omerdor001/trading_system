@@ -3,12 +3,13 @@ package com.example.trading_system.domain.users;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 public interface UserFacade {
-    UserRepository getUserRepository();
-    void setUserRepository(UserRepository userRepository);
+    UserDatabaseRepository getUserRepository();
+    void setUserRepository(UserDatabaseRepository userRepository);
     void deleteInstance();
 
     String getPendingUserNotifications(String admin, String username);
@@ -89,7 +90,9 @@ public interface UserFacade {
 
     String getPurchaseHistory(String username, String storeName);
 
-    void purchaseCart(String username) throws Exception;
+    void bidPurchase(String userName, String storeName, int productID, double price, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception;
+
+    void purchaseCart(String username, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception;
 
     String calculatePrice(String username) throws Exception;
 
@@ -117,5 +120,4 @@ public interface UserFacade {
 
     String getManagersOfStore(String username, String storeName);
 
-    void bidPurchase(String userName, String storeName, int productID, double price) throws Exception;
 }

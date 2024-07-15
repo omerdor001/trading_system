@@ -119,6 +119,9 @@ public class UserDatabaseRepository implements UserRepository {
     public void saveUser(User user) {
         if (user instanceof Registered) {
             Registered registeredUser = (Registered) user;
+            Cart cart = registeredUser.getCart();
+            if (cart != null)
+                entityManager.persist(cart);
             for (Role role : registeredUser.getRoles()) {
                 role.setRegisteredUser(registeredUser); // Ensure each role is associated with the user
                 entityManager.persist(role.getRoleState());

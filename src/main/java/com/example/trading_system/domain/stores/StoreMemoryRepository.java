@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.HashMap;
 
-//@Service
+@Service
 public class StoreMemoryRepository implements StoreRepository {
     private static StoreMemoryRepository instance = null;
     private HashMap<String, Store> stores;
 
-//    @Autowired
+    @Autowired
     private StoreMemoryRepository() {
         stores = new HashMap<>();
     }
@@ -26,11 +26,6 @@ public class StoreMemoryRepository implements StoreRepository {
             this.stores.clear();
         }
         instance = null;
-    }
-
-    @Override
-    public void save(Store store) {
-
     }
 
     @Override

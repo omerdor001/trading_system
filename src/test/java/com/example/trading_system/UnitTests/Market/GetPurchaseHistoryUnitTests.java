@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -130,7 +129,7 @@ public class GetPurchaseHistoryUnitTests {
 
         marketFacade.getStore(storeName).addPurchase(purchase);
 
-        userRepository.addRegistered(username, "encrypted_password", LocalDate.of(2002,11,24));
+        userRepository.addRegistered(username, "encrypted_password", null);
         // Ensure user is added but not logged in
         Assertions.assertThrows(RuntimeException.class, () -> userFacadeImp.getPurchaseHistory(username, storeName), "User is not logged");
     }
@@ -142,7 +141,7 @@ public class GetPurchaseHistoryUnitTests {
         marketFacade.addStore(storeName, "Description", "founder", 6.0);
         marketFacade.getStore(storeName).addPurchase(purchase);
 
-        userRepository.addRegistered(username, "encrypted_password", LocalDate.of(2002,11,24));
+        userRepository.addRegistered(username, "encrypted_password", null);
         // Ensure user is logged in
         User user = userRepository.getUser(username);
         user.login();

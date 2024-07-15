@@ -42,7 +42,7 @@ public class SearchProductStoresAcceptanceTests {
     private StoreDatabaseRepository storeRepository;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
 
         tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
@@ -50,37 +50,52 @@ public class SearchProductStoresAcceptanceTests {
         tradingSystem.openSystem(storeRepository);
 
         String userTokenResponse = tradingSystem.enter().getBody();
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode rootNode = objectMapper.readTree(userTokenResponse);
-            token = rootNode.get("token").asText();
-        } catch (Exception e) {
-            Assertions.fail("Setup failed: Unable to extract token from JSON response");
-        }
+        extractToken(userTokenResponse);
 
         String loginResponse = tradingSystem.login(token, "v0", "owner1", "password123").getBody();
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode rootNode = objectMapper.readTree(loginResponse);
-            username = rootNode.get("username").asText();
-            token = rootNode.get("token").asText();
-        } catch (Exception e) {
-            Assertions.fail("Setup failed: Unable to extract username and token from JSON response");
-        }
+        extractUsernameAndToken(loginResponse);
     }
 
     @AfterEach
-    void setDown(){
+    void tearDown() {
         tradingSystem.deleteInstance();
         userRepository.deleteInstance();
         storeRepository.deleteInstance();
     }
 
+    private void extractToken(String jsonResponse) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+            token = rootNode.get("token").asText();
+            if (token == null || token.isEmpty()) {
+                Assertions.fail("Setup failed: Token is null or empty");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail("Setup failed: Unable to extract token from JSON response. Response: " + jsonResponse);
+        }
+    }
+
+    private void extractUsernameAndToken(String jsonResponse) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+            username = rootNode.get("username").asText();
+            token = rootNode.get("token").asText();
+            if (username == null || username.isEmpty() || token == null || token.isEmpty()) {
+                Assertions.fail("Setup failed: Username or token is null or empty");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail("Setup failed: Unable to extract username and token from JSON response. Response: " + jsonResponse);
+        }
+    }
     @Test
     public void testSearchNameInStore_Successful() {
         tradingSystem.openStore(username, token, "store1", "General Store");
         tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 1, "");
-        ResponseEntity<String> response = tradingSystem.searchNameInStores(username, token, "product1", null, null, null, 1, null);
+        ResponseEntity<String> response = tradingSystem.searchNameInStores(username,token, "product1",null, null, null, 1, null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("[{\"product_id\":1, \"store_name\":\"store1\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":\"Sport\", \"keyWords\":[\"\"]}]",response.getBody());
     }
@@ -89,7 +104,7 @@ public class SearchProductStoresAcceptanceTests {
     public void testSearchCategoryInStore_Successful() {
         tradingSystem.openStore(username, token, "store1", "General Store");
         tradingSystem.addProduct(username, token, 1, "store1", "product1", "desc1", 10.0, 100, 4, 1, "");
-        ResponseEntity<String> response = tradingSystem.searchCategoryInStores(username, token, 1, null, null, null, null);
+        ResponseEntity<String> response = tradingSystem.searchCategoryInStores(username,token, 1,null, null, null, null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("[{\"product_id\":1, \"store_name\":\"store1\", \"product_name\":\"product1\", \"product_description\":\"desc1\", \"product_price\":10.0, \"product_quantity\":100, \"rating\":4.0, \"category\":\"Sport\", \"keyWords\":[\"\"]}]",response.getBody());
     }

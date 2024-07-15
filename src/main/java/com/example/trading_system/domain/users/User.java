@@ -1,6 +1,7 @@
 package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.Message;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 
 import lombok.Getter;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -207,15 +209,15 @@ public abstract class User {
         return cart.checkProductQuantity(productId, storeName);
     }
 
-    public void removeReservedProducts(StoreRepository storeRepository) {
+    public void removeReservedProducts(StoreDatabaseRepository storeRepository) {
         cart.removeReservedProducts(storeRepository);
     }
 
-    public void releaseReservedProducts(StoreRepository storeRepository) {
+    public void releaseReservedProducts(StoreDatabaseRepository storeRepository) {
         cart.releaseReservedProducts(storeRepository);
     }
 
-    public void checkAvailabilityAndConditions(StoreRepository storeRepository) {
+    public void checkAvailabilityAndConditions(StoreDatabaseRepository storeRepository) {
         if (cart == null || cart.getShoppingBags().isEmpty()) {
             logger.error("Cart is empty or null");
             throw new RuntimeException("Cart is empty or null");
@@ -227,7 +229,7 @@ public abstract class User {
         cart.checkAvailabilityAndConditions(storeRepository);
     }
 
-    public void addPurchase(StoreRepository storeRepository,String username) {
+    public void addPurchase(StoreDatabaseRepository storeRepository,String username) {
         cart.addPurchase(storeRepository,username);
     }
 

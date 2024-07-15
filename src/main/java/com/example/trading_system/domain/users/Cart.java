@@ -1,10 +1,12 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +19,7 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Getter
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @MapKeyColumn(name = "store_id")
     private Map<String, ShoppingBag> shoppingBags = new HashMap<>();
@@ -31,9 +33,6 @@ public class Cart {
         return objectMapper.readValue(json, Cart.class);
     }
 
-    public HashMap<String, ShoppingBag> getShoppingBags() {
-        return (HashMap<String, ShoppingBag>) shoppingBags;
-    }
 
     public void addShoppingBag(ShoppingBag shoppingBag, String storeId) {
         shoppingBags.put(storeId, shoppingBag);
@@ -42,7 +41,7 @@ public class Cart {
     public void addProductToCart(int productId, int quantity, String storeId, double price, int category) {
         ShoppingBag shoppingBag = shoppingBags.get(storeId);
         if (shoppingBag == null) {
-            shoppingBag = new ShoppingBag(storeId);
+            shoppingBag = new ShoppingBag(storeId,this);
             shoppingBags.put(storeId, shoppingBag);
         }
         shoppingBag.addProduct(productId, quantity, price, category);
@@ -113,26 +112,25 @@ public class Cart {
         return shoppingBags.get(storeName).checkProductQuantity(productId);
     }
 
-    public void removeReservedProducts(StoreRepository storeRepository) {
+    public void removeReservedProducts(StoreDatabaseRepository storeRepository) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
             shoppingBagInStore.removeReservedProducts(storeRepository);
-
         }
     }
 
-    public void releaseReservedProducts(StoreRepository storeRepository) {
+    public void releaseReservedProducts(StoreDatabaseRepository storeRepository) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
             shoppingBagInStore.releaseReservedProducts(storeRepository);
         }
     }
 
-    public void checkAvailabilityAndConditions(StoreRepository storeRepository) {
+    public void checkAvailabilityAndConditions(StoreDatabaseRepository storeRepository) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
             shoppingBagInStore.checkAvailabilityAndConditions(storeRepository);
         }
     }
 
-    public void addPurchase(StoreRepository storeRepository, String username) {
+    public void addPurchase(StoreDatabaseRepository storeRepository, String username) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
             shoppingBagInStore.addPurchase(storeRepository, username);
         }

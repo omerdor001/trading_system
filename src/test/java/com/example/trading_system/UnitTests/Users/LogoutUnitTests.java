@@ -52,7 +52,7 @@ class LogoutUnitTests {
         when(user.getLogged()).thenReturn(true);
         when(user.getCart()).thenReturn(shoppingCart);
         userFacadeImp.getUsers().put(username, user);
-        userRepository.saveUser(user);
+
         Assertions.assertDoesNotThrow(() -> userFacadeImp.logout(id, username));
 
         verify(user).getLogged();

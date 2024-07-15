@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface MarketFacade {
-    StoreRepository getStoreRepository();
+    StoreDatabaseRepository getStoreRepository();
 
     void deleteInstance();
 
@@ -198,6 +198,8 @@ public interface MarketFacade {
 
     void setPurchasePolicyAge(String username, String storeName, int selectedIndex, int age) throws IllegalAccessException;
 
+    void setPurchasePolicyCategory(String username, String storeName, int selectedIndex, int category) throws IllegalAccessException;
+
     void setFirstPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedFirstIndex) throws IllegalAccessException;
 
     void setSecondPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedSecondIndex) throws IllegalAccessException;
@@ -212,7 +214,7 @@ public interface MarketFacade {
 
     void placeBid(String userName, String storeName, int productID, double price) throws IllegalArgumentException;
 
-    void approveBid(String userName, String storeName, int productID, String bidUserName) throws Exception;
+    void approveBid(String userName, String storeName, int productID, String bidUserName, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception;
 
     void rejectBid(String userName, String storeName, int productID, String bidUserName) throws IllegalArgumentException, IllegalAccessException;
 
