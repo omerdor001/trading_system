@@ -14,7 +14,7 @@ public class WebSocketNotificationSender implements NotificationSender {
     }
 
     public void sendNotification(String receiver, String notificationJson) {
-        String destination = String.format("/user/%s/notifications", receiver);
+        String destination = String.format("/user/%s/queue/notifications", receiver);
         messagingTemplate.convertAndSend(destination, notificationJson);
     }
 }

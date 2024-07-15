@@ -66,6 +66,6 @@ public class AndPolicy extends PurchasePolicy {
     public String getPurchasePolicyInfo() {
         String firstInfo = predicateOne.getPurchasePolicyInfo();
         String secondInfo = predicateTwo.getPurchasePolicyInfo();
-        return "{ \"type\": \"And Policy\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + " }";
+        return "{ \"type\": \"and\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + " }";
     }
 }

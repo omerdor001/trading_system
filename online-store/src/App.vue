@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <router-view />
-    <PrimeToast />
   </div>
 </template>
 
@@ -11,6 +10,7 @@ import PrimeVue from 'primevue/config';
 import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
+import webSocketService from './webSocketService';
 
 export default {
   name: 'App',
@@ -18,7 +18,23 @@ export default {
     const app = createApp();
     app.use(PrimeVue);
     this.$root.$primevue = PrimeVue;
+    const webSocketUrl = 'ws://localhost:8080/ws';
+    webSocketService.connect(webSocketUrl);
+
+    webSocketService.subscribe(this.handleWebSocketMessage);
   },
+  beforeDestroy() {
+    webSocketService.unsubscribe(this.handleWebSocketMessage);
+    webSocketService.disconnect();
+  },
+  methods: {
+    handleWebSocketMessage(message) {
+      // Handle the incoming WebSocket message
+      console.log('Received WebSocket message:', message);
+      //notifications.value.push(message);
+      // Add your custom handling logic here
+    }
+  }
 }
 </script>
 

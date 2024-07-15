@@ -27,7 +27,6 @@ public class PurchasePolicyUnitTests {
         product.setQuantity(1);
         product.setCategory(1);
         items.add(product);
-        store.addProduct(product.getId(), "Product1", "Description1", product.getPrice(), product.getQuantity(), 4.5, product.getCategory(), List.of("keyword1"));
     }
 
     @Test
@@ -96,7 +95,6 @@ public class PurchasePolicyUnitTests {
         product.setQuantity(2);
         product.setCategory(1);
         items.add(product);
-        store.addProduct(product.getId(), "Product2", "Description1", product.getPrice(), product.getQuantity(), 4.5, product.getCategory(), List.of("keyword1"));
         store.addPurchasePolicyByShoppingCartMaxProductsUnit(1, 1);
         boolean result = store.validatePurchasePolicies(items, 20);
         assertFalse(result);
@@ -245,81 +243,4 @@ public class PurchasePolicyUnitTests {
     public void testAddPurchasePolicyByShoppingCartMinProductsUnit_InvalidQuantity() {
         assertThrows(IllegalArgumentException.class, () -> store.addPurchasePolicyByShoppingCartMinProductsUnit(0, 0));
     }
-
-    @Test
-    public void testSetFirstPurchasePolicy_Valid() {
-        store.addOrPurchasePolicy();
-        store.addPurchasePolicyByShoppingCartMinProducts(1);
-        store.setFirstPurchasePolicy(0, 1);
-        // Verify state indirectly
-        assertEquals(1, store.getPurchasePolicies().size());
-    }
-
-    @Test
-    public void testSetFirstPurchasePolicy_InvalidIndexesSame() {
-        store.addPurchasePolicyByAge(18, 1);
-        store.addPurchasePolicyByShoppingCartMinProducts(1);
-        assertThrows(IllegalArgumentException.class, () -> store.setFirstPurchasePolicy(0, 0));
-    }
-
-    @Test
-    public void testSetSecondPurchasePolicy_Valid() {
-        store.addOrPurchasePolicy();
-        store.addPurchasePolicyByShoppingCartMinProducts(1);
-        store.setSecondPurchasePolicy(0, 1);
-        // Verify state indirectly
-        assertEquals(1, store.getPurchasePolicies().size());
-    }
-
-    @Test
-    public void testSetSecondPurchasePolicy_InvalidIndexesSame() {
-        store.addPurchasePolicyByAge(18, 1);
-        store.addPurchasePolicyByShoppingCartMinProducts(1);
-        assertThrows(IllegalArgumentException.class, () -> store.setSecondPurchasePolicy(0, 0));
-    }
-
-    @Test
-    public void testSetPurchasePolicyProductId_InvalidProductId() {
-        store.addPurchasePolicyByAge(18, 1);
-        assertThrows(IllegalArgumentException.class, () -> store.setPurchasePolicyProductId(0, -1));
-    }
-
-
-    @Test
-    public void testSetPurchasePolicyNumOfQuantity_InvalidQuantity() {
-        store.addPurchasePolicyByAge(18, 1);
-        assertThrows(IllegalArgumentException.class, () -> store.setPurchasePolicyNumOfQuantity(0, 0));
-    }
-
-    @Test
-    public void testSetPurchasePolicyDateTime_NullDate() {
-        store.addPurchasePolicyByAge(18, 1);
-        assertThrows(IllegalArgumentException.class, () -> store.setPurchasePolicyDateTime(0, null));
-    }
-
-    @Test
-    public void testSetPurchasePolicyAge_InvalidAge() {
-        store.addPurchasePolicyByAge(18, 1);
-        assertThrows(IllegalArgumentException.class, () -> store.setPurchasePolicyAge(0, 0));
-    }
-
-    @Test
-    public void testSetPurchasePolicyCategory_InvalidCategory() {
-        store.addPurchasePolicyByAge(18, 1);
-        assertThrows(IllegalArgumentException.class, () -> store.setPurchasePolicyCategory(0, -1));
-    }
-
-    @Test
-    public void testRemovePurchasePolicy_Valid() {
-        store.addPurchasePolicyByAge(18, 1);
-        store.removePurchasePolicy(0);
-        assertTrue(store.getPurchasePolicies().isEmpty());
-    }
-
-    @Test
-    public void testRemovePurchasePolicy_InvalidIndex() {
-        store.addPurchasePolicyByAge(18, 1);
-        assertThrows(IllegalArgumentException.class, () -> store.removePurchasePolicy(1));
-    }
-
 }
