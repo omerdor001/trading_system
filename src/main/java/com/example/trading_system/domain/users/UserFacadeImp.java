@@ -1064,6 +1064,7 @@ public class UserFacadeImp implements UserFacade {
             throw new RuntimeException("Products do not meet purchase policies conditions.");
         }
         user.removeReservedProducts(marketFacade.getStoreRepository());
+
         Timer timer = new Timer();
         user.setTimerCancelled(false);
         timer.schedule(new TimerTask() {

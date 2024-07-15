@@ -116,6 +116,7 @@ public class Cart {
     public void removeReservedProducts(StoreDatabaseRepository storeRepository) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
             shoppingBagInStore.removeReservedProducts(storeRepository);
+
         }
     }
 
