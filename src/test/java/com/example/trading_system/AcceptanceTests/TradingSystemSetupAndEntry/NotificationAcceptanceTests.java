@@ -4,11 +4,7 @@ import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.StoreDatabaseRepository;
-import com.example.trading_system.domain.stores.StoreMemoryRepository;
-import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserDatabaseRepository;
-import com.example.trading_system.domain.users.UserMemoryRepository;
-import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -17,11 +13,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.eq;
@@ -36,6 +32,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class NotificationAcceptanceTests {
     private final String storeName = "store1";
     private TradingSystem tradingSystem;
+    @MockBean
     private NotificationSender mockNotificationSender;
     private String token;
     private String username;
@@ -51,8 +48,6 @@ class NotificationAcceptanceTests {
 
     @BeforeEach
     public void setUp() {
-
-        mockNotificationSender = mock(NotificationSender.class);
         tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mockNotificationSender, userRepository, storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.register("owner2", "password123", LocalDate.now());

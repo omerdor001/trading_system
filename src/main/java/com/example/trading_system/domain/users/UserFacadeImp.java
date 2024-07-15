@@ -10,7 +10,6 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,14 +27,14 @@ public class UserFacadeImp implements UserFacade {
     private static UserFacadeImp instance = null;
     private final NotificationSender notificationSender;
     @Setter
-    private UserDatabaseRepository userRepository;
+    private UserRepository userRepository;
     private DeliveryService deliveryService;
     private PaymentService paymentService;
     private MarketFacade marketFacade;
     @Autowired
 
     public UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender,
-                         UserDatabaseRepository userRepository, StoreDatabaseRepository storeRepository) {
+                         UserRepository userRepository, StoreRepository storeRepository) {
         this.paymentService = paymentService;
         this.deliveryService = deliveryService;
         this.userRepository = userRepository;
@@ -45,12 +44,17 @@ public class UserFacadeImp implements UserFacade {
     }
 
     public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender
-            notificationSender, UserDatabaseRepository userRepository, StoreDatabaseRepository storeRepository) {
+            notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         if (instance == null) {
             instance = new UserFacadeImp(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
             instance.marketFacade.initialize(instance);
         }
         return instance;
+    }
+
+    @Override
+    public void setUserRepository(UserRepository userRepository){
+        this.userRepository = userRepository;
     }
 
     // Method to encrypt a given password
@@ -66,7 +70,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public UserDatabaseRepository getUserRepository() {
+    public UserRepository getUserRepository() {
         return userRepository;
     }
 
@@ -728,7 +732,6 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("User is not owner of this store");
         }
         if (store.getFounder().equals(userName)) throw new IllegalAccessException("Founder cant waive on ownership");
-
         cancelOwnerShip(userName, storeName);
     }
 
@@ -738,12 +741,11 @@ public class UserFacadeImp implements UserFacade {
         List<String> storeOwners = store.getOwners();
         List<String> storeManagers = store.getManagers();
 
-
         for (String storeOwner : storeOwners) {
             User user = userRepository.getUser(storeOwner);
             if (user.getRoleByStoreId(storeName).getAppointedById().equals(userName)) {
                 cancelOwnerShip(storeOwner, storeName);
-                sendNotification(userName, "r" + user.getUsername(), "You are no longer an owner at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
+                sendNotification(userName, storeOwner, "You are no longer an owner at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
             }
             userRepository.saveUser(user);
         }
@@ -753,7 +755,7 @@ public class UserFacadeImp implements UserFacade {
             if (user.getRoleByStoreId(storeName).getAppointedById().equals(userName)) {
                 user.removeManagerRole(storeName);
                 store.removeManager(storeManager);
-                sendNotification(userName, "r" + user.getUsername(), "You are no longer a manager at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
+                sendNotification(userName, storeManager, "You are no longer a manager at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
             }
             userRepository.saveUser(user);
         }

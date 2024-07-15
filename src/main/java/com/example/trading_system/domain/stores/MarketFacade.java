@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface MarketFacade {
-    StoreDatabaseRepository getStoreRepository();
+    StoreRepository getStoreRepository();
 
     void deleteInstance();
 
