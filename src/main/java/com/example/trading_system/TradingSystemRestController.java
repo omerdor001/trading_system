@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/api/trading")
 public class TradingSystemRestController {
 
@@ -77,7 +78,7 @@ public class TradingSystemRestController {
         return tradingSystem.openStoreExist(username, token, storeName);
     }
 
-    @GetMapping("/create-store")
+    @PostMapping("/create-store")
     public ResponseEntity<String> openStore(@RequestParam String username,
                                             @RequestParam String token,
                                             @RequestParam String storeName,
