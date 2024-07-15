@@ -737,12 +737,11 @@ public class UserFacadeImp implements UserFacade {
         List<String> storeOwners = store.getOwners();
         List<String> storeManagers = store.getManagers();
 
-
         for (String storeOwner : storeOwners) {
             User user = userRepository.getUser(storeOwner);
             if (user.getRoleByStoreId(storeName).getAppointedById().equals(userName)) {
                 cancelOwnerShip(storeOwner, storeName);
-                sendNotification(userName,  user.getUsername(), "You are no longer an owner at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
+                sendNotification(userName, storeOwner, "You are no longer an owner at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
             }
             userRepository.saveUser(user);
         }
