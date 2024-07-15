@@ -4,7 +4,9 @@ import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.StoreDatabaseRepository;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.users.UserDatabaseRepository;
+import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -41,10 +43,10 @@ class NotificationAcceptanceTests {
     private String managerUsername;
     private String managerToken;
     @Autowired
-    private UserDatabaseRepository userRepository;
+    private UserMemoryRepository userRepository;
 
     @Autowired
-    private StoreDatabaseRepository storeRepository;
+    private StoreMemoryRepository storeRepository;
 
     @BeforeEach
     public void setUp() {
