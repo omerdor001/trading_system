@@ -75,7 +75,7 @@ public class PurchasePolicyByAge extends PurchasePolicy {
 
     @Override
     public String getPurchasePolicyInfo() {
-        return "{ \"type\": \"Age and Category Policy\", \"category\": " + categoryId + ", \"age\": " + ageToCheck +  " }";
+        return "{ \"type\": \"ShoppingCart age and category\", \"category\": " + categoryId+ ", \"ageToCheck\": " + ageToCheck +  " }";
     }
 
 

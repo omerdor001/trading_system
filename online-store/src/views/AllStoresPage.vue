@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
+    <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
     <div class="main-content">
       <h1>All Stores</h1>
       <div v-if="stores.length === 0">
@@ -9,9 +9,10 @@
       <div v-else>
         <ul class="stores-list">
           <li v-for="store in stores" :key="store.name" class="store-item">
+            <img :src="store.image" alt="Store Image" class="store-image">
             <div class="store-details">
-              <h3>Store Name: {{ store.name }}</h3>
-              <p>Description: {{ store.description }}</p>
+              <h3>{{ store.name }}</h3>
+              <p>{{ store.description }}</p>
               <p>Rating: {{ store.rating }}</p>
               <PrimeButton label="View Products" @click="viewProducts(store.name)" class="view-products-button"/>
             </div>
@@ -29,8 +30,6 @@ import SiteHeader from '@/components/SiteHeader.vue';
 import PrimeButton from 'primevue/button';
 import PrimeToast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 
 export default {
   name: 'AllStoresPage',
@@ -39,15 +38,20 @@ export default {
     PrimeButton,
     PrimeToast
   },
-  setup() {
-    const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
-    const stores = ref([]);
-    const username = ref(localStorage.getItem('username') || '');
-    const toast = useToast();
-    const router = useRouter();
-
-    const fetchStores = async () => {
+  data() {
+    return {
+      stores: [],
+      username: localStorage.getItem('username') || ''
+    };
+  },
+  created() {
+    this.fetchStores();
+  },
+  methods: {
+    async fetchStores() {
+      const toast = useToast();
       const token = localStorage.getItem('token');
+      const username = localStorage.getItem('username');
 
       if (!token) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Invalid token was supplied', life: 3000 });
@@ -57,13 +61,14 @@ export default {
       try {
         const response = await axios.get('http://localhost:8082/api/trading/stores-detailed-info', {
           params: {
-            username: username.value,
+            username: username,
             token: token
           }
         });
         console.log(response.data);  // Add this line to check the returned data
-        stores.value = response.data.map(store => ({
+        this.stores = response.data.map(store => ({
           name: store.name,
+          image: 'default-image-url', // Replace with actual image URL if available
           description: store.description,
           rating: store.rating
         }));
@@ -74,23 +79,10 @@ export default {
           toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load stores', life: 3000 });
         }
       }
-    };
-
-    const viewProducts = (storeId) => {
-      router.push({ name: 'StoreDetails', params: { storeId } });
-    };
-
-    onMounted(() => {
-      fetchStores();
-    });
-
-    return {
-      isLoggedIn,
-      stores,
-      username,
-      fetchStores,
-      viewProducts
-    };
+    },
+    viewProducts(storeId) {
+      this.$router.push({ name: 'StoreDetails', params: { storeId } });
+    },
   }
 };
 </script>
@@ -113,6 +105,13 @@ export default {
   border: 1px solid #ddd;
   border-radius: 10px;
   background-color: #f9f9f9;
+}
+
+.store-image {
+  width: 150px;
+  height: 150px;
+  margin-right: 20px;
+  border-radius: 10px;
 }
 
 .store-details {

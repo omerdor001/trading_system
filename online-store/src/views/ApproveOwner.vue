@@ -22,10 +22,10 @@
               <td>{{ request.storeName }}</td>
               <td>{{ request.appointee }}</td>
               <td>
-                <PrimeButton label="Approve" type="button" @click="approveOwner(request)" />
+                <PrimeButton label="Click-Approve" type="button" @click="approveOwner(request)" />
               </td>
               <td>
-                <PrimeButton label="Reject" type="button" @click="rejectOwner(request)" />
+                <PrimeButton label="Click-Reject" type="button" @click="rejectOwner(request)" />
               </td>
             </tr>
           </tbody>

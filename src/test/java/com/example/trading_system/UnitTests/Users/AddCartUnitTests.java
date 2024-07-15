@@ -5,9 +5,11 @@ import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.Store;
 import com.example.trading_system.domain.stores.StoreDatabaseRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.Cart;
 import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserFacadeImp;
+import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -61,7 +63,7 @@ public class AddCartUnitTests {
         userRepository.getUser(username).setCart(shoppingCart);
 
         assertDoesNotThrow(() -> userFacadeImp.addToCart(username, productId, storeName, quantity, 10.0));
-//        assertEquals(quantity, shoppingCart.getShoppingBags().get(storeName).getProducts_list().get(productId).getQuantity());
+        assertEquals(quantity, shoppingCart.getShoppingBags().get(storeName).getProducts_list().get(productId).getQuantity());
     }
 
     @Test

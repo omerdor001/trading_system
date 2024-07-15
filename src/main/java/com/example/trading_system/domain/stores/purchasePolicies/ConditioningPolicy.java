@@ -68,6 +68,6 @@ public class ConditioningPolicy extends PurchasePolicy {
     public String getPurchasePolicyInfo() {
         String firstInfo = predicateOne.getPurchasePolicyInfo();
         String secondInfo = predicateTwo.getPurchasePolicyInfo();
-        return "{ \"type\": \"Conditioning Policy\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + " }";
+        return "{ \"type\": \"conditioning\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + " }";
     }
 }

@@ -9,6 +9,7 @@ import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import com.example.trading_system.domain.users.UserRepository;
 
@@ -22,11 +23,11 @@ public class UserServiceImp implements UserService {
     private static UserServiceImp instance = null;
     private UserFacadeImp userFacade;
 
-    private UserServiceImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserDatabaseRepository userRepository, StoreDatabaseRepository storeRepository) {
+    private UserServiceImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         userFacade = UserFacadeImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
     }
 
-    public static UserServiceImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserDatabaseRepository userRepository, StoreDatabaseRepository storeRepository) {
+    public static UserServiceImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         if (instance == null)
             instance = new UserServiceImp(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
         return instance;
@@ -216,12 +217,11 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void approvePurchase(String registeredId, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
+    public void approvePurchase(String registeredId) throws Exception {
         logger.info("Approving purchase for registered user with ID: {} ", registeredId);
-        userFacade.purchaseCart(registeredId, address, amount, currency, cardNumber, month, year, holder, ccv, id);
+        userFacade.purchaseCart(registeredId);
         logger.info("Purchase approved for registered user with ID: {}", registeredId);
     }
-
 
     @Override
     public String getPurchaseHistory(String username, String storeName) {

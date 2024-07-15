@@ -4,27 +4,12 @@
     <div class="main-content">
       <div class="content">
         <h2>Checkout</h2>
-        <p>Please enter your address details:</p>
-
-        <form @submit.prevent="proceedToPayment">
+        <form @submit.prevent="proceedToCheckout">
           <div class="form-group">
-            <label for="street">Street</label>
-            <InputText v-model="street" id="street" placeholder="e.g., 1234 El Street" required />
+            <label for="address">Delivery Address</label>
+            <InputText v-model="address" id="address" required />
           </div>
-          <div class="form-group">
-            <label for="city">City</label>
-            <InputText v-model="city" id="city" placeholder="e.g., Springfield" required />
-          </div>
-          <div class="form-group">
-            <label for="state">State</label>
-            <InputText v-model="state" id="state" placeholder="e.g., IL" required />
-          </div>
-          <div class="form-group">
-            <label for="postalCode">Postal Code</label>
-            <InputText v-model="postalCode" id="postalCode" placeholder="e.g., 62704-5678" required />
-          </div>
-
-          <PrimeButton label="Proceed to Payment" type="submit" class="submit-order-button" />
+          <PrimeButton label="Proceed to Checkout" type="submit" class="submit-order-button" />
         </form>
       </div>
     </div>
@@ -55,24 +40,19 @@ export default defineComponent({
     const toast = useToast();
     const username = ref(localStorage.getItem('username') || '');
     const token = ref(localStorage.getItem('token') || '');
-    const street = ref('');
-    const city = ref('');
-    const state = ref('');
-    const postalCode = ref('');
+    const address = ref('');
 
-    const proceedToPayment = async () => {
-      const address = `${street.value}, ${city.value}, ${state.value}, ${postalCode.value}`;
-
+    const proceedToCheckout = async () => {
       try {
         await axios.post('http://localhost:8082/api/trading/setAddress', null, {
           params: {
             username: username.value,
             token: token.value,
-            address: address,
+            address: address.value,
           },
         });
         toast.add({ severity: 'success', summary: 'Success', detail: 'Address saved successfully', life: 3000 });
-        router.push({ name: 'PaymentPage', query: { address: address } });
+        router.push({ name: 'PaymentPage', query: { address: address.value } });
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to save address', life: 3000 });
       }
@@ -87,11 +67,8 @@ export default defineComponent({
 
     return {
       username,
-      street,
-      city,
-      state,
-      postalCode,
-      proceedToPayment,
+      address,
+      proceedToCheckout,
       logout
     };
   }

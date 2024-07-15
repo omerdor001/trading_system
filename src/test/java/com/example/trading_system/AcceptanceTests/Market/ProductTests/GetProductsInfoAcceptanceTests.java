@@ -20,11 +20,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Fail.fail;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import jakarta.transaction.*;
@@ -89,13 +86,7 @@ public class GetProductsInfoAcceptanceTests {
         tradingSystem.openStore(username, token, "existingStore", "General Store");
         tradingSystem.openStore(username, token, "existingStore2", "General Store");
         ResponseEntity<String> response = tradingSystem.getAllStores(username, token);
-        List<String> possibleResponses = Arrays.asList(
-                "[\"stores\":existingStore,existingStore2]",
-                "[\"stores\":existingStore2,existingStore]"
-        );
-
-        // Check if the actual response is one of the possible expected responses
-        assertTrue(possibleResponses.contains(response.getBody()));;
+        assertEquals("[\"stores\":existingStore2,existingStore]",response.getBody());
     }
 
     @Test
@@ -118,7 +109,6 @@ public class GetProductsInfoAcceptanceTests {
     @Test
     public void testGetProductInfoNonExistentProduct() {
         tradingSystem.openStore(username, token, "store1", "General Store");
-        System.out.println("fksabijbkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
         ResponseEntity<String> response = tradingSystem.getProductInfo(username, token,"store1", 999);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Can't find product with id 999", response.getBody());
