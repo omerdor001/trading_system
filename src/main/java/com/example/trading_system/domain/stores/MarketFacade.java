@@ -213,7 +213,7 @@ public interface MarketFacade {
 
     void placeBid(String userName, String storeName, int productID, double price) throws IllegalArgumentException;
 
-    void approveBid(String userName, String storeName, int productID, String bidUserName) throws Exception;
+    void approveBid(String userName, String storeName, int productID, String bidUserName, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception;
 
     void rejectBid(String userName, String storeName, int productID, String bidUserName) throws IllegalArgumentException, IllegalAccessException;
 

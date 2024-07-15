@@ -393,7 +393,8 @@ public class Store {
             purchaseMap.put("productInSaleList", productInSaleListJSON);
             purchaseMap.put("customUsername", purchase.getCustomerUsername());
             purchaseMap.put("totalPrice", purchase.getTotalPrice());
-            purchaseMap.put("storeName", purchase.getStoreName());
+            purchaseMap.put("storeName", this.nameId);  // Ensure store name is included
+            purchasesList.add(purchaseMap);
         }
         ObjectMapper objectMapper = new ObjectMapper();
         try {

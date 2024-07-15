@@ -462,19 +462,27 @@ public class TradingSystemRestController {
     }
 
     @PostMapping("/purchase/approve")
-    public ResponseEntity<String> approvePurchase(@RequestParam String username, @RequestParam String token) {
-        return tradingSystem.approvePurchase("r" + username, token);
+    public ResponseEntity<String> approvePurchase(
+            @RequestParam String username,
+            @RequestParam String token,
+            @RequestParam String address,
+            @RequestParam String amount,
+            @RequestParam String currency,
+            @RequestParam String cardNumber,
+            @RequestParam String month,
+            @RequestParam String year,
+            @RequestParam String holder,
+            @RequestParam String ccv,
+            @RequestParam String id) {
+        return tradingSystem.approvePurchase(username, token, address, amount, currency, cardNumber, month, year, holder, ccv, id);
     }
+
 
     @GetMapping("/purchase/history")
     public ResponseEntity<String> getPurchaseHistory(@RequestParam String username, @RequestParam String token, @RequestParam String storeName) {
         return tradingSystem.getPurchaseHistory(username, token, storeName);
     }
 
-    @GetMapping("/stores/purchase/history")
-    public ResponseEntity<String> getStoresPurchaseHistory(@RequestParam String username, @RequestParam String token, @RequestParam String storeName, @RequestParam Integer productBarcode) {
-        return tradingSystem.getStoresPurchaseHistory(username, token, storeName, productBarcode);
-    }
 
     @PostMapping("/cart/add")
     public ResponseEntity<String> addToCart(@RequestParam String username, @RequestParam String token, @RequestParam int productId, @RequestParam String storeName, @RequestParam int quantity, @RequestParam double price) {
@@ -961,8 +969,17 @@ public class TradingSystemRestController {
                                              @RequestParam String token,
                                              @PathVariable String storeName,
                                              @RequestParam int productID,
-                                             @RequestParam String bidUserName) {
-        return tradingSystem.approveBid(userName, token, storeName, productID, bidUserName);
+                                             @RequestParam String bidUserName,
+                                             @RequestParam String address,
+                                             @RequestParam String amount,
+                                             @RequestParam String currency,
+                                             @RequestParam String cardNumber,
+                                             @RequestParam String month,
+                                             @RequestParam String year,
+                                             @RequestParam String holder,
+                                             @RequestParam String ccv,
+                                             @RequestParam String id) {
+        return tradingSystem.approveBid(userName, token, storeName, productID, bidUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
     }
 
     @PutMapping("/store/{storeName}/reject-bid")

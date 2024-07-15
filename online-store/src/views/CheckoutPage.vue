@@ -23,10 +23,6 @@
             <label for="postalCode">Postal Code</label>
             <InputText v-model="postalCode" id="postalCode" placeholder="e.g., 62704-5678" required />
           </div>
-          <div class="form-group">
-            <label for="country">Country</label>
-            <InputText v-model="country" id="country" placeholder="e.g., USA" required />
-          </div>
 
           <PrimeButton label="Proceed to Payment" type="submit" class="submit-order-button" />
         </form>
@@ -63,10 +59,9 @@ export default defineComponent({
     const city = ref('');
     const state = ref('');
     const postalCode = ref('');
-    const country = ref('');
 
     const proceedToPayment = async () => {
-      const address = `${street.value}, ${city.value}, ${state.value}, ${postalCode.value}, ${country.value}`;
+      const address = `${street.value}, ${city.value}, ${state.value}, ${postalCode.value}`;
 
       try {
         await axios.post('http://localhost:8082/api/trading/setAddress', null, {
@@ -96,7 +91,6 @@ export default defineComponent({
       city,
       state,
       postalCode,
-      country,
       proceedToPayment,
       logout
     };

@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 @Service
 public class PaymentServiceProxy implements PaymentService {
     private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
@@ -16,16 +15,16 @@ public class PaymentServiceProxy implements PaymentService {
     }
 
     @Override
-    public int makePayment(double amount) {
+    public int makePayment(double amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) {
         if (amount > 0) {
-            System.out.println("Processing payment of $" + amount);
+            System.out.println("Processing payment of $" + amount + " " + currency);
         } else {
-            logger.error("Delivery authorization failed to make payment of amount : {}", amount);
+            logger.error("Payment authorization failed for amount: {}", amount);
             throw new IllegalArgumentException("Payment authorization failed");
         }
-        logger.info("Succeed making payment in pay of {} ", amount);
-        int paymentId = id;
-        id++;
+        logger.info("Succeed making payment of {} {}", amount, currency);
+        int paymentId = this.id;
+        this.id++;
         return paymentId;
     }
 

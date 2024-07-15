@@ -970,61 +970,56 @@ public class UserFacadeImp implements UserFacade {
         return true;
     }
 
-
     @Override
-    public void bidPurchase(String userName, String storeName, int productID, double price) throws Exception {
+    public void bidPurchase(String userName, String storeName, int productID, double price, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
         // quantity = 1
         User user = userRepository.getUser(userName);
         Store store = marketFacade.getStore(storeName);
         Product product = store.getProduct(productID);
-        synchronized (product)
-        {
+        synchronized (product) {
             if(product.getProduct_quantity() == 0)
-                throw new IllegalArgumentException("Dont have enough from this product");
+                throw new IllegalArgumentException("Don't have enough from this product");
             else
                 marketFacade.getStore(storeName).removeReservedProducts(productID, 1);
         }
 
         LinkedList<ProductInSaleDTO> products = new LinkedList<>();
-        ProductInSaleDTO productInSaleDTO = new ProductInSaleDTO(storeName,productID,price,1,product.getCategory().getIntValue());
-         products.add(productInSaleDTO);
+        ProductInSaleDTO productInSaleDTO = new ProductInSaleDTO(storeName, productID, price, 1, product.getCategory().getIntValue());
+        products.add(productInSaleDTO);
         int userAge = getUser(userName).getAge();
         store.validatePurchasePolicies(products, userAge);
         int deliveryId;
-        String address = user.getAddress();
         try {
             deliveryId = deliveryService.makeDelivery(address);
         } catch (Exception e) {
             throw new Exception("Error in Delivery");
         }
         if (deliveryId < 0) {
-            store.releaseReservedProducts(productID,1);
+            store.releaseReservedProducts(productID, 1);
             throw new Exception("Error in Delivery");
         }
         int paymentId;
         try {
-            paymentId = paymentService.makePayment(price);
+            paymentId = paymentService.makePayment(price, currency, cardNumber, month, year, holder, ccv, id);
         } catch (Exception e) {
             deliveryService.cancelDelivery(deliveryId);
-            store.releaseReservedProducts(productID,1);
+            store.releaseReservedProducts(productID, 1);
             throw new Exception("Error in Payment");
         }
         if (paymentId < 0) {
             deliveryService.cancelDelivery(deliveryId);
-            store.releaseReservedProducts(productID,1);
+            store.releaseReservedProducts(productID, 1);
             throw new Exception("Error in Payment");
         }
-         HashMap<Integer, ProductInSale> products_list = new HashMap<>();
-        products_list.put(productID,new ProductInSale(storeName,productID,price,1,product.getCategory().getIntValue()));
+        HashMap<Integer, ProductInSale> products_list = new HashMap<>();
+        products_list.put(productID, new ProductInSale(storeName, productID, price, 1, product.getCategory().getIntValue()));
         ObjectMapper objectMapper = new ObjectMapper();
         String a = objectMapper.writeValueAsString(products_list.values());
-        marketFacade.addPurchase(userName,a,price,storeName);
-
-
+        marketFacade.addPurchase(userName, a, price, storeName);
     }
 
     @Override
-    public void purchaseCart(String username) throws Exception {
+    public void purchaseCart(String username, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
         User user = userRepository.getUser(username);
 
         if (!checkAvailabilityAndConditions(username)) {
@@ -1034,7 +1029,6 @@ public class UserFacadeImp implements UserFacade {
         }
         if (!marketFacade.validatePurchasePolicies(user.getCart().toJson(), user.getAge())) {
             user.setTimerCancelled(true);
-
             logger.error("Products do not meet purchase policies conditions.");
             throw new RuntimeException("Products do not meet purchase policies conditions.");
         }
@@ -1050,7 +1044,6 @@ public class UserFacadeImp implements UserFacade {
         }, 10 * 60 * 1000);
         double totalPrice = marketFacade.calculateTotalPrice(user.getCart().toJson());
         int deliveryId;
-        String address = user.getAddress();
         try {
             deliveryId = deliveryService.makeDelivery(address);
         } catch (Exception e) {
@@ -1067,7 +1060,7 @@ public class UserFacadeImp implements UserFacade {
         }
         int paymentId;
         try {
-            paymentId = paymentService.makePayment(totalPrice);
+            paymentId = paymentService.makePayment(totalPrice, currency, cardNumber, month, year, holder, ccv, id);
         } catch (Exception e) {
             deliveryService.cancelDelivery(deliveryId);
             user.releaseReservedProducts(marketFacade.getStoreRepository());
@@ -1087,7 +1080,6 @@ public class UserFacadeImp implements UserFacade {
         user.setTimerCancelled(true);
         timer.purge();
         userRepository.saveUser(user);
-        //TODO save store for each store
     }
 
 

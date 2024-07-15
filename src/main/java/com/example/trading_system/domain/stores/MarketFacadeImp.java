@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -250,31 +249,46 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String getPurchaseHistoryJSONFormatForStore(String userName,String storeName){
-        validateUserAndStore(userName,storeName);
+    public String getPurchaseHistoryJSONFormatForStore(String userName, String storeName) {
+        validateUserAndStore(userName, storeName);
         return storeRepository.getStore(storeName).getPurchaseHistoryJSONFormat();
     }
 
     @Override
     public String getPurchaseHistoryJSONFormat(String userName) throws IllegalAccessException {
         if(!userFacade.isUserExist(userName)){
-            throw new IllegalAccessException("Username is not exist");
+            throw new IllegalAccessException("Username does not exist");
         }
-        List<Map<String, Object>> allStoresPurchases = new ArrayList<>();
-        for(Store store:storeRepository.getAllStoresByStores()){
-            Map<String, Object> storePurchaseMap = Map.of(
-                    "purchaseHistory", getPurchaseHistoryJSONFormatForStore(userName,store.getNameId())
-            );
-            allStoresPurchases.add(storePurchaseMap);
+        List<Map<String, Object>> allProducts = new ArrayList<>();
+        for(Store store : storeRepository.getAllStoresByStores()){
+            List<Purchase> purchases = store.getSalesHistory().getPurchases();
+            for(Purchase purchase : purchases){
+                List<ProductInSaleDTO> productList = purchase.getProductInSaleList();
+                for(ProductInSaleDTO product : productList){
+                    Map<String, Object> productMap = getStringObjectMap(store, purchase, product);
+                    allProducts.add(productMap);
+                }
+            }
         }
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            return objectMapper.writeValueAsString(allStoresPurchases);
+            return objectMapper.writeValueAsString(allProducts);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "Error converting purchase history to JSON";
         }
+    }
 
+    private static Map<String, Object> getStringObjectMap(Store store, Purchase purchase, ProductInSaleDTO product) {
+        Map<String, Object> productMap = new HashMap<>();
+        productMap.put("productId", product.getId());
+        productMap.put("price", product.getPrice());
+        productMap.put("quantity", product.getQuantity());
+        productMap.put("category", product.getCategory());
+        productMap.put("storeName", store.getNameId());
+        productMap.put("customUsername", purchase.getCustomerUsername());
+        productMap.put("totalPrice", purchase.getTotalPrice());
+        return productMap;
     }
 
 
@@ -1508,25 +1522,24 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public void approveBid(String userName, String storeName, int productID, String bidUserName) throws Exception {
+    public void approveBid(String userName, String storeName, int productID, String bidUserName, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
         validateUserAndStore(userName, storeName);
         Store store = storeRepository.getStore(storeName);
-        if(!store.getProducts().containsKey(productID))
+        if (!store.getProducts().containsKey(productID))
             throw new IllegalArgumentException("Product must exist");
-        if(!store.isBidExist(productID, bidUserName))
+        if (!store.isBidExist(productID, bidUserName))
             throw new IllegalArgumentException("Bid must exist");
         User user = userFacade.getUser(userName);
         user.getRoleByStoreId(storeName).approveBid();
 
         boolean allOwnersApproved = store.approveBid(userName, productID, bidUserName);
-        if(allOwnersApproved)
-        {
+        if (allOwnersApproved) {
             userFacade.sendNotification(userName, bidUserName, "Your bid on product " + store.getProducts().get(productID).getProduct_name() + " in store " + storeName + " is approved");
-            userFacade.bidPurchase(bidUserName, storeName, productID, store.getBidPrice(bidUserName, productID));
+            userFacade.bidPurchase(bidUserName, storeName, productID, store.getBidPrice(bidUserName, productID), address, amount, currency, cardNumber, month, year, holder, ccv, id);
             store.removeBidAccepted(bidUserName, productID);
         }
-
     }
+
 
     @Override
     public void rejectBid(String userName, String storeName, int productID, String bidUserName) throws IllegalArgumentException, IllegalAccessException{
