@@ -9,6 +9,7 @@ import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -29,13 +30,13 @@ public class TradingSystemImp implements TradingSystem {
     private boolean systemOpen;
 
     private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender,
-                             UserDatabaseRepository userRepository, StoreDatabaseRepository storeRepository) {
+                             @Qualifier("ודקרDatabaseRepository") UserRepository userRepository,@Qualifier("storeDatabaseRepository") StoreRepository storeRepository) {
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
         this.marketService = MarketServiceImp.getInstance(storeRepository);
     }
 
-    public static TradingSystemImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserDatabaseRepository userRepository, StoreDatabaseRepository storeRepository) {
+    public static TradingSystemImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         if (instance == null)
             instance = new TradingSystemImp(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
         return instance;
@@ -93,7 +94,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> openSystem(StoreDatabaseRepository storeRepository) {
+    public ResponseEntity<String> openSystem(StoreRepository storeRepository) {
         logger.info("Attempting to open system");
         if (systemOpen) {
             logger.warn("System attempted to open twice");

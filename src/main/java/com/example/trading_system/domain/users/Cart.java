@@ -1,6 +1,6 @@
 package com.example.trading_system.domain.users;
 
-import com.example.trading_system.domain.stores.StoreDatabaseRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -113,25 +113,25 @@ public class Cart {
         return shoppingBags.get(storeName).checkProductQuantity(productId);
     }
 
-    public void removeReservedProducts(StoreDatabaseRepository storeRepository) {
+    public void removeReservedProducts(StoreRepository storeRepository) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
             shoppingBagInStore.removeReservedProducts(storeRepository);
         }
     }
 
-    public void releaseReservedProducts(StoreDatabaseRepository storeRepository) {
+    public void releaseReservedProducts(StoreRepository storeRepository) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
             shoppingBagInStore.releaseReservedProducts(storeRepository);
         }
     }
 
-    public void checkAvailabilityAndConditions(StoreDatabaseRepository storeRepository) {
+    public void checkAvailabilityAndConditions(StoreRepository storeRepository) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
             shoppingBagInStore.checkAvailabilityAndConditions(storeRepository);
         }
     }
 
-    public void addPurchase(StoreDatabaseRepository storeRepository, String username) {
+    public void addPurchase(StoreRepository storeRepository, String username) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
             shoppingBagInStore.addPurchase(storeRepository, username);
         }

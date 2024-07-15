@@ -6,6 +6,7 @@ import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +24,11 @@ public class MarketServiceImp implements MarketService {
 
     private MarketFacade marketFacade;
 
-    private MarketServiceImp(StoreDatabaseRepository storeRepository) {
+    private MarketServiceImp(StoreRepository storeRepository) {
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
     }
 
-    public static MarketServiceImp getInstance(StoreDatabaseRepository storeRepository) {
+    public static MarketServiceImp getInstance(StoreRepository storeRepository) {
         if (instance == null) instance = new MarketServiceImp(storeRepository);
         return instance;
     }
