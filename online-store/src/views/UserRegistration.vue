@@ -123,10 +123,10 @@ export default defineComponent({
         try {
           const response = await axios.get("http://localhost:8082/api/trading/register", { params });
           toast.add({ severity: 'success', summary: 'Success', detail: 'Registration successful', life: 3000 });
-          console.log(response.data);
+          console.log(response);
           router.push('/');
         } catch (error) {
-          toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to register', life: 3000 });
+          toast.add({ severity: 'error', summary: 'Error', detail: error.response || 'Failed to register', life: 3000 });
           console.error('Registration error:', error);
         }
       }
@@ -221,8 +221,8 @@ export default defineComponent({
   .form-group .p-password,
   .form-group .p-calendar {
     /* Assuming these classes are defined elsewhere */
-    /* flex-direction: column; */ /* Not necessary */
-    /* align-items: center; */ /* Not necessary */
+    /* flex-direction: column; / / Not necessary */
+    /* align-items: center; / / Not necessary */
   }
 
   .custom-card {
@@ -254,6 +254,5 @@ export default defineComponent({
   .close-button .p-button,
   .goback-button .p-button {
     width: 100%;
-  }
+    }
 </style>
-

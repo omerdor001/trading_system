@@ -126,6 +126,9 @@ public abstract class User {
 
     public abstract boolean isEditDiscountPolicy(String storeName);
 
+    public abstract boolean isAcceptBids(String storeName);
+
+    public abstract boolean isCreateLottery(String storeName);
 
     public abstract boolean removeWaitingAppoint_Owner(String storeName);
 

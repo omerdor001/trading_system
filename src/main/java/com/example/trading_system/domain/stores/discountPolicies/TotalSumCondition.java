@@ -47,6 +47,11 @@ public class TotalSumCondition extends Condition {
     }
 
     @Override
+    public void setProductId(int productId) {
+        throw new RuntimeException("Action not allowed for total sum condition");
+    }
+
+    @Override
     public String getInfo() {
         return "{ \"type\": \"totalSum\", \"requiredSum\": " + requiredSum + " }";
     }

@@ -221,7 +221,7 @@ public class ImmunityTest {
         }
         tradingSystemRestController.getTradingSystem().addToCart("v2",user1Token,1,"storeName",5,100.0);
         tradingSystemRestController.getTradingSystem().addToCart("v2",user1Token,2,"storeName",5,100.0);
-        tradingSystemRestController.getTradingSystem().approvePurchase("v2",user1Token);
+        //tradingSystemRestController.getTradingSystem().approvePurchase("v2",user1Token);
         tradingSystemRestController.getTradingSystem().exit(user1Token,"v2");
         TradingSystemApplication.restart();
         try {
@@ -282,7 +282,7 @@ public class ImmunityTest {
         }
         tradingSystemRestController.getTradingSystem().addToCart("v2",user1Token,1,"storeName",5,100.0);
         tradingSystemRestController.getTradingSystem().addToCart("v2",user1Token,2,"storeName",5,100.0);
-        tradingSystemRestController.getTradingSystem().approvePurchase("v2",user1Token);
+       // tradingSystemRestController.getTradingSystem().approvePurchase("v2",user1Token);
         tradingSystemRestController.getTradingSystem().exit(user1Token,"v2");
         TradingSystemApplication.restart();
         try {

@@ -115,6 +115,10 @@ public interface TradingSystem {
 
     ResponseEntity<String> getPurchaseHistoryJSONFormat(String username, String token);
 
+    ResponseEntity<String> getManagersOfStore(String username,String token, String storeName);
+
+    ResponseEntity<String> getOwnersOfStore(String username,String token,String storeName);
+
     //search in specific store
 
     ResponseEntity<String> searchProductsInStores(String userName, String token, String keyWord, double minPrice, double maxPrice, String categories, Double rating);
@@ -132,12 +136,10 @@ public interface TradingSystem {
 
     ResponseEntity<String> searchKeywordsInStores(String userName, String token, String keyWords, Double minPrice, Double maxPrice, Double minRating, int category, Double storeRating);
 
-
-    ResponseEntity<String> approvePurchase(String username, String token);
+    ResponseEntity<String> approvePurchase(String username, String token, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id);
 
     ResponseEntity<String> getPurchaseHistory(String username, String token, String storeName);
 
-    ResponseEntity<String> getStoresPurchaseHistory(String username, String token, String storeName, Integer productBarcode);
 
     ResponseEntity<String> addToCart(String username, String token, int productId, String storeName, int quantity, double price);
 
@@ -227,6 +229,8 @@ public interface TradingSystem {
     ResponseEntity<String> setCountCondition(String username, String token, String storeName, int selectedConditionIndex, int newCount);
 
     ResponseEntity<String> setCategoryCondition(String username, String token, String storeName, int selectedConditionIndex, int newCategory);
+
+    ResponseEntity<String> setProductIdCondition(String username, String token, String storeName, int selectedConditionIndex, int newId);
     //endregion
 
     //region purchase policy
@@ -260,9 +264,11 @@ public interface TradingSystem {
 
     ResponseEntity<String> setPurchasePolicyAge(String username, String token, String storeName, int selectedIndex, int age);
 
-    ResponseEntity<String> setFirstPurchasePolicy(String username, String token, String storeName, int selectedDiscountIndex, int selectedFirstIndex);
+    ResponseEntity<String> setPurchasePolicyCategory(String username, String token, String storeName, int selectedIndex, int category);
 
-    ResponseEntity<String> setSecondPurchasePolicy(String username, String token, String storeName, int selectedDiscountIndex, int selectedSecondIndex);
+    ResponseEntity<String> setFirstPurchasePolicy(String username, String token, String storeName, int selectedPolicyIndex, int selectedFirstIndex);
+
+    ResponseEntity<String> setSecondPurchasePolicy(String username, String token, String storeName, int selectedPolicyIndex, int selectedSecondIndex);
 
     ResponseEntity<String> removePurchasePolicy(String username, String token, String storeName, int selectedIndex);
     //endregion
@@ -277,7 +283,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> placeBid(String userName, String token, String storeName, int productID, double price);
 
-    ResponseEntity<String> approveBid(String userName, String token, String storeName, int productID, String bidUserName);
+    ResponseEntity<String> approveBid(String userName, String token, String storeName, int productID, String bidUserName, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id);
 
     ResponseEntity<String> rejectBid(String userName, String token, String storeName, int productID, String bidUserName);
 

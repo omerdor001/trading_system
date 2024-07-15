@@ -90,7 +90,9 @@ public interface UserFacade {
 
     String getPurchaseHistory(String username, String storeName);
 
-    void purchaseCart(String username) throws Exception;
+    void bidPurchase(String userName, String storeName, int productID, double price, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception;
+
+    void purchaseCart(String username, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception;
 
     String calculatePrice(String username) throws Exception;
 
@@ -116,5 +118,6 @@ public interface UserFacade {
 
     String getPermissionsForUserJSONFormat(String username,String storeName);
 
-    void bidPurchase(String userName, String storeName, int productID, double price) throws Exception;
+    String getManagersOfStore(String username, String storeName);
+
 }

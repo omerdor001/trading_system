@@ -24,7 +24,6 @@ import { defineComponent, ref, onMounted } from 'vue';
 import axios from 'axios';
 import SiteHeader from '@/components/SiteHeader.vue';
 import Button from 'primevue/button';
-import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import PrimeToast from 'primevue/toast';
 import PrimeDropdown from 'primevue/dropdown';
@@ -38,7 +37,6 @@ export default defineComponent({
     PrimeToast,
   },
   setup() {
-    const router = useRouter();
     const stores = ref([]);
     const storeOptions = ref([]);
     const selectedStore = ref('');
@@ -80,12 +78,6 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      router.push('/login');
-    };
-
     return {
       stores,
       storeOptions,
@@ -93,7 +85,6 @@ export default defineComponent({
       username,
       token,
       handleCloseStorePer,
-      logout,
       loading,
     };
   },

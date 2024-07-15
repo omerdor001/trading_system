@@ -52,6 +52,7 @@ public class ProductCountCondition extends Condition {
         this.count = count;
     }
 
+    @Override
     public void setProductId(int productId) {
         this.productId = productId;
     }

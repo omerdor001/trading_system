@@ -214,11 +214,12 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void approvePurchase(String registeredId) throws Exception {
+    public void approvePurchase(String registeredId, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
         logger.info("Approving purchase for registered user with ID: {} ", registeredId);
-        userFacade.purchaseCart(registeredId);
+        userFacade.purchaseCart(registeredId, address, amount, currency, cardNumber, month, year, holder, ccv, id);
         logger.info("Purchase approved for registered user with ID: {}", registeredId);
     }
+
 
     @Override
     public String getPurchaseHistory(String username, String storeName) {
@@ -291,6 +292,10 @@ public class UserServiceImp implements UserService {
         return userFacade.getPermissionsForUserJSONFormat(username,storeName);
     }
 
+    @Override
+    public String getManagersOfStore(String username, String storeName) {
+        return userFacade.getManagersOfStore(username,storeName);
+    }
 
 
 }

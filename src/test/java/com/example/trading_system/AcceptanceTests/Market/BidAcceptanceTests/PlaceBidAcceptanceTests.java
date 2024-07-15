@@ -3,17 +3,14 @@ package com.example.trading_system.AcceptanceTests.Market.BidAcceptanceTests;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.stores.Store;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.User;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystem;
 import com.example.trading_system.service.TradingSystemImp;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,12 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.LinkedList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -41,8 +34,16 @@ public class PlaceBidAcceptanceTests {
     private String regularUserName;
     private String secondOwnerUserName = "owner2";
     private String secondOwnerToken;
-    private final String password = "123456";
     private final String productName = "Product1";
+    private final String address = "1234 Main Street, Springfield, IL, 62704-1234";
+    private final String amount = "100.00";
+    private final String currency = "USD";
+    private final String cardNumber = "4111111111111111";
+    private final String month = "12";
+    private final String year = "2025";
+    private final String holder = "John Doe";
+    private final String ccv = "123";
+    private final String id = "123456789";
 
     private final String storeName = "Store1";
     private UserRepository userRepository;
@@ -182,7 +183,7 @@ public class PlaceBidAcceptanceTests {
         // place bid, approve bid, verify notication, verify getBids, verify getMyBids
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10).getStatusCode());
 
-        ResponseEntity<String> res = tradingSystem.approveBid(ownerUserName, ownerToken, storeName, productID, regularUserName);
+        ResponseEntity<String> res = tradingSystem.approveBid(ownerUserName, ownerToken, storeName, productID, regularUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
         Assertions.assertEquals(HttpStatus.OK, res.getStatusCode());
         Assertions.assertEquals("Approved bid successfully.", res.getBody());
 
@@ -206,7 +207,7 @@ public class PlaceBidAcceptanceTests {
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveOwner(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10).getStatusCode());
 
-        ResponseEntity<String> res = tradingSystem.approveBid(ownerUserName, ownerToken, storeName, productID, regularUserName);
+        ResponseEntity<String> res = tradingSystem.approveBid(ownerUserName, ownerToken, storeName, productID, regularUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
         Assertions.assertEquals(HttpStatus.OK, res.getStatusCode());
         Assertions.assertEquals("Approved bid successfully.", res.getBody());
 
@@ -228,7 +229,7 @@ public class PlaceBidAcceptanceTests {
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveOwner(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10).getStatusCode());
 
-        ResponseEntity<String> res = tradingSystem.approveBid(ownerUserName, ownerToken, storeName, productID, regularUserName);
+        ResponseEntity<String> res = tradingSystem.approveBid(ownerUserName, ownerToken, storeName, productID, regularUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
         Assertions.assertEquals(HttpStatus.OK, res.getStatusCode());
         Assertions.assertEquals("Approved bid successfully.", res.getBody());
         verify(mockNotificationSender,never()).sendNotification(eq(regularUserName),anyString());
@@ -236,7 +237,7 @@ public class PlaceBidAcceptanceTests {
         verify(mockNotificationSender).sendNotification(eq(secondOwnerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner2\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}"));
 //
         Assertions.assertEquals("",tradingSystem.getAllHistoryPurchases(ownerUserName, ownerToken, storeName).getBody());
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveBid(secondOwnerUserName,secondOwnerToken,storeName,productID,regularUserName).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveBid(secondOwnerUserName,secondOwnerToken,storeName,productID,regularUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id).getStatusCode());
         verify(mockNotificationSender).sendNotification(eq(regularUserName), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rregularUser\",\"textContent\":\"Your bid on product Product1 in store Store1 is approved\"}"));
         Assertions.assertNotEquals("",tradingSystem.getAllHistoryPurchases(ownerUserName, ownerToken, storeName).getBody());
 
@@ -251,7 +252,7 @@ public class PlaceBidAcceptanceTests {
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,true, true).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10).getStatusCode());
 
-        ResponseEntity<String> res = tradingSystem.approveBid(secondOwnerUserName, secondOwnerToken, storeName, productID, regularUserName);
+        ResponseEntity<String> res = tradingSystem.approveBid(secondOwnerUserName, secondOwnerToken, storeName, productID, regularUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
         Assertions.assertEquals(HttpStatus.OK, res.getStatusCode());
         Assertions.assertEquals("Approved bid successfully.", res.getBody());
     }
@@ -263,7 +264,7 @@ public class PlaceBidAcceptanceTests {
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,false, false).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10).getStatusCode());
 
-        ResponseEntity<String> res = tradingSystem.approveBid(secondOwnerUserName, secondOwnerToken, storeName, productID, regularUserName);
+        ResponseEntity<String> res = tradingSystem.approveBid(secondOwnerUserName, secondOwnerToken, storeName, productID, regularUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
         Assertions.assertEquals("Manager cannot approve bid", res.getBody());
     }
@@ -340,7 +341,7 @@ public class PlaceBidAcceptanceTests {
     @Test
     void testApproveBid_WhenBidNotExist()
     {
-        ResponseEntity<String> result = tradingSystem.approveBid(ownerUserName, ownerToken, storeName, 111, regularUserName);
+        ResponseEntity<String> result = tradingSystem.approveBid(ownerUserName, ownerToken, storeName, 111, regularUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST,result.getStatusCode());
         Assertions.assertEquals("Bid must exist", result.getBody());
     }

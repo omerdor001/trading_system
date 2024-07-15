@@ -5,10 +5,8 @@ import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.StoreRepository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -56,6 +54,11 @@ public class MarketServiceImp implements MarketService {
     @Override
     public String getStoresIOpened(String username) {
         return marketFacade.getStoresIOpened(username);
+    }
+
+    @Override
+    public String getOwnersOfStore(String username, String storeName) {
+        return marketFacade.getOwnersOfStore(username,storeName);
     }
 
     @Override
@@ -304,6 +307,11 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public void setProductIdCondition(String username, String storeName, int selectedConditionIndex, int newId) throws IllegalAccessException {
+        marketFacade.setProductIdCondition(username, storeName, selectedConditionIndex, newId);
+    }
+
+    @Override
     public void removeCondition(String username, String storeName, int selectedIndex) throws IllegalAccessException {
         marketFacade.removeCondition(username, storeName, selectedIndex);
     }
@@ -384,6 +392,12 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public void setPurchasePolicyCategory(String username, String storeName, int selectedIndex, int category) throws IllegalAccessException {
+        marketFacade.setPurchasePolicyCategory(username, storeName, selectedIndex, category);
+    }
+
+
+    @Override
     public void setFirstPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedFirstIndex) throws IllegalAccessException {
         marketFacade.setFirstPurchasePolicy(username, storeName, selectedDiscountIndex, selectedFirstIndex);
     }
@@ -420,8 +434,9 @@ public class MarketServiceImp implements MarketService {
     }
 
 
-    public String getPurchaseHistoryJSONFormatForStore(String userName,String storeName) {
-        return marketFacade.getPurchaseHistoryJSONFormatForStore(userName,storeName);
+    @Override
+    public String getPurchaseHistoryJSONFormatForStore(String userName, String storeName) {
+        return marketFacade.getPurchaseHistoryJSONFormatForStore(userName, storeName);
     }
 
     @Override
@@ -460,8 +475,8 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public void approveBid(String userName, String storeName, int productID, String bidUserName) throws Exception {
-        marketFacade.approveBid(userName, storeName, productID, bidUserName);
+    public void approveBid(String userName, String storeName, int productID, String bidUserName, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
+        marketFacade.approveBid(userName, storeName, productID, bidUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
     }
 
     @Override
