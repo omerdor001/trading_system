@@ -3,15 +3,20 @@
     <SiteHeader :isLoggedIn="true" :username="username" />
     <div class="main-content">
       <h2>Purchase History for Store: {{ storeName }}</h2>
-      <PrimeDataTable :value="allProducts" class="products-table">
+      <div v-if="storeDetails">
+        <p>Customer: {{ storeDetails.customUsername }}</p>
+        <p>Total Price: {{ storeDetails.totalPrice }}</p>
+        <PrimeButton label="View Products" @click="openModal(storeDetails)" class="view-products-button"/>
+      </div>
+    </div>
+    <PrimeDialog header="Purchased Products" v-model="isModalVisible" :modal="true" :style="{ width: '50vw' }" :closable="true">
+      <PrimeDataTable :value="selectedStoreProducts" class="products-table">
         <PrimeColumn field="productId" header="Product ID" />
         <PrimeColumn field="price" header="Price" />
         <PrimeColumn field="quantity" header="Quantity" />
         <PrimeColumn field="category" header="Category" />
-        <PrimeColumn field="customUsername" header="Customer" />
-        <PrimeColumn field="totalPrice" header="Total Price" />
       </PrimeDataTable>
-    </div>
+    </PrimeDialog>
     <PrimeToast />
   </div>
 </template>
@@ -19,8 +24,10 @@
 <script>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import PrimeButton from 'primevue/button';
 import PrimeDataTable from 'primevue/datatable';
 import PrimeColumn from 'primevue/column';
+import PrimeDialog from 'primevue/dialog';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
@@ -28,45 +35,53 @@ import { useRouter } from 'vue-router';
 export default {
   name: 'PurchaseHistoryForStore',
   components: {
+    PrimeButton,
     PrimeDataTable,
     PrimeColumn,
+    PrimeDialog,
     SiteHeader,
   },
   setup() {
     const router = useRouter();
+    const isModalVisible = ref(false);
+    const selectedStoreProducts = ref([]);
     const username = ref(localStorage.getItem('username') || '');
     const token = ref(localStorage.getItem('token') || '');
-    const storeName = ref(router.currentRoute.value.params.storeName);
-    const allProducts = ref([]);
     const toast = useToast();
+    const storeName = ref(router.currentRoute.value.params.storeName);
+    const storeDetails = ref(null);
 
     const fetchPurchaseHistory = async () => {
       try {
         const response = await axios.get(`http://localhost:8082/api/trading/store/purchaseHistory`, {
           params: {
-            username: username.value,
-            token: token.value,
-            storeName: storeName.value
+           username: username.value,
+           token: token.value,
+           storeName: storeName.value
           },
-        });
-        const purchaseData = response.data;
-        const allProductsList = [];
+       });
+      const purchaseData = response.data;
+      const storeData = purchaseData.filter(purchase => purchase.storeName === storeName.value);
+      storeDetails.value = {
+      storeName: storeName.value,
+      purchases: storeData.map(purchase => ({
+        customUsername: purchase.customUsername,
+        totalPrice: purchase.totalPrice,
+        productInSaleList: JSON.parse(purchase.productInSaleList)
+      }))
+    };
+  } catch (error) {
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch purchase history' });
+  }
+};
 
-        purchaseData.forEach(purchase => {
-          const productList = JSON.parse(purchase.productInSaleList);
-          productList.forEach(product => {
-            allProductsList.push({
-              ...product,
-              customUsername: purchase.customUsername,
-              totalPrice: purchase.totalPrice
-            });
-          });
-        });
+    const openModal = (store) => {
+      selectedStoreProducts.value = store.productInSaleList;
+      isModalVisible.value = true;
+    };
 
-        allProducts.value = allProductsList;
-      } catch (error) {
-        toast.add({severity: 'error', summary: 'Error', detail: 'Failed to fetch purchase history'});
-      }
+    const closeModal = () => {
+      isModalVisible.value = false;
     };
 
     onMounted(() => {
@@ -74,7 +89,11 @@ export default {
     });
 
     return {
-      allProducts,
+      storeDetails,
+      isModalVisible,
+      selectedStoreProducts,
+      openModal,
+      closeModal,
       username,
       token,
       storeName,
@@ -86,6 +105,10 @@ export default {
 <style scoped>
 .main-content {
   padding: 20px;
+}
+
+.view-products-button {
+  margin-top: 10px;
 }
 
 .products-table {

@@ -272,26 +272,16 @@ const TradingSystemService = {
             }
         });
     },
-    approvePurchase(username, token, address, amount, currency, cardNumber, month, year, holder, ccv, id) {
-        return axios.post(`${API_BASE_URL}/purchase/approve`, null, {
-            params: {
-                username,
-                token,
-                address,
-                amount,
-                currency,
-                cardNumber,
-                month,
-                year,
-                holder,
-                ccv,
-                id
-            }
-        });
+    approvePurchase(username, token) {
+        return axios.post(`${API_BASE_URL}/purchase/approve`, { username, token });
     },
 
     getPurchaseHistory(username, token, storeName) {
         return axios.get(`${API_BASE_URL}/purchase/history`, { params: { username, token, storeName } });
+    },
+
+    getStoresPurchaseHistory(username, token, storeName, productBarcode) {
+        return axios.get(`${API_BASE_URL}/stores/purchase/history`, { params: { username, token, storeName, productBarcode } });
     },
 
     // Cart endpoints

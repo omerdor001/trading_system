@@ -6,8 +6,11 @@ import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,11 +24,11 @@ public class MarketServiceImp implements MarketService {
 
     private MarketFacade marketFacade;
 
-    private MarketServiceImp(StoreDatabaseRepository storeRepository) {
+    private MarketServiceImp(StoreRepository storeRepository) {
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
     }
 
-    public static MarketServiceImp getInstance(StoreDatabaseRepository storeRepository) {
+    public static MarketServiceImp getInstance(StoreRepository storeRepository) {
         if (instance == null) instance = new MarketServiceImp(storeRepository);
         return instance;
     }
@@ -393,12 +396,6 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public void setPurchasePolicyCategory(String username, String storeName, int selectedIndex, int category) throws IllegalAccessException {
-        marketFacade.setPurchasePolicyCategory(username, storeName, selectedIndex, category);
-    }
-
-
-    @Override
     public void setFirstPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedFirstIndex) throws IllegalAccessException {
         marketFacade.setFirstPurchasePolicy(username, storeName, selectedDiscountIndex, selectedFirstIndex);
     }
@@ -435,9 +432,8 @@ public class MarketServiceImp implements MarketService {
     }
 
 
-    @Override
-    public String getPurchaseHistoryJSONFormatForStore(String userName, String storeName) {
-        return marketFacade.getPurchaseHistoryJSONFormatForStore(userName, storeName);
+    public String getPurchaseHistoryJSONFormatForStore(String userName,String storeName) {
+        return marketFacade.getPurchaseHistoryJSONFormatForStore(userName,storeName);
     }
 
     @Override
@@ -476,8 +472,8 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public void approveBid(String userName, String storeName, int productID, String bidUserName, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
-        marketFacade.approveBid(userName, storeName, productID, bidUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
+    public void approveBid(String userName, String storeName, int productID, String bidUserName) throws Exception {
+        marketFacade.approveBid(userName, storeName, productID, bidUserName);
     }
 
     @Override

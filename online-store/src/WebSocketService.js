@@ -1,48 +1,46 @@
-import SockJS from 'sockjs-client';
-import { Stomp } from '@stomp/stompjs';
-
 class WebSocketService {
-  constructor() {
-    this.stompClient = null;
-    this.connected = false;
-  }
-
-  connect(user, onMessageReceived) {
-    const socket = new SockJS('http://localhost:8082/ws');
-    this.stompClient = Stomp.over(socket);
-
-    this.stompClient.connect({}, (frame) => {
-      console.log('Connected: ' + frame);
-      this.connected = true;
-      this.subscribe(user, onMessageReceived);
-    }, this.onError);
-  }
-
-  subscribe(user, onMessageReceived) {
-    if (this.connected) {
-      this.stompClient.subscribe(`/user/${user}/notifications`, (message) => {
-        onMessageReceived(message.body);
-      });
+    constructor() {
+      this.socket = null;
+      this.callbacks = [];
+    }
+  
+    connect(url) {
+      this.socket = new WebSocket(url);
+      
+      this.socket.onopen = () => {
+        console.log('WebSocket connection opened');
+      };
+  
+      this.socket.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        this.callbacks.forEach(callback => callback(message));
+      };
+  
+      this.socket.onclose = () => {
+        console.log('WebSocket connection closed');
+        this.socket = null;
+      };
+  
+      this.socket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+    }
+  
+    disconnect() {
+      if (this.socket) {
+        this.socket.close();
+        this.socket = null;
+      }
+    }
+  
+    subscribe(callback) {
+      this.callbacks.push(callback);
+    }
+  
+    unsubscribe(callback) {
+      this.callbacks = this.callbacks.filter(cb => cb !== callback);
     }
   }
-
-  unsubscribe(user) {
-    if(this.connected) {
-      this.stompClient.unsubscribe(`/user/${user}/notifications`)
-    }
-  }
-
-  onError(error) {
-    console.log('WebSocket connection error: ' + error);
-  }
-
-  disconnect() {
-    if (this.stompClient !== null) {
-      this.stompClient.disconnect();
-    }
-    this.connected = false;
-    console.log('Disconnected');
-  }
-}
-
-export default new WebSocketService();
+  
+  const webSocketService = new WebSocketService();
+  export default webSocketService;

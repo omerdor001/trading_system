@@ -71,7 +71,7 @@ public class StoreDatabaseRepository implements StoreRepository {
         Long count = entityManager.createQuery("SELECT COUNT(s) FROM Store s", Long.class).getSingleResult();
         return count == 0;
     }
-    @Transactional
+
     @Override
     public void addStore(String storeName, String description, String founder, Double storeRating) {
         Store store = new Store(storeName, description, founder, storeRating);

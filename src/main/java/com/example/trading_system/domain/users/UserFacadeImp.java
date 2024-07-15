@@ -10,7 +10,7 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,14 +28,13 @@ public class UserFacadeImp implements UserFacade {
     private static UserFacadeImp instance = null;
     private final NotificationSender notificationSender;
     @Setter
-    private UserDatabaseRepository userRepository;
+    private UserRepository userRepository;
     private DeliveryService deliveryService;
     private PaymentService paymentService;
     private MarketFacade marketFacade;
     @Autowired
 
-    public UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender,
-                         UserDatabaseRepository userRepository, StoreDatabaseRepository storeRepository) {
+    public UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         this.paymentService = paymentService;
         this.deliveryService = deliveryService;
         this.userRepository = userRepository;
@@ -44,8 +43,7 @@ public class UserFacadeImp implements UserFacade {
         marketFacade.initialize(this);
     }
 
-    public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender
-            notificationSender, UserDatabaseRepository userRepository, StoreDatabaseRepository storeRepository) {
+    public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         if (instance == null) {
             instance = new UserFacadeImp(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
             instance.marketFacade.initialize(instance);
@@ -66,7 +64,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public UserDatabaseRepository getUserRepository() {
+    public UserRepository getUserRepository() {
         return userRepository;
     }
 
@@ -82,6 +80,7 @@ public class UserFacadeImp implements UserFacade {
         this.paymentService = null;
         this.deliveryService = null;
     }
+
 
     @Override
     public HashMap<String, User> getUsers() {
@@ -413,32 +412,29 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Store not found: " + storeName);
             throw new NoSuchElementException("Store not found: " + storeName);
         }
-        if (!marketFacade.getStore(storeName).isOpen()) {
-            throw new IllegalArgumentException("When store is closed you can't add to cart from this store");
-        }
+        if (!marketFacade.getStore(storeName).isOpen())
+            throw new IllegalArgumentException("When store is closed you cant add to cart from this store");
         if (username.charAt(0) == 'r' && !userRepository.getUser(username).getLogged()) {
             logger.error("User is not logged in: " + username);
             throw new RuntimeException("User is not logged in: " + username);
         }
-
         checkProductQuantity(username, productId, storeName, quantity);
-
         Product p = marketFacade.getStore(storeName).getProduct(productId);
         User user = userRepository.getUser(username);
-
-        if (p.getProduct_price() == price) {
-
+        if(p.getProduct_price() == price) {
             user.addProductToCart(productId, quantity, storeName, p.getProduct_price(), p.getCategory().getIntValue());
             userRepository.saveUser(user);
-        } else {
-            if (marketFacade.getStore(storeName).isBidApproved(username, productId, price)) {
+        }
+        else {
+            if(marketFacade.getStore(storeName).isBidApproved(username,productId,price)){
                 user.addProductToCart(productId, quantity, storeName, price, p.getCategory().getIntValue());
                 userRepository.saveUser(user);
-            } else {
-                throw new IllegalArgumentException("This bid has not been approved by all owners or there is no bid with this price");
             }
+            else
+                throw new IllegalArgumentException("This bid has not approved by all owners or there is no bid with this price");
         }
-        marketFacade.save(marketFacade.getStore(storeName));
+
+        //TODO save product in store?
     }
 
 
@@ -519,9 +515,13 @@ public class UserFacadeImp implements UserFacade {
         }
         try {
             marketFacade.addStore(storeName, description, username, null);
+            logger.info("111111111111111111");
             User user = userRepository.getUser(username);
+            logger.info("222222222222222222");
             user.openStore(storeName);
+            logger.info("333333333333333333");
             userRepository.saveUser(user);
+            logger.info("444444444444444444");
         } catch (Exception e) {
             logger.error("Failed to open store: {}", e.getMessage());
             throw new IllegalArgumentException("Failed to open store", e);
@@ -728,7 +728,6 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("User is not owner of this store");
         }
         if (store.getFounder().equals(userName)) throw new IllegalAccessException("Founder cant waive on ownership");
-
         cancelOwnerShip(userName, storeName);
     }
 
@@ -738,12 +737,11 @@ public class UserFacadeImp implements UserFacade {
         List<String> storeOwners = store.getOwners();
         List<String> storeManagers = store.getManagers();
 
-
         for (String storeOwner : storeOwners) {
             User user = userRepository.getUser(storeOwner);
             if (user.getRoleByStoreId(storeName).getAppointedById().equals(userName)) {
                 cancelOwnerShip(storeOwner, storeName);
-                sendNotification(userName, "r" + user.getUsername(), "You are no longer an owner at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
+                sendNotification(userName, storeOwner, "You are no longer an owner at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
             }
             userRepository.saveUser(user);
         }
@@ -753,7 +751,7 @@ public class UserFacadeImp implements UserFacade {
             if (user.getRoleByStoreId(storeName).getAppointedById().equals(userName)) {
                 user.removeManagerRole(storeName);
                 store.removeManager(storeManager);
-                sendNotification(userName, "r" + user.getUsername(), "You are no longer a manager at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
+                sendNotification(userName,  user.getUsername(), "You are no longer a manager at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
             }
             userRepository.saveUser(user);
         }
@@ -878,6 +876,7 @@ public class UserFacadeImp implements UserFacade {
         System.out.println("Users saved successfully.");
     }
 
+
     @Override
     public void editPermissionForManager(String userId, String managerToEdit, String storeName, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException, NoSuchElementException {
         if (!marketFacade.isStoreExist(storeName))
@@ -1001,56 +1000,61 @@ public class UserFacadeImp implements UserFacade {
         return true;
     }
 
+
     @Override
-    public void bidPurchase(String userName, String storeName, int productID, double price, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
+    public void bidPurchase(String userName, String storeName, int productID, double price) throws Exception {
         // quantity = 1
         User user = userRepository.getUser(userName);
         Store store = marketFacade.getStore(storeName);
         Product product = store.getProduct(productID);
-        synchronized (product) {
+        synchronized (product)
+        {
             if(product.getProduct_quantity() == 0)
-                throw new IllegalArgumentException("Don't have enough from this product");
+                throw new IllegalArgumentException("Dont have enough from this product");
             else
                 marketFacade.getStore(storeName).removeReservedProducts(productID, 1);
         }
 
         LinkedList<ProductInSaleDTO> products = new LinkedList<>();
-        ProductInSaleDTO productInSaleDTO = new ProductInSaleDTO(storeName, productID, price, 1, product.getCategory().getIntValue());
-        products.add(productInSaleDTO);
+        ProductInSaleDTO productInSaleDTO = new ProductInSaleDTO(storeName,productID,price,1,product.getCategory().getIntValue());
+         products.add(productInSaleDTO);
         int userAge = getUser(userName).getAge();
         store.validatePurchasePolicies(products, userAge);
         int deliveryId;
+        String address = user.getAddress();
         try {
             deliveryId = deliveryService.makeDelivery(address);
         } catch (Exception e) {
             throw new Exception("Error in Delivery");
         }
         if (deliveryId < 0) {
-            store.releaseReservedProducts(productID, 1);
+            store.releaseReservedProducts(productID,1);
             throw new Exception("Error in Delivery");
         }
         int paymentId;
         try {
-            paymentId = paymentService.makePayment(price, currency, cardNumber, month, year, holder, ccv, id);
+            paymentId = paymentService.makePayment(price);
         } catch (Exception e) {
             deliveryService.cancelDelivery(deliveryId);
-            store.releaseReservedProducts(productID, 1);
+            store.releaseReservedProducts(productID,1);
             throw new Exception("Error in Payment");
         }
         if (paymentId < 0) {
             deliveryService.cancelDelivery(deliveryId);
-            store.releaseReservedProducts(productID, 1);
+            store.releaseReservedProducts(productID,1);
             throw new Exception("Error in Payment");
         }
-        HashMap<Integer, ProductInSale> products_list = new HashMap<>();
-        products_list.put(productID, new ProductInSale(storeName, productID, price, 1, product.getCategory().getIntValue()));
+         HashMap<Integer, ProductInSale> products_list = new HashMap<>();
+        products_list.put(productID,new ProductInSale(storeName,productID,price,1,product.getCategory().getIntValue()));
         ObjectMapper objectMapper = new ObjectMapper();
         String a = objectMapper.writeValueAsString(products_list.values());
-        marketFacade.addPurchase(userName, a, price, storeName);
+        marketFacade.addPurchase(userName,a,price,storeName);
+
+
     }
 
     @Override
-    public void purchaseCart(String username, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
+    public void purchaseCart(String username) throws Exception {
         User user = userRepository.getUser(username);
 
         if (!checkAvailabilityAndConditions(username)) {
@@ -1060,6 +1064,7 @@ public class UserFacadeImp implements UserFacade {
         }
         if (!marketFacade.validatePurchasePolicies(user.getCart().toJson(), user.getAge())) {
             user.setTimerCancelled(true);
+
             logger.error("Products do not meet purchase policies conditions.");
             throw new RuntimeException("Products do not meet purchase policies conditions.");
         }
@@ -1076,6 +1081,7 @@ public class UserFacadeImp implements UserFacade {
         }, 10 * 60 * 1000);
         double totalPrice = marketFacade.calculateTotalPrice(user.getCart().toJson());
         int deliveryId;
+        String address = user.getAddress();
         try {
             deliveryId = deliveryService.makeDelivery(address);
         } catch (Exception e) {
@@ -1092,7 +1098,7 @@ public class UserFacadeImp implements UserFacade {
         }
         int paymentId;
         try {
-            paymentId = paymentService.makePayment(totalPrice, currency, cardNumber, month, year, holder, ccv, id);
+            paymentId = paymentService.makePayment(totalPrice);
         } catch (Exception e) {
             deliveryService.cancelDelivery(deliveryId);
             user.releaseReservedProducts(marketFacade.getStoreRepository());
@@ -1112,6 +1118,7 @@ public class UserFacadeImp implements UserFacade {
         user.setTimerCancelled(true);
         timer.purge();
         userRepository.saveUser(user);
+        //TODO save store for each store
     }
 
 
@@ -1283,13 +1290,15 @@ public class UserFacadeImp implements UserFacade {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> permissions = new HashMap<>();
         User user = userRepository.getUser(username);
-        permissions.put("username",username);
-        permissions.put("watch", user.isWatch(storeName));
-        permissions.put("editSupply", user.isEditSupply(storeName));
-        permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
-        permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
-        permissions.put("editAcceptBids", user.isAcceptBids(storeName));
-        permissions.put("editCreateLottery", user.isCreateLottery(storeName));
+        if(!user.getUsername().equals(username) && user.isManager(storeName)){
+            permissions.put("username",username);
+            permissions.put("watch", user.isWatch(storeName));
+            permissions.put("editSupply", user.isEditSupply(storeName));
+            permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
+            permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
+            permissions.put("editAcceptBids", user.isAcceptBids(storeName));
+            permissions.put("editCreateLottery", user.isCreateLottery(storeName));
+        }
         try {
             return mapper.writeValueAsString(permissions);
         } catch (JsonProcessingException e) {
