@@ -1111,6 +1111,7 @@ public class UserFacadeImp implements UserFacade {
         user.setTimerCancelled(true);
         timer.purge();
         userRepository.saveUser(user);
+
     }
 
 

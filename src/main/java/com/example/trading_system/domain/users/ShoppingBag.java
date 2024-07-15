@@ -32,7 +32,7 @@ public class ShoppingBag {
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
-
+    @Getter
     @OneToMany(mappedBy = "shoppingBag", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Map<Integer, ProductInSale> products_list = new HashMap<>();
 
@@ -48,9 +48,7 @@ public class ShoppingBag {
     }
 
 
-    public HashMap<Integer, ProductInSale> getProducts_list() {
-        return (HashMap<Integer, ProductInSale>) products_list;
-    }
+
 
     public synchronized void addProduct(int productId, int quantity, double price, int category) {
         if (products_list.containsKey(productId)) {

@@ -1008,12 +1008,15 @@ public class MarketFacadeImp implements MarketFacade {
     @Override
     public void releaseReservedProducts(int productId, int quantity, String storeName) {
         getStore(storeName).releaseReservedProducts(productId, quantity);
+        storeRepository.save(getStore(storeName));
+
 
     }
 
     @Override
     public void removeReservedProducts(int productId, int quantity, String storeName) {
         getStore(storeName).removeReservedProducts(productId, quantity);
+        storeRepository.save(getStore(storeName));
 
     }
 
