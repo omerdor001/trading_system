@@ -389,15 +389,10 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("No name provided");
             throw new IllegalArgumentException("No name provided");
         }
-        if (!userFacade.getUsers().containsKey(userName)) {
-            logger.error("User does not exist");
-            throw new IllegalArgumentException("User does not exist");
-        }
-        if (userFacade.isSuspended(userName)) {
-            throw new RuntimeException("User is suspended from the system");
-        }
+
         StringBuilder sb = new StringBuilder();
         for (Store store : storeRepository.getAllStoresByStores()) {
+            validateUserAndStore(userName, store.getNameId());
             if (!store.isOpen()) continue;
             if (!store.searchName(productName, minPrice, maxPrice, minRating, category, storeRating).isEmpty())//Change to Repo
                 sb.append(store.searchName(productName, minPrice, maxPrice, minRating, category, storeRating).toString());
@@ -417,15 +412,11 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("Category is not a valid category");
             throw new RuntimeException("Category is not a valid category");
         }
-        if (!userFacade.getUsers().containsKey(userName)) {
-            logger.error("User does not exist");
-            throw new IllegalArgumentException("User does not exist");
-        }
-        if (userFacade.isSuspended(userName)) {
-            throw new RuntimeException("User is suspended from the system");
-        }
+
         StringBuilder sb = new StringBuilder();
         for (Store store : storeRepository.getAllStoresByStores()) {    //Change to Repo
+            validateUserAndStore(userName, store.getNameId());
+
             if (!store.isOpen()) continue;
             if (!store.searchCategory(category, minPrice, maxPrice, minRating, storeRating).isEmpty())
                 sb.append(store.searchCategory(category, minPrice, maxPrice, minRating, storeRating).toString());
@@ -441,15 +432,11 @@ public class MarketFacadeImp implements MarketFacade {
             logger.error("No keywords provided");
             throw new IllegalArgumentException("No keywords provided");
         }
-        if (!userFacade.getUsers().containsKey(userName)) {
-            logger.error("User does not exist");
-            throw new IllegalArgumentException("User does not exist");
-        }
-        if (userFacade.isSuspended(userName)) {
-            throw new RuntimeException("User is suspended from the system");
-        }
+
         StringBuilder sb = new StringBuilder();
         for (Store store : storeRepository.getAllStores().values()) {      //Change to Repo
+            validateUserAndStore(userName, store.getNameId());
+
             if (!store.isOpen()) continue;
             if (!store.searchKeywords(keyWords, minPrice, maxPrice, minRating, category, storeRating).isEmpty())
                 sb.append(store.searchKeywords(keyWords, minPrice, maxPrice, minRating, category, storeRating).toString());

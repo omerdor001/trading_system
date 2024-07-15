@@ -28,6 +28,7 @@ public class ShoppingBag {
     @Column(nullable = false)
     private String storeId;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
@@ -36,9 +37,10 @@ public class ShoppingBag {
     private Map<Integer, ProductInSale> products_list = new HashMap<>();
 
 
-    public ShoppingBag(String storeId) {
+    public ShoppingBag(String storeId, Cart cart) {
         this.storeId = storeId;
         products_list = new HashMap<>();
+        this.cart=cart;
     }
 
     public ShoppingBag() {
@@ -121,4 +123,5 @@ public class ShoppingBag {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(products_list.values());
     }
+
 }

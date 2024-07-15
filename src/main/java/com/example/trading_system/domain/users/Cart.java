@@ -31,8 +31,8 @@ public class Cart {
         return objectMapper.readValue(json, Cart.class);
     }
 
-    public HashMap<String, ShoppingBag> getShoppingBags() {
-        return (HashMap<String, ShoppingBag>) shoppingBags;
+    public Map<String, ShoppingBag> getShoppingBags() {
+        return shoppingBags;
     }
 
     public void addShoppingBag(ShoppingBag shoppingBag, String storeId) {
@@ -42,7 +42,7 @@ public class Cart {
     public void addProductToCart(int productId, int quantity, String storeId, double price, int category) {
         ShoppingBag shoppingBag = shoppingBags.get(storeId);
         if (shoppingBag == null) {
-            shoppingBag = new ShoppingBag(storeId);
+            shoppingBag = new ShoppingBag(storeId,this);
             shoppingBags.put(storeId, shoppingBag);
         }
         shoppingBag.addProduct(productId, quantity, price, category);
