@@ -120,7 +120,6 @@ public interface UserFacade {
 
     String getManagersOfStore(String username, String storeName);
 
-    void bidPurchase(String userName, String storeName, int productID, double price) throws Exception;
 
     String getUserAppointer(String user, String storeName);
 }

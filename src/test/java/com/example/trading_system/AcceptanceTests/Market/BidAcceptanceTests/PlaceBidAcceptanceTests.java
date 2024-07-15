@@ -248,8 +248,8 @@ public class PlaceBidAcceptanceTests {
 
     @Test
     void managerWithPermissionApproved() {
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, true, true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,true).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10).getStatusCode());
 
         ResponseEntity<String> res = tradingSystem.approveBid(secondOwnerUserName, secondOwnerToken, storeName, productID, regularUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
@@ -260,8 +260,8 @@ public class PlaceBidAcceptanceTests {
     @Test
     void managerWithoutPermissionsApproved(){
 
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, false, false).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,false, false).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, false).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,false).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10).getStatusCode());
 
         ResponseEntity<String> res = tradingSystem.approveBid(secondOwnerUserName, secondOwnerToken, storeName, productID, regularUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
@@ -291,8 +291,8 @@ public class PlaceBidAcceptanceTests {
     @Test
     void testManagerWithoutPermissionReject_ThenThrowException(){
 
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, false, false).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,false, false).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, false).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,false).getStatusCode());
 
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10).getStatusCode());
 
@@ -304,8 +304,8 @@ public class PlaceBidAcceptanceTests {
 
     @Test
     void testManagerWithPermissionReject_ThenSuccess(){
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, true, true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,true).getStatusCode());
 
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10).getStatusCode());
 
@@ -385,8 +385,8 @@ public class PlaceBidAcceptanceTests {
 
     @Test
     void placeCounterOffer_managerWithPermissions_Success(){
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, true, true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,true).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10).getStatusCode());
         ResponseEntity<String> response = tradingSystem.placeCounterOffer(secondOwnerUserName, secondOwnerToken, storeName, productID, regularUserName, 11);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -395,8 +395,8 @@ public class PlaceBidAcceptanceTests {
 
     @Test
     void placeCounterOffer_managerWithoutPermission_ThenThrowException(){
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, false, false).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,false, false).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, false).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,false).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10).getStatusCode());
         ResponseEntity<String> response = tradingSystem.placeCounterOffer(secondOwnerUserName, secondOwnerToken, storeName, productID, regularUserName, 11);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -427,16 +427,16 @@ public class PlaceBidAcceptanceTests {
 
     @Test
     void getStoreBids_managerWithPermission_ThenSuccess(){
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, true, true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,true).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.getStoreBids(secondOwnerUserName, secondOwnerToken, storeName).getStatusCode());
     }
 
     @Test
     void getStoreBids_managerWithoutPermission_ThenThrowException(){
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, false,false).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,false,false).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.suggestManage(ownerUserName,ownerToken,secondOwnerUserName,storeName, true, true, true, true, false).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystem.approveManage(secondOwnerUserName,secondOwnerToken,storeName,ownerUserName, true, true,true,true,false).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK,tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10).getStatusCode());
 
         ResponseEntity<String> response = tradingSystem.getStoreBids(secondOwnerUserName, secondOwnerToken, storeName);

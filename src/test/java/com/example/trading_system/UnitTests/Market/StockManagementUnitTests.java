@@ -44,9 +44,9 @@ class StockManagementUnitTests {
             userFacade.createStore("rtestuser0","Adidas","sport shop");
             userFacade.createStore("rtestuser0","Nike","sport shop");
             userFacade.suggestOwner("rtestuser0","rtestuser1","Adidas");
-            userFacade.suggestManager("rtestuser0","rtestuser2","Adidas",false,false,false,false, false, false);
+            userFacade.suggestManager("rtestuser0","rtestuser2","Adidas",false,false,false,false, false);
             userFacade.approveOwner("rtestuser1","Adidas","rtestuser0");
-            userFacade.approveManager("rtestuser2","Adidas","rtestuser0",false,false,false,false, false, false);
+            userFacade.approveManager("rtestuser2","Adidas","rtestuser0",false,false,false,false, false);
 
         } catch (Exception e) {
             e.printStackTrace();
