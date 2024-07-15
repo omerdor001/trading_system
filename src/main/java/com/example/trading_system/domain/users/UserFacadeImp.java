@@ -418,22 +418,32 @@ public class UserFacadeImp implements UserFacade {
             logger.error("User is not logged in: " + username);
             throw new RuntimeException("User is not logged in: " + username);
         }
+        System.out.println("1111111111111111111111111");
         checkProductQuantity(username, productId, storeName, quantity);
+        System.out.println("2222222222222222222222");
         Product p = marketFacade.getStore(storeName).getProduct(productId);
         User user = userRepository.getUser(username);
         if(p.getProduct_price() == price) {
+            System.out.println("333333333333333333333333");
             user.addProductToCart(productId, quantity, storeName, p.getProduct_price(), p.getCategory().getIntValue());
+            System.out.println("44444444444444444444444");
             userRepository.saveUser(user);
+            System.out.println("9999999999999999999999");
         }
         else {
-            if(marketFacade.getStore(storeName).isBidApproved(username,productId,price)){
+            System.out.println("55555555555555555555555555");
+            if (marketFacade.getStore(storeName).isBidApproved(username, productId, price)) {
+                System.out.println("666666666666666666666666");
                 user.addProductToCart(productId, quantity, storeName, price, p.getCategory().getIntValue());
+                System.out.println("777777777777777777777777");
                 userRepository.saveUser(user);
-            }
-            else
+            } else {
+                System.out.println("8888888888888888888888");
                 throw new IllegalArgumentException("This bid has not approved by all owners or there is no bid with this price");
+            }
         }
-
+        System.out.println("999999999999999999999999999");
+            marketFacade.save(marketFacade.getStore(storeName));
         //TODO save product in store?
     }
 
