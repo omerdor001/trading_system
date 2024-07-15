@@ -151,7 +151,7 @@ public class AppointManagerAcceptanceTests {
     @Test
     public void GivenNotSuggestManage_WhenApproveManage_ThenThrowException() {
         ResponseEntity<String> res = tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, userName, true, true, true, true, true, true);
-        Assertions.assertEquals("No one suggest this user to be a manager", res.getBody());
+        Assertions.assertEquals("No appointment requests in this store.", res.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
     }
 
@@ -233,7 +233,7 @@ public class AppointManagerAcceptanceTests {
     public void GivenNoOneSuggest_WhenRejectManage_ThenThrowException() {
         ResponseEntity<String> res = tradingSystemImp.rejectToManageStore(userNameManager, tokenManager, storeName, userName);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
-        Assertions.assertEquals("No one suggest this user to be a manager", res.getBody());
+        Assertions.assertEquals("No one suggests this user to be a manager", res.getBody());
     }
 
     @Test
