@@ -81,6 +81,7 @@ public class UserFacadeImp implements UserFacade {
         this.deliveryService = null;
     }
 
+
     @Override
     public HashMap<String, User> getUsers() {
         return userRepository.getAllUsers();
@@ -432,6 +433,7 @@ public class UserFacadeImp implements UserFacade {
             else
                 throw new IllegalArgumentException("This bid has not approved by all owners or there is no bid with this price");
         }
+
         //TODO save product in store?
     }
 
@@ -623,7 +625,7 @@ public class UserFacadeImp implements UserFacade {
         sendNotification(newOwner, appoint, newOwnerUser.getUsername() + " accepted your suggestion to become an owner at store: " + storeName);
         userRepository.saveUser(newOwnerUser);
         userRepository.saveUser(appointUser);
-        //TODO save store
+        marketFacade.save(store);
     }
 
     @Override
@@ -653,15 +655,27 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User is already owner of this store");
         }
-        if (newManagerUser.removeWaitingAppoint_Manager(storeName, appoint) == null)
+
+        System.out.println("Current manager suggestions for " + newManager + ": ");
+        for (ManagerSuggestion suggestion : newManagerUser.getManagerSuggestions()) {
+            System.out.println(" - " + suggestion.getSuggestionKey());
+        }
+        String suggestionKey = storeName + ":" + appoint;
+        System.out.println("Attempting to remove waiting appointment for: " + suggestionKey);
+        List<Boolean> permissions = newManagerUser.removeWaitingAppoint_Manager(suggestionKey);
+        if (permissions == null) {
+            System.out.println("No suggestion found for: " + suggestionKey);
             throw new RuntimeException("No appointment requests in this store.");
+        }
+
+
         newManagerUser.addManagerRole(appoint, storeName);
         marketFacade.getStore(storeName).addManager(newManager);
         newManagerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
         sendNotification(newManager, appoint, newManagerUser.getUsername() + " accepted your suggestion to become a manager at store: " + storeName);
         userRepository.saveUser(newManagerUser);
         userRepository.saveUser(appointUser);
-        //TODO save store
+        marketFacade.save(marketFacade.getStore(storeName));
     }
 
     @Override
@@ -746,7 +760,7 @@ public class UserFacadeImp implements UserFacade {
         userRepository.getUser(userName).removeOwnerRole(storeName);
         marketFacade.getStore(storeName).removeOwner(userName);
         userRepository.saveUser(ownerUser);
-        //TODO save store
+        marketFacade.save(store);
     }
 
     @Override
@@ -781,7 +795,7 @@ public class UserFacadeImp implements UserFacade {
         store.removeManager(manager);
         sendNotification(owner, manager, "You are no longer a manager at store: " + storeName + " due to being fired by " + ownerUser.getUsername());
         userRepository.saveUser(managerUser);
-        //TODO call save store
+        marketFacade.save(store);
     }
 
     @Override
@@ -816,7 +830,7 @@ public class UserFacadeImp implements UserFacade {
         cancelOwnerShip(owner, storeName);
         sendNotification(ownerAppoint, owner, "You are no longer an owner at store: " + storeName + " due to being fired by user: " + ownerAppointer.getUsername());
         userRepository.saveUser(ownerUser);
-        //TODO save store
+        marketFacade.save(marketFacade.getStore(storeName));
     }
     @Override
     public void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException {
@@ -849,7 +863,7 @@ public class UserFacadeImp implements UserFacade {
         }
 
 
-        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName, appoint);
+        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName);
         if (perm == null) {
             throw new IllegalAccessException("No one suggests this user to be a manager");
         }

@@ -2,7 +2,6 @@ package com.example.trading_system.domain.users;
 
 import jakarta.persistence.*;
 import java.util.List;
-
 @Entity
 @Table(name = "manager_suggestion")
 public class ManagerSuggestion {

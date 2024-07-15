@@ -81,7 +81,9 @@ public interface MarketFacade {
 
     String requestManagersPermissions(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
 
-    String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
+      void save(Store store);
+
+        String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
 
     void addStore(String storeName, String description, String founder, Double storeRating);
 

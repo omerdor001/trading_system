@@ -3,6 +3,7 @@ package com.example.trading_system.domain.stores;
 import com.example.trading_system.domain.users.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public class MarketFacadeImp implements MarketFacade {
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
     private static MarketFacadeImp instance = null;
     private final ConcurrentHashMap<String, Lock> storeLocks = new ConcurrentHashMap<>();
+    @Getter
     private StoreDatabaseRepository storeRepository;
     private UserFacade userFacade;
 
@@ -52,9 +54,8 @@ public class MarketFacadeImp implements MarketFacade {
             instance = null;
         }
     }
-
-    public StoreDatabaseRepository getStoreRepository() {
-        return storeRepository;
+    public  void save(Store store){
+        storeRepository.save(store);
     }
 
     public boolean isStoreExist(String store_name) {

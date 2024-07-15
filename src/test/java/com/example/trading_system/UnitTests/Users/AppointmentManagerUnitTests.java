@@ -164,6 +164,7 @@ class AppointmentManagerUnitTests {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("the suggtion is "+userFacade.getUser("r" + username2).getManagerSuggestions().get(0));
         int sizeB = userFacade.getUser("r" + username2).getManagerSuggestions().size();
         assertDoesNotThrow(() -> userFacade.approveManager("r" + username2, "Adidas", "r" + username1, true, false, true, false, true, true), "approveManage should not throw any exceptions");
         int sizeA = userFacade.getUser("r" + username2).getManagerSuggestions().size();

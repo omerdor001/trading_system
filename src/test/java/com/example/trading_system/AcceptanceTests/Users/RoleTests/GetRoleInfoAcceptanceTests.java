@@ -246,8 +246,8 @@ public class GetRoleInfoAcceptanceTests {
         //TODO - check why these 2 lines are required for build to succeed (probably other test class has bad cleanup after tests)
         tearDown();
         setUp();
-        ResponseEntity<String> response = tradingSystemImp.requestManagersPermissions(userName, token, storeName);
-        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+       ResponseEntity<String> response = tradingSystemImp.requestManagersPermissions(userName, token, storeName);
+       Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertTrue(Objects.requireNonNull(response.getBody()).contains("managerUser " + userNameManager + " true true true true"));
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.editPermissionForManager(ownerUser, ownerToken, userNameManager, storeName, true, false, true, false, true, false).getStatusCode());
         ResponseEntity<String> response2 = tradingSystemImp.requestManagersPermissions(userName, token, storeName);

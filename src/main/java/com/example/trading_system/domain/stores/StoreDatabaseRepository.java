@@ -1,5 +1,6 @@
 package com.example.trading_system.domain.stores;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -76,5 +77,15 @@ public class StoreDatabaseRepository implements StoreRepository {
         Store store = new Store(storeName, description, founder, storeRating);
         store.addOwner(founder);
         entityManager.persist(store);
+    }
+    @Transactional
+    public void save(Store store) {
+        if (store != null) {
+            if (entityManager.contains(store) || store.getNameId() != null && entityManager.find(Store.class, store.getNameId()) != null) {
+                entityManager.merge(store);
+            } else {
+                entityManager.persist(store);
+            }
+        }
     }
 }

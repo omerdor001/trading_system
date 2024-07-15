@@ -35,10 +35,11 @@ public class Registered extends User {
 
     @OneToMany(mappedBy = "receiverUsername", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications;
+
     @Getter
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "registered_id")
-    private List<ManagerSuggestion> managerSuggestions;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_manager_suggestions", referencedColumnName = "username")
+    private List<ManagerSuggestion> managerSuggestions = new ArrayList<>();
 
     @Getter
     @ElementCollection
@@ -184,8 +185,9 @@ public class Registered extends User {
     }
 
     public void addWaitingAppoint_Manager(String store_name_id, String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
-        ManagerSuggestion managerSuggestion = new ManagerSuggestion(appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery));
+        ManagerSuggestion managerSuggestion = new ManagerSuggestion(store_name_id + ":" + appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery));
         managerSuggestions.add(managerSuggestion);
+        System.out.println("Adding ManagerSuggestion: " + managerSuggestion.getSuggestionKey());
     }
 
     public boolean isWatch(String storeName) {
@@ -242,19 +244,21 @@ public class Registered extends User {
         ownerSuggestions.put(storeName, appointee);
     }
 
-    public List<Boolean> removeWaitingAppoint_Manager(String storeName, String appoint) {
+    public List<Boolean> removeWaitingAppoint_Manager(String suggestionKey) {
         Iterator<ManagerSuggestion> iterator = managerSuggestions.iterator();
-        System.out.println("888888888888888");
+        System.out.println("Attempting to remove waiting appointment for: " + suggestionKey);
         while (iterator.hasNext()) {
-            System.out.println("7777777777777777777");
             ManagerSuggestion suggestion = iterator.next();
-            if (suggestion.getSuggestionKey().equals(storeName + ":" + appoint)) {
+            if (suggestion.getSuggestionKey().equals(suggestionKey)) {
+                System.out.println("Found and removing suggestion: " + suggestion.getSuggestionKey());
                 iterator.remove();
                 return suggestion.getSuggestionValues();
             }
         }
+        System.out.println("No suggestion found for: " + suggestionKey);
         return null;
     }
+
 
 
     public boolean removeWaitingAppoint_Owner(String storeName) {
