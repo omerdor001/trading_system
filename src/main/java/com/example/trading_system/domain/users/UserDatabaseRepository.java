@@ -7,7 +7,7 @@ import jakarta.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.*;
 
-//@Repository
+@Repository
 public class UserDatabaseRepository implements UserRepository {
 
     private static UserDatabaseRepository instance = null;

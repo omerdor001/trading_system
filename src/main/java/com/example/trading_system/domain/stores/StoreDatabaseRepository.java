@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-//@Repository
+@Repository
 public class StoreDatabaseRepository implements StoreRepository {
 
     private static StoreDatabaseRepository instance = null;

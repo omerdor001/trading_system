@@ -43,10 +43,10 @@ class NotificationAcceptanceTests {
     private String managerUsername;
     private String managerToken;
     @Autowired
-    private UserMemoryRepository userRepository;
+    private UserDatabaseRepository userRepository;
 
     @Autowired
-    private StoreMemoryRepository storeRepository;
+    private StoreDatabaseRepository storeRepository;
 
     @BeforeEach
     public void setUp() {
