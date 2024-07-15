@@ -8,16 +8,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 @Service
 public class DeliveryServiceProxy implements DeliveryService {
     private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
-    private static final String ADDRESS_PATTERN =
-            "^\\d+\\s+[A-Za-z0-9\\s]+,\\s+[A-Za-z\\s]+,\\s+[A-Z]{2},\\s+\\d{5}(-\\d{4})?$";
+    private static final String ADDRESS_PATTERN = "^[\\w\\s.,'-]+$";  // More flexible pattern
     private static final Pattern pattern = Pattern.compile(ADDRESS_PATTERN);
     int id = 1;
 
-    @Autowired
+    //@Autowired
     public DeliveryServiceProxy() {
     }
 
@@ -31,14 +29,13 @@ public class DeliveryServiceProxy implements DeliveryService {
 
     @Override
     public int makeDelivery(String address) {
-        // Additional logic before delegating to the real payment service
         if (isValidAddress(address)) {
-            System.out.println("Processing delivery of $" + address);
+            System.out.println("Processing delivery to " + address);
         } else {
             logger.error("Delivery authorization failed to address : {}", address);
             throw new IllegalArgumentException("Delivery authorization failed");
         }
-        logger.info("Succeed making delivery to {}", address);
+        logger.info("Succeeded making delivery to {}", address);
         int deliveryId = id;
         id++;
         return deliveryId;
@@ -55,3 +52,4 @@ public class DeliveryServiceProxy implements DeliveryService {
         return true;
     }
 }
+

@@ -67,7 +67,7 @@ public interface UserService {
 
     boolean isAdminRegistered();
 
-    void approvePurchase(String username) throws Exception;
+    void approvePurchase(String registeredId, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception;
 
     String getPurchaseHistory(String username, String storeName);
 
