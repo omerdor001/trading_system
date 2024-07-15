@@ -39,7 +39,7 @@ public class UserDatabaseRepository implements UserRepository {
         if (username.startsWith("v")) {
             return visitors.get(username);
         } else {
-            return entityManager.find(Registered.class, username);
+            return entityManager.find(Registered.class, username.substring(1));
         }
     }
 
@@ -48,7 +48,7 @@ public class UserDatabaseRepository implements UserRepository {
         if (username.startsWith("v")) {
             return visitors.containsKey(username);
         } else {
-            return entityManager.find(Registered.class, username) != null;
+            return entityManager.find(Registered.class, username.substring(1)) != null;
         }
     }
 
@@ -91,7 +91,7 @@ public class UserDatabaseRepository implements UserRepository {
         if (username.startsWith("v")) {
             visitors.remove(username);
         } else {
-            Registered user = entityManager.find(Registered.class, username);
+            Registered user = entityManager.find(Registered.class, username.substring(1));
             if (user != null) {
                 entityManager.remove(user);
             }
@@ -111,7 +111,7 @@ public class UserDatabaseRepository implements UserRepository {
 
     @Override
     public void addRegistered(String userName, String encryption, LocalDate birthdate) {
-        Registered user = new Registered(userName, encryption, birthdate);
+        Registered user = new Registered(userName.substring(1), encryption, birthdate);
         entityManager.persist(user);
     }
 
