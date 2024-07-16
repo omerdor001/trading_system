@@ -62,11 +62,6 @@ export default defineComponent({
       }
     });
 
-    const logout = () => {
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      router.push('/login');
-    };
 
     const manageProduct = (product) => {
       router.push({ name: 'ManageProduct', params: { productId: product.product_id } });
@@ -92,7 +87,6 @@ export default defineComponent({
       products,
       username,
       token,
-      logout,
       loading,
       manageProduct,
       keywordsTemplate,

@@ -75,8 +75,6 @@ export default defineComponent({
 
     onMounted(() => {
       const filters = router.currentRoute.value.query;
-      toast.add({ severity: 'success', summary: 'Success', detail: filters, life: 3000 });
-
       fetchProducts(filters);
     });
 
@@ -97,16 +95,13 @@ export default defineComponent({
             categories : categoriesString,
             rating : filters.rating
           } });
-          toast.add({ severity: 'success', summary: 'Success', detail: response.data[0].product_id, life: 3000 });
           products.value = response.data
-        
-        toast.add({ severity: 'success', summary: 'Success', detail: products.value});
         bidPrices.value = products.value.map(() => 0);
         quantity.value = products.value.map(() => 0);
 
       } catch (error) {
         console.error('Error fetching products:', error);
-        toast.add({ severity: 'error', summary: 'error', detail: filters.query });
+        toast.add({ severity: 'error', summary: 'error', detail: filters.query, life: 3000 });
 
       }
     };
@@ -163,19 +158,11 @@ export default defineComponent({
 
     };
 
-
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     return {
       username,
       token,
       products,
       viewOptions,
-      logout,
       addToCart,
       placeBid,
       bidPrices,
