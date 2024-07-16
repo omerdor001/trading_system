@@ -109,8 +109,8 @@ public class CloseStoreExistAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemImp.suggestManage(userName, token, userNameOwner, storeName, true, true, true, true, true, true);
-        tradingSystemImp.approveManage(userNameOwner, tokenOwner, storeName, userName, true, true, true, true, true, true);
+        tradingSystemImp.suggestManage(userName, token, userNameOwner, storeName, true, true, true, true, true);
+        tradingSystemImp.approveManage(userNameOwner, tokenOwner, storeName, userName, true, true, true, true, true);
         String response2 = tradingSystemImp.closeStoreExist(userNameOwner, tokenOwner, storeName).getBody();
 
         Assertions.assertEquals("Only founder can close store exist", response2);

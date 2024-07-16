@@ -95,7 +95,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
 
     }
 
@@ -123,10 +123,6 @@ public class Visitor extends User {
         return false;
     }
 
-    @Override
-    public boolean isCreateLottery(String storeName) {
-        return false;
-    }
 
 
     @Override
@@ -144,7 +140,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
     }
 
     @Override

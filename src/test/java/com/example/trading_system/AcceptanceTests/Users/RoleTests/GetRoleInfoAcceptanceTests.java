@@ -117,8 +117,8 @@ public class GetRoleInfoAcceptanceTests {
         }
         tradingSystemImp.suggestOwner(userName, token, ownerUser, storeName);
         tradingSystemImp.approveOwner(ownerUser, ownerToken, storeName, userName);
-        tradingSystemImp.suggestManage(ownerUser, ownerToken, userNameManager, storeName, true, true, true, true, true, true);
-        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, ownerUser, true, true, true, true, true, true);
+        tradingSystemImp.suggestManage(ownerUser, ownerToken, userNameManager, storeName, true, true, true, true, true);
+        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, ownerUser, true, true, true, true, true);
 
     }
 
@@ -235,7 +235,7 @@ public class GetRoleInfoAcceptanceTests {
         ResponseEntity<String> response = tradingSystemImp.requestManagersPermissions(ownerUser, ownerToken, storeName);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertTrue(Objects.requireNonNull(response.getBody()).contains("managerUser " + userNameManager + " true true true true"));
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.editPermissionForManager(ownerUser, ownerToken, userNameManager, storeName, true, false, true, false, true, false).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.editPermissionForManager(ownerUser, ownerToken, userNameManager, storeName, true, false, true, false, true).getStatusCode());
         ResponseEntity<String> response2 = tradingSystemImp.requestManagersPermissions(ownerUser, ownerToken, storeName);
         Assertions.assertEquals(HttpStatus.OK, response2.getStatusCode());
         Assertions.assertTrue(Objects.requireNonNull(response2.getBody()).contains("managerUser " + userNameManager + " true false true false"));
@@ -249,7 +249,7 @@ public class GetRoleInfoAcceptanceTests {
        ResponseEntity<String> response = tradingSystemImp.requestManagersPermissions(userName, token, storeName);
        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertTrue(Objects.requireNonNull(response.getBody()).contains("managerUser " + userNameManager + " true true true true"));
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.editPermissionForManager(ownerUser, ownerToken, userNameManager, storeName, true, false, true, false, true, false).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.editPermissionForManager(ownerUser, ownerToken, userNameManager, storeName, true, false, true, false, true).getStatusCode());
         ResponseEntity<String> response2 = tradingSystemImp.requestManagersPermissions(userName, token, storeName);
         Assertions.assertEquals(HttpStatus.OK, response2.getStatusCode());
         Assertions.assertTrue(Objects.requireNonNull(response2.getBody()).contains("managerUser " + userNameManager + " true false true false"));

@@ -146,8 +146,8 @@ class AddProductToStoreAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystem.suggestManage(username, token, usernameManager, storeName, true, false, true, true, true, true);
-        tradingSystem.approveManage(usernameManager, tokenManager, storeName, username, true, false, true, true, true, true);
+        tradingSystem.suggestManage(username, token, usernameManager, storeName, true, false, true, true, true);
+        tradingSystem.approveManage(usernameManager, tokenManager, storeName, username, true, false, true, true, true);
         ResponseEntity<String> response2 = tradingSystem.addProduct(usernameManager, tokenManager, 111, storeName, productName, "newDescription", 15.0, 6, 1, 1, "[\"CarPlay\", \"iPhone\"]");
         Assertions.assertEquals("Manager cannot add products", response2.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response2.getStatusCode());
@@ -177,8 +177,8 @@ class AddProductToStoreAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystem.suggestManage(username, token, usernameManager, storeName, true, true, true, true, true, true);
-        tradingSystem.approveManage(usernameManager, tokenManager, storeName, username, true, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, usernameManager, storeName, true, true, true, true, true);
+        tradingSystem.approveManage(usernameManager, tokenManager, storeName, username, true, true, true, true, true);
         ResponseEntity<String> response2 = tradingSystem.addProduct(usernameManager, tokenManager, 111, storeName, productName, "newDescription", 15.0, 6, 1, 1,"[\"CarPlay\", \"iPhone\"]");
         Assertions.assertEquals("Product was added successfully.", response2.getBody());
         Assertions.assertEquals(HttpStatus.OK, response2.getStatusCode());

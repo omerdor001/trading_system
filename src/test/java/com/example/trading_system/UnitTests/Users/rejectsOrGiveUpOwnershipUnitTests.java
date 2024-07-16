@@ -76,7 +76,7 @@ class rejectsOrGiveUpOwnershipUnitTests {
     @Test
     void rejectToManageStore_Success() {
         try {
-            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true, false);
+            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true);
         } catch (Exception e) {
         }
         int sizeB = userFacade.getUser("r" + username2).getManagerSuggestions().size();
@@ -88,7 +88,7 @@ class rejectsOrGiveUpOwnershipUnitTests {
     @Test
     void rejectToManageStore_StoreNotExist() {
         try {
-            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true, false);
+            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true);
         } catch (Exception e) {
         }
         int sizeB = userFacade.getUser("r" + username2).getManagerSuggestions().size();
@@ -101,7 +101,7 @@ class rejectsOrGiveUpOwnershipUnitTests {
     @Test
     void rejectToManageStore_UserToOwnerExist() {
         try {
-            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true,false);
+            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true);
         } catch (Exception e) {
         }
         int sizeB = userFacade.getUser("r" + username2).getManagerSuggestions().size();
@@ -114,7 +114,7 @@ class rejectsOrGiveUpOwnershipUnitTests {
     @Test
     void rejectToManageStore_newManagerIsSuspended() {
         try {
-            userFacade.suggestManager("r" + username3, "r" + username2, "Nike", true, false, true, false, true, false);
+            userFacade.suggestManager("r" + username3, "r" + username2, "Nike", true, false, true, false, true);
         } catch (Exception e) {
         }
         int sizeB = userFacade.getUser("r" + username3).getManagerSuggestions().size();
@@ -129,7 +129,7 @@ class rejectsOrGiveUpOwnershipUnitTests {
     @Test
     void rejectToManageStore_UserAppointNotOwner() {
         try {
-            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true, false);
+            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true);
         } catch (Exception e) {
         }
         int sizeB = userFacade.getUser("r" + username3).getManagerSuggestions().size();
@@ -142,7 +142,7 @@ class rejectsOrGiveUpOwnershipUnitTests {
     @Test
     void rejectToManageStore_UserToManageNotLogged() {
         try {
-            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true, false);
+            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true);
         } catch (Exception e) {
         }
         int sizeB = userFacade.getUser("r" + username2).getManagerSuggestions().size();
@@ -166,7 +166,7 @@ class rejectsOrGiveUpOwnershipUnitTests {
     @Test
     void rejectToManageStore_UserAppointIsManager() {
         try {
-            userFacade.suggestManager("r" + username2, "r" + username3, "Nike", true, false, true, false, true, false);
+            userFacade.suggestManager("r" + username2, "r" + username3, "Nike", true, false, true, false, true);
             userFacade.getUser("r" + username3).addManagerRole("r" + username2, "Nike");
         } catch (Exception e) {
         }
@@ -180,7 +180,7 @@ class rejectsOrGiveUpOwnershipUnitTests {
     @Test
     void rejectToManageStore_isOwner() {
         try {
-            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true, true);
+            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true);
         } catch (Exception e) {
         }
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> userFacade.rejectToManageStore("r" + username1, "Adidas", "r" + username1));
@@ -245,7 +245,7 @@ class rejectsOrGiveUpOwnershipUnitTests {
     @Test
     void rejectToOwnStore_UserAppointNotOwner() {
         try {
-            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true, true);
+            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, false, true, false, true);
         } catch (Exception e) {
         }
         int sizeB = userFacade.getUser("r" + username3).getOwnerSuggestions().size();

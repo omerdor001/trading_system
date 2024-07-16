@@ -77,9 +77,6 @@ public abstract class RoleState {
 
     public abstract void setEditDiscountPolicy(boolean editDiscountPolicy);
 
-    public abstract void setCreateLottery(boolean createLottery);
-
-    public abstract boolean isCreateLottery();
 
     public abstract void addProduct(String username, int product_id, String store_name, String product_name, String product_description, double product_price, int product_quantity, double rating, int category, List<String> keyWords) throws IllegalAccessException;
 
@@ -127,6 +124,5 @@ public abstract class RoleState {
 
     public abstract void getStoreBids() throws IllegalAccessException;
 
-    public abstract  void createProductLottery() throws IllegalAccessException;
 
 }

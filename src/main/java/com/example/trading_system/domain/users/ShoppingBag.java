@@ -83,6 +83,9 @@ public class ShoppingBag {
     }
 
     public int checkProductQuantity(int productId) {
+        ProductInSale productInSale = products_list.get(productId);
+        if(productInSale == null)
+            return 0;
         return products_list.get(productId).getQuantity();
     }
 

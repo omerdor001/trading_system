@@ -141,7 +141,7 @@ class NotificationAcceptanceTests {
 
     @Test
     public void testNotification_SuggestManager_NotLogged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}]", result.getBody());
@@ -150,7 +150,7 @@ class NotificationAcceptanceTests {
     @Test
     public void testNotification_SuggestManager_Logged() {
         loginOwner2();
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[]", result.getBody());
@@ -182,11 +182,11 @@ class NotificationAcceptanceTests {
 
     @Test
     public void testNotification_ApproveManager_NotLogged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
         tradingSystem.makeAdmin(username, token, "rowner2");
         tradingSystem.logout(token, username);
         loginOwner2();
-        tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true, true);
+        tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true);
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(owner2Username, owner2Token, "rowner1");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"owner2 accepted your suggestion to become a manager at store: store1\"}]", result.getBody());
@@ -194,9 +194,9 @@ class NotificationAcceptanceTests {
 
     @Test
     public void testNotification_ApproveManager_Logged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
         loginOwner2();
-        tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true, true);
+        tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true);
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner1");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[]", result.getBody());
@@ -228,7 +228,7 @@ class NotificationAcceptanceTests {
 
     @Test
     public void testNotification_RejectManager_NotLogged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
         tradingSystem.makeAdmin(username, token, "rowner2");
         tradingSystem.logout(token, username);
         loginOwner2();
@@ -240,7 +240,7 @@ class NotificationAcceptanceTests {
 
     @Test
     public void testNotification_RejectManager_Logged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
         loginOwner2();
         tradingSystem.rejectToManageStore(owner2Username, owner2Token, storeName, username);
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner1");
@@ -283,9 +283,9 @@ class NotificationAcceptanceTests {
 
     @Test
     public void testNotification_FireManager_NotLogged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
         loginOwner2();
-        tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true, true);
+        tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true);
         tradingSystem.logout(owner2Token, owner2Username);
         tradingSystem.fireManager(username, token, storeName, "rowner2");
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
@@ -295,9 +295,9 @@ class NotificationAcceptanceTests {
 
     @Test
     public void testNotification_FireManager_Logged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
         loginOwner2();
-        tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true, true);
+        tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true);
         tradingSystem.fireManager(username, token, storeName, "rowner2");
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, owner2Username);
         assertEquals(HttpStatus.OK, result.getStatusCode());
@@ -331,11 +331,11 @@ class NotificationAcceptanceTests {
 
     @Test
     public void testNotification_EditPermission_NotLogged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
         loginOwner2();
-        tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true,true, true);
+        tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true,true);
         tradingSystem.logout(owner2Token, owner2Username);
-        tradingSystem.editPermissionForManager(username, token, "rowner2", storeName, true, true, true, false,true, true);
+        tradingSystem.editPermissionForManager(username, token, "rowner2", storeName, true, true, true, false,true);
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"},{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}]", result.getBody());
@@ -343,10 +343,10 @@ class NotificationAcceptanceTests {
 
     @Test
     public void testNotification_EditPermission_Logged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
         loginOwner2();
-        tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true, true);
-        tradingSystem.editPermissionForManager(username, token, "rowner2", storeName, true, true, true, false, true, true);
+        tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true);
+        tradingSystem.editPermissionForManager(username, token, "rowner2", storeName, true, true, true, false, true);
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}]", result.getBody());
@@ -438,10 +438,10 @@ class NotificationAcceptanceTests {
 
     @Test
     public void testNotification_SendPendingNotifications() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
         loginOwner2();
-        tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true, true);
-        tradingSystem.editPermissionForManager(username, token, "rowner2", storeName, true, true, true, false, true, true);
+        tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true);
+        tradingSystem.editPermissionForManager(username, token, "rowner2", storeName, true, true, true, false, true);
         tradingSystem.sendPendingNotifications(owner2Username, owner2Token);
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());

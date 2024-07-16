@@ -165,8 +165,9 @@ public class MarketFacadeImp implements MarketFacade {
             if (storeRepository.getStore(storeName).getFounder().equals(user))
                 ownerMap.put("founder", true);
             else
-                ownerMap.put("founder", true);
-            ownerMap.put("username", user.substring(1));
+                ownerMap.put("founder",false);
+            ownerMap.put("username",user.substring(1));
+            ownerMap.put("appointer",userFacade.getUserAppointer(user, storeName));
             ownersList.add(ownerMap);
         }
         ObjectMapper objectMapper = new ObjectMapper();
@@ -232,7 +233,7 @@ public class MarketFacadeImp implements MarketFacade {
         }
         return stores.toString().substring(1, stores.toString().length() - 1);
     }
-    
+
     @Override
     public String getStoreProducts(String userName, String storeName) throws IllegalAccessException {
         validateUserAndStore(userName, storeName);
@@ -317,7 +318,7 @@ public class MarketFacadeImp implements MarketFacade {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(resultProductList);
     }
-    
+
     @Override
     public String searchNameInStore(String userName, String productName, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) throws IllegalAccessException {
         if (productName == null) {
@@ -952,7 +953,7 @@ public class MarketFacadeImp implements MarketFacade {
         for (String manager : storeManagers) {
             User user2 = userFacade.getUser(manager);
             RoleState managerRole = user2.getRoleByStoreId(storeName).getRoleState();
-            result.append(user2.getUsername()).append(" ").append(manager).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append(" ").append(managerRole.isCreateLottery()).append('\n');
+            result.append(user2.getUsername()).append(" ").append(manager).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append('\n');
         }
         return result.toString();
     }
@@ -993,7 +994,7 @@ public class MarketFacadeImp implements MarketFacade {
             User user2 = userFacade.getUser(officialUserName);
             RoleState managerRole = user2.getRoleByStoreId(storeName).getRoleState();
             result.append("Role id username address birthdate watch editSupply editPurchasePolicy editDiscountPolicy").append("\n");
-            result.append("Manager ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append(" ").append(managerRole.isCreateLottery()).append("\n");
+            result.append("Manager ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append("\n");
         } else throw new IllegalArgumentException("User is not employed in this store.");
         return result.toString();
     }
@@ -1052,6 +1053,13 @@ public class MarketFacadeImp implements MarketFacade {
         userFacade.sendNotification(customerUsername, store.getFounder(), "User: " + customerUsername + " bought the following items from your store: " + storeName + " " + productInSaleList);
         save(store);
     }
+
+    @Override
+    public void addBidPurchase(String customerUsername, String productInSaleList, double totalPrice, String storeName) throws IOException {
+        Store store = storeRepository.getStore(storeName);
+        store.addPurchase(new Purchase(customerUsername, ProductInSaleDTO.fromJsonList(productInSaleList), totalPrice, storeName));
+    }
+
 
     //region Discount management
     @Override
@@ -1597,12 +1605,14 @@ public class MarketFacadeImp implements MarketFacade {
 //    }
 
     @Override
-    public void placeBid(String userName, String storeName, int productID, double price) throws IllegalArgumentException {
+    public void placeBid(String userName, String storeName, int productID, double price, String address, String amount, String currency,String cardNumber, String month,String year,String holder,String ccv,String id) throws IllegalArgumentException {
         validateUserAndStore(userName, storeName);
         Store store = storeRepository.getStore(storeName);
         if (!store.getProducts().containsKey(productID))
             throw new IllegalArgumentException("Product must exist");
-        store.placeBid(userName, productID, price);
+        if(price > store.getProduct(productID).getProduct_price())
+            throw new IllegalArgumentException("Your bid price is higher than buy now price, you can buy it now cheaper");
+        store.placeBid(userName, productID, price,address, amount, currency, cardNumber, month, year, holder, ccv, id);
 
         for (String owner : store.getOwners())
             userFacade.sendNotification(userName, owner, userName + " is placed a bid for product " + productID + " in store " + storeName + " with price " + price);
@@ -1612,7 +1622,7 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public void approveBid(String userName, String storeName, int productID, String bidUserName, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
+    public void approveBid(String userName, String storeName, int productID, String bidUserName) throws Exception {
         validateUserAndStore(userName, storeName);
         Store store = storeRepository.getStore(storeName);
         if (!store.getProducts().containsKey(productID))
@@ -1623,12 +1633,33 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).approveBid();
 
         boolean allOwnersApproved = store.approveBid(userName, productID, bidUserName);
-        if (allOwnersApproved) {
+        Bid bid = store.getBid(productID, bidUserName);
+        if(bid == null)
+            throw new Exception("Bid has not found");
+        if (allOwnersApproved && bid.isCustomerApproved()) {
             userFacade.sendNotification(userName, bidUserName, "Your bid on product " + store.getProducts().get(productID).getProduct_name() + " in store " + storeName + " is approved");
-            userFacade.bidPurchase(bidUserName, storeName, productID, store.getBidPrice(bidUserName, productID), address, amount, currency, cardNumber, month, year, holder, ccv, id);
+            userFacade.bidPurchase(bidUserName, storeName, productID, store.getBidPrice(bidUserName, productID), bid.getAddress(), bid.getAmount(), bid.getCurrency(), bid.getCardNumber(), bid.getMonth(), bid.getYear(), bid.getHolder(), bid.getCcv(), bid.getHolderId());
             store.removeBidAccepted(bidUserName, productID);
         }
         save(store);
+    }
+
+    @Override
+    public void approveCounterOffer(String userName, String storeName, int productID, double price) throws Exception {
+        validateUserAndStore(userName, storeName);
+        Store store = storeRepository.getStore(storeName);
+        if(!store.getProducts().containsKey(productID))
+            throw new IllegalArgumentException("Product must exist");
+        if(!store.isBidExist(productID, userName))
+            throw new IllegalArgumentException("Bid must exist");
+
+        boolean allOwnersApproved = store.approveCounterOffer(userName,productID,price);
+        Bid bid = store.getBid(productID, userName);
+        userFacade.sendNotification(userName, store.getFounder(), userName + "is accepted for counter offer on "  + store.getProducts().get(productID).getProduct_name() + " in store " + storeName );
+        if (allOwnersApproved) {
+            userFacade.bidPurchase(userName, storeName, productID, store.getBidPrice(userName, productID), bid.getAddress(), bid.getAmount(), bid.getCurrency(), bid.getCardNumber(), bid.getMonth(), bid.getYear(), bid.getHolder(), bid.getCcv(), bid.getHolderId());
+            store.removeBidAccepted(userName, productID);
+        }
     }
 
 
@@ -1672,10 +1703,20 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String getMyBids(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException {
-        validateUserAndStore(userName, storeName);
-        Store store = storeRepository.getStore(storeName);
-        return store.getMyBids(userName);
+    public String getMyBids(String userName) throws IllegalArgumentException, IllegalAccessException {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, List<Bid>> bidsPerStore = new HashMap<>();
+
+        for (Store store : storeRepository.getAllStoresByStores())
+        {
+            if(!store.getMyBids(userName).equals("{}"))
+                bidsPerStore.put(store.getNameId(),store.getAllBidsByUserName(userName));
+        }
+        try {
+            return mapper.writeValueAsString(bidsPerStore);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+        }
 
     }
 
