@@ -142,14 +142,13 @@ public class Registered extends User {
         getRoles().add(manager);
     }
 
-    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editPurchasePolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editPurchasePolicy, boolean editDiscountPolicy, boolean acceptBids) {
         Role manager = getRoleByStoreId(store_name_id);
         manager.getRoleState().setWatch(watch);
         manager.getRoleState().setEditSupply(editSupply);
         manager.getRoleState().setEditPurchasePolicy(editPurchasePolicy);
         manager.getRoleState().setEditDiscountPolicy(editDiscountPolicy);
         manager.getRoleState().setAcceptBids(acceptBids);
-        manager.getRoleState().setCreateLottery(createLottery);
     }
 
     public Role getRoleByStoreId(String store_name_id) {
@@ -190,9 +189,9 @@ public class Registered extends User {
         }
     }
 
-    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
         HashMap<String, List<Boolean>> permissions = new HashMap<>();
-        permissions.put(appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery));
+        permissions.put(appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids));
         managerSuggestions.put(store_name_id, permissions);
     }
 
@@ -238,16 +237,6 @@ public class Registered extends User {
             return true;
         else if(isManager(storeName)){
             return getRoleByStoreId(storeName).isAcceptBids();
-        }
-        else return false;
-    }
-
-    @Override
-    public boolean isCreateLottery(String storeName) {
-        if (isOwner(storeName))
-            return true;
-        else if(isManager(storeName)){
-            return getRoleByStoreId(storeName).isCreateLottery();
         }
         else return false;
     }

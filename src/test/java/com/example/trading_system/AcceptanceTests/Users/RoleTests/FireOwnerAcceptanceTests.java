@@ -132,8 +132,8 @@ public class FireOwnerAcceptanceTests {
         tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
         tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName);
         tradingSystemImp.approveOwner(ownerUserName, ownerToken, storeName, userName);
-        tradingSystemImp.suggestManage(ownerUserName, ownerToken, userNameManager, storeName, false, false, false, false, false, false);
-        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, ownerUserName, false, false, false, false, false, false);
+        tradingSystemImp.suggestManage(ownerUserName, ownerToken, userNameManager, storeName, false, false, false, false, false);
+        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, ownerUserName, false, false, false, false, false);
         tradingSystemImp.suggestOwner(ownerUserName, ownerToken, ownerUserName2, storeName);
         tradingSystemImp.approveOwner(ownerUserName2, ownerToken2, storeName, ownerUserName);
     }
@@ -273,14 +273,14 @@ public class FireOwnerAcceptanceTests {
 
 
 
-        Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName2, ownerToken2, secondManagerUserName, storeName, true, true, true, true, true, true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(secondManagerUserName, secondManagerToken, storeName, ownerUserName2, true, true, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK,tradingSystemImp.suggestManage(ownerUserName2, ownerToken2, secondManagerUserName, storeName, true, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(secondManagerUserName, secondManagerToken, storeName, ownerUserName2, true, true, true, true, true).getStatusCode());
 
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestOwner(ownerUserName2,ownerToken2,thirdOwnerUserName, storeName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveOwner(thirdOwnerUserName, thirdOwnerToken, storeName, ownerUserName2).getStatusCode());
 
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(thirdOwnerUserName, thirdOwnerToken, thirdManagerUserName, storeName, true ,true, true, true, true, true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(thirdManagerUserName, thirdManagerToken, storeName, thirdOwnerUserName, true ,true ,true ,true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(thirdOwnerUserName, thirdOwnerToken, thirdManagerUserName, storeName, true ,true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(thirdManagerUserName, thirdManagerToken, storeName, thirdOwnerUserName, true ,true ,true ,true, true).getStatusCode());
 
 
         tradingSystemImp.register("owner4", password, LocalDate.now());
