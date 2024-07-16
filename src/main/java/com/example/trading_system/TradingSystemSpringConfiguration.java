@@ -1,15 +1,21 @@
 package com.example.trading_system;
 
+import com.example.trading_system.domain.NotificationSender;
+import com.example.trading_system.domain.externalservices.*;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserRepository;
+import com.example.trading_system.service.TradingSystemImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class TradingSystemSpringConfiguration {
     private static final Logger logger = LoggerFactory.getLogger( TradingSystemSpringConfiguration.class );
     static {
-        logger.trace("Starting TradingSystemSpringConfiguration");
+        logger.info("Starting TradingSystemSpringConfiguration");
 //        OpenCV.loadShared();
         logger.info("OpenCV is Loaded.");
     }
@@ -18,6 +24,11 @@ public class TradingSystemSpringConfiguration {
     private String serverHost;
     @Value("${server.port:8082}")
     private String serverPort;
+
+    @Value("${payment.service.name:wsep}")
+    private PaymentServiceEnum paymentServiceName ;
+
+    private PaymentService paymentService;
 
 
 
@@ -44,14 +55,25 @@ public class TradingSystemSpringConfiguration {
           }</code>
      */
 
-
+@Bean
+public PaymentService getPaymentService() {
+    if (paymentServiceName == PaymentServiceEnum.wsep){
+        paymentService = new WsepClient();
+    }
+    else {
+        paymentService = new PaymentServiceProxy();
+    }
+    return paymentService;
+}
 
 //    @Bean
-//    public MyServiceOrClass myService() {
-//        return new MyServiceOrClassImpl();
+//    public TradingSystemImp tradingSystemImp( DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
+//        if (paymentServiceName == PaymentServiceEnum.wsep){
+//            paymentService = new WsepClient();
+//        }
+//        TradingSystemImp.instance= new TradingSystemImp(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
+//        return TradingSystemImp.instance;
 //    }
 
     // Other @Bean definitions can follow here
-
-
 }
