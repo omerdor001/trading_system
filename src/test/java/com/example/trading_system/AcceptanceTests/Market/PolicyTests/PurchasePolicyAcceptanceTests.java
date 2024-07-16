@@ -484,6 +484,5 @@ public class PurchasePolicyAcceptanceTests {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Invalid index: 3", response.getBody());
     }
-
 }
 

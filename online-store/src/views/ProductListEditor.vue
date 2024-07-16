@@ -4,8 +4,8 @@
     <div class="container">
       <h2>{{ storeName }} Products</h2>
       <div class="button-wrapper">
-        <PrimeButton  v-if="isEditSupply" label="Add Product" icon="pi pi-plus" class="custom-button" @click="openAddProductModal" />
-        <PrimeButton  v-if="isEditSupply" label="Remove Product" icon="pi pi-minus" class="custom-button" @click="openRemoveProductModal" />
+        <PrimeButton v-if="isEditSupply" label="Add Product" icon="pi pi-plus" class="custom-button" @click="openAddProductModal" />
+        <PrimeButton v-if="isEditSupply" label="Remove Product" icon="pi pi-minus" class="custom-button" @click="openRemoveProductModal" />
       </div>
       <div class="product-list">
         <div v-for="product in products" :key="product.id" class="product-item" @click="showProductDetails(product)">
@@ -15,10 +15,10 @@
     </div>
 
     <div v-if="selectedProduct" class="custom-modal">
-     <div class="custom-modal-content">
-    <button @click="closeModal" class="custom-modal-close">&times;</button>
-    <h3>Product Details</h3>
-    <div class="product-info">
+      <div class="custom-modal-content auto-size-modal">
+        <button @click="closeModal" class="custom-modal-close">&times;</button>
+        <h3>Product Details</h3>
+        <div class="product-info">
           <p><span class="product-label">ID: </span> {{ selectedProduct.id }}</p>
           <p><span class="product-label">Name: </span> {{ selectedProduct.name }}</p>
           <p><span class="product-label">Description: </span> {{ selectedProduct.description }}</p>
@@ -28,11 +28,11 @@
           <p><span class="product-label">Category: </span> {{ selectedProduct.category }}</p>
           <p><span class="product-label">Keywords: </span> {{ selectedProduct.keyWords }}</p>
         </div>
-    <div class="modal-button-wrapper">
-      <PrimeButton v-if="isEditSupply" label="Edit Product" class="custom-button" @click="editProduct(selectedProduct.id)" />
+        <div class="modal-button-wrapper">
+          <PrimeButton v-if="isEditSupply" label="Edit Product" class="custom-button" @click="editProduct(selectedProduct.id)" />
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
     <div v-if="showAddProduct" class="custom-modal">
       <div class="custom-modal-content">
@@ -80,12 +80,12 @@
 
     <div v-if="showRemoveProduct" class="custom-modal">
       <div class="custom-modal-content">
-        <button @click="closeModal" class="custom-modal-close">&times;</button>
+        <button @click="closeRemoveProductModal" class="custom-modal-close">&times;</button>
         <h3>Remove Product</h3>
         <form @submit.prevent="removeProduct">
           <div class="p-field">
             <label for="productId">Product ID </label>
-            <InputText v-model="productIdToRemove" required />
+            <InputNumber v-model="productIdToRemove" required />
           </div>
           <div class="button-wrapper">
             <PrimeButton type="submit" label="Remove Product" class="custom-button" />
@@ -135,12 +135,12 @@ export default {
       id: '',
       name: '',
       description: '',
-      price: 0,
-      quantity: 0,
-      rating: 0,
+      price: '',
+      quantity: '',
+      rating: '',
       keyWords: '',
     });
-    const productIdToRemove = ref('');
+    const productIdToRemove = ref(null);
 
     onMounted(() => {
       fetchProducts();
@@ -184,22 +184,95 @@ export default {
       selectedProduct.value = product;
     };
 
+    const resetNewProductForm = () => {
+      newProduct.value = {
+        id: null,
+        name: '',
+        description: '',
+        price: null,
+        quantity: null,
+        rating: null,
+        keyWords: '',
+      };
+      selectedCategoryIndex.value = null;
+    };
+
+    const resetRemoveProductForm = () => {
+      productIdToRemove.value = null;
+    };
+
     const closeModal = () => {
+      resetNewProductForm();
       selectedProduct.value = null;
       showAddProduct.value = false;
+    };
+
+    const closeRemoveProductModal = () => {
+      resetRemoveProductForm();
       showRemoveProduct.value = false;
     };
 
     const openAddProductModal = () => {
+      resetNewProductForm();
       showAddProduct.value = true;
       fetchCategories();
     };
 
     const openRemoveProductModal = () => {
+      resetRemoveProductForm();
       showRemoveProduct.value = true;
     };
 
+    const validateProductId = () => {
+      if (newProduct.value.id === null || newProduct.value.id === '') {
+        toast.add({ severity: 'warn', summary: 'Warning', detail: 'Product ID cannot be empty', life: 3000 });
+        return false;
+      }
+      return true;
+    };
+
+    const validatePrice = () => {
+      if (newProduct.value.price === null || newProduct.value.price === '') {
+        toast.add({ severity: 'warn', summary: 'Warning', detail: 'Product price cannot be empty', life: 3000 });
+        return false;
+      }
+      return true;
+    };
+
+    const validateQuantity = () => {
+      if (newProduct.value.quantity === null || newProduct.value.quantity === '') {
+        toast.add({ severity: 'warn', summary: 'Warning', detail: 'Product quantity cannot be empty', life: 3000 });
+        return false;
+      }
+      return true;
+    };
+
+    const validateRating = () => {
+      if (newProduct.value.rating === null || newProduct.value.rating === '') {
+        toast.add({ severity: 'warn', summary: 'Warning', detail: 'Product rating cannot be empty', life: 3000 });
+        return false;
+      }
+      return true;
+    };
+
+    const validateCategory = () => {
+      if (selectedCategoryIndex.value === null || selectedCategoryIndex.value === '') {
+        toast.add({ severity: 'warn', summary: 'Warning', detail: 'Product category cannot be empty', life: 3000 });
+        return false;
+      }
+      return true;
+    };
+
+    const validateRemoveProductId = () => {
+      if (productIdToRemove.value === null || productIdToRemove.value === '') {
+        toast.add({ severity: 'warn', summary: 'Warning', detail: 'Product ID cannot be empty', life: 3000 });
+        return false;
+      }
+      return true;
+    };
+
     const addProduct = async () => {
+      if (!validateProductId() || !validatePrice() || !validateQuantity() || !validateRating() || !validateCategory()) return;
       try {
         const keyWordsArray = newProduct.value.keyWords.split(',').map(word => word.trim());
         const keyWordsString = keyWordsArray.join(',');
@@ -221,16 +294,18 @@ export default {
         });
         products.value.push(response.data);
         toast.add({ severity: 'success', summary: 'Success', detail: 'Product added successfully', life: 3000 });
+        resetNewProductForm();
         closeModal();
         fetchProducts();
       } catch (error) {
-        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+        toast.add({ severity: 'error', summary: 'Error',  detail: error.response.data || 'Failed to add product', life: 3000 });
       }
     };
 
     const removeProduct = async () => {
+      if (!validateRemoveProductId()) return;
       try {
-        await axios.delete(`http://localhost:8082/api/trading/product/remove`, {
+        const response = await axios.delete(`http://localhost:8082/api/trading/product/remove`, {
           params: {
             username: username,
             token: token,
@@ -238,12 +313,13 @@ export default {
             productId: productIdToRemove.value,
           }
         });
+        console.log(response.data);
         products.value = products.value.filter(product => product.id !== productIdToRemove.value);
         toast.add({ severity: 'success', summary: 'Success', detail: 'Product removed successfully', life: 3000 });
-        closeModal();
+        closeRemoveProductModal();
         fetchProducts();
       } catch (error) {
-        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+        toast.add({ severity: 'error', summary: 'Error',  detail: error.response.data || 'Failed to remove product', life: 3000 });
       }
     };
 
@@ -262,6 +338,7 @@ export default {
       productIdToRemove,
       showProductDetails,
       closeModal,
+      closeRemoveProductModal,
       openAddProductModal,
       openRemoveProductModal,
       addProduct,
@@ -303,6 +380,13 @@ export default {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
 }
 
+.product-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
 .custom-modal {
   position: fixed;
   top: 0;
@@ -321,9 +405,17 @@ export default {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 80%;
+  width: auto;
   max-width: 400px;
-  position: relative; 
+  position: relative;
+}
+
+.auto-size-modal {
+  width: auto;
+  max-width: 80%;
+  height: auto;
+  max-height: 80%;
+  overflow-y: auto;
 }
 
 .custom-modal-close {
@@ -341,6 +433,12 @@ export default {
 }
 
 .button-wrapper {
+  display: flex;
+  justify-content: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+}
+
+.modal-button-wrapper {
   display: flex;
   justify-content: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
@@ -371,4 +469,3 @@ export default {
   background-color: #6EB5FF;
 }
 </style>
-
