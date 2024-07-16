@@ -1,9 +1,9 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="true" :username="username" />
+    <SiteHeader :isLoggedIn="true" :username="displayName" />
     <div class="main-content">
       <h2>Purchase History</h2>
-      <PrimeDataTable :value="allProducts" class="products-table">
+      <PrimeDataTable :value="processedProducts" class="products-table">
         <PrimeColumn field="productId" header="Product ID" />
         <PrimeColumn field="price" header="Price" />
         <PrimeColumn field="quantity" header="Quantity" />
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import PrimeDataTable from 'primevue/datatable';
 import PrimeColumn from 'primevue/column';
@@ -52,13 +52,36 @@ export default {
       }
     };
 
+    // Computed property to process product usernames
+    const processedProducts = computed(() => {
+      return allProducts.value.map(product => {
+        let customUsername = product.customUsername;
+        if (customUsername.startsWith('r')) {
+          customUsername = customUsername.substring(1);  // Remove the first character 'r'
+        } else if (customUsername.startsWith('v')) {
+          customUsername = 'Guest';  // Change any username starting with 'v' to 'Guest'
+        }
+        return { ...product, customUsername };
+      });
+    });
+
+    const displayName = computed(() => {
+      if (username.value.startsWith('r')) {
+        return username.value.substring(1);  // Removes the first character 'r'
+      } else if (username.value.startsWith('v')) {
+        return 'Guest';  // Changes any username starting with 'v' to 'Guest'
+      }
+      return username.value;  // Default case if no specific rules are matched
+    });
+
     onMounted(() => {
       fetchPurchaseHistory();
     });
 
     return {
       allProducts,
-      username,
+      processedProducts,
+      displayName,
       token,
     };
   },
