@@ -1,10 +1,6 @@
 package com.example.trading_system;
 
-import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.*;
-import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserRepository;
-import com.example.trading_system.service.TradingSystemImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
