@@ -2,17 +2,12 @@ package com.example.trading_system;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +23,6 @@ public class TradingSystemInitializer {
         tokens=new HashMap<>();
         File file = new File("C:\\Users\\alex\\Documents\\trading_system\\initialState.json");
         try {
-           // InputStream inputStream = getClass().getResourceAsStream("/trading_system/initialState.json");
             ObjectMapper objectMapper = new ObjectMapper();
             List<Map<String, Object>> useCases = objectMapper.readValue(file, new TypeReference<List<Map<String, Object>>>() {});
             for (Map<String, Object> useCase : useCases) {
