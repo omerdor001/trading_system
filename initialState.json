@@ -200,7 +200,7 @@
     "arguments": {}
   },
   {
-    "useCase": "addToCart",
+    "useCase": "addToCart1",
     "arguments": {
       "username": "v6",
       "token": "",
@@ -211,7 +211,7 @@
     }
   },
   {
-  "useCase": "approvePurchase",
+  "useCase": "approvePurchase1",
   "arguments": {
     "username": "v6",
     "token": "",
@@ -247,7 +247,7 @@
     }
   },
   {
-  "useCase": "addToCart",
+  "useCase": "addToCart2",
   "arguments": {
     "username": "jane_doe",
     "token": "",
@@ -258,7 +258,7 @@
     }
   },
   {
-  "useCase": "approvePurchase",
+  "useCase": "approvePurchase2",
   "arguments": {
     "username": "jane_doe",
     "token": "",
@@ -274,7 +274,7 @@
     }
    },
    {
-    "useCase": "logoutR3",
+    "useCase": "logoutR1",
     "arguments": {
       "token": "",
       "username": "jane_doe"
