@@ -32,7 +32,7 @@
     }
   },
   {
-    "useCase": "login",
+    "useCase": "login0",
     "arguments": {
       "token": "",
       "usernameV": "v0",
@@ -69,29 +69,29 @@
       "editSupply": true,
       "editBuyPolicy": true,
       "editDiscountPolicy": true,
-      "acceptBids": true,
+      "acceptBids": true
     }
   },
   {
-    "useCase": "logout",
+    "useCase": "logoutR0",
     "arguments": {
       "token": "",
       "username": "john_doe"
     }
   },
   {
-    "useCase": "exit",
+    "useCase": "exit1",
     "arguments": {
       "token": "",
       "username": "v1"
     }
-  }
+  },
   {
     "useCase": "enter",
     "arguments": {}
   },
   {
-    "useCase": "login",
+    "useCase": "login2",
     "arguments": {
       "token": "",
       "usernameV": "v2",
@@ -109,14 +109,14 @@
     }
   },
   {
-    "useCase": "logout",
+    "useCase": "logoutR1",
     "arguments": {
       "token": "",
       "username": "jane_doe"
     }
   },
   {
-    "useCase": "exit",
+    "useCase": "exit3",
     "arguments": {
       "token": "",
       "username": "v3"
@@ -127,7 +127,7 @@
     "arguments": {}
   },
   {
-    "useCase": "login",
+    "useCase": "login4",
     "arguments": {
       "token": "",
       "usernameV": "v4",
@@ -146,7 +146,7 @@
       "editSupply": true,
       "editBuyPolicy": true,
       "editDiscountPolicy": true,
-      "acceptBids": true,
+      "acceptBids": true
     }
   },
   {
@@ -182,14 +182,14 @@
     }
   },
   {
-    "useCase": "logout",
+    "useCase": "logoutR2",
     "arguments": {
       "token": "",
       "username": "scooby_doe"
     }
   },
   {
-    "useCase": "exit",
+    "useCase": "exit5",
     "arguments": {
       "token": "",
       "username": "v5"
@@ -227,7 +227,7 @@
     }
   },
   {
-    "useCase": "exit",
+    "useCase": "exit6",
     "arguments": {
       "token": "",
       "username": "v6"
@@ -238,7 +238,7 @@
     "arguments": {}
   },
   {
-    "useCase": "login",
+    "useCase": "login7",
     "arguments": {
       "token": "",
       "usernameV": "v7",
@@ -274,14 +274,14 @@
     }
    },
    {
-    "useCase": "logout",
+    "useCase": "logoutR3",
     "arguments": {
       "token": "",
       "username": "jane_doe"
     }
   },
   {
-    "useCase": "exit",
+    "useCase": "exit8",
     "arguments": {
       "token": "",
       "username": "v8"
