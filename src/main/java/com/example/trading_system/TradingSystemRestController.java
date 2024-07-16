@@ -963,8 +963,17 @@ public class TradingSystemRestController {
                                            @RequestParam String token,
                                            @RequestParam String storeName,
                                            @RequestParam int productID,
-                                           @RequestParam double price) {
-        return tradingSystem.placeBid( userName, token, storeName, productID, price);
+                                           @RequestParam double price,
+                                           @RequestParam String address,
+                                           @RequestParam String amount,
+                                           @RequestParam String currency,
+                                           @RequestParam String cardNumber,
+                                           @RequestParam String month,
+                                           @RequestParam String year,
+                                           @RequestParam String holder,
+                                           @RequestParam String ccv,
+                                           @RequestParam String id) {
+        return tradingSystem.placeBid( userName, token, storeName, productID, price, address, amount, currency, cardNumber, month, year, holder, ccv, id);
     }
 
     @PostMapping("/store/approve-bid")
@@ -972,17 +981,9 @@ public class TradingSystemRestController {
                                              @RequestParam String token,
                                              @RequestParam String storeName,
                                              @RequestParam int productID,
-                                             @RequestParam String bidUserName,
-                                             @RequestParam String address,
-                                             @RequestParam String amount,
-                                             @RequestParam String currency,
-                                             @RequestParam String cardNumber,
-                                             @RequestParam String month,
-                                             @RequestParam String year,
-                                             @RequestParam String holder,
-                                             @RequestParam String ccv,
-                                             @RequestParam String id) {
-        return tradingSystem.approveBid(userName, token, storeName, productID, bidUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
+                                             @RequestParam String bidUserName
+                                             ) {
+        return tradingSystem.approveBid(userName, token, storeName, productID, bidUserName);
     }
 
     @PostMapping("/store/reject-bid")
@@ -1011,7 +1012,7 @@ public class TradingSystemRestController {
                                                       @RequestParam String storeName,
                                                       @RequestParam int productID,
                                                       @RequestParam double price) {
-        return tradingSystem.placeBid(userName, token, storeName, productID, price);
+        return tradingSystem.approveCounterOffer(userName, token, storeName, productID, price);
     }
 
     @GetMapping("/store/get-store-bids")
@@ -1021,11 +1022,11 @@ public class TradingSystemRestController {
         return tradingSystem.getStoreBids(userName, token, storeName);
     }
 
-    @GetMapping("/store/{storeName}/get-my-bids")
+    @GetMapping("/store/get-my-bids")
     public ResponseEntity<String> getMyBids(@RequestParam String userName,
-                                            @RequestParam String token,
-                                            @PathVariable String storeName) {
-        return tradingSystem.getMyBids(userName, token, storeName);
+                                            @RequestParam String token
+                                            ) {
+        return tradingSystem.getMyBids(userName, token);
     }
 
 //    @PostMapping("/store/{storeName}/create-product-lottery")

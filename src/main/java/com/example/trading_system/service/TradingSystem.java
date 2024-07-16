@@ -281,17 +281,19 @@ public interface TradingSystem {
 
     ResponseEntity<String> getIsEditPurchasePolicyPermission(String username, String token, String manager, String storeName);
 
-    ResponseEntity<String> placeBid(String userName, String token, String storeName, int productID, double price);
+    ResponseEntity<String> placeBid(String userName, String token, String storeName, int productID, double price, String address, String amount, String currency,String cardNumber, String month,String year,String holder,String ccv,String id);
 
-    ResponseEntity<String> approveBid(String userName, String token, String storeName, int productID, String bidUserName, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id);
+    ResponseEntity<String> approveBid(String userName, String token, String storeName, int productID, String bidUserName);
 
     ResponseEntity<String> rejectBid(String userName, String token, String storeName, int productID, String bidUserName);
 
     ResponseEntity<String> placeCounterOffer(String userName, String token, String storeName, int productID, String bidUserName, double newPrice);
 
+    ResponseEntity<String> approveCounterOffer(String userName, String token, String storeName, int productID, double price);
+
     ResponseEntity<String> getStoreBids(String userName, String token, String storeName);
 
-    ResponseEntity<String> getMyBids(String userName, String token, String storeName);
+    ResponseEntity<String> getMyBids(String userName, String token);
 
 //    ResponseEntity<String> buyLotteryProductTicket(String userName, String token, String storeName, int productID, double price);
 //

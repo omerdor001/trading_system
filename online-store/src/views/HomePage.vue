@@ -9,6 +9,8 @@
         <PrimeButton v-if="isLoggedIn" label="Close Store" @click="closeStore" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="View Ownership Suggestions" @click="approveOwnership" class="sidebar-button" />
         <PrimeButton v-if="isLoggedIn" label="View Management Suggestions" @click="approveManagement" class="sidebar-button" />
+        <PrimeButton v-if="isLoggedIn" label="View My Bids" @click="viewMyBids" class="sidebar-button" />
+
       </div>
       <div class="content">
         <AboutSection />
@@ -87,6 +89,10 @@ export default defineComponent({
      const approveManagement = () => {
         router.push('/approve-manager');
       };
+      
+      const viewMyBids = () => {
+        router.push('/get-my-bids')
+      };
 
     const stores = () => {
       router.push('/stores-page');
@@ -138,6 +144,7 @@ export default defineComponent({
       watchSuspensions,
       purchasesHistoryAsSystemManager,
       viewAllStores,
+      viewMyBids
     };
   }
 });

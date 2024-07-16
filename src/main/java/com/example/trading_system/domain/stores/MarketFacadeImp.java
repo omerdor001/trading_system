@@ -1056,6 +1056,13 @@ public class MarketFacadeImp implements MarketFacade {
         userFacade.sendNotification(customerUsername, store.getFounder(), "User: " + customerUsername + " bought the following items from your store: " + storeName + " " + productInSaleList);
     }
 
+    @Override
+    public void addBidPurchase(String customerUsername, String productInSaleList, double totalPrice, String storeName) throws IOException {
+        Store store = storeRepository.getStore(storeName);
+        store.addPurchase(new Purchase(customerUsername, ProductInSaleDTO.fromJsonList(productInSaleList), totalPrice, storeName));
+    }
+
+
     //region Discount management
     @Override
     public String getDiscountPolicies(String username, String storeName) throws IllegalAccessException {
@@ -1509,12 +1516,14 @@ public class MarketFacadeImp implements MarketFacade {
 //    }
 
     @Override
-    public void placeBid(String userName, String storeName, int productID, double price) throws IllegalArgumentException {
+    public void placeBid(String userName, String storeName, int productID, double price, String address, String amount, String currency,String cardNumber, String month,String year,String holder,String ccv,String id) throws IllegalArgumentException {
         validateUserAndStore(userName, storeName);
         Store store = storeRepository.getStore(storeName);
         if(!store.getProducts().containsKey(productID))
             throw new IllegalArgumentException("Product must exist");
-        store.placeBid(userName, productID, price);
+        if(price > store.getProduct(productID).getProduct_price())
+            throw new IllegalArgumentException("Your bid price is higher than buy now price, you can buy it now cheaper");
+        store.placeBid(userName, productID, price,address, amount, currency, cardNumber, month, year, holder, ccv, id);
 
         for (String owner : store.getOwners())
             userFacade.sendNotification(userName, owner, userName + " is placed a bid for product " + productID + " in store " + storeName + " with price " + price);
@@ -1523,7 +1532,7 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public void approveBid(String userName, String storeName, int productID, String bidUserName, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
+    public void approveBid(String userName, String storeName, int productID, String bidUserName) throws Exception {
         validateUserAndStore(userName, storeName);
         Store store = storeRepository.getStore(storeName);
         if (!store.getProducts().containsKey(productID))
@@ -1534,10 +1543,31 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).approveBid();
 
         boolean allOwnersApproved = store.approveBid(userName, productID, bidUserName);
-        if (allOwnersApproved) {
+        Bid bid = store.getBid(productID, bidUserName);
+        if(bid == null)
+            throw new Exception("Bid has not found");
+        if (allOwnersApproved && bid.isCustomerApproved()) {
             userFacade.sendNotification(userName, bidUserName, "Your bid on product " + store.getProducts().get(productID).getProduct_name() + " in store " + storeName + " is approved");
-            userFacade.bidPurchase(bidUserName, storeName, productID, store.getBidPrice(bidUserName, productID), address, amount, currency, cardNumber, month, year, holder, ccv, id);
+            userFacade.bidPurchase(bidUserName, storeName, productID, store.getBidPrice(bidUserName, productID), bid.getAddress(), bid.getAmount(), bid.getCurrency(), bid.getCardNumber(), bid.getMonth(), bid.getYear(), bid.getHolder(), bid.getCcv(), bid.getHolderId());
             store.removeBidAccepted(bidUserName, productID);
+        }
+    }
+
+    @Override
+    public void approveCounterOffer(String userName, String storeName, int productID, double price) throws Exception {
+        validateUserAndStore(userName, storeName);
+        Store store = storeRepository.getStore(storeName);
+        if(!store.getProducts().containsKey(productID))
+            throw new IllegalArgumentException("Product must exist");
+        if(!store.isBidExist(productID, userName))
+            throw new IllegalArgumentException("Bid must exist");
+
+        boolean allOwnersApproved = store.approveCounterOffer(userName,productID,price);
+        Bid bid = store.getBid(productID, userName);
+        userFacade.sendNotification(userName, store.getFounder(), userName + "is accepted for counter offer on "  + store.getProducts().get(productID).getProduct_name() + " in store " + storeName );
+        if (allOwnersApproved) {
+            userFacade.bidPurchase(userName, storeName, productID, store.getBidPrice(userName, productID), bid.getAddress(), bid.getAmount(), bid.getCurrency(), bid.getCardNumber(), bid.getMonth(), bid.getYear(), bid.getHolder(), bid.getCcv(), bid.getHolderId());
+            store.removeBidAccepted(userName, productID);
         }
     }
 
@@ -1584,10 +1614,20 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String getMyBids(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException {
-        validateUserAndStore(userName, storeName);
-        Store store = storeRepository.getStore(storeName);
-        return store.getMyBids(userName);
+    public String getMyBids(String userName) throws IllegalArgumentException, IllegalAccessException {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, List<Bid>> bidsPerStore = new HashMap<>();
+
+        for (Store store : storeRepository.getAllStoresByStores())
+        {
+            if(!store.getMyBids(userName).equals("{}"))
+                bidsPerStore.put(store.getNameId(),store.getAllBidsByUserName(userName));
+        }
+        try {
+            return mapper.writeValueAsString(bidsPerStore);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+        }
 
     }
 

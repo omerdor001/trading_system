@@ -3,7 +3,7 @@
     <SiteHeader :isLoggedIn="true" :username="username" @logout="logout" />
     <div class="store-bids">
       <h1>{{ storeName }}</h1>
-      <div v-if="bids.length">
+      <div v-if="bids">
         <table>
           <thead>
             <tr>
@@ -14,9 +14,11 @@
                 Product ID
               </th>
               <th>Price</th>
+              <th>Customer Approve</th>
               <th>Approved By</th>
               <th>Approve</th>
               <th>Reject</th>
+              <th>Counter Offer</th>
             </tr>
           </thead>
           <tbody>
@@ -24,12 +26,17 @@
               <td> {{ bid.userName }}</td>
               <td> {{ bid.productID }}</td>
               <td> {{ bid.price }}</td>
+              <td> {{ bid.customerApproved ? 'Yes' : 'No' }}</td>
               <td> {{  bid.approvedBy.length > 0 ? bid.approvedBy.join(',') : 'No approvals yet' }}</td>
               <td>
                   <Button v-if="!isApprovedByUser(bid)" @click="approveBid(bid)">Approve</Button>
               </td>
               <td>
                   <Button v-if="!isApprovedByUser(bid)" @click="rejectBid(bid)">Reject</Button>
+              </td>
+              <td>
+                  <input v-if="!isApprovedByUser(bid)" type="number" v-model="counterOffer" placeholder="Enter Counter Offer" />
+                  <Button v-if="!isApprovedByUser(bid)" @click="placeCounterOffer(bid)">Counter Offer</Button>
               </td>
             </tr>
           </tbody>
@@ -67,6 +74,7 @@
     const bids = ref([]);
     const error = ref(null);
     const toast = useToast();
+    const counterOffer = ref(0);
 
 
 
@@ -125,9 +133,32 @@ const isApprovedByUser =  (bid) => {
     }
 };
 
+
+const placeCounterOffer = async (bid) => {
+  try {
+      const response = await axios.post('http://localhost:8082/api/trading/store/place-counter-offer', null, {
+        params: {
+           userName : username, 
+           token : token,
+           storeName : storeName,
+           productID : bid.productID,
+           bidUserName: bid.userName,
+           newPrice: counterOffer.value
+          } 
+      });
+      toast.add({ severity : 'success', summary: 'success', detail: "Counter offer bid succeessed", life: 3000 });
+      toast.add({ severity : 'success', summary: 'success', detail:  response.data, life: 3000 });
+
+      fetchStoreBids();
+
+    } catch (error) {
+      console.error('Error fetching store bids:', error);
+    }
+};
+
 const rejectBid = async (bid) => {
   try {
-      const response = await axios.put('http://localhost:8082/api/trading/store/reject-bid', {
+      const response = await axios.post('http://localhost:8082/api/trading/store/reject-bid', null, {
         params: {
            userName : username, 
            token : token,
@@ -158,7 +189,9 @@ const rejectBid = async (bid) => {
       toast,
       isApprovedByUser,
       approveBid,
-      rejectBid
+      rejectBid,
+      counterOffer,
+      placeCounterOffer
     };
   },
 });
@@ -166,7 +199,7 @@ const rejectBid = async (bid) => {
   
   <style scoped>
   .store-bids {
-    max-width: 800px;
+    max-width: 100%;
     margin: 0 auto;
     padding: 1em;
     font-family: Arial, sans-serif;

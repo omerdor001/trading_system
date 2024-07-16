@@ -1015,7 +1015,7 @@ public class UserFacadeImp implements UserFacade {
         products_list.put(productID, new ProductInSale(storeName, productID, price, 1, product.getCategory().getIntValue()));
         ObjectMapper objectMapper = new ObjectMapper();
         String a = objectMapper.writeValueAsString(products_list.values());
-        marketFacade.addPurchase(userName, a, price, storeName);
+        marketFacade.addBidPurchase(userName, a, price, storeName);
     }
 
     @Override

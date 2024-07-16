@@ -32,6 +32,7 @@ import PaymentPage from '@/views/PaymentPage.vue';
 import ProductsForStore from '@/views/ProductsForStore.vue';
 import EditPurchasePolicy from '@/views/PurchasePolicyManagement.vue';
 import EditDiscountPolicy from '@/components/DiscountManagement.vue';
+import ViewMyBids from '@/views/ViewMyBids.vue'
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },
@@ -67,7 +68,9 @@ const routes = [
     { path: '/edit-discount-policy/:storeName', name: 'EditDiscountPolicy', component: EditDiscountPolicy },
     { path: '/edit-purchase-policy/:storeName', name: 'EditPurchasePolicy', component: EditPurchasePolicy },
     { path: '/all-stores', name: 'AllStoresPage', component: AllStoresPage },
-    { path: '/workers-in-store/:storeName', name: 'WorkersInStore', component: WorkersInStore }
+    { path: '/workers-in-store/:storeName', name: 'WorkersInStore', component: WorkersInStore },
+    { path: '/get-my-bids', name: 'ViewMyBids', component: ViewMyBids }
+
 ];
 
 const router = createRouter({

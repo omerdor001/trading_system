@@ -143,7 +143,16 @@ export default defineComponent({
             token: token,
             storeName: storeName,
             productID: productID,
-            price: price
+            price: price,
+            address: "1234 Main Street, Springfield, IL, 62704-1234",
+            amount: price,
+            currency: "USD",
+            cardNumber: "4111111111111111",
+            month: "12",
+            year: "2025",
+            holder: "John Doe",
+            ccv: "123",
+            id:"209507664"
           }
         });
         toast.add({ severity: 'success', summary: 'Success', detail: response.data, life: 3000 });

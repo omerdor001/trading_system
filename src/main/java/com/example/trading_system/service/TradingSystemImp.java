@@ -2010,12 +2010,12 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override //TODO: approve counter Offer will call a placeBid
-    public ResponseEntity<String> placeBid(String userName, String token, String storeName, int productID, double price){
+    public ResponseEntity<String> placeBid(String userName, String token, String storeName, int productID, double price, String address, String amount, String currency,String cardNumber, String month,String year,String holder,String ccv,String id){
         logger.info("{} is trying to place a bid for product {} in store {}", userName, productID, storeName);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(userName, token)) return invalidTokenResponse();
-            marketService.placeBid(userName, storeName, productID, price);
+            marketService.placeBid(userName, storeName, productID, price, address, amount, currency, cardNumber, month, year, holder, ccv, id);
             return new ResponseEntity<>("Placed bid successfully.", HttpStatus.OK);
         } catch (Exception e){
             logger.error("Error occurred while {} trying to place a bid for product {} in store {}", userName, productID, storeName);
@@ -2024,15 +2024,15 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> approveBid(String userName, String token, String storeName, int productID, String bidUserName, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) {
+    public ResponseEntity<String> approveBid(String userName, String token, String storeName, int productID, String bidUserName) {
         logger.info("{} is trying to approve bid by user {} for product {} in store {}", userName, bidUserName, productID, storeName);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(userName, token)) return invalidTokenResponse();
-            marketService.approveBid(userName, storeName, productID, bidUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
+            marketService.approveBid(userName, storeName, productID, bidUserName);
             return new ResponseEntity<>("Approved bid successfully.", HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred while {} trying to approved a bid by user {} for product {} in store {}", userName, bidUserName, productID, storeName);
+            logger.error("Error occurred while {} trying to approved a bid by user {} for product {} in store {}. error = {}", userName, bidUserName, productID, storeName, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -2066,6 +2066,20 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
+    public ResponseEntity<String> approveCounterOffer(String userName, String token, String storeName, int productID, double price) {
+        logger.info("{} is trying to approve a counter offer for his bid for product {} in store {}", userName, productID, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
+            marketService.approveCounterOffer(userName, storeName, productID, price);
+            return new ResponseEntity<>("Approved counter offer successfully.", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while {} trying to approve a counter offer for bid for product {} in store {}", userName, productID, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+        @Override
     public ResponseEntity<String> getStoreBids(String userName, String token, String storeName){
         logger.info("{} is trying to get all bids from store {}", userName, storeName);
         try {
@@ -2081,17 +2095,19 @@ public class TradingSystemImp implements TradingSystem {
 
 
     @Override
-    public ResponseEntity<String> getMyBids(String userName, String token, String storeName) {
-        logger.info("{} is trying to get all his bids for store {} ", userName, storeName);
+    public ResponseEntity<String> getMyBids(String userName, String token) {
+        logger.info("{} is trying to get all his bids", userName);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(userName, token)) return invalidTokenResponse();
-            String result = marketService.getMyBids(userName, storeName);
+            String result = marketService.getMyBids(userName);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred while {} trying to get all his bids for store", userName, storeName);
+            logger.error("Error occurred while {} trying to get all his bids ", userName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
     }
 //
 //    @Override
@@ -2123,4 +2139,4 @@ public class TradingSystemImp implements TradingSystem {
 //    }
 //
 
-}
+//}

@@ -212,7 +212,7 @@ export default defineComponent({
 
     const acceptBids = (storeName) => {
       const store = selectedStore.value;
-      if (store) {
+      if (store && store.permissions.acceptBids) {
         router.push({ name: 'WatchStoreBids', params: { storeName } });
       }
     };
