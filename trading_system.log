@@ -1985,3 +1985,24 @@ This generated password is for development use only. Your security configuration
 2024-07-16T13:42:24.528+03:00  INFO 25516 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
 2024-07-16T13:42:24.534+03:00  INFO 25516 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@675b18ff]]
 2024-07-16T13:42:24.535+03:00  INFO 25516 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-07-16T14:44:26.023+03:00  INFO 28168 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 28168 (C:\Users\yuval azulay\trading_system\target\classes started by yuval azulay in C:\Users\yuval azulay\trading_system)
+2024-07-16T14:44:26.027+03:00  INFO 28168 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-16T14:44:28.017+03:00  INFO 28168 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : OpenCV is Loaded.
+2024-07-16T14:44:28.835+03:00  INFO 28168 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-16T14:44:28.869+03:00  INFO 28168 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-16T14:44:28.869+03:00  INFO 28168 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-16T14:44:28.995+03:00  INFO 28168 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-16T14:44:28.996+03:00  INFO 28168 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2878 ms
+2024-07-16T14:44:29.586+03:00  WARN 28168 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 29cd9ac1-c822-41a4-891d-824992bbe314
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-07-16T14:44:30.021+03:00  INFO 28168 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2443135, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@184823ed, org.springframework.security.web.context.SecurityContextHolderFilter@624b523, org.springframework.security.web.header.HeaderWriterFilter@31acfd4e, org.springframework.web.filter.CorsFilter@30bbcf91, org.springframework.security.web.authentication.logout.LogoutFilter@10980560, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1c30cb85, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@577bf0aa, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3ca14cf4, org.springframework.security.web.access.ExceptionTranslationFilter@481b2f10, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@70b2fa10]
+2024-07-16T14:44:30.372+03:00  INFO 28168 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
+2024-07-16T14:44:30.376+03:00  INFO 28168 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-07-16T14:44:30.381+03:00  INFO 28168 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@508ad266]]
+2024-07-16T14:44:30.382+03:00  INFO 28168 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-07-16T14:44:30.391+03:00  INFO 28168 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 5.209 seconds (process running for 17.107)
+2024-07-16T14:45:30.396+03:00  INFO 28168 --- [Trading_System] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
