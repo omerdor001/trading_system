@@ -718,7 +718,7 @@ public class MarketFacadeImp implements MarketFacade {
             if (!store.getProducts().containsKey(productId)) {
                 throw new IllegalArgumentException("Product must exist");
             }
-            if (rating < 0) throw new IllegalArgumentException("Rating can't be negative number");
+            if (rating < 0 || rating > 5) throw new IllegalArgumentException("Rating must be a number between 0 to 5");
             if (!userFacade.isUserExist(username)) {
                 throw new IllegalArgumentException("User must exist");
             }

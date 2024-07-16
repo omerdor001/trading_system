@@ -187,7 +187,7 @@ public class Store {
             throw new IllegalArgumentException("Product with id " + product_id + " already exists");
         if (product_price < 0) throw new IllegalArgumentException("Price can't be negative number");
         if (product_quantity <= 0) throw new IllegalArgumentException("Quantity must be natural number");
-        if (rating < 0) throw new IllegalArgumentException("Rating can't be negative number");
+        if (rating < 0 || rating > 5) throw new IllegalArgumentException("Rating must be a number between 0 to 5");
         Product product = new Product(product_id, product_name, product_description, product_price, product_quantity, rating, Category.getCategoryFromInt(category), keyWords);
         product.setStore_name(this.nameId);
         products.put(product.getProduct_id(), product);
