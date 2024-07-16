@@ -321,13 +321,11 @@ public class PurchasePolicyAcceptanceTests {
     }
 
     @Test
-    @Disabled
-    //TODO fix me
     public void testSetPurchasePolicyProductIdNotExists_fail() {
         tradingSystem.addPurchasePolicyByShoppingCartMaxProductsUnit(username, token, storeName, 0, 5);
         ResponseEntity<String> response = tradingSystem.setPurchasePolicyProductId(username, token, storeName, 0, 3);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Product with id 3 does not exist", response.getBody());
+        assertEquals("Product with id 3 does not exists", response.getBody());
     }
 
     @Test

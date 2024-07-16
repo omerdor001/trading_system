@@ -65,8 +65,8 @@ public class Bid {
         return price;
     }
 
-    public LinkedList<String> getApprovedBy() {
-        return (LinkedList<String>) approvedBy;
+    public List<String> getApprovedBy() {
+        return approvedBy;
     }
 
 

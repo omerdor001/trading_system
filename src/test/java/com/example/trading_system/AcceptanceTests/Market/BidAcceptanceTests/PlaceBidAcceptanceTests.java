@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -40,6 +41,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Transactional
 public class PlaceBidAcceptanceTests {
 
+    @MockBean
     private NotificationSender mockNotificationSender;
     private TradingSystem tradingSystem;
     private String ownerToken;
@@ -133,8 +135,6 @@ public class PlaceBidAcceptanceTests {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-
-
     }
 
 
