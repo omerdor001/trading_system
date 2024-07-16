@@ -874,13 +874,24 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(customerUserName)) {
             throw new IllegalArgumentException("Customer must exist");
         }
-        User user = userFacade.getUser(userName);
-        User customer = userFacade.getUsers().get(customerUserName);
-        if (user.isAdmin())
-            return store.getHistoryPurchasesByCustomer(customer.getUsername()).stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
-
-        user.getRoleByStoreId(storeName).getRoleState().getHistoryPurchasesByCustomer();
-        return store.getHistoryPurchasesByCustomer(customer.getUsername()).stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
+        List<Map<String, Object>> allProducts = new ArrayList<>();
+        for(Store store : storeRepository.getAllStoresByStores()){
+            List<Purchase> purchases = store.getSalesHistory().getPurchasesByCustomer(customerUserName);
+            for(Purchase purchase : purchases){
+                List<ProductInSaleDTO> productList = purchase.getProductInSaleList();
+                for(ProductInSaleDTO product : productList){
+                    Map<String, Object> productMap = getStringObjectMap(store, purchase, product);
+                    allProducts.add(productMap);
+                }
+            }
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(allProducts);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Error converting purchase history to JSON";
+        }
     }
 
     @Override
