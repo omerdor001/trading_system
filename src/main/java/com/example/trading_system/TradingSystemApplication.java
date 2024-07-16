@@ -25,7 +25,7 @@ public class TradingSystemApplication {
 
     @PostConstruct
     public void initializeSystem() {
-        // initializationService.initializeSystem();
+        initializationService.initializeSystem();
     }
 }
 

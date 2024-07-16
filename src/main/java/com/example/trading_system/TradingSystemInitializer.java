@@ -3,12 +3,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -16,17 +19,18 @@ import java.util.Map;
 
 import static com.example.trading_system.service.Security.generateToken;
 
+@Service
 public class TradingSystemInitializer {
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate = new RestTemplate();
     private Map<String, String> tokens=new HashMap<>();
     @PostConstruct
     public void initializeSystem() {
         tokens=new HashMap<>();
+        File file = new File("C:\\Users\\alex\\Documents\\trading_system\\initialState.json");
         try {
-            InputStream inputStream = getClass().getResourceAsStream("/initialState.json");
+           // InputStream inputStream = getClass().getResourceAsStream("/trading_system/initialState.json");
             ObjectMapper objectMapper = new ObjectMapper();
-            List<Map<String, Object>> useCases = objectMapper.readValue(inputStream, new TypeReference<List<Map<String, Object>>>() {});
+            List<Map<String, Object>> useCases = objectMapper.readValue(file, new TypeReference<List<Map<String, Object>>>() {});
             for (Map<String, Object> useCase : useCases) {
                 String useCaseName = (String) useCase.get("useCase");
                 Map<String, Object> arguments = (Map<String, Object>) useCase.get("arguments");
@@ -54,20 +58,20 @@ public class TradingSystemInitializer {
     }
 
     private void executeUseCase(String useCaseName, Map<String, Object> arguments) {
+        String baseUrl = "http://localhost:8082/api/trading";
         switch (useCaseName) {
             case "register":
-                LocalDate birthday = (LocalDate) arguments.get("birthday");
                 MultiValueMap<String, String> paramsRegister = new LinkedMultiValueMap<>();
                 paramsRegister.add("username", (String) arguments.get("username"));
                 paramsRegister.add("password", (String) arguments.get("password"));
-                paramsRegister.add("birthday", birthday.toString());
-                restTemplate.getForEntity("/api/trading/register", String.class, paramsRegister);
+                paramsRegister.add("birthdate",(String) arguments.get("birthdate"));
+                restTemplate.getForEntity(baseUrl +"/register", String.class, paramsRegister);
                 break;
             case "openSystem":
-                restTemplate.postForEntity("/api/trading/openSystem", null, String.class);
+                restTemplate.postForEntity(baseUrl +"/openSystem", null, String.class);
                 break;
             case "enter":
-                restTemplate.postForEntity("/api/trading/enter", null, String.class);
+                restTemplate.postForEntity(baseUrl +"/enter", null, String.class);
                 break;
             case "login0":
                 MultiValueMap<String, String> paramsLogin0 = new LinkedMultiValueMap<>();
@@ -75,7 +79,7 @@ public class TradingSystemInitializer {
                 paramsLogin0.add("usernameV", (String) arguments.get("usernameV"));
                 paramsLogin0.add("username", (String) arguments.get("username"));
                 paramsLogin0.add("password", (String) arguments.get("password"));
-                restTemplate.getForEntity("/api/trading/login", String.class, paramsLogin0);
+                restTemplate.getForEntity(baseUrl +"/login", String.class, paramsLogin0);
                 break;
             case "login2":
                 MultiValueMap<String, String> paramsLogin2 = new LinkedMultiValueMap<>();
@@ -83,7 +87,7 @@ public class TradingSystemInitializer {
                 paramsLogin2.add("usernameV", (String) arguments.get("usernameV"));
                 paramsLogin2.add("username", (String) arguments.get("username"));
                 paramsLogin2.add("password", (String) arguments.get("password"));
-                restTemplate.getForEntity("/api/trading/login", String.class, paramsLogin2);
+                restTemplate.getForEntity(baseUrl +"/login", String.class, paramsLogin2);
                 break;
             case "login4":
                 MultiValueMap<String, String> paramsLogin4 = new LinkedMultiValueMap<>();
@@ -91,7 +95,7 @@ public class TradingSystemInitializer {
                 paramsLogin4.add("usernameV", (String) arguments.get("usernameV"));
                 paramsLogin4.add("username", (String) arguments.get("username"));
                 paramsLogin4.add("password", (String) arguments.get("password"));
-                restTemplate.getForEntity("/api/trading/login", String.class, paramsLogin4);
+                restTemplate.getForEntity(baseUrl +"/login", String.class, paramsLogin4);
                 break;
             case "login7":
                 MultiValueMap<String, String> paramsLogin7 = new LinkedMultiValueMap<>();
@@ -99,7 +103,7 @@ public class TradingSystemInitializer {
                 paramsLogin7.add("usernameV", (String) arguments.get("usernameV"));
                 paramsLogin7.add("username", (String) arguments.get("username"));
                 paramsLogin7.add("password", (String) arguments.get("password"));
-                restTemplate.getForEntity("/api/trading/login", String.class, paramsLogin7);
+                restTemplate.getForEntity(baseUrl +"/login", String.class, paramsLogin7);
                 break;
             case "openStore":
                 MultiValueMap<String, String> paramsOpenStore = new LinkedMultiValueMap<>();
@@ -107,7 +111,7 @@ public class TradingSystemInitializer {
                 paramsOpenStore.add("token", tokens.get("john_doe"));
                 paramsOpenStore.add("storeName", (String) arguments.get("storeName"));
                 paramsOpenStore.add("description", (String) arguments.get("description"));
-                restTemplate.getForEntity("/api/trading/create-store", String.class, paramsOpenStore);
+                restTemplate.getForEntity(baseUrl +"/create-store", String.class, paramsOpenStore);
                 break;
             case "suggestOwner":
                 MultiValueMap<String, String> paramsSuggestOwner = new LinkedMultiValueMap<>();
@@ -115,7 +119,7 @@ public class TradingSystemInitializer {
                 paramsSuggestOwner.add("token", tokens.get("john_doe"));
                 paramsSuggestOwner.add("newOwner", (String) arguments.get("newOwner"));
                 paramsSuggestOwner.add("storeName", (String) arguments.get("storeName"));
-                restTemplate.getForEntity("/api/trading/suggestOwner", String.class, paramsSuggestOwner);
+                restTemplate.getForEntity(baseUrl +"/suggestOwner", String.class, paramsSuggestOwner);
                 break;
             case "suggestManage":
                 MultiValueMap<String, String> paramsSuggestManager = new LinkedMultiValueMap<>();
@@ -128,55 +132,55 @@ public class TradingSystemInitializer {
                 paramsSuggestManager.add("editBuyPolicy", String.valueOf(arguments.get("editBuyPolicy")));
                 paramsSuggestManager.add("editDiscountPolicy", String.valueOf(arguments.get("editDiscountPolicy")));
                 paramsSuggestManager.add("acceptBids", String.valueOf(arguments.get("acceptBids")));
-                restTemplate.getForEntity("/api/trading/suggestManage", String.class, paramsSuggestManager);
+                restTemplate.getForEntity(baseUrl +"/suggestManage", String.class, paramsSuggestManager);
                 break;
             case "logoutR0":
                 MultiValueMap<String, String> paramsLogoutR0 = new LinkedMultiValueMap<>();
                 paramsLogoutR0.add("token", tokens.get("john_doe"));
                 paramsLogoutR0.add("username", (String) arguments.get("username"));
-                restTemplate.getForEntity("/api/trading/logout", String.class, paramsLogoutR0);
+                restTemplate.getForEntity(baseUrl +"/logout", String.class, paramsLogoutR0);
                 break;
             case "logoutR1":
                 MultiValueMap<String, String> paramsLogoutR1 = new LinkedMultiValueMap<>();
                 paramsLogoutR1.add("token", tokens.get("jane_doe"));
                 paramsLogoutR1.add("username", (String) arguments.get("username"));
-                restTemplate.getForEntity("/api/trading/logout", String.class, paramsLogoutR1);
+                restTemplate.getForEntity(baseUrl +"/logout", String.class, paramsLogoutR1);
                 break;
             case "logoutR2":
                 MultiValueMap<String, String> paramsLogoutR2 = new LinkedMultiValueMap<>();
                 paramsLogoutR2.add("token", tokens.get("scooby_doe"));
                 paramsLogoutR2.add("username", (String) arguments.get("username"));
-                restTemplate.getForEntity("/api/trading/logout", String.class, paramsLogoutR2);
+                restTemplate.getForEntity(baseUrl +"/logout", String.class, paramsLogoutR2);
                 break;
             case "exit1":
                 MultiValueMap<String, String> paramsExit1 = new LinkedMultiValueMap<>();
                 paramsExit1.add("token", tokens.get("v1"));
                 paramsExit1.add("username", (String) arguments.get("username"));
-                restTemplate.getForEntity("/api/trading/exit", String.class, paramsExit1);
+                restTemplate.getForEntity(baseUrl +"/exit", String.class, paramsExit1);
                 break;
             case "exit3":
                 MultiValueMap<String, String> paramsExit3 = new LinkedMultiValueMap<>();
                 paramsExit3.add("token", tokens.get("v3"));
                 paramsExit3.add("username", (String) arguments.get("username"));
-                restTemplate.getForEntity("/api/trading/exit", String.class, paramsExit3);
+                restTemplate.getForEntity(baseUrl +"/exit", String.class, paramsExit3);
                 break;
             case "exit5":
                 MultiValueMap<String, String> paramsExit5 = new LinkedMultiValueMap<>();
                 paramsExit5.add("token", tokens.get("v5"));
                 paramsExit5.add("username", (String) arguments.get("username"));
-                restTemplate.getForEntity("/api/trading/exit", String.class, paramsExit5);
+                restTemplate.getForEntity(baseUrl +"/exit", String.class, paramsExit5);
                 break;
             case "exit6":
                 MultiValueMap<String, String> paramsExit6 = new LinkedMultiValueMap<>();
                 paramsExit6.add("token", tokens.get("v6"));
                 paramsExit6.add("username", (String) arguments.get("username"));
-                restTemplate.getForEntity("/api/trading/exit", String.class, paramsExit6);
+                restTemplate.getForEntity(baseUrl +"/exit", String.class, paramsExit6);
                 break;
             case "exit8":
                 MultiValueMap<String, String> paramsExit8 = new LinkedMultiValueMap<>();
                 paramsExit8.add("token", tokens.get("v8"));
                 paramsExit8.add("username", (String) arguments.get("username"));
-                restTemplate.getForEntity("/api/trading/exit", String.class, paramsExit8);
+                restTemplate.getForEntity(baseUrl +"/exit", String.class, paramsExit8);
                 break;
             case "approveOwner":
                 MultiValueMap<String, String> paramsApproveOwner = new LinkedMultiValueMap<>();
@@ -184,7 +188,7 @@ public class TradingSystemInitializer {
                 paramsApproveOwner.add("token", tokens.get("jane_doe"));
                 paramsApproveOwner.add("storeName", (String) arguments.get("storeName"));
                 paramsApproveOwner.add("appoint", (String) arguments.get("appoint"));
-                restTemplate.postForEntity("/api/trading/approveOwner", paramsApproveOwner, String.class);
+                restTemplate.postForEntity(baseUrl +"/approveOwner", paramsApproveOwner, String.class);
                 break;
             case "approveManage":
                 MultiValueMap<String, String> paramsApproveManage = new LinkedMultiValueMap<>();
@@ -197,7 +201,7 @@ public class TradingSystemInitializer {
                 paramsApproveManage.add("editBuyPolicy", String.valueOf(arguments.get("editBuyPolicy")));
                 paramsApproveManage.add("editDiscountPolicy", String.valueOf(arguments.get("editDiscountPolicy")));
                 paramsApproveManage.add("acceptBids", String.valueOf(arguments.get("acceptBids")));
-                restTemplate.postForEntity("/api/trading/approveManage", paramsApproveManage, String.class);
+                restTemplate.postForEntity(baseUrl +"/approveManage", paramsApproveManage, String.class);
                 break;
             case "addProduct":
                 MultiValueMap<String, String> paramsAddProduct = new LinkedMultiValueMap<>();
@@ -212,7 +216,7 @@ public class TradingSystemInitializer {
                 paramsAddProduct.add("rating", String.valueOf(arguments.get("rating")));
                 paramsAddProduct.add("category", String.valueOf(arguments.get("category")));
                 paramsAddProduct.add("keyWords", (String) arguments.get("keyWords"));
-                restTemplate.postForEntity("/api/trading/product/add", paramsAddProduct, String.class);
+                restTemplate.postForEntity(baseUrl +"/product/add", paramsAddProduct, String.class);
                 break;
             case "addToCart1":
                 MultiValueMap<String, String> paramsAddToCart1 = new LinkedMultiValueMap<>();
@@ -222,7 +226,7 @@ public class TradingSystemInitializer {
                 paramsAddToCart1.add("storeName", (String) arguments.get("storeName"));
                 paramsAddToCart1.add("quantity", String.valueOf(arguments.get("quantity")));
                 paramsAddToCart1.add("price", String.valueOf(arguments.get("price")));
-                restTemplate.postForEntity("/api/trading/cart/add", paramsAddToCart1, String.class);
+                restTemplate.postForEntity(baseUrl +"/cart/add", paramsAddToCart1, String.class);
                 break;
             case "addToCart2":
                 MultiValueMap<String, String> paramsAddToCart2 = new LinkedMultiValueMap<>();
@@ -232,7 +236,7 @@ public class TradingSystemInitializer {
                 paramsAddToCart2.add("storeName", (String) arguments.get("storeName"));
                 paramsAddToCart2.add("quantity", String.valueOf(arguments.get("quantity")));
                 paramsAddToCart2.add("price", String.valueOf(arguments.get("price")));
-                restTemplate.postForEntity("/api/trading/cart/add", paramsAddToCart2, String.class);
+                restTemplate.postForEntity(baseUrl +"/cart/add", paramsAddToCart2, String.class);
                 break;
             case "approvePurchase1":
                 MultiValueMap<String, String> paramsApprovePurchase1 = new LinkedMultiValueMap<>();
@@ -247,7 +251,7 @@ public class TradingSystemInitializer {
                 paramsApprovePurchase1.add("holder", (String) arguments.get("holder"));
                 paramsApprovePurchase1.add("ccv", (String) arguments.get("ccv"));
                 paramsApprovePurchase1.add("id", (String) arguments.get("id"));
-                restTemplate.postForEntity("/api/trading/purchase/approve", paramsApprovePurchase1, String.class);
+                restTemplate.postForEntity(baseUrl +"/purchase/approve", paramsApprovePurchase1, String.class);
                 break;
             case "approvePurchase2":
                 MultiValueMap<String, String> paramsApprovePurchase2 = new LinkedMultiValueMap<>();
@@ -262,7 +266,7 @@ public class TradingSystemInitializer {
                 paramsApprovePurchase2.add("holder", (String) arguments.get("holder"));
                 paramsApprovePurchase2.add("ccv", (String) arguments.get("ccv"));
                 paramsApprovePurchase2.add("id", (String) arguments.get("id"));
-                restTemplate.postForEntity("/api/trading/purchase/approve", paramsApprovePurchase2, String.class);
+                restTemplate.postForEntity(baseUrl +"/purchase/approve", paramsApprovePurchase2, String.class);
                 break;
             default:
                 break;
