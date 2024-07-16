@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @Transactional
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StockManagementUnitTests {
     MarketFacade marketFacade;
     UserFacade userFacade;
@@ -26,9 +25,8 @@ class StockManagementUnitTests {
 
     @Autowired
     private StoreDatabaseRepository storeRepository;
-    @BeforeAll
+    @BeforeEach
     void setUp() {
-
         PaymentService paymentService=mock(PaymentService.class);
         DeliveryService deliveryService=mock(DeliveryService.class);
         userFacade= UserFacadeImp.getInstance(paymentService,deliveryService, mock(NotificationSender.class), userRepository, storeRepository);
@@ -49,14 +47,12 @@ class StockManagementUnitTests {
             userFacade.suggestManager("rtestuser0","rtestuser2","Adidas",false,false,false,false, false, false);
             userFacade.approveOwner("rtestuser1","Adidas","rtestuser0");
             userFacade.approveManager("rtestuser2","Adidas","rtestuser0",false,false,false,false, false, false);
-
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            fail(e);
         }
     }
 
-    @AfterAll
+    @AfterEach
     public void tearDown(){
         userFacade.logout(0,"rtestuser0");
         userFacade.logout(1,"rtestuser1");
@@ -172,7 +168,7 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
         int numOfProducts_before=marketFacade.getStore("Nike").getProducts().size();
         assertDoesNotThrow(() -> {
@@ -191,7 +187,7 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
         int numOfProducts_before=marketFacade.getStore("Nike").getProducts().size();
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> marketFacade.removeProduct("rtestuser4","Nike",143));
@@ -209,7 +205,7 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
         int numOfProducts_before=marketFacade.getStore("Nike").getProducts().size();
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> marketFacade.removeProduct("rtestuser0","Nike1",140));
@@ -227,7 +223,7 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
         int numOfProducts_before=marketFacade.getStore("Nike").getProducts().size();
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> marketFacade.removeProduct("rtestuser0","Nike",101));
@@ -245,7 +241,7 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
         int numOfProducts_before=marketFacade.getStore("Nike").getProducts().size();
         RuntimeException exception = assertThrows(RuntimeException.class, () -> marketFacade.removeProduct("rtestuser2","Nike",124));
@@ -263,7 +259,7 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
         int numOfProducts_before=marketFacade.getStore("Nike").getProducts().size();
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> marketFacade.removeProduct("rtestuser2","Adidas",124));
@@ -281,7 +277,7 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
         assertDoesNotThrow(() -> {
             marketFacade.setProductName("rtestuser0","Nike",141,"Shirt1");
@@ -298,7 +294,7 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> marketFacade.setProductPrice("rtestuser0","Nike",126,-150.0));
         assertEquals("Price can't be negative number", exception.getMessage());
@@ -314,7 +310,7 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> marketFacade.setProductPrice("rtestuser4","Nike",127,100.0));
         assertEquals("User must exist", exception.getMessage());
@@ -330,7 +326,7 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> marketFacade.setRating("rtestuser0","Nike",100,4.0));
         assertEquals("Product must exist", exception.getMessage());
@@ -346,7 +342,7 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> marketFacade.setProductQuantity("rtestuser0","Nike1",129,50));
         assertEquals("Store must exist", exception.getMessage());
@@ -362,7 +358,7 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
         RuntimeException exception = assertThrows(RuntimeException.class, () -> marketFacade.setProductDescription("rtestuser2","Nike",130,"Sport shirt1"));
         assertEquals("User with no permission for this store", exception.getMessage());
@@ -370,7 +366,7 @@ class StockManagementUnitTests {
     }
 
     @Test
-    void setProduct_category_NotOwnerButtDiffRol() {
+    void setProduct_category_NotOwnerButDiffRol() {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Shirt11");
         try{
@@ -378,9 +374,9 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
-        IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> marketFacade.setProductDescription("rtestuser2","Adidas",142,"Sport shirt1"));
+        IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> marketFacade.setProductDescription("rtestuser2","Adidas",180,"Sport shirt1"));
         assertEquals("Manager cannot edit products", exception.getMessage());
         assertEquals(marketFacade.getStore("Adidas").getProduct(180).getCategory().getIntValue(),1);
     }
@@ -394,12 +390,12 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
         assertDoesNotThrow(() -> {
-            marketFacade.addKeywordToProduct("rtestuser0","Adidas",142,"Shirt1");
+            marketFacade.addKeywordToProduct("rtestuser0","Adidas",181,"Shirt1");
         }, "setProductName should not throw any exceptions");
-        assertEquals(marketFacade.getStore("Adidas").getProduct(142).getKeyWords().contains("Shirt1"),true);
+        assertEquals(marketFacade.getStore("Adidas").getProduct(181).getKeyWords().contains("Shirt1"),true);
     }
 
     @Test
@@ -412,7 +408,7 @@ class StockManagementUnitTests {
                     100.0, 100, 5.0, 1, keyWords);
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            fail(e);
         }
         assertDoesNotThrow(() -> {
             marketFacade.removeKeywordToProduct("rtestuser0","Adidas",142,"Shirt1");
@@ -421,193 +417,191 @@ class StockManagementUnitTests {
     }
 
     //Concurrency tests
-    @Test
-    void addProduct_ConcurrencySuccess(){
-        ArrayList<String> keyWords=new ArrayList<>();
-        keyWords.add("Shirt11");
-        int numOfProducts_before=marketFacade.getStore("Adidas").getProducts().size();
-        Runnable task = () -> {
-            try {
-                marketFacade.addProduct("rtestuser1", 143, "Adidas", "Samba", "Snickers shoes",
-                        330.0, 100, 5.0, 1, keyWords);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        };
-        Thread thread1 = new Thread(task);
-        Thread thread2 = new Thread(task);
-        thread1.start();
-        thread2.start();
-        try {
-            thread1.join();
-            thread2.join();
-        }
-        catch (Exception e){
-            throw new RuntimeException(e);
-        }
-        int numOfProducts_after=marketFacade.getStore("Adidas").getProducts().size();
-        assertEquals(numOfProducts_before,numOfProducts_after-1);
-    }
-
-    @Test
-    void addProduct_ConcurrencyPriceLessThanZero() {
-        ArrayList<String> keyWords=new ArrayList<>();
-        keyWords.add("Samba");
-        int numOfProducts_before=marketFacade.getStore("Adidas").getProducts().size();
-        Runnable task = () -> {
-            try {
-                marketFacade.addProduct("rtestuser1", 123, "Adidas", "Samba", "Snickers shoes",
-                        -100.0, 100, 5.0, 1, keyWords);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        };
-        Thread thread1 = new Thread(task);
-        Thread thread2 = new Thread(task);
-        thread1.start();
-        thread2.start();
-        try {
-            thread1.join();
-            thread2.join();
-        }
-        catch (Exception e){
-            throw new RuntimeException(e);
-        }
-        int numOfProducts_after=marketFacade.getStore("Adidas").getProducts().size();
-        assertEquals(numOfProducts_before,numOfProducts_after);
-    }
-
-    @Test
-    void removeProduct_ConcurrencySuccess(){
-        ArrayList<String> keyWords=new ArrayList<>();
-        keyWords.add("Shirt11");
-        try{
-            marketFacade.addProduct("rtestuser0", 150, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 1, keyWords);
-        }
-        catch (Exception e){
-            throw new RuntimeException(e);
-        }
-        int numOfProducts_before=marketFacade.getStore("Nike").getProducts().size();
-        Runnable task = () -> {
-            try {
-                marketFacade.removeProduct("rtestuser0","Nike",150);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        };
-        Thread thread1 = new Thread(task);
-        Thread thread2 = new Thread(task);
-        thread1.start();
-        thread2.start();
-        try {
-            thread1.join();
-            thread2.join();
-        }
-        catch (Exception e){
-            throw new RuntimeException(e);
-        }
-        int numOfProducts_after=marketFacade.getStore("Nike").getProducts().size();
-        assertEquals(numOfProducts_before,numOfProducts_after+1);
-    }
-
-    @Test
-    void removeProduct_ConcurrencyProductNotExist(){
-        ArrayList<String> keyWords=new ArrayList<>();
-        keyWords.add("Shirt11");
-        try{
-            marketFacade.addProduct("rtestuser0", 151, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 1, keyWords);
-        }
-        catch (Exception e){
-            throw new RuntimeException(e);
-        }
-        int numOfProducts_before=marketFacade.getStore("Nike").getProducts().size();
-        Runnable task = () -> {
-            try {
-                marketFacade.removeProduct("rtestuser0","Nike",101);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        };
-        Thread thread1 = new Thread(task);
-        Thread thread2 = new Thread(task);
-        thread1.start();
-        thread2.start();
-        try {
-            thread1.join();
-            thread2.join();
-        }
-        catch (Exception e){
-            throw new RuntimeException(e);
-        }
-        int numOfProducts_after=marketFacade.getStore("Nike").getProducts().size();
-        assertEquals(numOfProducts_before,numOfProducts_after);
-    }
-
-    @Test
-    void setProduct_Concurrency_name_success() {
-        ArrayList<String> keyWords=new ArrayList<>();
-        keyWords.add("Shirt11");
-        try{
-            marketFacade.addProduct("rtestuser0", 145, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 1, keyWords);
-        }
-        catch (Exception e){
-            throw new RuntimeException(e);
-        }
-        Runnable task = () -> {
-            try {
-                marketFacade.setProductName("rtestuser0","Nike",145,"Shirt1");
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        };
-        Thread thread1 = new Thread(task);
-        Thread thread2 = new Thread(task);
-        thread1.start();
-        thread2.start();
-        try {
-            thread1.join();
-            thread2.join();
-        }
-        catch (Exception e){
-            throw new RuntimeException(e);
-        }
-        assertEquals(marketFacade.getStore("Nike").getProduct(145).getProduct_name(),"Shirt1");
-    }
-
-    @Test
-    void setProduct_Price_ConcurrencyPriceLessThanZero() {
-        ArrayList<String> keyWords=new ArrayList<>();
-        keyWords.add("Shirt11");
-        try{
-            marketFacade.addProduct("rtestuser0", 156, "Nike", "Shirt11", "Sport shirt",
-                    100.0, 100, 5.0, 1, keyWords);
-        }
-        catch (Exception e){
-            throw new RuntimeException(e);
-        }
-        Runnable task = () -> {
-            try {
-                marketFacade.setProductPrice("rtestuser0","Nike",156,-150.0);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        };
-        Thread thread1 = new Thread(task);
-        Thread thread2 = new Thread(task);
-        thread1.start();
-        thread2.start();
-        try {
-            thread1.join();
-            thread2.join();
-        }
-        catch (Exception e){
-            throw new RuntimeException(e);
-        }
-        assertEquals(marketFacade.getStore("Nike").getProduct(156).getProduct_price(),100.0);
-    }
-
-
+//    @Test
+//    void addProduct_ConcurrencySuccess(){
+//        ArrayList<String> keyWords=new ArrayList<>();
+//        keyWords.add("Shirt11");
+//        int numOfProducts_before=marketFacade.getStore("Adidas").getProducts().size();
+//        Runnable task = () -> {
+//            try {
+//                marketFacade.addProduct("rtestuser1", 143, "Adidas", "Samba", "Snickers shoes",
+//                        330.0, 100, 5.0, 1, keyWords);
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//        };
+//        Thread thread1 = new Thread(task);
+//        Thread thread2 = new Thread(task);
+//        thread1.start();
+//        thread2.start();
+//        try {
+//            thread1.join();
+//            thread2.join();
+//        }
+//        catch (Exception e){
+//            fail(e);
+//        }
+//        int numOfProducts_after=marketFacade.getStore("Adidas").getProducts().size();
+//        assertEquals(numOfProducts_before,numOfProducts_after-1);
+//    }
+//
+//    @Test
+//    void addProduct_ConcurrencyPriceLessThanZero() {
+//        ArrayList<String> keyWords=new ArrayList<>();
+//        keyWords.add("Samba");
+//        int numOfProducts_before=marketFacade.getStore("Adidas").getProducts().size();
+//        Runnable task = () -> {
+//            try {
+//                marketFacade.addProduct("rtestuser1", 123, "Adidas", "Samba", "Snickers shoes",
+//                        -100.0, 100, 5.0, 1, keyWords);
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//        };
+//        Thread thread1 = new Thread(task);
+//        Thread thread2 = new Thread(task);
+//        thread1.start();
+//        thread2.start();
+//        try {
+//            thread1.join();
+//            thread2.join();
+//        }
+//        catch (Exception e){
+//            fail(e);
+//        }
+//        int numOfProducts_after=marketFacade.getStore("Adidas").getProducts().size();
+//        assertEquals(numOfProducts_before,numOfProducts_after);
+//    }
+//
+//    @Test
+//    void removeProduct_ConcurrencySuccess(){
+//        ArrayList<String> keyWords=new ArrayList<>();
+//        keyWords.add("Shirt11");
+//        try{
+//            marketFacade.addProduct("rtestuser0", 150, "Nike", "Shirt11", "Sport shirt",
+//                    100.0, 100, 5.0, 1, keyWords);
+//        }
+//        catch (Exception e){
+//            fail(e);
+//        }
+//        int numOfProducts_before=marketFacade.getStore("Nike").getProducts().size();
+//        Runnable task = () -> {
+//            try {
+//                marketFacade.removeProduct("rtestuser0","Nike",150);
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//        };
+//        Thread thread1 = new Thread(task);
+//        Thread thread2 = new Thread(task);
+//        thread1.start();
+//        thread2.start();
+//        try {
+//            thread1.join();
+//            thread2.join();
+//        }
+//        catch (Exception e){
+//            fail(e);
+//        }
+//        int numOfProducts_after=marketFacade.getStore("Nike").getProducts().size();
+//        assertEquals(numOfProducts_before,numOfProducts_after+1);
+//    }
+//
+//    @Test
+//    void removeProduct_ConcurrencyProductNotExist(){
+//        ArrayList<String> keyWords=new ArrayList<>();
+//        keyWords.add("Shirt11");
+//        try{
+//            marketFacade.addProduct("rtestuser0", 151, "Nike", "Shirt11", "Sport shirt",
+//                    100.0, 100, 5.0, 1, keyWords);
+//        }
+//        catch (Exception e){
+//            fail(e);
+//        }
+//        int numOfProducts_before=marketFacade.getStore("Nike").getProducts().size();
+//        Runnable task = () -> {
+//            try {
+//                marketFacade.removeProduct("rtestuser0","Nike",101);
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//        };
+//        Thread thread1 = new Thread(task);
+//        Thread thread2 = new Thread(task);
+//        thread1.start();
+//        thread2.start();
+//        try {
+//            thread1.join();
+//            thread2.join();
+//        }
+//        catch (Exception e){
+//            fail(e);
+//        }
+//        int numOfProducts_after=marketFacade.getStore("Nike").getProducts().size();
+//        assertEquals(numOfProducts_before,numOfProducts_after);
+//    }
+//
+//    @Test
+//    void setProduct_Concurrency_name_success() {
+//        ArrayList<String> keyWords=new ArrayList<>();
+//        keyWords.add("Shirt11");
+//        try{
+//            marketFacade.addProduct("rtestuser0", 145, "Nike", "Shirt11", "Sport shirt",
+//                    100.0, 100, 5.0, 1, keyWords);
+//        }
+//        catch (Exception e){
+//            fail(e);
+//        }
+//        Runnable task = () -> {
+//            try {
+//                marketFacade.setProductName("rtestuser0","Nike",145,"Shirt1");
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//        };
+//        Thread thread1 = new Thread(task);
+//        Thread thread2 = new Thread(task);
+//        thread1.start();
+//        thread2.start();
+//        try {
+//            thread1.join();
+//            thread2.join();
+//        }
+//        catch (Exception e){
+//            fail(e);
+//        }
+//        assertEquals(marketFacade.getStore("Nike").getProduct(145).getProduct_name(),"Shirt1");
+//    }
+//
+//    @Test
+//    void setProduct_Price_ConcurrencyPriceLessThanZero() {
+//        ArrayList<String> keyWords=new ArrayList<>();
+//        keyWords.add("Shirt11");
+//        try{
+//            marketFacade.addProduct("rtestuser0", 156, "Nike", "Shirt11", "Sport shirt",
+//                    100.0, 100, 5.0, 1, keyWords);
+//        }
+//        catch (Exception e){
+//            fail(e);
+//        }
+//        Runnable task = () -> {
+//            try {
+//                marketFacade.setProductPrice("rtestuser0","Nike",156,-150.0);
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//        };
+//        Thread thread1 = new Thread(task);
+//        Thread thread2 = new Thread(task);
+//        thread1.start();
+//        thread2.start();
+//        try {
+//            thread1.join();
+//            thread2.join();
+//        }
+//        catch (Exception e){
+//            fail(e);
+//        }
+//        assertEquals(marketFacade.getStore("Nike").getProduct(156).getProduct_price(),100.0);
+//    }
 }

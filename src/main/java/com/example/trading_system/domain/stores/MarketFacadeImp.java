@@ -19,7 +19,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 @Transactional
-
 @Service
 public class MarketFacadeImp implements MarketFacade {
     private static final Logger logger = LoggerFactory.getLogger(MarketFacadeImp.class);
@@ -98,6 +97,7 @@ public class MarketFacadeImp implements MarketFacade {
                 throw new RuntimeException("Can't deactivate store that already not active");
             }
         }
+        save(store);
     }
 
     //For Tests
@@ -108,8 +108,6 @@ public class MarketFacadeImp implements MarketFacade {
         Store store = storeRepository.getStore(storeName);
         if (!store.isOpen() && !(store.isRoleHolder(userName) || userFacade.isAdmin(userName)))
             throw new IllegalAccessException("When store is closed just role holders can check if product exist");
-
-
         return storeRepository.getStore(storeName).isProductExist(productId);
     }
 
@@ -234,17 +232,14 @@ public class MarketFacadeImp implements MarketFacade {
         }
         return stores.toString().substring(1, stores.toString().length() - 1);
     }
-
-
+    
     @Override
     public String getStoreProducts(String userName, String storeName) throws IllegalAccessException {
         validateUserAndStore(userName, storeName);
         Store store = storeRepository.getStore(storeName);
         if (!store.isOpen() && !(store.isRoleHolder(userName) || userFacade.isAdmin(userName)))
             throw new IllegalAccessException("When the store is closed only role holders can get products");
-
         return store.toString();
-
     }
 
     @Override
@@ -302,36 +297,27 @@ public class MarketFacadeImp implements MarketFacade {
         return productMap;
     }
 
-
     @Override
     public String searchProductsInStores(String userName, String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) throws JsonProcessingException {
         if (!userFacade.isUserExist(userName)) {
             throw new IllegalArgumentException("User must exist");
         }
-
         List<Product> resultProductList = new LinkedList<>();
-
         StringBuilder sb = new StringBuilder();
         for (Store store : storeRepository.getAllStoresByStores()) {
             if (!store.isOpen()) continue;
             List<Product> products2 = store.searchProduct(keyWord, minPrice, maxPrice, intCategories, rating);
-            if (!products2.isEmpty())//Change to Repo
+            if (!products2.isEmpty())
             {
-                sb.append(products2.toString());
-
+                sb.append(products2);
                 resultProductList.addAll(products2);
             }
-
         }
         if (sb.isEmpty()) return "{}";
-
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(resultProductList);
-
-
     }
-
-
+    
     @Override
     public String searchNameInStore(String userName, String productName, String storeName, Double minPrice, Double maxPrice, Double minRating, int category) throws IllegalAccessException {
         if (productName == null) {
@@ -418,7 +404,6 @@ public class MarketFacadeImp implements MarketFacade {
             if (!store.isOpen()) continue;
             if (!store.searchName(productName, minPrice, maxPrice, minRating, category, storeRating).isEmpty())//Change to Repo
                 sb.append(store.searchName(productName, minPrice, maxPrice, minRating, category, storeRating).toString());
-
         }
         if (sb.isEmpty()) return "{}";
         return sb.toString();
@@ -444,7 +429,6 @@ public class MarketFacadeImp implements MarketFacade {
                 sb.append(store.searchCategory(category, minPrice, maxPrice, minRating, storeRating).toString());
         }
         if (sb.isEmpty()) return "{}";
-
         return sb.toString();
     }
 
@@ -456,7 +440,7 @@ public class MarketFacadeImp implements MarketFacade {
         }
 
         StringBuilder sb = new StringBuilder();
-        for (Store store : storeRepository.getAllStores().values()) {      //Change to Repo
+        for (Store store : storeRepository.getAllStores().values()) {
             validateUserAndStore(userName, store.getNameId());
 
             if (!store.isOpen()) continue;
@@ -482,25 +466,29 @@ public class MarketFacadeImp implements MarketFacade {
             userFacade.sendNotification(userName, managerUserName, "Store " + storeName + " has reopened");
         for (String ownerUserName : store.getOwners())
             userFacade.sendNotification(userName, ownerUserName, "Store " + storeName + " has reopened");
+        save(store);
     }
 
     @Override
     public void closeStoreExist(String userName, String storeName) throws IllegalAccessException {
         validateUserAndStore(userName, storeName);
-        Store store = storeRepository.getStore(storeName);    //Change to Repo
+        Store store = storeRepository.getStore(storeName);
         if (!store.getFounder().equals(userName)) {
             throw new IllegalArgumentException("Only founder can close store exist");
         }
         if (!store.isOpen()) {
             throw new IllegalArgumentException("Store is not active");
         }
-        store.setOpen(false);
-        for (User user : userFacade.getUsers().values())
-            user.getCart().removeShoppingBagFromCartByStore(storeName);
+        store.setOpen(false);//todo
+//        for (User user : userFacade.getUsers().values()) {
+//            user.getCart().removeShoppingBagFromCartByStore(storeName);
+//            userFacade.getUserRepository().saveUser(user);
+//        }
         for (String managerUserName : store.getManagers())
             userFacade.sendNotification(userName, managerUserName, storeName + " has closed");
         for (String ownerUserName : store.getOwners())
             userFacade.sendNotification(userName, ownerUserName, storeName + " has closed");
+        save(store);
     }
 
     //Supply Management
@@ -520,6 +508,7 @@ public class MarketFacadeImp implements MarketFacade {
             store.addProduct(productId, productName, productDescription, productPrice, productQuantity, rating, category, keyWords);
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            save(store);
             return true;
         } catch (Exception e) {
             lock.unlock();
@@ -547,6 +536,7 @@ public class MarketFacadeImp implements MarketFacade {
             store.removeProduct(productId);
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            save(store);
             return true;
         } catch (Exception e) {
             lock.unlock();
@@ -581,6 +571,7 @@ public class MarketFacadeImp implements MarketFacade {
             store.setProductName(productId, productName);
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            save(store);
             return true;
         } catch (Exception e) {
             lock.unlock();
@@ -610,8 +601,8 @@ public class MarketFacadeImp implements MarketFacade {
         }
         if (productPrice < 0) throw new IllegalArgumentException("Price can't be negative number");
         if (productQuantity <= 0) throw new IllegalArgumentException("Quantity must be natural number");
-
         store.editProduct(productId, productName, productDescription, productPrice, productQuantity);
+        save(store);
     }
 
     @Override
@@ -640,6 +631,7 @@ public class MarketFacadeImp implements MarketFacade {
             store.setProductDescription(productId, productDescription);
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            save(store);
             return true;
         } catch (Exception e) {
             lock.unlock();
@@ -675,6 +667,7 @@ public class MarketFacadeImp implements MarketFacade {
             store.setProductPrice(productId, productPrice);
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            save(store);
             return true;
         } catch (Exception e) {
             lock.unlock();
@@ -710,6 +703,7 @@ public class MarketFacadeImp implements MarketFacade {
             store.setProductQuantity(productId, productQuantity);
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            save(store);
             return true;
         } catch (Exception e) {
             lock.unlock();
@@ -745,6 +739,7 @@ public class MarketFacadeImp implements MarketFacade {
             store.setRating(productId, rating);
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            save(store);
             return true;
         } catch (Exception e) {
             lock.unlock();
@@ -780,6 +775,7 @@ public class MarketFacadeImp implements MarketFacade {
             store.setCategory(productId, category);
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            save(store);
             return true;
         } catch (Exception e) {
             lock.unlock();
@@ -814,6 +810,7 @@ public class MarketFacadeImp implements MarketFacade {
             store.addKeyWordToProduct(productId, keyword);
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            save(store);
             return true;
         } catch (Exception e) {
             lock.unlock();
@@ -849,6 +846,7 @@ public class MarketFacadeImp implements MarketFacade {
             store.removeKeyWordFromProduct(productId, keyword);
             lock.unlock();
             storeLocks.remove(storeName, lock);
+            save(store);
             return true;
         } catch (Exception e) {
             lock.unlock();
@@ -873,7 +871,7 @@ public class MarketFacadeImp implements MarketFacade {
             throw new IllegalArgumentException("Customer must exist");
         }
         User user = userFacade.getUser(userName);
-        User customer = userFacade.getUsers().get(customerUserName);
+        User customer = userFacade.getUser(customerUserName);
         if (user.isAdmin())
             return store.getHistoryPurchasesByCustomer(customer.getUsername()).stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
 
@@ -886,14 +884,14 @@ public class MarketFacadeImp implements MarketFacade {
         if (!storeRepository.isExist(storeName)) {
             throw new IllegalArgumentException("Store must exist");
         }
-        if (!userFacade.getUsers().containsKey(userName)) {
+        if (!userFacade.isUserExist(userName)) {
             throw new IllegalArgumentException("User must exist");
         }
         if (userFacade.isSuspended(userName)) {
             throw new RuntimeException("User is suspended from the system");
         }
         Store store = storeRepository.getStore(storeName);
-        User user = userFacade.getUsers().get(userName);
+        User user = userFacade.getUser(userName);
         if (user.isAdmin())
             return store.getAllHistoryPurchases().stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
         if (user.getRoleByStoreId(storeName) == null) throw new RuntimeException("Not allowed to view store history");
@@ -997,7 +995,6 @@ public class MarketFacadeImp implements MarketFacade {
             result.append("Role id username address birthdate watch editSupply editPurchasePolicy editDiscountPolicy").append("\n");
             result.append("Manager ").append(user2.getUsername()).append(" ").append(officialUserName).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append(" ").append(managerRole.isWatch()).append(" ").append(managerRole.isEditSupply()).append(" ").append(managerRole.isEditPurchasePolicy()).append(" ").append(managerRole.isEditDiscountPolicy()).append(" ").append(managerRole.isAcceptBids()).append(" ").append(managerRole.isCreateLottery()).append("\n");
         } else throw new IllegalArgumentException("User is not employed in this store.");
-
         return result.toString();
     }
 
@@ -1014,13 +1011,16 @@ public class MarketFacadeImp implements MarketFacade {
 
     @Override
     public void releaseReservedProducts(int productId, int quantity, String storeName) {
-        getStore(storeName).releaseReservedProducts(productId, quantity);
+        Store store = getStore(storeName);
+        store.releaseReservedProducts(productId, quantity);
+        save(store);
     }
 
     @Override
     public void removeReservedProducts(int productId, int quantity, String storeName) {
-        getStore(storeName).removeReservedProducts(productId, quantity);
-
+        Store store = getStore(storeName);
+        store.removeReservedProducts(productId, quantity);
+        save(store);
     }
 
     @Override
@@ -1050,6 +1050,7 @@ public class MarketFacadeImp implements MarketFacade {
         Store store = storeRepository.getStore(storeName);
         store.addPurchase(new Purchase(customerUsername, ProductInSaleDTO.fromJsonList(productInSaleList), totalPrice, storeName));
         userFacade.sendNotification(customerUsername, store.getFounder(), "User: " + customerUsername + " bought the following items from your store: " + storeName + " " + productInSaleList);
+        save(store);
     }
 
     //region Discount management
@@ -1076,7 +1077,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.addCategoryPercentageDiscount(category, discountPercent);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1086,7 +1087,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.addProductPercentageDiscount(productId, discountPercent);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1096,7 +1097,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.addStoreDiscount(discountPercent);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1106,7 +1107,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.addConditionalDiscount();
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1116,7 +1117,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.addAdditiveDiscount();
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1126,7 +1127,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.addMaxDiscount();
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1136,7 +1137,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.addCategoryCountCondition(category, count);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1146,7 +1147,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.addTotalSumCondition(requiredSum);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1156,7 +1157,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.addProductCountCondition(productId, count);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1166,7 +1167,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.addAndDiscount();
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1176,7 +1177,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.addOrDiscount();
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1186,7 +1187,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.addXorDiscount();
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1196,7 +1197,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.removeDiscount(selectedIndex);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1206,7 +1207,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.setFirstDiscount(selectedDiscountIndex, selectedFirstIndex);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1216,7 +1217,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.setSecondDiscount(selectedDiscountIndex, selectedSecondIndex);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1226,7 +1227,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.setFirstCondition(selectedDiscountIndex, selectedSecondIndex);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1236,7 +1237,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.setSecondCondition(selectedDiscountIndex, selectedSecondIndex);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1246,7 +1247,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.setThenDiscount(selectedDiscountIndex, selectedThenIndex);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1256,7 +1257,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.setCategoryDiscount(selectedDiscountIndex, category);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1266,7 +1267,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.setProductIdDiscount(selectedDiscountIndex, productId);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1276,7 +1277,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.setPercentDiscount(selectedDiscountIndex, discountPercent);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1286,7 +1287,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.setDeciderDiscount(selectedDiscountIndex, selectedDeciderIndex);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1296,7 +1297,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.setTotalSum(selectedConditionIndex, newSum);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1306,7 +1307,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.setCountCondition(selectedConditionIndex, newCount);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1316,7 +1317,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.setCategoryCondition(selectedConditionIndex, newCategory);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1326,7 +1327,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.setProductIdCondition(selectedConditionIndex, newId);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1336,7 +1337,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editDiscounts();
         Store store = storeRepository.getStore(storeName);
         store.removeCondition(selectedIndex);
-        storeRepository.save(store);
+        save(store);
     }
 
     //endregion
@@ -1356,7 +1357,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.addPurchasePolicyByAge(ageToCheck, category);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1366,7 +1367,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.addPurchasePolicyByCategoryAndDate(category, dateTime);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1376,7 +1377,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.addPurchasePolicyByDate(dateTime);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1386,7 +1387,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.addPurchasePolicyByProductAndDate(productId, dateTime);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1396,7 +1397,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.addPurchasePolicyByShoppingCartMaxProductsUnit(productId, numOfQuantity);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1406,7 +1407,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.addPurchasePolicyByShoppingCartMinProducts(numOfQuantity);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1416,7 +1417,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.addPurchasePolicyByShoppingCartMinProductsUnit(productId, numOfQuantity);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1426,7 +1427,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.addAndPurchasePolicy();
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1436,7 +1437,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.addOrPurchasePolicy();
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1446,7 +1447,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.addConditioningPurchasePolicy();
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1456,7 +1457,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.setPurchasePolicyProductId(selectedIndex, productId);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1466,7 +1467,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.setPurchasePolicyNumOfQuantity(selectedIndex, numOfQuantity);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1476,7 +1477,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.setPurchasePolicyDateTime(selectedIndex, dateTime);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1486,7 +1487,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.setPurchasePolicyAge(selectedIndex, age);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1496,7 +1497,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.setPurchasePolicyCategory(selectedIndex, category);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1506,7 +1507,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.setFirstPurchasePolicy(selectedDiscountIndex, selectedFirstIndex);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1516,7 +1517,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.setSecondPurchasePolicy(selectedDiscountIndex, selectedSecondIndex);
-        storeRepository.save(store);
+        save(store);
     }
 
     @Override
@@ -1526,7 +1527,7 @@ public class MarketFacadeImp implements MarketFacade {
         user.getRoleByStoreId(storeName).editPurchasePolicies();
         Store store = storeRepository.getStore(storeName);
         store.removePurchasePolicy(selectedIndex);
-        storeRepository.save(store);
+        save(store);
     }
 
     public void checkAvailabilityAndConditions(int id, int quantity, String storeId) {
@@ -1607,6 +1608,7 @@ public class MarketFacadeImp implements MarketFacade {
             userFacade.sendNotification(userName, owner, userName + " is placed a bid for product " + productID + " in store " + storeName + " with price " + price);
         for (String manager : store.getManagers())
             userFacade.sendNotification(userName, manager, userName + " is placed a bid for product " + productID + " in store " + storeName + " with price " + price);
+        save(store);
     }
 
     @Override
@@ -1626,6 +1628,7 @@ public class MarketFacadeImp implements MarketFacade {
             userFacade.bidPurchase(bidUserName, storeName, productID, store.getBidPrice(bidUserName, productID), address, amount, currency, cardNumber, month, year, holder, ccv, id);
             store.removeBidAccepted(bidUserName, productID);
         }
+        save(store);
     }
 
 
@@ -1639,10 +1642,9 @@ public class MarketFacadeImp implements MarketFacade {
             throw new IllegalArgumentException("Bid must exist");
         User user = userFacade.getUser(userName);
         user.getRoleByStoreId(storeName).rejectBid();
-
         store.rejectBid(userName, productID, bidUserName);
-
         userFacade.sendNotification(userName, bidUserName, "Your bid on product " + store.getProducts().get(productID).getProduct_name() + " in store " + storeName + " is rejected");
+        save(store);
     }
 
     @Override
@@ -1655,10 +1657,9 @@ public class MarketFacadeImp implements MarketFacade {
             throw new IllegalArgumentException("Bid must exist");
         User user = userFacade.getUser(userName);
         user.getRoleByStoreId(storeName).placeCounterOffer();
-
         store.counterOffer(userName, productID, bidUserName, newPrice);
-
         userFacade.sendNotification(userName, bidUserName, "Your bid on product " + store.getProducts().get(productID).getProduct_name() + " in store " + storeName + " is got counter offer by " + userName + " of " + newPrice);
+        save(store);
     }
 
     @Override
@@ -1704,6 +1705,4 @@ public class MarketFacadeImp implements MarketFacade {
 //            return "Ticket Bought Successfully";
 //
 //    }
-
-
 }

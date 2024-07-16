@@ -23,7 +23,7 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class SearchUnitTests {
     private MarketFacadeImp marketFacade;
-    private final String validUsername = "vvalidName"; // Prefix with 'v' for visitor
+    private final String validUsername = "vvalidName";
     private User user;
     private UserFacadeImp userFacade;
 
