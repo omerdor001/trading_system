@@ -3,18 +3,15 @@ package com.example.trading_system.UnitTests.Users;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.stores.StoreDatabaseRepository;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserFacade;
 import com.example.trading_system.domain.users.UserFacadeImp;
+import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,24 +20,20 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-@SpringBootTest
-@Transactional
+
 class AppointmentOwnerUnitTests {
-
-    @Autowired
-    private UserDatabaseRepository userRepository;
-
-    @Autowired
-    private StoreDatabaseRepository storeRepository;
-
     private UserFacade userFacade;
     private String username1;
     private String username2;
     private String username3;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     public void setUp() {
-        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
+        storeRepository= StoreMemoryRepository.getInstance();
+        userRepository = UserMemoryRepository.getInstance();
+        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
         username1 = "testuser1";
         username2 = "testuser2";
         username3 = "testuser3";
@@ -57,7 +50,6 @@ class AppointmentOwnerUnitTests {
             userFacade.createStore("r" + username1, "Adidas", "");
             userFacade.createStore("r" + username2, "Nike", "");
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -71,14 +63,11 @@ class AppointmentOwnerUnitTests {
             userFacade.exit("v1");
             userFacade.exit("v2");
             userFacade.deleteInstance();
-            userRepository.deleteInstance();
-            storeRepository.deleteInstance();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
-    // SuggestOwner
+    //SuggestOwner
 
     @Test
     void suggestOwner_Success() {
@@ -146,14 +135,13 @@ class AppointmentOwnerUnitTests {
         assertEquals(sizeB, sizeA);
     }
 
-    // ApproveOwner
+    //ApproveOwner
 
     @Test
     void approveOwner_Success() {
         try {
             userFacade.suggestOwner("r" + username1, "r" + username2, "Adidas");
         } catch (Exception e) {
-            e.printStackTrace();
         }
         int sizeB = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         assertDoesNotThrow(() -> userFacade.approveOwner("r" + username2, "Adidas", "r" + username1), "approveOwner should not throw any exceptions");
@@ -166,7 +154,6 @@ class AppointmentOwnerUnitTests {
         try {
             userFacade.suggestOwner("r" + username1, "r" + username2, "Adidas");
         } catch (Exception e) {
-            e.printStackTrace();
         }
         int sizeB = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> userFacade.approveOwner("r" + username2, "Adidas1", "r" + username1));
@@ -180,7 +167,6 @@ class AppointmentOwnerUnitTests {
         try {
             userFacade.suggestOwner("r" + username1, "r" + username2, "Adidas");
         } catch (Exception e) {
-            e.printStackTrace();
         }
         int sizeB = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> userFacade.approveOwner("r" + "username2", "Adidas", "r" + username1));
@@ -194,7 +180,6 @@ class AppointmentOwnerUnitTests {
         try {
             userFacade.suggestOwner("r" + username3, "r" + username2, "Nike");
         } catch (Exception e) {
-            e.printStackTrace();
         }
         int sizeB = userFacade.getUser("r" + username3).getOwnerSuggestions().size();
         userFacade.suspendUser("r" + username1, "r" + username3, LocalDateTime.of(2025, 1, 1, 1, 1));
@@ -210,7 +195,6 @@ class AppointmentOwnerUnitTests {
         try {
             userFacade.suggestOwner("r" + username1, "r" + username2, "Adidas");
         } catch (Exception e) {
-            e.printStackTrace();
         }
         int sizeB = userFacade.getUser("r" + username3).getOwnerSuggestions().size();
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> userFacade.approveOwner("r" + username3, "Adidas", "r" + username2));
@@ -224,7 +208,6 @@ class AppointmentOwnerUnitTests {
         try {
             userFacade.suggestOwner("r" + username1, "r" + username2, "Adidas");
         } catch (Exception e) {
-            e.printStackTrace();
         }
         int sizeB = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         userFacade.logout(1, "r" + username2);
@@ -240,7 +223,6 @@ class AppointmentOwnerUnitTests {
         try {
             userFacade.suggestOwner("r" + username1, "r" + username2, "Adidas");
         } catch (Exception e) {
-            e.printStackTrace();
         }
         int sizeB = userFacade.getUser("r" + username2).getOwnerSuggestions().size();
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> userFacade.approveOwner("r" + username1, "Adidas", "r" + username1));

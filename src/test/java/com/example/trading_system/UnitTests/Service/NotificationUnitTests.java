@@ -3,14 +3,17 @@ package com.example.trading_system.UnitTests.Service;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.stores.*;
-import com.example.trading_system.domain.users.*;
-import jakarta.transaction.Transactional;
+import com.example.trading_system.domain.stores.MarketFacade;
+import com.example.trading_system.domain.stores.MarketFacadeImp;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserFacade;
+import com.example.trading_system.domain.users.UserFacadeImp;
+import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -20,25 +23,22 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-@SpringBootTest
-@Transactional
+
 public class NotificationUnitTests {
     private final String owner1 = "rowner1";
     private final String owner2 = "rowner2";
     private final String manager = "rmanager";
     private final String storeName = "store1";
     private NotificationSender mockNotificationSender;
-    @Autowired
-    private UserDatabaseRepository userRepository;
-
-    @Autowired
-    private StoreDatabaseRepository storeRepository;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
     private UserFacade userFacade;
     private MarketFacade marketFacade;
 
     @BeforeEach
     public void setUp() {
-
+        userRepository = UserMemoryRepository.getInstance();
+        storeRepository = StoreMemoryRepository.getInstance();
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
         mockNotificationSender = mock(NotificationSender.class);
         userFacade = UserFacadeImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mockNotificationSender, userRepository, storeRepository);

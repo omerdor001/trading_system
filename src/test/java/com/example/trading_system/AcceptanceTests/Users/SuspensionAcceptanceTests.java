@@ -3,10 +3,8 @@ package com.example.trading_system.AcceptanceTests.Users;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
@@ -17,8 +15,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
@@ -28,10 +24,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
-import jakarta.transaction.*;
 
-@SpringBootTest
-@Transactional
 class SuspensionAcceptanceTests {
     String token1;
     String username;
@@ -48,13 +41,10 @@ class SuspensionAcceptanceTests {
     private final String holder = "John Doe";
     private final String ccv = "123";
     private final String id = "123456789";
-    @Autowired
-    private UserDatabaseRepository userRepository;
-
-    @Autowired
-    private StoreDatabaseRepository storeRepository;
     @BeforeEach
     public void setUp() {
+        UserRepository userRepository = UserMemoryRepository.getInstance();
+        StoreRepository storeRepository = StoreMemoryRepository.getInstance();
         tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
         tradingSystem.userService.getUserFacade().setUserRepository(userRepository);
         tradingSystem.userService = UserServiceImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);

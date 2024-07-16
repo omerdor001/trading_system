@@ -3,38 +3,30 @@ package com.example.trading_system.UnitTests.Users;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-@SpringBootTest
-@Transactional
+
 class ExitUnitTests {
     private UserFacadeImp userFacade;
-    @Autowired
-    private UserDatabaseRepository userRepository;
-
-    @Autowired
-    private StoreDatabaseRepository storeRepository;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     void setUp() {
-        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
-
+        storeRepository= StoreMemoryRepository.getInstance();
+        userRepository = UserMemoryRepository.getInstance();
+        userFacade = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
         // Adding sample visitors and registered users
         userFacade.enter(1);
         userFacade.enter(2);

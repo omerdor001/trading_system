@@ -3,32 +3,25 @@ package com.example.trading_system.UnitTests.Users;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
 import static org.mockito.Mockito.mock;
-@SpringBootTest
-@Transactional
+
 public class ViewCartUnitTests {
 
-    @Autowired
-    private UserDatabaseRepository userRepository;
-
-    @Autowired
-    private StoreDatabaseRepository storeRepository;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
     UserFacadeImp userFacadeImp;
 
     @BeforeEach
     public void init() {
-
+        userRepository = UserMemoryRepository.getInstance();
+        storeRepository= StoreMemoryRepository.getInstance();
         userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
     }
 

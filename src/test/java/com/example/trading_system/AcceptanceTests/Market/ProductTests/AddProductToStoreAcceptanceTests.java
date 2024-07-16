@@ -3,10 +3,8 @@ package com.example.trading_system.AcceptanceTests.Market.ProductTests;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystem;
@@ -17,18 +15,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import jakarta.transaction.*;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-@Transactional
 class AddProductToStoreAcceptanceTests {
     private TradingSystem tradingSystem;
     private String token;
@@ -37,16 +30,14 @@ class AddProductToStoreAcceptanceTests {
     private final String productName = "Product1";
     private final String[] keyWords = {"CarPlay", "iPhone"};
     private final String storeName = "Store1";
-    @Autowired
-    private UserDatabaseRepository userRepository;
-
-    @Autowired
-    private StoreDatabaseRepository storeRepository;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
 
     @BeforeEach
     void setUp() {
-
+        userRepository= UserMemoryRepository.getInstance();    //May be change later
+        storeRepository= StoreMemoryRepository.getInstance();  //May be change later
         tradingSystem = TradingSystemImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class),mock(NotificationSender.class),userRepository,storeRepository);
         tradingSystem.register("owner1", "password123", LocalDate.now());
         tradingSystem.openSystem(storeRepository);

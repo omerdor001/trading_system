@@ -4,37 +4,28 @@ import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
-import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserFacadeImp;
 import com.example.trading_system.domain.users.UserMemoryRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
 
 import static org.mockito.Mockito.mock;
-@SpringBootTest
-@Transactional
+
 public class OpenStoreUnitTests {
     MarketFacadeImp marketFacade;
     UserFacadeImp userFacadeImp;
-    @Autowired
-    private UserDatabaseRepository userRepository;
+    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
-    @Autowired
-    private StoreDatabaseRepository storeRepository;
     @BeforeEach
     public void init() {
         // Re-instantiate singletons
+        storeRepository= StoreMemoryRepository.getInstance();
+        userRepository = UserMemoryRepository.getInstance();
         marketFacade = MarketFacadeImp.getInstance(storeRepository);
-
-        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class), mock(DeliveryService.class), mock(NotificationSender.class), userRepository, storeRepository);
+        userFacadeImp = UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
     }
 
     @AfterEach
@@ -49,7 +40,7 @@ public class OpenStoreUnitTests {
         String storeName = "StoreName";
         String description = "StoreDescription";
 
-        userRepository.addRegistered(username, "encrypted_password", LocalDate.of(2002,11,24));
+        userRepository.addRegistered(username, "encrypted_password", null);
         userRepository.getUser(username).login();
 
         Assertions.assertDoesNotThrow(() -> userFacadeImp.createStore(username, storeName, description));
@@ -75,7 +66,7 @@ public class OpenStoreUnitTests {
         //String storeName = null;
         String description = "StoreDescription";
 
-        userRepository.addRegistered(username, "encrypted_password", LocalDate.of(2002,11,24));
+        userRepository.addRegistered(username, "encrypted_password", null);
         userRepository.getUser(username).login();
 
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.createStore(username, null, description));
@@ -89,7 +80,7 @@ public class OpenStoreUnitTests {
         String storeName = "";
         String description = "StoreDescription";
 
-        userRepository.addRegistered(username, "encrypted_password", LocalDate.of(2002,11,24));
+        userRepository.addRegistered(username, "encrypted_password", null);
         userRepository.getUser(username).login();
 
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> userFacadeImp.createStore(username, storeName, description));
@@ -103,7 +94,7 @@ public class OpenStoreUnitTests {
         String storeName = "ExistingStoreName";
         String description = "StoreDescription";
 
-        userRepository.addRegistered(username, "encrypted_password", LocalDate.of(2002,11,24));
+        userRepository.addRegistered(username, "encrypted_password", null);
         userRepository.getUser(username).login();
         marketFacade.addStore(storeName, description, username, null); // Ensure store exists
 
@@ -117,7 +108,7 @@ public class OpenStoreUnitTests {
         String username = "rValidUser";
         String description = "StoreDescription";
 
-        userRepository.addRegistered(username, "encrypted_password", LocalDate.of(2002,11,24));
+        userRepository.addRegistered(username, "encrypted_password", null);
         userRepository.getUser(username).login();
 
         // Simulate exception by invalid parameters
