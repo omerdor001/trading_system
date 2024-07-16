@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 @SpringBootTest
 @Transactional
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SuspensionUnitTests {
     MarketFacade marketFacade;
     UserFacade userFacade;
@@ -29,7 +28,7 @@ class SuspensionUnitTests {
     @Autowired
     private StoreDatabaseRepository storeRepository;
 
-    @BeforeAll
+    @BeforeEach
     void setUpBA() {
 
         userFacade= UserFacadeImp.getInstance(mock(PaymentService.class),mock(DeliveryService.class), mock(NotificationSender.class),userRepository,storeRepository);
@@ -56,7 +55,7 @@ class SuspensionUnitTests {
         }
     }
 
-    @AfterAll
+    @AfterEach
     public void tearDown(){
         userFacade.logout(0,"rtestuser0");
         userFacade.logout(1,"rtestuser1");
@@ -67,7 +66,7 @@ class SuspensionUnitTests {
             userFacade.exit("v0");
         }
         catch (Exception e){
-
+            fail(e);
         }
         marketFacade.deleteInstance();
         userFacade.deleteInstance();
@@ -75,9 +74,8 @@ class SuspensionUnitTests {
 
     @Test
     void suspendUser_Success() {
-        boolean suspended = userFacade.isSuspended("rtestuser2");
-        assertDoesNotThrow(() -> userFacade.suspendUser("rtestuser0", "rtestuser2", LocalDateTime.of(2024, 8, 1, 1, 1)), "suspendUser should not throw any exceptions");
-        assertEquals(suspended, userFacade.isSuspended("rtestuser2"));
+        userFacade.suspendUser("rtestuser0", "rtestuser2", LocalDateTime.of(2024, 8, 1, 1, 1));
+        assertTrue(userFacade.isSuspended("rtestuser2"));
         RuntimeException exception = assertThrows(RuntimeException.class, () -> userFacade.purchaseCart("rtestuser2", "1234 El Street, Springfield, IL, 62704-5678", "100.00", "USD", "4111111111111111", "12", "2025", "John Doe", "123", "123456789"));
         assertEquals("User is suspended from the system", exception.getMessage());
     }
@@ -131,20 +129,18 @@ class SuspensionUnitTests {
 
     @Test
     void endSuspendUser_AdminNotExist() {
-        boolean suspended=userFacade.isSuspended("rtestuser2");
         userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,8,1,1,1));
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userFacade.endSuspendUser("rtestuser4","rtestuser2"));
         assertEquals("Admin user doesn't exist in the system", exception.getMessage());
-        assertEquals(suspended,userFacade.isSuspended("rtestuser2"));
+        assertTrue(userFacade.isSuspended("rtestuser2"));
     }
 
     @Test
     void endSuspendUser_SuspenderNotAdmin() {
-        boolean suspended=userFacade.isSuspended("rtestuser2");
         userFacade.suspendUser("rtestuser0","rtestuser2", LocalDateTime.of(2024,8,1,1,1));
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userFacade.endSuspendUser("rtestuser1","rtestuser2"));
         assertEquals("Only admin user can suspend users", exception.getMessage());
-        assertEquals(suspended,userFacade.isSuspended("rtestuser2"));
+        assertTrue(userFacade.isSuspended("rtestuser2"));
     }
 
     @Test

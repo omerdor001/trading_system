@@ -115,13 +115,10 @@ class SuspensionAcceptanceTests {
     }
 
     @Test
-    @Disabled
-        //TODO fix me
     void suspendUser_SuccessNotMakeAction() {
-
         tradingSystem.suspendUser(token1, username, username1, LocalDateTime.of(2024, 8, 1, 10, 0));
-        ResponseEntity<String> response = tradingSystem.approvePurchase(username, token1, address, amount, currency, cardNumber, month, year, holder, ccv, id);
-        assertEquals(HttpStatusCode.valueOf(401), response.getStatusCode());
+        ResponseEntity<String> response = tradingSystem.approvePurchase(username1, token2, address, amount, currency, cardNumber, month, year, holder, ccv, id);
+        assertEquals(HttpStatusCode.valueOf(400), response.getStatusCode());
     }
 
     @Test

@@ -118,7 +118,6 @@ public class GetProductsInfoAcceptanceTests {
     @Test
     public void testGetProductInfoNonExistentProduct() {
         tradingSystem.openStore(username, token, "store1", "General Store");
-        System.out.println("fksabijbkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
         ResponseEntity<String> response = tradingSystem.getProductInfo(username, token,"store1", 999);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Can't find product with id 999", response.getBody());
