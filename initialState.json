@@ -1,0 +1,290 @@
+[
+  {
+    "useCase": "register",
+    "arguments": {
+      "username": "john_doe",
+      "password": "password123",
+      "birthdate": "1990-01-01"
+    }
+  },
+  {
+    "useCase": "openSystem",
+    "arguments": {}
+  },
+  {
+    "useCase": "enter",
+    "arguments": {}
+  },
+  {
+    "useCase": "register",
+    "arguments": {
+      "username": "jane_doe",
+      "password": "password456",
+      "birthdate": "1992-02-02"
+    }
+  },
+  {
+    "useCase": "register",
+    "arguments": {
+      "username": "scooby_doe",
+      "password": "password789",
+      "birthdate": "1995-05-05"
+    }
+  },
+  {
+    "useCase": "login",
+    "arguments": {
+      "token": "",
+      "usernameV": "v0",
+      "username": "john_doe",
+      "password": "password123"
+    }
+  },
+  {
+    "useCase": "openStore",
+    "arguments": {
+      "username": "john_doe",
+      "token": "",
+      "storeName": "John's Apple Store",
+      "description": "This is John's store for buying apples."
+    }
+  },
+  {
+    "useCase": "suggestOwner",
+    "arguments": {
+      "appoint": "john_doe",
+      "token": "",
+      "newOwner": "jane_doe",
+      "storeName": "John's Apple Store"
+    }
+  },
+   {
+    "useCase": "suggestManage",
+    "arguments": {
+      "appoint": "john_doe",
+      "token": "",
+      "newManager": "scooby_doe",
+      "store_name_id": "John's Apple Store",
+      "watch": true,
+      "editSupply": true,
+      "editBuyPolicy": true,
+      "editDiscountPolicy": true,
+      "acceptBids": true,
+    }
+  },
+  {
+    "useCase": "logout",
+    "arguments": {
+      "token": "",
+      "username": "john_doe"
+    }
+  },
+  {
+    "useCase": "exit",
+    "arguments": {
+      "token": "",
+      "username": "v1"
+    }
+  }
+  {
+    "useCase": "enter",
+    "arguments": {}
+  },
+  {
+    "useCase": "login",
+    "arguments": {
+      "token": "",
+      "usernameV": "v2",
+      "username": "jane_doe",
+      "password": "password456"
+    }
+  },
+  {
+    "useCase": "approveOwner",
+    "arguments": {
+      "newOwner": "jane_doe",
+      "token": "",
+      "storeName": "John's Apple Store",
+      "appoint": "john_doe"
+    }
+  },
+  {
+    "useCase": "logout",
+    "arguments": {
+      "token": "",
+      "username": "jane_doe"
+    }
+  },
+  {
+    "useCase": "exit",
+    "arguments": {
+      "token": "",
+      "username": "v3"
+    }
+  },
+  {
+    "useCase": "enter",
+    "arguments": {}
+  },
+  {
+    "useCase": "login",
+    "arguments": {
+      "token": "",
+      "usernameV": "v4",
+      "username": "scooby_doe",
+      "password": "password789"
+    }
+  },
+  {
+    "useCase": "approveManage",
+    "arguments": {
+      "newManager": "scooby_doe",
+      "token": "",
+      "store_name_id": "John's Apple Store",
+      "appoint": "john_doe",
+      "watch": true,
+      "editSupply": true,
+      "editBuyPolicy": true,
+      "editDiscountPolicy": true,
+      "acceptBids": true,
+    }
+  },
+  {
+    "useCase": "addProduct",
+    "arguments": {
+      "username": "scooby_doe",
+      "token": "",
+      "product_id": 12345,
+      "store_name": "John's Apple Store",
+      "product_name": "Secret Apple",
+      "product_description": "This is a secret to tell about the apple.",
+      "product_price": 99.99,
+      "product_quantity": 10,
+      "rating": 4,
+      "category": 3,
+      "keyWords": "apple, secret"
+    }
+  },
+  {
+  "useCase": "addProduct",
+  "arguments": {
+    "username": "scooby_doe",
+    "token": "",
+    "product_id": 67890,
+    "store_name": "John's Apple Store",
+    "product_name": "Mystery Apple",
+    "product_description": "Unveil the mystery behind this extraordinary apple.",
+    "product_price": 149.99,
+    "product_quantity": 5,
+    "rating": 4.7,
+    "category": 3,
+    "keyWords": "apple, mystery"
+    }
+  },
+  {
+    "useCase": "logout",
+    "arguments": {
+      "token": "",
+      "username": "scooby_doe"
+    }
+  },
+  {
+    "useCase": "exit",
+    "arguments": {
+      "token": "",
+      "username": "v5"
+    }
+  },
+  {
+    "useCase": "enter",
+    "arguments": {}
+  },
+  {
+    "useCase": "addToCart",
+    "arguments": {
+      "username": "v6",
+      "token": "",
+      "productId": 12345,
+      "storeName": "John's Apple Store",
+      "quantity": 2,
+      "price": 99.99
+    }
+  },
+  {
+  "useCase": "approvePurchase",
+  "arguments": {
+    "username": "v6",
+    "token": "",
+    "address": "456 Elm St, Anytown",
+    "amount": "199.98",
+    "currency": "USD",
+    "cardNumber": "9876543210987654",
+    "month": "11",
+    "year": "2024",
+    "holder": "Emily Johnson",
+    "ccv": "456",
+    "id": "432789467"
+    }
+  },
+  {
+    "useCase": "exit",
+    "arguments": {
+      "token": "",
+      "username": "v6"
+    }
+  },
+  {
+    "useCase": "enter",
+    "arguments": {}
+  },
+  {
+    "useCase": "login",
+    "arguments": {
+      "token": "",
+      "usernameV": "v7",
+      "username": "jane_doe",
+      "password": "password456"
+    }
+  },
+  {
+  "useCase": "addToCart",
+  "arguments": {
+    "username": "jane_doe",
+    "token": "",
+    "productId": 67890,
+    "storeName": "John's Apple Store",
+    "quantity": 1,
+    "price": 149.99
+    }
+  },
+  {
+  "useCase": "approvePurchase",
+  "arguments": {
+    "username": "jane_doe",
+    "token": "",
+    "address": "123 Main St, Anytown",
+    "amount": "149.99",
+    "currency": "USD",
+    "cardNumber": "1234567812345678",
+    "month": "12",
+    "year": "2025",
+    "holder": "Jane Doe",
+    "ccv": "123",
+    "id": "659302740"
+    }
+   },
+   {
+    "useCase": "logout",
+    "arguments": {
+      "token": "",
+      "username": "jane_doe"
+    }
+  },
+  {
+    "useCase": "exit",
+    "arguments": {
+      "token": "",
+      "username": "v8"
+    }
+  }
+]
