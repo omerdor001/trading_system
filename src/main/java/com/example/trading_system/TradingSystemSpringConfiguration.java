@@ -16,8 +16,6 @@ public class TradingSystemSpringConfiguration {
     private static final Logger logger = LoggerFactory.getLogger( TradingSystemSpringConfiguration.class );
     static {
         logger.info("Starting TradingSystemSpringConfiguration");
-//        OpenCV.loadShared();
-        logger.info("OpenCV is Loaded.");
     }
 
     @Value("${server.host:localhost}")
