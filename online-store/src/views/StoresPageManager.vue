@@ -108,8 +108,6 @@ export default defineComponent({
             isOwner: false,
           }
         }));
-        toast.add({ severity: 'success', summary: 'success', detail: username , life: 3000 });
-        toast.add({ severity: 'success', summary: 'success', detail: response.data , life: 3000 });
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
       }
@@ -138,8 +136,6 @@ export default defineComponent({
        store.permissions.isEditPurchasePolicy = permissions.editBuyPolicy;
        store.permissions.isEditDiscountPolicy = permissions.editDiscountPolicy;
        store.permissions.acceptBids = permissions.acceptBids;
-       toast.add({ severity: 'success', summary: 'success', detail: username , life: 3000 });
-       toast.add({ severity: 'success', summary: 'success', detail: response.data , life: 3000 });
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch permissions', life: 3000 });
         console.error('Error fetching permissions:', error);

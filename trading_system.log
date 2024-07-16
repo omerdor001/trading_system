@@ -2006,3 +2006,651 @@ This generated password is for development use only. Your security configuration
 2024-07-16T14:44:30.382+03:00  INFO 28168 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
 2024-07-16T14:44:30.391+03:00  INFO 28168 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 5.209 seconds (process running for 17.107)
 2024-07-16T14:45:30.396+03:00  INFO 28168 --- [Trading_System] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2024-07-16T17:23:09.070+03:00  INFO 22828 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 22828 (C:\Users\adidi\Documents\trading_system\target\classes started by adidi in C:\Users\adidi\Documents\trading_system)
+2024-07-16T17:23:09.073+03:00  INFO 22828 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-16T17:23:10.316+03:00  INFO 22828 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : OpenCV is Loaded.
+2024-07-16T17:23:10.738+03:00  INFO 22828 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-16T17:23:10.755+03:00  INFO 22828 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-16T17:23:10.755+03:00  INFO 22828 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-16T17:23:10.833+03:00  INFO 22828 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-16T17:23:10.833+03:00  INFO 22828 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1703 ms
+2024-07-16T17:23:11.183+03:00  WARN 22828 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d1690745-848f-4fba-8d8e-e24e8a90de30
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-07-16T17:23:11.454+03:00  INFO 22828 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@656842bc, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6b867ee7, org.springframework.security.web.context.SecurityContextHolderFilter@578a5ce8, org.springframework.security.web.header.HeaderWriterFilter@7558633, org.springframework.web.filter.CorsFilter@3dec3f87, org.springframework.security.web.authentication.logout.LogoutFilter@65cc5252, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@16cb9989, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3dfd6220, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7a606260, org.springframework.security.web.access.ExceptionTranslationFilter@16d431b4, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5bfc79cb]
+2024-07-16T17:23:11.683+03:00  INFO 22828 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
+2024-07-16T17:23:11.685+03:00  INFO 22828 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-07-16T17:23:11.688+03:00  INFO 22828 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@bd93bc3]]
+2024-07-16T17:23:11.688+03:00  INFO 22828 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-07-16T17:23:11.698+03:00  INFO 22828 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 3.223 seconds (process running for 4.298)
+2024-07-16T17:23:11.750+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-16T17:23:11.751+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-07-16T17:23:11.752+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-07-16T17:23:11.831+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : radiay is trying to get all his bids
+2024-07-16T17:23:11.832+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-16T17:24:11.661+03:00  INFO 22828 --- [Trading_System] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2024-07-16T17:24:14.284+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : radiay is trying to get all his bids
+2024-07-16T17:24:14.284+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-16T17:35:46.825+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : radiay is trying to get all his bids
+2024-07-16T17:35:46.826+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-16T17:35:59.712+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : radiay is trying to get all his bids
+2024-07-16T17:35:59.712+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-16T17:40:14.201+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : radiay is trying to get all his bids
+2024-07-16T17:40:14.202+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-16T17:40:18.928+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : radiay is trying to get all his bids
+2024-07-16T17:40:18.928+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-16T17:40:34.640+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to logout user: radiay
+2024-07-16T17:40:34.640+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-16T17:40:50.518+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to register user: adiay with password : Ac123456 and birthdate : 2024-06-03 
+2024-07-16T17:40:50.645+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : User registered successfully : adiay with password : Ac123456 and birthdate : 2024-06-03
+2024-07-16T17:40:50.672+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-16T17:40:50.672+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : System opened successfully
+2024-07-16T17:40:50.672+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T17:40:50.672+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 0
+2024-07-16T17:40:50.749+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MCIsImlhdCI6MTcyMTE0MDg1MCwiZXhwIjoxNzIxMTc2ODUwfQ.L38ZWWBMAMXADQIEM-3qPP3OoBE5vUYJuXtRI2qokpA and username: v0
+2024-07-16T17:40:59.854+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Attempting to login user: adiay
+2024-07-16T17:40:59.855+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : Trying to login user: adiay
+2024-07-16T17:40:59.935+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : User: adiay logged in
+2024-07-16T17:40:59.978+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : User: adiay logged in successfully
+2024-07-16T17:40:59.989+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: radiay
+2024-07-16T17:40:59.992+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: radiay
+2024-07-16T17:41:01.474+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : radiay is trying to get all his bids
+2024-07-16T17:54:11.670+03:00  INFO 22828 --- [Trading_System] [MessageBroker-2] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[1 current WS(1)-HttpStream(0)-HttpPoll(0), 1 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 6], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 1], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 2, completed tasks = 191]
+2024-07-16T17:54:29.461+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : radiay is trying to get all his bids
+2024-07-16T17:54:33.424+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Attempting to get suspension details
+2024-07-16T17:54:33.426+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Getting details of suspension successfully
+2024-07-16T17:54:46.321+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : radiay is trying to get all his bids
+2024-07-16T17:54:47.499+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : radiay is trying to get all his bids
+2024-07-16T17:57:27.543+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T17:57:27.545+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T17:57:34.268+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T17:57:34.270+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T17:57:35.768+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T17:57:35.770+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T17:57:44.005+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying opening store with name: csdvc
+2024-07-16T17:57:44.007+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.UserServiceImp             : Trying opening store with name: csdvc
+2024-07-16T17:57:44.009+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.UserServiceImp             : Finished opening store with name: csdvc
+2024-07-16T17:57:44.009+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Finished opening store with name: csdvc
+2024-07-16T17:57:46.427+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T17:57:46.429+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T17:58:27.019+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T17:58:27.021+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T18:00:27.808+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T18:00:27.810+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T18:00:33.463+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : radiay is trying to get all bids from store csdvc
+2024-07-16T18:01:18.242+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:01:18.244+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:01:19.582+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T18:01:19.583+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T18:01:26.448+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:01:26.449+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:02:03.456+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:02:03.458+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:02:04.212+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T18:02:04.213+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T18:02:16.135+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:02:16.137+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:02:16.770+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T18:02:16.772+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T18:05:18.303+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T18:05:18.305+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T18:05:19.127+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T18:05:19.128+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T18:05:19.866+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-16T18:05:19.867+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-16T18:05:25.538+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-16T18:05:25.539+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-16T18:05:45.125+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : User radiay is trying to add products to store : csdvc with product Id : 0 , product name : dscasdc, product description : sdad , product price : 3.0 ,product quantity : 3 , rating : 12.0 , category : 4 , key words : aqsc 
+2024-07-16T18:05:45.127+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : User radiay finished to add products to store : csdvc with product Id : 0 , product name : dscasdc, product description : sdad , product price : 3.0 ,product quantity : 3 , rating : 12.0 , category : 4 , key words : aqsc 
+2024-07-16T18:05:45.134+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T18:05:45.135+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T18:06:21.146+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:06:21.149+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:06:21.848+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T18:06:21.850+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T18:06:23.139+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : radiay is trying to get all bids from store csdvc
+2024-07-16T18:06:55.186+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : radiay is trying to get all bids from store csdvc
+2024-07-16T18:07:31.574+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : radiay is trying to get all bids from store csdvc
+2024-07-16T18:07:31.612+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : radiay is trying to get all bids from store csdvc
+2024-07-16T18:07:47.332+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : radiay is trying to get all bids from store csdvc
+2024-07-16T18:07:49.757+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : radiay is trying to get all bids from store csdvc
+2024-07-16T18:07:54.571+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:07:54.573+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:07:55.211+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T18:07:55.213+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T18:08:04.768+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : radiay is trying to get all his bids
+2024-07-16T18:08:17.218+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying user : radiay view cart 
+2024-07-16T18:08:17.220+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : Trying registered : radiay view cart 
+2024-07-16T18:08:17.239+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : Finished registered view cart: radiay 
+2024-07-16T18:08:50.885+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying user : radiay view cart 
+2024-07-16T18:08:50.888+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.UserServiceImp             : Trying registered : radiay view cart 
+2024-07-16T18:08:50.889+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.UserServiceImp             : Finished registered view cart: radiay 
+2024-07-16T18:08:54.171+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying user : radiay view cart 
+2024-07-16T18:08:54.173+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : Trying registered : radiay view cart 
+2024-07-16T18:08:54.174+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : Finished registered view cart: radiay 
+2024-07-16T18:09:01.905+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to logout user: radiay
+2024-07-16T18:09:01.907+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : Trying to logout user: radiay
+2024-07-16T18:09:01.907+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : User: radiay logged out
+2024-07-16T18:09:01.908+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : User: radiay logged out successfully
+2024-07-16T18:09:01.908+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T18:09:01.908+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 1
+2024-07-16T18:09:01.908+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MSIsImlhdCI6MTcyMTE0MjU0MSwiZXhwIjoxNzIxMTc4NTQxfQ.w4tnJA9tNCo5gsNFCLNFm1XBSG4AFMPJBAMeE-jam98 and username: v1
+2024-07-16T18:09:10.054+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Attempting to login user: adiay
+2024-07-16T18:09:10.054+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.UserServiceImp             : Trying to login user: adiay
+2024-07-16T18:09:10.121+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.UserServiceImp             : User: adiay logged in
+2024-07-16T18:09:10.122+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : User: adiay logged in successfully
+2024-07-16T18:09:10.130+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: radiay
+2024-07-16T18:09:10.132+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: radiay
+2024-07-16T18:09:15.603+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:09:15.606+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:09:16.084+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T18:09:16.084+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T18:09:17.687+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T18:09:17.688+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T18:09:18.170+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-16T18:09:18.172+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-16T18:09:23.523+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Attempting to logout user: radiay
+2024-07-16T18:09:23.524+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.UserServiceImp             : Trying to logout user: radiay
+2024-07-16T18:09:23.524+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.UserServiceImp             : User: radiay logged out
+2024-07-16T18:09:23.525+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : User: radiay logged out successfully
+2024-07-16T18:09:23.525+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T18:09:23.525+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 2
+2024-07-16T18:09:23.525+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MiIsImlhdCI6MTcyMTE0MjU2MywiZXhwIjoxNzIxMTc4NTYzfQ.EFOwBQZxbospAdmJ9gXvqSp3ArbxV092tg2WJVNmBSU and username: v2
+2024-07-16T18:09:35.249+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Attempting to register user: test with password : Ac123456 and birthdate : 2024-07-14 
+2024-07-16T18:09:35.312+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : User registered successfully : test with password : Ac123456 and birthdate : 2024-07-14
+2024-07-16T18:09:35.340+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-16T18:09:35.340+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-16T18:09:35.340+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T18:09:35.340+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 3
+2024-07-16T18:09:35.341+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MyIsImlhdCI6MTcyMTE0MjU3NSwiZXhwIjoxNzIxMTc4NTc1fQ.eKgoy8eZZlB2mFR6ekubUyc4VwGzepfJk7FAXUk6TeY and username: v3
+2024-07-16T18:09:45.127+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Attempting to login user: test
+2024-07-16T18:09:45.127+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.UserServiceImp             : Trying to login user: test
+2024-07-16T18:09:45.197+03:00 ERROR 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.domain.users.UserFacadeImp         : Wrong password, Failed login user: test
+2024-07-16T18:09:45.197+03:00 ERROR 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: test: Wrong password
+2024-07-16T18:09:50.912+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to login user: test
+2024-07-16T18:09:50.913+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.UserServiceImp             : Trying to login user: test
+2024-07-16T18:09:50.977+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.UserServiceImp             : User: test logged in
+2024-07-16T18:09:50.978+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User: test logged in successfully
+2024-07-16T18:09:50.985+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: rtest
+2024-07-16T18:09:50.986+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: rtest
+2024-07-16T18:09:59.272+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:09:59.273+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:10:00.267+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T18:10:00.268+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T18:10:11.577+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-7] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'userName' for method parameter type String is not present]
+2024-07-16T18:10:57.510+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 0
+2024-07-16T18:10:57.512+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 0
+2024-07-16T18:10:57.517+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.UserServiceImp             : Finished adding to cart product with id: 0
+2024-07-16T18:10:57.517+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Finished adding to cart product with id: 0
+2024-07-16T18:11:00.219+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying user : rtest view cart 
+2024-07-16T18:11:00.220+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.UserServiceImp             : Trying registered : rtest view cart 
+2024-07-16T18:11:00.233+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.UserServiceImp             : Finished registered view cart: rtest 
+2024-07-16T18:11:04.832+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying removing from cart product with id: 0
+2024-07-16T18:11:04.833+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : Trying removing from cart product with id: 0
+2024-07-16T18:11:04.833+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : Finished removing from cart product with id: 0
+2024-07-16T18:11:04.833+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Finished removing from cart product with id: 0
+2024-07-16T18:11:04.839+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying user : rtest view cart 
+2024-07-16T18:11:04.840+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : Trying registered : rtest view cart 
+2024-07-16T18:11:04.841+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : Finished registered view cart: rtest 
+2024-07-16T18:11:16.798+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:11:16.800+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:11:17.637+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T18:11:17.639+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T18:11:22.624+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-9] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'userName' for method parameter type String is not present]
+2024-07-16T18:22:44.887+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-7] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'username' for method parameter type String is not present]
+2024-07-16T18:22:45.010+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T18:22:45.012+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T18:24:11.675+03:00  INFO 22828 --- [Trading_System] [MessageBroker-3] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[2 current WS(2)-HttpStream(0)-HttpPoll(0), 3 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(3)-CONNECTED(3)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 24], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 4], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 3, completed tasks = 623]
+2024-07-16T18:25:14.657+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-3] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'userName' for method parameter type String is not present]
+2024-07-16T18:30:31.746+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:30:31.748+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:30:32.823+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T18:30:32.831+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T18:30:35.838+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:30:35.839+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:30:38.284+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:30:38.286+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:30:41.866+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-16T18:30:41.867+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-16T18:30:43.417+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:30:43.419+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:30:44.346+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T18:30:44.347+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T18:30:47.495+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-8] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'userName' for method parameter type String is not present]
+2024-07-16T18:32:02.932+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'userName' for method parameter type String is not present]
+2024-07-16T18:33:17.619+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T18:33:17.621+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T18:33:19.062+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-1] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'userName' for method parameter type String is not present]
+2024-07-16T18:33:28.351+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:33:28.353+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:33:29.666+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T18:33:29.667+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T18:33:37.231+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-9] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'userName' for method parameter type String is not present]
+2024-07-16T18:35:37.468+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T18:35:37.470+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T18:35:48.010+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-16T18:35:48.011+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-16T18:35:49.888+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:35:49.889+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:36:13.309+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T18:36:13.310+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T18:36:54.079+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-16T18:36:54.081+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-16T18:36:59.725+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : rtest trying to search products in stores
+2024-07-16T18:36:59.730+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Finished Searching products in store
+2024-07-16T18:37:05.560+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-16T18:37:05.562+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-16T18:37:11.780+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:37:11.781+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:37:12.656+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T18:37:12.658+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T18:37:55.546+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-16T18:37:55.548+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-16T18:38:01.212+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:38:01.214+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:38:01.732+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T18:38:01.733+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T18:38:04.147+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History for Store csdvc
+2024-07-16T18:38:04.148+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store csdvc
+2024-07-16T18:38:07.604+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:38:07.606+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:38:10.309+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T18:38:10.310+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T18:38:12.126+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Managers of the Store
+2024-07-16T18:38:12.127+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Managers of the Store
+2024-07-16T18:38:12.136+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Owners of the Store
+2024-07-16T18:38:12.137+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Owners of the Store
+2024-07-16T18:38:19.742+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:38:19.743+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:38:20.479+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T18:38:20.480+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T18:39:05.948+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Attempting to logout user: rtest
+2024-07-16T18:39:05.949+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.UserServiceImp             : Trying to logout user: rtest
+2024-07-16T18:39:05.949+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.UserServiceImp             : User: rtest logged out
+2024-07-16T18:39:05.950+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : User: rtest logged out successfully
+2024-07-16T18:39:05.950+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T18:39:05.950+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 4
+2024-07-16T18:39:05.950+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NCIsImlhdCI6MTcyMTE0NDM0NSwiZXhwIjoxNzIxMTgwMzQ1fQ.tuDdotfPCnTq8DgQXMYfI98XYBZGrtyEdlJ3NhOQ4Ik and username: v4
+2024-07-16T18:39:12.897+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Attempting to login user: adiay
+2024-07-16T18:39:12.897+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.UserServiceImp             : Trying to login user: adiay
+2024-07-16T18:39:12.963+03:00 ERROR 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.domain.users.UserFacadeImp         : Wrong password, Failed login user: adiay
+2024-07-16T18:39:12.963+03:00 ERROR 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: adiay: Wrong password
+2024-07-16T18:40:32.231+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Attempting to login user: adiay
+2024-07-16T18:40:32.232+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.UserServiceImp             : Trying to login user: adiay
+2024-07-16T18:40:32.295+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.UserServiceImp             : User: adiay logged in
+2024-07-16T18:40:32.297+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : User: adiay logged in successfully
+2024-07-16T18:40:32.305+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: radiay
+2024-07-16T18:40:32.306+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: radiay
+2024-07-16T18:40:34.844+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:40:34.845+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:40:35.386+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T18:40:35.387+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T18:40:37.140+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T18:40:37.141+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T18:40:40.367+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-16T18:40:40.367+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-16T18:40:54.713+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : User radiay is trying to add products to store : csdvc with product Id : 1 , product name : shirt, product description : shirt , product price : 5.0 ,product quantity : 5 , rating : 5.0 , category : 4 , key words : shirt 
+2024-07-16T18:40:54.714+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : User radiay finished to add products to store : csdvc with product Id : 1 , product name : shirt, product description : shirt , product price : 5.0 ,product quantity : 5 , rating : 5.0 , category : 4 , key words : shirt 
+2024-07-16T18:40:54.721+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T18:40:54.721+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T18:40:58.522+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to logout user: radiay
+2024-07-16T18:40:58.523+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.UserServiceImp             : Trying to logout user: radiay
+2024-07-16T18:40:58.523+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.UserServiceImp             : User: radiay logged out
+2024-07-16T18:40:58.523+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User: radiay logged out successfully
+2024-07-16T18:40:58.523+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T18:40:58.524+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 5
+2024-07-16T18:40:58.524+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NSIsImlhdCI6MTcyMTE0NDQ1OCwiZXhwIjoxNzIxMTgwNDU4fQ._4Fg112AXIln00VlppV4p1JCO3cs52lVxdNcHH8qsmg and username: v5
+2024-07-16T18:41:03.533+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Attempting to login user: adiay
+2024-07-16T18:41:03.533+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : Trying to login user: adiay
+2024-07-16T18:41:03.603+03:00 ERROR 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.domain.users.UserFacadeImp         : Wrong password, Failed login user: adiay
+2024-07-16T18:41:03.603+03:00 ERROR 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: adiay: Wrong password
+2024-07-16T18:41:08.318+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to login user: adiay
+2024-07-16T18:41:08.319+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : Trying to login user: adiay
+2024-07-16T18:41:08.383+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : User: adiay logged in
+2024-07-16T18:41:08.384+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : User: adiay logged in successfully
+2024-07-16T18:41:08.391+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: radiay
+2024-07-16T18:41:08.392+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: radiay
+2024-07-16T18:41:43.491+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to logout user: radiay
+2024-07-16T18:41:43.492+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : Trying to logout user: radiay
+2024-07-16T18:41:43.492+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : User: radiay logged out
+2024-07-16T18:41:43.492+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : User: radiay logged out successfully
+2024-07-16T18:41:43.492+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T18:41:43.492+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 6
+2024-07-16T18:41:43.492+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NiIsImlhdCI6MTcyMTE0NDUwMywiZXhwIjoxNzIxMTgwNTAzfQ.FU_zDGitfJH5rU6e1VTZEry_c613EHXYOsGYLBlIlW0 and username: v6
+2024-07-16T18:41:49.715+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to login user: test
+2024-07-16T18:41:49.716+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.UserServiceImp             : Trying to login user: test
+2024-07-16T18:41:49.780+03:00 ERROR 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.domain.users.UserFacadeImp         : Wrong password, Failed login user: test
+2024-07-16T18:41:49.780+03:00 ERROR 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: test: Wrong password
+2024-07-16T18:41:56.259+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Attempting to login user: test
+2024-07-16T18:41:56.259+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : Trying to login user: test
+2024-07-16T18:41:56.324+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : User: test logged in
+2024-07-16T18:41:56.324+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : User: test logged in successfully
+2024-07-16T18:41:56.331+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: rtest
+2024-07-16T18:41:56.332+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: rtest
+2024-07-16T18:41:59.359+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:41:59.361+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:42:00.212+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T18:42:00.214+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T18:42:32.807+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-16T18:42:32.808+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-16T18:42:59.665+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : rtest trying to search products in stores
+2024-07-16T18:42:59.683+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Finished Searching products in store
+2024-07-16T18:43:42.607+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : rtest trying to search products in stores
+2024-07-16T18:43:42.609+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Finished Searching products in store
+2024-07-16T18:43:49.572+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-16T18:43:49.573+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-16T18:44:02.450+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : rtest trying to search products in stores
+2024-07-16T18:44:02.453+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Finished Searching products in store
+2024-07-16T18:44:23.769+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : rtest trying to search products in stores
+2024-07-16T18:44:23.773+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Finished Searching products in store
+2024-07-16T18:44:25.249+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-16T18:44:25.250+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-16T18:45:08.501+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-16T18:45:08.503+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-16T18:45:32.193+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : rtest trying to search products in stores
+2024-07-16T18:45:32.196+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Finished Searching products in store
+2024-07-16T18:45:39.696+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : rtest is trying to place a bid for product 1 in store csdvc
+2024-07-16T18:45:42.970+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T18:46:05.822+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T18:46:05.823+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T18:46:06.591+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T18:46:06.592+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T18:47:17.109+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T18:47:17.111+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T18:47:24.286+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T18:54:11.686+03:00  INFO 22828 --- [Trading_System] [MessageBroker-8] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 6 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(6)-CONNECTED(6)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 63], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 12], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 1, completed tasks = 1044]
+2024-07-16T18:54:54.605+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T18:54:59.196+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T18:55:34.903+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'bidUserName' for method parameter type String is not present]
+2024-07-16T18:55:36.159+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-1] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'bidUserName' for method parameter type String is not present]
+2024-07-16T18:56:51.905+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T18:56:54.202+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:01:17.965+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:01:29.332+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:02:46.452+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T19:02:46.453+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T19:02:46.993+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T19:02:46.994+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T19:04:44.758+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:10:31.854+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:10:34.263+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:10:52.207+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:10:53.671+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:10:55.312+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : rtest is trying to approve a counter offer for his bid for product 1 in store csdvc
+2024-07-16T19:10:55.321+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:14:41.908+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:14:41.955+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:14:44.886+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:14:48.362+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : rtest is trying to approve a counter offer for his bid for product 1 in store csdvc
+2024-07-16T19:14:48.367+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:16:07.072+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : rtest is trying to approve a counter offer for his bid for product 1 in store csdvc
+2024-07-16T19:16:07.080+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:18:20.738+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:18:31.711+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'bidUserName' for method parameter type String is not present]
+2024-07-16T19:18:45.561+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:18:51.645+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-10] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'bidUserName' for method parameter type String is not present]
+2024-07-16T19:19:06.238+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:20:13.636+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : rtest is trying to approve a counter offer for his bid for product 1 in store csdvc
+2024-07-16T19:20:13.643+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:21:33.574+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : rtest is trying to approve a counter offer for his bid for product 1 in store csdvc
+2024-07-16T19:21:33.589+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:21:56.155+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:22:02.445+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : rtest is trying to approve a counter offer for his bid for product 1 in store csdvc
+2024-07-16T19:22:02.452+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:22:07.620+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-9] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'bidUserName' for method parameter type String is not present]
+2024-07-16T19:24:11.700+03:00  INFO 22828 --- [Trading_System] [MessageBroker-8] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 6 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(6)-CONNECTED(6)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 63], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 12], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 1, completed tasks = 1405]
+2024-07-16T19:25:58.090+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:28:33.621+03:00  WARN 22828 --- [Trading_System] [http-nio-8082-exec-5] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'bidUserName' for method parameter type String is not present]
+2024-07-16T19:28:40.453+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : rtest is trying to approve a counter offer for his bid for product 1 in store csdvc
+2024-07-16T19:28:40.460+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:37:57.385+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:38:23.866+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : rtest is trying to get all his bids
+2024-07-16T19:38:30.814+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T19:38:30.815+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T19:38:32.351+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T19:38:32.352+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T19:38:35.372+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T19:38:35.373+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T19:38:37.295+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T19:38:37.296+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T19:42:01.299+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T19:42:01.301+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T19:52:36.573+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T19:52:36.574+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T19:54:11.715+03:00  INFO 22828 --- [Trading_System] [MessageBroker-4] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 6 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(6)-CONNECTED(6)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 63], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 12], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 1, completed tasks = 1766]
+2024-07-16T19:57:20.043+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T19:57:20.045+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T19:57:20.740+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T19:57:20.741+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T19:57:26.085+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T19:57:26.087+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T19:57:29.480+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to get all Stores rtest created
+2024-07-16T19:57:29.483+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores rtest created
+2024-07-16T19:57:31.905+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Attempting to logout user: rtest
+2024-07-16T19:57:31.906+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.UserServiceImp             : Trying to logout user: rtest
+2024-07-16T19:57:31.907+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.UserServiceImp             : User: rtest logged out
+2024-07-16T19:57:31.907+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : User: rtest logged out successfully
+2024-07-16T19:57:31.907+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T19:57:31.907+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 7
+2024-07-16T19:57:31.908+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NyIsImlhdCI6MTcyMTE0OTA1MSwiZXhwIjoxNzIxMTg1MDUxfQ.ymZblchY4qPw5609kTjBHD286HJkvYbhFoB3CV3erVQ and username: v7
+2024-07-16T19:58:40.506+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to login user: adiay
+2024-07-16T19:58:40.508+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.UserServiceImp             : Trying to login user: adiay
+2024-07-16T19:58:40.600+03:00 ERROR 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.domain.users.UserFacadeImp         : Wrong password, Failed login user: adiay
+2024-07-16T19:58:40.600+03:00 ERROR 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: adiay: Wrong password
+2024-07-16T19:58:41.826+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to login user: adiay
+2024-07-16T19:58:41.826+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.UserServiceImp             : Trying to login user: adiay
+2024-07-16T19:58:41.908+03:00 ERROR 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.domain.users.UserFacadeImp         : Wrong password, Failed login user: adiay
+2024-07-16T19:58:41.908+03:00 ERROR 22828 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: adiay: Wrong password
+2024-07-16T19:58:46.795+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Attempting to login user: adiay
+2024-07-16T19:58:46.795+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : Trying to login user: adiay
+2024-07-16T19:58:46.882+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : User: adiay logged in
+2024-07-16T19:58:46.884+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : User: adiay logged in successfully
+2024-07-16T19:58:46.895+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: radiay
+2024-07-16T19:58:46.914+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: radiay
+2024-07-16T19:58:49.338+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T19:58:49.339+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T19:58:49.885+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T19:58:49.886+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T19:58:50.562+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store csdvc
+2024-07-16T19:58:50.565+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store csdvc
+2024-07-16T19:58:54.059+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-16T19:58:54.060+03:00  INFO 22828 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-16T20:01:26.209+03:00  INFO 22828 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-07-16T20:01:26.209+03:00  INFO 22828 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@bd93bc3]]
+2024-07-16T20:01:26.209+03:00  INFO 22828 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-07-16T20:18:27.317+03:00  INFO 3324 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 3324 (C:\Users\adidi\Documents\trading_system\target\classes started by adidi in C:\Users\adidi\Documents\trading_system)
+2024-07-16T20:18:27.319+03:00  INFO 3324 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-16T20:18:28.863+03:00  INFO 3324 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : OpenCV is Loaded.
+2024-07-16T20:18:29.237+03:00  INFO 3324 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-16T20:18:29.252+03:00  INFO 3324 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-16T20:18:29.252+03:00  INFO 3324 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-16T20:18:29.332+03:00  INFO 3324 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-16T20:18:29.332+03:00  INFO 3324 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1958 ms
+2024-07-16T20:18:29.680+03:00  WARN 3324 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 51e5260f-1ad9-4074-b80e-be8781477295
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-07-16T20:18:30.010+03:00  INFO 3324 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@595f9916, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2055833f, org.springframework.security.web.context.SecurityContextHolderFilter@27a9f025, org.springframework.security.web.header.HeaderWriterFilter@3dfd6220, org.springframework.web.filter.CorsFilter@28768e25, org.springframework.security.web.authentication.logout.LogoutFilter@5a592c70, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@61359e87, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2dc39b53, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@310d57b1, org.springframework.security.web.access.ExceptionTranslationFilter@7c453c34, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@21e5f0b6]
+2024-07-16T20:18:30.300+03:00  INFO 3324 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
+2024-07-16T20:18:30.304+03:00  INFO 3324 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-07-16T20:18:30.306+03:00  INFO 3324 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@179ee36b]]
+2024-07-16T20:18:30.307+03:00  INFO 3324 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-07-16T20:18:30.317+03:00  INFO 3324 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 3.567 seconds (process running for 4.075)
+2024-07-16T20:18:34.208+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-16T20:18:34.209+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-07-16T20:18:34.209+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2024-07-16T20:18:34.289+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to logout user: radiay
+2024-07-16T20:18:34.290+03:00  WARN 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-16T20:18:52.047+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to register user: adiay with password : Ac123456 and birthdate : 2024-06-03 
+2024-07-16T20:18:52.178+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User registered successfully : adiay with password : Ac123456 and birthdate : 2024-06-03
+2024-07-16T20:18:52.206+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-16T20:18:52.207+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : System opened successfully
+2024-07-16T20:18:52.207+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T20:18:52.207+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 0
+2024-07-16T20:18:52.286+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MCIsImlhdCI6MTcyMTE1MDMzMiwiZXhwIjoxNzIxMTg2MzMyfQ._jVTTCxVENXdLeN7g5U-_BnnnKexGaaNnVOU7iQYV6A and username: v0
+2024-07-16T20:18:59.651+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to login user: adiay
+2024-07-16T20:18:59.652+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.UserServiceImp             : Trying to login user: adiay
+2024-07-16T20:18:59.742+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.UserServiceImp             : User: adiay logged in
+2024-07-16T20:18:59.775+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : User: adiay logged in successfully
+2024-07-16T20:18:59.785+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: radiay
+2024-07-16T20:18:59.787+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: radiay
+2024-07-16T20:19:00.945+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Get Requests owners for radiay
+2024-07-16T20:19:00.947+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Get Requests owners for radiay
+2024-07-16T20:19:02.807+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T20:19:02.810+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T20:19:07.562+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying opening store with name: cswcd
+2024-07-16T20:19:07.563+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : Trying opening store with name: cswcd
+2024-07-16T20:19:07.566+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : Finished opening store with name: cswcd
+2024-07-16T20:19:07.566+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Finished opening store with name: cswcd
+2024-07-16T20:19:10.003+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T20:19:10.005+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T20:19:10.842+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T20:19:10.844+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T20:19:12.644+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Managers of the Store
+2024-07-16T20:19:12.647+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Managers of the Store
+2024-07-16T20:19:12.654+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Owners of the Store
+2024-07-16T20:19:12.657+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Owners of the Store
+2024-07-16T20:19:18.937+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Attempting to logout user: radiay
+2024-07-16T20:19:18.939+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : Trying to logout user: radiay
+2024-07-16T20:19:18.939+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : User: radiay logged out
+2024-07-16T20:19:18.940+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : User: radiay logged out successfully
+2024-07-16T20:19:18.940+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T20:19:18.940+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 1
+2024-07-16T20:19:18.941+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MSIsImlhdCI6MTcyMTE1MDM1OCwiZXhwIjoxNzIxMTg2MzU4fQ.PZx17N-peCGX2flnAi2_1D7C8s426IZZGYT4lWM_ZrQ and username: v1
+2024-07-16T20:19:30.271+03:00  INFO 3324 --- [Trading_System] [MessageBroker-7] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[1 current WS(1)-HttpStream(0)-HttpPoll(0), 1 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 9, active threads = 0, queued tasks = 0, completed tasks = 9], outboundChannel[pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 2, completed tasks = 8]
+2024-07-16T20:19:30.730+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Attempting to register user: test with password : Ac123456 and birthdate : 2024-06-03 
+2024-07-16T20:19:30.831+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : User registered successfully : test with password : Ac123456 and birthdate : 2024-06-03
+2024-07-16T20:19:30.857+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-16T20:19:30.857+03:00  WARN 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-16T20:19:30.857+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T20:19:30.857+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 2
+2024-07-16T20:19:30.857+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MiIsImlhdCI6MTcyMTE1MDM3MCwiZXhwIjoxNzIxMTg2MzcwfQ.T8mEPTqVERPPR_S6xwkiUc2ljYZi1a1XrUwbhyLvQpk and username: v2
+2024-07-16T20:19:39.359+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Attempting to login user: adiay
+2024-07-16T20:19:39.360+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.UserServiceImp             : Trying to login user: adiay
+2024-07-16T20:19:39.449+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.UserServiceImp             : User: adiay logged in
+2024-07-16T20:19:39.451+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : User: adiay logged in successfully
+2024-07-16T20:19:39.460+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: radiay
+2024-07-16T20:19:39.462+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: radiay
+2024-07-16T20:19:41.017+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T20:19:41.019+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T20:19:41.890+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T20:19:41.892+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T20:19:42.837+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store cswcd
+2024-07-16T20:19:42.838+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store cswcd
+2024-07-16T20:19:44.956+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T20:19:44.961+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T20:19:45.713+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T20:19:45.715+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T20:19:47.430+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Managers of the Store
+2024-07-16T20:19:47.432+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Managers of the Store
+2024-07-16T20:19:47.439+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Owners of the Store
+2024-07-16T20:19:47.441+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Owners of the Store
+2024-07-16T20:19:57.295+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T20:19:57.297+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T20:19:57.975+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T20:19:57.975+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T20:20:09.441+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to suggest user : rtest to be a manager in store : cswcd
+2024-07-16T20:20:09.443+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : Trying to suggest user : rtest to be a manager in store : cswcd
+2024-07-16T20:20:09.445+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : Finished suggesting manager : rtest to be a manager in store : cswcd
+2024-07-16T20:20:09.445+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Finished suggesting manager : rtest to be a manager in store : cswcd
+2024-07-16T20:20:12.388+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T20:20:12.390+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T20:20:13.051+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T20:20:13.053+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T20:20:14.357+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Managers of the Store
+2024-07-16T20:20:14.358+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Managers of the Store
+2024-07-16T20:20:14.370+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Owners of the Store
+2024-07-16T20:20:14.371+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Owners of the Store
+2024-07-16T20:20:18.245+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Attempting to logout user: radiay
+2024-07-16T20:20:18.246+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.UserServiceImp             : Trying to logout user: radiay
+2024-07-16T20:20:18.246+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.UserServiceImp             : User: radiay logged out
+2024-07-16T20:20:18.246+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : User: radiay logged out successfully
+2024-07-16T20:20:18.248+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T20:20:18.248+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 3
+2024-07-16T20:20:18.248+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MyIsImlhdCI6MTcyMTE1MDQxOCwiZXhwIjoxNzIxMTg2NDE4fQ.ht1K9uDSI2SRLVg8_aw8Qdwq3zycn1POyuLEQMt86GM and username: v3
+2024-07-16T20:20:23.980+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to login user: test
+2024-07-16T20:20:23.980+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.UserServiceImp             : Trying to login user: test
+2024-07-16T20:20:24.092+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.UserServiceImp             : User: test logged in
+2024-07-16T20:20:24.093+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User: test logged in successfully
+2024-07-16T20:20:24.103+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: rtest
+2024-07-16T20:20:24.137+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: rtest
+2024-07-16T20:20:34.305+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Get Requests managers for rtest
+2024-07-16T20:20:34.306+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Get Requests managers for rtest
+2024-07-16T20:20:36.629+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to approve manage to store : cswcd
+2024-07-16T20:20:36.631+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.UserServiceImp             : Trying to approve manage to store : cswcd
+2024-07-16T20:20:36.631+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.UserServiceImp             : Finished approving manage to store : cswcd
+2024-07-16T20:20:36.631+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Finished approving manage to store : cswcd
+2024-07-16T20:20:46.138+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T20:20:46.140+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T20:20:47.038+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T20:20:47.040+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T20:20:48.578+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store cswcd
+2024-07-16T20:20:48.580+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store cswcd
+2024-07-16T20:20:51.031+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T20:20:51.033+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T20:20:51.678+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rtest
+2024-07-16T20:20:51.680+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rtest
+2024-07-16T20:20:57.553+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History for Store cswcd
+2024-07-16T20:20:57.554+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store cswcd
+2024-07-16T20:21:01.090+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Attempting to logout user: rtest
+2024-07-16T20:21:01.090+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.UserServiceImp             : Trying to logout user: rtest
+2024-07-16T20:21:01.090+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.UserServiceImp             : User: rtest logged out
+2024-07-16T20:21:01.091+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : User: rtest logged out successfully
+2024-07-16T20:21:01.091+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T20:21:01.091+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 4
+2024-07-16T20:21:01.091+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NCIsImlhdCI6MTcyMTE1MDQ2MSwiZXhwIjoxNzIxMTg2NDYxfQ.fmMzYOUSv281YHsQG9jwLP8Ojhlpcac4bx_4vrY1xsU and username: v4
+2024-07-16T20:21:05.515+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Attempting to login user: adiay
+2024-07-16T20:21:05.515+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.UserServiceImp             : Trying to login user: adiay
+2024-07-16T20:21:05.603+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.UserServiceImp             : User: adiay logged in
+2024-07-16T20:21:05.605+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : User: adiay logged in successfully
+2024-07-16T20:21:05.613+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: radiay
+2024-07-16T20:21:05.616+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: radiay
+2024-07-16T20:21:11.780+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-16T20:21:11.782+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-16T20:21:12.749+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T20:21:12.750+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T20:21:15.759+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T20:21:15.761+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T20:21:18.052+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radiay
+2024-07-16T20:21:18.054+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radiay
+2024-07-16T20:21:25.695+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Managers of the Store
+2024-07-16T20:21:25.696+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Managers of the Store
+2024-07-16T20:21:25.706+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Owners of the Store
+2024-07-16T20:21:25.709+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Owners of the Store
+2024-07-16T20:21:32.067+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : radiay is Trying to edit permission for manager : rtest in store : cswcd
+2024-07-16T20:21:32.068+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.UserServiceImp             : radiay is Trying to edit permission for manager : rtest in store : cswcd
+2024-07-16T20:21:32.069+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.UserServiceImp             : Finished edit permission to manager : rtest  in store : cswcd
+2024-07-16T20:21:32.069+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Finished edit permission to manager : rtest  in store : cswcd
+2024-07-16T20:21:32.074+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Managers of the Store
+2024-07-16T20:21:32.075+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Managers of the Store
+2024-07-16T20:21:32.085+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Owners of the Store
+2024-07-16T20:21:32.086+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Owners of the Store
+2024-07-16T20:22:32.567+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to logout user: radiay
+2024-07-16T20:22:32.568+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : Trying to logout user: radiay
+2024-07-16T20:22:32.569+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : User: radiay logged out
+2024-07-16T20:22:32.570+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : User: radiay logged out successfully
+2024-07-16T20:22:32.570+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T20:22:32.570+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 5
+2024-07-16T20:22:32.570+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NSIsImlhdCI6MTcyMTE1MDU1MiwiZXhwIjoxNzIxMTg2NTUyfQ.zknRWsXnT1yNTivroNSy5_mgoq8p9rMks5B_6YPwidI and username: v5
+2024-07-16T20:24:02.608+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Attempting to register user: adiay with password : Ac123456 and birthdate : 2024-05-07 
+2024-07-16T20:24:02.609+03:00 ERROR 3324 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Error occurred while registering user : adiay with password : Ac123456 and birthdate : 2024-05-07 : username already exists - adiay
+2024-07-16T20:24:07.511+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Attempting to register user: adiay with password : Ac123456 and birthdate : 2024-05-07 
+2024-07-16T20:24:07.512+03:00 ERROR 3324 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Error occurred while registering user : adiay with password : Ac123456 and birthdate : 2024-05-07 : username already exists - adiay
+2024-07-16T20:24:26.280+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Attempting to register user: adiay with password : Ac123456 and birthdate : 2024-05-07 
+2024-07-16T20:24:26.280+03:00 ERROR 3324 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Error occurred while registering user : adiay with password : Ac123456 and birthdate : 2024-05-07 : username already exists - adiay
+2024-07-16T20:27:49.030+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Attempting to register user: adiay with password : Ac123456 and birthdate : 2024-05-07 
+2024-07-16T20:27:49.031+03:00 ERROR 3324 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Error occurred while registering user : adiay with password : Ac123456 and birthdate : 2024-05-07 : username already exists - adiay
+2024-07-16T20:28:02.699+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to register user: test with password : Ac123456 and birthdate : 2024-05-07 
+2024-07-16T20:28:02.699+03:00 ERROR 3324 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Error occurred while registering user : test with password : Ac123456 and birthdate : 2024-05-07 : username already exists - test
+2024-07-16T20:28:07.549+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to register user: test1 with password : Ac123456 and birthdate : 2024-05-07 
+2024-07-16T20:28:07.643+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User registered successfully : test1 with password : Ac123456 and birthdate : 2024-05-07
+2024-07-16T20:28:07.669+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-16T20:28:07.669+03:00  WARN 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-16T20:28:07.669+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-16T20:28:07.669+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 6
+2024-07-16T20:28:07.671+03:00  INFO 3324 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NiIsImlhdCI6MTcyMTE1MDg4NywiZXhwIjoxNzIxMTg2ODg3fQ.LmPvFo3dEZNHy_9B9365qNsTm_-5Qcp4SmCFMTXWpv4 and username: v6
