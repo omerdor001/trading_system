@@ -101,10 +101,6 @@ public class Owner extends RoleState {
     public void setEditDiscountPolicy(boolean editDiscountPolicy) {
     }
 
-    @Override
-    public void setCreateLottery(boolean createLottery) {
-
-    }
 
     @Override
     public void setAcceptBids(boolean acceptBids) {
@@ -116,10 +112,6 @@ public class Owner extends RoleState {
         return true;
     }
 
-    @Override
-    public boolean isCreateLottery(){
-        return true;
-}
 
     @Override
     public void requestManagersPermissions() {
@@ -166,9 +158,5 @@ public class Owner extends RoleState {
     public void getStoreBids() {
     }
 
-    @Override
-    public void createProductLottery(){
-
-    }
 
 }

@@ -33,6 +33,7 @@ import ProductsForStore from '@/views/ProductsForStore.vue';
 import EditPurchasePolicy from '@/views/PurchasePolicyManagement.vue';
 import EditDiscountPolicy from '@/components/DiscountManagement.vue';
 import PurchaseHistoryForCustomer from '@/views/PurchaseHistoryForCustomer.vue'; // Import the new component
+import ViewMyBids from '@/views/ViewMyBids.vue'
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },
@@ -62,13 +63,14 @@ const routes = [
     { path: '/suggest-manager/:storeName', name: 'SuggestManager', component: SuggestManager },
     { path: '/approve-owner', name: 'ApproveOwner', component: ApproveOwner },
     { path: '/approve-manager', name: 'ApproveManager', component: ApproveManager },
-    { path: '/get-store-bids', name: 'WatchStoreBids', component: WatchStoreBids },
+    { path: '/get-store-bids/:storeName', name: 'WatchStoreBids', component: WatchStoreBids },
     { path: '/payment', name: 'PaymentPage', component: PaymentPage },
     { path: '/productsForStore/:storeName', name: 'ProductsForStore', component: ProductsForStore },
     { path: '/edit-discount-policy/:storeName', name: 'EditDiscountPolicy', component: EditDiscountPolicy },
     { path: '/edit-purchase-policy/:storeName', name: 'EditPurchasePolicy', component: EditPurchasePolicy },
     { path: '/all-stores', name: 'AllStoresPage', component: AllStoresPage },
     { path: '/workers-in-store/:storeName', name: 'WorkersInStore', component: WorkersInStore },
+    { path: '/get-my-bids', name: 'ViewMyBids', component: ViewMyBids },
     { path: '/customer-purchase-history', name: 'PurchaseHistoryForCustomer', component: PurchaseHistoryForCustomer } // New Route
 ];
 
