@@ -32,6 +32,7 @@ import PaymentPage from '@/views/PaymentPage.vue';
 import ProductsForStore from '@/views/ProductsForStore.vue';
 import EditPurchasePolicy from '@/views/PurchasePolicyManagement.vue';
 import EditDiscountPolicy from '@/components/DiscountManagement.vue';
+import PurchaseHistoryForCustomer from '@/views/PurchaseHistoryForCustomer.vue'; // Import the new component
 
 const routes = [
     { path: '/', name: 'HomePage', component: HomePage },
@@ -44,7 +45,7 @@ const routes = [
     { path: '/store/:storeId', name: 'StoreDetails', component: StoreDetails, props: true },
     { path: '/create-suspension', name: 'CreateSuspension', component: CreateSuspension },
     { path: '/end-suspension', name: 'EndSuspension', component: EndSuspension },
-    { path: '/watch-suspensions', name: 'WatchSuspensions' ,component: WatchSuspensions },
+    { path: '/watch-suspensions', name: 'WatchSuspensions', component: WatchSuspensions },
     { path: '/stores-page', name: 'StoresPageManager', component: StoresPageManagerVue },
     { path: '/product/:productId/:storeId', name: 'ProductDetails', component: ProductDetails, props: true },
     { path: '/cart', name: 'ShoppingCart', component: ShoppingCart },
@@ -67,7 +68,8 @@ const routes = [
     { path: '/edit-discount-policy/:storeName', name: 'EditDiscountPolicy', component: EditDiscountPolicy },
     { path: '/edit-purchase-policy/:storeName', name: 'EditPurchasePolicy', component: EditPurchasePolicy },
     { path: '/all-stores', name: 'AllStoresPage', component: AllStoresPage },
-    { path: '/workers-in-store/:storeName', name: 'WorkersInStore', component: WorkersInStore }
+    { path: '/workers-in-store/:storeName', name: 'WorkersInStore', component: WorkersInStore },
+    { path: '/customer-purchase-history', name: 'PurchaseHistoryForCustomer', component: PurchaseHistoryForCustomer } // New Route
 ];
 
 const router = createRouter({
