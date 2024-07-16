@@ -28,7 +28,6 @@ import SiteHeader from '@/components/SiteHeader.vue';
 import { InputText } from 'primevue/inputtext';
 import { PrimeCalendar } from 'primevue/calendar';
 import { PrimeButton } from 'primevue/button';
-import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import PrimeToast from 'primevue/toast';
 
@@ -42,7 +41,6 @@ export default defineComponent({
     'p-toast': PrimeToast,
   },
   setup() {
-    const router = useRouter();
     const toast = useToast();
     const toSuspend = ref('');
     const endSuspension = ref(null);
@@ -70,16 +68,11 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      router.push('/login');
-    };
-
     return {
       toSuspend,
       endSuspension,
       username,
       submitForm,
-      logout,
     };
   },
 });

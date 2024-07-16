@@ -92,12 +92,6 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     const fetchUserCart = async () => {
       try {
       const response = await axios.get('http://localhost:8082/api/trading/cart/view', {
@@ -123,7 +117,6 @@ export default defineComponent({
       removeFromCart,
       totalPrice,
       buyCart,
-      logout
     };
   }
 });

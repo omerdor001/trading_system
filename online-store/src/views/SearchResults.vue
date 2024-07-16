@@ -158,19 +158,11 @@ export default defineComponent({
 
     };
 
-
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     return {
       username,
       token,
       products,
       viewOptions,
-      logout,
       addToCart,
       placeBid,
       bidPrices,
