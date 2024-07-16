@@ -1073,7 +1073,7 @@ public class UserFacadeImp implements UserFacade {
             user.releaseReservedProducts(marketFacade.getStoreRepository());
             timer.cancel();
             user.setTimerCancelled(true);
-            throw new Exception("Error in Payment");
+            throw new Exception("Error in Payment\t response from remote service is :"+paymentId);
         }
         user.addPurchase(marketFacade.getStoreRepository(), username);
         timer.cancel();
