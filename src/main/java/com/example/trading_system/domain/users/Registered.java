@@ -183,8 +183,8 @@ public class Registered extends User {
         }
     }
 
-    public void addWaitingAppoint_Manager(String store_name_id, String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
-        ManagerSuggestion managerSuggestion = new ManagerSuggestion(store_name_id + ":" + appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery));
+    public void addWaitingAppoint_Manager(String store_name_id, String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
+        ManagerSuggestion managerSuggestion = new ManagerSuggestion(store_name_id + ":" + appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids));
         managerSuggestions.add(managerSuggestion);
     }
 
