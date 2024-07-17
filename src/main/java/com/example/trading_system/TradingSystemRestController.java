@@ -18,6 +18,7 @@ import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ import java.time.LocalDateTime;
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/api/trading")
+@Service
 public class TradingSystemRestController {
 
     private final TradingSystemImp tradingSystem;
