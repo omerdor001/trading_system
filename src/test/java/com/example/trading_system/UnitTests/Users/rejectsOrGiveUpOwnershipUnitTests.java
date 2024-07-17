@@ -151,7 +151,7 @@ class rejectsOrGiveUpOwnershipUnitTests {
     void rejectToManageStore_UserNotForStoreList() {
         int sizeB = userFacade.getUser("r" + username3).getManagerSuggestions().size();
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> userFacade.rejectToManageStore("r" + username3, "Nike", "r" + username2));
-        assertEquals("No one suggest this user to be a manager", exception.getMessage());
+        assertEquals("No one suggests this user to be a manager", exception.getMessage());
         int sizeA = userFacade.getUser("r" + username3).getManagerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }

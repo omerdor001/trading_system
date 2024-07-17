@@ -19,4 +19,6 @@ public interface StoreRepository {
     void addStore(String storeName, String description, String founder, Double storeRating);
 
     void deleteInstance();
+
+    void save(Store store);
 }

@@ -5,27 +5,33 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.util.HashSet;
-import java.util.LinkedList;
+import lombok.Setter;
+
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "roles")
 public class Role {
+
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "role_state_id", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_state_id")
     private RoleState roleState;
 
-    @Column(nullable = false)
+    @Column
     private String store_name_id;
 
-    @Column(nullable = false)
+    @Column
     private String appointedById;
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "registered_username", referencedColumnName = "username", nullable = false)
+    private Registered registeredUser;
 
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

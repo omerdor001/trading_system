@@ -11,10 +11,7 @@ import java.util.Collection;
 
 public class TotalSumCondition extends Condition {
     private double requiredSum;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long id;
+
     public TotalSumCondition(double requiredSum) {
         this.requiredSum = requiredSum;
     }

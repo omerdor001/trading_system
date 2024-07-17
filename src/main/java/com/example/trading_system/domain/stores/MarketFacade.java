@@ -4,7 +4,6 @@ import com.example.trading_system.domain.users.UserFacade;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +82,9 @@ public interface MarketFacade {
 
     String requestManagersPermissions(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
 
-    String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
+      void save(Store store);
+
+        String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
 
     void addStore(String storeName, String description, String founder, Double storeRating);
 

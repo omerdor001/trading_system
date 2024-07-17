@@ -45,19 +45,19 @@ export default defineComponent({
   setup() {
     const name = ref('');
     const description = ref('');
-    const username = localStorage.getItem('username'); 
-    const token = localStorage.getItem('token'); 
+    const username = localStorage.getItem('username');
+    const token = localStorage.getItem('token');
     const toast = useToast();
-
     const handleCreateStore = async () => {
       try {
-        const response = await axios.post('http://localhost:8082/api/trading/create-store',null, {
-            params : { 
+        const response = await axios.put('http://localhost:8082/api/trading/create-store'
+            , null, {
+          params: {
             username: username,
             token: token,
             storeName: name.value,
             description: description.value
-            }
+          }
         });
         console.log(response.data);
         toast.add({ severity: 'success', summary: 'Success', detail: 'Store was opened Successfully', life: 3000 });
@@ -68,6 +68,7 @@ export default defineComponent({
         console.error('Failed to create store:', error.message);
       }
     };
+
 
     return {
       name,

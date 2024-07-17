@@ -15,7 +15,7 @@ public class DeliveryServiceProxy implements DeliveryService {
     private static final Pattern pattern = Pattern.compile(ADDRESS_PATTERN);
     int id = 1;
 
-    @Autowired
+    //@Autowired
     public DeliveryServiceProxy() {
     }
 
