@@ -1,5 +1,6 @@
 package com.example.trading_system.domain.users;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -113,12 +114,16 @@ public class UserDatabaseRepository implements UserRepository {
     }
 
     @Override
+    @Transactional
+
     public void addRegistered(String userName, String encryption, LocalDate birthdate) {
         Registered user = new Registered(userName.substring(1), encryption, birthdate);
         entityManager.persist(user);
     }
 
     @Override
+    @Transactional
+
     public void saveUser(User user) {
         if (user instanceof Registered) {
             Registered registeredUser = (Registered) user;
