@@ -113,7 +113,7 @@ export default defineComponent({
         }));
 
         ownOrManageStore.value = stores.value.some(store => store.role === 'Owner' || store.role === 'Manager');
-        toast.add({ severity: 'error', summary: 'Error', detail: "Fetched store details", life: 3000 });
+        toast.add({ severity: 'success', summary: 'success', detail: "Fetched store details", life: 3000 });
 
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
