@@ -10,11 +10,6 @@ import java.util.Collection;
 @DiscriminatorValue("AND")
 public class AndDiscount extends DiscountPolicy {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long id;
-
     @OneToOne
     @JoinColumn(name = "first_condition_id")
     private Condition first;

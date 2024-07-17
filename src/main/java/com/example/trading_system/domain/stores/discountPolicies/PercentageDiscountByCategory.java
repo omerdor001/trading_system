@@ -10,10 +10,6 @@ import java.util.Collection;
 @DiscriminatorValue("PERCENTAGE_CATEGORY")
 public class PercentageDiscountByCategory extends DiscountPolicy {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long id;
 
     @Column(name = "discounted_category")
     private int discountedCategory;
@@ -105,7 +101,4 @@ public class PercentageDiscountByCategory extends DiscountPolicy {
         return "{ \"type\": \"percentageCategory\", \"category\": " + discountedCategory + ", \"percent\": " + discountPercent + " }";
     }
 
-    public Long getId() {
-        return id;
-    }
 }

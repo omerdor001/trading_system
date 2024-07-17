@@ -73,17 +73,10 @@ export default defineComponent({
       productId.value = null;
     };
 
-    const logout = () => {
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      router.push('/login');
-    };
-
     return {
       storeName,
       productId,
       handleRemoveProduct,
-      logout,
       username,
       token,
     };
