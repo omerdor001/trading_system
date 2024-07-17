@@ -151,7 +151,7 @@ export default defineComponent({
 
       } catch (error) {
         console.error('Error fetching products:', error);
-        toast.add({ severity: 'error', summary: 'error', detail: filters.query, life: 3000 });
+        toast.add({ severity: 'error', summary: 'error', detail: error.message , life: 3000 });
 
       }
     };
@@ -166,7 +166,7 @@ export default defineComponent({
 
     const addToCart = async (productID, storeName, quantity, price) => {
       try {
-        const response = await axios.post('http://localhost:8082/api/trading/cart/add',null, {
+        await axios.post('http://localhost:8082/api/trading/cart/add',null, {
           params: {
             username: username,
             token: token,
@@ -176,7 +176,7 @@ export default defineComponent({
             price: price
           }
         });
-        toast.add({ severity: 'success', summary: 'Success', detail: response.data, life: 3000 });
+        toast.add({ severity: 'success', summary: 'Success', detail: "Add to cart successfully", life: 3000 });
       } catch (err) {
         err.value = err.response?.data?.message || 'An error occurred';
         toast.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
@@ -185,7 +185,6 @@ export default defineComponent({
     };
 
     const openCounterModdal = async(productId, storeName, price) => {
-              toast.add({ severity: 'success', summary: 'Success', detail: "im here", life: 3000 });
 
       product_ID.value = productId;
       product_store.value = storeName;
@@ -195,7 +194,7 @@ export default defineComponent({
 
     const placeBid = async () => {
       try {
-        const response = await axios.post('http://localhost:8082/api/trading/store/place-bid',null, {
+       await axios.post('http://localhost:8082/api/trading/store/place-bid',null, {
           params: {
             userName: username,
             token: token,
@@ -213,7 +212,7 @@ export default defineComponent({
             id: id.value
           }
         });
-        toast.add({ severity: 'success', summary: 'Success', detail: response.data, life: 3000 });
+        toast.add({ severity: 'success', summary: 'Success', detail: "Place bid successfully", life: 3000 });
         counterOfferModalVisible.value = false;
 
       } catch (err) {

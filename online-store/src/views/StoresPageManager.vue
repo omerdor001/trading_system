@@ -113,7 +113,7 @@ export default defineComponent({
         }));
 
         ownOrManageStore.value = stores.value.some(store => store.role === 'Owner' || store.role === 'Manager');
-        toast.add({ severity: 'error', summary: 'Error', detail: ownOrManageStore.value, life: 3000 });
+        toast.add({ severity: 'error', summary: 'Error', detail: "Fetched store details", life: 3000 });
 
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
@@ -238,7 +238,7 @@ export default defineComponent({
             }
           });
           console.log(response.data);
-          toast.add({ severity: 'success', summary: 'Success', detail: response.data, life: 3000 });
+          toast.add({ severity: 'success', summary: 'Success', detail: "Yield ownership successed", life: 3000 });
         } catch (error) {
           toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to yield ownership', life: 3000 });
           console.error('Failed to yield ownership:', error.message);

@@ -105,7 +105,7 @@ const isApprovedByUser =  (bid) => {
       const data = response.data;
       bids.value = data.bids;
 
-      toast.add({ severity : 'success', summary: 'success', detail: data.bids , life: 20000 });
+      toast.add({ severity : 'success', summary: 'success', detail: "Fetched store bids" , life: 20000 });
 
     } catch (error) {
       console.error('Error fetching store bids:', error);
@@ -114,7 +114,7 @@ const isApprovedByUser =  (bid) => {
 
   const approveBid = async (bid) => {
   try {
-      const response = await axios.post('http://localhost:8082/api/trading/store/approve-bid', null, {
+      await axios.post('http://localhost:8082/api/trading/store/approve-bid', null, {
         params: {
            userName : username, 
            token : token,
@@ -124,7 +124,6 @@ const isApprovedByUser =  (bid) => {
           } 
       });
       toast.add({ severity : 'success', summary: 'success', detail: "Approve bid succeessed", life: 3000 });
-      toast.add({ severity : 'success', summary: 'success', detail:  response.data, life: 3000 });
       fetchStoreBids();
 
     } catch (error) {
@@ -135,7 +134,7 @@ const isApprovedByUser =  (bid) => {
 
 const placeCounterOffer = async (bid) => {
   try {
-      const response = await axios.post('http://localhost:8082/api/trading/store/place-counter-offer', null, {
+      await axios.post('http://localhost:8082/api/trading/store/place-counter-offer', null, {
         params: {
            userName : username, 
            token : token,
@@ -146,7 +145,6 @@ const placeCounterOffer = async (bid) => {
           } 
       });
       toast.add({ severity : 'success', summary: 'success', detail: "Counter offer bid succeessed", life: 3000 });
-      toast.add({ severity : 'success', summary: 'success', detail:  response.data, life: 3000 });
 
       fetchStoreBids();
 
@@ -157,7 +155,7 @@ const placeCounterOffer = async (bid) => {
 
 const rejectBid = async (bid) => {
   try {
-      const response = await axios.post('http://localhost:8082/api/trading/store/reject-bid', null, {
+      await axios.post('http://localhost:8082/api/trading/store/reject-bid', null, {
         params: {
            userName : username, 
            token : token,
@@ -167,7 +165,6 @@ const rejectBid = async (bid) => {
           } 
       });
       toast.add({ severity : 'success', summary: 'success', detail: "Approve bid succeessed", life: 3000 });
-      toast.add({ severity : 'success', summary: 'success', detail:  response.data, life: 3000 });
 
       fetchStoreBids();
 
