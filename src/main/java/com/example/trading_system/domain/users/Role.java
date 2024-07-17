@@ -2,7 +2,12 @@ package com.example.trading_system.domain.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -22,13 +27,24 @@ public class Role {
     @Column(nullable = false)
     private String appointedById;
 
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "users_appointing", referencedColumnName = "id")
+    @Getter
+    private Set<Registered> usersAppointedByMe;
+
     public Role(String store_name_id, String appointedById) {
         this.store_name_id = store_name_id;
         this.appointedById = appointedById;
+        this.usersAppointedByMe = new HashSet<>();
     }
 
     public Role() {
 
+    }
+
+    public void addUserAppointedByMe(Registered registered){
+        this.usersAppointedByMe.add(registered);
     }
 
     public String getStoreId() {
@@ -125,9 +141,6 @@ public class Role {
         roleState.getStoreBids();
     }
 
-    public void createProductLottery() throws IllegalAccessException{
-        roleState.createProductLottery();
-    }
     //Getters of permissions
     public boolean isWatch(){
         return roleState.isWatch();
@@ -149,9 +162,6 @@ public class Role {
         return roleState.isAcceptBids();
     }
 
-    public boolean isCreateLottery(){
-        return roleState.isCreateLottery();
-    }
 
 }
 

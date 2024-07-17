@@ -61,6 +61,6 @@ public class OrPolicy extends PurchasePolicy{
     public String getPurchasePolicyInfo() {
         String firstInfo = predicateOne.getPurchasePolicyInfo();
         String secondInfo = predicateTwo.getPurchasePolicyInfo();
-        return "{ \"type\": \"or\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + " }";
+        return "{ \"type\": \"Or Policy\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + " }";
     }
 }

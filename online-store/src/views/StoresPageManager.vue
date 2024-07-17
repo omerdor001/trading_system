@@ -6,14 +6,17 @@
         <h2>Stores</h2>
         <hr />
         <!-- Stores list -->
-        <div class="store-container">
-          <div v-for="store in stores" :key="store.name" class="store-item" @click="showStoreDetails(store)">
+        <div v-if= "filterStores().length > 0 " class="store-container">
+          <div v-for="store in filterStores()" :key="store.name"   class="store-item" @click="showStoreDetails(store)">
             <div class="store-content">
               <h3 class="store-name">Store: {{ store.name }}</h3>
               <h5 class="status">Status: {{ getStatusText(store.status) }}</h5>
               <h5 class="role-at-store">I am a: {{ store.role }}</h5>
             </div>
           </div>
+        </div>
+        <div v-else>
+          <p>No Stores Availibale</p>
         </div>
       </div>
     </div>
@@ -35,19 +38,21 @@
           <!-- Right column for founder, isActive, rating, isOpen -->
           <div class="details-column">
             <p><strong>Founder:</strong> {{ selectedStore.founder }}</p>
-            <label><input type="checkbox" v-model="selectedStore.status"> Active</label><br />
-            <label><input type="checkbox" v-model="selectedStore.isOpen"> Is Open</label><br />
+            <label><input type="checkbox" v-model="selectedStore.status" disabled> Active</label><br />
+            <label><input type="checkbox" v-model="selectedStore.isOpen" disabled> Is Open</label><br />
             <p><strong>Rating:</strong> {{ selectedStore.rating }}</p>
           </div>
         </div>
         <div class="options-container">
           <h3>Options</h3>
+          <PrimeButton v-if="!selectedStore.isOpen  && selectedStore.founder === username.substring(1)" class="option-button primary" @click="openStoreExist(selectedStore.name)">Re-open Store</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isOwner" class="option-button primary" @click="suggestOwner(selectedStore.name)">Suggest Owner</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isOwner" class="option-button primary" @click="suggestManager(selectedStore.name)">Suggest Manager</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isOwner" class="option-button primary" @click="yieldOwnership()">Yield Ownership</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isEditPurchasePolicy" class="option-button primary" @click="editPurchasePolicy(selectedStore.name)">Edit Purchase Policy</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isEditDiscountPolicy" class="option-button primary" @click="editDiscountPolicy(selectedStore.name)">Edit Discount Policy</PrimeButton>
           <PrimeButton class="option-button primary" @click="purchasesHistory(selectedStore.name)">Purchases History</PrimeButton>
+          <PrimeButton v-if="selectedStore.permissions.acceptBids" class="option-button primary" @click="acceptBids(selectedStore.name)">Accept Bids</PrimeButton>
         </div>
       </div>
     </div>
@@ -78,8 +83,11 @@ export default defineComponent({
     const token = localStorage.getItem('token');
     const selectedStore = ref(null);
     const toast = useToast();
+    const ownOrManageStore = ref(false);
 
-    onMounted(async () => {
+
+    
+    const fetchStoreDetails = async () => {
       try {
         const response = await axios.get('http://localhost:8082/api/trading/stores-detailed-info', {
           params: { 
@@ -103,10 +111,21 @@ export default defineComponent({
             isOwner: false,
           }
         }));
+
+        ownOrManageStore.value = stores.value.some(store => store.role === 'Owner' || store.role === 'Manager');
+        toast.add({ severity: 'error', summary: 'Error', detail: "Fetched store details", life: 3000 });
+
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
       }
+    };
+    
+    onMounted(() => {
+      fetchStoreDetails();
     });
+
+
+
     
     const showStoreDetails = async (store) => {
       selectedStore.value = store;
@@ -125,6 +144,7 @@ export default defineComponent({
        store.permissions.isEditSupply = permissions.editSupply;
        store.permissions.isEditPurchasePolicy = permissions.editBuyPolicy;
        store.permissions.isEditDiscountPolicy = permissions.editDiscountPolicy;
+       store.permissions.acceptBids = permissions.acceptBids;
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch permissions', life: 3000 });
         console.error('Error fetching permissions:', error);
@@ -133,6 +153,10 @@ export default defineComponent({
 
     const closeModal = () => {
       selectedStore.value = null;
+    };
+
+    const filterStores = () => {
+      return stores.value.filter(store => store.role === 'Manager' || store.role === 'Owner');
     };
 
     const navigateToProductsInStore = (storeName,isEditSupply) => {
@@ -153,6 +177,26 @@ export default defineComponent({
         router.push({ name: 'SuggestOwner', params: { storeName } });
       } 
     };
+
+    const openStoreExist =  async (store) => {
+      const tempStore = store;
+      try {
+         const response = await axios.post('http://localhost:8082/api/trading/store/open', null, {
+           params: {
+             username: username,
+             storeName: tempStore,
+             token: token,
+          }
+       });
+       console.log(response.data);
+       closeModal();
+       fetchStoreDetails();
+      } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to Re-open store', life: 3000 });
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
 
     const suggestManager = (storeName) => {
       const store = selectedStore.value;
@@ -175,6 +219,13 @@ export default defineComponent({
       }
     };
 
+    const acceptBids = (storeName) => {
+      const store = selectedStore.value;
+      if (store && store.permissions.acceptBids) {
+        router.push({ name: 'WatchStoreBids', params: { storeName } });
+      }
+    };
+
     const yieldOwnership = async () => {
       const store = selectedStore.value;
       if (store && store.permissions.isOwner) {
@@ -187,7 +238,7 @@ export default defineComponent({
             }
           });
           console.log(response.data);
-          toast.add({ severity: 'success', summary: 'Success', detail: response.data, life: 3000 });
+          toast.add({ severity: 'success', summary: 'Success', detail: "Yield ownership successed", life: 3000 });
         } catch (error) {
           toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to yield ownership', life: 3000 });
           console.error('Failed to yield ownership:', error.message);
@@ -204,17 +255,22 @@ export default defineComponent({
       username,
       token,
       showStoreDetails,
+      ownOrManageStore,
       selectedStore,
       navigateToProductsInStore,
       navigateToWorkersInStore,
       getStatusText,
       closeModal,
       suggestOwner,
+      acceptBids,
       suggestManager,
       editPurchasePolicy,
       editDiscountPolicy,
       yieldOwnership,
-      purchasesHistory
+      openStoreExist,
+      purchasesHistory,
+      filterStores,
+      fetchStoreDetails
     };
   }
 });

@@ -50,6 +50,11 @@
         }
 
         @Override
+        public Registered getRegistered(String userName) throws Exception{
+            return entityManager.find(Registered.class,userName);
+        }
+
+        @Override
         public boolean isExist(String username) {
             if (username.startsWith("v")) {
                 return visitors.containsKey(username);
@@ -134,6 +139,12 @@
         @Override
         public void saveUser(User user) {
             entityManager.persist(user);
+        }
+
+        @Override
+        public void saveUsers(List<User> users){
+            for (User user: users)
+                saveUser(user);
         }
 
         @Override

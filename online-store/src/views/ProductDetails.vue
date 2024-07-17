@@ -115,20 +115,12 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      router.push('/login');
-    };
-
     return {
       username,
       product,
       quantity,
       backToStore,
       addToCart,
-      logout
     };
   }
 });

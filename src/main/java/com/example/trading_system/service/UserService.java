@@ -43,11 +43,11 @@ public interface UserService {
 
     void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
 
-    void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException;
+    void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException;
 
-    void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
+    void approveOwner(String newOwner, String storeName, String appoint) throws Exception;
 
-    void approveManage(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException;
+    void approveManage(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws Exception;
 
     void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException;
 
@@ -63,11 +63,11 @@ public interface UserService {
 
     String viewCart(String username) throws Exception;
 
-    void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException;
+    void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException;
 
     boolean isAdminRegistered();
 
-    void approvePurchase(String username) throws Exception;
+    void approvePurchase(String registeredId, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception;
 
     String getPurchaseHistory(String username, String storeName);
 

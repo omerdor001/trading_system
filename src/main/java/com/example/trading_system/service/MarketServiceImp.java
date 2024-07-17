@@ -5,10 +5,8 @@ import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.StoreRepository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -394,6 +392,12 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public void setPurchasePolicyCategory(String username, String storeName, int selectedIndex, int category) throws IllegalAccessException {
+        marketFacade.setPurchasePolicyCategory(username, storeName, selectedIndex, category);
+    }
+
+
+    @Override
     public void setFirstPurchasePolicy(String username, String storeName, int selectedDiscountIndex, int selectedFirstIndex) throws IllegalAccessException {
         marketFacade.setFirstPurchasePolicy(username, storeName, selectedDiscountIndex, selectedFirstIndex);
     }
@@ -430,8 +434,9 @@ public class MarketServiceImp implements MarketService {
     }
 
 
-    public String getPurchaseHistoryJSONFormatForStore(String userName,String storeName) {
-        return marketFacade.getPurchaseHistoryJSONFormatForStore(userName,storeName);
+    @Override
+    public String getPurchaseHistoryJSONFormatForStore(String userName, String storeName) {
+        return marketFacade.getPurchaseHistoryJSONFormatForStore(userName, storeName);
     }
 
     @Override
@@ -465,8 +470,8 @@ public class MarketServiceImp implements MarketService {
 //    }
 
     @Override
-    public void placeBid(String userName, String storeName, int productID, double price) throws  IllegalArgumentException {
-        marketFacade.placeBid(userName, storeName, productID, price);
+    public void placeBid(String userName, String storeName, int productID, double price, String address, String amount, String currency,String cardNumber, String month,String year,String holder,String ccv,String id) throws  IllegalArgumentException {
+        marketFacade.placeBid(userName, storeName, productID, price,address, amount, currency, cardNumber, month, year, holder, ccv, id);
     }
 
     @Override
@@ -485,13 +490,25 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public  void approveCounterOffer(String userName, String storeName, int productID, double price) throws Exception{
+        marketFacade.approveCounterOffer(userName, storeName, productID, price);
+
+    }
+
+    @Override
+    public void rejectCounterOffer(String userName, String storeName, int productID) throws Exception{
+        marketFacade.rejectCounterOffer(userName, storeName, productID);
+    }
+
+
+    @Override
     public String getStoreBids(String userName, String storeName) throws IllegalAccessException, IllegalArgumentException{
         return marketFacade.getStoreBids(userName, storeName);
     }
 
     @Override
-    public String getMyBids(String userName, String storeName) throws IllegalAccessException, IllegalArgumentException{
-        return marketFacade.getMyBids(userName, storeName);
+    public String getMyBids(String userName) throws IllegalAccessException, IllegalArgumentException{
+        return marketFacade.getMyBids(userName);
     }
 
 //    @Override

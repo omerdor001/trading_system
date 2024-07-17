@@ -18,7 +18,6 @@
               <th>Edit Buy Policy</th>
               <th>Edit Discount Policy</th>
               <th>Accept Bids</th>
-              <th>Create Lottery</th>
               <th>Approve</th>
               <th>Reject</th>
             </tr>
@@ -32,12 +31,11 @@
               <td>{{ request.editBuyPolicy ? '✔' : '✘' }}</td>
               <td>{{ request.editDiscountPolicy ? '✔' : '✘' }}</td>
               <td>{{ request.acceptBids ? '✔' : '✘' }}</td>
-              <td>{{ request.createLottery ? '✔' : '✘' }}</td>
               <td>
-                <PrimeButton label="Approve-Click" type="button" @click="approveManager(request)" />
+                <PrimeButton label="Approve" type="button" @click="approveManager(request)" />
               </td>
               <td>
-                <PrimeButton label="Reject-Click" type="button" @click="rejectManager(request)" />
+                <PrimeButton label="Reject" type="button" @click="rejectManager(request)" />
               </td>
             </tr>
           </tbody>
@@ -93,8 +91,7 @@ export default defineComponent({
           editSupply: request.editSupply,
           editBuyPolicy: request.editBuyPolicy,
           editDiscountPolicy: request.editDiscountPolicy,
-          acceptBids: request.editAcceptBids,
-          createLottery: request.editCreateLottery,
+          acceptBids: request.acceptBids
         }));
         console.log(requests.value);
         loading.value = false;
@@ -117,8 +114,7 @@ export default defineComponent({
             editSupply: request.editSupply,
             editBuyPolicy: request.editBuyPolicy,
             editDiscountPolicy: request.editDiscountPolicy,
-            acceptBids: request.acceptBids,
-            createLottery: request.createLottery,
+            acceptBids: request.acceptBids
           }
         });
         showSuccessToast(response.data.message);

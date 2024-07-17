@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class UserMemoryRepository implements UserRepository {
@@ -35,6 +36,15 @@ public class UserMemoryRepository implements UserRepository {
     public User getUser(String username) {
         return users.get(username);
     }
+
+    @Override
+    public Registered getRegistered(String userName) throws Exception{
+        if (userName.charAt(0) != 'r')
+            throw new Exception("User is not registerd");
+        else
+            return (Registered) users.get(userName);
+    }
+
 
     @Override
     public boolean isExist(String username) {
@@ -89,6 +99,9 @@ public class UserMemoryRepository implements UserRepository {
     @Override
     public void saveUser(User user) {
     }
+
+    @Override
+    public void saveUsers(List<User> users) {}
 
     @Override
     public boolean checkIfRegistersEmpty() {
