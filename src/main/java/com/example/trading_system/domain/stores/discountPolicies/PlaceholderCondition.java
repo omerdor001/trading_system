@@ -10,8 +10,6 @@ import java.util.Collection;
 @DiscriminatorValue("PLACEHOLDER")
 public class PlaceholderCondition extends Condition {
 
-
-
     @Override
     public boolean isSatisfied(Collection<ProductInSaleDTO> items) {
         return false;

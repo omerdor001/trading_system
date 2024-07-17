@@ -11,10 +11,6 @@ import java.util.Collection;
 @DiscriminatorValue("PLACEHOLDER")
 public class PlaceholderDiscountPolicy extends DiscountPolicy {
 
-
-    public PlaceholderDiscountPolicy() {
-    }
-
     @Override
     public double calculateDiscount(Collection<ProductInSaleDTO> items) {
         return 0;

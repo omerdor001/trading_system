@@ -10,8 +10,11 @@ public class ManagerSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "suggestion_key", nullable = false)
-    private String suggestionKey;
+    @Column(name = "suggestion_user", nullable = false)
+    private String suggestionUser;
+
+    @Column(name = "suggestion_store", nullable = false)
+    private String suggestionStore;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "suggestion_values", joinColumns = @JoinColumn(name = "manager_suggestion_id"))
@@ -21,8 +24,9 @@ public class ManagerSuggestion {
     // Constructors, getters, and setters
     public ManagerSuggestion() {}
 
-    public ManagerSuggestion(String suggestionKey, List<Boolean> suggestionValues) {
-        this.suggestionKey = suggestionKey;
+    public ManagerSuggestion(String suggestionStore, String suggestionUser, List<Boolean> suggestionValues) {
+        this.suggestionUser = suggestionUser;
+        this.suggestionStore = suggestionStore;
         this.suggestionValues = suggestionValues;
     }
 
@@ -34,12 +38,18 @@ public class ManagerSuggestion {
         this.id = id;
     }
 
-    public String getSuggestionKey() {
-        return suggestionKey;
+    public String getSuggestionUser() {
+        return suggestionUser;
+    }
+    public String getSuggestionStore() {
+        return suggestionStore;
     }
 
-    public void setSuggestionKey(String suggestionKey) {
-        this.suggestionKey = suggestionKey;
+    public void setSuggestionUser(String suggestionUser) {
+        this.suggestionUser = suggestionUser;
+    }
+    public void setSuggestionStore(String suggestionStore) {
+        this.suggestionStore = suggestionStore;
     }
 
     public List<Boolean> getSuggestionValues() {

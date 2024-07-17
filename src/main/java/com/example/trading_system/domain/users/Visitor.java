@@ -131,7 +131,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id) {
+    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id, String appoint) {
         return List.of();
     }
 

@@ -11,10 +11,10 @@ import java.util.Collection;
 @DiscriminatorValue("CONDITIONING")
 public class ConditioningPolicy extends PurchasePolicy {
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private PurchasePolicy predicateOne;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private PurchasePolicy predicateTwo;
     public ConditioningPolicy() {
         predicateOne = new PlaceholderPurchasePolicy();

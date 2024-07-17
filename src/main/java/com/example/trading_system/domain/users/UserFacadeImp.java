@@ -608,12 +608,12 @@ public class UserFacadeImp implements UserFacade {
         if (!newOwnerUser.removeWaitingAppoint_Owner(storeName))
             throw new IllegalAccessException("No one suggest this user to be a owner");
 
-        marketFacade.addOwner(storeName, newOwner);
         newOwnerUser.addOwnerRole(appoint, storeName);
-        appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getRegistered(newOwner));
+        marketFacade.getStore(storeName).addOwner(newOwner);
         sendNotification(newOwner, appoint, newOwnerUser.getUsername() + " accepted your suggestion to become an owner at store: " + storeName);
         userRepository.saveUser(newOwnerUser);
         userRepository.saveUser(appointUser);
+        marketFacade.save(marketFacade.getStore(storeName));
     }
 
     @Override
@@ -643,16 +643,10 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User is already owner of this store");
         }
-
-        System.out.println("Current manager suggestions for " + newManager + ": ");
-        for (ManagerSuggestion suggestion : newManagerUser.getManagerSuggestions()) {
-            System.out.println(" - " + suggestion.getSuggestionKey());
-        }
-        String suggestionKey = storeName + ":" + appoint;
-        System.out.println("Attempting to remove waiting appointment for: " + suggestionKey);
-        List<Boolean> permissions = newManagerUser.removeWaitingAppoint_Manager(suggestionKey);
+        System.out.println("Attempting to remove waiting appointment for user: " + newManagerUser + " Store: " + storeName);
+        List<Boolean> permissions = newManagerUser.removeWaitingAppoint_Manager(storeName, appoint);
         if (permissions == null) {
-            System.out.println("No suggestion found for: " + suggestionKey);
+            System.out.println("No suggestion found for user: " + newManagerUser + " Store: " + storeName);
             throw new RuntimeException("No appointment requests in this store.");
         }
 
@@ -826,13 +820,12 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("User is already owner of this store");
         }
 
-        String suggestionKey = storeName + ":" + appoint;
-        System.out.println("Attempting to remove waiting appointment for: " + suggestionKey);
-        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(suggestionKey);
+        System.out.println("Attempting to remove waiting appointment for user: " + userName + " Store: " + storeName);
+        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName , appoint);
         if (perm == null) {
             throw new IllegalAccessException("No one suggests this user to be a manager");
         }
-        System.out.println("Removed waiting appointment for: " + suggestionKey);
+        System.out.println("Removed waiting appointment for user: " + userName + " Store: " + storeName);
 
         sendNotification(userName, appoint, newManagerUser.getUsername() + " rejected your suggestion to become a manager at store: " + storeName);
         System.out.println("Notification sent to " + appoint);
@@ -1192,12 +1185,13 @@ public class UserFacadeImp implements UserFacade {
         List<Map<String, Object>> toApproves = new ArrayList<>();
 
         for (ManagerSuggestion suggestion : user.getManagerSuggestions()) {
-            String storeName = suggestion.getSuggestionKey();
+            String storeName = suggestion.getSuggestionStore();
+            String appoint = suggestion.getSuggestionUser();
             List<Boolean> permissions = suggestion.getSuggestionValues();
 
             Map<String, Object> approveMap = new HashMap<>();
             approveMap.put("storeName", storeName);
-            approveMap.put("appointee", suggestion.getSuggestionKey());
+            approveMap.put("appointee", suggestion.getSuggestionUser());
             approveMap.put("permissions", permissions);
 
             toApproves.add(approveMap);

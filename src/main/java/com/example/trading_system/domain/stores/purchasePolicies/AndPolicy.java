@@ -11,10 +11,10 @@ import java.util.function.Predicate;
 @DiscriminatorValue("AND")
 public class AndPolicy extends PurchasePolicy {
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private PurchasePolicy predicateOne;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private PurchasePolicy predicateTwo;
 
     public AndPolicy() {
@@ -29,7 +29,6 @@ public class AndPolicy extends PurchasePolicy {
     @Override
     public void setPurchasePolicyFirst(PurchasePolicy first) {
         predicateOne=first;
-
     }
 
     @Override

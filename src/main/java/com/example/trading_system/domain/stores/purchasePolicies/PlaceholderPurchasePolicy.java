@@ -11,9 +11,6 @@ import java.util.Collection;
 @DiscriminatorValue("PlaceholderPurchasePolicy")
 public class PlaceholderPurchasePolicy extends PurchasePolicy{
 
-    public PlaceholderPurchasePolicy() {
-    }
-
     @Override
     public boolean isPurchasePolicySatisfied(Collection<ProductInSaleDTO> items, int age) {
         return true;

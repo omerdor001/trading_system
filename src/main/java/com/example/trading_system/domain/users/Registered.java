@@ -191,7 +191,7 @@ public class Registered extends User {
     }
 
     public void addWaitingAppoint_Manager(String store_name_id, String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
-        ManagerSuggestion managerSuggestion = new ManagerSuggestion(store_name_id + ":" + appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids));
+        ManagerSuggestion managerSuggestion = new ManagerSuggestion(store_name_id , appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids));
         managerSuggestions.add(managerSuggestion);
     }
 
@@ -236,18 +236,18 @@ public class Registered extends User {
         ownerSuggestions.put(storeName, appointee);
     }
 
-    public List<Boolean> removeWaitingAppoint_Manager(String suggestionKey) {
+    public List<Boolean> removeWaitingAppoint_Manager(String suggestionStore, String suggestionUser) {
         Iterator<ManagerSuggestion> iterator = managerSuggestions.iterator();
-        System.out.println("Attempting to remove waiting appointment for: " + suggestionKey);
+        System.out.println("Attempting to remove waiting appointment for user: " + suggestionUser + " Store: " + suggestionStore);
         while (iterator.hasNext()) {
             ManagerSuggestion suggestion = iterator.next();
-            if (suggestion.getSuggestionKey().equals(suggestionKey)) {
-                System.out.println("Found and removing suggestion: " + suggestion.getSuggestionKey());
+            if (suggestion.getSuggestionStore().equals(suggestionStore) && suggestion.getSuggestionUser().equals(suggestionUser)) {
+                System.out.println("Found and removing suggestion for user: " + suggestionUser + " Store: " + suggestionStore);
                 iterator.remove();
                 return suggestion.getSuggestionValues();
             }
         }
-        System.out.println("No suggestion found for: " + suggestionKey);
+        System.out.println("No suggestion found for user: " + suggestionUser + " Store: " + suggestionStore);
         return null;
     }
 

@@ -129,7 +129,7 @@ public abstract class User {
 
     public abstract boolean removeWaitingAppoint_Owner(String storeName);
 
-    public abstract List<Boolean> removeWaitingAppoint_Manager(String store_name_id) throws IllegalAccessException;
+    public abstract List<Boolean> removeWaitingAppoint_Manager(String store_name_id, String appoint) throws IllegalAccessException;
 
     public abstract void addManagerRole(String appoint, String store_name_id);
 
