@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public interface MarketFacade {
     StoreRepository getStoreRepository();
@@ -81,7 +82,9 @@ public interface MarketFacade {
 
     String requestManagersPermissions(String userName, String storeName) throws IllegalArgumentException, IllegalAccessException;
 
-    String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
+      void save(Store store);
+
+        String requestInformationAboutSpecificOfficialInStore(String userName, String storeName, String officialUserName) throws IllegalArgumentException, IllegalAccessException;
 
     void addStore(String storeName, String description, String founder, Double storeRating);
 
@@ -99,7 +102,6 @@ public interface MarketFacade {
 
     void addPurchase(String customerUsername, String productInSaleList, double totalPrice, String storeName) throws IOException;
 
-    void addBidPurchase(String customerUsername, String productInSaleList, double totalPrice, String storeName) throws IOException;
     //region Discount creation
     String getDiscountPolicies(String username, String storeName) throws IllegalAccessException;
 
@@ -231,5 +233,33 @@ public interface MarketFacade {
 
     String searchProductsInStores(String userName, String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) throws Exception;
 
+    boolean isStoreFounder(String storeName, String userName);
+
+    void removeWorkers(String storeName, Set<String> influecnedUsers);
+
+    void addOwner(String storeName, String newOwner);
+
+    int checkProductQuantity(String storeName, int productID);
+
+    void addManager(String storeName, String newManager);
+
+    String getPurchaseHistoryString(String storeName, String username);
+
+    double getProductPrice(String storeName, int productId);
+
+    int getProductCategory(String storeName, int productId);
+
+    boolean isStoreOpen(String storeName);
+
+    boolean validateBidPurchasePolicies(String storeName, int productID, int quantity, int age, double price);
+
+    void checkAvailabilityAndConditions(int id, int quantity, String storeId);
+
+    void addBidPurchase(String userName, String storeName, int productID, double price, int quantity) throws JsonProcessingException;
+
+    boolean isBidApproved(String storeName, String username, int productId, double price);
+
     void approveCounterOffer(String userName, String storeName, int productID, double price) throws Exception;
+
+    void rejectCounterOffer(String userName, String storeName, int productID) throws Exception;
 }

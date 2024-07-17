@@ -989,7 +989,7 @@ export default {
         const deletePolicy = async (index) => {
             try {
                 const url = `http://localhost:8082/api/trading/store/purchase-policies/removePurchasePolicy`;
-                await axios.delete(url, {
+                const response = await axios.delete(url, {
                     params: {
                         username: username.value,
                         token: token.value,
@@ -997,12 +997,13 @@ export default {
                         selectedIndex: index
                     }
                 });
+                console.log(response.data);
                 fetchPolicies();
                 showDeletePolicyDialog.value = false;
                 toast.add({ severity: 'success', summary: 'Success', detail: 'Policy removed', life: 3000 });
             } catch (error) {
                 console.error('Error deleting policy:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to remove policy', life: 3000 });
             }
         };
 

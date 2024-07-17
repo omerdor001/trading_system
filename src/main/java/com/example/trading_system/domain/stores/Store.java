@@ -42,16 +42,20 @@ public class Store {
     @CollectionTable(name = "store_owners", joinColumns = @JoinColumn(name = "store_id"))
     @Column(name = "owner")
     private List<String> owners = new LinkedList<>();
+
     @Column(name = "founder")
     private String founder;
+
     @Column(name = "ActivtionStatus")
     private boolean isActive;
+
     @Column(name = "openingStatus")
     private boolean isOpen;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "sales_history_id", referencedColumnName = "id")
     private StoreSalesHistory salesHistory = new StoreSalesHistory();
+
     @Column(name = "rating")
     private Double storeRating;
 
@@ -64,12 +68,8 @@ public class Store {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchasePolicy> purchasePolicies = new LinkedList<>();
 
-//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Message> messages = new LinkedList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "store_id")
-    private List<Bid> bids;
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bid> bids = new LinkedList<>();
 
 //    @ElementCollection
 //    @CollectionTable(name = "store_lottery_products", joinColumns = @JoinColumn(name = "store_id"))
@@ -808,7 +808,7 @@ public class Store {
         }
         else
         {
-            Bid newBid = new Bid(userName, productID, price, address, amount, currency, cardNumber, month, year, holder, ccv, id);
+            Bid newBid = new Bid(userName, productID, price,getProduct(productID).getProduct_name(), address, amount, currency, cardNumber, month, year, holder, ccv, id);
             this.bids.add(newBid);
         }
     }
@@ -839,7 +839,8 @@ public class Store {
                 b.setPrice(newPrice);
                 b.setCustomerApproved(false);
                 b.setAllOwnersApproved(false);
-                b.setApprovedBy(new LinkedList<>(Arrays.asList(userName)));
+                b.setApprovedBy(new LinkedList<>());
+                b.approveBid(userName);
             }
         }
 
@@ -854,14 +855,22 @@ public class Store {
         return false;
     }
 
-    public String getStoreBids() {
-        if (bids.isEmpty()) return "{}";
-        StringBuilder sb = new StringBuilder();
-        sb.append("{\n");
-        sb.append("  \"storeName\" : \"").append(nameId).append("\",\n");
-        sb.append("  \"bids\" : ").append(Bid.toJsonList(bids)).append("\n");
-        sb.append("}");
-        return sb.toString();
+    public String getStoreBids() throws RuntimeException{
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(bids);
+        }
+        catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert bids to JSON: " + e.getMessage());
+
+        }
+//        if (bids.isEmpty()) return "{}";
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("{\n");
+//        sb.append("  \"storeName\" : \"").append(nameId).append("\",\n");
+//        sb.append("  \"bids\" : ").append(Bid.toJsonList(bids)).append("\n");
+//        sb.append("}");
+//        return sb.toString();
     }
 
     public boolean isBidApproved(String username, int productId, double price) {
@@ -958,6 +967,15 @@ public class Store {
         }).collect(Collectors.toList());
     }
 
+    public void removeWorkers(Set<String> influecnedUsers) {
+        for(String userName : influecnedUsers){
+            if (owners.contains(userName))
+                owners.remove(userName);
+            else
+                managers.remove(userName);
+        }
+    }
+
     public Bid getBid(int productID, String bidUserName) {
         for (Bid b : bids) {
             if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) {
@@ -971,6 +989,7 @@ public class Store {
         for (Bid b : bids) {
             if (b.getProductID() == productID && b.getUserName().equals(userName)) {
                 b.setCustomerApproved(true);
+                if (b.getApprovedBy().containsAll(owners)) b.setAllOwnersApproved(true);
                 return b.getAllOwnersApproved();
             }
         }
@@ -984,6 +1003,15 @@ public class Store {
                 bidList.add(b);
         }
         return bidList;
+    }
+
+    public void rejectCounterOffer(String userName, int productID) {
+        for (Bid b : bids) {
+            if (b.getProductID() == productID && b.getUserName().equals(userName)) {
+                bids.remove(b);
+                break;
+            }
+        }
     }
 
 //    public List<PurchasePolicy> getPurchasePolicies() {

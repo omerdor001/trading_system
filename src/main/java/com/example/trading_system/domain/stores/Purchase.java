@@ -6,7 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 @Getter
 @Entity
@@ -19,9 +21,8 @@ public class Purchase {
 
     @ElementCollection
     @CollectionTable(name = "product_in_sale_list", joinColumns = @JoinColumn(name = "purchase_id"))
-    private List<ProductInSaleDTO> productInSaleList;
+    private List<ProductInSaleDTO> productInSaleList = new ArrayList<>();
 
-    @Getter
     @Column(nullable = false)
     private String customerUsername;
 
@@ -29,8 +30,8 @@ public class Purchase {
     private double totalPrice;
 
     @Column(nullable = false)
-    @Getter
     private String storeName;
+
 
 
     public Purchase(String customerUsername, List<ProductInSaleDTO> productInSaleList, double totalPrice, String storeName) {

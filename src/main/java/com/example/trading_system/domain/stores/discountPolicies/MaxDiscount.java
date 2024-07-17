@@ -11,12 +11,6 @@ import java.util.Collection;
 @DiscriminatorValue("MAX")
 public class MaxDiscount extends DiscountPolicy {
 
-    @Getter
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long id;
-
     @OneToOne(cascade = CascadeType.ALL)
     private DiscountPolicy first;
 

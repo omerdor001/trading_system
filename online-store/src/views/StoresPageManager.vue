@@ -6,14 +6,17 @@
         <h2>Stores</h2>
         <hr />
         <!-- Stores list -->
-        <div class="store-container">
-          <div v-for="store in stores" :key="store.name" class="store-item" @click="showStoreDetails(store)">
+        <div v-if= "filterStores().length > 0 " class="store-container">
+          <div v-for="store in filterStores()" :key="store.name"   class="store-item" @click="showStoreDetails(store)">
             <div class="store-content">
               <h3 class="store-name">Store: {{ store.name }}</h3>
               <h5 class="status">Status: {{ getStatusText(store.status) }}</h5>
               <h5 class="role-at-store">I am a: {{ store.role }}</h5>
             </div>
           </div>
+        </div>
+        <div v-else>
+          <p>No Stores Availibale</p>
         </div>
       </div>
     </div>
@@ -35,8 +38,8 @@
           <!-- Right column for founder, isActive, rating, isOpen -->
           <div class="details-column">
             <p><strong>Founder:</strong> {{ selectedStore.founder }}</p>
-            <label><input type="checkbox" v-model="selectedStore.status"> Active</label><br />
-            <label><input type="checkbox" v-model="selectedStore.isOpen"> Is Open</label><br />
+            <label><input type="checkbox" v-model="selectedStore.status" disabled> Active</label><br />
+            <label><input type="checkbox" v-model="selectedStore.isOpen" disabled> Is Open</label><br />
             <p><strong>Rating:</strong> {{ selectedStore.rating }}</p>
           </div>
         </div>
@@ -80,7 +83,7 @@ export default defineComponent({
     const token = localStorage.getItem('token');
     const selectedStore = ref(null);
     const toast = useToast();
-
+    const ownOrManageStore = ref(false);
 
 
     
@@ -108,8 +111,10 @@ export default defineComponent({
             isOwner: false,
           }
         }));
-        toast.add({ severity: 'success', summary: 'success', detail: username , life: 3000 });
-        toast.add({ severity: 'success', summary: 'success', detail: response.data , life: 3000 });
+
+        ownOrManageStore.value = stores.value.some(store => store.role === 'Owner' || store.role === 'Manager');
+        toast.add({ severity: 'success', summary: 'success', detail: "Fetched store details", life: 3000 });
+
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
       }
@@ -118,6 +123,8 @@ export default defineComponent({
     onMounted(() => {
       fetchStoreDetails();
     });
+
+
 
     
     const showStoreDetails = async (store) => {
@@ -138,8 +145,6 @@ export default defineComponent({
        store.permissions.isEditPurchasePolicy = permissions.editBuyPolicy;
        store.permissions.isEditDiscountPolicy = permissions.editDiscountPolicy;
        store.permissions.acceptBids = permissions.acceptBids;
-       toast.add({ severity: 'success', summary: 'success', detail: username , life: 3000 });
-       toast.add({ severity: 'success', summary: 'success', detail: response.data , life: 3000 });
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch permissions', life: 3000 });
         console.error('Error fetching permissions:', error);
@@ -148,6 +153,10 @@ export default defineComponent({
 
     const closeModal = () => {
       selectedStore.value = null;
+    };
+
+    const filterStores = () => {
+      return stores.value.filter(store => store.role === 'Manager' || store.role === 'Owner');
     };
 
     const navigateToProductsInStore = (storeName,isEditSupply) => {
@@ -229,7 +238,7 @@ export default defineComponent({
             }
           });
           console.log(response.data);
-          toast.add({ severity: 'success', summary: 'Success', detail: response.data, life: 3000 });
+          toast.add({ severity: 'success', summary: 'Success', detail: "Yield ownership successed", life: 3000 });
         } catch (error) {
           toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to yield ownership', life: 3000 });
           console.error('Failed to yield ownership:', error.message);
@@ -246,6 +255,7 @@ export default defineComponent({
       username,
       token,
       showStoreDetails,
+      ownOrManageStore,
       selectedStore,
       navigateToProductsInStore,
       navigateToWorkersInStore,
@@ -259,6 +269,7 @@ export default defineComponent({
       yieldOwnership,
       openStoreExist,
       purchasesHistory,
+      filterStores,
       fetchStoreDetails
     };
   }
