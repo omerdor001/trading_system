@@ -35,4 +35,6 @@ public interface UserRepository {
     void saveUsers(List<User> users);
 
     void saveCart(User user);
+
+    Registered getRegistered(String userName);
 }

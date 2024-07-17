@@ -287,7 +287,7 @@ public class Registered extends User {
 
     @Override
     public Set<String> cancelOwnerShip(String storeName) {
-        Set<User> usersAppointedByMe = getRoleByStoreId(storeName).getUsersAppointedByMe();
+        Set<Registered> usersAppointedByMe = getRoleByStoreId(storeName).getUsersAppointedByMe();
         Set<String> influencedUsers = new HashSet<>();
         if (usersAppointedByMe.isEmpty()) {
             removeOwnerRole(storeName);

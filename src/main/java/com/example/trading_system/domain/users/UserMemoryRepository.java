@@ -104,6 +104,13 @@ public class UserMemoryRepository implements UserRepository {
 
     @Override
     public void saveCart(User user) {
+    }
 
+    @Override
+    public Registered getRegistered(String userName){
+        if (userName.charAt(0) != 'r')
+            throw new RuntimeException("User is not registerd");
+        else
+            return (Registered) users.get(userName);
     }
 }

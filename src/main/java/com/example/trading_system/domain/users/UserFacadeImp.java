@@ -610,7 +610,7 @@ public class UserFacadeImp implements UserFacade {
 
         marketFacade.addOwner(storeName, newOwner);
         newOwnerUser.addOwnerRole(appoint, storeName);
-        appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getUser(newOwner));
+        appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getRegistered(newOwner));
         sendNotification(newOwner, appoint, newOwnerUser.getUsername() + " accepted your suggestion to become an owner at store: " + storeName);
         userRepository.saveUser(newOwnerUser);
         userRepository.saveUser(appointUser);
@@ -658,7 +658,7 @@ public class UserFacadeImp implements UserFacade {
 
 
         newManagerUser.addManagerRole(appoint, storeName);
-        appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getUser(newManager));
+        appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getRegistered(newManager));
 
         marketFacade.getStore(storeName).addManager(newManager);
         newManagerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);

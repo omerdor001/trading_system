@@ -37,7 +37,7 @@ public class Role {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "users_appointing", referencedColumnName = "id")
     @Getter
-    private Set<User> usersAppointedByMe;
+    private Set<Registered> usersAppointedByMe;
 
     public Role(String store_name_id, String appointedById) {
         this.store_name_id = store_name_id;
@@ -49,7 +49,7 @@ public class Role {
 
     }
 
-    public void addUserAppointedByMe(User registered){
+    public void addUserAppointedByMe(Registered registered){
         this.usersAppointedByMe.add(registered);
     }
 

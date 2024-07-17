@@ -150,4 +150,12 @@ public class UserDatabaseRepository implements UserRepository {
         Long count = entityManager.createQuery("SELECT COUNT(u) FROM Registered u", Long.class).getSingleResult();
         return count == 0;
     }
+
+    @Override
+    public Registered getRegistered(String userName){
+        Registered user = entityManager.find(Registered.class,userName);
+        if(user == null)
+            throw new RuntimeException("No such user");
+        return user;
+    }
 }
