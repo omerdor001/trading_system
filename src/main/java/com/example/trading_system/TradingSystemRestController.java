@@ -13,7 +13,9 @@ package com.example.trading_system;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ public class TradingSystemRestController {
     private final StoreRepository storeRepository;
 
     @Autowired
-    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository,StoreRepository storeRepository) {
+    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
         tradingSystem = TradingSystemImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
     }
@@ -508,14 +510,9 @@ public class TradingSystemRestController {
     }
 
     @GetMapping("/purchase/history/customer")
-    public ResponseEntity<String> getHistoryPurchasesByCustomer(
-            @RequestParam String userName,
-            @RequestParam String token,
-            @RequestParam(required = false) String storeName,  // Make storeName optional
-            @RequestParam String customerUserName) {
+    public ResponseEntity<String> getHistoryPurchasesByCustomer(@RequestParam String userName, @RequestParam String token, @RequestParam String storeName, @RequestParam String customerUserName) {
         return tradingSystem.getHistoryPurchasesByCustomer(userName, token, storeName, customerUserName);
     }
-
 
     @GetMapping("/store/officials/info")
     public ResponseEntity<String> requestInformationAboutOfficialsInStore(@RequestParam String userName,

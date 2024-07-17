@@ -876,11 +876,6 @@ public class MarketFacadeImp implements MarketFacade {
             throw new IllegalArgumentException("Customer must exist");
         }
         Store store = storeRepository.getStore(storeName);
-        User user = userFacade.getUsers().get(userName);
-        if (user.isAdmin())
-            return store.getHistoryPurchasesByCustomer(customerUserName).stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
-        if (user.getRoleByStoreId(storeName) == null) throw new RuntimeException("Not allowed to view store history");
-        user.getRoleByStoreId(storeName).getRoleState().getAllHistoryPurchases();
         return store.getHistoryPurchasesByCustomer(customerUserName).stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
     }
 
@@ -928,10 +923,8 @@ public class MarketFacadeImp implements MarketFacade {
             User user2 = userFacade.getUser(manager);
             result.append("Manager ").append(user2.getUsername()).append(" ").append(manager).append(" ").append(user2.getAddress()).append(" ").append(user2.getBirthdate()).append("\n");
         }
-
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(result);
-
     }
 
     /**
