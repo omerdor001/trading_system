@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
@@ -47,6 +48,7 @@ public class Registered extends User {
     @MapKeyColumn(name = "store_name")
     @Column(name = "owner_suggestion")
     private Map<String, String> ownerSuggestions = new HashMap<>();
+
     public Registered(String userName, String encryption, LocalDate birthdate) {
         super(userName);
         this.encrypted_pass = encryption;
@@ -67,11 +69,10 @@ public class Registered extends User {
     }
 
     public void addOwnerRole(String appoint, String storeName) {
-        try{
-            if(getRoleByStoreId(storeName) != null)
-                removeManagerRole(storeName);
-        } catch (Exception ignored){}
-        finally {
+        try {
+            if (getRoleByStoreId(storeName) != null) removeManagerRole(storeName);
+        } catch (Exception ignored) {
+        } finally {
             Role owner = new Role(storeName, appoint);
             owner.setRoleState(new Owner(owner));
             getRoles().add(owner);
@@ -195,32 +196,28 @@ public class Registered extends User {
     }
 
     public boolean isWatch(String storeName) {
-        if (isOwner(storeName))
-            return true;
+        if (isOwner(storeName)) return true;
         else if (isManager(storeName)) {
             return getRoleByStoreId(storeName).isWatch();
         } else return false;
     }
 
     public boolean isEditSupply(String storeName) {
-        if (isOwner(storeName))
-            return true;
+        if (isOwner(storeName)) return true;
         else if (isManager(storeName)) {
             return getRoleByStoreId(storeName).isEditSupply();
         } else return false;
     }
 
     public boolean isEditPurchasePolicy(String storeName) {
-        if (isOwner(storeName))
-            return true;
+        if (isOwner(storeName)) return true;
         else if (isManager(storeName)) {
             return getRoleByStoreId(storeName).isEditPurchasePolicy();
         } else return false;
     }
 
     public boolean isEditDiscountPolicy(String storeName) {
-        if (isOwner(storeName))
-            return true;
+        if (isOwner(storeName)) return true;
         else if (isManager(storeName)) {
             return getRoleByStoreId(storeName).isEditDiscountPolicy();
         } else return false;
@@ -228,8 +225,7 @@ public class Registered extends User {
 
     @Override
     public boolean isAcceptBids(String storeName) {
-        if (isOwner(storeName))
-            return true;
+        if (isOwner(storeName)) return true;
         else if (isManager(storeName)) {
             return getRoleByStoreId(storeName).isAcceptBids();
         } else return false;
@@ -254,7 +250,6 @@ public class Registered extends User {
         System.out.println("No suggestion found for: " + suggestionKey);
         return null;
     }
-
 
 
     public boolean removeWaitingAppoint_Owner(String storeName) {
@@ -291,22 +286,17 @@ public class Registered extends User {
 
 
     @Override
-    public Set<String> cancelOwnerShip(String storeName){
-        Set<Registered> usersAppointedByMe = getRoleByStoreId(storeName).getUsersAppointedByMe();
+    public Set<String> cancelOwnerShip(String storeName) {
+        Set<User> usersAppointedByMe = getRoleByStoreId(storeName).getUsersAppointedByMe();
         Set<String> influencedUsers = new HashSet<>();
-        if(usersAppointedByMe.isEmpty())
-        {
+        if (usersAppointedByMe.isEmpty()) {
             removeOwnerRole(storeName);
             return influencedUsers;
-
         }
 
-        for(Registered registered : usersAppointedByMe) //check if they are managers or owners
-        {
-            if(registered.isOwner(storeName))
-                influencedUsers.addAll(registered.cancelOwnerShip(storeName));
-            else
-                registered.removeManagerRole(storeName);
+        for (User registered : usersAppointedByMe) {
+            if (registered.isOwner(storeName)) influencedUsers.addAll(registered.cancelOwnerShip(storeName));
+            else registered.removeManagerRole(storeName);
             influencedUsers.add("r" + registered.getUsername());
         }
         removeOwnerRole(storeName);

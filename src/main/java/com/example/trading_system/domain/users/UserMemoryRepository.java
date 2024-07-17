@@ -38,15 +38,6 @@ public class UserMemoryRepository implements UserRepository {
     }
 
     @Override
-    public Registered getRegistered(String userName) throws Exception{
-        if (userName.charAt(0) != 'r')
-            throw new Exception("User is not registerd");
-        else
-            return (Registered) users.get(userName);
-    }
-
-
-    @Override
     public boolean isExist(String username) {
         return users.containsKey(username);
     }

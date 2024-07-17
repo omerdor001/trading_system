@@ -3,7 +3,6 @@ package com.example.trading_system.domain.users;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-//import com.example.trading_system.domain.stores.*;
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.StoreRepository;
@@ -30,7 +29,6 @@ public class UserFacadeImp implements UserFacade {
     private static final Logger logger = LoggerFactory.getLogger(UserFacadeImp.class);
     private static UserFacadeImp instance = null;
     private final NotificationSender notificationSender;
-    @Setter
     private UserRepository userRepository;
     private DeliveryService deliveryService;
     private PaymentService paymentService;
@@ -612,11 +610,10 @@ public class UserFacadeImp implements UserFacade {
 
         marketFacade.addOwner(storeName, newOwner);
         newOwnerUser.addOwnerRole(appoint, storeName);
-        appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getRegistered(newOwner));
+        appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getUser(newOwner));
         sendNotification(newOwner, appoint, newOwnerUser.getUsername() + " accepted your suggestion to become an owner at store: " + storeName);
         userRepository.saveUser(newOwnerUser);
         userRepository.saveUser(appointUser);
-        marketFacade.save(store);
     }
 
     @Override
@@ -661,7 +658,7 @@ public class UserFacadeImp implements UserFacade {
 
 
         newManagerUser.addManagerRole(appoint, storeName);
-        appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getRegistered(newManager));
+        appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getUser(newManager));
 
         marketFacade.getStore(storeName).addManager(newManager);
         newManagerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
@@ -764,7 +761,6 @@ public class UserFacadeImp implements UserFacade {
         marketFacade.removeWorkers(storeName, new HashSet<>(Set.of(manager)));
         sendNotification(owner, manager, "You are no longer a manager at store: " + storeName + " due to being fired by " + ownerUser.getUsername());
         userRepository.saveUser(managerUser);
-        marketFacade.save(store);
     }
 
     @Override
@@ -783,7 +779,6 @@ public class UserFacadeImp implements UserFacade {
         if (ownerAppoint.charAt(0) != 'r') {
             throw new NoSuchElementException("No user called " + ownerAppoint + "is registered");
         }
-
         User ownerAppointer = userRepository.getUser(ownerAppoint);
         User ownerUser = userRepository.getUser(owner);
         if (!ownerAppointer.isOwner(storeName)) {
@@ -972,14 +967,11 @@ public class UserFacadeImp implements UserFacade {
 
     @Override
     public void bidPurchase(String userName, String storeName, int productID, double price, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
-        // quantity = 1
         User user = userRepository.getUser(userName);
-        // user exist, not suspended, is logged in
         marketFacade.checkAvailabilityAndConditions(productID,1,storeName);
         marketFacade.removeReservedProducts(productID,1,storeName);
 
-
-        int userAge = getUser(userName).getAge();
+        int userAge = user.getAge();
         marketFacade.validateBidPurchasePolicies(storeName, productID, 1, userAge, price);
         int deliveryId;
         try {
@@ -1004,8 +996,8 @@ public class UserFacadeImp implements UserFacade {
             marketFacade.releaseReservedProducts(productID,1,storeName);
             throw new Exception("Error in Payment");
         }
-
         marketFacade.addBidPurchase(userName, storeName, productID, price, 1);
+        userRepository.saveUser(user);
     }
 
     @Override

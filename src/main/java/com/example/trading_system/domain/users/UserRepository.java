@@ -34,7 +34,5 @@ public interface UserRepository {
 
     void saveUsers(List<User> users);
 
-    Registered getRegistered(String userName) throws Exception;
-
     void saveCart(User user);
 }

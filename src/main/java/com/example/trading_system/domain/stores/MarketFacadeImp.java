@@ -999,7 +999,6 @@ public class MarketFacadeImp implements MarketFacade {
         return result.toString();
     }
 
-
     @Override
     public HashMap<String, Store> getStores() {
         return storeRepository.getAllStores();
@@ -1043,7 +1042,6 @@ public class MarketFacadeImp implements MarketFacade {
         if (store == null || store.validatePurchasePolicies(products, age))
             return false;
         return true;
-
     }
 
     @Override
@@ -1074,6 +1072,7 @@ public class MarketFacadeImp implements MarketFacade {
         ObjectMapper objectMapper = new ObjectMapper();
         String productListMapper = objectMapper.writeValueAsString(products_list.values());
         store.addPurchase(new Purchase(userName,ProductInSaleDTO.fromJsonList(productListMapper),price, storeName));
+        save(store);
     }
 
     //region Discount management
@@ -1677,19 +1676,20 @@ public class MarketFacadeImp implements MarketFacade {
             userFacade.bidPurchase(userName, storeName, productID, store.getBidPrice(userName, productID), bid.getAddress(), bid.getAmount(), bid.getCurrency(), bid.getCardNumber(), bid.getMonth(), bid.getYear(), bid.getHolder(), bid.getCcv(), bid.getHolderId());
             store.removeBidAccepted(userName, productID);
         }
+        save(store);
     }
 
     @Override
-    public void rejectCounterOffer(String userName, String storeName, int productID) throws Exception {
+    public void rejectCounterOffer(String userName, String storeName, int productID){
         validateUserAndStore(userName, storeName);
         Store store = storeRepository.getStore(storeName);
         if(!store.getProducts().containsKey(productID))
             throw new IllegalArgumentException("Product must exist");
         if(!store.isBidExist(productID, userName))
             throw new IllegalArgumentException("Bid must exist");
-
         store.rejectCounterOffer(userName,productID);
         userFacade.sendNotification(userName, store.getFounder(), userName + "is rejected for counter offer on "  + store.getProducts().get(productID).getProduct_name() + " in store " + storeName );
+        save(store);
     }
 
     @Override
@@ -1746,7 +1746,6 @@ public class MarketFacadeImp implements MarketFacade {
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
         }
-
     }
 
     @Override
@@ -1756,17 +1755,23 @@ public class MarketFacadeImp implements MarketFacade {
 
     @Override
     public void removeWorkers(String storeName, Set<String> influecnedUsers) {
-        storeRepository.getStore(storeName).removeWorkers(influecnedUsers);
+        Store store = storeRepository.getStore(storeName);
+        store.removeWorkers(influecnedUsers);
+        save(store);
     }
 
     @Override
     public void addOwner(String storeName, String newOwner) {
-        storeRepository.getStore(storeName).addOwner(newOwner);
+        Store store = storeRepository.getStore(storeName);
+        store.addOwner(newOwner);
+        save(store);
     }
 
     @Override
     public void addManager(String storeName, String newManager){
-        storeRepository.getStore(storeName).addManager(newManager);
+        Store store = storeRepository.getStore(storeName);
+        store.addManager(newManager);
+        save(store);
     }
 
     @Override
@@ -1809,8 +1814,6 @@ public class MarketFacadeImp implements MarketFacade {
     public boolean isBidApproved(String storeName, String username, int productId, double price) {
         return storeRepository.getStore(storeName).isBidApproved(username,productId,price);
     }
-
-
 
 //    @Override
 //    public void createProductLottery(String userName, String storeName, int productID, LocalDateTime localDateTime, double price) throws Exception{

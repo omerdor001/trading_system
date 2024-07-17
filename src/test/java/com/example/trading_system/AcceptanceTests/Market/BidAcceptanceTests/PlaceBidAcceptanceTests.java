@@ -22,7 +22,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 public class PlaceBidAcceptanceTests {
-
     private NotificationSender mockNotificationSender;
     private TradingSystem tradingSystem;
     private String ownerToken;
@@ -118,17 +117,13 @@ public class PlaceBidAcceptanceTests {
 
     @Test
     void placeOneBid_Success() {
-
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.suggestOwner(ownerUserName, ownerToken, secondOwnerUserName, storeName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.approveOwner(secondOwnerUserName, secondOwnerToken, storeName, ownerUserName).getStatusCode());
-
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.logout(secondOwnerToken, secondOwnerUserName).getStatusCode());
         ResponseEntity<String> result = tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10, address, amount, currency, cardNumber, month, year, holder, ccv, id);
         Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
         Assertions.assertEquals("Placed bid successfully.", result.getBody());
-
         ResponseEntity<String> result2 = tradingSystem.getStoreBids(ownerUserName, ownerToken, storeName);
-
         Assertions.assertEquals("""
                 {
                   "storeName" : "Store1",
@@ -137,19 +132,16 @@ public class PlaceBidAcceptanceTests {
                   "userName" : "rregularUser",
                   "productID" : 111,
                   "price" : 10.0,
+                  "productName" : Product1,
                   "allOwnersApproved" : false,
                   "customerApproved" : true,
                   "approvedBy" : []
                 }
                 ]
                 }""", result2.getBody());
-        Assertions.assertEquals("{\"Store1\":[{\"id\":null,\"userName\":\"rregularUser\",\"productID\":111,\"price\":10.0,\"approvedBy\":[],\"allOwnersApproved\":false,\"store\":null,\"address\":\"1234 Main Street, Springfield, IL, 62704-1234\",\"amount\":\"100.00\",\"currency\":\"USD\",\"cardNumber\":\"4111111111111111\",\"month\":\"12\",\"year\":\"2025\",\"holder\":\"John Doe\",\"ccv\":\"123\",\"holderId\":\"123456789\",\"customerApproved\":true}]}", tradingSystem.getMyBids(regularUserName, regularUserToken).getBody());
-
+        Assertions.assertEquals("{\"Store1\":[{\"id\":null,\"userName\":\"rregularUser\",\"productID\":111,\"price\":10.0,\"productName\":\"Product1\",\"approvedBy\":[],\"allOwnersApproved\":false,\"store\":null,\"address\":\"1234 Main Street, Springfield, IL, 62704-1234\",\"amount\":\"100.00\",\"currency\":\"USD\",\"cardNumber\":\"4111111111111111\",\"month\":\"12\",\"year\":\"2025\",\"holder\":\"John Doe\",\"ccv\":\"123\",\"holderId\":\"123456789\",\"customerApproved\":true}]}", tradingSystem.getMyBids(regularUserName, regularUserToken).getBody());
         verify(mockNotificationSender).sendNotification(eq(ownerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner1\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}"));
-        //verify(mockNotificationSender).sendNotification(eq(secondOwnerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner2\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}"));
-
         Assertions.assertEquals("[{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner2\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}]", tradingSystem.getPendingUserNotifications(ownerUserName, ownerToken, "rowner2").getBody());
-
     }
 
     @Test
@@ -157,12 +149,10 @@ public class PlaceBidAcceptanceTests {
         ResponseEntity<String> result = tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10, address, amount, currency, cardNumber, month, year, holder, ccv, id);
         Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
         Assertions.assertEquals("Placed bid successfully.", result.getBody());
-
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.addProduct(ownerUserName, ownerToken, 222, storeName, "product2", "product2description", 20, 5, 6, 4, "[\"CarPlay\", \"iPhone\"]").getStatusCode());
         ResponseEntity<String> result2 = tradingSystem.placeBid(regularUserName, regularUserToken, storeName, 222, 10, address, amount, currency, cardNumber, month, year, holder, ccv, id);
         Assertions.assertEquals(HttpStatus.OK, result2.getStatusCode());
         Assertions.assertEquals("Placed bid successfully.", result2.getBody());
-
         Assertions.assertEquals("""
                 {
                   "storeName" : "Store1",
@@ -171,6 +161,7 @@ public class PlaceBidAcceptanceTests {
                   "userName" : "rregularUser",
                   "productID" : 111,
                   "price" : 10.0,
+                  "productName" : Product1,
                   "allOwnersApproved" : false,
                   "customerApproved" : true,
                   "approvedBy" : []
@@ -179,14 +170,14 @@ public class PlaceBidAcceptanceTests {
                   "userName" : "rregularUser",
                   "productID" : 222,
                   "price" : 10.0,
+                  "productName" : product2,
                   "allOwnersApproved" : false,
                   "customerApproved" : true,
                   "approvedBy" : []
                 }
                 ]
                 }""", tradingSystem.getStoreBids(ownerUserName, ownerToken, storeName).getBody());
-        Assertions.assertEquals("{\"Store1\":[{\"id\":null,\"userName\":\"rregularUser\",\"productID\":111,\"price\":10.0,\"approvedBy\":[],\"allOwnersApproved\":false,\"store\":null,\"address\":\"1234 Main Street, Springfield, IL, 62704-1234\",\"amount\":\"100.00\",\"currency\":\"USD\",\"cardNumber\":\"4111111111111111\",\"month\":\"12\",\"year\":\"2025\",\"holder\":\"John Doe\",\"ccv\":\"123\",\"holderId\":\"123456789\",\"customerApproved\":true},{\"id\":null,\"userName\":\"rregularUser\",\"productID\":222,\"price\":10.0,\"approvedBy\":[],\"allOwnersApproved\":false,\"store\":null,\"address\":\"1234 Main Street, Springfield, IL, 62704-1234\",\"amount\":\"100.00\",\"currency\":\"USD\",\"cardNumber\":\"4111111111111111\",\"month\":\"12\",\"year\":\"2025\",\"holder\":\"John Doe\",\"ccv\":\"123\",\"holderId\":\"123456789\",\"customerApproved\":true}]}", tradingSystem.getMyBids(regularUserName, regularUserToken).getBody());
-
+        Assertions.assertEquals("{\"Store1\":[{\"id\":null,\"userName\":\"rregularUser\",\"productID\":111,\"price\":10.0,\"productName\":\"Product1\",\"approvedBy\":[],\"allOwnersApproved\":false,\"store\":null,\"address\":\"1234 Main Street, Springfield, IL, 62704-1234\",\"amount\":\"100.00\",\"currency\":\"USD\",\"cardNumber\":\"4111111111111111\",\"month\":\"12\",\"year\":\"2025\",\"holder\":\"John Doe\",\"ccv\":\"123\",\"holderId\":\"123456789\",\"customerApproved\":true},{\"id\":null,\"userName\":\"rregularUser\",\"productID\":222,\"price\":10.0,\"productName\":\"product2\",\"approvedBy\":[],\"allOwnersApproved\":false,\"store\":null,\"address\":\"1234 Main Street, Springfield, IL, 62704-1234\",\"amount\":\"100.00\",\"currency\":\"USD\",\"cardNumber\":\"4111111111111111\",\"month\":\"12\",\"year\":\"2025\",\"holder\":\"John Doe\",\"ccv\":\"123\",\"holderId\":\"123456789\",\"customerApproved\":true}]}", tradingSystem.getMyBids(regularUserName, regularUserToken).getBody());
         verify(mockNotificationSender).sendNotification(eq(ownerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner1\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}"));
         verify(mockNotificationSender).sendNotification(eq(ownerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner1\",\"textContent\":\"rregularUser is placed a bid for product 222 in store Store1 with price 10.0\"}"));
     }
@@ -207,10 +198,7 @@ public class PlaceBidAcceptanceTests {
 
     @Test
     void approveBidOneOwner_Success() {
-
-        // place bid, approve bid, verify notication, verify getBids, verify getMyBids
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10, address, amount, currency, cardNumber, month, year, holder, ccv, id).getStatusCode());
-
         ResponseEntity<String> res = tradingSystem.approveBid(ownerUserName, ownerToken, storeName, productID, regularUserName);
         Assertions.assertEquals(HttpStatus.OK, res.getStatusCode());
         Assertions.assertEquals("Approved bid successfully.", res.getBody());
@@ -227,21 +215,16 @@ public class PlaceBidAcceptanceTests {
 
     @Test
     void approveBidOneOwnerButHaveTwoOwners_Success() {
-
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.suggestOwner(ownerUserName, ownerToken, secondOwnerUserName, storeName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.approveOwner(secondOwnerUserName, secondOwnerToken, storeName, ownerUserName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10, address, amount, currency, cardNumber, month, year, holder, ccv, id).getStatusCode());
-
         ResponseEntity<String> res = tradingSystem.approveBid(ownerUserName, ownerToken, storeName, productID, regularUserName);
         Assertions.assertEquals(HttpStatus.OK, res.getStatusCode());
         Assertions.assertEquals("Approved bid successfully.", res.getBody());
-
         verify(mockNotificationSender).sendNotification(eq(ownerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner1\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}"));
         verify(mockNotificationSender).sendNotification(eq(secondOwnerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner2\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}"));
-
         Assertions.assertEquals("", tradingSystem.getAllHistoryPurchases(ownerUserName, ownerToken, storeName).getBody());
-
-        Assertions.assertEquals("{\"Store1\":[{\"id\":null,\"userName\":\"rregularUser\",\"productID\":111,\"price\":10.0,\"approvedBy\":[\"rowner1\"],\"allOwnersApproved\":false,\"store\":null,\"address\":\"1234 Main Street, Springfield, IL, 62704-1234\",\"amount\":\"100.00\",\"currency\":\"USD\",\"cardNumber\":\"4111111111111111\",\"month\":\"12\",\"year\":\"2025\",\"holder\":\"John Doe\",\"ccv\":\"123\",\"holderId\":\"123456789\",\"customerApproved\":true}]}", tradingSystem.getMyBids(regularUserName, regularUserToken).getBody());
+        Assertions.assertEquals("{\"Store1\":[{\"id\":null,\"userName\":\"rregularUser\",\"productID\":111,\"price\":10.0,\"productName\":\"Product1\",\"approvedBy\":[\"rowner1\"],\"allOwnersApproved\":false,\"store\":null,\"address\":\"1234 Main Street, Springfield, IL, 62704-1234\",\"amount\":\"100.00\",\"currency\":\"USD\",\"cardNumber\":\"4111111111111111\",\"month\":\"12\",\"year\":\"2025\",\"holder\":\"John Doe\",\"ccv\":\"123\",\"holderId\":\"123456789\",\"customerApproved\":true}]}", tradingSystem.getMyBids(regularUserName, regularUserToken).getBody());
         Assertions.assertEquals("""
                 {
                   "storeName" : "Store1",
@@ -250,19 +233,17 @@ public class PlaceBidAcceptanceTests {
                   "userName" : "rregularUser",
                   "productID" : 111,
                   "price" : 10.0,
+                  "productName" : Product1,
                   "allOwnersApproved" : false,
                   "customerApproved" : true,
                   "approvedBy" : ["rowner1"]
                 }
                 ]
                 }""", tradingSystem.getStoreBids(ownerUserName, ownerToken, storeName).getBody());
-
     }
 
     @Test
     void approveTwoOwners() {
-
-
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.suggestOwner(ownerUserName, ownerToken, secondOwnerUserName, storeName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.approveOwner(secondOwnerUserName, secondOwnerToken, storeName, ownerUserName).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10, address, amount, currency, cardNumber, month, year, holder, ccv, id).getStatusCode());
@@ -273,7 +254,7 @@ public class PlaceBidAcceptanceTests {
         verify(mockNotificationSender, never()).sendNotification(eq(regularUserName), anyString());
         verify(mockNotificationSender).sendNotification(eq(ownerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner1\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}"));
         verify(mockNotificationSender).sendNotification(eq(secondOwnerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner2\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}"));
-//
+
         Assertions.assertEquals("", tradingSystem.getAllHistoryPurchases(ownerUserName, ownerToken, storeName).getBody());
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.approveBid(secondOwnerUserName, secondOwnerToken, storeName, productID, regularUserName).getStatusCode());
         verify(mockNotificationSender).sendNotification(eq(regularUserName), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rregularUser\",\"textContent\":\"Your bid on product Product1 in store Store1 is approved\"}"));
@@ -281,7 +262,6 @@ public class PlaceBidAcceptanceTests {
 
         Assertions.assertEquals("{}", tradingSystem.getMyBids(regularUserName, regularUserToken).getBody());
         Assertions.assertEquals("{}", tradingSystem.getStoreBids(ownerUserName, ownerToken, storeName).getBody());
-
     }
 
     @Test
@@ -297,7 +277,6 @@ public class PlaceBidAcceptanceTests {
 
     @Test
     void managerWithoutPermissionsApproved() {
-
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.suggestManage(ownerUserName, ownerToken, secondOwnerUserName, storeName, true, true, true, true, false).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.approveManage(secondOwnerUserName, secondOwnerToken, storeName, ownerUserName, true, true, true, true, false).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10, address, amount, currency, cardNumber, month, year, holder, ccv, id).getStatusCode());
@@ -310,7 +289,6 @@ public class PlaceBidAcceptanceTests {
 
     @Test
     void testRejectBid_Success() {
-
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10, address, amount, currency, cardNumber, month, year, holder, ccv, id).getStatusCode());
 
         ResponseEntity<String> res = tradingSystem.rejectBid(ownerUserName, ownerToken, storeName, productID, regularUserName);
@@ -320,7 +298,6 @@ public class PlaceBidAcceptanceTests {
         verify(mockNotificationSender).sendNotification(eq(regularUserName), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rregularUser\",\"textContent\":\"Your bid on product Product1 in store Store1 is rejected\"}"));
         verify(mockNotificationSender).sendNotification(eq(ownerUserName), eq("{\"senderUsername\":\"rregularUser\",\"receiverUsername\":\"rowner1\",\"textContent\":\"rregularUser is placed a bid for product 111 in store Store1 with price 10.0\"}"));
 
-
         Assertions.assertEquals("{}", tradingSystem.getMyBids(regularUserName, regularUserToken).getBody());
         Assertions.assertEquals("{}", tradingSystem.getStoreBids(ownerUserName, ownerToken, storeName).getBody());
 
@@ -328,16 +305,13 @@ public class PlaceBidAcceptanceTests {
 
     @Test
     void testManagerWithoutPermissionReject_ThenThrowException() {
-
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.suggestManage(ownerUserName, ownerToken, secondOwnerUserName, storeName, true, true, true, true, false).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.approveManage(secondOwnerUserName, secondOwnerToken, storeName, ownerUserName, true, true, true, true, false).getStatusCode());
-
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10, address, amount, currency, cardNumber, month, year, holder, ccv, id).getStatusCode());
 
         ResponseEntity<String> result = tradingSystem.rejectBid(secondOwnerUserName, secondOwnerToken, storeName, productID, regularUserName);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         Assertions.assertEquals("Manager cannot reject bid", result.getBody());
-
     }
 
     @Test
@@ -358,7 +332,6 @@ public class PlaceBidAcceptanceTests {
         ResponseEntity<String> result = tradingSystem.rejectBid(ownerUserName, ownerToken, "badStoreName", productID, regularUserName);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         Assertions.assertEquals("Store must exist", result.getBody());
-
     }
 
     @Test
@@ -451,16 +424,17 @@ public class PlaceBidAcceptanceTests {
                   "userName" : "rregularUser",
                   "productID" : 111,
                   "price" : 10.0,
+                  "productName" : Product1,
                   "allOwnersApproved" : false,
                   "customerApproved" : true,
                   "approvedBy" : []
                 }
                 ]
                 }""", tradingSystem.getStoreBids(ownerUserName, ownerToken, storeName).getBody());
-        Assertions.assertEquals("{\"Store1\":[{\"id\":null,\"userName\":\"rregularUser\",\"productID\":111,\"price\":10.0,\"approvedBy\":[],\"allOwnersApproved\":false,\"store\":null,\"address\":\"1234 Main Street, Springfield, IL, 62704-1234\",\"amount\":\"100.00\",\"currency\":\"USD\",\"cardNumber\":\"4111111111111111\",\"month\":\"12\",\"year\":\"2025\",\"holder\":\"John Doe\",\"ccv\":\"123\",\"holderId\":\"123456789\",\"customerApproved\":true}]}", tradingSystem.getMyBids(regularUserName, regularUserToken).getBody());
+        Assertions.assertEquals("{\"Store1\":[{\"id\":null,\"userName\":\"rregularUser\",\"productID\":111,\"price\":10.0,\"productName\":\"Product1\",\"approvedBy\":[],\"allOwnersApproved\":false,\"store\":null,\"address\":\"1234 Main Street, Springfield, IL, 62704-1234\",\"amount\":\"100.00\",\"currency\":\"USD\",\"cardNumber\":\"4111111111111111\",\"month\":\"12\",\"year\":\"2025\",\"holder\":\"John Doe\",\"ccv\":\"123\",\"holderId\":\"123456789\",\"customerApproved\":true}]}", tradingSystem.getMyBids(regularUserName, regularUserToken).getBody());
 
         tradingSystem.placeCounterOffer(ownerUserName, ownerToken, storeName, productID, regularUserName, 11);
-        Assertions.assertEquals("{\"Store1\":[{\"id\":null,\"userName\":\"rregularUser\",\"productID\":111,\"price\":11.0,\"approvedBy\":[\"rowner1\"],\"allOwnersApproved\":false,\"store\":null,\"address\":\"1234 Main Street, Springfield, IL, 62704-1234\",\"amount\":\"100.00\",\"currency\":\"USD\",\"cardNumber\":\"4111111111111111\",\"month\":\"12\",\"year\":\"2025\",\"holder\":\"John Doe\",\"ccv\":\"123\",\"holderId\":\"123456789\",\"customerApproved\":false}]}", tradingSystem.getMyBids(regularUserName, regularUserToken).getBody());
+        Assertions.assertEquals("{\"Store1\":[{\"id\":null,\"userName\":\"rregularUser\",\"productID\":111,\"price\":11.0,\"productName\":\"Product1\",\"approvedBy\":[\"rowner1\"],\"allOwnersApproved\":false,\"store\":null,\"address\":\"1234 Main Street, Springfield, IL, 62704-1234\",\"amount\":\"100.00\",\"currency\":\"USD\",\"cardNumber\":\"4111111111111111\",\"month\":\"12\",\"year\":\"2025\",\"holder\":\"John Doe\",\"ccv\":\"123\",\"holderId\":\"123456789\",\"customerApproved\":false}]}", tradingSystem.getMyBids(regularUserName, regularUserToken).getBody());
         Assertions.assertEquals("""
                 {
                   "storeName" : "Store1",
@@ -469,6 +443,7 @@ public class PlaceBidAcceptanceTests {
                   "userName" : "rregularUser",
                   "productID" : 111,
                   "price" : 11.0,
+                  "productName" : Product1,
                   "allOwnersApproved" : false,
                   "customerApproved" : false,
                   "approvedBy" : ["rowner1"]
@@ -497,7 +472,6 @@ public class PlaceBidAcceptanceTests {
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.suggestManage(ownerUserName, ownerToken, secondOwnerUserName, storeName, true, true, true, true, false).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.approveManage(secondOwnerUserName, secondOwnerToken, storeName, ownerUserName, true, true, true, true, false).getStatusCode());
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10, address, amount, currency, cardNumber, month, year, holder, ccv, id).getStatusCode());
-
         ResponseEntity<String> response = tradingSystem.getStoreBids(secondOwnerUserName, secondOwnerToken, storeName);
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         Assertions.assertEquals("Manager cannot view store bids", response.getBody());
@@ -516,7 +490,7 @@ public class PlaceBidAcceptanceTests {
         Assertions.assertEquals(HttpStatus.OK, tradingSystem.placeBid(regularUserName, regularUserToken, storeName, productID, 10, address, amount, currency, cardNumber, month, year, holder, ccv, id).getStatusCode());
         ResponseEntity<String> response = tradingSystem.getMyBids(regularUserName, regularUserToken);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assertions.assertEquals("{\"Store1\":[{\"id\":null,\"userName\":\"rregularUser\",\"productID\":111,\"price\":10.0,\"approvedBy\":[],\"allOwnersApproved\":false,\"store\":null,\"address\":\"1234 Main Street, Springfield, IL, 62704-1234\",\"amount\":\"100.00\",\"currency\":\"USD\",\"cardNumber\":\"4111111111111111\",\"month\":\"12\",\"year\":\"2025\",\"holder\":\"John Doe\",\"ccv\":\"123\",\"holderId\":\"123456789\",\"customerApproved\":true}]}", response.getBody());
+        Assertions.assertEquals("{\"Store1\":[{\"id\":null,\"userName\":\"rregularUser\",\"productID\":111,\"price\":10.0,\"productName\":\"Product1\",\"approvedBy\":[],\"allOwnersApproved\":false,\"store\":null,\"address\":\"1234 Main Street, Springfield, IL, 62704-1234\",\"amount\":\"100.00\",\"currency\":\"USD\",\"cardNumber\":\"4111111111111111\",\"month\":\"12\",\"year\":\"2025\",\"holder\":\"John Doe\",\"ccv\":\"123\",\"holderId\":\"123456789\",\"customerApproved\":true}]}", response.getBody());
     }
 
     @Test
@@ -527,14 +501,10 @@ public class PlaceBidAcceptanceTests {
         Assertions.assertEquals("{}", response.getBody());
     }
 
-    //check getMyBids is just for my bid
-
     @AfterEach
     public void tearDown() {
         tradingSystem.deleteInstance();
         userRepository.deleteInstance();
         storeRepository.deleteInstance();
     }
-
-
 }
