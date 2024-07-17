@@ -808,7 +808,7 @@ public class Store {
         }
         else
         {
-            Bid newBid = new Bid(userName, productID, price, address, amount, currency, cardNumber, month, year, holder, ccv, id);
+            Bid newBid = new Bid(userName, productID, price,getProduct(productID).getProduct_name(), address, amount, currency, cardNumber, month, year, holder, ccv, id);
             this.bids.add(newBid);
         }
     }
@@ -839,7 +839,8 @@ public class Store {
                 b.setPrice(newPrice);
                 b.setCustomerApproved(false);
                 b.setAllOwnersApproved(false);
-                b.setApprovedBy(new LinkedList<>(Arrays.asList(userName)));
+                b.setApprovedBy(new LinkedList<>());
+                b.approveBid(userName);
             }
         }
 
@@ -958,6 +959,15 @@ public class Store {
         }).collect(Collectors.toList());
     }
 
+    public void removeWorkers(Set<String> influecnedUsers) {
+        for(String userName : influecnedUsers){
+            if (owners.contains(userName))
+                owners.remove(userName);
+            else
+                managers.remove(userName);
+        }
+    }
+
     public Bid getBid(int productID, String bidUserName) {
         for (Bid b : bids) {
             if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) {
@@ -971,6 +981,7 @@ public class Store {
         for (Bid b : bids) {
             if (b.getProductID() == productID && b.getUserName().equals(userName)) {
                 b.setCustomerApproved(true);
+                if (b.getApprovedBy().containsAll(owners)) b.setAllOwnersApproved(true);
                 return b.getAllOwnersApproved();
             }
         }
@@ -984,6 +995,15 @@ public class Store {
                 bidList.add(b);
         }
         return bidList;
+    }
+
+    public void rejectCounterOffer(String userName, int productID) {
+        for (Bid b : bids) {
+            if (b.getProductID() == productID && b.getUserName().equals(userName)) {
+                bids.remove(b);
+                break;
+            }
+        }
     }
 
 //    public List<PurchasePolicy> getPurchasePolicies() {
