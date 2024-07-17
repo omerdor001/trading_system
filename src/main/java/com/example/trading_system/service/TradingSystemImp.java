@@ -39,6 +39,12 @@ public class TradingSystemImp implements TradingSystem {
         return instance;
     }
 
+    //for testing
+    public void deleteData(){
+        userService.deleteData();
+        marketService.deleteData();
+    }
+
     public void setSystemOpen(boolean systemOpen) {   //For tests
         this.systemOpen = systemOpen;
     }

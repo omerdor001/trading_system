@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public interface StoreRepository {
+    void deleteData();
+
     Store getStore(String storeName);
 
     boolean isExist(String storeName);

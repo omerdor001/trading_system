@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Repository
+@Transactional
 public class StoreDatabaseRepository implements StoreRepository {
 
     private static StoreDatabaseRepository instance = null;
@@ -26,6 +27,11 @@ public class StoreDatabaseRepository implements StoreRepository {
             instance.entityManager = entityManager;
         }
         return instance;
+    }
+
+    @Override
+    public void deleteData(){
+        entityManager.createQuery("DELETE FROM Store").executeUpdate();
     }
 
     @Override

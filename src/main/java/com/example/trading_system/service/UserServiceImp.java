@@ -34,6 +34,12 @@ public class UserServiceImp implements UserService {
         return userFacade;
     }
 
+
+    @Override
+    public void deleteData(){
+        userFacade.deleteData();
+    }
+
     @Override
     public void deleteInstance() {
         instance = null;

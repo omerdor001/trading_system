@@ -75,6 +75,11 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
+    public void deleteData(){
+        userRepository.deleteData();
+    }
+
+    @Override
     public void deleteInstance() {
         instance = null;
         if (marketFacade != null) marketFacade.deleteInstance();

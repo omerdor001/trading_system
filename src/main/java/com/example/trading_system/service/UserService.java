@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 public interface UserService {
     UserFacadeImp getUserFacade();
 
+    void deleteData();
+
     void deleteInstance();
 
     String getPendingUserNotifications(String admin, String username);
@@ -19,7 +21,6 @@ public interface UserService {
     boolean isAdmin(String username);
 
     void addToCart(String username, int productId, String storeName, int quantity, double price);
-
 
     void removeFromCart(String username, int productId, String storeName, int quantity);
 

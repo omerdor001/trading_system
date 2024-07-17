@@ -8,7 +8,11 @@ import java.util.NoSuchElementException;
 
 public interface UserFacade {
     UserRepository getUserRepository();
+
     void setUserRepository(UserRepository userRepository);
+
+    void deleteData();
+
     void deleteInstance();
 
     String getPendingUserNotifications(String admin, String username);

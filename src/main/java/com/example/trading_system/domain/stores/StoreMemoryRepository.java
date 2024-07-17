@@ -21,6 +21,11 @@ public class StoreMemoryRepository implements StoreRepository {
         return instance;
     }
 
+    @Override
+    public void deleteData(){
+        this.stores.clear();
+    }
+
     public void deleteInstance() {
         if(stores!=null){
             this.stores.clear();

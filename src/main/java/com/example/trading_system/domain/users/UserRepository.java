@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public interface UserRepository {
+    void deleteData();
+
     void deleteInstance();
 
     User getUser(String username);

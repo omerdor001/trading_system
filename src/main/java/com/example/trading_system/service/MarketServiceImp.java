@@ -30,6 +30,11 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public void deleteData(){
+        marketFacade.deleteData();
+    }
+
+    @Override
     public void deleteInstance() {
         instance = null;
         this.marketFacade.deleteInstance();

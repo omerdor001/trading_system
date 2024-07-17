@@ -1,8 +1,9 @@
 package com.example.trading_system.DBTests;
+
 import com.example.trading_system.TradingSystemApplication;
 import com.example.trading_system.TradingSystemRestController;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserRepository;;
+import com.example.trading_system.domain.users.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,13 +18,8 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-        classes = TradingSystemApplication.class
-)
-@TestPropertySource(
-        locations = "classpath:application.properties"
-)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = TradingSystemApplication.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class ImmunityTest {
     @Autowired
     private TradingSystemRestController tradingSystemRestController;
@@ -31,6 +27,7 @@ public class ImmunityTest {
     private UserRepository userRepository;
     @Autowired
     private StoreRepository storeRepository;
+    ConfigurableApplicationContext context;
 
     //data
     private String username;
@@ -40,7 +37,22 @@ public class ImmunityTest {
     void setUp() {
         if (TradingSystemApplication.getContext() == null) {
             TradingSystemApplication.main(new String[]{});
+            context = TradingSystemApplication.getContext();
         }
+        tradingSystemRestController.deleteData();
+    }
+
+    private void resetSystem() {
+        TradingSystemApplication.restart();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        context = TradingSystemApplication.getContext();
+        tradingSystemRestController = context.getBean(TradingSystemRestController.class);
+        userRepository = context.getBean(UserRepository.class);
+        storeRepository = context.getBean(StoreRepository.class);
     }
 
     @Test
@@ -49,19 +61,12 @@ public class ImmunityTest {
         tradingSystemRestController.openSystem();
         tradingSystemRestController.getTradingSystem().register("user1", "User111", LocalDate.now());
         tradingSystemRestController.getTradingSystem().register("user2", "User222", LocalDate.now());
-        TradingSystemApplication.restart();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        ConfigurableApplicationContext context = TradingSystemApplication.getContext();
-        tradingSystemRestController = context.getBean(TradingSystemRestController.class);
-        userRepository = context.getBean(UserRepository.class);
-        storeRepository = context.getBean(StoreRepository.class);
-        assertTrue("Admin is registered",userRepository.isExist("admin"));
-        assertTrue("User1 is registered",userRepository.isExist("user1"));
-        assertTrue("User2 is registered",userRepository.isExist("user2"));
+        boolean res = userRepository.isExist("radmin");
+        resetSystem();
+        res = userRepository.isExist("radmin");
+        assertTrue("Admin is registered", userRepository.isExist("admin"));
+        assertTrue("User1 is registered", userRepository.isExist("user1"));
+        assertTrue("User2 is registered", userRepository.isExist("user2"));
     }
 
     @Test
@@ -87,7 +92,7 @@ public class ImmunityTest {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
         tradingSystemRestController.getTradingSystem().openStore(username, token, "storeName", "");
-        tradingSystemRestController.getTradingSystem().suggestOwner(username,token,"user1","storeName");
+        tradingSystemRestController.getTradingSystem().suggestOwner(username, token, "user1", "storeName");
         String user1Token = tradingSystemRestController.getTradingSystem().enter().getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -105,22 +110,13 @@ public class ImmunityTest {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemRestController.getTradingSystem().approveOwner("user1",user1Token,"storeName","admin");
-        String exitUser1=tradingSystemRestController.getTradingSystem().logout(user1Token,"user1").getBody();
-        tradingSystemRestController.getTradingSystem().exit(exitUser1,"v2");
-        String exitAdmin=tradingSystemRestController.getTradingSystem().logout(adminToken,"admin").getBody();
-        tradingSystemRestController.getTradingSystem().exit(exitAdmin,"v3");
-        TradingSystemApplication.restart();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        ConfigurableApplicationContext context = TradingSystemApplication.getContext();
-        tradingSystemRestController = context.getBean(TradingSystemRestController.class);
-        userRepository = context.getBean(UserRepository.class);
-        storeRepository = context.getBean(StoreRepository.class);
-        assertTrue("User1 is owner of storeName",userRepository.getUser("user1").isOwner("storeName"));
+        tradingSystemRestController.getTradingSystem().approveOwner("user1", user1Token, "storeName", "admin");
+        String exitUser1 = tradingSystemRestController.getTradingSystem().logout(user1Token, "user1").getBody();
+        tradingSystemRestController.getTradingSystem().exit(exitUser1, "v2");
+        String exitAdmin = tradingSystemRestController.getTradingSystem().logout(adminToken, "admin").getBody();
+        tradingSystemRestController.getTradingSystem().exit(exitAdmin, "v3");
+        resetSystem();
+        assertTrue("User1 is owner of storeName", userRepository.getUser("user1").isOwner("storeName"));
     }
 
     @Test
@@ -146,7 +142,7 @@ public class ImmunityTest {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
         tradingSystemRestController.getTradingSystem().openStore(username, token, "storeName", "");
-        tradingSystemRestController.getTradingSystem().suggestManage(username,token,"user1","storeName",true,true,false,true,true,false);
+        tradingSystemRestController.getTradingSystem().suggestManage(username, token, "user1", "storeName", true, true, false, true, true);
         String user1Token = tradingSystemRestController.getTradingSystem().enter().getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -164,22 +160,13 @@ public class ImmunityTest {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemRestController.getTradingSystem().approveManage("user1",user1Token,"storeName","admin",true,true,false,true,true,false);
-        String exitUser1=tradingSystemRestController.getTradingSystem().logout(user1Token,"user1").getBody();
-        tradingSystemRestController.getTradingSystem().exit(exitUser1,"v2");
-        String exitAdmin=tradingSystemRestController.getTradingSystem().logout(adminToken,"admin").getBody();
-        tradingSystemRestController.getTradingSystem().exit(exitAdmin,"v3");
-        TradingSystemApplication.restart();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        ConfigurableApplicationContext context = TradingSystemApplication.getContext();
-        tradingSystemRestController = context.getBean(TradingSystemRestController.class);
-        userRepository = context.getBean(UserRepository.class);
-        storeRepository = context.getBean(StoreRepository.class);
-        assertTrue("User1 is manager of storeName",userRepository.getUser("user1").isManager("storeName"));
+        tradingSystemRestController.getTradingSystem().approveManage("user1", user1Token, "storeName", "admin", true, true, false, true, true);
+        String exitUser1 = tradingSystemRestController.getTradingSystem().logout(user1Token, "user1").getBody();
+        tradingSystemRestController.getTradingSystem().exit(exitUser1, "v2");
+        String exitAdmin = tradingSystemRestController.getTradingSystem().logout(adminToken, "admin").getBody();
+        tradingSystemRestController.getTradingSystem().exit(exitAdmin, "v3");
+        resetSystem();
+        assertTrue("User1 is manager of storeName", userRepository.getUser("user1").isManager("storeName"));
     }
 
     @Test
@@ -206,10 +193,10 @@ public class ImmunityTest {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
         tradingSystemRestController.getTradingSystem().openStore(username, token, "storeName", "");
-        tradingSystemRestController.getTradingSystem().addProduct(username,token,1,"storeName","product1","aaa",100.0,100,5,1,"");
-        tradingSystemRestController.getTradingSystem().addProduct(username,token,2,"storeName","product2","bbb",100.0,100,5,1,"");
-        String exitAdmin=tradingSystemRestController.getTradingSystem().logout(adminToken,"admin").getBody();
-        tradingSystemRestController.getTradingSystem().exit(exitAdmin,"v1");
+        tradingSystemRestController.getTradingSystem().addProduct(username, token, 1, "storeName", "product1", "aaa", 100.0, 100, 5, 1, "");
+        tradingSystemRestController.getTradingSystem().addProduct(username, token, 2, "storeName", "product2", "bbb", 100.0, 100, 5, 1, "");
+        String exitAdmin = tradingSystemRestController.getTradingSystem().logout(adminToken, "admin").getBody();
+        tradingSystemRestController.getTradingSystem().exit(exitAdmin, "v1");
 
         String user1Token = tradingSystemRestController.getTradingSystem().enter().getBody();
         try {
@@ -219,21 +206,12 @@ public class ImmunityTest {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract token from JSON response");
         }
-        tradingSystemRestController.getTradingSystem().addToCart("v2",user1Token,1,"storeName",5,100.0);
-        tradingSystemRestController.getTradingSystem().addToCart("v2",user1Token,2,"storeName",5,100.0);
-        tradingSystemRestController.getTradingSystem().approvePurchase("v2",user1Token,"1234 Main Street, Springfield, IL, 62704-1234","100.00","USD","4111111111111111","12","2025","John Doe","123","123456789");
-        tradingSystemRestController.getTradingSystem().exit(user1Token,"v2");
-        TradingSystemApplication.restart();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        ConfigurableApplicationContext context = TradingSystemApplication.getContext();
-        tradingSystemRestController = context.getBean(TradingSystemRestController.class);
-        userRepository = context.getBean(UserRepository.class);
-        storeRepository = context.getBean(StoreRepository.class);
-        assertTrue("Store named storeName included purchase",storeRepository.getStore("storeName").isPurchaseExist());
+        tradingSystemRestController.getTradingSystem().addToCart("v2", user1Token, 1, "storeName", 5, 100.0);
+        tradingSystemRestController.getTradingSystem().addToCart("v2", user1Token, 2, "storeName", 5, 100.0);
+        tradingSystemRestController.getTradingSystem().approvePurchase("v2", user1Token, "1234 Main Street, Springfield, IL, 62704-1234", "100.00", "USD", "4111111111111111", "12", "2025", "John Doe", "123", "123456789");
+        tradingSystemRestController.getTradingSystem().exit(user1Token, "v2");
+        resetSystem();
+        assertTrue("Store named storeName included purchase", storeRepository.getStore("storeName").isPurchaseExist());
     }
 
     @Test
@@ -258,11 +236,11 @@ public class ImmunityTest {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemRestController.getTradingSystem().openStore("r"+username, token, "storeName", "");
-        tradingSystemRestController.getTradingSystem().addProduct("r"+username,token,1,"storeName","product1","aaa",100.0,100,5,1,"");
-        tradingSystemRestController.getTradingSystem().addProduct("r"+username,token,2,"storeName","product2","bbb",100.0,100,5,1,"");
-        String exitAdmin=tradingSystemRestController.getTradingSystem().logout(adminToken,"r"+"admin").getBody();
-        tradingSystemRestController.getTradingSystem().exit(exitAdmin,"v1");
+        tradingSystemRestController.getTradingSystem().openStore("r" + username, token, "storeName", "");
+        tradingSystemRestController.getTradingSystem().addProduct("r" + username, token, 1, "storeName", "product1", "aaa", 100.0, 100, 5, 1, "");
+        tradingSystemRestController.getTradingSystem().addProduct("r" + username, token, 2, "storeName", "product2", "bbb", 100.0, 100, 5, 1, "");
+        String exitAdmin = tradingSystemRestController.getTradingSystem().logout(adminToken, "r" + "admin").getBody();
+        tradingSystemRestController.getTradingSystem().exit(exitAdmin, "v1");
         String user1Token = tradingSystemRestController.getTradingSystem().enter().getBody();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -280,22 +258,11 @@ public class ImmunityTest {
         } catch (Exception e) {
             fail("Setup failed: Unable to extract username and token from JSON response");
         }
-        tradingSystemRestController.getTradingSystem().addToCart("ruser1",user1Token,1,"storeName",5,100.0);
-        tradingSystemRestController.getTradingSystem().addToCart("ruser1",user1Token,2,"storeName",5,100.0);
-        tradingSystemRestController.getTradingSystem().approvePurchase("ruser1",user1Token,"1234 Main Street, Springfield, IL, 62704-1234","100.00","USD","4111111111111111","12","2025","John Doe","123","123456789");
-        tradingSystemRestController.getTradingSystem().exit(user1Token,"v2");
-        TradingSystemApplication.restart();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        ConfigurableApplicationContext context = TradingSystemApplication.getContext();
-        tradingSystemRestController = context.getBean(TradingSystemRestController.class);
-        userRepository = context.getBean(UserRepository.class);
-        storeRepository = context.getBean(StoreRepository.class);
-        assertTrue("User1 made purchase",storeRepository.getStore("storeName").isPurchaseOfUserExist("user1"));
+        tradingSystemRestController.getTradingSystem().addToCart("ruser1", user1Token, 1, "storeName", 5, 100.0);
+        tradingSystemRestController.getTradingSystem().addToCart("ruser1", user1Token, 2, "storeName", 5, 100.0);
+        tradingSystemRestController.getTradingSystem().approvePurchase("ruser1", user1Token, "1234 Main Street, Springfield, IL, 62704-1234", "100.00", "USD", "4111111111111111", "12", "2025", "John Doe", "123", "123456789");
+        tradingSystemRestController.getTradingSystem().exit(user1Token, "v2");
+        resetSystem();
+        assertTrue("User1 made purchase", storeRepository.getStore("storeName").isPurchaseOfUserExist("user1"));
     }
-
-
 }

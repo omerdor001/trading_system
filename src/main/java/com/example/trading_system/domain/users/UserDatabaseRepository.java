@@ -2,17 +2,18 @@ package com.example.trading_system.domain.users;
 
 import org.springframework.stereotype.Repository;
 
-    import jakarta.persistence.EntityManager;
-    import jakarta.persistence.PersistenceContext;
-    import org.springframework.context.annotation.Primary;
-    import org.springframework.stereotype.Repository;
-    import org.springframework.stereotype.Service;
-    import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-    import java.time.LocalDate;
-    import java.util.*;
+import java.time.LocalDate;
+import java.util.*;
 
 @Repository
+@Transactional
 public class UserDatabaseRepository implements UserRepository {
 
     private static UserDatabaseRepository instance = null;
@@ -31,6 +32,12 @@ public class UserDatabaseRepository implements UserRepository {
             instance.entityManager = entityManager;
         }
         return instance;
+    }
+
+    @Override
+    public void deleteData() {
+        entityManager.createQuery("DELETE FROM Registered").executeUpdate();
+        this.visitors.clear();
     }
 
     @Override
@@ -72,6 +79,7 @@ public class UserDatabaseRepository implements UserRepository {
         }
         return false;
     }
+
     public void saveCart(User user) {
         entityManager.merge(user.getCart());
     }
@@ -117,12 +125,12 @@ public class UserDatabaseRepository implements UserRepository {
         visitors.put(username, new Visitor(username.substring(1)));
     }
 
-        @Transactional
-        @Override
-        public void addRegistered(String userName, String encryption, LocalDate birthdate) {
-            Registered user = new Registered(userName, encryption, birthdate);
-            entityManager.persist(user);
-        }
+    @Transactional
+    @Override
+    public void addRegistered(String userName, String encryption, LocalDate birthdate) {
+        Registered user = new Registered(userName, encryption, birthdate);
+        entityManager.persist(user);
+    }
 
     @Override
     public void saveUser(User user) {
@@ -139,6 +147,7 @@ public class UserDatabaseRepository implements UserRepository {
             entityManager.persist(registeredUser);
         }
     }
+
     @Override
     public boolean checkIfRegistersEmpty() {
         Long count = entityManager.createQuery("SELECT COUNT(u) FROM Registered u", Long.class).getSingleResult();
