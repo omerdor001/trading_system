@@ -36,17 +36,10 @@ export default defineComponent({
       router.push({ name: 'StoreSearchResults', query: { name: searchStoreName.value } });
     };
 
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     return {
       username,
       searchStoreName,
       searchStore,
-      logout
     };
   }
 });

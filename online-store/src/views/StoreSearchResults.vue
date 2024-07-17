@@ -70,18 +70,10 @@ export default defineComponent({
       router.push({ name: 'StoreDetails', params: { storeId } });
     };
 
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      router.push('/login');
-    };
-
     return {
       username,
       stores,
       viewProducts,
-      logout
     };
   }
 });

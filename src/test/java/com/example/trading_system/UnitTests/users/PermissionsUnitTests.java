@@ -47,8 +47,8 @@ class PermissionsUnitTests {
             userFacade.login("v1", username2, username2);
             userFacade.login("v2", username3, username3);
             userFacade.createStore("r" + username1, "Adidas", "");
-            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, true ,true, true, true, true);
-            userFacade.approveManager("r" + username2, "Adidas", "r" + username1, true, true, true, true, true, true);
+            userFacade.suggestManager("r" + username1, "r" + username2, "Adidas", true, true ,true, true, true);
+            userFacade.approveManager("r" + username2, "Adidas", "r" + username1, true, true, true, true, true);
         } catch (Exception e) {
         }
     }
@@ -84,7 +84,7 @@ class PermissionsUnitTests {
     @Test
     void addProductManager_NoPermission() {
         try{
-            userFacade.editPermissionForManager("rtestuser1","rtestuser2","Adidas",true,false,true,true, true, true);
+            userFacade.editPermissionForManager("rtestuser1","rtestuser2","Adidas",true,false,true,true, true);
         }
         catch (Exception e){}
         ArrayList<String> keyWords=new ArrayList<>();
@@ -126,7 +126,7 @@ class PermissionsUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Samba");
         try{
-            userFacade.editPermissionForManager("rtestuser1","rtestuser2","Adidas",true,true,true,false, true, true);
+            userFacade.editPermissionForManager("rtestuser1","rtestuser2","Adidas",true,true,true,false, true);
             marketFacade.addProduct("rtestuser2",124,"Adidas" ,"product1", "", 1, 1, 1, 1, new LinkedList<>());
 
         }
@@ -176,7 +176,7 @@ class PermissionsUnitTests {
         ArrayList<String> keyWords=new ArrayList<>();
         keyWords.add("Samba");
         try{
-            userFacade.editPermissionForManager("rtestuser1","rtestuser2","Adidas",true,true,false,true, true, true);
+            userFacade.editPermissionForManager("rtestuser1","rtestuser2","Adidas",true,true,false,true, true);
             marketFacade.addProduct("rtestuser2",124,"Adidas" ,"product1", "", 1, 1, 1, 1, new LinkedList<>());
 
         }

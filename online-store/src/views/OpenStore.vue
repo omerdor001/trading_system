@@ -30,8 +30,6 @@ import SiteHeader from '@/components/SiteHeader.vue';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import CreateButton from 'primevue/button';
-import UserViewModel from "@/ViewModel/UserViewModel";
-import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import PrimeToast from 'primevue/toast';
 
@@ -45,7 +43,6 @@ export default defineComponent({
     'p-toast': PrimeToast,
   },
   setup() {
-    const router = useRouter();
     const name = ref('');
     const description = ref('');
     const username = localStorage.getItem('username'); 
@@ -54,7 +51,7 @@ export default defineComponent({
 
     const handleCreateStore = async () => {
       try {
-        const response = await axios.put('http://localhost:8082/api/trading/create-store',null, {
+        const response = await axios.post('http://localhost:8082/api/trading/create-store',null, {
             params : { 
             username: username,
             token: token,
@@ -72,18 +69,12 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      UserViewModel.actions.logout();
-      router.push('/login');
-    };
-
     return {
       name,
       description,
       username,
       token,
       handleCreateStore,
-      logout,
     };
   }
 });

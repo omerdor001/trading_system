@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <SiteHeader :isLoggedIn="isLoggedIn" :username="username" @logout="logout" />
@@ -16,6 +17,7 @@
               <th>Edit Supply</th>
               <th>Edit Buy Policy</th>
               <th>Edit Discount Policy</th>
+              <th>Accept Bids</th>
               <th>Approve</th>
               <th>Reject</th>
             </tr>
@@ -28,11 +30,12 @@
               <td>{{ request.editSupply ? '✔' : '✘' }}</td>
               <td>{{ request.editBuyPolicy ? '✔' : '✘' }}</td>
               <td>{{ request.editDiscountPolicy ? '✔' : '✘' }}</td>
+              <td>{{ request.acceptBids ? '✔' : '✘' }}</td>
               <td>
-                <PrimeButton label="Approve-Click" type="button" @click="approveManager(request)" />
+                <PrimeButton label="Approve" type="button" @click="approveManager(request)" />
               </td>
               <td>
-                <PrimeButton label="Reject-Click" type="button" @click="rejectManager(request)" />
+                <PrimeButton label="Reject" type="button" @click="rejectManager(request)" />
               </td>
             </tr>
           </tbody>
@@ -55,7 +58,6 @@ import { defineComponent, ref, onMounted } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { Button as PrimeButton } from 'primevue/button';
 import { Toast as PrimeToast } from 'primevue/toast';
-import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'ApproveManager',
@@ -65,7 +67,6 @@ export default defineComponent({
     PrimeToast,
   },
   setup() {
-    const router = useRouter();
     const loading = ref(false);
     const error = ref(null);
     const requests = ref([]);
@@ -90,7 +91,9 @@ export default defineComponent({
           editSupply: request.editSupply,
           editBuyPolicy: request.editBuyPolicy,
           editDiscountPolicy: request.editDiscountPolicy,
+          acceptBids: request.acceptBids
         }));
+        console.log(requests.value);
         loading.value = false;
       } catch (err) {
         loading.value = false;
@@ -111,6 +114,7 @@ export default defineComponent({
             editSupply: request.editSupply,
             editBuyPolicy: request.editBuyPolicy,
             editDiscountPolicy: request.editDiscountPolicy,
+            acceptBids: request.acceptBids
           }
         });
         showSuccessToast(response.data.message);
@@ -142,11 +146,6 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     const showSuccessToast = (message) => {
       toast.value.add({
         severity: 'success',
@@ -175,7 +174,6 @@ export default defineComponent({
       requests,
       approveManager,
       rejectManager,
-      logout,
       toast,
     };
   },

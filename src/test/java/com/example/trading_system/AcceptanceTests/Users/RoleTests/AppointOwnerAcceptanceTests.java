@@ -183,8 +183,8 @@ public class AppointOwnerAcceptanceTests {
 
     @Test
     public void GivenUserIsManagerValid_WhenApprove_Owner_ThenSuccess() {
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, ownerUserName, storeName, true, true, true, true, true, true).getStatusCode());
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(ownerUserName, ownerToken, storeName, userName, true, true, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestManage(userName, token, ownerUserName, storeName, true, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.approveManage(ownerUserName, ownerToken, storeName, userName, true, true, true, true, true).getStatusCode());
         ResponseEntity<String> response = tradingSystemImp.requestInformationAboutSpecificOfficialInStore(userName, token, storeName, ownerUserName);
         Assertions.assertTrue(Objects.requireNonNull(response.getBody()).contains("Manager"));
         Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName).getStatusCode());

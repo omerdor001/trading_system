@@ -54,6 +54,11 @@ public class CategoryCountCondition extends Condition {
     }
 
     @Override
+    public void setProductId(int productId) {
+        throw new RuntimeException("Action not allowed for category count condition");
+    }
+
+    @Override
     public String getInfo() {
         return "{ \"type\": \"categoryCount\", \"category\": " + category + ", \"count\": " + count + " }";
     }

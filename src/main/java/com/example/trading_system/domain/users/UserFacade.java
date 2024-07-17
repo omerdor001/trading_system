@@ -52,11 +52,11 @@ public interface UserFacade {
 
     void suggestOwner(String appoint, String newOwner, String storeName) throws IllegalAccessException;
 
-    void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException, NoSuchElementException;
+    void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException, NoSuchElementException;
 
     void approveOwner(String newOwner, String storeName, String appoint) throws Exception;
 
-    void approveManager(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws Exception;
+    void approveManager(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws Exception;
 
     void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException;
 
@@ -72,7 +72,7 @@ public interface UserFacade {
      * @param userId        is the current user that do the update
      * @param managerToEdit is the manager that the update will affect
      **/
-    void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException;
+    void editPermissionForManager(String userId, String managerToEdit, String storeNameId, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException;
 
     String getUserPassword(String username);
 
@@ -90,7 +90,9 @@ public interface UserFacade {
 
     String getPurchaseHistory(String username, String storeName);
 
-    void purchaseCart(String username) throws Exception;
+    void bidPurchase(String userName, String storeName, int productID, double price, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception;
+
+    void purchaseCart(String username, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception;
 
     String calculatePrice(String username) throws Exception;
 
@@ -116,5 +118,8 @@ public interface UserFacade {
 
     String getPermissionsForUserJSONFormat(String username,String storeName);
 
-    void bidPurchase(String userName, String storeName, int productID, double price) throws Exception;
+    String getManagersOfStore(String username, String storeName);
+
+
+    String getUserAppointer(String user, String storeName);
 }

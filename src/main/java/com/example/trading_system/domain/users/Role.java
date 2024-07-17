@@ -141,9 +141,6 @@ public class Role {
         roleState.getStoreBids();
     }
 
-    public void createProductLottery() throws IllegalAccessException{
-        roleState.createProductLottery();
-    }
     //Getters of permissions
     public boolean isWatch(){
         return roleState.isWatch();
@@ -160,6 +157,11 @@ public class Role {
     public boolean isEditDiscountPolicy(){
         return roleState.isEditDiscountPolicy();
     }
+
+    public boolean isAcceptBids(){
+        return roleState.isAcceptBids();
+    }
+
 
 }
 

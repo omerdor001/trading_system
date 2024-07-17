@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -545,7 +544,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException, NoSuchElementException {
+    public void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException, NoSuchElementException {
         if (!marketFacade.isStoreExist(store_name_id))
             throw new NoSuchElementException("No store called " + store_name_id + " exist");
         if (!userRepository.isExist(appoint)) {
@@ -571,7 +570,7 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(store_name_id)) {
             throw new IllegalAccessException("User is already owner of this store");
         }
-        newManagerUser.addWaitingAppoint_Manager(store_name_id,appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+        newManagerUser.addWaitingAppoint_Manager(store_name_id,appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
         sendNotification(appoint, newManager, appointUser.getUsername() + " suggests you to become a store manager at " + store_name_id);
         userRepository.saveUser(newManagerUser);
     }
@@ -613,7 +612,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void approveManager(String newManager, String storeName, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws Exception {
+    public void approveManager(String newManager, String storeName, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws Exception {
         if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userRepository.isExist(newManager)) {
@@ -644,8 +643,8 @@ public class UserFacadeImp implements UserFacade {
         newManagerUser.addManagerRole(appoint, storeName);
         appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getRegistered(newManager));
 
-        marketFacade.addManager(storeName,newManager);
-        newManagerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+        marketFacade.getStore(storeName).addManager(newManager);
+        newManagerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
         sendNotification(newManager, appoint, newManagerUser.getUsername() + " accepted your suggestion to become a manager at store: " + storeName);
         userRepository.saveUser(newManagerUser);
         userRepository.saveUser(appointUser);
@@ -818,7 +817,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void editPermissionForManager(String userId, String managerToEdit, String storeName, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException, NoSuchElementException {
+    public void editPermissionForManager(String userId, String managerToEdit, String storeName, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException, NoSuchElementException {
         if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userRepository.isExist(userId)) {
@@ -847,7 +846,7 @@ public class UserFacadeImp implements UserFacade {
         if (!managerUser.getRoleByStoreId(storeName).getAppointedById().equals(userId)) {
             throw new IllegalAccessException("Owner cant edit permissions to manager that he/she didn't appointed");
         }
-        managerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+        managerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
         sendNotification(userId, managerToEdit, "Your permissions for store: " + storeName + " were changed by user: " + appointUser.getUsername());
         userRepository.saveUser(managerUser);
     }
@@ -940,19 +939,18 @@ public class UserFacadeImp implements UserFacade {
         return true;
     }
 
-
     @Override
-    public void bidPurchase(String userName, String storeName, int productID, double price) throws Exception {
+    public void bidPurchase(String userName, String storeName, int productID, double price, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
         // quantity = 1
         User user = userRepository.getUser(userName);
         // user exist, not suspended, is logged in
         marketFacade.checkAvailabilityAndConditions(productID,1,storeName);
         marketFacade.removeReservedProducts(productID,1,storeName);
 
+
         int userAge = getUser(userName).getAge();
         marketFacade.validateBidPurchasePolicies(storeName, productID, 1, userAge, price);
         int deliveryId;
-        String address = user.getAddress();
         try {
             deliveryId = deliveryService.makeDelivery(address);
         } catch (Exception e) {
@@ -964,7 +962,7 @@ public class UserFacadeImp implements UserFacade {
         }
         int paymentId;
         try {
-            paymentId = paymentService.makePayment(price);
+            paymentId = paymentService.makePayment(price, currency, cardNumber, month, year, holder, ccv, id);
         } catch (Exception e) {
             deliveryService.cancelDelivery(deliveryId);
             marketFacade.releaseReservedProducts(productID, 1, storeName);
@@ -976,12 +974,11 @@ public class UserFacadeImp implements UserFacade {
             throw new Exception("Error in Payment");
         }
 
-        marketFacade.addBidPurchase(userName,storeName,productID,price,1);
-
+        marketFacade.addBidPurchase(userName, storeName, productID, price, 1);
     }
 
     @Override
-    public void purchaseCart(String username) throws Exception {
+    public void purchaseCart(String username, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
         User user = userRepository.getUser(username);
 
         if (!checkAvailabilityAndConditions(username)) {
@@ -991,7 +988,6 @@ public class UserFacadeImp implements UserFacade {
         }
         if (!marketFacade.validatePurchasePolicies(user.getCart().toJson(), user.getAge())) {
             user.setTimerCancelled(true);
-
             logger.error("Products do not meet purchase policies conditions.");
             throw new RuntimeException("Products do not meet purchase policies conditions.");
         }
@@ -1007,7 +1003,6 @@ public class UserFacadeImp implements UserFacade {
         }, 10 * 60 * 1000);
         double totalPrice = marketFacade.calculateTotalPrice(user.getCart().toJson());
         int deliveryId;
-        String address = user.getAddress();
         try {
             deliveryId = deliveryService.makeDelivery(address);
         } catch (Exception e) {
@@ -1024,7 +1019,7 @@ public class UserFacadeImp implements UserFacade {
         }
         int paymentId;
         try {
-            paymentId = paymentService.makePayment(totalPrice);
+            paymentId = paymentService.makePayment(totalPrice, currency, cardNumber, month, year, holder, ccv, id);
         } catch (Exception e) {
             deliveryService.cancelDelivery(deliveryId);
             user.releaseReservedProducts(marketFacade.getStoreRepository());
@@ -1044,7 +1039,6 @@ public class UserFacadeImp implements UserFacade {
         user.setTimerCancelled(true);
         timer.purge();
         userRepository.saveUser(user);
-        //TODO save store for each store
     }
 
 
@@ -1194,6 +1188,7 @@ public class UserFacadeImp implements UserFacade {
         approveMap.put("editSupply", permissions.get(1));
         approveMap.put("editBuyPolicy", permissions.get(2));
         approveMap.put("editDiscountPolicy", permissions.get(3));
+        approveMap.put("acceptBids",permissions.get(4));
         return approveMap;
     }
 
@@ -1208,12 +1203,51 @@ public class UserFacadeImp implements UserFacade {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> permissions = new HashMap<>();
         User user = userRepository.getUser(username);
-        permissions.put("watch", user.isWatch(storeName));
-        permissions.put("editSupply", user.isEditSupply(storeName));
-        permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
-        permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
+        if (user.isOwner(storeName) || user.isManager(storeName)) {
+            permissions.put("username", username);
+            permissions.put("watch", user.isWatch(storeName));
+            permissions.put("editSupply", user.isEditSupply(storeName));
+            permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
+            permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
+            permissions.put("acceptBids", user.isAcceptBids(storeName));
+        }
+            try {
+                return mapper.writeValueAsString(permissions);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+            }
+        }
+
+    @Override
+    public String getUserAppointer(String user, String storeName) {
+        return getUser(user).getRoleByStoreId(storeName).getAppointedById();
+    }
+
+    @Override
+    public String getManagersOfStore(String username, String storeName) {
+        if (!userRepository.isExist(username)) {
+            throw new IllegalArgumentException("User doesn't exist in the system");
+        }
+        if (!marketFacade.isStoreExist(storeName)) {
+            throw new IllegalArgumentException("Store doesn't exist in the system");
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        List<Map<String, Object>> managers = new ArrayList<>();
+        for (User user : userRepository.getAllUsersAsList()) {
+            Map<String, Object> permissions = new HashMap<>();
+            if(!user.getUsername().equals(username) && user.isManager(storeName)){
+                permissions.put("username", user.getUsername());
+                permissions.put("appointer",user.getRoleByStoreId(storeName).getAppointedById());
+                permissions.put("watch", user.isWatch(storeName));
+                permissions.put("editSupply", user.isEditSupply(storeName));
+                permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
+                permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
+                permissions.put("acceptBids", user.isAcceptBids(storeName));
+                managers.add(permissions);
+            }
+        }
         try {
-            return mapper.writeValueAsString(permissions);
+            return mapper.writeValueAsString(managers);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
         }

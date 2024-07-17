@@ -26,7 +26,6 @@ import {defineComponent, ref, onMounted} from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import {useRouter} from 'vue-router';
 
 export default defineComponent({
   name: 'StoreDetailsEditor',
@@ -42,7 +41,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const router = useRouter();
     const username = ref(localStorage.getItem('username') || '');
     const store = ref({
       name: '',
@@ -72,16 +70,9 @@ export default defineComponent({
       };
     };
 
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     return {
       username,
       store,
-      logout
     };
   }
 });

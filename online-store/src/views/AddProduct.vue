@@ -123,12 +123,6 @@ export default defineComponent({
       keyWords.value = [];
     };
 
-    const logout = () => {
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      router.push('/login');
-    };
-
     return {
       productId,
       storeName,
@@ -140,7 +134,6 @@ export default defineComponent({
       category,
       keyWords,
       handleAddProduct,
-      logout,
       username,
       token,
     };

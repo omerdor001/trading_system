@@ -29,6 +29,14 @@ public class PaymentAcceptanceTests {
     private TradingSystemImp tradingSystem;
     private String username;
     private String token;
+    private final String amount = "100.00";
+    private final String currency = "USD";
+    private final String cardNumber = "4111111111111111";
+    private final String month = "12";
+    private final String year = "2025";
+    private final String holder = "John Doe";
+    private final String ccv = "123";
+    private final String id = "123456789";
 
     @BeforeEach
     void setUp() {
@@ -70,7 +78,7 @@ public class PaymentAcceptanceTests {
     @Test
     void testRegistered_Success() {
         tradingSystem.addToCart(username, token, 0, storeName, 1,1);
-        ResponseEntity<String> result = tradingSystem.approvePurchase(username, token);
+        ResponseEntity<String> result = tradingSystem.approvePurchase(username, token, address, amount, currency, cardNumber, month, year, holder, ccv, id);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Purchase approved", result.getBody());
     }
@@ -88,7 +96,7 @@ public class PaymentAcceptanceTests {
         }
         tradingSystem.setAddress(username, token, address);
         tradingSystem.addToCart(username, token, 0, storeName, 1,1);
-        ResponseEntity<String> result = tradingSystem.approvePurchase(username, token);
+        ResponseEntity<String> result = tradingSystem.approvePurchase(username, token, address, amount, currency, cardNumber, month, year, holder, ccv, id);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Purchase approved", result.getBody());
     }
@@ -110,7 +118,7 @@ public class PaymentAcceptanceTests {
         }
         tradingSystem.addToCart(visitorUsername, visitorToken, 0, storeName, 2,1);
         tradingSystem.setProductQuantity(username, token, storeName, 0, 1);
-        ResponseEntity<String> result = tradingSystem.approvePurchase(visitorUsername, visitorToken);
+        ResponseEntity<String> result = tradingSystem.approvePurchase(visitorUsername, visitorToken, address, amount, currency, cardNumber, month, year, holder, ccv, id);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Product quantity is too low", result.getBody());
     }
@@ -119,7 +127,7 @@ public class PaymentAcceptanceTests {
     void testRegistered_ProductNotAvailable() {
         tradingSystem.addToCart(username, token, 0, storeName, 2,1);
         tradingSystem.setProductQuantity(username, token, storeName, 0, 1);
-        ResponseEntity<String> result = tradingSystem.approvePurchase(username, token);
+        ResponseEntity<String> result = tradingSystem.approvePurchase(username, token, address, amount, currency, cardNumber, month, year, holder, ccv, id);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("Product quantity is too low", result.getBody());
     }

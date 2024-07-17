@@ -6,14 +6,17 @@
         <h2>Stores</h2>
         <hr />
         <!-- Stores list -->
-        <div class="store-container">
-          <div v-for="store in stores" :key="store.name" class="store-item" @click="showStoreDetails(store)">
+        <div v-if= "filterStores().length > 0 " class="store-container">
+          <div v-for="store in filterStores()" :key="store.name"   class="store-item" @click="showStoreDetails(store)">
             <div class="store-content">
               <h3 class="store-name">Store: {{ store.name }}</h3>
               <h5 class="status">Status: {{ getStatusText(store.status) }}</h5>
               <h5 class="role-at-store">I am a: {{ store.role }}</h5>
             </div>
           </div>
+        </div>
+        <div v-else>
+          <p>No Stores Availibale</p>
         </div>
       </div>
     </div>
@@ -27,26 +30,29 @@
           <!-- Left column for description and products -->
           <div class="details-column">
             <p><strong>Description:</strong> {{ selectedStore.description }}</p>
-            <div class="manage-products-link">
-              <p><strong>Products:</strong> <router-link :to="`/product-list/${selectedStore.name}/${selectedStore.permissions.isEditSupply}`">View Products</router-link></p>
-            </div>
+            <p><strong>Products:</strong></p>
+            <PrimeButton class="option-button primary" @click="navigateToProductsInStore(selectedStore.name,selectedStore.permissions.isEditSupply)">View Products</PrimeButton>
+            <p><strong>Workers:</strong></p>
+            <PrimeButton class="option-button primary" @click="navigateToWorkersInStore(selectedStore.name)">View Workers</PrimeButton>
           </div>
           <!-- Right column for founder, isActive, rating, isOpen -->
           <div class="details-column">
             <p><strong>Founder:</strong> {{ selectedStore.founder }}</p>
-            <label><input type="checkbox" v-model="selectedStore.status"> Active</label><br />
-            <label><input type="checkbox" v-model="selectedStore.isOpen"> Is Open</label><br />
+            <label><input type="checkbox" v-model="selectedStore.status" disabled> Active</label><br />
+            <label><input type="checkbox" v-model="selectedStore.isOpen" disabled> Is Open</label><br />
             <p><strong>Rating:</strong> {{ selectedStore.rating }}</p>
           </div>
         </div>
         <div class="options-container">
           <h3>Options</h3>
+          <PrimeButton v-if="!selectedStore.isOpen  && selectedStore.founder === username.substring(1)" class="option-button primary" @click="openStoreExist(selectedStore.name)">Re-open Store</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isOwner" class="option-button primary" @click="suggestOwner(selectedStore.name)">Suggest Owner</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isOwner" class="option-button primary" @click="suggestManager(selectedStore.name)">Suggest Manager</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isOwner" class="option-button primary" @click="yieldOwnership()">Yield Ownership</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isEditPurchasePolicy" class="option-button primary" @click="editPurchasePolicy(selectedStore.name)">Edit Purchase Policy</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isEditDiscountPolicy" class="option-button primary" @click="editDiscountPolicy(selectedStore.name)">Edit Discount Policy</PrimeButton>
           <PrimeButton class="option-button primary" @click="purchasesHistory(selectedStore.name)">Purchases History</PrimeButton>
+          <PrimeButton v-if="selectedStore.permissions.acceptBids" class="option-button primary" @click="acceptBids(selectedStore.name)">Accept Bids</PrimeButton>
         </div>
       </div>
     </div>
@@ -64,7 +70,7 @@ import PrimeButton from 'primevue/button';
 import axios from 'axios';
 
 export default defineComponent({
-  name: 'MyStoresIOwn',
+  name: 'StoresPageManager',
   components: {
     SiteHeader,
     'p-toast': PrimeToast,
@@ -77,8 +83,11 @@ export default defineComponent({
     const token = localStorage.getItem('token');
     const selectedStore = ref(null);
     const toast = useToast();
+    const ownOrManageStore = ref(false);
 
-    onMounted(async () => {
+
+    
+    const fetchStoreDetails = async () => {
       try {
         const response = await axios.get('http://localhost:8082/api/trading/stores-detailed-info', {
           params: { 
@@ -102,10 +111,21 @@ export default defineComponent({
             isOwner: false,
           }
         }));
+
+        ownOrManageStore.value = stores.value.some(store => store.role === 'Owner' || store.role === 'Manager');
+        toast.add({ severity: 'error', summary: 'Error', detail: ownOrManageStore.value, life: 3000 });
+
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
       }
+    };
+    
+    onMounted(() => {
+      fetchStoreDetails();
     });
+
+
+
     
     const showStoreDetails = async (store) => {
       selectedStore.value = store;
@@ -117,12 +137,14 @@ export default defineComponent({
              token: token,
           }
        });
+       console.log(response.data);
        const permissions = response.data; 
        store.permissions.isOwner = store.role === 'Owner';
        store.permissions.isWatch = permissions.watch;
        store.permissions.isEditSupply = permissions.editSupply;
        store.permissions.isEditPurchasePolicy = permissions.editBuyPolicy;
        store.permissions.isEditDiscountPolicy = permissions.editDiscountPolicy;
+       store.permissions.acceptBids = permissions.acceptBids;
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch permissions', life: 3000 });
         console.error('Error fetching permissions:', error);
@@ -133,18 +155,20 @@ export default defineComponent({
       selectedStore.value = null;
     };
 
-    const viewProducts = (storeName) => {
-      router.push({ name: 'ProductList', params: { storeName } });
+    const filterStores = () => {
+      return stores.value.filter(store => store.role === 'Manager' || store.role === 'Owner');
+    };
+
+    const navigateToProductsInStore = (storeName,isEditSupply) => {
+      router.push({ name: 'ProductList', params: { storeName,isEditSupply } });
+    };
+
+    const navigateToWorkersInStore = (storeName) => {
+      router.push({ name: 'WorkersInStore', params: { storeName } });
     };
 
     const getStatusText = (status) => {
       return status ? 'Active' : 'Inactive';
-    };
-
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      router.push('/login');
     };
 
     const suggestOwner = (storeName) => {
@@ -153,6 +177,26 @@ export default defineComponent({
         router.push({ name: 'SuggestOwner', params: { storeName } });
       } 
     };
+
+    const openStoreExist =  async (store) => {
+      const tempStore = store;
+      try {
+         const response = await axios.post('http://localhost:8082/api/trading/store/open', null, {
+           params: {
+             username: username,
+             storeName: tempStore,
+             token: token,
+          }
+       });
+       console.log(response.data);
+       closeModal();
+       fetchStoreDetails();
+      } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to Re-open store', life: 3000 });
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
 
     const suggestManager = (storeName) => {
       const store = selectedStore.value;
@@ -172,6 +216,13 @@ export default defineComponent({
       const store = selectedStore.value;
       if (store && store.permissions.isEditDiscountPolicy) {
         router.push({ name: 'EditDiscountPolicy', params: { storeName } });
+      }
+    };
+
+    const acceptBids = (storeName) => {
+      const store = selectedStore.value;
+      if (store && store.permissions.acceptBids) {
+        router.push({ name: 'WatchStoreBids', params: { storeName } });
       }
     };
 
@@ -204,17 +255,22 @@ export default defineComponent({
       username,
       token,
       showStoreDetails,
+      ownOrManageStore,
       selectedStore,
-      viewProducts,
+      navigateToProductsInStore,
+      navigateToWorkersInStore,
       getStatusText,
-      logout,
       closeModal,
       suggestOwner,
+      acceptBids,
       suggestManager,
       editPurchasePolicy,
       editDiscountPolicy,
       yieldOwnership,
-      purchasesHistory
+      openStoreExist,
+      purchasesHistory,
+      filterStores,
+      fetchStoreDetails
     };
   }
 });
@@ -228,14 +284,14 @@ export default defineComponent({
 .content {
   width: 80%;
   padding: 15px;
-  margin: auto; 
+  margin: auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .store-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px; 
+  gap: 20px;
 }
 
 .store-item {
@@ -244,7 +300,7 @@ export default defineComponent({
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .store-content {
@@ -265,7 +321,7 @@ export default defineComponent({
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); 
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -276,25 +332,25 @@ export default defineComponent({
   background-color: #fefefe;
   padding: 30px;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   max-width: 80%;
   max-height: 80%;
   overflow-y: auto;
   position: relative;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .store-details {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
-  font-family: inherit; 
+  font-family: inherit;
 }
 
 .details-column {
   flex: 1;
   margin-right: 20px;
-  font-family: inherit; 
+  font-family: inherit;
 }
 
 .close-button {
@@ -304,24 +360,24 @@ export default defineComponent({
   color: #aaa;
   cursor: pointer;
   font-size: 24px;
-  font-family: inherit; 
+  font-family: inherit;
 }
 
-.close-button:hover {
+close-button:hover {
   color: #555;
 }
 
 .manage-products-link {
   margin-top: 10px;
-  margin-left: 5px; 
-  font-family: inherit; 
+  margin-left: 5px;
+  font-family: inherit;
 }
 
 .manage-products-link a {
   margin-bottom: 0;
   text-decoration: none;
-  color: #007bff; 
-  font-family: inherit; 
+  color: #007bff;
+  font-family: inherit;
 }
 
 .options-container {
@@ -329,27 +385,27 @@ export default defineComponent({
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
-  font-family: inherit; 
+  font-family: inherit;
 }
 
 .option-button {
-  background-color: #007bff; 
+  background-color: #007bff;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  font-family: inherit; 
+  font-family: inherit;
 }
 
 .option-button:hover {
-  background-color: #0056b3; 
+  background-color: #0056b3;
 }
 
 .primary {
-  background-color: #cce5ff; 
-  color: black; 
-  font-family: inherit; 
+  background-color: #cce5ff;
+  color: black;
+  font-family: inherit;
 }
 
 .primary:hover {

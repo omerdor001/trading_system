@@ -92,12 +92,6 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     const fetchUserCart = async () => {
       try {
       const response = await axios.get('http://localhost:8082/api/trading/cart/view', {
@@ -106,11 +100,7 @@ export default defineComponent({
         token : token,
       },
     });
-      toast.add({ severity: 'success', summary: 'success', detail: response.data , life: 5000 });
-      toast.add({ severity: 'success', summary: 'success', detail: typeof(response.data), life: 5000 });
       cart.value = response.data;
-      toast.add({ severity: 'success', summary: 'success', detail: cart.value.shoppingBags, life: 5000 });
-
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to load stores', life: 3000 });
       }
@@ -127,7 +117,6 @@ export default defineComponent({
       removeFromCart,
       totalPrice,
       buyCart,
-      logout
     };
   }
 });

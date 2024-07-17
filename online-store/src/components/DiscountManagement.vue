@@ -68,30 +68,30 @@
             @hide="addConditionDialogVisible = false" :closable="false" blockScroll :draggable="false" modal>
             <div class="p-fluid">
                 <div class="p-field">
-                    <label for="conditionType">Select condition type</label>
+                    <label for="conditionType">Select condition type:</label>
                     <Dropdown id="conditionType" v-model="newCondition.type" :options="conditionTypes"
                         optionLabel="label" optionValue="value" />
                 </div>
-                <template v-if="newCondition.type === 'Category count'">
+                <template v-if="newCondition.type === 'Category Count'">
                     <div class="p-field">
-                        <label for="categorySelect">Select category</label>
+                        <label for="categorySelect">Select category:</label>
                         <Dropdown id="categorySelect" v-model="newCondition.category" :options="categoryOptions"
                             optionLabel="label" optionValue="value" />
-                        <label for="categoryCount">Set category count</label>
+                        <label for="categoryCount">Set category count:</label>
                         <InputNumber id="categoryCount" v-model="newCondition.categoryCount" mode="decimal" min="0" />
                     </div>
                 </template>
                 <template v-else-if="newCondition.type === 'Product Count'">
                     <div class="p-field">
-                        <label for="productId">Set product ID</label>
+                        <label for="productId">Set product ID:</label>
                         <InputNumber id="productId" v-model="newCondition.productId" mode="decimal" min="0" />
-                        <label for="productCount">Set product count</label>
+                        <label for="productCount">Set product count:</label>
                         <InputNumber id="productCount" v-model="newCondition.productCount" mode="decimal" min="0" />
                     </div>
                 </template>
                 <template v-else-if="newCondition.type === 'Total Sum'">
                     <div class="p-field">
-                        <label for="totalSum">Total Sum</label>
+                        <label for="totalSum">Total Sum:</label>
                         <InputNumber id="totalSum" v-model="newCondition.totalSum" mode="decimal" min="0" />
                     </div>
                 </template>
@@ -102,13 +102,16 @@
                 <Button label="Save" icon="pi pi-check" @click="saveCondition" />
             </template>
         </Dialog>
-        <DataTable :value="discounts" title="Discount" responsiveLayout="scroll" class="p-mt-3">
+        <DataTable :value="discounts" title="Discount" responsiveLayout="scroll" class="p-mt-3" paginator :rows="5"
+            :rowsPerPageOptions="[5, 10, 20, 50]">
             <template #header>
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <span class="text-xl font-bold">Discounts</span>
                 </div>
             </template>
-            <Column field="type" header="Type" style="width: 20%;" :headerStyle="{ 'text-align': 'center' }"
+            <Column field="index" header="Index" style="width: 5%;" :headerStyle="{ 'text-align': 'center' }">
+            </Column>
+            <Column field="type" header="Type" style="width: 10%;" :headerStyle="{ 'text-align': 'center' }"
                 :body="typeTemplate">
             </Column>
             <Column field="details" header="Details" style="width: 20%;" :headerStyle="{ 'text-align': 'center' }"
@@ -116,146 +119,211 @@
             <Column header="Actions" style="width: 30%;">
                 <template #body="rowData">
                     <div class="action-buttons">
-                        <Button
+                        <Button class="action-button"
                             v-if="rowData.data.type === 'Store Discount' || rowData.data.type === 'percentageStore' || rowData.data.type === 'Category Discount' || rowData.data.type === 'Product Discount'"
-                            @click="showEditPercentDialog = true">Edit percent
+                            @click="openEditPercentDialog(rowData.index)">Edit percent
                         </Button>
 
-                        <Button v-if="rowData.data.type === 'Category Discount'" @click="showEditCategoryDialog = true">Edit
-                            category
+                        <Button class="action-button" v-if="rowData.data.type === 'Category Discount'"
+                            @click="openEditCategoryDialog(rowData.index)">Edit category
                         </Button>
 
-                        <Button v-if="rowData.data.type === 'Product Discount'" @click="showEditProductDialog = true">Edit
-                            product ID
+                        <Button class="action-button" v-if="rowData.data.type === 'Product Discount'"
+                            @click="openEditProductDialog(rowData.index)">Edit product ID
                         </Button>
 
-                        <Button
+                        <Button class="action-button"
                             v-if="rowData.data.type === 'Additive Discount' || rowData.data.type === 'Maximum Discount' || rowData.data.type === 'Xor Discount'"
-                            @click="showEditFirstDiscountDialog = true">Edit first discount
+                            @click="openEditFirstDiscountDialog(rowData.index)">Edit first discount
                         </Button>
 
-                        <Button
+                        <Button class="action-button"
                             v-if="rowData.data.type === 'Additive Discount' || rowData.data.type === 'Maximum Discount' || rowData.data.type === 'Xor Discount'"
-                            @click="showEditSecondDiscountDialog = true">Edit second discount
+                            @click="openEditSecondDiscountDialog(rowData.index)">Edit second discount
                         </Button>
 
-                        <Button
+                        <Button class="action-button"
                             v-if="rowData.data.type === 'Conditional Discount' || rowData.data.type === 'And Discount' || rowData.data.type === 'Or Discount'"
-                            @click="showEditFirstConditionDialog = true">Edit first condition
+                            @click="openEditFirstConditionDialog(rowData.index)">Edit first condition
                         </Button>
 
-                        <Button
+                        <Button class="action-button"
+                            v-if="rowData.data.type === 'And Discount' || rowData.data.type === 'Or Discount'"
+                            @click="openEditSecondConditionDialog(rowData.index)">Edit second condition
+                        </Button>
+
+                        <Button class="action-button"
                             v-if="rowData.data.type === 'Conditional Discount' || rowData.data.type === 'Or Discount' || rowData.data.type === 'And Discount'"
-                            @click="showEditThenDiscountDialog = true">Edit discount
+                            @click="openEditThenDiscountDialog(rowData.index)">Edit discount
                         </Button>
 
-                        <Button v-if="rowData.data.type === 'And Discount' || rowData.data.type === 'Or Discount'"
-                            @click="showEditSecondConditionDialog = true">Edit second condition
+                        <Button class="action-button" v-if="rowData.data.type === 'Xor Discount'"
+                            @click="openEditDeciderConditionDialog(rowData.index)">Edit decider condition
                         </Button>
 
-                        <Button v-if="rowData.data.type === 'Xor Discount'"
-                            @click="showEditDeciderConditionDialog = true">Edit decider condition
-                        </Button>
-
-                        <Button @click="showDeleteDiscountDialog = true">Delete Discount
-
-                        </Button>
+                        <Button class="action-button" @click="openDeleteDialog(rowData.index)">Delete Discount</Button>
                     </div>
-                    <!-- Edit Percent Dialog -->
-                    <Dialog v-model="showEditPercentDialog" :visible="showEditPercentDialog" header="Edit Percent" closable="false">
-                        <InputNumber v-model="editPercentValue" />
-                        <Button @click="editDiscountPercent(rowData.index, editPercentValue)">Save</Button>
-                        <Button @click="showEditPercentDialog = false">Cancel</Button>
-                    </Dialog>
-
-                    <!-- Edit Category Dialog -->
-                    <Dialog v-model="showEditCategoryDialog" :visible="showEditCategoryDialog" header="Edit Category">
-                        <Dropdown v-model="editCategoryValue" :options="categoryOptions" optionLabel="label" />
-                        <Button @click="editCategoryDiscountCategory(rowData.index, editCategoryValue)">Save</Button>
-                        <Button @click="showEditCategoryDialog = false">Cancel</Button>
-                    </Dialog>
-
-                    <!-- Edit Product ID Dialog -->
-                    <Dialog v-model="showEditProductDialog" :visible="showEditProductDialog" header="Edit Product ID">
-                        <InputNumber v-model="editProductIDValue" />
-                        <Button @click="editProductDiscountID(rowData.index, editProductDiscountID)">Save</Button>
-                        <Button @click="showEditProductDialog = false">Cancel</Button>
-                    </Dialog>
-
-                    <!-- Edit First Discount Dialog -->
-                    <Dialog v-model="showEditFirstDiscountDialog" :visible="showEditFirstDiscountDialog"
-                        header="Edit First Discount">
-                        <Dropdown v-model="editFirstDiscountIndex" :options=formattedDiscounts() optionLabel="label"
-                            optionValue="value" />
-                        <Button @click="editFirstDiscount(rowData.index, editFirstDiscountIndex)">Save</Button>
-                        <Button @click="showEditFirstDiscountDialog = false">Cancel</Button>
-                    </Dialog>
-
-                    <!-- Edit Second Discount Dialog -->
-                    <Dialog v-model="showEditSecondDiscountDialog" :visible="showEditSecondDiscountDialog"
-                        header="Edit Second Discount">
-                        <Dropdown v-model="editSecondDiscountIndex" :options=formattedDiscounts() optionLabel="label"
-                            optionValue="value" />
-                        <Button @click="editSecondDiscount(rowData.index, editSecondDiscountIndex)">Save</Button>
-                        <Button @click="showEditSecondDiscountDialog = false">Cancel</Button>
-                    </Dialog>
-
-                    <!-- Edit First Condition Dialog -->
-                    <Dialog v-model="showEditFirstConditionDialog" :visible="showEditFirstConditionDialog"
-                        header="Edit First Condition">
-                        <Dropdown v-model="editFirstConditionIndex" :options=formattedConditions() optionLabel="label"
-                            optionValue="value" />
-                        <Button @click="editFirstCondition(rowData.index, editFirstConditionIndex)">Save</Button>
-                        <Button @click="showEditFirstConditionDialog = false">Cancel</Button>
-                    </Dialog>
-
-                    <!-- Edit Second Condition Dialog -->
-                    <Dialog v-model="showEditSecondConditionDialog" :visible="showEditSecondConditionDialog"
-                        header="Edit Second Condition">
-                        <Dropdown v-model="editSecondConditionIndex" :options=formattedConditions() optionLabel="label"
-                            optionValue="value" />
-                        <Button @click="editSecondCondition(rowData.index, editSecondConditionIndex)">Save</Button>
-                        <Button @click="showEditSecondConditionDialog = false">Cancel</Button>
-                    </Dialog>
-
-                    <!-- Edit Then Discount Dialog -->
-                    <Dialog v-model="showEditThenDiscountDialog" :visible="showEditThenDiscountDialog"
-                        header="Edit Then Discount">
-                        <Dropdown v-model="editThenDiscountIndex" :options=formattedDiscounts() optionLabel="label"
-                            optionValue="value" />
-                        <Button @click="editThenDiscount(rowData.index, editThenDiscountIndex)">Save</Button>
-                        <Button @click="showEditThenDiscountDialog = false">Cancel</Button>
-                    </Dialog>
-
-                    <!-- Edit Decider Condition Dialog -->
-                    <Dialog v-model="showEditDeciderConditionDialog" :visible="showEditDeciderConditionDialog"
-                        header="Edit Decider Condition">
-                        <Dropdown v-model="editThenDiscountIndex" :options=formattedConditions() optionLabel="label"
-                            optionValue="value" />
-                        <Button @click="editDeciderCondition(rowData.index, editDeciderConditionIndex)">Save</Button>
-                        <Button @click="showEditDeciderConditionDialog = false">Cancel</Button>
-                    </Dialog>
-
-                    <!-- Delete Discount Dialog -->
-                    <Dialog v-model="showDeleteDiscountDialog" :visible="showDeleteDiscountDialog"
-                        header="Delete Discount">
-                        <Button @click="deleteDiscount(rowData.index)">Save</Button>
-                        <Button @click="showDeleteDiscountDialog = false">Cancel</Button>
-                    </Dialog>
-                </template>
-                <template #header>
-                    <span class="flex-1 text-center"></span>
                 </template>
             </Column>
         </DataTable>
 
-        <DataTable :value="conditions" responsiveLayout="scroll" class="p-mt-3">
+        <!-- Edit Percent Dialog -->
+        <Dialog v-model="showEditPercentDialog" :visible="showEditPercentDialog" :closable="false" blockScroll
+            :draggable="false" modal>
+            <template v-slot:header>
+                <div class="dialog-header">Edit Percent</div>
+            </template>
+            <label for="editPercent" class="label">Set new percent:</label>
+            <InputNumber id="editPercent" v-model="editPercentValue" />
+            <div class="button-container">
+                <Button @click="editDiscountPercent()">Save</Button>
+                <Button @click="showEditPercentDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
+
+        <!-- Edit Category Dialog -->
+        <Dialog v-model="showEditCategoryDialog" :visible="showEditCategoryDialog" :closable="false" blockScroll
+            :draggable="false" modal>
+            <template v-slot:header>
+                <div class="dialog-header">Edit Category</div>
+            </template>
+            <div class="input-container">
+                <label for="editCategory" class="label">Select new category:</label>
+                <Dropdown id="editCategory" v-model="editCategoryValue" :options="categoryOptions" optionLabel="label"
+                    :style="{ width: '100%' }" />
+            </div>
+            <div class="button-container">
+                <Button @click="editCategoryDiscountCategory()">Save</Button>
+                <Button @click="showEditCategoryDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
+
+        <!-- Edit Product ID Dialog -->
+        <Dialog v-model="showEditProductDialog" :visible="showEditProductDialog" :closable="false" blockScroll
+            :draggable="false" modal>
+            <template v-slot:header>
+                <div class="dialog-header">Edit Product ID</div>
+            </template>
+            <label for="editProductId" class="label">Set new product ID:</label>
+            <InputNumber id="editProductId" v-model="editProductIDValue" />
+            <div class="button-container">
+                <Button @click="editProductDiscountID()">Save</Button>
+                <Button @click="showEditProductDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
+
+        <!-- Edit First Discount Dialog -->
+        <Dialog v-model="showEditFirstDiscountDialog" :visible="showEditFirstDiscountDialog" :closable="false"
+            blockScroll :draggable="false" modal>
+            <template v-slot:header>
+                <div class="dialog-header">Edit First Discount</div>
+            </template>
+            <label for="editFirstDiscount" class="label">Select first discount to set:</label>
+            <Dropdown id="editFirstDiscount" v-model="editFirstDiscountIndex" :options="formattedDiscounts"
+                optionLabel="label" optionValue="value" />
+            <div class="button-container">
+                <Button @click="editFirstDiscount()">Save</Button>
+                <Button @click="showEditFirstDiscountDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
+
+        <!-- Edit Second Discount Dialog -->
+        <Dialog v-model="showEditSecondDiscountDialog" :visible="showEditSecondDiscountDialog" :closable="false"
+            blockScroll :draggable="false" modal>
+            <template v-slot:header>
+                <div class="dialog-header">Edit Second Discount</div>
+            </template>
+            <label for="editSecondDiscount" class="label">Select second discount to set:</label>
+            <Dropdown id="editSecondDiscount" v-model="editSecondDiscountIndex" :options="formattedDiscounts"
+                optionLabel="label" optionValue="value" />
+            <div class="button-container">
+                <Button @click="editSecondDiscount()">Save</Button>
+                <Button @click="showEditSecondDiscountDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
+
+        <!-- Edit First Condition Dialog -->
+        <Dialog v-model="showEditFirstConditionDialog" :visible="showEditFirstConditionDialog" :closable="false"
+            blockScroll :draggable="false" modal>
+            <template v-slot:header>
+                <div class="dialog-header">Edit First Condition</div>
+            </template>
+            <label for="editFirstCondition" class="label">Select first condition to set:</label>
+            <Dropdown id="editFirstCondition" v-model="editFirstConditionIndex" :options="formattedConditions"
+                optionLabel="label" optionValue="value" />
+            <div class="button-container">
+                <Button @click="editFirstCondition()">Save</Button>
+                <Button @click="showEditFirstConditionDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
+
+        <!-- Edit Second Condition Dialog -->
+        <Dialog v-model="showEditSecondConditionDialog" :visible="showEditSecondConditionDialog" :closable="false"
+            blockScroll :draggable="false" modal>
+            <template v-slot:header>
+                <div class="dialog-header">Edit Second Condition</div>
+            </template>
+            <label for="editSecondCondition" class="label">Select second condition to set:</label>
+            <Dropdown id="editSecondCondition" v-model="editSecondConditionIndex" :options="formattedConditions"
+                optionLabel="label" optionValue="value" />
+            <div class="button-container">
+                <Button @click="editSecondCondition()">Save</Button>
+                <Button @click="showEditSecondConditionDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
+
+        <!-- Edit Then Discount Dialog -->
+        <Dialog v-model="showEditThenDiscountDialog" :visible="showEditThenDiscountDialog" :closable="false" blockScroll
+            :draggable="false" modal>
+            <template v-slot:header>
+                <div class="dialog-header">Edit Then Discount</div>
+            </template>
+            <label for="editThenCondition" class="label">Select then condition to set:</label>
+            <Dropdown id="editThenCondition" v-model="editThenDiscountIndex" :options="formattedDiscounts"
+                optionLabel="label" optionValue="value" />
+            <div class="button-container">
+                <Button @click="editThenDiscount()">Save</Button>
+                <Button @click="showEditThenDiscountDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
+
+        <!-- Edit Decider Condition Dialog -->
+        <Dialog v-model="showEditDeciderConditionDialog" :visible="showEditDeciderConditionDialog" :closable="false"
+            blockScroll :draggable="false" modal>
+            <template v-slot:header>
+                <div class="dialog-header">Edit Decider Condition</div>
+            </template>
+            <label for="editDeciderCondition" class="label">Select decider condition to set:</label>
+            <Dropdown id="editDeciderCondition" v-model="editDeciderConditionIndex" :options="formattedConditions"
+                optionLabel="label" optionValue="value" />
+            <div class="button-container">
+                <Button @click="editDeciderCondition()">Save</Button>
+                <Button @click="showEditDeciderConditionDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
+
+        <!-- Delete Discount Dialog -->
+        <Dialog v-model="showDeleteDiscountDialog" :visible="showDeleteDiscountDialog" :closable="false" blockScroll
+            :draggable="false" modal>
+            <template v-slot:header>
+                <div class="dialog-header">Delete Discount?</div>
+            </template>
+            <div class="button-container">
+                <Button @click="deleteDiscount()">Confirm</Button>
+                <Button @click="showDeleteDiscountDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
+
+        <DataTable :value="conditions" responsiveLayout="scroll" class="p-mt-3" paginator :rows="5"
+            :rowsPerPageOptions="[5, 10, 20, 50]">
             <template #header>
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <span class="text-xl font-bold">Conditions</span>
                 </div>
             </template>
-            <Column field="type" header="Type" style="width: 20%;" :headerStyle="{ 'text-align': 'center' }"
+            <Column field="index" header="Index" style="width: 5%;" :headerStyle="{ 'text-align': 'center' }">
+            </Column>
+            <Column field="type" header="Type" style="width: 10%;" :headerStyle="{ 'text-align': 'center' }"
                 :body="typeCondTemplate">
             </Column>
             <Column field="details" header="Details" style="width: 20%;" :headerStyle="{ 'text-align': 'center' }"
@@ -263,72 +331,86 @@
             <Column header="Actions" style="width: 30%;">
                 <template #body="rowData">
                     <div class="action-buttons">
-                        <Button v-if="rowData.data.type === 'Category Count' || rowData.data.type === 'Product Count'"
-                            @click="showEditCountDialog = true">Edit count
+                        <Button class="action-button"
+                            v-if="rowData.data.type === 'Category Count' || rowData.data.type === 'Product Count'"
+                            @click="openEditCountDialog(rowData.index)">Edit count
                         </Button>
 
-                        <Button v-if="rowData.data.type === 'Category Count'" @click="showEditCategoryCondDialog = true">Edit
-                            category
+                        <Button class="action-button" v-if="rowData.data.type === 'Category Count'"
+                            @click="openEditCategoryCondDialog(rowData.index)">Edit category
                         </Button>
 
-                        <Button v-if="rowData.data.type === 'Product Count'" @click="showEditProductCondDialog = true">
-                            Edit product ID
+                        <Button class="action-button" v-if="rowData.data.type === 'Product Count'"
+                            @click="openEditProductCondDialog(rowData.index)">Edit product ID
                         </Button>
 
-                        <Button v-if="rowData.data.type === 'Total Sum'" @click="showEditTotalSumDialog = true">Edit
-                            total sum
+                        <Button class="action-button" v-if="rowData.data.type === 'Total Sum'"
+                            @click="openEditTotalSumDialog(rowData.index)">Edit total sum
                         </Button>
 
-                        <Button @click="showDeleteCondDialog = true">
-                            Delete Condition
-                        </Button>
+                        <Button class="action-button" @click="openDeleteCondDialog(rowData.index)">Delete
+                            Condition</Button>
                     </div>
-                    <!-- Edit Cond Count Dialog -->
-                    <Dialog v-model="showEditCountDialog" :visible="showEditCountDialog" header="Edit Count">
-                        <label for="condCount">Set condition count</label>
-                        <InputNumber id="condCount" v-model="editCountValue" />
-                        <Button @click="editConditionCount(rowData.index, editCountValue)">Save</Button>
-                        <Button @click="showEditCountDialog = false">Cancel</Button>
-                    </Dialog>
-
-                    <!-- Edit Cond Category Dialog -->
-                    <Dialog v-model="showEditCategoryCondDialog" :visible="showEditCategoryCondDialog"
-                        header="Edit Category">
-                        <label for="condCategory">Set condition category</label>
-                        <Dropdown id="condCategory" v-model="editCondCategoryValue" :options="categoryOptions"
-                            optionLabel="label" />
-                        <Button @click="editConditionCategory(rowData.index, editCondCategoryValue)">Save</Button>
-                        <Button @click="showEditCategoryCondDialog = false">Cancel</Button>
-                    </Dialog>
-
-                    <!-- Edit Cond Product ID Dialog -->
-                    <Dialog v-model="showEditProductCondDialog" :visible="showEditProductCondDialog"
-                        header="Edit Product ID">
-                        <label for="condProductId">Set condition product id</label>
-                        <InputNumber id="condProductId" v-model="editCondProductIDValue" />
-                        <Button @click="editConditionProductID(rowData.index, editCondProductIDValue)">Save</Button>
-                        <Button @click="showEditProductCondDialog = false">Cancel</Button>
-                    </Dialog>
-
-                    <!-- Edit Cond Total Sum Dialog -->
-                    <Dialog v-model="showEditTotalSumDialog" :visible="showEditTotalSumDialog" header="Edit Total Sum">
-                        <label for="condTotalSum">Set category count</label>
-                        <InputNumber id="condTotalSum" v-model="editTotalSumValue" />
-                        <Button @click="editConditionTotalSum(rowData.index, editTotalSumValue)">Save</Button>
-                        <Button @click="showEditTotalSumDialog = false">Cancel</Button>
-                    </Dialog>
-
-                    <!-- Delete Cond Dialog -->
-                    <Dialog v-model="showDeleteCondDialog" :visible="showDeleteCondDialog" header="Delete Condition">
-                        <Button @click="deleteCondition(rowData.index)">Save</Button>
-                        <Button @click="showDeleteCondDialog = false">Cancel</Button>
-                    </Dialog>
                 </template>
                 <template #header>
                     <span class="flex-1 text-center"></span>
                 </template>
             </Column>
         </DataTable>
+
+        <!-- Edit Cond Count Dialog -->
+        <Dialog v-model="showEditCountDialog" :visible="showEditCountDialog" header="Edit Count" :closable="false"
+            blockScroll :draggable="false" modal>
+            <label for="condCount">Set condition count:</label>
+            <InputNumber id="condCount" v-model="editCountValue" />
+            <div class="button-container">
+                <Button @click="editConditionCount()">Save</Button>
+                <Button @click="showEditCountDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
+
+        <!-- Edit Cond Category Dialog -->
+        <Dialog v-model="showEditCategoryCondDialog" :visible="showEditCategoryCondDialog" header="Edit Category"
+            :closable="false" blockScroll :draggable="false" modal>
+            <label for="condCategory">Set condition category:</label>
+            <Dropdown id="condCategory" v-model="editCondCategoryValue" :options="categoryOptions"
+                optionLabel="label" />
+            <div class="button-container">
+                <Button @click="editConditionCategory()">Save</Button>
+                <Button @click="showEditCategoryCondDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
+
+        <!-- Edit Cond Product ID Dialog -->
+        <Dialog v-model="showEditProductCondDialog" :visible="showEditProductCondDialog" header="Edit Product ID"
+            :closable="false" blockScroll :draggable="false" modal>
+            <label for="condProductId">Set condition product id:</label>
+            <InputNumber id="condProductId" v-model="editCondProductIDValue" />
+            <div class="button-container">
+                <Button @click="editConditionProductID()">Save</Button>
+                <Button @click="showEditProductCondDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
+
+        <!-- Edit Cond Total Sum Dialog -->
+        <Dialog v-model="showEditTotalSumDialog" :visible="showEditTotalSumDialog" header="Edit Total Sum"
+            :closable="false" blockScroll :draggable="false" modal>
+            <label for="condTotalSum">Set category count:</label>
+            <InputNumber id="condTotalSum" v-model="editTotalSumValue" />
+            <div class="button-container">
+                <Button @click="editConditionTotalSum()">Save</Button>
+                <Button @click="showEditTotalSumDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
+
+        <!-- Delete Cond Dialog -->
+        <Dialog v-model="showDeleteCondDialog" :visible="showDeleteCondDialog" header="Delete Condition?"
+            :closable="false" blockScroll :draggable="false" modal>
+            <div class="button-container">
+                <Button @click="deleteCondition()">Confirm</Button>
+                <Button @click="showDeleteCondDialog = false">Cancel</Button>
+            </div>
+        </Dialog>
     </div>
 </template>
 
@@ -363,7 +445,9 @@ export default {
         const route = useRoute();
         const storeName = route.params.storeName;
         const discounts = ref([]);
+        const formattedDiscounts = ref([]);
         const conditions = ref([]);
+        const formattedConditions = ref([]);
         const addDiscountDialogVisible = ref(false);
         const addConditionDialogVisible = ref(false);
         const showEditPercentDialog = ref(false);
@@ -381,19 +465,33 @@ export default {
         const showEditProductCondDialog = ref(false);
         const showEditTotalSumDialog = ref(false);
         const showDeleteCondDialog = ref(false);
+        const rowIndex = ref(-1);
+        const editCategoryValue = ref(null);
+        const editPercentValue = ref(null);
+        const editProductIDValue = ref(null);
+        const editFirstDiscountIndex = ref(-1);
+        const editSecondDiscountIndex = ref(-1);
+        const editFirstConditionIndex = ref(-1);
+        const editSecondConditionIndex = ref(-1);
+        const editThenDiscountIndex = ref(-1);
+        const editDeciderConditionIndex = ref(-1);
+        const editCountValue = ref(null);
+        const editCondCategoryValue = ref(null);
+        const editCondProductIDValue = ref(null);
+        const editTotalSumValue = ref(null);
         const newDiscount = ref({
             type: '',
-            percent: 0,
+            percent: null,
             category: null,
-            productId: -1,
+            productId: null,
         });
         const newCondition = ref({
             type: '',
             category: null,
-            productId: -1,
-            categoryCount: -1,
-            productCount: -1,
-            totalSum: -1
+            productId: null,
+            categoryCount: null,
+            productCount: null,
+            totalSum: null
         });
         const discountTypes = ref([
             { label: 'Store', value: 'Store' },
@@ -433,13 +531,15 @@ export default {
                         token: token.value
                     }
                 });
-                discounts.value = response.data.map(discount => ({
+                discounts.value = response.data.map((discount, index) => ({
+                    index: index,
                     type: getDiscountTypeLabel(discount.type),
                     details: createDetails(discount)
                 }));
+                formattedDiscounts.value = formatDiscounts();
             } catch (error) {
                 console.error('Error fetching discounts:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
             }
         };
 
@@ -452,13 +552,15 @@ export default {
                         token: token.value
                     }
                 });
-                conditions.value = response.data.map(condition => ({
+                conditions.value = response.data.map((condition, index) => ({
+                    index: index,
                     type: getConditionTypeLabel(condition.type),
                     details: createConditionDetails(condition)
                 }));
+                formattedConditions.value = formatConditions();
             } catch (error) {
                 console.error('Error fetching conditions:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
             }
         };
 
@@ -499,7 +601,7 @@ export default {
                         });
                         fetchDiscounts();
                     } catch (error) {
-                        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
                         return;
                     }
                     break;
@@ -517,7 +619,7 @@ export default {
                         });
                         fetchDiscounts();
                     } catch (error) {
-                        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
                         return;
                     }
                     break;
@@ -535,7 +637,7 @@ export default {
                         });
                         fetchDiscounts();
                     } catch (error) {
-                        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
                         return;
                     }
                     break;
@@ -551,7 +653,7 @@ export default {
                         });
                         fetchDiscounts();
                     } catch (error) {
-                        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
                         return;
                     }
                     break;
@@ -567,7 +669,7 @@ export default {
                         });
                         fetchDiscounts();
                     } catch (error) {
-                        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
                         return;
                     }
                     break;
@@ -583,7 +685,7 @@ export default {
                         });
                         fetchDiscounts();
                     } catch (error) {
-                        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
                         return;
                     }
                     break;
@@ -599,7 +701,7 @@ export default {
                         });
                         fetchDiscounts();
                     } catch (error) {
-                        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
                         return;
                     }
                     break;
@@ -615,7 +717,7 @@ export default {
                         });
                         fetchDiscounts();
                     } catch (error) {
-                        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
                         return;
                     }
                     break;
@@ -631,7 +733,7 @@ export default {
                         });
                         fetchDiscounts();
                     } catch (error) {
-                        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
                         return;
                     }
                     break;
@@ -656,7 +758,7 @@ export default {
                         });
                         fetchConditions();
                     } catch (error) {
-                        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
                         return;
                     }
                     break;
@@ -674,11 +776,11 @@ export default {
                         });
                         fetchConditions();
                     } catch (error) {
-                        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
                         return;
                     }
                     break;
-                case 'Toal Sum':
+                case 'Total Sum':
                     try {
                         const url = `http://localhost:8082/api/trading/store/${storeName}/conditions/total-sum`;
                         await axios.post(url, null, {
@@ -691,7 +793,7 @@ export default {
                         });
                         fetchConditions();
                     } catch (error) {
-                        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                        toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
                         return;
                     }
                     break;
@@ -719,9 +821,9 @@ export default {
 
         const getConditionTypeLabel = (type) => {
             const typeMap = {
-                'productCount' : 'Product Count',
-                'totalSum' : 'Total Sum',
-                'categoryCount' : 'Category Count',
+                'productCount': 'Product Count',
+                'totalSum': 'Total Sum',
+                'categoryCount': 'Category Count',
             }
             return typeMap[type] || type;
         }
@@ -731,21 +833,21 @@ export default {
                 case 'percentageStore':
                     return discount.details = `Percentage: ${discount.percent * 100}%`;
                 case 'percentageCategory':
-                    return discount.details = `Category: ${categoryOptions.value.find(opt => opt.value === discount.category)?.label} Percentage: ${discount.percent * 100}%`;
+                    return discount.details = `Category: ${categoryOptions.value.find(opt => opt.value === discount.category)?.label}, Percentage: ${discount.percent * 100}%`;
                 case 'percentageProduct':
-                    return discount.details = `Product Id: ${discount.productId} Percentage: ${discount.percent * 100}%`;
+                    return discount.details = `Product Id: ${discount.productId}, Percentage: ${discount.percent * 100}%`;
                 case 'additive':
-                    return discount.details = `First discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.first)} Second discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.second)}`;
+                    return discount.details = `First discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.first)}, Second discount: ${getDiscountTypeLabel(discount.second.type)} ${createDetails(discount.second)}`;
                 case 'max':
-                    return discount.details = `First discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.first)} Second discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.second)}`;
+                    return discount.details = `First discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.first)}, Second discount: ${getDiscountTypeLabel(discount.second.type)} ${createDetails(discount.second)}`;
                 case 'conditional':
-                    return discount.details = `Condition: ${createConditionDetails(discount.condition)} discount: ${getDiscountTypeLabel(discount.then.type)} ${createDetails(discount.then)}`;
+                    return discount.details = `Condition: ${createConditionDetails(discount.condition)}, Discount: ${getDiscountTypeLabel(discount.then.type)} ${createDetails(discount.then)}`;
                 case 'and':
-                    return discount.details = `First condition: ${createConditionDetails(discount.first)} Second condition: ${createConditionDetails(discount.second)} Discount: ${getDiscountTypeLabel(discount.then.type)} ${createDetails(discount.then)}`;
+                    return discount.details = `First condition: ${createConditionDetails(discount.first)}, Second condition: ${createConditionDetails(discount.second)}, Discount: ${getDiscountTypeLabel(discount.then.type)} ${createDetails(discount.then)}`;
                 case 'or':
-                    return discount.details = `First condition: ${createConditionDetails(discount.first)} Second condition: ${createConditionDetails(discount.second)} Discount: ${getDiscountTypeLabel(discount.then.type)} ${createDetails(discount.then)}`;
+                    return discount.details = `First condition: ${createConditionDetails(discount.first)}, Second condition: ${createConditionDetails(discount.second)}, Discount: ${getDiscountTypeLabel(discount.then.type)} ${createDetails(discount.then)}`;
                 case 'xor':
-                    return discount.details = `First discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.first)} Second discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.second)} Decider condition: ${createConditionDetails(discount.decider)}`;
+                    return discount.details = `First discount: ${getDiscountTypeLabel(discount.first.type)} ${createDetails(discount.first)}, Second discount: ${getDiscountTypeLabel(discount.second.type)} ${createDetails(discount.second)}, Decider condition: ${createConditionDetails(discount.decider)}`;
                 case 'placeholderDiscount':
                     return discount.details = 'Placeholder'
             }
@@ -754,11 +856,11 @@ export default {
         const createConditionDetails = (condition) => {
             switch (condition.type) {
                 case 'productCount':
-                    return condition.details = `Product ID: ${condition.productId} Count: ${condition.count}`;
+                    return condition.details = `Product ID: ${condition.productId}, Count: ${condition.count}`;
                 case 'categoryCount':
-                    return condition.details = `Category: ${categoryOptions.value.find(opt => opt.value === condition.category)?.label} Count: ${condition.count}`;
+                    return condition.details = `Category: ${categoryOptions.value.find(opt => opt.value === condition.category)?.label}, Count: ${condition.count}`;
                 case 'totalSum':
-                    return condition.details = `Required sum ${condition.requiredSum}`;
+                    return condition.details = `Required sum: ${condition.requiredSum}`;
                 case 'placeholderCondition':
                     return condition.details = 'Placeholder';
             }
@@ -782,9 +884,294 @@ export default {
             return h('div', {}, createDetails(rowData));
         };
 
-        const deleteDiscount = async (selectedIndex) => {
+        const formatDiscounts = () => {
+            return discounts.value.map((discount, index) => ({
+                label: `Type: ${discount.type}, Details: ${discount.details}`,
+                value: index
+            }));
+        }
+
+        const formatConditions = () => {
+            return conditions.value.map((condition, index) => ({
+                label: `Type: ${condition.type}, Details: ${condition.details}`,
+                value: index
+            }));
+        }
+
+        const editDiscountPercent = async () => {
             try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/removeDiscount/${selectedIndex}`;
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setPercentDiscount/${rowIndex.value}/${editPercentValue.value / 100}`;
+                await axios.post(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value
+                    }
+                });
+                fetchDiscounts();
+                fetchConditions();
+                showEditPercentDialog.value = false;
+                rowIndex.value = -1;
+                editPercentValue.value = null;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Percent changed', life: 3000 });
+            } catch (error) {
+                console.error('Error setting discount percent:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+            }
+        }
+
+        const editCategoryDiscountCategory = async () => {
+            try {
+                console.log(`index: ${rowIndex.value}, cat val: ${editCategoryValue}`);
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setCategoryDiscount/${rowIndex.value}/${editCategoryValue.value.value}`;
+                await axios.post(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value
+                    }
+                });
+                fetchDiscounts();
+                fetchConditions();
+                showEditCategoryDialog.value = false;
+                rowIndex.value = -1;
+                editCategoryValue.value = null;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Category changed', life: 3000 });
+            } catch (error) {
+                console.error('Error setting discount category:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+            }
+        }
+
+        const editProductDiscountID = async () => {
+            try {
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setProductIdDiscount/${rowIndex.value}/${editProductIDValue.value}`;
+                await axios.post(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value
+                    }
+                });
+                fetchDiscounts();
+                fetchConditions();
+                showEditProductDialog.value = false;
+                rowIndex.value = -1;
+                editProductIDValue.value = null;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Product id changed', life: 3000 });
+            } catch (error) {
+                console.error('Error setting discount product:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+            }
+        }
+
+        const editFirstDiscount = async () => {
+            try {
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setFirstDiscount/${rowIndex.value}/${editFirstDiscountIndex.value}`;
+                await axios.post(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value
+                    }
+                });
+                fetchDiscounts();
+                fetchConditions();
+                showEditFirstDiscountDialog.value = false;
+                rowIndex.value = -1;
+                editFirstDiscountIndex.value = null;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'First discount set', life: 3000 });
+            } catch (error) {
+                console.error('Error setting first discount:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+            }
+        }
+
+        const editSecondDiscount = async () => {
+            try {
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setSecondDiscount/${rowIndex.value}/${editSecondDiscountIndex.value}`;
+                await axios.post(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value
+                    }
+                });
+                fetchDiscounts();
+                fetchConditions();
+                showEditSecondDiscountDialog.value = false;
+                rowIndex.value = -1;
+                editSecondDiscountIndex.value = null;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Second discount set', life: 3000 });
+            } catch (error) {
+                console.error('Error setting second discount:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+            }
+        }
+
+        const editFirstCondition = async () => {
+            try {
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setFirstCondition/${rowIndex.value}/${editFirstConditionIndex.value}`;
+                await axios.post(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value
+                    }
+                });
+                fetchDiscounts();
+                fetchConditions();
+                showEditFirstConditionDialog.value = false;
+                rowIndex.value = -1;
+                editFirstConditionIndex.value = null;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'First condition set', life: 3000 });
+            } catch (error) {
+                console.error('Error setting first condition:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+            }
+        }
+
+        const editSecondCondition = async () => {
+            try {
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setSecondCondition/${rowIndex.value}/${editSecondConditionIndex.value}`;
+                await axios.post(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value
+                    }
+                });
+                fetchDiscounts();
+                fetchConditions();
+                showEditSecondConditionDialog.value = false;
+                rowIndex.value = -1;
+                editSecondConditionIndex.value = null;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Second condition set', life: 3000 });
+            } catch (error) {
+                console.error('Error setting second condition:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+            }
+        }
+
+        const editThenDiscount = async () => {
+            try {
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setThenDiscount/${rowIndex.value}/${editThenDiscountIndex.value}`;
+                await axios.post(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value
+                    }
+                });
+                fetchDiscounts();
+                fetchConditions();
+                showEditThenDiscountDialog.value = false;
+                rowIndex.value = -1;
+                editThenDiscountIndex.value = null;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Then discount set', life: 3000 });
+            } catch (error) {
+                console.error('Error setting then discount:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+            }
+        }
+
+        const editDeciderCondition = async () => {
+            try {
+                console.log(editDeciderConditionIndex.value);
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setDeciderDiscount/${rowIndex.value}/${editDeciderConditionIndex.value}`;
+                await axios.post(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value
+                    }
+                });
+                fetchDiscounts();
+                fetchConditions();
+                showEditDeciderConditionDialog.value = false;
+                rowIndex.value = -1;
+                editDeciderConditionIndex.value = null;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Decider changed', life: 3000 });
+            } catch (error) {
+                console.error('Error setting decider condition:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+            }
+        }
+
+        const editConditionCount = async () => {
+            try {
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setCountCondition/${rowIndex.value}/${editCountValue.value}`;
+                await axios.post(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value
+                    }
+                });
+                fetchConditions();
+                showEditCountDialog.value = false;
+                rowIndex.value = -1;
+                editCountValue.value = null;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Count changed', life: 3000 });
+            } catch (error) {
+                console.error('Error setting condition count:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+            }
+        }
+
+        const editConditionCategory = async () => {
+            try {
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setCategoryCondition/${rowIndex.value}/${editCondCategoryValue.value}`;
+                await axios.post(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value
+                    }
+                });
+                fetchConditions();
+                showEditCategoryCondDialog.value = false;
+                rowIndex.value = -1;
+                editCondCategoryValue.value = null;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Category changed', life: 3000 });
+            } catch (error) {
+                console.error('Error setting condition category:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+            }
+        }
+
+        const editConditionProductID = async () => {
+            try {
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setProductIdCondition/${rowIndex.value}/${editCondProductIDValue.value}`;
+                await axios.post(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value
+                    }
+                });
+                fetchConditions();
+                showEditProductCondDialog.value = false;
+                rowIndex.value = -1;
+                editCondProductIDValue.value = null;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Product id changed', life: 3000 });
+            } catch (error) {
+                console.error('Error setting condition product ID:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+            }
+        }
+
+        const editConditionTotalSum = async () => {
+            try {
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setTotalSum/${rowIndex.value}/${editTotalSumValue.value}`;
+                await axios.post(url, null, {
+                    params: {
+                        username: username.value,
+                        token: token.value
+                    }
+                });
+                fetchConditions();
+                showEditTotalSumDialog.value = false;
+                rowIndex.value = -1;
+                editTotalSumValue.value = null;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Total sum changed', life: 3000 });
+            } catch (error) {
+                console.error('Error setting condition total sum:', error);
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
+            }
+        }
+
+        const deleteDiscount = async () => {
+            try {
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/removeDiscount/${rowIndex.value}`;
                 await axios.delete(url, {
                     params: {
                         username: username.value,
@@ -793,246 +1180,17 @@ export default {
                 });
                 fetchDiscounts();
                 showDeleteDiscountDialog.value = false;
+                rowIndex.value = -1;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Discount deleted', life: 3000 });
             } catch (error) {
                 console.error('Error deleting discount:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
             }
         }
 
-        const formattedDiscounts = () => {
-            return discounts.value.map((discount, index) => ({
-                label: discount.details,
-                value: index
-            }));
-        }
-
-        const formattedConditions = () => {
-            return conditions.value.map((condition, index) => ({
-                label: condition.details,
-                value: index
-            }));
-        }
-
-        const editDiscountPercent = async (index, editPercentValue) => {
+        const deleteCondition = async () => {
             try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setPercentDiscount/${index}/${editPercentValue}`;
-                await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value
-                    }
-                });
-                fetchDiscounts();
-                fetchConditions();
-            } catch (error) {
-                console.error('Error setting discount percent:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-            }
-        }
-
-        const editCategoryDiscountCategory = async (index, editCategoryValue) => {
-            try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setCategoryDiscount/${index}/${editCategoryValue}`;
-                await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value
-                    }
-                });
-                fetchDiscounts();
-                fetchConditions();
-            } catch (error) {
-                console.error('Error setting discount category:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-            }
-        }
-
-        const editProductDiscountID = async (index, editProductDiscountID) => {
-            try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setProductIdDiscount/${index}/${editProductDiscountID}`;
-                await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value
-                    }
-                });
-                fetchDiscounts();
-                fetchConditions();
-            } catch (error) {
-                console.error('Error setting discount product:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-            }
-        }
-
-        const editFirstDiscount = async (index, editFirstDiscountIndex) => {
-            try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setFirstDiscount/${index}/${editFirstDiscountIndex}`;
-                await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value
-                    }
-                });
-                fetchDiscounts();
-                fetchConditions();
-            } catch (error) {
-                console.error('Error setting first discount:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-            }
-        }
-
-        const editSecondDiscount = async (index, editSecondDiscountIndex) => {
-            try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setSecondDiscount/${index}/${editSecondDiscountIndex}`;
-                await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value
-                    }
-                });
-                fetchDiscounts();
-                fetchConditions();
-            } catch (error) {
-                console.error('Error setting second discount:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-            }
-        }
-
-        const editFirstCondition = async (index, editFirstConditionIndex) => {
-            try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setFirstCondition/${index}/${editFirstConditionIndex}`;
-                await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value
-                    }
-                });
-                fetchDiscounts();
-                fetchConditions();
-            } catch (error) {
-                console.error('Error setting first condition:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-            }
-        }
-
-        const editSecondCondition = async (index, editSecondConditionIndex) => {
-            try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setSecondCondition/${index}/${editSecondConditionIndex}`;
-                await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value
-                    }
-                });
-                fetchDiscounts();
-                fetchConditions();
-            } catch (error) {
-                console.error('Error setting second condition:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-            }
-        }
-
-        const editThenDiscount = async (index, editThenDiscountIndex) => {
-            try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setThenDiscount/${index}/${editThenDiscountIndex}`;
-                await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value
-                    }
-                });
-                fetchDiscounts();
-                fetchConditions();
-            } catch (error) {
-                console.error('Error setting then discount:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-            }
-        }
-
-        const editDeciderCondition = async (index, editDeciderConditionIndex) => {
-            try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setDeciderDiscount/${index}/${editDeciderConditionIndex}`;
-                await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value
-                    }
-                });
-                fetchDiscounts();
-                fetchConditions();
-            } catch (error) {
-                console.error('Error setting decider condition:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-            }
-        }
-
-        const editConditionCount = async (index, editCountValue) => {
-            try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setCountCondition/${index}/${editCountValue}`;
-                await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value
-                    }
-                });
-                fetchConditions();
-            } catch (error) {
-                console.error('Error setting condition count:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-            }
-        }
-
-        const editConditionCategory = async (index, editCondCategoryValue) => {
-            try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setCategoryCondition/${index}/${editCondCategoryValue}`;
-                await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value
-                    }
-                });
-                fetchConditions();
-            } catch (error) {
-                console.error('Error setting condition category:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-            }
-        }
-
-        const editConditionProductID = async (index, editCondProductIDValue) => {
-            try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setProductIdDiscount/${index}/${editCondProductIDValue}`;
-                await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value
-                    }
-                });
-                fetchConditions();
-            } catch (error) {
-                console.error('Error setting condition product ID:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-            }
-        }
-
-        const editConditionTotalSum = async (index, editTotalSumValue) => {
-            try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/setTotalSum/${index}/${editTotalSumValue}`;
-                await axios.post(url, null, {
-                    params: {
-                        username: username.value,
-                        token: token.value
-                    }
-                });
-                fetchConditions();
-            } catch (error) {
-                console.error('Error setting condition total sum:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-            }
-        }
-
-        const deleteCondition = async (index) => {
-            try {
-                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/removeCondition/${index}`;
+                const url = `http://localhost:8082/api/trading/store/${storeName}/discounts/removeCondition/${rowIndex.value}`;
                 await axios.delete(url, {
                     params: {
                         username: username.value,
@@ -1040,11 +1198,89 @@ export default {
                     }
                 });
                 fetchConditions();
+                showDeleteCondDialog.value = false;
+                rowIndex.value = -1;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Condition deleted', life: 3000 });
             } catch (error) {
                 console.error('Error deleting condition:', error);
-                toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
             }
         }
+
+        const openEditPercentDialog = (index) => {
+            rowIndex.value = index;
+            showEditPercentDialog.value = true;
+        }
+
+        const openEditCategoryDialog = (index) => {
+            rowIndex.value = index;
+            showEditCategoryDialog.value = true;
+        }
+
+        const openEditProductDialog = (index) => {
+            rowIndex.value = index;
+            showEditProductDialog.value = true;
+        }
+
+        const openEditFirstDiscountDialog = (index) => {
+            rowIndex.value = index;
+            showEditFirstDiscountDialog.value = true;
+        }
+
+        const openEditSecondDiscountDialog = (index) => {
+            rowIndex.value = index;
+            showEditSecondDiscountDialog.value = true;
+        }
+
+        const openEditFirstConditionDialog = (index) => {
+            rowIndex.value = index;
+            showEditFirstConditionDialog.value = true;
+        }
+
+        const openEditThenDiscountDialog = (index) => {
+            rowIndex.value = index;
+            showEditThenDiscountDialog.value = true;
+        }
+
+        const openEditSecondConditionDialog = (index) => {
+            rowIndex.value = index;
+            showEditSecondConditionDialog.value = true;
+        }
+
+        const openEditDeciderConditionDialog = (index) => {
+            rowIndex.value = index;
+            showEditDeciderConditionDialog.value = true;
+        }
+
+        const openDeleteDialog = (index) => {
+            rowIndex.value = index;
+            showDeleteDiscountDialog.value = true;
+        }
+
+        const openEditCountDialog = (index) => {
+            rowIndex.value = index;
+            showEditCountDialog.value = true;
+        };
+
+        const openEditCategoryCondDialog = (index) => {
+            rowIndex.value = index;
+            showEditCategoryCondDialog.value = true;
+        };
+
+        const openEditProductCondDialog = (index) => {
+            rowIndex.value = index;
+            showEditProductCondDialog.value = true;
+        };
+
+        const openEditTotalSumDialog = (index) => {
+            rowIndex.value = index;
+            showEditTotalSumDialog.value = true;
+        };
+
+        const openDeleteCondDialog = (index) => {
+            rowIndex.value = index;
+            showDeleteCondDialog.value = true;
+        };
 
         return {
             username,
@@ -1098,9 +1334,36 @@ export default {
             editConditionProductID,
             editConditionTotalSum,
             deleteCondition,
+            openEditPercentDialog,
+            openEditCategoryDialog,
+            openEditProductDialog,
+            openEditFirstDiscountDialog,
+            openEditSecondDiscountDialog,
+            openEditFirstConditionDialog,
+            openEditThenDiscountDialog,
+            openEditSecondConditionDialog,
+            openEditDeciderConditionDialog,
+            openDeleteDialog,
+            openEditCountDialog,
+            openEditCategoryCondDialog,
+            openEditProductCondDialog,
+            openEditTotalSumDialog,
+            openDeleteCondDialog,
+            editPercentValue,
+            editCategoryValue,
+            editProductIDValue,
+            editFirstDiscountIndex,
+            editSecondDiscountIndex,
+            editFirstConditionIndex,
+            editSecondConditionIndex,
+            editThenDiscountIndex,
+            editDeciderConditionIndex,
+            editCountValue,
+            editCondCategoryValue,
+            editCondProductIDValue,
+            editTotalSumValue,
         };
     },
-    methods: {}
 };
 </script>
 
@@ -1113,9 +1376,24 @@ export default {
     margin-bottom: 1em;
 }
 
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
 .button-container button {
-    margin-right: 12px;
     margin-bottom: 12px;
+}
+
+.input-container {
+    margin-bottom: 10px;
+}
+
+.label {
+    display: block;
 }
 
 .action-buttons button {
@@ -1125,9 +1403,28 @@ export default {
 
 .p-datatable {
     margin-inline: 4rem;
+    margin-top: 1rem;
+    margin-bottom: 4rem;
+    justify-content: center;
 }
 
-.p-datatable {
+.dialog-header {
+    display: flex;
     justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    width: 100%;
+    text-align: center;
+}
+
+.p-dropdown-panel {
+    max-width: 100% !important;
+    width: auto !important;
+    box-sizing: border-box;
+}
+
+/* Ensure the dropdown panel does not overflow the dialog */
+.p-dialog .p-dropdown {
+    width: 100%;
 }
 </style>

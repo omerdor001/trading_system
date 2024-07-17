@@ -12,5 +12,7 @@ public interface ConditionInterface {
 
     void setSum(double requiredSum);
 
+    void setProductId(int productId);
+
     String getInfo();
 }

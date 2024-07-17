@@ -23,6 +23,9 @@ public class Bid {
     @Column(nullable = false)
     private double price;
 
+    @Column(nullable = false)
+    private String productName;
+
     @ElementCollection
     @CollectionTable(name = "bid_approved_by", joinColumns = @JoinColumn(name = "bid_id"))
     @Column(name = "approved_by")
@@ -31,12 +34,64 @@ public class Bid {
     @Column(nullable = false)
     private boolean allOwnersApproved;
 
-    public Bid(String userName, int productID, double price) {
+    @Getter
+    @Column(nullable = false)
+    private String address;
+
+    @Getter
+    @Column(nullable = false)
+    private String amount;
+
+    @Getter
+    @Column(nullable = false)
+    private String currency;
+
+    @Getter
+    @Column(nullable = false)
+    private String cardNumber;
+
+    @Getter
+    @Column(nullable = false)
+    private String month;
+
+    @Getter
+    @Column(nullable = false)
+    private String year;
+
+    @Getter
+    @Column(nullable = false)
+    private String holder;
+
+    @Getter
+    @Column(nullable = false)
+    private String ccv;
+
+    @Getter
+    @Column(nullable = false)
+    private String holderId;
+
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private boolean customerApproved;
+
+    public Bid(String userName, int productID, double price, String productName, String address, String amount, String currency,String cardNumber, String month,String year,String holder,String ccv,String id) {
         this.userName = userName;
         this.productID = productID;
         this.price = price;
+        this.productName = productName;
         approvedBy = new LinkedList<>();
         allOwnersApproved = false;
+        this.address = address;
+        this.amount = amount;
+        this.currency = currency;
+        this.cardNumber = cardNumber;
+        this.month = month;
+        this.year = year;
+        this.holder = holder;
+        this.ccv = ccv;
+        this.holderId = id;
+        this.customerApproved = true;
     }
 
     public Bid() {
@@ -76,7 +131,9 @@ public class Bid {
         sb.append("  \"userName\" : \"").append(userName).append("\",\n");
         sb.append("  \"productID\" : ").append(productID).append(",\n");
         sb.append("  \"price\" : ").append(price).append(",\n");
+        sb.append("  \"productName\" : ").append(productName).append(",\n");
         sb.append("  \"allOwnersApproved\" : ").append(allOwnersApproved).append(",\n");
+        sb.append("  \"customerApproved\" : ").append(customerApproved).append(",\n");
         sb.append("  \"approvedBy\" : [");
 
         for (int i = 0; i < approvedBy.size(); i++) {
