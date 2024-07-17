@@ -191,7 +191,7 @@ public class PlaceBidAcceptanceTests {
 
         Assertions.assertNotEquals("",tradingSystem.getAllHistoryPurchases(ownerUserName, ownerToken, storeName).getBody());
         Assertions.assertEquals("{}",tradingSystem.getMyBids(regularUserName,regularUserToken).getBody());
-        Assertions.assertEquals("{}",tradingSystem.getStoreBids(ownerUserName,ownerToken,storeName).getBody());
+        Assertions.assertEquals("[]",tradingSystem.getStoreBids(ownerUserName,ownerToken,storeName).getBody());
 
 
 
@@ -242,7 +242,7 @@ public class PlaceBidAcceptanceTests {
         Assertions.assertNotEquals("",tradingSystem.getAllHistoryPurchases(ownerUserName, ownerToken, storeName).getBody());
 
         Assertions.assertEquals("{}",tradingSystem.getMyBids(regularUserName,regularUserToken).getBody());
-        Assertions.assertEquals("{}",tradingSystem.getStoreBids(ownerUserName,ownerToken,storeName).getBody());
+        Assertions.assertEquals("[]",tradingSystem.getStoreBids(ownerUserName,ownerToken,storeName).getBody());
 
     }
 
@@ -284,7 +284,7 @@ public class PlaceBidAcceptanceTests {
 
 
         Assertions.assertEquals("{}",tradingSystem.getMyBids(regularUserName,regularUserToken).getBody());
-        Assertions.assertEquals("{}",tradingSystem.getStoreBids(ownerUserName,ownerToken,storeName).getBody());
+        Assertions.assertEquals("[]",tradingSystem.getStoreBids(ownerUserName,ownerToken,storeName).getBody());
 
     }
 
