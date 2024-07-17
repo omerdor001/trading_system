@@ -54,6 +54,9 @@ public PaymentService getPaymentService() {
     if (paymentServiceName == PaymentServiceEnum.wsep){
         paymentService = new WsepClient();
     }
+    else if (paymentServiceName == PaymentServiceEnum.proxy){
+        paymentService = new PaymentServiceProxy();
+    }
     else {
         paymentService = new PaymentServiceProxy();
     }
