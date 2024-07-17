@@ -1,7 +1,5 @@
 package com.example.trading_system.domain.users;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
@@ -36,5 +34,7 @@ public interface UserRepository {
 
     void saveUsers(List<User> users);
 
-    Registered getRegistered(String userName) throws Exception;
+    void saveCart(User user);
+
+    Registered getRegistered(String userName);
 }

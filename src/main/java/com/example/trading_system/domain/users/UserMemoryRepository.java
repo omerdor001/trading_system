@@ -8,12 +8,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-@Service
+//@Service
 public class UserMemoryRepository implements UserRepository {
     private static UserMemoryRepository instance = null;
     private HashMap<String, User> users;
 
-    @Autowired
+    //@Autowired
     private UserMemoryRepository() {
         users = new HashMap<>();
     }
@@ -36,15 +36,6 @@ public class UserMemoryRepository implements UserRepository {
     public User getUser(String username) {
         return users.get(username);
     }
-
-    @Override
-    public Registered getRegistered(String userName) throws Exception{
-        if (userName.charAt(0) != 'r')
-            throw new Exception("User is not registerd");
-        else
-            return (Registered) users.get(userName);
-    }
-
 
     @Override
     public boolean isExist(String username) {
@@ -109,5 +100,17 @@ public class UserMemoryRepository implements UserRepository {
             if (username.startsWith("r")) return false;
         }
         return true;
+    }
+
+    @Override
+    public void saveCart(User user) {
+    }
+
+    @Override
+    public Registered getRegistered(String userName){
+        if (userName.charAt(0) != 'r')
+            throw new RuntimeException("User is not registerd");
+        else
+            return (Registered) users.get(userName);
     }
 }

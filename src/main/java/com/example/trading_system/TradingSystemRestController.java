@@ -13,9 +13,12 @@ package com.example.trading_system;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +29,14 @@ import java.time.LocalDateTime;
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/api/trading")
+@Transactional
 public class TradingSystemRestController {
 
     private final TradingSystemImp tradingSystem;
     private final StoreRepository storeRepository;
 
     @Autowired
-    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository,StoreRepository storeRepository) {
+    public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
         tradingSystem = TradingSystemImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
     }
@@ -78,7 +82,7 @@ public class TradingSystemRestController {
         return tradingSystem.openStoreExist(username, token, storeName);
     }
 
-    @PostMapping("/create-store")
+    @PutMapping("/create-store")
     public ResponseEntity<String> openStore(@RequestParam String username,
                                             @RequestParam String token,
                                             @RequestParam String storeName,

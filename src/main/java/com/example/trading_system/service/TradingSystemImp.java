@@ -26,7 +26,8 @@ public class TradingSystemImp implements TradingSystem {
     public int counter_user = 0;
     private boolean systemOpen;
 
-    private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
+    private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender,
+                             UserRepository userRepository, StoreRepository storeRepository) {
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
         this.marketService = MarketServiceImp.getInstance(storeRepository);
@@ -153,9 +154,9 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (checkSystemClosed()) {
                 logger.warn("System is not open, entry forbidden");
-               return new ResponseEntity<>("System is not open, entry forbidden", HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>("System is not open, entry forbidden", HttpStatus.FORBIDDEN);
             }
-            logger.info("Trying enter to system as a visitor , with id : {}", counter_user);
+            logger.info("Trying to enter the system as a visitor, with id: {}", counter_user);
             String username = userService.enter(counter_user);
             counter_user++;
             String token = Security.generateToken(username);

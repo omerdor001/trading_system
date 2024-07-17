@@ -6,26 +6,30 @@ import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
+
 @Entity
 public class Registered extends User {
+
     @Column(nullable = false)
     private String encrypted_pass;
 
+    @Getter
     @Column(nullable = false)
     private LocalDate birthdate;
 
-    @Column(nullable = false)
+    @Column
     private boolean isAdmin;
 
-    @Column(nullable = false)
-    @Getter
+    @Column
     @Setter
     private boolean isLogged;
 
+    @Getter
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "registered_username", referencedColumnName = "username")
     private List<Role> roles;
@@ -33,17 +37,17 @@ public class Registered extends User {
     @OneToMany(mappedBy = "receiverUsername", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications;
 
-    @ElementCollection
-    @CollectionTable(name = "manager_suggestions", joinColumns = @JoinColumn(name = "registered_id"))
-    @MapKeyColumn(name = "store_name")
-    @Column(name = "suggestion_map")
-    private HashMap<String, HashMap<String,List<Boolean>>> managerSuggestions;
+    @Getter
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_manager_suggestions", referencedColumnName = "username")
+    private List<ManagerSuggestion> managerSuggestions = new ArrayList<>();
 
+    @Getter
     @ElementCollection
     @CollectionTable(name = "owner_suggestions", joinColumns = @JoinColumn(name = "registered_id"))
     @MapKeyColumn(name = "store_name")
     @Column(name = "owner_suggestion")
-    private HashMap<String, String> ownerSuggestions;
+    private Map<String, String> ownerSuggestions = new HashMap<>();
 
     public Registered(String userName, String encryption, LocalDate birthdate) {
         super(userName);
@@ -53,25 +57,22 @@ public class Registered extends User {
         this.isLogged = false;
         this.notifications = new LinkedList<>();
         this.roles = new ArrayList<>();
-        this.managerSuggestions = new HashMap<>();
+        this.managerSuggestions = new ArrayList<>();
         this.ownerSuggestions = new HashMap<>();
     }
 
     public Registered() {
-
     }
 
     public void openStore(String storeName) {
-        addOwnerRole(username, storeName);
-
+        addOwnerRole(getUsername(), storeName);
     }
 
     public void addOwnerRole(String appoint, String storeName) {
-        try{
-            if(getRoleByStoreId(storeName) != null)
-                removeManagerRole(storeName);
-        } catch (Exception ignored){}
-        finally {
+        try {
+            if (getRoleByStoreId(storeName) != null) removeManagerRole(storeName);
+        } catch (Exception ignored) {
+        } finally {
             Role owner = new Role(storeName, appoint);
             owner.setRoleState(new Owner(owner));
             getRoles().add(owner);
@@ -130,13 +131,6 @@ public class Registered extends User {
         this.notifications.clear();
     }
 
-    public HashMap<String, String> getOwnerSuggestions() {
-        return ownerSuggestions;
-    }
-
-    public HashMap<String, HashMap<String, List<Boolean>>> getManagerSuggestions() {
-        return managerSuggestions;
-    }
 
     @Override
     public void receiveDelayedNotification(Notification notification) {
@@ -196,79 +190,70 @@ public class Registered extends User {
         }
     }
 
-    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
-        HashMap<String, List<Boolean>> permissions = new HashMap<>();
-        permissions.put(appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids));
-        managerSuggestions.put(store_name_id, permissions);
+    public void addWaitingAppoint_Manager(String store_name_id, String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
+        ManagerSuggestion managerSuggestion = new ManagerSuggestion(store_name_id + ":" + appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids));
+        managerSuggestions.add(managerSuggestion);
     }
 
-    public boolean isWatch(String storeName){
-        if (isOwner(storeName))
-            return true;
-        else if(isManager(storeName)){
+    public boolean isWatch(String storeName) {
+        if (isOwner(storeName)) return true;
+        else if (isManager(storeName)) {
             return getRoleByStoreId(storeName).isWatch();
-        }
-        else return false;
+        } else return false;
     }
 
-    public boolean isEditSupply(String storeName){
-        if (isOwner(storeName))
-            return true;
-        else if(isManager(storeName)){
+    public boolean isEditSupply(String storeName) {
+        if (isOwner(storeName)) return true;
+        else if (isManager(storeName)) {
             return getRoleByStoreId(storeName).isEditSupply();
-        }
-        else return false;
+        } else return false;
     }
 
-    public boolean isEditPurchasePolicy(String storeName){
-        if (isOwner(storeName))
-            return true;
-        else if(isManager(storeName)){
+    public boolean isEditPurchasePolicy(String storeName) {
+        if (isOwner(storeName)) return true;
+        else if (isManager(storeName)) {
             return getRoleByStoreId(storeName).isEditPurchasePolicy();
-        }
-        else return false;
+        } else return false;
     }
 
-    public boolean isEditDiscountPolicy(String storeName){
-        if (isOwner(storeName))
-            return true;
-        else if(isManager(storeName)){
+    public boolean isEditDiscountPolicy(String storeName) {
+        if (isOwner(storeName)) return true;
+        else if (isManager(storeName)) {
             return getRoleByStoreId(storeName).isEditDiscountPolicy();
-        }
-        else return false;
+        } else return false;
     }
 
     @Override
     public boolean isAcceptBids(String storeName) {
-        if (isOwner(storeName))
-            return true;
-        else if(isManager(storeName)){
+        if (isOwner(storeName)) return true;
+        else if (isManager(storeName)) {
             return getRoleByStoreId(storeName).isAcceptBids();
+        } else return false;
+    }
+
+
+    public void addWaitingAppoint_Owner(String storeName, String appointee) {
+        ownerSuggestions.put(storeName, appointee);
+    }
+
+    public List<Boolean> removeWaitingAppoint_Manager(String suggestionKey) {
+        Iterator<ManagerSuggestion> iterator = managerSuggestions.iterator();
+        System.out.println("Attempting to remove waiting appointment for: " + suggestionKey);
+        while (iterator.hasNext()) {
+            ManagerSuggestion suggestion = iterator.next();
+            if (suggestion.getSuggestionKey().equals(suggestionKey)) {
+                System.out.println("Found and removing suggestion: " + suggestion.getSuggestionKey());
+                iterator.remove();
+                return suggestion.getSuggestionValues();
+            }
         }
-        else return false;
+        System.out.println("No suggestion found for: " + suggestionKey);
+        return null;
     }
 
-
-    public void addWaitingAppoint_Owner(String storeName,String appointee) {
-        ownerSuggestions.put(storeName,appointee);
-    }
-
-    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id, String appointee) throws IllegalAccessException {
-        HashMap<String,List<Boolean>> removed= managerSuggestions.remove(store_name_id);
-        if (removed == null) throw new IllegalAccessException("No one suggest this user to be a manager");
-        return removed.get(appointee);
-    }
 
     public boolean removeWaitingAppoint_Owner(String storeName) {
-        return ownerSuggestions.remove(storeName)!=null;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public LocalDate getBirthdate() {
-        return birthdate;
+        return ownerSuggestions.remove(storeName) != null;
     }
 
     @Override
@@ -278,10 +263,10 @@ public class Registered extends User {
     }
 
     @Override
-    public String getStoresIOwn(){
-        List stores=new ArrayList();
-        for (Role role:roles){
-            if(role.getRoleState().isOwner()){
+    public String getStoresIOwn() {
+        List<String> stores = new ArrayList<>();
+        for (Role role : roles) {
+            if (role.getRoleState().isOwner()) {
                 stores.add(role.getStoreId());
             }
         }
@@ -289,10 +274,10 @@ public class Registered extends User {
     }
 
     @Override
-    public String getStoresIManage(){
-        List stores=new ArrayList();
-        for (Role role:roles){
-            if(role.getRoleState().isManager()){
+    public String getStoresIManage() {
+        List<String> stores = new ArrayList<>();
+        for (Role role : roles) {
+            if (role.getRoleState().isManager()) {
                 stores.add(role.getStoreId());
             }
         }
@@ -301,22 +286,17 @@ public class Registered extends User {
 
 
     @Override
-    public Set<String> cancelOwnerShip(String storeName){
+    public Set<String> cancelOwnerShip(String storeName) {
         Set<Registered> usersAppointedByMe = getRoleByStoreId(storeName).getUsersAppointedByMe();
         Set<String> influencedUsers = new HashSet<>();
-        if(usersAppointedByMe.isEmpty())
-        {
+        if (usersAppointedByMe.isEmpty()) {
             removeOwnerRole(storeName);
             return influencedUsers;
-
         }
 
-        for(Registered registered : usersAppointedByMe) //check if they are managers or owners
-        {
-            if(registered.isOwner(storeName))
-                influencedUsers.addAll(registered.cancelOwnerShip(storeName));
-            else
-                registered.removeManagerRole(storeName);
+        for (User registered : usersAppointedByMe) {
+            if (registered.isOwner(storeName)) influencedUsers.addAll(registered.cancelOwnerShip(storeName));
+            else registered.removeManagerRole(storeName);
             influencedUsers.add("r" + registered.getUsername());
         }
         removeOwnerRole(storeName);

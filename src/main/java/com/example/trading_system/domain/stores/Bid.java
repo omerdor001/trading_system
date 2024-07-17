@@ -27,12 +27,15 @@ public class Bid {
     private String productName;
 
     @ElementCollection
-    @CollectionTable(name = "bid_approved_by", joinColumns = @JoinColumn(name = "bid_id"))
-    @Column(name = "approved_by")
+    @CollectionTable(name = "bid_approvals", joinColumns = @JoinColumn(name = "bid_id"))
+    @Column(name = "owner")
     private List<String> approvedBy = new LinkedList<>();
 
     @Column(nullable = false)
     private boolean allOwnersApproved;
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
 
     @Getter
     @Column(nullable = false)
@@ -95,9 +98,7 @@ public class Bid {
     }
 
     public Bid() {
-
     }
-
 
     public void setPrice(double price)
     {
@@ -116,10 +117,17 @@ public class Bid {
         return price;
     }
 
-    public LinkedList<String> getApprovedBy() {
-        return (LinkedList<String>) approvedBy;
+    public List<String> getApprovedBy() {
+        return approvedBy;
     }
 
+    public void setProductName(String productName){
+        this.productName = productName;
+    }
+
+    public String getProductName(){
+        return productName;
+    }
 
     public void approveBid(String userName){
         approvedBy.add(userName);

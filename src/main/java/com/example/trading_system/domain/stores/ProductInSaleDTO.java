@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 @Embeddable
 public class ProductInSaleDTO {
+    private int shoppingBag;
     private String storeId;
     private int id;
     private double price;
@@ -19,17 +20,21 @@ public class ProductInSaleDTO {
     public ProductInSaleDTO() {
     }
     public ProductInSaleDTO(String storeId, int id, double price, int quantity, int category) {
+        this.shoppingBag = -1;
         this.storeId = storeId;
         this.id = id;
         this.price = price;
         this.quantity = quantity;
         this.category = category;
-
     }
 
     public static ProductInSaleDTO fromJson(String json) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(json, ProductInSaleDTO.class);
+    }
+
+    public void setShoppingBag(int shoppingBag){
+        this.shoppingBag = shoppingBag;
     }
 
     public String getStoreId() {

@@ -10,11 +10,6 @@ import java.util.Collection;
 @DiscriminatorValue("PRODUCT_COUNT")
 public class ProductCountCondition extends Condition {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long id;
-
     @Column(name = "product_id")
     private int productId;
 
@@ -67,11 +62,4 @@ public class ProductCountCondition extends Condition {
         return "{ \"type\": \"productCount\", \"productId\": " + productId + ", \"count\": " + count + " }";
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
 }

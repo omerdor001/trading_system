@@ -10,10 +10,7 @@ import java.util.Collection;
 @DiscriminatorValue("OR")
 public class OrDiscount extends DiscountPolicy {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long id;
+
 
     @OneToOne(cascade = CascadeType.ALL)
     private Condition first;
@@ -104,7 +101,4 @@ public class OrDiscount extends DiscountPolicy {
         return "{ \"type\": \"or\", \"first\": " + firstInfo + ", \"second\": " + secondInfo + ", \"then\": " + thenInfo + " }";
     }
 
-    public Long getId() {
-        return id;
-    }
 }

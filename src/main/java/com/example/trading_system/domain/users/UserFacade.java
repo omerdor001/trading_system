@@ -3,7 +3,6 @@ package com.example.trading_system.domain.users;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
