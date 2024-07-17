@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Repository
+@Transactional
 public class UserDatabaseRepository implements UserRepository {
 
     private static UserDatabaseRepository instance = null;
@@ -114,7 +115,6 @@ public class UserDatabaseRepository implements UserRepository {
     }
 
     @Override
-    @Transactional
 
     public void addRegistered(String userName, String encryption, LocalDate birthdate) {
         Registered user = new Registered(userName.substring(1), encryption, birthdate);
@@ -122,7 +122,6 @@ public class UserDatabaseRepository implements UserRepository {
     }
 
     @Override
-    @Transactional
 
     public void saveUser(User user) {
         if (user instanceof Registered) {
