@@ -23,6 +23,8 @@ public class Bid {
     @Column(nullable = false)
     private double price;
 
+    @Column(nullable = false)
+    private String productName;
 
     @ElementCollection
     @CollectionTable(name = "bid_approvals", joinColumns = @JoinColumn(name = "bid_id"))
@@ -76,10 +78,11 @@ public class Bid {
     @Column(nullable = false)
     private boolean customerApproved;
 
-    public Bid(String userName, int productID, double price,String address, String amount, String currency,String cardNumber, String month,String year,String holder,String ccv,String id) {
+    public Bid(String userName, int productID, double price, String productName, String address, String amount, String currency,String cardNumber, String month,String year,String holder,String ccv,String id) {
         this.userName = userName;
         this.productID = productID;
         this.price = price;
+        this.productName = productName;
         approvedBy = new LinkedList<>();
         allOwnersApproved = false;
         this.address = address;
@@ -95,9 +98,7 @@ public class Bid {
     }
 
     public Bid() {
-
     }
-
 
     public void setPrice(double price)
     {
@@ -120,6 +121,13 @@ public class Bid {
         return approvedBy;
     }
 
+    public void setProductName(String productName){
+        this.productName = productName;
+    }
+
+    public String getProductName(){
+        return productName;
+    }
 
     public void approveBid(String userName){
         approvedBy.add(userName);
@@ -131,6 +139,7 @@ public class Bid {
         sb.append("  \"userName\" : \"").append(userName).append("\",\n");
         sb.append("  \"productID\" : ").append(productID).append(",\n");
         sb.append("  \"price\" : ").append(price).append(",\n");
+        sb.append("  \"productName\" : ").append(productName).append(",\n");
         sb.append("  \"allOwnersApproved\" : ").append(allOwnersApproved).append(",\n");
         sb.append("  \"customerApproved\" : ").append(customerApproved).append(",\n");
         sb.append("  \"approvedBy\" : [");

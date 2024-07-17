@@ -289,6 +289,8 @@ public interface TradingSystem {
 
     ResponseEntity<String> approveCounterOffer(String userName, String token, String storeName, int productID, double price);
 
+    ResponseEntity<String> rejectCounterOffer(String userName, String token, String storeName, int productID);
+
     ResponseEntity<String> getStoreBids(String userName, String token, String storeName);
 
     ResponseEntity<String> getMyBids(String userName, String token);

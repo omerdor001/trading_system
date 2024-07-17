@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -68,6 +69,7 @@ public class UserDatabaseRepository implements UserRepository {
         }
         return false;
     }
+
     public void saveCart(User user) {
         entityManager.merge(user.getCart());
     }
@@ -123,7 +125,6 @@ public class UserDatabaseRepository implements UserRepository {
 
     @Override
     @Transactional
-
     public void saveUser(User user) {
         if (user instanceof Registered) {
             Registered registeredUser = (Registered) user;
@@ -138,6 +139,13 @@ public class UserDatabaseRepository implements UserRepository {
             entityManager.persist(registeredUser);
         }
     }
+
+    @Override
+    public void saveUsers(List<User> users) {
+        for (User user : users)
+            saveUser(user);
+    }
+
     @Override
     public boolean checkIfRegistersEmpty() {
         Long count = entityManager.createQuery("SELECT COUNT(u) FROM Registered u", Long.class).getSingleResult();

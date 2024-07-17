@@ -1,7 +1,6 @@
 package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.Message;
-import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 
 import lombok.Getter;
@@ -10,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.Map;
 
 @MappedSuperclass
@@ -241,5 +240,9 @@ public abstract class User {
 
     public void setTimerCancelled(boolean timerCancelled) {
         isTimerCancelled = timerCancelled;
+    }
+
+    public Set<String> cancelOwnerShip(String storeName){
+        throw new RuntimeException("Only registered users can be owners.");
     }
 }

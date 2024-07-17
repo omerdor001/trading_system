@@ -496,6 +496,12 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public void rejectCounterOffer(String userName, String storeName, int productID) throws Exception{
+        marketFacade.rejectCounterOffer(userName, storeName, productID);
+    }
+
+
+    @Override
     public String getStoreBids(String userName, String storeName) throws IllegalAccessException, IllegalArgumentException{
         return marketFacade.getStoreBids(userName, storeName);
     }

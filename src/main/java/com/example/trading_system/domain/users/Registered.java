@@ -63,13 +63,19 @@ public class Registered extends User {
     }
 
     public void openStore(String storeName) {
-        addOwnerRole(this.getUsername(), storeName);
+        addOwnerRole(getUsername(), storeName);
     }
 
     public void addOwnerRole(String appoint, String storeName) {
-        Role owner = new Role(storeName, appoint);
-        owner.setRoleState(new Owner(owner));
-        getRoles().add(owner);
+        try{
+            if(getRoleByStoreId(storeName) != null)
+                removeManagerRole(storeName);
+        } catch (Exception ignored){}
+        finally {
+            Role owner = new Role(storeName, appoint);
+            owner.setRoleState(new Owner(owner));
+            getRoles().add(owner);
+        }
     }
 
     @Override
@@ -281,5 +287,29 @@ public class Registered extends User {
             }
         }
         return stores.toString();
+    }
+
+
+    @Override
+    public Set<String> cancelOwnerShip(String storeName){
+        Set<Registered> usersAppointedByMe = getRoleByStoreId(storeName).getUsersAppointedByMe();
+        Set<String> influencedUsers = new HashSet<>();
+        if(usersAppointedByMe.isEmpty())
+        {
+            removeOwnerRole(storeName);
+            return influencedUsers;
+
+        }
+
+        for(Registered registered : usersAppointedByMe) //check if they are managers or owners
+        {
+            if(registered.isOwner(storeName))
+                influencedUsers.addAll(registered.cancelOwnerShip(storeName));
+            else
+                registered.removeManagerRole(storeName);
+            influencedUsers.add("r" + registered.getUsername());
+        }
+        removeOwnerRole(storeName);
+        return influencedUsers;
     }
 }

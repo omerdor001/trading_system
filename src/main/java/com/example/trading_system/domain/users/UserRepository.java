@@ -1,10 +1,9 @@
 package com.example.trading_system.domain.users;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public interface UserRepository {
     void deleteInstance();
@@ -32,6 +31,10 @@ public interface UserRepository {
     void saveUser(User user);
 
     boolean checkIfRegistersEmpty();
+
+    void saveUsers(List<User> users);
+
+    Registered getRegistered(String userName) throws Exception;
 
     void saveCart(User user);
 }

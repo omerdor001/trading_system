@@ -2089,6 +2089,22 @@ public class TradingSystemImp implements TradingSystem {
         }
     }
 
+
+    @Override
+    public ResponseEntity<String> rejectCounterOffer(String userName, String token, String storeName, int productID) {
+        logger.info("{} is trying to reject a counter offer for his bid for product {} in store {}", userName, productID, storeName);
+        try {
+            if (checkSystemClosed()) return systemClosedResponse();
+            if (checkInvalidToken(userName, token)) return invalidTokenResponse();
+            marketService.rejectCounterOffer(userName, storeName, productID);
+            logger.info("Successfully rejected counter offer by {} for product {} in store {}", userName, productID, storeName);
+            return new ResponseEntity<>("Approved counter offer successfully.", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while {} trying to reject a counter offer for bid for product {} in store {}", userName, productID, storeName);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @Override
     public ResponseEntity<String> getStoreBids(String userName, String token, String storeName) {
         logger.info("{} is trying to get all bids from store {}", userName, storeName);

@@ -45,9 +45,9 @@ public interface UserService {
 
     void suggestManage(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException;
 
-    void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
+    void approveOwner(String newOwner, String storeName, String appoint) throws Exception;
 
-    void approveManage(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException;
+    void approveManage(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws Exception;
 
     void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException;
 

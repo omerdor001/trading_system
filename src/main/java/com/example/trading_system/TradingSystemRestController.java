@@ -1017,6 +1017,16 @@ public class TradingSystemRestController {
         return tradingSystem.approveCounterOffer(userName, token, storeName, productID, price);
     }
 
+
+    @PostMapping("/store/reject-counter-offer")
+    public ResponseEntity<String> rejectCounterOffer(@RequestParam String userName,
+                                                      @RequestParam String token,
+                                                      @RequestParam String storeName,
+                                                      @RequestParam int productID
+                                                      ) {
+        return tradingSystem.rejectCounterOffer(userName, token, storeName, productID);
+    }
+
     @GetMapping("/store/get-store-bids")
     public ResponseEntity<String> getStoreBids(@RequestParam String userName,
                                                @RequestParam String token,
