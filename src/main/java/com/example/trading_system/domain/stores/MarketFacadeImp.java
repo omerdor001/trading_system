@@ -255,6 +255,33 @@ public class MarketFacadeImp implements MarketFacade {
         return storeRepository.getStore(storeName).getPurchaseHistoryJSONFormat();
     }
 
+
+    public String getPurchaseHistoryForCustomerJSONFormat(String userName) throws IllegalAccessException {
+        if(!userFacade.isUserExist(userName)){
+            throw new IllegalAccessException("Username does not exist");
+        }
+        List<Map<String, Object>> allProducts = new ArrayList<>();
+        for(Store store : storeRepository.getAllStoresByStores()){
+            List<Purchase> purchases = store.getSalesHistory().getPurchases();
+            for(Purchase purchase : purchases){
+                List<ProductInSaleDTO> productList = purchase.getProductInSaleList();
+                for(ProductInSaleDTO product : productList){
+                    if(Objects.equals(purchase.getCustomerUsername(), userName)) {
+                        Map<String, Object> productMap = getStringObjectMap(store, purchase, product);
+                        allProducts.add(productMap);
+                    }
+                }
+            }
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(allProducts);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Error converting purchase history to JSON";
+        }
+    }
+
     @Override
     public String getPurchaseHistoryJSONFormat(String userName) throws IllegalAccessException {
         if(!userFacade.isUserExist(userName)){
@@ -266,8 +293,10 @@ public class MarketFacadeImp implements MarketFacade {
             for(Purchase purchase : purchases){
                 List<ProductInSaleDTO> productList = purchase.getProductInSaleList();
                 for(ProductInSaleDTO product : productList){
-                    Map<String, Object> productMap = getStringObjectMap(store, purchase, product);
-                    allProducts.add(productMap);
+                    if(purchase.getCustomerUsername() == userName) {
+                        Map<String, Object> productMap = getStringObjectMap(store, purchase, product);
+                        allProducts.add(productMap);
+                    }
                 }
             }
         }
@@ -861,22 +890,30 @@ public class MarketFacadeImp implements MarketFacade {
     }
 
     @Override
-    public String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) throws IllegalAccessException {
-        if (!storeRepository.isExist(storeName)) {
-            throw new IllegalArgumentException("Store must exist");
+    public String getHistoryPurchasesByCustomer(String userName) throws IllegalAccessException {
+        if(!userFacade.isUserExist(userName)){
+            throw new IllegalAccessException("Username does not exist");
         }
-//        Store store = storeRepository.getStore(storeName);
-        if (!userFacade.isUserExist(userName)) {
-            throw new IllegalArgumentException("User must exist");
+        List<Map<String, Object>> allProducts = new ArrayList<>();
+        for(Store store : storeRepository.getAllStoresByStores()){
+            List<Purchase> purchases = store.getSalesHistory().getPurchases();
+            for(Purchase purchase : purchases){
+                List<ProductInSaleDTO> productList = purchase.getProductInSaleList();
+                for(ProductInSaleDTO product : productList){
+                    if(Objects.equals(purchase.getCustomerUsername(), userName)) {
+                        Map<String, Object> productMap = getStringObjectMap(store, purchase, product);
+                        allProducts.add(productMap);
+                    }
+                }
+            }
         }
-        if (userFacade.isSuspended(userName)) {
-            throw new RuntimeException("User is suspended from the system");
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(allProducts);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Error converting purchase history to JSON";
         }
-        if (!userFacade.isUserExist(customerUserName)) {
-            throw new IllegalArgumentException("Customer must exist");
-        }
-        Store store = storeRepository.getStore(storeName);
-        return store.getHistoryPurchasesByCustomer(customerUserName).stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
     }
 
     @Override

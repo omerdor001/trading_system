@@ -1,9 +1,9 @@
 <template>
   <div>
-    <SiteHeader :isLoggedIn="isLoggedIn" :username="displayName" />
+    <SiteHeader :isLoggedIn="true" :username="displayName" />
     <div class="main-content">
       <h2>Purchase History for {{ displayName }}</h2>
-      <PrimeDataTable :value="processedProducts" class="products-table">
+      <PrimeDataTable :value="filteredProducts" class="products-table">
         <PrimeColumn field="productId" header="Product ID" />
         <PrimeColumn field="price" header="Price" />
         <PrimeColumn field="quantity" header="Quantity" />
@@ -18,12 +18,12 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue';
+import {ref, onMounted, computed} from 'vue';
 import axios from 'axios';
 import PrimeDataTable from 'primevue/datatable';
 import PrimeColumn from 'primevue/column';
 import SiteHeader from '@/components/SiteHeader.vue';
-import { useToast } from 'primevue/usetoast';
+import {useToast} from 'primevue/usetoast';
 
 export default {
   name: 'PurchaseHistoryForCustomer',
@@ -33,22 +33,17 @@ export default {
     SiteHeader,
   },
   setup() {
-    const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
-    const userName = ref(localStorage.getItem('username') || 'Guest');
+    const username = ref(localStorage.getItem('username') || '');
     const token = ref(localStorage.getItem('token') || '');
     const allProducts = ref([]);
     const toast = useToast();
-
-    const storeName = ref(''); // Add this line
 
     const fetchPurchaseHistory = async () => {
       try {
         const response = await axios.get('http://localhost:8082/api/trading/purchase/history/customer', {
           params: {
-            userName: userName.value,
+            username: username.value, // Ensure this matches the backend parameter name
             token: token.value,
-            customerUserName: userName.value,
-            storeName: storeName.value, // Add this line
           },
         });
         allProducts.value = response.data;
@@ -57,7 +52,9 @@ export default {
       }
     };
 
-    const processedProducts = computed(() => {
+
+    // Filtered products for the specific customer
+    const filteredProducts = computed(() => {
       return allProducts.value.map(product => {
         let customUsername = product.customUsername;
         if (customUsername.startsWith('r')) {
@@ -70,12 +67,12 @@ export default {
     });
 
     const displayName = computed(() => {
-      if (userName.value.startsWith('r')) {
-        return userName.value.substring(1);  // Removes the first character 'r'
-      } else if (userName.value.startsWith('v')) {
+      if (username.value.startsWith('r')) {
+        return username.value.substring(1);  // Removes the first character 'r'
+      } else if (username.value.startsWith('v')) {
         return 'Guest';  // Changes any username starting with 'v' to 'Guest'
       }
-      return userName.value;  // Default case if no specific rules are matched
+      return username.value;  // Default case if no specific rules are matched
     });
 
     onMounted(() => {
@@ -84,12 +81,9 @@ export default {
 
     return {
       allProducts,
-      processedProducts,
+      filteredProducts,
       displayName,
       token,
-      isLoggedIn,
-      userName,
-      storeName, // Add this line
     };
   },
 };

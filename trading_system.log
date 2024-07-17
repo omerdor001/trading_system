@@ -2006,3 +2006,268 @@ This generated password is for development use only. Your security configuration
 2024-07-16T14:44:30.382+03:00  INFO 28168 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
 2024-07-16T14:44:30.391+03:00  INFO 28168 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 5.209 seconds (process running for 17.107)
 2024-07-16T14:45:30.396+03:00  INFO 28168 --- [Trading_System] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2024-07-17T21:11:33.663+03:00  INFO 13676 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 13676 (C:\Users\shaden\Documents\Year_5\Semester_B\Workshop\trading_system\target\classes started by shade in C:\Users\shaden\Documents\Year_5\Semester_B\Workshop\trading_system)
+2024-07-17T21:11:33.667+03:00  INFO 13676 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-17T21:11:34.783+03:00  INFO 13676 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : OpenCV is Loaded.
+2024-07-17T21:11:35.202+03:00  INFO 13676 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-17T21:11:35.222+03:00  INFO 13676 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-17T21:11:35.222+03:00  INFO 13676 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-17T21:11:35.298+03:00  INFO 13676 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-17T21:11:35.298+03:00  INFO 13676 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1567 ms
+2024-07-17T21:11:35.677+03:00  WARN 13676 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 9b29fb6c-fda2-4274-9309-de51227407c1
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-07-17T21:11:36.180+03:00  INFO 13676 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5ec88f9e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7a04f730, org.springframework.security.web.context.SecurityContextHolderFilter@35bd8bc9, org.springframework.security.web.header.HeaderWriterFilter@50211483, org.springframework.web.filter.CorsFilter@3b11620a, org.springframework.security.web.authentication.logout.LogoutFilter@7fef0b40, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@45d56062, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4026461d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2fd1ad8a, org.springframework.security.web.access.ExceptionTranslationFilter@2afdf6b7, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6cc64028]
+2024-07-17T21:11:36.591+03:00  INFO 13676 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
+2024-07-17T21:11:36.594+03:00  INFO 13676 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-07-17T21:11:36.595+03:00  INFO 13676 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@27da994b]]
+2024-07-17T21:11:36.596+03:00  INFO 13676 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-07-17T21:11:36.606+03:00  INFO 13676 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 3.444 seconds (process running for 4.298)
+2024-07-17T21:11:41.050+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-17T21:11:41.051+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-07-17T21:11:41.052+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-07-17T21:11:41.156+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to logout user: radmin
+2024-07-17T21:11:41.157+03:00  WARN 13676 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-17T21:11:48.087+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to register user: admin with password : adminS123 and birthdate : 2024-07-01 
+2024-07-17T21:11:48.193+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User registered successfully : admin with password : adminS123 and birthdate : 2024-07-01
+2024-07-17T21:11:48.241+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-17T21:11:48.241+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : System opened successfully
+2024-07-17T21:11:48.242+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-17T21:11:48.242+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 0
+2024-07-17T21:11:48.341+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MCIsImlhdCI6MTcyMTIzOTkwOCwiZXhwIjoxNzIxMjc1OTA4fQ.kBRzGLFB4sxzwExVjbSbYd7FhkRU2KLycJ3G4gGjQfk and username: v0
+2024-07-17T21:11:49.313+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-17T21:11:49.360+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-17T21:11:50.554+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-17T21:11:50.555+03:00  WARN 13676 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-17T21:11:50.555+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-17T21:11:50.555+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 1
+2024-07-17T21:11:50.555+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MSIsImlhdCI6MTcyMTIzOTkxMCwiZXhwIjoxNzIxMjc1OTEwfQ.l3M0pOVCsVUUuQ0TXvB4lSWpr4yjrEvyNKF-YXU2fvY and username: v1
+2024-07-17T21:11:57.361+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Attempting to login user: admin
+2024-07-17T21:11:57.362+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : Trying to login user: admin
+2024-07-17T21:11:57.465+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : User: admin logged in
+2024-07-17T21:11:57.470+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : User: admin logged in successfully
+2024-07-17T21:11:57.480+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: radmin
+2024-07-17T21:11:57.482+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: radmin
+2024-07-17T21:12:02.453+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying opening store with name: robin
+2024-07-17T21:12:02.458+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : Trying opening store with name: robin
+2024-07-17T21:12:02.461+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : Finished opening store with name: robin
+2024-07-17T21:12:02.461+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Finished opening store with name: robin
+2024-07-17T21:12:03.942+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-17T21:12:03.945+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-17T21:12:05.108+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radmin
+2024-07-17T21:12:05.110+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radmin
+2024-07-17T21:12:05.767+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store robin
+2024-07-17T21:12:05.773+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store robin
+2024-07-17T21:12:06.277+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-17T21:12:06.279+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-17T21:12:14.539+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : User radmin is trying to add products to store : robin with product Id : 1 , product name : asdf, product description : asdf , product price : 4.0 ,product quantity : 5 , rating : 5.0 , category : 3 , key words : asdf 
+2024-07-17T21:12:14.541+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : User radmin finished to add products to store : robin with product Id : 1 , product name : asdf, product description : asdf , product price : 4.0 ,product quantity : 5 , rating : 5.0 , category : 3 , key words : asdf 
+2024-07-17T21:12:14.549+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store robin
+2024-07-17T21:12:14.550+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store robin
+2024-07-17T21:12:15.957+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-17T21:12:15.960+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-17T21:12:17.740+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store robin
+2024-07-17T21:12:17.743+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store robin
+2024-07-17T21:12:18.527+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 1
+2024-07-17T21:12:18.529+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 1
+2024-07-17T21:12:18.530+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.UserServiceImp             : Finished adding to cart product with id: 1
+2024-07-17T21:12:18.530+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Finished adding to cart product with id: 1
+2024-07-17T21:12:19.585+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying user : radmin view cart 
+2024-07-17T21:12:19.588+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : Trying registered : radmin view cart 
+2024-07-17T21:12:19.635+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : Finished registered view cart: radmin 
+2024-07-17T21:12:25.454+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to set address of user: radmin
+2024-07-17T21:12:25.456+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User: radmin set address to: Mar. Elias, Fassouta, IL, 2517000
+2024-07-17T21:12:25.585+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying user : radmin calculate price 
+2024-07-17T21:12:25.588+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.UserServiceImp             : Calculating price for user with ID: radmin 
+2024-07-17T21:12:25.627+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.UserServiceImp             : Finished calculating price for user with ID: radmin
+2024-07-17T21:12:36.551+03:00  INFO 13676 --- [Trading_System] [MessageBroker-6] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[1 current WS(1)-HttpStream(0)-HttpPoll(0), 1 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 6, active threads = 0, queued tasks = 0, completed tasks = 6], outboundChannel[pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 2, completed tasks = 9]
+2024-07-17T21:12:38.139+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Approving purchase for registered user with ID: radmin 
+2024-07-17T21:12:38.140+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.UserServiceImp             : Approving purchase for registered user with ID: radmin 
+2024-07-17T21:12:38.143+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.domain.stores.Product              : Removed 1 products. New quantity: 4
+2024-07-17T21:12:38.147+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Succeeded making delivery to Mar. Elias, Fassouta, IL, 2517000
+2024-07-17T21:12:38.147+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Succeed making payment of 4.0 USD
+2024-07-17T21:12:38.154+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.UserServiceImp             : Purchase approved for registered user with ID: radmin
+2024-07-17T21:12:39.182+03:00  INFO 13676 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : radmin is trying to get all his bids
+2024-07-17T21:24:39.574+03:00  INFO 13676 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-07-17T21:24:39.574+03:00  INFO 13676 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@27da994b]]
+2024-07-17T21:24:39.574+03:00  INFO 13676 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-07-17T21:24:48.297+03:00  INFO 15168 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 15168 (C:\Users\shaden\Documents\Year_5\Semester_B\Workshop\trading_system\target\classes started by shade in C:\Users\shaden\Documents\Year_5\Semester_B\Workshop\trading_system)
+2024-07-17T21:24:48.301+03:00  INFO 15168 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-17T21:24:49.434+03:00  INFO 15168 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : OpenCV is Loaded.
+2024-07-17T21:24:49.815+03:00  INFO 15168 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-17T21:24:49.831+03:00  INFO 15168 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-17T21:24:49.831+03:00  INFO 15168 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-17T21:24:49.899+03:00  INFO 15168 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-17T21:24:49.899+03:00  INFO 15168 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1525 ms
+2024-07-17T21:24:50.226+03:00  WARN 15168 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 715c3f5f-1e38-4e23-a3bf-2e76dad8cc60
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-07-17T21:24:50.560+03:00  INFO 15168 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@26be9a6, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4d518c66, org.springframework.security.web.context.SecurityContextHolderFilter@31a136a6, org.springframework.security.web.header.HeaderWriterFilter@4b195203, org.springframework.web.filter.CorsFilter@411fa0ce, org.springframework.security.web.authentication.logout.LogoutFilter@217dc48e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2f9b21d6, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2e0fdbe9, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@251d7fdd, org.springframework.security.web.access.ExceptionTranslationFilter@517704, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7a31ca20]
+2024-07-17T21:24:50.788+03:00  INFO 15168 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
+2024-07-17T21:24:50.790+03:00  INFO 15168 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-07-17T21:24:50.791+03:00  INFO 15168 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5bf4764d]]
+2024-07-17T21:24:50.792+03:00  INFO 15168 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-07-17T21:24:50.810+03:00  INFO 15168 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 3.135 seconds (process running for 4.367)
+2024-07-17T21:25:50.767+03:00  INFO 15168 --- [Trading_System] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2024-07-17T21:28:33.725+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-17T21:28:33.726+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-07-17T21:28:33.728+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-07-17T21:28:33.844+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to logout user: radmin
+2024-07-17T21:28:33.847+03:00  WARN 15168 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-17T21:28:38.111+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to logout user: radmin
+2024-07-17T21:28:38.111+03:00  WARN 15168 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-17T21:28:44.149+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to logout user: radmin
+2024-07-17T21:28:44.150+03:00  WARN 15168 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-17T21:28:48.934+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Attempting to logout user: radmin
+2024-07-17T21:28:48.943+03:00  WARN 15168 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-17T21:28:52.748+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to logout user: radmin
+2024-07-17T21:28:52.748+03:00  WARN 15168 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-17T21:29:01.400+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Attempting to register user: admin with password : adminS123 and birthdate : 2024-06-30 
+2024-07-17T21:29:01.516+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : User registered successfully : admin with password : adminS123 and birthdate : 2024-06-30
+2024-07-17T21:29:01.599+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-17T21:29:01.600+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : System opened successfully
+2024-07-17T21:29:01.600+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-17T21:29:01.600+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 0
+2024-07-17T21:29:01.690+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MCIsImlhdCI6MTcyMTI0MDk0MSwiZXhwIjoxNzIxMjc2OTQxfQ.mArXLTBOTXNICe-MoYnl6BDq27A4Xu59DKHcOmtgTWs and username: v0
+2024-07-17T21:29:07.960+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Attempting to login user: admin
+2024-07-17T21:29:07.960+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.UserServiceImp             : Trying to login user: admin
+2024-07-17T21:29:08.044+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.UserServiceImp             : User: admin logged in
+2024-07-17T21:29:08.066+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : User: admin logged in successfully
+2024-07-17T21:29:08.078+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: radmin
+2024-07-17T21:29:08.080+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: radmin
+2024-07-17T21:29:09.263+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-17T21:29:09.268+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-17T21:29:11.771+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-17T21:29:11.773+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-17T21:29:16.949+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying opening store with name: robin
+2024-07-17T21:29:16.951+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : Trying opening store with name: robin
+2024-07-17T21:29:16.954+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : Finished opening store with name: robin
+2024-07-17T21:29:16.954+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Finished opening store with name: robin
+2024-07-17T21:29:18.494+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-17T21:29:18.504+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-17T21:29:19.347+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store robin
+2024-07-17T21:29:19.349+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store robin
+2024-07-17T21:29:20.815+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-17T21:29:20.817+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-17T21:29:21.417+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radmin
+2024-07-17T21:29:21.421+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radmin
+2024-07-17T21:29:22.037+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store robin
+2024-07-17T21:29:22.041+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store robin
+2024-07-17T21:29:22.506+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-17T21:29:22.509+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-17T21:29:30.416+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User radmin is trying to add products to store : robin with product Id : 2 , product name : adf, product description : asdf , product price : 5.0 ,product quantity : 4 , rating : 4.0 , category : 4 , key words : asdf 
+2024-07-17T21:29:30.418+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User radmin finished to add products to store : robin with product Id : 2 , product name : adf, product description : asdf , product price : 5.0 ,product quantity : 4 , rating : 4.0 , category : 4 , key words : asdf 
+2024-07-17T21:29:30.426+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store robin
+2024-07-17T21:29:30.429+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store robin
+2024-07-17T21:29:32.046+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-17T21:29:32.049+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-17T21:29:32.971+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store robin
+2024-07-17T21:29:32.972+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store robin
+2024-07-17T21:29:33.953+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 2
+2024-07-17T21:29:33.964+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 2
+2024-07-17T21:29:33.967+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.UserServiceImp             : Finished adding to cart product with id: 2
+2024-07-17T21:29:33.967+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Finished adding to cart product with id: 2
+2024-07-17T21:30:45.581+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Get Requests managers for radmin
+2024-07-17T21:30:45.584+03:00  INFO 15168 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : FINISHED Get Requests managers for radmin
+2024-07-17T21:30:47.348+03:00  WARN 15168 --- [Trading_System] [http-nio-8082-exec-1] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'userName' for method parameter type String is not present]
+2024-07-17T21:34:15.012+03:00  WARN 15168 --- [Trading_System] [http-nio-8082-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'userName' for method parameter type String is not present]
+2024-07-17T21:34:27.214+03:00  WARN 15168 --- [Trading_System] [http-nio-8082-exec-3] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'userName' for method parameter type String is not present]
+2024-07-17T21:35:01.852+03:00  WARN 15168 --- [Trading_System] [http-nio-8082-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'userName' for method parameter type String is not present]
+2024-07-17T21:35:09.072+03:00  INFO 15168 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-07-17T21:35:09.072+03:00  INFO 15168 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5bf4764d]]
+2024-07-17T21:35:09.072+03:00  INFO 15168 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-07-17T21:35:19.925+03:00  INFO 9256 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 9256 (C:\Users\shaden\Documents\Year_5\Semester_B\Workshop\trading_system\target\classes started by shade in C:\Users\shaden\Documents\Year_5\Semester_B\Workshop\trading_system)
+2024-07-17T21:35:19.929+03:00  INFO 9256 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-17T21:35:21.167+03:00  INFO 9256 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : OpenCV is Loaded.
+2024-07-17T21:35:21.537+03:00  INFO 9256 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-17T21:35:21.551+03:00  INFO 9256 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-17T21:35:21.552+03:00  INFO 9256 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-17T21:35:21.630+03:00  INFO 9256 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-17T21:35:21.631+03:00  INFO 9256 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1628 ms
+2024-07-17T21:35:22.034+03:00  WARN 9256 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 58ef57c6-c397-40fb-8942-902753c42095
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-07-17T21:35:22.350+03:00  INFO 9256 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6cc64028, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@291a4791, org.springframework.security.web.context.SecurityContextHolderFilter@168142da, org.springframework.security.web.header.HeaderWriterFilter@55846997, org.springframework.web.filter.CorsFilter@5b1e88f, org.springframework.security.web.authentication.logout.LogoutFilter@16a3cc88, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@47a4eee2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@36f6e521, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@340cb97f, org.springframework.security.web.access.ExceptionTranslationFilter@224c7de4, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@44d7e24]
+2024-07-17T21:35:22.605+03:00  INFO 9256 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
+2024-07-17T21:35:22.608+03:00  INFO 9256 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-07-17T21:35:22.610+03:00  INFO 9256 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@68bd8ca7]]
+2024-07-17T21:35:22.610+03:00  INFO 9256 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-07-17T21:35:22.619+03:00  INFO 9256 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 3.32 seconds (process running for 4.711)
+2024-07-17T21:35:34.164+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-17T21:35:34.164+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-07-17T21:35:34.164+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2024-07-17T21:35:34.253+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to logout user: radmin
+2024-07-17T21:35:34.255+03:00  WARN 9256 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : System is not open
+2024-07-17T21:35:42.340+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to register user: admin with password : adminS123 and birthdate : 2024-06-30 
+2024-07-17T21:35:42.439+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User registered successfully : admin with password : adminS123 and birthdate : 2024-06-30
+2024-07-17T21:35:42.518+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-17T21:35:42.519+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : System opened successfully
+2024-07-17T21:35:42.519+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-17T21:35:42.519+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying enter to system as a visitor , with id : 0
+2024-07-17T21:35:42.622+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MCIsImlhdCI6MTcyMTI0MTM0MiwiZXhwIjoxNzIxMjc3MzQyfQ._HXPZCUH-4bSWdSUB72jSTb-b_jHNWtDq96Lnf1aJU0 and username: v0
+2024-07-17T21:35:48.712+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Attempting to login user: admin
+2024-07-17T21:35:48.713+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.UserServiceImp             : Trying to login user: admin
+2024-07-17T21:35:48.797+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.UserServiceImp             : User: admin logged in
+2024-07-17T21:35:48.822+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : User: admin logged in successfully
+2024-07-17T21:35:48.835+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: radmin
+2024-07-17T21:35:48.841+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: radmin
+2024-07-17T21:35:56.010+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History
+2024-07-17T21:35:56.013+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store
+2024-07-17T21:36:04.208+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : radmin is Trying to get history purchases by customer {} from store {}
+2024-07-17T21:36:04.213+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : radmin Finished to get history purchases by {} from store {}
+2024-07-17T21:36:10.153+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History
+2024-07-17T21:36:10.156+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store
+2024-07-17T21:36:14.733+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying opening store with name: robin
+2024-07-17T21:36:14.735+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.UserServiceImp             : Trying opening store with name: robin
+2024-07-17T21:36:14.737+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.UserServiceImp             : Finished opening store with name: robin
+2024-07-17T21:36:14.737+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Finished opening store with name: robin
+2024-07-17T21:36:16.357+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-17T21:36:16.360+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-17T21:36:17.222+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store robin
+2024-07-17T21:36:17.223+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store robin
+2024-07-17T21:36:21.619+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-17T21:36:21.625+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-17T21:36:22.175+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Get permissions for radmin
+2024-07-17T21:36:22.177+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for radmin
+2024-07-17T21:36:22.585+03:00  INFO 9256 --- [Trading_System] [MessageBroker-6] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 1 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 9, active threads = 0, queued tasks = 0, completed tasks = 9], outboundChannel[pool size = 2, active threads = 0, queued tasks = 0, completed tasks = 2], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 1, completed tasks = 7]
+2024-07-17T21:36:22.865+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store robin
+2024-07-17T21:36:22.867+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store robin
+2024-07-17T21:36:23.374+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather Categories
+2024-07-17T21:36:23.375+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : FINISHED Gather Categories
+2024-07-17T21:36:31.556+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : User radmin is trying to add products to store : robin with product Id : 4 , product name : asdf, product description : asdf , product price : 7.0 ,product quantity : 7 , rating : 5.0 , category : 2 , key words : asdf 
+2024-07-17T21:36:31.559+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : User radmin finished to add products to store : robin with product Id : 4 , product name : asdf, product description : asdf , product price : 7.0 ,product quantity : 7 , rating : 5.0 , category : 2 , key words : asdf 
+2024-07-17T21:36:31.572+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store robin
+2024-07-17T21:36:31.573+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store robin
+2024-07-17T21:36:33.376+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-17T21:36:33.379+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-17T21:36:34.281+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store robin
+2024-07-17T21:36:34.283+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store robin
+2024-07-17T21:36:35.400+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 4
+2024-07-17T21:36:35.403+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 4
+2024-07-17T21:36:35.405+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.UserServiceImp             : Finished adding to cart product with id: 4
+2024-07-17T21:36:35.405+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-4] c.e.t.service.TradingSystemImp           : Finished adding to cart product with id: 4
+2024-07-17T21:36:36.090+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying user : radmin view cart 
+2024-07-17T21:36:36.096+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : Trying registered : radmin view cart 
+2024-07-17T21:36:36.144+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : Finished registered view cart: radmin 
+2024-07-17T21:36:40.334+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Attempting to set address of user: radmin
+2024-07-17T21:36:40.339+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : User: radmin set address to: Mar. Elias, Fassouta, IL, 2517000
+2024-07-17T21:36:40.451+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying user : radmin calculate price 
+2024-07-17T21:36:40.454+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.UserServiceImp             : Calculating price for user with ID: radmin 
+2024-07-17T21:36:40.499+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.UserServiceImp             : Finished calculating price for user with ID: radmin
+2024-07-17T21:36:53.341+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Approving purchase for registered user with ID: radmin 
+2024-07-17T21:36:53.341+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.UserServiceImp             : Approving purchase for registered user with ID: radmin 
+2024-07-17T21:36:53.356+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.domain.stores.Product              : Removed 1 products. New quantity: 6
+2024-07-17T21:36:53.360+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Succeeded making delivery to Mar. Elias, Fassouta, IL, 2517000
+2024-07-17T21:36:53.360+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Succeed making payment of 7.0 USD
+2024-07-17T21:36:53.368+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.UserServiceImp             : Purchase approved for registered user with ID: radmin
+2024-07-17T21:36:54.598+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : radmin is Trying to get history purchases by customer {} from store {}
+2024-07-17T21:36:54.600+03:00  INFO 9256 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : radmin Finished to get history purchases by {} from store {}
