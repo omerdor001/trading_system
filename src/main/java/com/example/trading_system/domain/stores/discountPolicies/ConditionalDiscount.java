@@ -11,12 +11,6 @@ import java.util.Collection;
 @DiscriminatorValue("CONDITIONAL")
 public class ConditionalDiscount extends DiscountPolicy {
 
-    @Getter
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long id;
-
     @OneToOne(cascade = CascadeType.ALL)
     private Condition condition;
 

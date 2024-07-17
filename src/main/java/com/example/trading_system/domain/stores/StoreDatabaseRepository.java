@@ -1,7 +1,6 @@
 package com.example.trading_system.domain.stores;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -9,30 +8,29 @@ import jakarta.persistence.PersistenceContext;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-//@Primary
-//@Repository
+
+@Repository
 public class StoreDatabaseRepository implements StoreRepository {
 
-    private HashMap<String, Store> memoryStores = new HashMap<>();
     private static StoreDatabaseRepository instance = null;
 
-//    @PersistenceContext
+    @PersistenceContext
     private EntityManager entityManager;
 
-//    @Autowired
-    public StoreDatabaseRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public StoreDatabaseRepository() {
     }
-    public static StoreDatabaseRepository getInstance(EntityManager entityManagery) {
-        if (instance == null) instance = new StoreDatabaseRepository(entityManagery);
+
+    public static StoreDatabaseRepository getInstance(EntityManager entityManager) {
+        if (instance == null) {
+            instance = new StoreDatabaseRepository();
+            instance.entityManager = entityManager;
+        }
         return instance;
     }
+
     @Override
     public void deleteInstance() {
-        if (memoryStores != null) {
-            this.memoryStores.clear();
-            this.memoryStores = null;
-        }
+        instance = null;
     }
 
     @Override
@@ -47,8 +45,8 @@ public class StoreDatabaseRepository implements StoreRepository {
 
     @Override
     public HashMap<String, Store> getAllStores() {
-        HashMap<String, Store> allStores = new HashMap<>(memoryStores);
         List<Store> storeList = entityManager.createQuery("SELECT s FROM Store s", Store.class).getResultList();
+        HashMap<String, Store> allStores = new HashMap<>();
         for (Store store : storeList) {
             allStores.put(store.getNameId(), store);
         }
@@ -71,13 +69,23 @@ public class StoreDatabaseRepository implements StoreRepository {
     @Override
     public boolean isEmpty() {
         Long count = entityManager.createQuery("SELECT COUNT(s) FROM Store s", Long.class).getSingleResult();
-        return memoryStores.isEmpty() && count == 0;
+        return count == 0;
     }
-
+    @Transactional
     @Override
     public void addStore(String storeName, String description, String founder, Double storeRating) {
         Store store = new Store(storeName, description, founder, storeRating);
         store.addOwner(founder);
         entityManager.persist(store);
+    }
+    @Transactional
+    public void save(Store store) {
+        if (store != null) {
+            if (entityManager.contains(store) || store.getNameId() != null && entityManager.find(Store.class, store.getNameId()) != null) {
+                entityManager.merge(store);
+            } else {
+                entityManager.persist(store);
+            }
+        }
     }
 }

@@ -22,6 +22,11 @@
               <i :class="['pi', slotProps.data.founder ? 'pi-check' : 'pi-times']"></i>
             </template>
           </PrimeColumn>
+          <PrimeColumn header="Fire Owner">
+            <template #body="slotProps">
+              <PrimeButton v-if="username === slotProps.data.appointer" icon="pi pi-pencil" type="button" @click="fireOwner(slotProps.data)" />
+            </template>
+          </PrimeColumn>
         </PrimeDataTable>
         <div v-if="selectedRole.value === 'owners' && owners.length === 0">
           <p>No owners found.</p>
@@ -52,17 +57,17 @@
           </PrimeColumn>
           <PrimeColumn field="acceptBids" header="Accept Bids">
             <template #body="slotProps">
-              <i :class="['pi', slotProps.data.editAcceptBids ? 'pi-check' : 'pi-times']"></i>
-            </template>
-          </PrimeColumn>
-          <PrimeColumn field="createLottery" header="Create Lottery">
-            <template #body="slotProps">
-              <i :class="['pi', slotProps.data.editCreateLottery ? 'pi-check' : 'pi-times']"></i>
+              <i :class="['pi', slotProps.data.acceptBids ? 'pi-check' : 'pi-times']"></i>
             </template>
           </PrimeColumn>
           <PrimeColumn header="Actions">
             <template #body="slotProps">
-              <PrimeButton icon="pi pi-pencil" @click="editPermissions(slotProps.data)" />
+              <PrimeButton v-if="username === slotProps.data.appointer" icon="pi pi-pencil" @click="editPermissions(slotProps.data)" />
+            </template>
+          </PrimeColumn>
+          <PrimeColumn header="Fire Manager">
+            <template #body="slotProps">
+              <PrimeButton v-if="username === slotProps.data.appointer" icon="pi pi-pencil" type="button" @click="fireManager(slotProps.data)" />
             </template>
           </PrimeColumn>
         </PrimeDataTable>
@@ -99,11 +104,6 @@
         <div>
           <label>
             <input type="checkbox" v-model="selectedManager.acceptBids" /> Accept Bids
-          </label>
-        </div>
-        <div>
-          <label>
-            <input type="checkbox" v-model="selectedManager.createLottery" /> Create Lottery
           </label>
         </div>
         <div class="dialog-buttons">
@@ -163,12 +163,12 @@ export default defineComponent({
 
         managers.value = managersResponse.data.map(manager => ({
           username: manager.username,
+          appointer: manager.appointer,
           watch: manager.watch,
           editSupply: manager.editSupply,
           editBuyPolicy: manager.editBuyPolicy,
           editDiscountPolicy: manager.editDiscountPolicy,
-          editAcceptBids: manager.editAcceptBids,
-          editCreateLottery: manager.editCreateLottery,
+          acceptBids: manager.acceptBids,
         }));
 
         console.log(managers.value);
@@ -183,6 +183,7 @@ export default defineComponent({
           }
         });
         owners.value = ownersResponse.data.map(owner => ({
+          appointer: owner.appointer,
           founder: owner.founder,
           username: owner.username,
         }));
@@ -200,6 +201,44 @@ export default defineComponent({
       editDialogVisible.value = true;
     };
 
+    const fireManager = async (manager) => { 
+      selectedManager.value = { ...manager};
+      try {
+        await axios.post('http://localhost:8082/api/trading/fireManager', null, {
+          params: {
+            owner: username,
+            token: token,
+            storeName: storeName.value,
+            manager: selectedManager.value.username
+          }
+        });
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Fired manager successfully', life: 3000 });
+        fetchData();
+      }
+      catch (err) {
+        toast.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
+      }
+    };
+
+    const fireOwner = async (owner) => { 
+      try {
+        await axios.post('http://localhost:8082/api/trading/fireOwner', null, {
+          params: {
+            ownerAppoint: username,
+            token: token,
+            storeName: storeName.value,
+            ownerToFire: owner.username
+          }
+        });
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Fired owner successfully', life: 3000 });
+        fetchData();
+      }
+      catch (err) {
+        toast.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
+      }
+    };
+
+
     const savePermissions = async () => {
       try {
         await axios.post('http://localhost:8082/api/trading/store/manager/permission/edit', null, {
@@ -213,7 +252,6 @@ export default defineComponent({
             editBuyPolicy: selectedManager.value.editBuyPolicy ? true : false,
             editDiscountPolicy: selectedManager.value.editDiscountPolicy ? true : false,
             acceptBids: selectedManager.value.acceptBids ? true : false,
-            createLottery: selectedManager.value.createLottery ? true : false,
           }
         });
         toast.add({ severity: 'success', summary: 'Success', detail: 'Permissions updated successfully', life: 3000 });
@@ -245,6 +283,8 @@ export default defineComponent({
       editPermissions,
       savePermissions,
       closeDialog,
+      fireManager,
+      fireOwner,
       roleOptions,
     };
   },

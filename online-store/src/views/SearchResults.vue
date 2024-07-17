@@ -17,6 +17,7 @@
             <th>Category</th>
             <th>KeyWords</th>
             <th>Price</th>
+            <th>Quantity</th>
             <th>Add To Cart</th>
             <th>Place Bid</th>
           </tr>
@@ -30,8 +31,10 @@
             <td>{{ product.category}}</td>
             <td>{{ product.keyWords}}</td>
             <td>{{ product.product_price}}</td>
+            <td>{{ product.product_quantity }}</td>
             <td>
-              <button @click="addToCart(product.product_id, product.store_name, 1, product.product_price)">Add To Cart</button>
+              <input type="number" v-model="quantity[index]" placeholder="Enter Quantity" />
+              <button @click="addToCart(product.product_id, product.store_name, quantity[index], product.product_price)">Add To Cart</button>
             </td>
             <td>
               <input type="number" v-model="bidPrices[index]" placeholder="Enter bid" />
@@ -67,12 +70,11 @@ export default defineComponent({
     const token = localStorage.getItem('token');
     const toast = useToast();
     const bidPrices = ref([]);
+    const quantity = ref([]);
     const products = ref([]);
 
     onMounted(() => {
       const filters = router.currentRoute.value.query;
-      toast.add({ severity: 'success', summary: 'Success', detail: filters, life: 3000 });
-
       fetchProducts(filters);
     });
 
@@ -93,15 +95,13 @@ export default defineComponent({
             categories : categoriesString,
             rating : filters.rating
           } });
-          toast.add({ severity: 'success', summary: 'Success', detail: response.data[0].product_id, life: 3000 });
           products.value = response.data
-        
-        toast.add({ severity: 'success', summary: 'Success', detail: products.value});
         bidPrices.value = products.value.map(() => 0);
+        quantity.value = products.value.map(() => 0);
 
       } catch (error) {
         console.error('Error fetching products:', error);
-        toast.add({ severity: 'error', summary: 'error', detail: filters.query });
+        toast.add({ severity: 'error', summary: 'error', detail: filters.query, life: 3000 });
 
       }
     };
@@ -138,7 +138,16 @@ export default defineComponent({
             token: token,
             storeName: storeName,
             productID: productID,
-            price: price
+            price: price,
+            address: "1234 Main Street, Springfield, IL, 62704-1234",
+            amount: price,
+            currency: "USD",
+            cardNumber: "4111111111111111",
+            month: "12",
+            year: "2025",
+            holder: "John Doe",
+            ccv: "123",
+            id:"209507664"
           }
         });
         toast.add({ severity: 'success', summary: 'Success', detail: response.data, life: 3000 });
@@ -149,22 +158,15 @@ export default defineComponent({
 
     };
 
-
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     return {
       username,
       token,
       products,
       viewOptions,
-      logout,
       addToCart,
       placeBid,
-      bidPrices
+      bidPrices,
+      quantity
     };
   }
 });

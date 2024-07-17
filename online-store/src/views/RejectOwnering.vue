@@ -102,11 +102,6 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     const showSuccessToast = (message) => {
       const toast = ref.$refs.toast;
       toast.add({
@@ -135,7 +130,6 @@ export default defineComponent({
       error,
       requests,
       rejectOwner,
-      logout,
     };
   },
 });

@@ -24,7 +24,6 @@ import { defineComponent, ref } from 'vue';
 import SiteHeader from '@/components/SiteHeader.vue';
 import { InputText } from 'primevue/inputtext';
 import { PrimeButton } from 'primevue/button';
-import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import PrimeToast from 'primevue/toast';
 
@@ -37,7 +36,6 @@ export default defineComponent({
     'p-toast': PrimeToast,
   },
   setup() {
-    const router = useRouter();
     const toast = useToast();
     const toEndSuspend = ref('');
     const username = localStorage.getItem('username'); 
@@ -61,15 +59,10 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      router.push('/login');
-    };
-
     return {
       username,
       toEndSuspend,
       submitForm,
-      logout,
     };
   },
 });

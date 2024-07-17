@@ -16,7 +16,6 @@
             <ToggleButton id="editBuyPolicy" v-model="editBuyPolicy" onIcon="pi pi-check" offIcon="pi pi-times" onLabel="Edit Buy Policy" offLabel="Edit Buy Policy" class="small-toggle" />
             <ToggleButton id="editDiscountPolicy" v-model="editDiscountPolicy" onIcon="pi pi-check" offIcon="pi pi-times" onLabel="Edit Discount Policy" offLabel="Edit Discount Policy" class="small-toggle" />
             <ToggleButton id="acceptBids" v-model="acceptBids" onIcon="pi pi-check" offIcon="pi pi-times" onLabel="Accept Bids" offLabel="Accept Bids" class="small-toggle" />
-            <ToggleButton id="createLottery" v-model="createLottery" onIcon="pi pi-check" offIcon="pi pi-times" onLabel="Create Lottery" offLabel="Create Lottery" class="small-toggle" />
           </div>
         </div>
         <div class="button-group">
@@ -56,7 +55,6 @@ export default defineComponent({
     const editBuyPolicy = ref(false);
     const editDiscountPolicy = ref(false);
     const acceptBids = ref(false);
-    const createLottery = ref(false);
     const error = ref(null);
     const username = localStorage.getItem('username');
     const token = localStorage.getItem('token');
@@ -77,8 +75,7 @@ export default defineComponent({
           editSupply: editSupply.value,
           editBuyPolicy: editBuyPolicy.value,
           editDiscountPolicy: editDiscountPolicy.value,
-          acceptBids: acceptBids.value,
-          createLottery: createLottery.value,
+          acceptBids: acceptBids.value
           }
         });
         showSuccessToast(response.data.message);
@@ -88,7 +85,6 @@ export default defineComponent({
         editBuyPolicy.value = false;
         editDiscountPolicy.value = false;
         acceptBids.value = false;
-        createLottery.value = false;
       } catch (err) {
         error.value = err.response?.data?.message || 'An error occurred';
         showErrorToast(error.value);
@@ -117,7 +113,6 @@ export default defineComponent({
       editBuyPolicy,
       editDiscountPolicy,
       acceptBids,
-      createLottery,
       error,
       suggestManage,
       toast,  

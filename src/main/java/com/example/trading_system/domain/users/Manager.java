@@ -6,14 +6,7 @@ import java.util.List;
 
 @Entity
 @DiscriminatorValue("MANAGER")
-
 public class Manager extends RoleState {
-
-    @JsonIgnore
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "watch")
     private boolean watch;
 
@@ -25,8 +18,9 @@ public class Manager extends RoleState {
 
     @Column(name = "edit_discount_policy")
     private boolean editDiscountPolicy;
+
+    @Column(name = "accept_bids")
     private boolean acceptBids;
-    private boolean createLottery;
 
     public Manager() {
         this.watch = false;
@@ -34,7 +28,6 @@ public class Manager extends RoleState {
         this.editDiscountPolicy = false;
         this.editSupply = false;
         this.acceptBids = false;
-        this.createLottery = false;
     }
 
     @Override
@@ -87,16 +80,6 @@ public class Manager extends RoleState {
         return acceptBids;
     }
 
-    @Override
-    public void setCreateLottery(boolean createLottery){
-        this.createLottery = createLottery;
-    }
-
-    @Override
-    public boolean isCreateLottery()
-    {
-        return createLottery;
-    }
 
 
     @Override
@@ -191,9 +174,5 @@ public class Manager extends RoleState {
 
     }
 
-    @Override
-    public void createProductLottery() throws IllegalAccessException{
-        if(!this.createLottery) throw new IllegalAccessException("Manager has not permission for create product lottery");
-    }
 
 }

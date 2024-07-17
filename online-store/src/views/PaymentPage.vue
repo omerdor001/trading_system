@@ -120,13 +120,6 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      router.push('/login');
-    };
-
     onMounted(() => {
       fetchTotalAmount();
     });
@@ -143,7 +136,6 @@ export default defineComponent({
       ccv,
       id,
       completePayment,
-      logout
     };
   }
 });

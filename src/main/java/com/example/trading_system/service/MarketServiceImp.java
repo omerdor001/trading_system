@@ -470,13 +470,13 @@ public class MarketServiceImp implements MarketService {
 //    }
 
     @Override
-    public void placeBid(String userName, String storeName, int productID, double price) throws  IllegalArgumentException {
-        marketFacade.placeBid(userName, storeName, productID, price);
+    public void placeBid(String userName, String storeName, int productID, double price, String address, String amount, String currency,String cardNumber, String month,String year,String holder,String ccv,String id) throws  IllegalArgumentException {
+        marketFacade.placeBid(userName, storeName, productID, price,address, amount, currency, cardNumber, month, year, holder, ccv, id);
     }
 
     @Override
-    public void approveBid(String userName, String storeName, int productID, String bidUserName, String address, String amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) throws Exception {
-        marketFacade.approveBid(userName, storeName, productID, bidUserName, address, amount, currency, cardNumber, month, year, holder, ccv, id);
+    public void approveBid(String userName, String storeName, int productID, String bidUserName) throws Exception {
+        marketFacade.approveBid(userName, storeName, productID, bidUserName);
     }
 
     @Override
@@ -490,13 +490,19 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
+    public  void approveCounterOffer(String userName, String storeName, int productID, double price) throws Exception{
+        marketFacade.approveCounterOffer(userName, storeName, productID, price);
+
+    }
+
+    @Override
     public String getStoreBids(String userName, String storeName) throws IllegalAccessException, IllegalArgumentException{
         return marketFacade.getStoreBids(userName, storeName);
     }
 
     @Override
-    public String getMyBids(String userName, String storeName) throws IllegalAccessException, IllegalArgumentException{
-        return marketFacade.getMyBids(userName, storeName);
+    public String getMyBids(String userName) throws IllegalAccessException, IllegalArgumentException{
+        return marketFacade.getMyBids(userName);
     }
 
 //    @Override

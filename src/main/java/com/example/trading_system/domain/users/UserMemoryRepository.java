@@ -7,12 +7,12 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 
-@Service
+//@Service
 public class UserMemoryRepository implements UserRepository {
     private static UserMemoryRepository instance = null;
     private HashMap<String, User> users;
 
-    @Autowired
+    //@Autowired
     private UserMemoryRepository() {
         users = new HashMap<>();
     }
@@ -96,5 +96,10 @@ public class UserMemoryRepository implements UserRepository {
             if (username.startsWith("r")) return false;
         }
         return true;
+    }
+
+    @Override
+    public void saveCart(User user) {
+
     }
 }

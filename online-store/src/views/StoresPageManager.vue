@@ -42,12 +42,14 @@
         </div>
         <div class="options-container">
           <h3>Options</h3>
+          <PrimeButton v-if="!selectedStore.isOpen  && selectedStore.founder === username.substring(1)" class="option-button primary" @click="openStoreExist(selectedStore.name)">Re-open Store</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isOwner" class="option-button primary" @click="suggestOwner(selectedStore.name)">Suggest Owner</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isOwner" class="option-button primary" @click="suggestManager(selectedStore.name)">Suggest Manager</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isOwner" class="option-button primary" @click="yieldOwnership()">Yield Ownership</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isEditPurchasePolicy" class="option-button primary" @click="editPurchasePolicy(selectedStore.name)">Edit Purchase Policy</PrimeButton>
           <PrimeButton v-if="selectedStore.permissions.isEditDiscountPolicy" class="option-button primary" @click="editDiscountPolicy(selectedStore.name)">Edit Discount Policy</PrimeButton>
           <PrimeButton class="option-button primary" @click="purchasesHistory(selectedStore.name)">Purchases History</PrimeButton>
+          <PrimeButton v-if="selectedStore.permissions.acceptBids" class="option-button primary" @click="acceptBids(selectedStore.name)">Accept Bids</PrimeButton>
         </div>
       </div>
     </div>
@@ -79,7 +81,10 @@ export default defineComponent({
     const selectedStore = ref(null);
     const toast = useToast();
 
-    onMounted(async () => {
+
+
+    
+    const fetchStoreDetails = async () => {
       try {
         const response = await axios.get('http://localhost:8082/api/trading/stores-detailed-info', {
           params: { 
@@ -106,7 +111,12 @@ export default defineComponent({
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
       }
+    };
+    
+    onMounted(() => {
+      fetchStoreDetails();
     });
+
     
     const showStoreDetails = async (store) => {
       selectedStore.value = store;
@@ -125,6 +135,7 @@ export default defineComponent({
        store.permissions.isEditSupply = permissions.editSupply;
        store.permissions.isEditPurchasePolicy = permissions.editBuyPolicy;
        store.permissions.isEditDiscountPolicy = permissions.editDiscountPolicy;
+       store.permissions.acceptBids = permissions.acceptBids;
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch permissions', life: 3000 });
         console.error('Error fetching permissions:', error);
@@ -154,6 +165,26 @@ export default defineComponent({
       } 
     };
 
+    const openStoreExist =  async (store) => {
+      const tempStore = store;
+      try {
+         const response = await axios.post('http://localhost:8082/api/trading/store/open', null, {
+           params: {
+             username: username,
+             storeName: tempStore,
+             token: token,
+          }
+       });
+       console.log(response.data);
+       closeModal();
+       fetchStoreDetails();
+      } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to Re-open store', life: 3000 });
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
+
     const suggestManager = (storeName) => {
       const store = selectedStore.value;
       if (store && store.permissions.isOwner) {
@@ -172,6 +203,13 @@ export default defineComponent({
       const store = selectedStore.value;
       if (store && store.permissions.isEditDiscountPolicy) {
         router.push({ name: 'EditDiscountPolicy', params: { storeName } });
+      }
+    };
+
+    const acceptBids = (storeName) => {
+      const store = selectedStore.value;
+      if (store && store.permissions.acceptBids) {
+        router.push({ name: 'WatchStoreBids', params: { storeName } });
       }
     };
 
@@ -210,11 +248,14 @@ export default defineComponent({
       getStatusText,
       closeModal,
       suggestOwner,
+      acceptBids,
       suggestManager,
       editPurchasePolicy,
       editDiscountPolicy,
       yieldOwnership,
-      purchasesHistory
+      openStoreExist,
+      purchasesHistory,
+      fetchStoreDetails
     };
   }
 });

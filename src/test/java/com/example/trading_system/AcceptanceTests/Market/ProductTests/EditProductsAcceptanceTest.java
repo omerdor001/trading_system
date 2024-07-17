@@ -112,8 +112,8 @@ public class EditProductsAcceptanceTest {
         tradingSystemImp.openStore(userName, token, storeName, "My Store is the best");
         tradingSystemImp.suggestOwner(userName, token, ownerUserName, storeName);
         tradingSystemImp.approveOwner(ownerUserName, ownerToken, storeName, userName);
-        tradingSystemImp.suggestManage(ownerUserName, ownerToken, userNameManager, storeName, false, false, false, false, false, false);
-        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, ownerUserName, false, false, false, false, false, false);
+        tradingSystemImp.suggestManage(ownerUserName, ownerToken, userNameManager, storeName, false, false, false, false, false);
+        tradingSystemImp.approveManage(userNameManager, tokenManager, storeName, ownerUserName, false, false, false, false, false);
         tradingSystemImp.addProduct(ownerUserName, ownerToken, productID, storeName, productName, "oldDescription", 15.0, 6, 1, 1, "[\"CarPlay\", \"iPhone\"]");
     }
 
@@ -142,7 +142,7 @@ public class EditProductsAcceptanceTest {
     public void GivenManagerWithoutPermission_WhenSetProductName_ThenThrowException() {
         ResponseEntity<String> resp = tradingSystemImp.getStoreProducts(userName, token, storeName);
         Assertions.assertTrue(Objects.requireNonNull(resp.getBody()).contains("\"product_id\":111"));
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.editPermissionForManager(ownerUserName, ownerToken, userNameManager, storeName, false, false, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.editPermissionForManager(ownerUserName, ownerToken, userNameManager, storeName, false, false, true, true, true).getStatusCode());
         ResponseEntity<String> resp2 = tradingSystemImp.setProductName(userNameManager, tokenManager, storeName, productID, "newName");
         Assertions.assertEquals("Manager cannot edit products", resp2.getBody());
         Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resp2.getStatusCode());
@@ -153,7 +153,7 @@ public class EditProductsAcceptanceTest {
         ResponseEntity<String> resp = tradingSystemImp.getStoreProducts(userName, token, storeName);
         Assertions.assertTrue(Objects.requireNonNull(resp.getBody()).contains("\"product_id\":111"));
         Assertions.assertTrue(resp.getBody().contains("\"product_name\":\"" + productName));
-        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.editPermissionForManager(ownerUserName, ownerToken, userNameManager, storeName, true, true, true, true, true, true).getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, tradingSystemImp.editPermissionForManager(ownerUserName, ownerToken, userNameManager, storeName, true, true, true, true, true).getStatusCode());
         ResponseEntity<String> resp2 = tradingSystemImp.setProductName(userNameManager, tokenManager, storeName, productID, "newName");
         Assertions.assertEquals("Product name was set successfully.", resp2.getBody());
         Assertions.assertEquals(HttpStatus.OK, resp2.getStatusCode());

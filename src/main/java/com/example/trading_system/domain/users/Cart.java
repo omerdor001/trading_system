@@ -1,24 +1,34 @@
 package com.example.trading_system.domain.users;
 
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Embeddable
+@Entity
+@Table(name = "cart")
 public class Cart {
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "shopping_bags", joinColumns = @JoinColumn(name = "cart_id"))
+
+    @Getter
+    @Setter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Getter
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @MapKeyColumn(name = "store_id")
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private final HashMap<String, ShoppingBag> shoppingBags;
+    private Map<String, ShoppingBag> shoppingBags = new HashMap<>();
+
+
 
     public Cart() {
         shoppingBags = new HashMap<>();
@@ -29,9 +39,6 @@ public class Cart {
         return objectMapper.readValue(json, Cart.class);
     }
 
-    public HashMap<String, ShoppingBag> getShoppingBags() {
-        return shoppingBags;
-    }
 
     public void addShoppingBag(ShoppingBag shoppingBag, String storeId) {
         shoppingBags.put(storeId, shoppingBag);
@@ -40,7 +47,7 @@ public class Cart {
     public void addProductToCart(int productId, int quantity, String storeId, double price, int category) {
         ShoppingBag shoppingBag = shoppingBags.get(storeId);
         if (shoppingBag == null) {
-            shoppingBag = new ShoppingBag(storeId);
+            shoppingBag = new ShoppingBag(storeId,this);
             shoppingBags.put(storeId, shoppingBag);
         }
         shoppingBag.addProduct(productId, quantity, price, category);
@@ -70,9 +77,17 @@ public class Cart {
         shoppingBags.remove(storeName);
     }
 
-    public void saveCart() {
-        //TODO when connecting to database.
-    }
+
+//
+//    public void saveCart() {
+//        if (entityManager != null) {
+//            entityManager.getTransaction().begin();
+//            entityManager.persist(this);
+//            entityManager.getTransaction().commit();
+//        } else {
+//            throw new IllegalStateException("EntityManager is not set.");
+//        }
+//    }
 
     @Override
     public String toString() {
@@ -93,9 +108,9 @@ public class Cart {
     }
 
     private List<ProductInSale> getProductsToList() {
-        List list = new ArrayList<>();
+        List<ProductInSale> list = new ArrayList<>();
         for (ShoppingBag shoppingBag : shoppingBags.values()) {
-            list.add(shoppingBag.getProducts_list().values());
+            list.addAll(shoppingBag.getProducts_list().values());
         }
         return list;
     }
@@ -129,9 +144,10 @@ public class Cart {
         }
     }
 
-    public void addPurchase(StoreRepository storeRepository,String username) {
+    public void addPurchase(StoreRepository storeRepository, String username) {
         for (ShoppingBag shoppingBagInStore : shoppingBags.values()) {
-            shoppingBagInStore.addPurchase(storeRepository,username);
+            shoppingBagInStore.addPurchase(storeRepository, username);
         }
     }
+
 }

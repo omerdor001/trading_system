@@ -11,10 +11,7 @@ import java.util.Collection;
 @DiscriminatorValue("PLACEHOLDER")
 public class PlaceholderDiscountPolicy extends DiscountPolicy {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long id;
+
     public PlaceholderDiscountPolicy() {
     }
 

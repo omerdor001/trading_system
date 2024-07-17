@@ -126,7 +126,7 @@ export default defineComponent({
           console.log(response);
           router.push('/');
         } catch (error) {
-          toast.add({ severity: 'error', summary: 'Error', detail: error.response || 'Failed to register', life: 3000 });
+          toast.add({ severity: 'error', summary: 'Error',  detail: error.response.data || 'Failed to register', life: 3000 });
           console.error('Registration error:', error);
         }
       }

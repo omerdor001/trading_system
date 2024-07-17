@@ -32,4 +32,6 @@ public interface UserRepository {
     void saveUser(User user);
 
     boolean checkIfRegistersEmpty();
+
+    void saveCart(User user);
 }

@@ -6,8 +6,10 @@ import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +26,15 @@ public class UserFacadeImp implements UserFacade {
     private static final Logger logger = LoggerFactory.getLogger(UserFacadeImp.class);
     private static UserFacadeImp instance = null;
     private final NotificationSender notificationSender;
+    @Setter
     private UserRepository userRepository;
     private DeliveryService deliveryService;
     private PaymentService paymentService;
     private MarketFacade marketFacade;
+    @Autowired
 
-    public UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
+    public UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender,
+                         UserRepository userRepository, StoreRepository storeRepository) {
         this.paymentService = paymentService;
         this.deliveryService = deliveryService;
         this.userRepository = userRepository;
@@ -38,12 +43,18 @@ public class UserFacadeImp implements UserFacade {
         marketFacade.initialize(this);
     }
 
-    public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
+    public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender
+            notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         if (instance == null) {
             instance = new UserFacadeImp(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
             instance.marketFacade.initialize(instance);
         }
         return instance;
+    }
+
+    @Override
+    public void setUserRepository(UserRepository userRepository){
+        this.userRepository = userRepository;
     }
 
     // Method to encrypt a given password
@@ -61,10 +72,6 @@ public class UserFacadeImp implements UserFacade {
     @Override
     public UserRepository getUserRepository() {
         return userRepository;
-    }
-
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -250,7 +257,8 @@ public class UserFacadeImp implements UserFacade {
         if (isSuspended(username)) {
             throw new RuntimeException("User is suspended from the system");
         }
-        userRepository.getUser(username).getCart().saveCart();
+        if(user.getCart().getShoppingBags()!=null)
+            userRepository.saveCart(user);
     }
 
     @Override
@@ -410,28 +418,32 @@ public class UserFacadeImp implements UserFacade {
             logger.error("Store not found: " + storeName);
             throw new NoSuchElementException("Store not found: " + storeName);
         }
-        if (!marketFacade.getStore(storeName).isOpen())
-            throw new IllegalArgumentException("When store is closed you cant add to cart from this store");
+        if (!marketFacade.getStore(storeName).isOpen()) {
+            throw new IllegalArgumentException("When store is closed you can't add to cart from this store");
+        }
         if (username.charAt(0) == 'r' && !userRepository.getUser(username).getLogged()) {
             logger.error("User is not logged in: " + username);
             throw new RuntimeException("User is not logged in: " + username);
         }
+
         checkProductQuantity(username, productId, storeName, quantity);
+
         Product p = marketFacade.getStore(storeName).getProduct(productId);
         User user = userRepository.getUser(username);
-        if(p.getProduct_price() == price) {
+
+        if (p.getProduct_price() == price) {
+
             user.addProductToCart(productId, quantity, storeName, p.getProduct_price(), p.getCategory().getIntValue());
             userRepository.saveUser(user);
-        }
-        else {
-            if(marketFacade.getStore(storeName).isBidApproved(username,productId,price)){
+        } else {
+            if (marketFacade.getStore(storeName).isBidApproved(username, productId, price)) {
                 user.addProductToCart(productId, quantity, storeName, price, p.getCategory().getIntValue());
                 userRepository.saveUser(user);
+            } else {
+                throw new IllegalArgumentException("This bid has not been approved by all owners or there is no bid with this price");
             }
-            else
-                throw new IllegalArgumentException("This bid has not approved by all owners or there is no bid with this price");
         }
-        //TODO save product in store?
+        marketFacade.save(marketFacade.getStore(storeName));
     }
 
 
@@ -551,7 +563,7 @@ public class UserFacadeImp implements UserFacade {
     }
 
     @Override
-    public void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException, NoSuchElementException {
+    public void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException, NoSuchElementException {
         if (!marketFacade.isStoreExist(store_name_id))
             throw new NoSuchElementException("No store called " + store_name_id + " exist");
         if (!userRepository.isExist(appoint)) {
@@ -577,7 +589,7 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(store_name_id)) {
             throw new IllegalAccessException("User is already owner of this store");
         }
-        newManagerUser.addWaitingAppoint_Manager(store_name_id,appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+        newManagerUser.addWaitingAppoint_Manager(store_name_id,appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
         sendNotification(appoint, newManager, appointUser.getUsername() + " suggests you to become a store manager at " + store_name_id);
         userRepository.saveUser(newManagerUser);
     }
@@ -618,11 +630,11 @@ public class UserFacadeImp implements UserFacade {
         sendNotification(newOwner, appoint, newOwnerUser.getUsername() + " accepted your suggestion to become an owner at store: " + storeName);
         userRepository.saveUser(newOwnerUser);
         userRepository.saveUser(appointUser);
-        //TODO save store
+        marketFacade.save(store);
     }
 
     @Override
-    public void approveManager(String newManager, String storeName, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException {
+    public void approveManager(String newManager, String storeName, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException {
         if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userRepository.isExist(newManager)) {
@@ -648,15 +660,27 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User is already owner of this store");
         }
-        if (newManagerUser.removeWaitingAppoint_Manager(storeName, appoint) == null)
+
+        System.out.println("Current manager suggestions for " + newManager + ": ");
+        for (ManagerSuggestion suggestion : newManagerUser.getManagerSuggestions()) {
+            System.out.println(" - " + suggestion.getSuggestionKey());
+        }
+        String suggestionKey = storeName + ":" + appoint;
+        System.out.println("Attempting to remove waiting appointment for: " + suggestionKey);
+        List<Boolean> permissions = newManagerUser.removeWaitingAppoint_Manager(suggestionKey);
+        if (permissions == null) {
+            System.out.println("No suggestion found for: " + suggestionKey);
             throw new RuntimeException("No appointment requests in this store.");
+        }
+
+
         newManagerUser.addManagerRole(appoint, storeName);
         marketFacade.getStore(storeName).addManager(newManager);
-        newManagerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+        newManagerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
         sendNotification(newManager, appoint, newManagerUser.getUsername() + " accepted your suggestion to become a manager at store: " + storeName);
         userRepository.saveUser(newManagerUser);
         userRepository.saveUser(appointUser);
-        //TODO save store
+        marketFacade.save(marketFacade.getStore(storeName));
     }
 
     @Override
@@ -709,7 +733,6 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("User is not owner of this store");
         }
         if (store.getFounder().equals(userName)) throw new IllegalAccessException("Founder cant waive on ownership");
-
         cancelOwnerShip(userName, storeName);
     }
 
@@ -719,12 +742,11 @@ public class UserFacadeImp implements UserFacade {
         List<String> storeOwners = store.getOwners();
         List<String> storeManagers = store.getManagers();
 
-
         for (String storeOwner : storeOwners) {
             User user = userRepository.getUser(storeOwner);
             if (user.getRoleByStoreId(storeName).getAppointedById().equals(userName)) {
                 cancelOwnerShip(storeOwner, storeName);
-                sendNotification(userName, "r" + user.getUsername(), "You are no longer an owner at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
+                sendNotification(userName, storeOwner, "You are no longer an owner at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
             }
             userRepository.saveUser(user);
         }
@@ -734,14 +756,14 @@ public class UserFacadeImp implements UserFacade {
             if (user.getRoleByStoreId(storeName).getAppointedById().equals(userName)) {
                 user.removeManagerRole(storeName);
                 store.removeManager(storeManager);
-                sendNotification(userName, "r" + user.getUsername(), "You are no longer a manager at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
+                sendNotification(userName, storeManager, "You are no longer a manager at store: " + storeName + " due to user: " + ownerUser.getUsername() + " is fired/waiving his ownership");
             }
             userRepository.saveUser(user);
         }
         userRepository.getUser(userName).removeOwnerRole(storeName);
         marketFacade.getStore(storeName).removeOwner(userName);
         userRepository.saveUser(ownerUser);
-        //TODO save store
+        marketFacade.save(store);
     }
 
     @Override
@@ -776,7 +798,7 @@ public class UserFacadeImp implements UserFacade {
         store.removeManager(manager);
         sendNotification(owner, manager, "You are no longer a manager at store: " + storeName + " due to being fired by " + ownerUser.getUsername());
         userRepository.saveUser(managerUser);
-        //TODO call save store
+        marketFacade.save(store);
     }
 
     @Override
@@ -811,9 +833,8 @@ public class UserFacadeImp implements UserFacade {
         cancelOwnerShip(owner, storeName);
         sendNotification(ownerAppoint, owner, "You are no longer an owner at store: " + storeName + " due to being fired by user: " + ownerAppointer.getUsername());
         userRepository.saveUser(ownerUser);
-        //TODO save store
+        marketFacade.save(marketFacade.getStore(storeName));
     }
-
     @Override
     public void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException {
         if (!marketFacade.isStoreExist(storeName))
@@ -827,8 +848,10 @@ public class UserFacadeImp implements UserFacade {
         if (isSuspended(userName)) {
             throw new RuntimeException("User is suspended from the system");
         }
+
         User appointUser = userRepository.getUser(appoint);
         User newManagerUser = userRepository.getUser(userName);
+
         if (!newManagerUser.getLogged()) {
             throw new IllegalAccessException("New Manager user is not logged");
         }
@@ -841,14 +864,25 @@ public class UserFacadeImp implements UserFacade {
         if (newManagerUser.isOwner(storeName)) {
             throw new IllegalAccessException("User is already owner of this store");
         }
-        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(storeName, appoint);
+
+        String suggestionKey = storeName + ":" + appoint;
+        System.out.println("Attempting to remove waiting appointment for: " + suggestionKey);
+        List<Boolean> perm = newManagerUser.removeWaitingAppoint_Manager(suggestionKey);
+        if (perm == null) {
+            throw new IllegalAccessException("No one suggests this user to be a manager");
+        }
+        System.out.println("Removed waiting appointment for: " + suggestionKey);
+
         sendNotification(userName, appoint, newManagerUser.getUsername() + " rejected your suggestion to become a manager at store: " + storeName);
+        System.out.println("Notification sent to " + appoint);
+
         userRepository.saveUser(newManagerUser);
         userRepository.saveUser(appointUser);
+        System.out.println("Users saved successfully.");
     }
 
     @Override
-    public void editPermissionForManager(String userId, String managerToEdit, String storeName, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) throws IllegalAccessException, NoSuchElementException {
+    public void editPermissionForManager(String userId, String managerToEdit, String storeName, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException, NoSuchElementException {
         if (!marketFacade.isStoreExist(storeName))
             throw new NoSuchElementException("No store called " + storeName + " exist");
         if (!userRepository.isExist(userId)) {
@@ -877,7 +911,7 @@ public class UserFacadeImp implements UserFacade {
         if (!managerUser.getRoleByStoreId(storeName).getAppointedById().equals(userId)) {
             throw new IllegalAccessException("Owner cant edit permissions to manager that he/she didn't appointed");
         }
-        managerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids, createLottery);
+        managerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
         sendNotification(userId, managerToEdit, "Your permissions for store: " + storeName + " were changed by user: " + appointUser.getUsername());
         userRepository.saveUser(managerUser);
     }
@@ -1015,7 +1049,7 @@ public class UserFacadeImp implements UserFacade {
         products_list.put(productID, new ProductInSale(storeName, productID, price, 1, product.getCategory().getIntValue()));
         ObjectMapper objectMapper = new ObjectMapper();
         String a = objectMapper.writeValueAsString(products_list.values());
-        marketFacade.addPurchase(userName, a, price, storeName);
+        marketFacade.addBidPurchase(userName, a, price, storeName);
     }
 
     @Override
@@ -1208,16 +1242,22 @@ public class UserFacadeImp implements UserFacade {
     private List<Map<String, Object>> getMapsForManagement(String username) {
         User user = userRepository.getUser(username);
         List<Map<String, Object>> toApproves = new ArrayList<>();
-        for (Map.Entry<String, HashMap<String, List<Boolean>>> entry : user.getManagerSuggestions().entrySet()) {
-            String storeName = entry.getKey();
-            HashMap<String, List<Boolean>> appointeesPermissions = entry.getValue();
-            for (Map.Entry<String, List<Boolean>> appointeeEntry : appointeesPermissions.entrySet()) {
-                Map<String, Object> approveMap = getStringObjectMap(appointeeEntry, storeName);
-                toApproves.add(approveMap);
-            }
+
+        for (ManagerSuggestion suggestion : user.getManagerSuggestions()) {
+            String storeName = suggestion.getSuggestionKey();
+            List<Boolean> permissions = suggestion.getSuggestionValues();
+
+            Map<String, Object> approveMap = new HashMap<>();
+            approveMap.put("storeName", storeName);
+            approveMap.put("appointee", suggestion.getSuggestionKey());
+            approveMap.put("permissions", permissions);
+
+            toApproves.add(approveMap);
         }
+
         return toApproves;
     }
+
 
     private Map<String, Object> getStringObjectMap(Map.Entry<String, List<Boolean>> appointeeEntry, String storeName) {
         String appointee = appointeeEntry.getKey();
@@ -1229,8 +1269,7 @@ public class UserFacadeImp implements UserFacade {
         approveMap.put("editSupply", permissions.get(1));
         approveMap.put("editBuyPolicy", permissions.get(2));
         approveMap.put("editDiscountPolicy", permissions.get(3));
-        approveMap.put("editAcceptBids",permissions.get(4));
-        approveMap.put("editCreateLottery",permissions.get(5));
+        approveMap.put("acceptBids",permissions.get(4));
         return approveMap;
     }
 
@@ -1245,18 +1284,24 @@ public class UserFacadeImp implements UserFacade {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> permissions = new HashMap<>();
         User user = userRepository.getUser(username);
-        permissions.put("username",username);
-        permissions.put("watch", user.isWatch(storeName));
-        permissions.put("editSupply", user.isEditSupply(storeName));
-        permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
-        permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
-        permissions.put("editAcceptBids", user.isAcceptBids(storeName));
-        permissions.put("editCreateLottery", user.isCreateLottery(storeName));
-        try {
-            return mapper.writeValueAsString(permissions);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+        if (user.isOwner(storeName) || user.isManager(storeName)) {
+            permissions.put("username", username);
+            permissions.put("watch", user.isWatch(storeName));
+            permissions.put("editSupply", user.isEditSupply(storeName));
+            permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
+            permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
+            permissions.put("acceptBids", user.isAcceptBids(storeName));
         }
+            try {
+                return mapper.writeValueAsString(permissions);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("Failed to convert suspension details to JSON: " + e.getMessage());
+            }
+        }
+
+    @Override
+    public String getUserAppointer(String user, String storeName) {
+        return getUser(user).getRoleByStoreId(storeName).getAppointedById();
     }
 
     @Override
@@ -1273,12 +1318,12 @@ public class UserFacadeImp implements UserFacade {
             Map<String, Object> permissions = new HashMap<>();
             if(!user.getUsername().equals(username) && user.isManager(storeName)){
                 permissions.put("username", user.getUsername());
+                permissions.put("appointer",user.getRoleByStoreId(storeName).getAppointedById());
                 permissions.put("watch", user.isWatch(storeName));
                 permissions.put("editSupply", user.isEditSupply(storeName));
                 permissions.put("editBuyPolicy", user.isEditPurchasePolicy(storeName));
                 permissions.put("editDiscountPolicy", user.isEditDiscountPolicy(storeName));
-                permissions.put("editAcceptBids", user.isAcceptBids(storeName));
-                permissions.put("editCreateLottery", user.isCreateLottery(storeName));
+                permissions.put("acceptBids", user.isAcceptBids(storeName));
                 managers.add(permissions);
             }
         }

@@ -20,7 +20,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public HashMap<String, HashMap<String, List<Boolean>>> getManagerSuggestions() {
+    public List<ManagerSuggestion> getManagerSuggestions() {
         return null;
     }
 
@@ -95,7 +95,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+    public void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
 
     }
 
@@ -123,10 +123,6 @@ public class Visitor extends User {
         return false;
     }
 
-    @Override
-    public boolean isCreateLottery(String storeName) {
-        return false;
-    }
 
 
     @Override
@@ -135,7 +131,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id,String appointee) {
+    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id) {
         return List.of();
     }
 
@@ -144,7 +140,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery) {
+    public void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
     }
 
     @Override

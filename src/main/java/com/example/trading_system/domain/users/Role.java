@@ -2,25 +2,32 @@ package com.example.trading_system.domain.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Setter;
+
 import java.util.List;
 
 @Entity
 @Table(name = "roles")
 public class Role {
+
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "role_state_id", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_state_id")
     private RoleState roleState;
 
-    @Column(nullable = false)
+    @Column
     private String store_name_id;
 
-    @Column(nullable = false)
+    @Column
     private String appointedById;
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "registered_username", referencedColumnName = "username", nullable = false)
+    private Registered registeredUser;
 
     public Role(String store_name_id, String appointedById) {
         this.store_name_id = store_name_id;
@@ -125,9 +132,6 @@ public class Role {
         roleState.getStoreBids();
     }
 
-    public void createProductLottery() throws IllegalAccessException{
-        roleState.createProductLottery();
-    }
     //Getters of permissions
     public boolean isWatch(){
         return roleState.isWatch();
@@ -149,9 +153,6 @@ public class Role {
         return roleState.isAcceptBids();
     }
 
-    public boolean isCreateLottery(){
-        return roleState.isCreateLottery();
-    }
 
 }
 

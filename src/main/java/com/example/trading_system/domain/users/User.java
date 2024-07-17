@@ -1,8 +1,10 @@
 package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.Message;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
 
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jakarta.persistence.*;
@@ -11,21 +13,23 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User {
     private static final Logger logger = LoggerFactory.getLogger(User.class);
 
+    @Getter
     @Id
     @Column(nullable = false, unique = true)
-    public String username;
+    private String username;
 
-    @Embedded
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id", referencedColumnName = "id")
     private Cart cart;
 
-    @Column(nullable = false)
+    @Column
     private boolean suspended;
 
     @Column
@@ -34,15 +38,14 @@ public abstract class User {
     @Column
     private LocalDateTime suspendedEnd;
 
-    @Column(nullable = false)
+    @Column
     private String address;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private LinkedList<Message> messages;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> messages;
 
     @Column(nullable = false)
     private boolean isTimerCancelled;
-
 
     public User(String username) {
         this.username = username;
@@ -56,10 +59,6 @@ public abstract class User {
     }
 
     public User() {
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public void setId(String username) {
@@ -116,7 +115,7 @@ public abstract class User {
 
     public abstract boolean isManager(String store_name_id);
 
-    public abstract void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery);
+    public abstract void addWaitingAppoint_Manager(String store_name_id,String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids);
 
     public abstract boolean isWatch(String storeName);
 
@@ -128,15 +127,14 @@ public abstract class User {
 
     public abstract boolean isAcceptBids(String storeName);
 
-    public abstract boolean isCreateLottery(String storeName);
 
     public abstract boolean removeWaitingAppoint_Owner(String storeName);
 
-    public abstract List<Boolean> removeWaitingAppoint_Manager(String store_name_id,String appointee) throws IllegalAccessException;
+    public abstract List<Boolean> removeWaitingAppoint_Manager(String store_name_id) throws IllegalAccessException;
 
     public abstract void addManagerRole(String appoint, String store_name_id);
 
-    public abstract void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids, boolean createLottery);
+    public abstract void setPermissionsToManager(String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids);
 
     public abstract void addOwnerRole(String appoint, String storeName);
 
@@ -163,7 +161,7 @@ public abstract class User {
     }
 
     public LinkedList<Message> getMessages(){
-        return this.messages;
+        return (LinkedList<Message>) this.messages;
     }
 
     public String getMessagesJSON(){
@@ -172,9 +170,9 @@ public abstract class User {
 
     public abstract boolean getLogged();
 
-    public abstract HashMap<String, String> getOwnerSuggestions();
+    public abstract Map<String, String> getOwnerSuggestions();
 
-    public abstract HashMap<String, HashMap<String, List<Boolean>>> getManagerSuggestions();
+    public abstract List<ManagerSuggestion> getManagerSuggestions();
 
     public abstract List<Notification> getNotifications();
 
