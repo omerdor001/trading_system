@@ -10,7 +10,7 @@ public class PaymentServiceProxy implements PaymentService {
     private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
     int id = 1;
 
-//    @Autowired
+    //@Autowired
     public PaymentServiceProxy() {
     }
 
