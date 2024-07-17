@@ -5,42 +5,35 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
-
-
-@Embeddable
+@Entity
 @Getter
 @Setter
-@Entity
 public class ProductInSale {
+
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pid;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private String storeId;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private int id;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private double price;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private int quantity;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private int category;
+
+    @ManyToOne
+    @JoinColumn(name = "shopping_bag_id", referencedColumnName = "id")
+    private ShoppingBag shoppingBag;
+
 
     public ProductInSale(String storeId, int productId, double price, int quantity, int category) {
         this.storeId=storeId;

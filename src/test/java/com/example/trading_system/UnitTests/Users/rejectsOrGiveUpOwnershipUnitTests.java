@@ -5,10 +5,7 @@ import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.StoreMemoryRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserFacade;
-import com.example.trading_system.domain.users.UserFacadeImp;
-import com.example.trading_system.domain.users.UserMemoryRepository;
-import com.example.trading_system.domain.users.UserRepository;
+import com.example.trading_system.domain.users.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -154,7 +151,7 @@ class rejectsOrGiveUpOwnershipUnitTests {
     void rejectToManageStore_UserNotForStoreList() {
         int sizeB = userFacade.getUser("r" + username3).getManagerSuggestions().size();
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> userFacade.rejectToManageStore("r" + username3, "Nike", "r" + username2));
-        assertEquals("No one suggest this user to be a manager", exception.getMessage());
+        assertEquals("No one suggests this user to be a manager", exception.getMessage());
         int sizeA = userFacade.getUser("r" + username3).getManagerSuggestions().size();
         assertEquals(sizeB, sizeA);
     }
@@ -344,8 +341,9 @@ class rejectsOrGiveUpOwnershipUnitTests {
     void waiverOnOwnership_IsFounder() {
         boolean isOwnerB = userFacade.getUser("r" + username1).isOwner("Adidas");
         IllegalAccessException exception = assertThrows(IllegalAccessException.class, () -> userFacade.waiverOnOwnership("r" + username1, "Adidas"));
-        assertEquals("Founder cant waive on ownership", exception.getMessage());
+        assertEquals("Founder cant waive his ownership", exception.getMessage());
         boolean isOwnerA = userFacade.getUser("r" + username1).isOwner("Adidas");
         assertEquals(isOwnerB, isOwnerA);
     }
+
 }

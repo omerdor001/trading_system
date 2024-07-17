@@ -20,7 +20,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public HashMap<String, HashMap<String, List<Boolean>>> getManagerSuggestions() {
+    public List<ManagerSuggestion> getManagerSuggestions() {
         return null;
     }
 
@@ -131,7 +131,7 @@ public class Visitor extends User {
     }
 
     @Override
-    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id,String appointee) {
+    public List<Boolean> removeWaitingAppoint_Manager(String store_name_id) {
         return List.of();
     }
 

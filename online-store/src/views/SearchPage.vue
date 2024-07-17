@@ -105,12 +105,6 @@ export default {
       selectedRating.value = 0;
     };
 
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     return {
       username,
       token,
@@ -122,8 +116,7 @@ export default {
       fetchCategories,
       search,
       selectRating,
-      resetFilters,
-      logout
+      resetFilters
     };
   }
 };

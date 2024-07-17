@@ -263,12 +263,6 @@ export default defineComponent({
       store.editableWorkers = store.editableWorkers.filter(worker => !worker.selected);
     };
 
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     return {
       stores,
       username,
@@ -292,7 +286,6 @@ export default defineComponent({
       removeWorker,
       editingWorkers,
       editingPermissions,
-      logout
     };
   }
 });

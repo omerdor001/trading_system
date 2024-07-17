@@ -12,10 +12,6 @@ import java.util.Collection;
 @DiscriminatorValue("XOR")
 public class XorDiscount extends DiscountPolicy {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long id;
 
     @OneToOne
     private DiscountPolicy first;

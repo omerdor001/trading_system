@@ -123,11 +123,6 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('username');
-      router.push('/login');
-    };
-
     const showSuccessToast = (message) => {
       toast.value.add({
         severity: 'success',
@@ -154,7 +149,6 @@ export default defineComponent({
       error,
       requests,
       rejectManager,
-      logout,
       toast,
     };
   },

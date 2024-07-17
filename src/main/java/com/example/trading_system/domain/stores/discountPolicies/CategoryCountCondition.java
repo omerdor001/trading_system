@@ -10,11 +10,6 @@ import java.util.Collection;
 @DiscriminatorValue("CATEGORYCOUNT")
 public class CategoryCountCondition extends Condition {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long id;
-
     @Column(name = "category")
     private int category;
 

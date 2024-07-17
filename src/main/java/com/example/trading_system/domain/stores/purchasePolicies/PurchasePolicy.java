@@ -8,7 +8,7 @@ import java.util.Collection;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "type")
+@DiscriminatorColumn(name = "type", length = 50)
 public abstract class PurchasePolicy implements PurchasePolicyInterface {
 
     @Id

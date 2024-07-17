@@ -209,4 +209,6 @@ public interface MarketService {
     String searchProductsInStores(String userName, String keyWord, double minPrice, double maxPrice, List<Integer> intCategories, Double rating) throws Exception;
 
     void approveCounterOffer(String userName, String storeName, int productID, double price) throws Exception;
+
+    void rejectCounterOffer(String userName, String storeName, int productID) throws Exception;
 }
