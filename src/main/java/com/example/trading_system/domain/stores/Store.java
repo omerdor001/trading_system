@@ -855,14 +855,22 @@ public class Store {
         return false;
     }
 
-    public String getStoreBids() {
-        if (bids.isEmpty()) return "{}";
-        StringBuilder sb = new StringBuilder();
-        sb.append("{\n");
-        sb.append("  \"storeName\" : \"").append(nameId).append("\",\n");
-        sb.append("  \"bids\" : ").append(Bid.toJsonList(bids)).append("\n");
-        sb.append("}");
-        return sb.toString();
+    public String getStoreBids() throws RuntimeException{
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(bids);
+        }
+        catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert bids to JSON: " + e.getMessage());
+
+        }
+//        if (bids.isEmpty()) return "{}";
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("{\n");
+//        sb.append("  \"storeName\" : \"").append(nameId).append("\",\n");
+//        sb.append("  \"bids\" : ").append(Bid.toJsonList(bids)).append("\n");
+//        sb.append("}");
+//        return sb.toString();
     }
 
     public boolean isBidApproved(String username, int productId, double price) {
