@@ -9,6 +9,7 @@
         <PrimeColumn field="quantity" header="Quantity" />
         <PrimeColumn field="category" header="Category" />
         <PrimeColumn field="storeName" header="Store Name" />
+        <PrimeColumn field="customUsername" header="Customer" />
         <PrimeColumn field="totalPrice" header="Total Price" />
       </PrimeDataTable>
     </div>
@@ -33,18 +34,21 @@ export default {
   },
   setup() {
     const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
-    const username = ref(localStorage.getItem('username') || 'Guest');
+    const userName = ref(localStorage.getItem('username') || 'Guest');
     const token = ref(localStorage.getItem('token') || '');
     const allProducts = ref([]);
     const toast = useToast();
+
+    const storeName = ref(''); // Add this line
 
     const fetchPurchaseHistory = async () => {
       try {
         const response = await axios.get('http://localhost:8082/api/trading/purchase/history/customer', {
           params: {
-            username: username.value,
+            userName: userName.value,
             token: token.value,
-            customerUserName: username.value
+            customerUserName: userName.value,
+            storeName: storeName.value, // Add this line
           },
         });
         allProducts.value = response.data;
@@ -66,12 +70,12 @@ export default {
     });
 
     const displayName = computed(() => {
-      if (username.value.startsWith('r')) {
-        return username.value.substring(1);  // Removes the first character 'r'
-      } else if (username.value.startsWith('v')) {
+      if (userName.value.startsWith('r')) {
+        return userName.value.substring(1);  // Removes the first character 'r'
+      } else if (userName.value.startsWith('v')) {
         return 'Guest';  // Changes any username starting with 'v' to 'Guest'
       }
-      return username.value;  // Default case if no specific rules are matched
+      return userName.value;  // Default case if no specific rules are matched
     });
 
     onMounted(() => {
@@ -84,6 +88,8 @@ export default {
       displayName,
       token,
       isLoggedIn,
+      userName,
+      storeName, // Add this line
     };
   },
 };

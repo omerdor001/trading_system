@@ -865,7 +865,7 @@ public class MarketFacadeImp implements MarketFacade {
         if (!storeRepository.isExist(storeName)) {
             throw new IllegalArgumentException("Store must exist");
         }
-        Store store = storeRepository.getStore(storeName);
+//        Store store = storeRepository.getStore(storeName);
         if (!userFacade.isUserExist(userName)) {
             throw new IllegalArgumentException("User must exist");
         }
@@ -875,24 +875,13 @@ public class MarketFacadeImp implements MarketFacade {
         if (!userFacade.isUserExist(customerUserName)) {
             throw new IllegalArgumentException("Customer must exist");
         }
-        List<Map<String, Object>> allProducts = new ArrayList<>();
-        for(Store store : storeRepository.getAllStoresByStores()){
-            List<Purchase> purchases = store.getSalesHistory().getPurchasesByCustomer(customerUserName);
-            for(Purchase purchase : purchases){
-                List<ProductInSaleDTO> productList = purchase.getProductInSaleList();
-                for(ProductInSaleDTO product : productList){
-                    Map<String, Object> productMap = getStringObjectMap(store, purchase, product);
-                    allProducts.add(productMap);
-                }
-            }
-        }
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writeValueAsString(allProducts);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return "Error converting purchase history to JSON";
-        }
+        Store store = storeRepository.getStore(storeName);
+        User user = userFacade.getUsers().get(userName);
+        if (user.isAdmin())
+            return store.getHistoryPurchasesByCustomer(customerUserName).stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
+        if (user.getRoleByStoreId(storeName) == null) throw new RuntimeException("Not allowed to view store history");
+        user.getRoleByStoreId(storeName).getRoleState().getAllHistoryPurchases();
+        return store.getHistoryPurchasesByCustomer(customerUserName).stream().map(Purchase::toString).collect(Collectors.joining("\n\n"));
     }
 
     @Override
