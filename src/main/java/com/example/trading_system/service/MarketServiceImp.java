@@ -424,8 +424,8 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) throws IllegalAccessException {
-        return marketFacade.getHistoryPurchasesByCustomer(userName, storeName, customerUserName);
+    public String getHistoryPurchasesByCustomer(String userName) throws IllegalAccessException {
+        return marketFacade.getHistoryPurchasesByCustomer(userName);
     }
 
     @Override
@@ -494,6 +494,12 @@ public class MarketServiceImp implements MarketService {
         marketFacade.approveCounterOffer(userName, storeName, productID, price);
 
     }
+
+    @Override
+    public void rejectCounterOffer(String userName, String storeName, int productID) throws Exception{
+        marketFacade.rejectCounterOffer(userName, storeName, productID);
+    }
+
 
     @Override
     public String getStoreBids(String userName, String storeName) throws IllegalAccessException, IllegalArgumentException{

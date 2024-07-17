@@ -7,9 +7,11 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class CartDTO {
+    private int id;
     private HashMap<String, ShoppingBagDTO> shoppingBags;
 
     public CartDTO() {
+        id = -1;
         shoppingBags = new HashMap<>();
     }
 
@@ -24,6 +26,10 @@ public class CartDTO {
 
     public void setShoppingBags(HashMap<String, ShoppingBagDTO> shoppingBags) {
         this.shoppingBags = shoppingBags;
+    }
+
+    public void setId(int id){
+        this.id = id;
     }
 
     public String toJson() throws JsonProcessingException {

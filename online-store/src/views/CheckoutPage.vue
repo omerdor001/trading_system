@@ -78,13 +78,6 @@ export default defineComponent({
       }
     };
 
-    const logout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
-      router.push('/login');
-    };
-
     return {
       username,
       street,
@@ -92,7 +85,6 @@ export default defineComponent({
       state,
       postalCode,
       proceedToPayment,
-      logout
     };
   }
 });

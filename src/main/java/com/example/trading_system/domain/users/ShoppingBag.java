@@ -2,55 +2,49 @@ package com.example.trading_system.domain.users;
 
 import com.example.trading_system.domain.stores.MarketFacadeImp;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 @Entity
+@Table(name = "shopping_bags")
 public class ShoppingBag {
-    @JsonIgnore
     @Id
+    @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
+    @Getter
     @Column(nullable = false)
     private String storeId;
 
-    @ElementCollection
-    @CollectionTable(name = "products_in_sale",
-            joinColumns = @JoinColumn(name = "shopping_bag_id"))
-    @MapKeyColumn(name = "product_id")
-    @AttributeOverrides({
-            @AttributeOverride(name = "price", column = @Column(name = "price")),
-            @AttributeOverride(name = "quantity", column = @Column(name = "quantity")),
-            @AttributeOverride(name = "category", column = @Column(name = "category"))
-    })
-    private HashMap<Integer, ProductInSale> products_list;
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "cart_id", nullable = false)
+    private Cart cart;
+    @Getter
+    @OneToMany(mappedBy = "shoppingBag", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Map<Integer, ProductInSale> products_list = new HashMap<>();
 
-    public ShoppingBag(String storeId) {
+
+    public ShoppingBag(String storeId, Cart cart) {
         this.storeId = storeId;
         products_list = new HashMap<>();
+        this.cart=cart;
     }
 
     public ShoppingBag() {
 
     }
 
-    public String getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(String storeId) {
-        this.storeId = storeId;
-    }
-
-    public HashMap<Integer, ProductInSale> getProducts_list() {
-        return products_list;
-    }
 
     public synchronized void addProduct(int productId, int quantity, double price, int category) {
         if (products_list.containsKey(productId)) {
@@ -126,4 +120,5 @@ public class ShoppingBag {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(products_list.values());
     }
+
 }

@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.LinkedList;
-import java.util.List;
 
 @Service
 public interface TradingSystem {
@@ -151,7 +149,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> getAllHistoryPurchases(String userName, String token, String storeName);
 
-    ResponseEntity<String> getHistoryPurchasesByCustomer(String userName, String token, String storeName, String customerUserName);
+    ResponseEntity<String> getHistoryPurchasesByCustomer(String userName, String token);
 
     ResponseEntity<String> requestInformationAboutOfficialsInStore(String userName, String token, String storeName);
 
@@ -290,6 +288,8 @@ public interface TradingSystem {
     ResponseEntity<String> placeCounterOffer(String userName, String token, String storeName, int productID, String bidUserName, double newPrice);
 
     ResponseEntity<String> approveCounterOffer(String userName, String token, String storeName, int productID, double price);
+
+    ResponseEntity<String> rejectCounterOffer(String userName, String token, String storeName, int productID);
 
     ResponseEntity<String> getStoreBids(String userName, String token, String storeName);
 

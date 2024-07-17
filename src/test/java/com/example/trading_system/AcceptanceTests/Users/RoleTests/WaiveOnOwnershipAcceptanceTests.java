@@ -162,7 +162,7 @@ public class WaiveOnOwnershipAcceptanceTests {
     public void GivenFounder_WhenWaiveOnOwnership_ThenThrowException()
     {
         ResponseEntity<String> resp = tradingSystemImp.waiverOnOwnership(userName,token,storeName);
-        Assertions.assertEquals("Founder cant waive on ownership",resp.getBody());
+        Assertions.assertEquals("Founder cant waive his ownership",resp.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
     }
 

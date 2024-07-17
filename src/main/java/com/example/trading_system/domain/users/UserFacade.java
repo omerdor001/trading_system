@@ -3,7 +3,6 @@ package com.example.trading_system.domain.users;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -54,9 +53,9 @@ public interface UserFacade {
 
     void suggestManager(String appoint, String newManager, String store_name_id, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException, NoSuchElementException;
 
-    void approveOwner(String newOwner, String storeName, String appoint) throws IllegalAccessException;
+    void approveOwner(String newOwner, String storeName, String appoint) throws Exception;
 
-    void approveManager(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws IllegalAccessException;
+    void approveManager(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws Exception;
 
     void rejectToManageStore(String userName, String storeName, String appoint) throws IllegalAccessException;
 

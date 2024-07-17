@@ -2,33 +2,55 @@ package com.example.trading_system.domain.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+
+import java.util.HashSet;
+import lombok.Setter;
+
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
 public class Role {
+
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "role_state_id", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_state_id")
     private RoleState roleState;
 
-    @Column(nullable = false)
+    @Column
     private String store_name_id;
 
-    @Column(nullable = false)
+    @Column
     private String appointedById;
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "registered_username", referencedColumnName = "username", nullable = false)
+    private Registered registeredUser;
+
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "users_appointing", referencedColumnName = "id")
+    @Getter
+    private Set<Registered> usersAppointedByMe;
 
     public Role(String store_name_id, String appointedById) {
         this.store_name_id = store_name_id;
         this.appointedById = appointedById;
+        this.usersAppointedByMe = new HashSet<>();
     }
 
     public Role() {
 
+    }
+
+    public void addUserAppointedByMe(Registered registered){
+        this.usersAppointedByMe.add(registered);
     }
 
     public String getStoreId() {

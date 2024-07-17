@@ -93,6 +93,7 @@
 			<artifactId>mssql-jdbc</artifactId>
 			<version>10.2.1.jre8</version>
 		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>
