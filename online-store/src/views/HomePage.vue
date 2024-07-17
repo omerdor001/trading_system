@@ -9,6 +9,7 @@
         <PrimeButton v-if="isLoggedIn" label="Close Store" @click="closeStore" class="sidebar-button"/>
         <PrimeButton v-if="isLoggedIn" label="View Ownership Suggestions" @click="approveOwnership" class="sidebar-button" />
         <PrimeButton v-if="isLoggedIn" label="View Management Suggestions" @click="approveManagement" class="sidebar-button" />
+        <PrimeButton v-if="isLoggedIn" label="My Purchase History" @click="viewPurchaseHistory" class="sidebar-button"/> <!-- New Button -->
         <PrimeButton v-if="isLoggedIn" label="View My Bids" @click="viewMyBids" class="sidebar-button" />
 
       </div>
@@ -17,13 +18,13 @@
       </div>
       <div class="sidebar2">
         <PrimeButton v-if="isLoggedIn && isAdmin" label="Create Suspension" @click="createSuspension"
-          class="sidebar-button" />
+                     class="sidebar-button" />
         <PrimeButton v-if="isLoggedIn && isAdmin" label="End Suspension" @click="endSuspension"
-          class="sidebar-button" />
+                     class="sidebar-button" />
         <PrimeButton v-if="isLoggedIn && isAdmin" label="Watch Suspensions" @click="watchSuspensions"
-          class="sidebar-button" />
+                     class="sidebar-button" />
         <PrimeButton v-if="isLoggedIn && isAdmin" label="Purchases History" @click="purchasesHistoryAsSystemManager"
-          class="sidebar-button" />
+                     class="sidebar-button" />
       </div>
     </div>
   </div>
@@ -82,17 +83,17 @@ export default defineComponent({
       router.push('/open-store');
     };
 
-     const approveOwnership = () => {
-          router.push('/approve-owner');
-        };
+    const approveOwnership = () => {
+      router.push('/approve-owner');
+    };
 
-     const approveManagement = () => {
-        router.push('/approve-manager');
-      };
-      
-      const viewMyBids = () => {
-        router.push('/get-my-bids')
-      };
+    const approveManagement = () => {
+      router.push('/approve-manager');
+    };
+
+    const viewMyBids = () => {
+      router.push('/get-my-bids')
+    };
 
     const stores = () => {
       router.push('/stores-page');
@@ -128,6 +129,10 @@ export default defineComponent({
       router.push({ name: 'AllStoresPage' });
     };
 
+    const viewPurchaseHistory = () => {
+      router.push({ name: 'PurchaseHistoryForCustomer' });  // Navigate to the new customer purchase history page
+    };
+
     return {
       isLoggedIn,
       isAdmin,
@@ -144,7 +149,8 @@ export default defineComponent({
       watchSuspensions,
       purchasesHistoryAsSystemManager,
       viewAllStores,
-      viewMyBids
+      viewMyBids,
+      viewPurchaseHistory,
     };
   }
 });
