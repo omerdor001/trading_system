@@ -5,6 +5,7 @@ import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
 import com.example.trading_system.domain.stores.StoreRepository;
 import com.example.trading_system.domain.users.UserRepository;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional
 public class TradingSystemImp implements TradingSystem {
     private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
     private static TradingSystemImp instance = null;
@@ -41,6 +43,12 @@ public class TradingSystemImp implements TradingSystem {
 
     public void setSystemOpen(boolean systemOpen) {   //For tests
         this.systemOpen = systemOpen;
+    }
+
+    @Override
+    public void deleteData() {
+        userService.deleteData();
+        marketService.deleteData();
     }
 
     @Override
@@ -187,6 +195,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<String> register(String username, String password, LocalDate birthdate) {
         logger.info("Attempting to register user: {} with password : {} and birthdate : {} ", username, password, birthdate);
         try {
@@ -292,7 +301,7 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> editProduct(String username, String token, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity){
+    public ResponseEntity<String> editProduct(String username, String token, String storeName, int productId, String productName, String productDescription, double productPrice, int productQuantity) {
         logger.info("User {} is trying to edit product : {} from store : {}", username, productId, storeName);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
@@ -344,9 +353,9 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            marketService.addKeywordToProduct(username,storeName,productId,keyword);
+            marketService.addKeywordToProduct(username, storeName, productId, keyword);
         } catch (Exception e) {
-            logger.error("Error occurred while adding keyword {} for product id: {} in store: {}: {}", keyword,productId,storeName, e.getMessage());
+            logger.error("Error occurred while adding keyword {} for product id: {} in store: {}: {}", keyword, productId, storeName, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.info("User {} finished to add keyword : {} to product : {} from store : {}", username, keyword, productId, storeName);
@@ -359,9 +368,9 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            marketService.removeKeywordToProduct(username,storeName,productId,keyword);
+            marketService.removeKeywordToProduct(username, storeName, productId, keyword);
         } catch (Exception e) {
-            logger.error("Error occurred while removing keyword {} for product id: {} in store: {}: {}", keyword,productId,storeName, e.getMessage());
+            logger.error("Error occurred while removing keyword {} for product id: {} in store: {}: {}", keyword, productId, storeName, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.info("User {} finished to remove keyword : {} to product : {} from store : {}", username, keyword, productId, storeName);
@@ -376,7 +385,7 @@ public class TradingSystemImp implements TradingSystem {
             if (userService.login(usernameV, username, password)) {
                 if (!token.isEmpty()) Security.makeTokenExpire(token);
                 String newToken = Security.generateToken("r" + username);
-                String userToken = "{\"username\": \"" + "r" + username + "\", \"token\": \"" + newToken + "\", \"isAdmin\": " + userService.isAdmin("r"+username) + "}";
+                String userToken = "{\"username\": \"" + "r" + username + "\", \"token\": \"" + newToken + "\", \"isAdmin\": " + userService.isAdmin("r" + username) + "}";
                 logger.info("User: {} logged in successfully", username);
                 return new ResponseEntity<>(userToken, HttpStatus.OK);
             } else {
@@ -531,7 +540,7 @@ public class TradingSystemImp implements TradingSystem {
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(newManager, token)) return invalidTokenResponse();
-            userService.approveManage(newManager, store_name_id, appoint,watch,editSupply,editBuyPolicy,editDiscountPolicy, acceptBids);
+            userService.approveManage(newManager, store_name_id, appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
             logger.info("Finished approving manage to store : {}", store_name_id);
             return new ResponseEntity<>("Success approving manage", HttpStatus.OK);
         } catch (Exception e) {
@@ -740,99 +749,99 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> getProductsFromStoreJSONFormat(String storeName,String username, String token) {
-        logger.info("Trying to Gather All Products Details of store {}",storeName);
+    public ResponseEntity<String> getProductsFromStoreJSONFormat(String storeName, String username, String token) {
+        logger.info("Trying to Gather All Products Details of store {}", storeName);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            logger.info("FINISHED Gather All Products Details of store {}",storeName);
+            logger.info("FINISHED Gather All Products Details of store {}", storeName);
             return new ResponseEntity<>(marketService.getProductsFromStoreJSONFormat(storeName), HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed on Gathering Products Details of store {} ",storeName, e.getMessage());
+            logger.error("Error occurred : {} , Failed on Gathering Products Details of store {} ", storeName, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @Override
     public ResponseEntity<String> getStoresIOpened(String username, String token) {
-        logger.info("Trying to get all Stores {} created",username);
+        logger.info("Trying to get all Stores {} created", username);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            logger.info("FINISHED Gather All Stores {} created",username);
+            logger.info("FINISHED Gather All Stores {} created", username);
             return new ResponseEntity<>(marketService.getStoresIOpened(username), HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed on Gathering Stores {} created ",username, e.getMessage());
+            logger.error("Error occurred : {} , Failed on Gathering Stores {} created ", username, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @Override
     public ResponseEntity<String> getStoresIOwn(String username, String token) {
-        logger.info("Trying to Get Stores {} owns",username);
+        logger.info("Trying to Get Stores {} owns", username);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            logger.info("FINISHED Get All Stores {} owns",username);
+            logger.info("FINISHED Get All Stores {} owns", username);
             return new ResponseEntity<>(userService.getStoresIOwn(username), HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed on Gathering Stores {} owns Info ",username, e.getMessage());
+            logger.error("Error occurred : {} , Failed on Gathering Stores {} owns Info ", username, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @Override
     public ResponseEntity<String> getUserRequestsOwnership(String username, String token) {
-        logger.info("Trying to Get Requests owners for {}",username);
+        logger.info("Trying to Get Requests owners for {}", username);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            logger.info("FINISHED Get Requests owners for {}",username);
+            logger.info("FINISHED Get Requests owners for {}", username);
             return new ResponseEntity<>(userService.getUserRequestsOwnership(username), HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed on Gathering Requests owners for {} ",username, e.getMessage());
+            logger.error("Error occurred : {} , Failed on Gathering Requests owners for {} ", username, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @Override
     public ResponseEntity<String> getUserRequestsManagement(String username, String token) {
-        logger.info("Trying to Get Requests managers for {}",username);
+        logger.info("Trying to Get Requests managers for {}", username);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            logger.info("FINISHED Get Requests managers for {}",username);
+            logger.info("FINISHED Get Requests managers for {}", username);
             return new ResponseEntity<>(userService.getUserRequestsManagement(username), HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed on Gathering Requests managers for {} ",username, e.getMessage());
+            logger.error("Error occurred : {} , Failed on Gathering Requests managers for {} ", username, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @Override
     public ResponseEntity<String> getStoresIManage(String username, String token) {
-        logger.info("Trying to Get Stores {} manages",username);
+        logger.info("Trying to Get Stores {} manages", username);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            logger.info("FINISHED Get All Stores {} manages",username);
+            logger.info("FINISHED Get All Stores {} manages", username);
             return new ResponseEntity<>(userService.getStoresIManage(username), HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed on Gathering Stores {} manages Info ",username, e.getMessage());
+            logger.error("Error occurred : {} , Failed on Gathering Stores {} manages Info ", username, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @Override
     public ResponseEntity<String> getPermissionsForUserJSONFormat(String username, String token, String storeName) {
-        logger.info("Trying to Get permissions for {}",username);
+        logger.info("Trying to Get permissions for {}", username);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
-            logger.info("FINISHED Get permissions for {}",username);
-            return new ResponseEntity<>(userService.getPermissionsForUserJSONFormat(username,storeName), HttpStatus.OK);
+            logger.info("FINISHED Get permissions for {}", username);
+            return new ResponseEntity<>(userService.getPermissionsForUserJSONFormat(username, storeName), HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {} , Failed on Gathering permissions for {} ",username, e.getMessage());
+            logger.error("Error occurred : {} , Failed on Gathering permissions for {} ", username, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -914,7 +923,7 @@ public class TradingSystemImp implements TradingSystem {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
             logger.info("Finish to Gather Information of Managers of the Store");
-            return new ResponseEntity<>(userService.getManagersOfStore(username,storeName), HttpStatus.OK);
+            return new ResponseEntity<>(userService.getManagersOfStore(username, storeName), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while trying to get Information of Managers of the Store", e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -928,7 +937,7 @@ public class TradingSystemImp implements TradingSystem {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(username, token)) return invalidTokenResponse();
             logger.info("Finish to Gather Information of Owners of the Store");
-            return new ResponseEntity<>(marketService.getOwnersOfStore(username,storeName), HttpStatus.OK);
+            return new ResponseEntity<>(marketService.getOwnersOfStore(username, storeName), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred : {} , while trying to get Information of Owners of the Store", e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -969,21 +978,21 @@ public class TradingSystemImp implements TradingSystem {
     // search in specific store
 
     @Override
-    public ResponseEntity<String> searchProductsInStores(String userName, String token, String keyWord, double minPrice, double maxPrice, String categories, Double rating){
+    public ResponseEntity<String> searchProductsInStores(String userName, String token, String keyWord, double minPrice, double maxPrice, String categories, Double rating) {
         logger.info("{} trying to search products in stores", userName);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(userName, token)) return invalidTokenResponse();
             List<Integer> intCategories = new LinkedList<>();
-            if(!categories.isEmpty())
-                 intCategories = Arrays.stream(categories.split(",")) // Split the string by commas
-                    .map(Integer::parseInt) // Parse each substring to an Integer
-                    .collect(Collectors.toList());
-            String result = marketService.searchProductsInStores(userName, keyWord, minPrice, maxPrice, intCategories , rating);
+            if (!categories.isEmpty())
+                intCategories = Arrays.stream(categories.split(",")) // Split the string by commas
+                        .map(Integer::parseInt) // Parse each substring to an Integer
+                        .collect(Collectors.toList());
+            String result = marketService.searchProductsInStores(userName, keyWord, minPrice, maxPrice, intCategories, rating);
             logger.info("Finished Searching products in store");
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Error occurred : {}, while {} trying to search stores", e.getMessage(),  userName);
+            logger.error("Error occurred : {}, while {} trying to search stores", e.getMessage(), userName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
@@ -1110,7 +1119,6 @@ public class TradingSystemImp implements TradingSystem {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
 
 
     @Override

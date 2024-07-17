@@ -12,6 +12,8 @@ import java.util.Set;
 public interface MarketFacade {
     StoreRepository getStoreRepository();
 
+    void deleteData();
+
     void deleteInstance();
 
     void initialize(UserFacade userFacade);

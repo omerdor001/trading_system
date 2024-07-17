@@ -10,6 +10,8 @@ import java.util.List;
 public interface MarketService {
     MarketFacade getMarketFacade();
 
+    void deleteData();
+
     void deleteInstance();
 
     String getAllStores(String userName);

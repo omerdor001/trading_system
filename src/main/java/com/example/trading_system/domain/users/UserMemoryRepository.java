@@ -92,7 +92,8 @@ public class UserMemoryRepository implements UserRepository {
     }
 
     @Override
-    public void saveUsers(List<User> users) {}
+    public void saveUsers(List<User> users) {
+    }
 
     @Override
     public boolean checkIfRegistersEmpty() {
@@ -107,10 +108,13 @@ public class UserMemoryRepository implements UserRepository {
     }
 
     @Override
-    public Registered getRegistered(String userName){
-        if (userName.charAt(0) != 'r')
-            throw new RuntimeException("User is not registerd");
-        else
-            return (Registered) users.get(userName);
+    public Registered getRegistered(String userName) {
+        if (userName.charAt(0) != 'r') throw new RuntimeException("User is not registerd");
+        else return (Registered) users.get(userName);
+    }
+
+    @Override
+    public void deleteData() {
+        this.users.clear();
     }
 }

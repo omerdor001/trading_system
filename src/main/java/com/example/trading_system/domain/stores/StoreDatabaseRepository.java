@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -74,6 +75,7 @@ public class StoreDatabaseRepository implements StoreRepository {
         Long count = entityManager.createQuery("SELECT COUNT(s) FROM Store s", Long.class).getSingleResult();
         return count == 0;
     }
+
     @Transactional
     @Override
     public void addStore(String storeName, String description, String founder, Double storeRating) {
@@ -81,6 +83,7 @@ public class StoreDatabaseRepository implements StoreRepository {
         store.addOwner(founder);
         entityManager.persist(store);
     }
+
     @Transactional
     public void save(Store store) {
         if (store != null) {
@@ -90,5 +93,10 @@ public class StoreDatabaseRepository implements StoreRepository {
                 entityManager.persist(store);
             }
         }
+    }
+
+    @Override
+    public void deleteData() {
+        entityManager.createQuery("DELETE FROM Store").executeUpdate();
     }
 }
