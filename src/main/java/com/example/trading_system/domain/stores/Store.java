@@ -30,7 +30,7 @@ public class Store {
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "store_name")
     private Map<Integer, Product> products = new HashMap<>();
 
     @ElementCollection
@@ -68,7 +68,8 @@ public class Store {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchasePolicy> purchasePolicies = new LinkedList<>();
 
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "store_name")
     private List<Bid> bids = new LinkedList<>();
 
 //    @ElementCollection
@@ -798,7 +799,15 @@ public class Store {
 
     //end region
 
+    public String removeR(String userName){
+        if(userName.charAt(0)=='r'){
+            return userName.substring(1);
+        }
+        return userName;
+    }
+
     public void placeBid(String userName, int productID, double price, String address, String amount, String currency,String cardNumber, String month,String year,String holder,String ccv,String id) {
+        userName = removeR(userName);
         Bid bid = getBid(productID, userName);
         if( bid != null) {
             bid.setPrice(price);
@@ -808,12 +817,14 @@ public class Store {
         }
         else
         {
-            Bid newBid = new Bid(userName, productID, price,getProduct(productID).getProduct_name(), address, amount, currency, cardNumber, month, year, holder, ccv, id);
+            Bid newBid = new Bid(userName,nameId,productID, price,getProduct(productID).getProduct_name(), address, amount, currency, cardNumber, month, year, holder, ccv, id);
             this.bids.add(newBid);
         }
     }
 
     public boolean approveBid(String userName, int productID, String bidUserName) {
+        userName = removeR(userName);
+        bidUserName = removeR(bidUserName);
         for (Bid b : bids) {
             if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) {
                 b.approveBid(userName);
@@ -825,6 +836,8 @@ public class Store {
     }
 
     public void rejectBid(String userName, int productID, String bidUserName) {
+        userName = removeR(userName);
+        bidUserName = removeR(bidUserName);
         for (Bid b : bids) {
             if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) {
                 bids.remove(b);
@@ -834,6 +847,8 @@ public class Store {
     }
 
     public void counterOffer(String userName, int productID, String bidUserName, double newPrice) {
+        userName = removeR(userName);
+        bidUserName = removeR(bidUserName);
         for (Bid b : bids) {
             if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) {
                 b.setPrice(newPrice);
@@ -848,6 +863,8 @@ public class Store {
     }
 
     public boolean isBidExist(int productID, String bidUserName) {
+
+        bidUserName = removeR(bidUserName);
 
         for (Bid b : bids) {
             if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) return true;
@@ -874,6 +891,7 @@ public class Store {
     }
 
     public boolean isBidApproved(String username, int productId, double price) {
+        username = removeR(username);
         for (Bid b : bids) {
             if (b.getProductID() == productId && b.getUserName().equals(username) && b.getPrice() == price) {
                 if (b.getApprovedBy().containsAll(owners)) return true;
@@ -883,7 +901,9 @@ public class Store {
     }
 
     public String getMyBids(String userName) {
-        LinkedList<Bid> filteredBids = bids.stream().filter(bid -> userName.equals(bid.getUserName())).collect(Collectors.toCollection(LinkedList::new));
+        userName = removeR(userName);
+        String finalUserName = userName;
+        LinkedList<Bid> filteredBids = bids.stream().filter(bid -> finalUserName.equals(bid.getUserName())).collect(Collectors.toCollection(LinkedList::new));
         if (filteredBids.isEmpty()) return "{}";
         StringBuilder sb = new StringBuilder();
         sb.append("{\n");
@@ -920,6 +940,7 @@ public class Store {
 
 
     public double getBidPrice(String userName, int productID) {
+        userName = removeR(userName);
         for (Bid b : bids) {
             if (b.getProductID() == productID && b.getUserName().equals(userName)) {
                 return b.getPrice();
@@ -929,6 +950,7 @@ public class Store {
     }
 
     public void removeBidAccepted(String userName, int productID) {
+        userName = removeR(userName);
         for (Bid b : bids) {
             if (b.getProductID() == productID && b.getUserName().equals(userName)) {
                 bids.remove(b);
@@ -977,6 +999,7 @@ public class Store {
     }
 
     public Bid getBid(int productID, String bidUserName) {
+        bidUserName = removeR(bidUserName);
         for (Bid b : bids) {
             if (b.getProductID() == productID && b.getUserName().equals(bidUserName)) {
                 return b;
@@ -986,6 +1009,7 @@ public class Store {
     }
 
     public boolean approveCounterOffer(String userName, int productID, double price) {
+        userName = removeR(userName);
         for (Bid b : bids) {
             if (b.getProductID() == productID && b.getUserName().equals(userName)) {
                 b.setCustomerApproved(true);
@@ -997,6 +1021,7 @@ public class Store {
     }
 
     public List<Bid> getAllBidsByUserName(String userName) {
+        userName = removeR(userName);
         List<Bid> bidList = new LinkedList<>();
         for(Bid b : bids) {
             if (b.getUserName().equals(userName))
@@ -1006,6 +1031,7 @@ public class Store {
     }
 
     public void rejectCounterOffer(String userName, int productID) {
+        userName = removeR(userName);
         for (Bid b : bids) {
             if (b.getProductID() == productID && b.getUserName().equals(userName)) {
                 bids.remove(b);

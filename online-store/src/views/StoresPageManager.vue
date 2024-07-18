@@ -238,6 +238,7 @@ export default defineComponent({
             }
           });
           console.log(response.data);
+          fetchStoreDetails();
           toast.add({ severity: 'success', summary: 'Success', detail: "Yield ownership successed", life: 3000 });
         } catch (error) {
           toast.add({ severity: 'error', summary: 'Error', detail: error.response.data || 'Failed to yield ownership', life: 3000 });

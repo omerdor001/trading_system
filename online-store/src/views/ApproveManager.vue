@@ -87,11 +87,11 @@ export default defineComponent({
         requests.value = response.data.map(request => ({
           storeName: request.storeName,
           appointee: request.appointee,
-          watch: request.watch,
-          editSupply: request.editSupply,
-          editBuyPolicy: request.editBuyPolicy,
-          editDiscountPolicy: request.editDiscountPolicy,
-          acceptBids: request.acceptBids
+          watch: request.permissions[0],
+          editSupply: request.permissions[1],
+          editBuyPolicy: request.permissions[2],
+          editDiscountPolicy: request.permissions[3],
+          acceptBids: request.permissions[4]
         }));
         console.log(requests.value);
         loading.value = false;
@@ -120,9 +120,9 @@ export default defineComponent({
         showSuccessToast(response.data.message);
         requests.value = requests.value.filter(req => req !== request);
         loading.value = false;
-      } catch (err) {
+      } catch (error) {
         loading.value = false;
-        showErrorToast(err.response?.data?.message || 'An error occurred');
+        showErrorToast(error.response.data || 'An error occurred');
       }
     };
 
