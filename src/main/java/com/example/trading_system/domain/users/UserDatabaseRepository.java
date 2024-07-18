@@ -55,7 +55,8 @@ public class UserDatabaseRepository implements UserRepository {
         if (username.startsWith("v")) {
             return visitors.containsKey(username);
         } else {
-            return entityManager.find(Registered.class, username.substring(1)) != null;
+            boolean b=entityManager.find(Registered.class, username.substring(1)) != null;
+            return b;
         }
     }
 

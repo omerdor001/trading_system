@@ -20,6 +20,7 @@ import jakarta.transaction.Transactional;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/api/trading")
 @Transactional
+@Service
 public class TradingSystemRestController {
     @Getter
     private final TradingSystemImp tradingSystem;
@@ -38,6 +40,7 @@ public class TradingSystemRestController {
     public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
         tradingSystem = TradingSystemImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
+
     }
 
     public void deleteData(){
