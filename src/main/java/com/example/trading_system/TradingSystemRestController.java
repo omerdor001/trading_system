@@ -13,12 +13,11 @@ package com.example.trading_system;
 import com.example.trading_system.domain.NotificationSender;
 import com.example.trading_system.domain.externalservices.DeliveryService;
 import com.example.trading_system.domain.externalservices.PaymentService;
-import com.example.trading_system.domain.stores.StoreDatabaseRepository;
 import com.example.trading_system.domain.stores.StoreRepository;
-import com.example.trading_system.domain.users.UserDatabaseRepository;
 import com.example.trading_system.domain.users.UserRepository;
 import com.example.trading_system.service.TradingSystemImp;
 import jakarta.transaction.Transactional;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +30,7 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/trading")
 @Transactional
 public class TradingSystemRestController {
-
+    @Getter
     private final TradingSystemImp tradingSystem;
     private final StoreRepository storeRepository;
 
@@ -39,6 +38,10 @@ public class TradingSystemRestController {
     public TradingSystemRestController(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
         tradingSystem = TradingSystemImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
+    }
+
+    public void deleteData(){
+        tradingSystem.deleteData();
     }
 
     @DeleteMapping("/instance")

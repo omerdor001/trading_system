@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 public interface UserService {
     UserFacadeImp getUserFacade();
 
+    void deleteData();
+
     void deleteInstance();
 
     String getPendingUserNotifications(String admin, String username);

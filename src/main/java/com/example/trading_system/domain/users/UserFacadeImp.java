@@ -8,7 +8,6 @@ import com.example.trading_system.domain.stores.MarketFacade;
 import com.example.trading_system.domain.stores.StoreRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,13 +46,17 @@ public class UserFacadeImp implements UserFacade {
         marketFacade.initialize(this);
     }
 
-    public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender
-            notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
+    public static UserFacadeImp getInstance(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         if (instance == null) {
             instance = new UserFacadeImp(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
             instance.marketFacade.initialize(instance);
         }
         return instance;
+    }
+
+    @Override
+    public void deleteData() {
+        userRepository.deleteData();
     }
 
     @Override
@@ -261,8 +264,7 @@ public class UserFacadeImp implements UserFacade {
         if (isSuspended(username)) {
             throw new RuntimeException("User is suspended from the system");
         }
-        if (user.getCart().getShoppingBags() != null)
-            userRepository.saveCart(user);
+        if (user.getCart().getShoppingBags() != null) userRepository.saveCart(user);
     }
 
     @Override
@@ -1153,8 +1155,7 @@ public class UserFacadeImp implements UserFacade {
         if (!userRepository.isExist(username)) {
             throw new IllegalArgumentException("User doesn't exist in the system");
         }
-        if (isSuspended(username))
-            throw new RuntimeException("User is suspended from the system");
+        if (isSuspended(username)) throw new RuntimeException("User is suspended from the system");
         User user = userRepository.getUser(username);
         ObjectMapper mapper = new ObjectMapper();
         List<Map<String, Object>> toApproves = new ArrayList<>();

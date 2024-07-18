@@ -37,4 +37,6 @@ public interface UserRepository {
     void saveCart(User user);
 
     Registered getRegistered(String userName);
+
+    void deleteData();
 }
