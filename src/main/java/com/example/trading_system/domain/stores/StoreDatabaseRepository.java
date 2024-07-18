@@ -32,6 +32,10 @@ public class StoreDatabaseRepository implements StoreRepository {
         return instance;
     }
 
+    public void setEntityManager(EntityManager entityManager){
+        this.entityManager = entityManager;
+    }
+
     @Override
     public void deleteInstance() {
         instance = null;
