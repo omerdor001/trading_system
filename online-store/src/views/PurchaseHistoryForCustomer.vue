@@ -2,12 +2,13 @@
   <div>
     <SiteHeader :isLoggedIn="true" :username="displayName" />
     <div class="main-content">
-      <h2>Purchase History for Store: {{ storeName }}</h2>
-      <PrimeDataTable :value="processedProducts" class="products-table">
+      <h2>Purchase History for {{ displayName }}</h2>
+      <PrimeDataTable :value="filteredProducts" class="products-table">
         <PrimeColumn field="productId" header="Product ID" />
         <PrimeColumn field="price" header="Price" />
         <PrimeColumn field="quantity" header="Quantity" />
         <PrimeColumn field="category" header="Category" />
+        <PrimeColumn field="storeName" header="Store Name" />
         <PrimeColumn field="customUsername" header="Customer" />
         <PrimeColumn field="totalPrice" header="Total Price" />
       </PrimeDataTable>
@@ -17,60 +18,43 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue';
+import {ref, onMounted, computed} from 'vue';
 import axios from 'axios';
 import PrimeDataTable from 'primevue/datatable';
 import PrimeColumn from 'primevue/column';
 import SiteHeader from '@/components/SiteHeader.vue';
-import { useToast } from 'primevue/usetoast';
-import { useRouter } from 'vue-router';
+import {useToast} from 'primevue/usetoast';
 
 export default {
-  name: 'PurchaseHistoryForStore',
+  name: 'PurchaseHistoryForCustomer',
   components: {
     PrimeDataTable,
     PrimeColumn,
     SiteHeader,
   },
   setup() {
-    const router = useRouter();
     const username = ref(localStorage.getItem('username') || '');
     const token = ref(localStorage.getItem('token') || '');
-    const storeName = ref(router.currentRoute.value.params.storeName);
     const allProducts = ref([]);
     const toast = useToast();
 
     const fetchPurchaseHistory = async () => {
       try {
-        const response = await axios.get(`http://localhost:8082/api/trading/store/purchaseHistory`, {
+        const response = await axios.get('http://localhost:8082/api/trading/purchase/history/customer', {
           params: {
-            username: username.value,
+            username: username.value, // Ensure this matches the backend parameter name
             token: token.value,
-            storeName: storeName.value
           },
         });
-        const purchaseData = response.data;
-        const allProductsList = [];
-
-        purchaseData.forEach(purchase => {
-          const productList = JSON.parse(purchase.productInSaleList);
-          productList.forEach(product => {
-            allProductsList.push({
-              ...product,
-              customUsername: purchase.customUsername,
-              totalPrice: purchase.totalPrice
-            });
-          });
-        });
-
-        allProducts.value = allProductsList;
+        allProducts.value = response.data;
       } catch (error) {
-        toast.add({severity: 'error', summary: 'Error', detail: 'Failed to fetch purchase history'});
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch purchases' });
       }
     };
 
-    // Computed property to process product usernames
-    const processedProducts = computed(() => {
+
+    // Filtered products for the specific customer
+    const filteredProducts = computed(() => {
       return allProducts.value.map(product => {
         let customUsername = product.customUsername;
         if (customUsername.startsWith('r')) {
@@ -78,7 +62,7 @@ export default {
         } else if (customUsername.startsWith('v')) {
           customUsername = 'Guest';  // Change any username starting with 'v' to 'Guest'
         }
-        return {...product, customUsername};
+        return { ...product, customUsername };
       });
     });
 
@@ -97,11 +81,9 @@ export default {
 
     return {
       allProducts,
-      processedProducts,
+      filteredProducts,
       displayName,
-      username,
       token,
-      storeName,
     };
   },
 };

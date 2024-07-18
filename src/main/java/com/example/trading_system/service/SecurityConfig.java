@@ -32,7 +32,17 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:8080")); // Add your frontend origin
+        configuration.setAllowedOrigins(List.of("http://localhost:8080",
+                "http://localhost:8080",
+                "http://localhost:8081",
+                "http://localhost:8082",
+                "http://localhost:8083",
+                "http://localhost:8084",
+                "http://localhost:8085",
+                "http://localhost:8086",
+                "http://localhost:8087",
+                "http://localhost:8088",
+                "http://localhost:8089")); // Add your frontend origin
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowCredentials(true);

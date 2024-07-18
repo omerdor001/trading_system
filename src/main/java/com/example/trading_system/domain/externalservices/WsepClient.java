@@ -8,9 +8,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
-public class WsepClient {
+public class WsepClient implements PaymentService {
 
     private static final String API_ENDPOINT = "https://damp-lynna-wsep-1984852e.koyeb.app/";
+
+    public WsepClient() {}
 
     /**
      *  handshake:<br>
@@ -147,5 +149,35 @@ public class WsepClient {
 
         String cancelSupplyResponse = apiClient.cancelSupply("30525");
         System.out.println("Cancel Supply Response: " + cancelSupplyResponse);
+    }
+
+    @Override
+    public int makePayment(double amount, String currency, String cardNumber, String month, String year, String holder, String ccv, String id) {
+        String amountString = String.format("%.2f", amount);
+        try {
+            String res= pay(amountString, currency, cardNumber, month, year, holder,ccv, id);
+            return Integer.parseInt(res);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    @Override
+    public void cancelPayment(int paymentId) {
+        String paymentIdString = String.valueOf(paymentId);
+        try {
+            String urlParameters = cancelPay(paymentIdString);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Not in use
+    @Override
+    public boolean connect() {
+        return false;
     }
 }

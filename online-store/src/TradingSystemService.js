@@ -312,8 +312,8 @@ const TradingSystemService = {
         return axios.get(`${API_BASE_URL}/purchase/history/all`, { params: { userName, token, storeName } });
     },
 
-    getHistoryPurchasesByCustomer(userName, token, storeName, customerUserName) {
-        return axios.get(`${API_BASE_URL}/purchase/history/customer`, { params: { userName, token, storeName, customerUserName } });
+    getHistoryPurchasesByCustomer(userName, token) {
+        return axios.get(`${API_BASE_URL}/purchase/history/customer`, { params: { username, token } });
     },
 
     // Store officials information endpoints

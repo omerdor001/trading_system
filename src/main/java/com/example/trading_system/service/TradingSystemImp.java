@@ -26,8 +26,7 @@ public class TradingSystemImp implements TradingSystem {
     public int counter_user = 0;
     private boolean systemOpen;
 
-    private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender,
-                             UserRepository userRepository, StoreRepository storeRepository) {
+    private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
         this.marketService = MarketServiceImp.getInstance(storeRepository);
@@ -648,17 +647,17 @@ public class TradingSystemImp implements TradingSystem {
     }
 
     @Override
-    public ResponseEntity<String> getHistoryPurchasesByCustomer(String userName, String token, String storeName, String customerUserName) {
-        logger.info("{} is Trying to get history purchases by customer {} from store {}", userName, customerUserName, storeName);
+    public ResponseEntity<String> getHistoryPurchasesByCustomer(String userName, String token) {
+        logger.info("{} is Trying to get history purchases by customer {} from store {}", userName);
         try {
             if (checkSystemClosed()) return systemClosedResponse();
             if (checkInvalidToken(userName, token)) return invalidTokenResponse();
-            String result = marketService.getHistoryPurchasesByCustomer(userName, storeName, customerUserName);
-            logger.info("{} Finished to get history purchases by {} from store {}", userName, customerUserName, storeName);
+            String result = marketService.getHistoryPurchasesByCustomer(userName);
+            logger.info("{} Finished to get history purchases by {} from store {}", userName);
             return new ResponseEntity<>(result, HttpStatus.OK);
 
         } catch (Exception e) {
-            logger.error("Error occurred : {} , while {} trying to get history purchases by client {} from store : {}", e.getMessage(), userName, customerUserName, storeName);
+            logger.error("Error occurred : {} , while {} trying to get history purchases by client {} from store : {}", e.getMessage(), userName);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
