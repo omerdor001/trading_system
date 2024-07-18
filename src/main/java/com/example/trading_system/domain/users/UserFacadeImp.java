@@ -322,7 +322,7 @@ public class UserFacadeImp implements UserFacade {
         if (!isUserExist(sender)) throw new RuntimeException("Not a valid sender: " + sender);
         if (!isUserExist(receiver)) throw new RuntimeException("Not a valid receiver: " + receiver);
         if (content.isEmpty()) throw new RuntimeException("Empty notification content");
-        Notification notification = new Notification(sender, receiver, content);
+        Notification notification = new Notification(sender.substring(1), receiver.substring(1), content);
         User senderUser = userRepository.getUser(sender);
         if (!senderUser.getLogged()) throw new RuntimeException("Notification sender must be logged in");
         User receiverUser = userRepository.getUser(receiver);
@@ -338,7 +338,7 @@ public class UserFacadeImp implements UserFacade {
         if (!senderUser.getLogged()) throw new RuntimeException("Notification sender must be logged in");
         for (String owner : owners) {
             if (!isUserExist(owner)) throw new RuntimeException("Not a valid receiver: " + owner);
-            Notification notification = new Notification(sender, owner, content);
+            Notification notification = new Notification(sender.substring(1), owner.substring(1), content);
             User receiverUser = userRepository.getUser(owner);
             if (!receiverUser.getLogged()) receiverUser.receiveDelayedNotification(notification);
             else notificationSender.sendNotification(owner, notification.toString());
@@ -609,7 +609,9 @@ public class UserFacadeImp implements UserFacade {
             throw new IllegalAccessException("No one suggest this user to be a owner");
 
         newOwnerUser.addOwnerRole(appoint, storeName);
+        appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getRegistered(newOwner.substring(1)));
         marketFacade.getStore(storeName).addOwner(newOwner);
+        newOwnerUser.removeManagerSuggestions();
         sendNotification(newOwner, appoint, newOwnerUser.getUsername() + " accepted your suggestion to become an owner at store: " + storeName);
         userRepository.saveUser(newOwnerUser);
         userRepository.saveUser(appointUser);
@@ -652,7 +654,7 @@ public class UserFacadeImp implements UserFacade {
 
 
         newManagerUser.addManagerRole(appoint, storeName);
-        appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getRegistered(newManager));
+        appointUser.getRoleByStoreId(storeName).addUserAppointedByMe(userRepository.getRegistered(newManager.substring(1)));
 
         marketFacade.getStore(storeName).addManager(newManager);
         newManagerUser.setPermissionsToManager(storeName, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
@@ -720,7 +722,6 @@ public class UserFacadeImp implements UserFacade {
         Set<String> influencedUsers = user.cancelOwnerShip(storeName);
         influencedUsers.add(userName);
         marketFacade.removeWorkers(storeName, influencedUsers);
-
         userRepository.saveUsers(influencedUsers.stream().map(this::getUser).collect(Collectors.toList()));
     }
 
@@ -1186,12 +1187,12 @@ public class UserFacadeImp implements UserFacade {
 
         for (ManagerSuggestion suggestion : user.getManagerSuggestions()) {
             String storeName = suggestion.getSuggestionStore();
-            String appoint = suggestion.getSuggestionUser();
+            String appoint = suggestion.getSuggestionUser().substring(1);
             List<Boolean> permissions = suggestion.getSuggestionValues();
 
             Map<String, Object> approveMap = new HashMap<>();
             approveMap.put("storeName", storeName);
-            approveMap.put("appointee", suggestion.getSuggestionUser());
+            approveMap.put("appointee", appoint);
             approveMap.put("permissions", permissions);
 
             toApproves.add(approveMap);

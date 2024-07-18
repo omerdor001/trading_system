@@ -34,7 +34,7 @@ public class Registered extends User {
     @JoinColumn(name = "registered_username", referencedColumnName = "username")
     private List<Role> roles;
 
-    @OneToMany(mappedBy = "receiverUsername", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "receiverUsername",fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications;
 
     @Getter
@@ -191,7 +191,7 @@ public class Registered extends User {
     }
 
     public void addWaitingAppoint_Manager(String store_name_id, String appointee, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) {
-        ManagerSuggestion managerSuggestion = new ManagerSuggestion(store_name_id , appointee, Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids));
+        ManagerSuggestion managerSuggestion = new ManagerSuggestion(store_name_id , appointee, new LinkedList<>(Arrays.asList(watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids)));
         managerSuggestions.add(managerSuggestion);
     }
 
@@ -301,5 +301,10 @@ public class Registered extends User {
         }
         removeOwnerRole(storeName);
         return influencedUsers;
+    }
+
+    @Override
+    public void removeManagerSuggestions() {
+        managerSuggestions.clear();
     }
 }

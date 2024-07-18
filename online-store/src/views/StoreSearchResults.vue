@@ -59,6 +59,7 @@ export default defineComponent({
             token: localStorage.getItem('token')
           }
         });
+        toast.add({ severity: 'error', summary: 'Error', detail: response.data || 'Failed to load stores', life: 3000 });
         stores.value = response.data;
       } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || 'Failed to load stores', life: 3000 });

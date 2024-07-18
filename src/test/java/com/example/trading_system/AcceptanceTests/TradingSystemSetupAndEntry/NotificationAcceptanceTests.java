@@ -118,136 +118,136 @@ class NotificationAcceptanceTests {
 
     @Test
     public void testNotification_SuggestOwner_NotLogged() {
-        tradingSystem.suggestOwner(username, token, "rowner2", storeName);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+        tradingSystem.suggestOwner(username, token, "owner2", storeName);
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}]", result.getBody());
+        assertEquals("[{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}]", result.getBody());
     }
 
     @Test
     public void testNotification_SuggestOwner_Logged() {
         loginOwner2();
-        tradingSystem.suggestOwner(username, token, "rowner2", storeName);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+        tradingSystem.suggestOwner(username, token, "owner2", storeName);
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[]", result.getBody());
-        verify(mockNotificationSender).sendNotification(eq("rowner2"), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}"));
+        verify(mockNotificationSender).sendNotification(eq("owner2"), eq("{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}"));
     }
 
     @Test
     public void testNotification_SuggestManager_NotLogged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+        tradingSystem.suggestManage(username, token, "owner2", storeName, true, true, true, true, true);
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}]", result.getBody());
+        assertEquals("[{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}]", result.getBody());
     }
 
     @Test
     public void testNotification_SuggestManager_Logged() {
         loginOwner2();
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+        tradingSystem.suggestManage(username, token, "owner2", storeName, true, true, true, true, true);
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[]", result.getBody());
-        verify(mockNotificationSender).sendNotification(eq("rowner2"), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}"));
+        verify(mockNotificationSender).sendNotification(eq("owner2"), eq("{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}"));
     }
 
     @Test
     public void testNotification_ApproveOwner_NotLogged() {
-        tradingSystem.suggestOwner(username, token, "rowner2", storeName);
-        tradingSystem.makeAdmin(username, token, "rowner2");
+        tradingSystem.suggestOwner(username, token, "owner2", storeName);
+        tradingSystem.makeAdmin(username, token, "owner2");
         tradingSystem.logout(token, username);
         loginOwner2();
         tradingSystem.approveOwner(owner2Username, owner2Token, storeName, username);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(owner2Username, owner2Token, "rowner1");
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(owner2Username, owner2Token, "owner1");
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"owner2 accepted your suggestion to become an owner at store: store1\"}]", result.getBody());
+        assertEquals("[{\"senderUsername\":\"owner2\",\"receiverUsername\":\"owner1\",\"textContent\":\"owner2 accepted your suggestion to become an owner at store: store1\"}]", result.getBody());
     }
 
     @Test
     public void testNotification_ApproveOwner_Logged() {
-        tradingSystem.suggestOwner(username, token, "rowner2", storeName);
+        tradingSystem.suggestOwner(username, token, "owner2", storeName);
         loginOwner2();
         tradingSystem.approveOwner(owner2Username, owner2Token, storeName, username);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner1");
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner1");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[]", result.getBody());
-        verify(mockNotificationSender).sendNotification(eq("rowner1"), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"owner2 accepted your suggestion to become an owner at store: store1\"}"));
+        verify(mockNotificationSender).sendNotification(eq("owner1"), eq("{\"senderUsername\":\"owner2\",\"receiverUsername\":\"owner1\",\"textContent\":\"owner2 accepted your suggestion to become an owner at store: store1\"}"));
     }
 
     @Test
     public void testNotification_ApproveManager_NotLogged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
-        tradingSystem.makeAdmin(username, token, "rowner2");
+        tradingSystem.suggestManage(username, token, "owner2", storeName, true, true, true, true, true);
+        tradingSystem.makeAdmin(username, token, "owner2");
         tradingSystem.logout(token, username);
         loginOwner2();
         tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(owner2Username, owner2Token, "rowner1");
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(owner2Username, owner2Token, "owner1");
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"owner2 accepted your suggestion to become a manager at store: store1\"}]", result.getBody());
+        assertEquals("[{\"senderUsername\":\"owner2\",\"receiverUsername\":\"owner1\",\"textContent\":\"owner2 accepted your suggestion to become a manager at store: store1\"}]", result.getBody());
     }
 
     @Test
     public void testNotification_ApproveManager_Logged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "owner2", storeName, true, true, true, true, true);
         loginOwner2();
         tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner1");
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner1");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[]", result.getBody());
-        verify(mockNotificationSender).sendNotification(eq("rowner1"), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"owner2 accepted your suggestion to become a manager at store: store1\"}"));
+        verify(mockNotificationSender).sendNotification(eq("owner1"), eq("{\"senderUsername\":\"owner2\",\"receiverUsername\":\"owner1\",\"textContent\":\"owner2 accepted your suggestion to become a manager at store: store1\"}"));
     }
 
     @Test
     public void testNotification_RejectOwner_NotLogged() {
-        tradingSystem.suggestOwner(username, token, "rowner2", storeName);
-        tradingSystem.makeAdmin(username, token, "rowner2");
+        tradingSystem.suggestOwner(username, token, "owner2", storeName);
+        tradingSystem.makeAdmin(username, token, "owner2");
         tradingSystem.logout(token, username);
         loginOwner2();
         tradingSystem.rejectToOwnStore(owner2Username, owner2Token, storeName, username);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(owner2Username, owner2Token, "rowner1");
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(owner2Username, owner2Token, "owner1");
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"owner2 rejected your suggestion to become an owner at store: store1\"}]", result.getBody());
+        assertEquals("[{\"senderUsername\":\"owner2\",\"receiverUsername\":\"owner1\",\"textContent\":\"owner2 rejected your suggestion to become an owner at store: store1\"}]", result.getBody());
     }
 
     @Test
     public void testNotification_RejectOwner_Logged() {
-        tradingSystem.suggestOwner(username, token, "rowner2", storeName);
+        tradingSystem.suggestOwner(username, token, "owner2", storeName);
         loginOwner2();
         tradingSystem.rejectToOwnStore(owner2Username, owner2Token, storeName, username);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner1");
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner1");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[]", result.getBody());
-        verify(mockNotificationSender).sendNotification(eq("rowner1"), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"owner2 rejected your suggestion to become an owner at store: store1\"}"));
+        verify(mockNotificationSender).sendNotification(eq("owner1"), eq("{\"senderUsername\":\"owner2\",\"receiverUsername\":\"owner1\",\"textContent\":\"owner2 rejected your suggestion to become an owner at store: store1\"}"));
     }
 
     @Test
     public void testNotification_RejectManager_NotLogged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
-        tradingSystem.makeAdmin(username, token, "rowner2");
+        tradingSystem.suggestManage(username, token, "owner2", storeName, true, true, true, true, true);
+        tradingSystem.makeAdmin(username, token, "owner2");
         tradingSystem.logout(token, username);
         loginOwner2();
         tradingSystem.rejectToManageStore(owner2Username, owner2Token, storeName, username);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(owner2Username, owner2Token, "rowner1");
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(owner2Username, owner2Token, "owner1");
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"owner2 rejected your suggestion to become a manager at store: store1\"}]", result.getBody());
+        assertEquals("[{\"senderUsername\":\"owner2\",\"receiverUsername\":\"owner1\",\"textContent\":\"owner2 rejected your suggestion to become a manager at store: store1\"}]", result.getBody());
     }
 
     @Test
     public void testNotification_RejectManager_Logged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "owner2", storeName, true, true, true, true, true);
         loginOwner2();
         tradingSystem.rejectToManageStore(owner2Username, owner2Token, storeName, username);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner1");
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner1");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[]", result.getBody());
-        verify(mockNotificationSender).sendNotification(eq("rowner1"), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"owner2 rejected your suggestion to become a manager at store: store1\"}"));
+        verify(mockNotificationSender).sendNotification(eq("owner1"), eq("{\"senderUsername\":\"owner2\",\"receiverUsername\":\"owner1\",\"textContent\":\"owner2 rejected your suggestion to become a manager at store: store1\"}"));
     }
 
 //    @Test
 //    public void testNotification_WaiverOwner_NotLogged() {
 //        tradingSystem.register("manager", "password123", LocalDate.now());
-//        tradingSystem.suggestOwner(username, token, "rowner2", storeName);
+//        tradingSystem.suggestOwner(username, token, "owner2", storeName);
 //        loginOwner2();
 //        tradingSystem.approveOwner(owner2Username, owner2Token, storeName, username);
 //        tradingSystem.suggestOwner(owner2Username, owner2Token, "rmanager", storeName);
@@ -257,13 +257,13 @@ class NotificationAcceptanceTests {
 //        tradingSystem.waiverOnOwnership(owner2Username, owner2Token, storeName);
 //        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rmanager");
 //        assertEquals(HttpStatus.OK, result.getStatusCode());
-//        assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"},{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 is fired/waiving his ownership\"}]", result.getBody());
+//        assertEquals("[{\"senderUsername\":\"owner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"},{\"senderUsername\":\"owner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 is fired/waiving his ownership\"}]", result.getBody());
 //    }
 //
 //    @Test
 //    public void testNotification_WaiverOwner_Logged() {
 //        tradingSystem.register("manager", "password123", LocalDate.now());
-//        tradingSystem.suggestOwner(username, token, "rowner2", storeName);
+//        tradingSystem.suggestOwner(username, token, "owner2", storeName);
 //        loginOwner2();
 //        tradingSystem.approveOwner(owner2Username, owner2Token, storeName, username);
 //        tradingSystem.suggestOwner(owner2Username, owner2Token, "rmanager", storeName);
@@ -272,90 +272,90 @@ class NotificationAcceptanceTests {
 //        tradingSystem.waiverOnOwnership(owner2Username, owner2Token, storeName);
 //        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rmanager");
 //        assertEquals(HttpStatus.OK, result.getStatusCode());
-//        assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"}]", result.getBody());
-//        verify(mockNotificationSender).sendNotification(eq("rmanager"), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 is fired/waiving his ownership\"}"));
+//        assertEquals("[{\"senderUsername\":\"owner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"owner2 suggests you to become a store owner at store1\"}]", result.getBody());
+//        verify(mockNotificationSender).sendNotification(eq("rmanager"), eq("{\"senderUsername\":\"owner2\",\"receiverUsername\":\"rmanager\",\"textContent\":\"You are no longer an owner at store: store1 due to user: owner2 is fired/waiving his ownership\"}"));
 //    }
 
     @Test
     public void testNotification_FireManager_NotLogged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "owner2", storeName, true, true, true, true, true);
         loginOwner2();
         tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true);
         tradingSystem.logout(owner2Token, owner2Username);
-        tradingSystem.fireManager(username, token, storeName, "rowner2");
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+        tradingSystem.fireManager(username, token, storeName, "owner2");
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"},{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You are no longer a manager at store: store1 due to being fired by owner1\"}]", result.getBody());
+        assertEquals("[{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"},{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"You are no longer a manager at store: store1 due to being fired by owner1\"}]", result.getBody());
     }
 
     @Test
     public void testNotification_FireManager_Logged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "owner2", storeName, true, true, true, true, true);
         loginOwner2();
         tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true);
-        tradingSystem.fireManager(username, token, storeName, "rowner2");
+        tradingSystem.fireManager(username, token, storeName, "owner2");
         ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, owner2Username);
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}]", result.getBody());
-        verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You are no longer a manager at store: store1 due to being fired by owner1\"}"));
+        assertEquals("[{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}]", result.getBody());
+        verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"You are no longer a manager at store: store1 due to being fired by owner1\"}"));
     }
 
     @Test
     public void testNotification_FireOwner_NotLogged() {
-        tradingSystem.suggestOwner(username, token, "rowner2", storeName);
+        tradingSystem.suggestOwner(username, token, "owner2", storeName);
         loginOwner2();
         tradingSystem.approveOwner(owner2Username, owner2Token, storeName, username);
         tradingSystem.logout(owner2Token, owner2Username);
-        tradingSystem.fireOwner(username, token, storeName, "rowner2");
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+        tradingSystem.fireOwner(username, token, storeName, "owner2");
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"},{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You are no longer an owner at store: store1 due to being fired by user: owner1\"}]", result.getBody());
+        assertEquals("[{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"},{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"You are no longer an owner at store: store1 due to being fired by user: owner1\"}]", result.getBody());
     }
 
     @Test
     public void testNotification_FireOwner_Logged() {
-        tradingSystem.suggestOwner(username, token, "rowner2", storeName);
+        tradingSystem.suggestOwner(username, token, "owner2", storeName);
         loginOwner2();
         tradingSystem.approveOwner(owner2Username, owner2Token, storeName, username);
-        tradingSystem.fireOwner(username, token, storeName, "rowner2");
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+        tradingSystem.fireOwner(username, token, storeName, "owner2");
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}]", result.getBody());
-        verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You are no longer an owner at store: store1 due to being fired by user: owner1\"}"));
+        assertEquals("[{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"owner1 suggests you to become a store owner at store1\"}]", result.getBody());
+        verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"You are no longer an owner at store: store1 due to being fired by user: owner1\"}"));
     }
 
     @Test
     public void testNotification_EditPermission_NotLogged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "owner2", storeName, true, true, true, true, true);
         loginOwner2();
         tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true,true);
         tradingSystem.logout(owner2Token, owner2Username);
-        tradingSystem.editPermissionForManager(username, token, "rowner2", storeName, true, true, true, false,true);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+        tradingSystem.editPermissionForManager(username, token, "owner2", storeName, true, true, true, false,true);
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"},{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}]", result.getBody());
+        assertEquals("[{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"},{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}]", result.getBody());
     }
 
     @Test
     public void testNotification_EditPermission_Logged() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "owner2", storeName, true, true, true, true, true);
         loginOwner2();
         tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true);
-        tradingSystem.editPermissionForManager(username, token, "rowner2", storeName, true, true, true, false, true);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+        tradingSystem.editPermissionForManager(username, token, "owner2", storeName, true, true, true, false, true);
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}]", result.getBody());
-        verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}"));
+        assertEquals("[{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}]", result.getBody());
+        verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}"));
     }
 
 
 //    @Test
 //    public void testNotification_MessageSentToUser_NotLogged() {
 //        try {
-//            tradingSystem.sendMessageUserToUser(username, token, "rowner2", "test");
-//            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+//            tradingSystem.sendMessageUserToUser(username, token, "owner2", "test");
+//            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner2");
 //            assertEquals(HttpStatus.OK, result.getStatusCode());
-//            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You have received a message from user: owner1\"}]", result.getBody());
+//            assertEquals("[{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"You have received a message from user: owner1\"}]", result.getBody());
 //        } catch (Exception e) {
 //            fail("Unexpected error: " + e.getMessage());
 //        }
@@ -365,11 +365,11 @@ class NotificationAcceptanceTests {
 //    public void testNotification_MessageSentToUser_Logged() {
 //        try {
 //            loginOwner2();
-//            tradingSystem.sendMessageUserToUser(username, token, "rowner2", "test");
-//            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+//            tradingSystem.sendMessageUserToUser(username, token, "owner2", "test");
+//            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner2");
 //            assertEquals("[]", result.getBody());
 //            assertEquals(HttpStatus.OK, result.getStatusCode());
-//            verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"You have received a message from user: owner1\"}"));
+//            verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"You have received a message from user: owner1\"}"));
 //        } catch (Exception e) {
 //            fail("Unexpected error: " + e.getMessage());
 //        }
@@ -384,7 +384,7 @@ class NotificationAcceptanceTests {
 //            tradingSystem.sendMessageUserToStore(owner2Username, owner2Token, storeName, "test");
 //            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(owner2Username, owner2Token, username);
 //            assertEquals(HttpStatus.OK, result.getStatusCode());
-//            assertEquals("[{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"Store: store1 received a message from user: rowner2\"}]", result.getBody());
+//            assertEquals("[{\"senderUsername\":\"owner2\",\"receiverUsername\":\"owner1\",\"textContent\":\"Store: store1 received a message from user: owner2\"}]", result.getBody());
 //        } catch (Exception e) {
 //            fail("Unexpected error: " + e.getMessage());
 //        }
@@ -399,7 +399,7 @@ class NotificationAcceptanceTests {
 //            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(owner2Username, owner2Token, username);
 //            assertEquals(HttpStatus.OK, result.getStatusCode());
 //            assertEquals("[]", result.getBody());
-//            verify(mockNotificationSender).sendNotification(eq(username), eq("{\"senderUsername\":\"rowner2\",\"receiverUsername\":\"rowner1\",\"textContent\":\"Store: store1 received a message from user: rowner2\"}"));
+//            verify(mockNotificationSender).sendNotification(eq(username), eq("{\"senderUsername\":\"owner2\",\"receiverUsername\":\"owner1\",\"textContent\":\"Store: store1 received a message from user: owner2\"}"));
 //        } catch (Exception e) {
 //            fail("Unexpected error: " + e.getMessage());
 //        }
@@ -408,10 +408,10 @@ class NotificationAcceptanceTests {
 //    @Test
 //    public void testNotification_MessageSentFromStore_NotLogged() {
 //        try {
-//            tradingSystem.sendMessageStoreToUser(username, token, "rowner2", storeName, "test");
-//            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+//            tradingSystem.sendMessageStoreToUser(username, token, "owner2", storeName, "test");
+//            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner2");
 //            assertEquals(HttpStatus.OK, result.getStatusCode());
-//            assertEquals("[{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Owner: owner1 from store: store1 has replied to your message\"}]", result.getBody());
+//            assertEquals("[{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"Owner: owner1 from store: store1 has replied to your message\"}]", result.getBody());
 //        } catch (Exception e) {
 //            fail("Unexpected error: " + e.getMessage());
 //        }
@@ -421,11 +421,11 @@ class NotificationAcceptanceTests {
 //    public void testNotification_MessageSentFromStore_Logged() {
 //        try {
 //            loginOwner2();
-//            tradingSystem.sendMessageStoreToUser(username, token, "rowner2", storeName, "test");
-//            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+//            tradingSystem.sendMessageStoreToUser(username, token, "owner2", storeName, "test");
+//            ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner2");
 //            assertEquals(HttpStatus.OK, result.getStatusCode());
 //            assertEquals("[]", result.getBody());
-//            verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Owner: owner1 from store: store1 has replied to your message\"}"));
+//            verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"Owner: owner1 from store: store1 has replied to your message\"}"));
 //        } catch (Exception e) {
 //            fail("Unexpected error: " + e.getMessage());
 //        }
@@ -433,15 +433,15 @@ class NotificationAcceptanceTests {
 
     @Test
     public void testNotification_SendPendingNotifications() {
-        tradingSystem.suggestManage(username, token, "rowner2", storeName, true, true, true, true, true);
+        tradingSystem.suggestManage(username, token, "owner2", storeName, true, true, true, true, true);
         loginOwner2();
         tradingSystem.approveManage(owner2Username, owner2Token, storeName, username, true, true, true, true, true);
-        tradingSystem.editPermissionForManager(username, token, "rowner2", storeName, true, true, true, false, true);
+        tradingSystem.editPermissionForManager(username, token, "owner2", storeName, true, true, true, false, true);
         tradingSystem.sendPendingNotifications(owner2Username, owner2Token);
-        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "rowner2");
+        ResponseEntity<String> result = tradingSystem.getPendingUserNotifications(username, token, "owner2");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("[]", result.getBody());
-        verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}"));
-        verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"rowner1\",\"receiverUsername\":\"rowner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}"));
+        verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"owner1 suggests you to become a store manager at store1\"}"));
+        verify(mockNotificationSender).sendNotification(eq(owner2Username), eq("{\"senderUsername\":\"owner1\",\"receiverUsername\":\"owner2\",\"textContent\":\"Your permissions for store: store1 were changed by user: owner1\"}"));
     }
 }

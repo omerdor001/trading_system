@@ -30,7 +30,7 @@ public class Role {
     private String appointedById;
     @Setter
     @ManyToOne
-    @JoinColumn(name = "registered_username", referencedColumnName = "username", nullable = false)
+    @JoinColumn(name = "registered_username", referencedColumnName = "username")
     private Registered registeredUser;
 
 
