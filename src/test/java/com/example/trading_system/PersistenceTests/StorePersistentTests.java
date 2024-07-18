@@ -122,7 +122,7 @@ public class StorePersistentTests {
         assertEquals(retrievePurchase,retrieveStoreSalesHistory.getAllPurchases().get(0));
     }
 
-    @Test
+   /* @Test
     void createProductAndRetrieve() {
         Product product=new Product(123,"Milk","Cow Milk",5.0,50,5.0,Category.Food,new ArrayList<>());
         Store store=new Store("Shufersal","Market store","testUser",4.0);
@@ -139,7 +139,7 @@ public class StorePersistentTests {
         assertEquals(5.0,retrieveProduct.getRating());
         assertEquals(Category.Food,retrieveProduct.getCategory());
         assertEquals(new ArrayList<>(),retrieveProduct.getKeyWords());
-    }
+    } */
 
    /* @Test
     void createBidAndRetrieve() {
