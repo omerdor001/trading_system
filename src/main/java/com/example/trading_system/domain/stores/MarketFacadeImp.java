@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +30,7 @@ public class MarketFacadeImp implements MarketFacade {
     private UserFacade userFacade;
 
     @Autowired
-    public MarketFacadeImp(StoreRepository storeRepository) {
+    public MarketFacadeImp(@Qualifier("getStoreRepository") StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
     }
 
@@ -47,6 +48,11 @@ public class MarketFacadeImp implements MarketFacade {
     @Override
     public void initialize(UserFacade userFacade) {
         this.userFacade = userFacade;
+    }
+
+    @Override
+    public void deleteData(){
+        storeRepository.deleteData();
     }
 
     @Override

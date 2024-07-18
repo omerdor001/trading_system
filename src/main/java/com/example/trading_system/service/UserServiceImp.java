@@ -35,6 +35,11 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public void deleteData() {
+        userFacade.deleteData();
+    }
+
+    @Override
     public void deleteInstance() {
         instance = null;
         userFacade.deleteInstance();
@@ -137,7 +142,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public String viewCart(String username) throws Exception{
+    public String viewCart(String username) throws Exception {
         logger.info("Trying registered : {} view cart ", username);
         String result = userFacade.viewCart(username);
         logger.info("Finished registered view cart: {} ", username);
@@ -168,7 +173,7 @@ public class UserServiceImp implements UserService {
     @Override
     public void approveManage(String newManager, String store_name_id, String appoint, boolean watch, boolean editSupply, boolean editBuyPolicy, boolean editDiscountPolicy, boolean acceptBids) throws Exception {
         logger.info("Trying to approve manage to store : {}", store_name_id);
-        userFacade.approveManager(newManager, store_name_id, appoint,watch, editSupply, editBuyPolicy,  editDiscountPolicy, acceptBids);
+        userFacade.approveManager(newManager, store_name_id, appoint, watch, editSupply, editBuyPolicy, editDiscountPolicy, acceptBids);
         logger.info("Finished approving manage to store : {}", store_name_id);
     }
 
@@ -289,13 +294,11 @@ public class UserServiceImp implements UserService {
 
     @Override
     public String getPermissionsForUserJSONFormat(String username, String storeName) {
-        return userFacade.getPermissionsForUserJSONFormat(username,storeName);
+        return userFacade.getPermissionsForUserJSONFormat(username, storeName);
     }
 
     @Override
     public String getManagersOfStore(String username, String storeName) {
-        return userFacade.getManagersOfStore(username,storeName);
+        return userFacade.getManagersOfStore(username, storeName);
     }
-
-
 }

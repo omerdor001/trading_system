@@ -1,18 +1,16 @@
 package com.example.trading_system.domain.stores;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.HashMap;
 
-//@Service
+@Repository
 public class StoreMemoryRepository implements StoreRepository {
     private static StoreMemoryRepository instance = null;
     private HashMap<String, Store> stores;
 
-    //@Autowired
-    private StoreMemoryRepository() {
+    public StoreMemoryRepository() {
         stores = new HashMap<>();
     }
 
@@ -22,7 +20,7 @@ public class StoreMemoryRepository implements StoreRepository {
     }
 
     public void deleteInstance() {
-        if(stores!=null){
+        if (stores != null) {
             this.stores.clear();
         }
         instance = null;
@@ -31,6 +29,11 @@ public class StoreMemoryRepository implements StoreRepository {
     @Override
     public void save(Store store) {
 
+    }
+
+    @Override
+    public void deleteData() {
+        this.stores.clear();
     }
 
     @Override
@@ -65,8 +68,8 @@ public class StoreMemoryRepository implements StoreRepository {
 
 
     @Override
-    public void addStore(String storeName, String description, String founder,Double storeRating) {
-        Store store=new Store(storeName,description,founder,storeRating);
+    public void addStore(String storeName, String description, String founder, Double storeRating) {
+        Store store = new Store(storeName, description, founder, storeRating);
         stores.put(storeName, store);
         store.addOwner(founder);
     }

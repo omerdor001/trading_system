@@ -23,6 +23,10 @@ public class UserDatabaseRepository implements UserRepository {
     public UserDatabaseRepository() {
     }
 
+    public void setEntityManager(EntityManager entityManager){
+        this.entityManager = entityManager;
+    }
+
     public static UserDatabaseRepository getInstance(EntityManager entityManager) {
         if (instance == null) {
             instance = new UserDatabaseRepository();
@@ -51,7 +55,8 @@ public class UserDatabaseRepository implements UserRepository {
         if (username.startsWith("v")) {
             return visitors.containsKey(username);
         } else {
-            return entityManager.find(Registered.class, username.substring(1)) != null;
+            boolean b=entityManager.find(Registered.class, username.substring(1)) != null;
+            return b;
         }
     }
 
@@ -65,8 +70,7 @@ public class UserDatabaseRepository implements UserRepository {
     public boolean isAdminRegistered() {
         List<Registered> registeredUsers = entityManager.createQuery("SELECT u FROM Registered u", Registered.class).getResultList();
         for (User user : registeredUsers) {
-            if (user.isAdmin())
-                return true;
+            if (user.isAdmin()) return true;
         }
         return false;
     }
@@ -127,15 +131,16 @@ public class UserDatabaseRepository implements UserRepository {
     public void saveUser(User user) {
         if (user instanceof Registered) {
             Registered registeredUser = (Registered) user;
+            entityManager.merge(registeredUser); // merge the user first
             Cart cart = registeredUser.getCart();
-            if (cart != null)
-                entityManager.persist(cart);
-            for (Role role : registeredUser.getRoles()) {
-                role.setRegisteredUser(registeredUser); // Ensure each role is associated with the user
-                entityManager.persist(role.getRoleState());
-                entityManager.persist(role);
+            if (cart != null) {
+                entityManager.merge(cart); // merge the cart
             }
-            entityManager.persist(registeredUser);
+            for (Role role : registeredUser.getRoles()) {
+                role.setRegisteredUser(registeredUser);
+                entityManager.merge(role); // merge the role
+                entityManager.merge(role.getRoleState()); // merge the role state
+            }
         }
     }
 
@@ -152,10 +157,15 @@ public class UserDatabaseRepository implements UserRepository {
     }
 
     @Override
-    public Registered getRegistered(String userName){
-        Registered user = entityManager.find(Registered.class,userName);
-        if(user == null)
-            throw new RuntimeException("No such user");
+    public Registered getRegistered(String userName) {
+        Registered user = entityManager.find(Registered.class, userName);
+        if (user == null) throw new RuntimeException("No such user");
         return user;
+    }
+
+    @Override
+    public void deleteData() {
+        entityManager.createQuery("DELETE FROM Registered").executeUpdate();
+        this.visitors.clear();
     }
 }

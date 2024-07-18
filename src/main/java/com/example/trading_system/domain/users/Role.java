@@ -28,6 +28,7 @@ public class Role {
 
     @Column
     private String appointedById;
+
     @Setter
     @ManyToOne
     @JoinColumn(name = "registered_username", referencedColumnName = "username")

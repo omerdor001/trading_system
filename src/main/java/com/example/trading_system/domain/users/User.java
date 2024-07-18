@@ -126,7 +126,6 @@ public abstract class User {
 
     public abstract boolean isAcceptBids(String storeName);
 
-
     public abstract boolean removeWaitingAppoint_Owner(String storeName);
 
     public abstract List<Boolean> removeWaitingAppoint_Manager(String store_name_id, String appoint) throws IllegalAccessException;
