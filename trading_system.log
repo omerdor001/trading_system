@@ -5754,3 +5754,34 @@ This generated password is for development use only. Your security configuration
 2024-07-18T04:50:58.785+03:00  INFO 21044 --- [Trading_System] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2024-07-18T04:50:58.785+03:00  INFO 21044 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2024-07-18T04:50:58.790+03:00  INFO 21044 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-07-18T04:55:00.170+03:00  INFO 21628 --- [Trading_System] [main] c.e.t.P.StorePersistentTests             : Starting StorePersistentTests using Java 22.0.1 with PID 21628 (started by alex in C:\Users\alex\Documents\trading_system)
+2024-07-18T04:55:00.170+03:00  INFO 21628 --- [Trading_System] [main] c.e.t.P.StorePersistentTests             : No active profile set, falling back to 1 default profile: "default"
+2024-07-18T04:55:00.603+03:00  INFO 21628 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-18T04:55:00.619+03:00  INFO 21628 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 10 ms. Found 0 JPA repository interfaces.
+2024-07-18T04:55:00.950+03:00  INFO 21628 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : OpenCV is Loaded.
+2024-07-18T04:55:01.215+03:00  INFO 21628 --- [Trading_System] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-18T04:55:01.262+03:00  INFO 21628 --- [Trading_System] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-07-18T04:55:01.293+03:00  INFO 21628 --- [Trading_System] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-07-18T04:55:01.591+03:00  INFO 21628 --- [Trading_System] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-07-18T04:55:01.607+03:00  INFO 21628 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-18T04:55:01.888+03:00  INFO 21628 --- [Trading_System] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 1cff562d-7bf3-4c58-b441-1d3e9494d0d3
+2024-07-18T04:55:01.888+03:00  INFO 21628 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-18T04:55:03.402+03:00  INFO 21628 --- [Trading_System] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-07-18T04:55:04.044+03:00  INFO 21628 --- [Trading_System] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T04:55:04.451+03:00  WARN 21628 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 73980c21-7fcc-4ebc-8ff2-36cd8a4d2ddd
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-07-18T04:55:04.733+03:00  INFO 21628 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7e64b248, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6e5dc02d, org.springframework.security.web.context.SecurityContextHolderFilter@4eb5cdae, org.springframework.security.web.header.HeaderWriterFilter@59df8444, org.springframework.web.filter.CorsFilter@7e4f5062, org.springframework.security.web.authentication.logout.LogoutFilter@523cc8b4, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1e9d5d79, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5ae06c93, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1c93f349, org.springframework.security.web.access.ExceptionTranslationFilter@48446968, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1c71d704]
+2024-07-18T04:55:04.984+03:00  INFO 21628 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-07-18T04:55:04.984+03:00  INFO 21628 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2e3fa7a7]]
+2024-07-18T04:55:04.984+03:00  INFO 21628 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-07-18T04:55:04.999+03:00  INFO 21628 --- [Trading_System] [main] c.e.t.P.StorePersistentTests             : Started StorePersistentTests in 5.171 seconds (process running for 6.222)
+2024-07-18T04:55:06.025+03:00  INFO 21628 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-07-18T04:55:06.025+03:00  INFO 21628 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2e3fa7a7]]
+2024-07-18T04:55:06.025+03:00  INFO 21628 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-07-18T04:55:06.025+03:00  INFO 21628 --- [Trading_System] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T04:55:06.025+03:00  INFO 21628 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-07-18T04:55:06.025+03:00  INFO 21628 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

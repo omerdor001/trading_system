@@ -2,15 +2,9 @@ package com.example.trading_system.PersistenceTests;
 
 import com.example.trading_system.TradingSystemRestController;
 import com.example.trading_system.domain.stores.*;
-import com.example.trading_system.domain.stores.discountPolicies.CategoryCountCondition;
 import com.example.trading_system.domain.stores.discountPolicies.Condition;
 import com.example.trading_system.domain.stores.discountPolicies.DiscountPolicy;
-import com.example.trading_system.domain.stores.discountPolicies.TotalSumCondition;
 import com.example.trading_system.domain.stores.purchasePolicies.*;
-import com.example.trading_system.domain.users.Registered;
-import com.example.trading_system.domain.users.User;
-import com.example.trading_system.domain.users.UserDatabaseRepository;
-import com.example.trading_system.domain.users.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.AfterEach;
@@ -21,8 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
