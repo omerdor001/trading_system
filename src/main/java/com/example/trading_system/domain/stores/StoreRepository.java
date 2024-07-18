@@ -21,4 +21,6 @@ public interface StoreRepository {
     void deleteInstance();
 
     void save(Store store);
+
+    void deleteData();
 }

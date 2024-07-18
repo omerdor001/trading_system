@@ -8,7 +8,11 @@ import java.util.NoSuchElementException;
 
 public interface UserFacade {
     UserRepository getUserRepository();
+
     void setUserRepository(UserRepository userRepository);
+
+    void deleteData();
+
     void deleteInstance();
 
     String getPendingUserNotifications(String admin, String username);
@@ -95,13 +99,13 @@ public interface UserFacade {
 
     String calculatePrice(String username) throws Exception;
 
-    boolean getIsWatchPermission(String username,String storeName) throws IllegalAccessException;
+    boolean getIsWatchPermission(String username, String storeName) throws IllegalAccessException;
 
-    boolean getIsEditSupplyPermission(String username,String storeName) throws IllegalAccessException;
+    boolean getIsEditSupplyPermission(String username, String storeName) throws IllegalAccessException;
 
-    boolean getIsEditDiscountPolicyPermission(String username,String storeName) throws IllegalAccessException;
+    boolean getIsEditDiscountPolicyPermission(String username, String storeName) throws IllegalAccessException;
 
-    boolean getIsEditPurchasePolicyPermission(String username,String storeName) throws IllegalAccessException;
+    boolean getIsEditPurchasePolicyPermission(String username, String storeName) throws IllegalAccessException;
 
     void sendMessageUserToUser(String sender, String receiver, String content);
 
@@ -115,7 +119,7 @@ public interface UserFacade {
 
     String getUserRequestsManagement(String username);
 
-    String getPermissionsForUserJSONFormat(String username,String storeName);
+    String getPermissionsForUserJSONFormat(String username, String storeName);
 
     String getManagersOfStore(String username, String storeName);
 

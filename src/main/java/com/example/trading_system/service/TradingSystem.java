@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 public interface TradingSystem {
     void setSystemOpen(boolean systemOpen); //For tests
 
+    void deleteData();
+
     void deleteInstance();
 
     ResponseEntity<String> getPendingUserNotifications(String admin, String token, String username);

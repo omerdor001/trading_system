@@ -110,4 +110,9 @@ public class UserMemoryRepository implements UserRepository {
         if (userName.charAt(0) != 'r') throw new RuntimeException("User is not registerd");
         else return (Registered) users.get(userName);
     }
+
+    @Override
+    public void deleteData() {
+        this.users.clear();
+    }
 }
