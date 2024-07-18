@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +35,9 @@ public class UserFacadeImp implements UserFacade {
     private MarketFacade marketFacade;
 
     @Autowired
-    public UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
+
+    public UserFacadeImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender,
+                         @Qualifier("getUserRepository") UserRepository userRepository, @Qualifier("getStoreRepository") StoreRepository storeRepository) {
         this.paymentService = paymentService;
         this.deliveryService = deliveryService;
         this.userRepository = userRepository;
@@ -1055,7 +1058,7 @@ public class UserFacadeImp implements UserFacade {
             user.releaseReservedProducts(marketFacade.getStoreRepository());
             timer.cancel();
             user.setTimerCancelled(true);
-            throw new Exception("Error in Payment\t response from remote service is :"+paymentId);
+            throw new Exception("Error in Payment\t response from remote service is :" + paymentId);
         }
         user.addPurchase(marketFacade.getStoreRepository(), username);
         timer.cancel();

@@ -1,15 +1,23 @@
 package com.example.trading_system;
 
 import com.example.trading_system.domain.externalservices.*;
+import com.example.trading_system.domain.stores.StoreDatabaseRepository;
+import com.example.trading_system.domain.stores.StoreMemoryRepository;
+import com.example.trading_system.domain.stores.StoreRepository;
+import com.example.trading_system.domain.users.UserDatabaseRepository;
+import com.example.trading_system.domain.users.UserMemoryRepository;
+import com.example.trading_system.domain.users.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class TradingSystemSpringConfiguration {
-    private static final Logger logger = LoggerFactory.getLogger( TradingSystemSpringConfiguration.class );
+    private static final Logger logger = LoggerFactory.getLogger(TradingSystemSpringConfiguration.class);
+
     static {
         logger.info("Starting TradingSystemSpringConfiguration");
     }
@@ -18,10 +26,10 @@ public class TradingSystemSpringConfiguration {
     private String serverHost;
     @Value("${server.port:8082}")
     private String serverPort;
-
     @Value("${payment.service.name:wsep}")
-    private PaymentServiceEnum paymentServiceName ;
-
+    private PaymentServiceEnum paymentServiceName;
+    @Value("${repository.type}")
+    private String repositoryType;
     private PaymentService paymentService;
 
 
@@ -49,19 +57,37 @@ public class TradingSystemSpringConfiguration {
           }</code>
      */
 
-@Bean
-public PaymentService getPaymentService() {
-    if (paymentServiceName == PaymentServiceEnum.wsep){
-        paymentService = new WsepClient();
+    @Bean
+    public PaymentService getPaymentService() {
+        if (paymentServiceName == PaymentServiceEnum.wsep) {
+            paymentService = new WsepClient();
+        } else if (paymentServiceName == PaymentServiceEnum.proxy) {
+            paymentService = new PaymentServiceProxy();
+        } else {
+            paymentService = new PaymentServiceProxy();
+        }
+        return paymentService;
     }
-    else if (paymentServiceName == PaymentServiceEnum.proxy){
-        paymentService = new PaymentServiceProxy();
+
+    @Bean
+    @Primary
+    public StoreRepository getStoreRepository() {
+        if ("database".equalsIgnoreCase(repositoryType)) {
+            return new StoreDatabaseRepository();
+        } else if ("memory".equalsIgnoreCase(repositoryType)) {
+            return new StoreMemoryRepository();
+        } else throw new IllegalArgumentException("Invalid repository type in config");
     }
-    else {
-        paymentService = new PaymentServiceProxy();
+
+    @Bean
+    @Primary
+    public UserRepository getUserRepository() {
+        if ("database".equalsIgnoreCase(repositoryType)) {
+            return new UserDatabaseRepository();
+        } else if ("memory".equalsIgnoreCase(repositoryType)) {
+            return new UserMemoryRepository();
+        } else throw new IllegalArgumentException("Invalid repository type in config");
     }
-    return paymentService;
-}
 
 //    @Bean
 //    public TradingSystemImp tradingSystemImp( DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
