@@ -102,9 +102,7 @@ const isApprovedByUser =  (bid) => {
            storeName : storeName
           } 
       });
-      const data = response.data;
-      bids.value = data.bids;
-
+      bids.value = response.data;
       toast.add({ severity : 'success', summary: 'success', detail: "Fetched store bids" , life: 20000 });
 
     } catch (error) {

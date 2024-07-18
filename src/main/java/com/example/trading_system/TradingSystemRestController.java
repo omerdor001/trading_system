@@ -515,8 +515,8 @@ public class TradingSystemRestController {
     }
 
     @GetMapping("/purchase/history/customer")
-    public ResponseEntity<String> getHistoryPurchasesByCustomer(@RequestParam String userName, @RequestParam String token, @RequestParam String storeName, @RequestParam String customerUserName) {
-        return tradingSystem.getHistoryPurchasesByCustomer(userName, token, storeName, customerUserName);
+    public ResponseEntity<String> getHistoryPurchasesByCustomer(@RequestParam String username, @RequestParam String token) {
+        return tradingSystem.getHistoryPurchasesByCustomer(username, token);
     }
 
     @GetMapping("/store/officials/info")

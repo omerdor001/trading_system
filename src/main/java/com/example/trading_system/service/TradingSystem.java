@@ -151,7 +151,7 @@ public interface TradingSystem {
 
     ResponseEntity<String> getAllHistoryPurchases(String userName, String token, String storeName);
 
-    ResponseEntity<String> getHistoryPurchasesByCustomer(String userName, String token, String storeName, String customerUserName);
+    ResponseEntity<String> getHistoryPurchasesByCustomer(String userName, String token);
 
     ResponseEntity<String> requestInformationAboutOfficialsInStore(String userName, String token, String storeName);
 

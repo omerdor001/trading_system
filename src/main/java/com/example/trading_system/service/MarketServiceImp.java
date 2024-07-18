@@ -430,8 +430,8 @@ public class MarketServiceImp implements MarketService {
     }
 
     @Override
-    public String getHistoryPurchasesByCustomer(String userName, String storeName, String customerUserName) throws IllegalAccessException {
-        return marketFacade.getHistoryPurchasesByCustomer(userName, storeName, customerUserName);
+    public String getHistoryPurchasesByCustomer(String userName) throws IllegalAccessException {
+        return marketFacade.getHistoryPurchasesByCustomer(userName);
     }
 
     @Override
