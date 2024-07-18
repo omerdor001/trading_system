@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -114,7 +115,8 @@ public class StorePersistentTests {
         assertEquals(retrievePurchase,retrieveStoreSalesHistory.getAllPurchases().get(0));
     }
 
-   /* @Test
+    @Disabled
+    @Test
     void createProductAndRetrieve() {
         Product product=new Product(123,"Milk","Cow Milk",5.0,50,5.0,Category.Food,new ArrayList<>());
         Store store=new Store("Shufersal","Market store","testUser",4.0);
@@ -131,26 +133,30 @@ public class StorePersistentTests {
         assertEquals(5.0,retrieveProduct.getRating());
         assertEquals(Category.Food,retrieveProduct.getCategory());
         assertEquals(new ArrayList<>(),retrieveProduct.getKeyWords());
-    } */
+    }
 
-   /* @Test
+    @Disabled
+    @Test
     void createBidAndRetrieve() {
-        Bid bid=new Bid("testUser",123,5.0,"Milk","Hadaat 6","1","USD","4111111111111111","12","2025","Emily Johnson","123","123456789");
         Store store=new Store("Shufersal","Market store","testUser",4.0);
-
+        store.addProduct(123,"Milk","Cow Milk",5.0,50,5.0,3,new ArrayList<>());
+        store.placeBid("testUser",123,5.0,"Hadaat 6","1","USD","4111111111111111","12","2025","Emily Johnson","123","123456789");
         storeRepository.save(store);
         initNewRepo();
         Store retrievedStore=anotherStoreRepository.getStore("Shufersal");
-        Product retrieveProduct=retrievedStore.getProduct(123);
-        assertEquals(123,retrieveProduct.getProduct_id());
-        assertEquals("Milk",retrieveProduct.getProduct_name());
-        assertEquals("Cow Milk",retrieveProduct.getProduct_description());
-        assertEquals(5.0,retrieveProduct.getProduct_price());
-        assertEquals(50,retrieveProduct.getProduct_quantity());
-        assertEquals(5.0,retrieveProduct.getRating());
-        assertEquals(Category.Food,retrieveProduct.getCategory());
-        assertEquals(new ArrayList<>(),retrieveProduct.getKeyWords());
-    } */
+        Bid receiveBid=retrievedStore.getBid(123,"testUser");
+        assertEquals("testUser",receiveBid.getUserName());
+        assertEquals("Hadaat 6",receiveBid.getAddress());
+        assertEquals(123,receiveBid.getProductID());
+        assertEquals("1",receiveBid.getAmount());
+        assertEquals("USD",receiveBid.getCurrency());
+        assertEquals("4111111111111111",receiveBid.getCardNumber());
+        assertEquals("12",receiveBid.getMonth());
+        assertEquals("2025",receiveBid.getYear());
+        assertEquals("Emily Johnson",receiveBid.getHolder());
+        assertEquals("123",receiveBid.getCcv());
+        assertEquals("123456789",receiveBid.getHolderId());
+    }
 
       @Test
     void createPurchasePolicyAndRetrieve() {
