@@ -1255,3 +1255,911 @@ This generated password is for development use only. Your security configuration
 2024-07-18T05:34:04.182+03:00  INFO 30340 --- [Trading_System] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2024-07-18T05:34:04.183+03:00  INFO 30340 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2024-07-18T05:34:04.189+03:00  INFO 30340 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-07-18T05:54:23.486+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 16860 (C:\Users\alex\Documents\trading_system\target\classes started by alex in C:\Users\alex\Documents\trading_system)
+2024-07-18T05:54:23.486+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-18T05:54:24.381+03:00  INFO 16860 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-18T05:54:24.412+03:00  INFO 16860 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25 ms. Found 0 JPA repository interfaces.
+2024-07-18T05:54:24.867+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : Starting TradingSystemSpringConfiguration
+2024-07-18T05:54:25.289+03:00  INFO 16860 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-18T05:54:25.305+03:00  INFO 16860 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-18T05:54:25.305+03:00  INFO 16860 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-18T05:54:25.383+03:00  INFO 16860 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-18T05:54:25.383+03:00  INFO 16860 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1849 ms
+2024-07-18T05:54:25.635+03:00  INFO 16860 --- [Trading_System] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-18T05:54:25.697+03:00  INFO 16860 --- [Trading_System] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-07-18T05:54:25.728+03:00  INFO 16860 --- [Trading_System] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-07-18T05:54:26.153+03:00  INFO 16860 --- [Trading_System] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-07-18T05:54:26.184+03:00  INFO 16860 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-18T05:54:26.561+03:00  INFO 16860 --- [Trading_System] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: eb5e5e34-81b0-4b39-9c82-f2419ebe757c
+2024-07-18T05:54:26.561+03:00  INFO 16860 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-18T05:54:28.583+03:00  INFO 16860 --- [Trading_System] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-07-18T05:54:30.040+03:00  INFO 16860 --- [Trading_System] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T05:54:30.386+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: john_doe with password : Password123 and birthdate : 1990-01-01 
+2024-07-18T05:54:30.480+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User registered successfully : john_doe with password : Password123 and birthdate : 1990-01-01
+2024-07-18T05:54:30.495+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:54:30.495+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System opened successfully
+2024-07-18T05:54:30.495+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:54:30.495+03:00  WARN 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:54:30.495+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:54:30.495+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 0
+2024-07-18T05:54:30.495+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MCIsImlhdCI6MTcyMTI3MTI3MCwiZXhwIjoxNzIxMzA3MjcwfQ.gF-n_Mnp9gaKpIprCxDJ1QSS59mtOiyjF1ne7T58vyY and username: v0
+2024-07-18T05:54:30.495+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: jane_doe with password : Password456 and birthdate : 1992-02-02 
+2024-07-18T05:54:30.589+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User registered successfully : jane_doe with password : Password456 and birthdate : 1992-02-02
+2024-07-18T05:54:30.589+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: scooby_doe with password : Password789 and birthdate : 1995-05-05 
+2024-07-18T05:54:30.667+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User registered successfully : scooby_doe with password : Password789 and birthdate : 1995-05-05
+2024-07-18T05:54:30.683+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: john_doe
+2024-07-18T05:54:30.683+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: john_doe
+2024-07-18T05:54:30.762+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: john_doe logged in
+2024-07-18T05:54:30.777+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: john_doe logged in successfully
+2024-07-18T05:54:30.784+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying opening store with name: John's Apple Store
+2024-07-18T05:54:30.784+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying opening store with name: John's Apple Store
+2024-07-18T05:54:30.790+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished opening store with name: John's Apple Store
+2024-07-18T05:54:30.790+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished opening store with name: John's Apple Store
+2024-07-18T05:54:30.790+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : rjohn_doe trying to suggest user : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T05:54:30.793+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : rjohn_doe trying to suggest user : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T05:54:30.793+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished suggesting  : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T05:54:30.793+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished suggesting  : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T05:54:30.798+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to suggest user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T05:54:30.798+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to suggest user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T05:54:30.798+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished suggesting manager : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T05:54:30.798+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished suggesting manager : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T05:54:30.805+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjohn_doe
+2024-07-18T05:54:30.806+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjohn_doe
+2024-07-18T05:54:30.806+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: rjohn_doe logged out
+2024-07-18T05:54:30.809+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: rjohn_doe logged out successfully
+2024-07-18T05:54:30.809+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:54:30.809+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 1
+2024-07-18T05:54:30.809+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MSIsImlhdCI6MTcyMTI3MTI3MCwiZXhwIjoxNzIxMzA3MjcwfQ.kdkPQIWFAFis6K2AIwXSfcaZ8ICqYqpbhcOk6D5qWMA and username: v1
+2024-07-18T05:54:30.812+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v1
+2024-07-18T05:54:30.815+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v1
+2024-07-18T05:54:30.816+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v1
+2024-07-18T05:54:30.816+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:54:30.816+03:00  WARN 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:54:30.816+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:54:30.816+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 2
+2024-07-18T05:54:30.816+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MiIsImlhdCI6MTcyMTI3MTI3MCwiZXhwIjoxNzIxMzA3MjcwfQ.1_fj-ESDfSBmRV42RTJeeQGf7tfXKl2bVgzc1GTNMkU and username: v2
+2024-07-18T05:54:30.816+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: jane_doe
+2024-07-18T05:54:30.816+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: jane_doe
+2024-07-18T05:54:30.888+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: jane_doe logged in
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: jane_doe logged in successfully
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : rjane_doe trying to approve owner to store : John's Apple Store
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : rjane_doe trying to approve owner to store : John's Apple Store
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished approving owner to store : John's Apple Store
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished approving owner to store : John's Apple Store
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjane_doe
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjane_doe
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: rjane_doe logged out
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: rjane_doe logged out successfully
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 3
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MyIsImlhdCI6MTcyMTI3MTI3MCwiZXhwIjoxNzIxMzA3MjcwfQ.qX5HWFo9xWT2bmqFaT4a754ZSPhFdd45CcKL-jS5BDg and username: v3
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v3
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v3
+2024-07-18T05:54:30.903+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v3
+2024-07-18T05:54:30.919+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:54:30.919+03:00  WARN 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:54:30.919+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:54:30.919+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 4
+2024-07-18T05:54:30.919+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NCIsImlhdCI6MTcyMTI3MTI3MCwiZXhwIjoxNzIxMzA3MjcwfQ.X0btIWHY5DOuZupq_tc9UiBFTz6iOZ8FgF-g7G_O_Po and username: v4
+2024-07-18T05:54:30.919+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: scooby_doe
+2024-07-18T05:54:30.919+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: scooby_doe
+2024-07-18T05:54:30.998+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: scooby_doe logged in
+2024-07-18T05:54:30.998+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: scooby_doe logged in successfully
+2024-07-18T05:54:30.998+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to approve manage to store : John's Apple Store
+2024-07-18T05:54:30.998+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to approve manage to store : John's Apple Store
+2024-07-18T05:54:30.998+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished approving manage to store : John's Apple Store
+2024-07-18T05:54:30.998+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished approving manage to store : John's Apple Store
+2024-07-18T05:54:30.998+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe is trying to add products to store : John's Apple Store with product Id : 12345 , product name : Secret Apple, product description : This is a secret to tell about the apple. , product price : 99.99 ,product quantity : 10 , rating : 4.0 , category : 3 , key words : apple, secret 
+2024-07-18T05:54:31.014+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe finished to add products to store : John's Apple Store with product Id : 12345 , product name : Secret Apple, product description : This is a secret to tell about the apple. , product price : 99.99 ,product quantity : 10 , rating : 4.0 , category : 3 , key words : apple, secret 
+2024-07-18T05:54:31.018+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe is trying to add products to store : John's Apple Store with product Id : 67890 , product name : Mystery Apple, product description : Unveil the mystery behind this extraordinary apple. , product price : 149.99 ,product quantity : 5 , rating : 4.7 , category : 3 , key words : apple, mystery 
+2024-07-18T05:54:31.018+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe finished to add products to store : John's Apple Store with product Id : 67890 , product name : Mystery Apple, product description : Unveil the mystery behind this extraordinary apple. , product price : 149.99 ,product quantity : 5 , rating : 4.7 , category : 3 , key words : apple, mystery 
+2024-07-18T05:54:31.018+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rscooby_doe
+2024-07-18T05:54:31.018+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rscooby_doe
+2024-07-18T05:54:31.018+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: rscooby_doe logged out
+2024-07-18T05:54:31.018+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: rscooby_doe logged out successfully
+2024-07-18T05:54:31.018+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:54:31.018+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 5
+2024-07-18T05:54:31.018+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NSIsImlhdCI6MTcyMTI3MTI3MSwiZXhwIjoxNzIxMzA3MjcxfQ.G-RxGBtAErKAFoI3zpaD6XbRSl1SsbX8F1tq25wanXY and username: v5
+2024-07-18T05:54:31.018+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v5
+2024-07-18T05:54:31.018+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v5
+2024-07-18T05:54:31.018+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v5
+2024-07-18T05:54:31.018+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:54:31.030+03:00  WARN 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:54:31.030+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:54:31.030+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 6
+2024-07-18T05:54:31.030+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NiIsImlhdCI6MTcyMTI3MTI3MSwiZXhwIjoxNzIxMzA3MjcxfQ.w4m5urljE-BYf7z5LerTpKKc3ZYVqwqsj6wQRvWWdPA and username: v6
+2024-07-18T05:54:31.030+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 12345
+2024-07-18T05:54:31.035+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 12345
+2024-07-18T05:54:31.035+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished adding to cart product with id: 12345
+2024-07-18T05:54:31.035+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished adding to cart product with id: 12345
+2024-07-18T05:54:31.035+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Approving purchase for registered user with ID: v6 
+2024-07-18T05:54:31.035+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Approving purchase for registered user with ID: v6 
+2024-07-18T05:54:31.075+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.domain.stores.Product              : Removed 2 products. New quantity: 8
+2024-07-18T05:54:31.077+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Succeeded making delivery to 456 Elm St, Anytown
+2024-07-18T05:54:31.077+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Succeed making payment of 199.98 USD
+2024-07-18T05:54:31.077+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Purchase approved for registered user with ID: v6
+2024-07-18T05:54:31.086+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v6
+2024-07-18T05:54:31.086+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v6
+2024-07-18T05:54:31.086+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v6
+2024-07-18T05:54:31.086+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:54:31.086+03:00  WARN 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:54:31.086+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:54:31.086+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 7
+2024-07-18T05:54:31.086+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NyIsImlhdCI6MTcyMTI3MTI3MSwiZXhwIjoxNzIxMzA3MjcxfQ.P_BEHBodGNlpb9S06TJklVUkjthS3UUxGO5bYVF8cL0 and username: v7
+2024-07-18T05:54:31.086+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: jane_doe
+2024-07-18T05:54:31.086+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: jane_doe
+2024-07-18T05:54:31.171+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: jane_doe logged in
+2024-07-18T05:54:31.171+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: jane_doe logged in successfully
+2024-07-18T05:54:31.171+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 67890
+2024-07-18T05:54:31.171+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 67890
+2024-07-18T05:54:31.171+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished adding to cart product with id: 67890
+2024-07-18T05:54:31.171+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished adding to cart product with id: 67890
+2024-07-18T05:54:31.171+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Approving purchase for registered user with ID: rjane_doe 
+2024-07-18T05:54:31.171+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Approving purchase for registered user with ID: rjane_doe 
+2024-07-18T05:54:31.187+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.domain.stores.Product              : Removed 1 products. New quantity: 4
+2024-07-18T05:54:31.187+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Succeeded making delivery to 123 Main St, Anytown
+2024-07-18T05:54:31.187+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Succeed making payment of 149.99 USD
+2024-07-18T05:54:31.187+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Purchase approved for registered user with ID: rjane_doe
+2024-07-18T05:54:31.187+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjane_doe
+2024-07-18T05:54:31.187+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjane_doe
+2024-07-18T05:54:31.187+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: rjane_doe logged out
+2024-07-18T05:54:31.187+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: rjane_doe logged out successfully
+2024-07-18T05:54:31.187+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:54:31.187+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 8
+2024-07-18T05:54:31.187+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2OCIsImlhdCI6MTcyMTI3MTI3MSwiZXhwIjoxNzIxMzA3MjcxfQ.l6gg51_0_2CG2bwnfR39-DlXL0lxZBumK6b1PqtA8Ao and username: v8
+2024-07-18T05:54:31.187+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v8
+2024-07-18T05:54:31.203+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v8
+2024-07-18T05:54:31.203+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v8
+2024-07-18T05:54:31.203+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: john_doe with password : Password123 and birthdate : 1990-01-01 
+2024-07-18T05:54:31.203+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while registering user : john_doe with password : Password123 and birthdate : 1990-01-01 : username already exists - john_doe
+2024-07-18T05:54:31.203+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:54:31.203+03:00  WARN 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:54:31.203+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:54:31.203+03:00  WARN 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:54:31.203+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:54:31.203+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 9
+2024-07-18T05:54:31.203+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2OSIsImlhdCI6MTcyMTI3MTI3MSwiZXhwIjoxNzIxMzA3MjcxfQ.DARg2iWkwnAwx4tKxwVPatuxdgCSJgdrmBHlDpEaFL8 and username: v9
+2024-07-18T05:54:31.203+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: jane_doe with password : Password456 and birthdate : 1992-02-02 
+2024-07-18T05:54:31.203+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while registering user : jane_doe with password : Password456 and birthdate : 1992-02-02 : username already exists - jane_doe
+2024-07-18T05:54:31.203+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: scooby_doe with password : Password789 and birthdate : 1995-05-05 
+2024-07-18T05:54:31.203+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while registering user : scooby_doe with password : Password789 and birthdate : 1995-05-05 : username already exists - scooby_doe
+2024-07-18T05:54:31.218+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: john_doe
+2024-07-18T05:54:31.218+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: john_doe
+2024-07-18T05:54:31.218+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: john_doe: User doesn't exist in the system
+2024-07-18T05:54:31.218+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying opening store with name: John's Apple Store
+2024-07-18T05:54:31.218+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying opening store with name: John's Apple Store
+2024-07-18T05:54:31.218+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.domain.users.UserFacadeImp         : While opening store - Store with name: John's Apple Store already exists
+2024-07-18T05:54:31.218+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : Store with name John's Apple Store already exists , Failed opening store with name: John's Apple Store
+2024-07-18T05:54:31.218+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : rjohn_doe trying to suggest user : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T05:54:31.218+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : rjohn_doe trying to suggest user : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T05:54:31.218+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : Appoint user is not logged , while trying to suggest the user : rjohn_doe to be a owner in store : John's Apple Store
+2024-07-18T05:54:31.218+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to suggest user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T05:54:31.218+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to suggest user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T05:54:31.218+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : Appoint user is not logged , while trying to suggest the user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T05:54:31.218+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjohn_doe
+2024-07-18T05:54:31.218+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjohn_doe
+2024-07-18T05:54:31.218+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging out user: rjohn_doe: User rjohn_doe already Logged out
+2024-07-18T05:54:31.218+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v1
+2024-07-18T05:54:31.218+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v1
+2024-07-18T05:54:31.218+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v1: No such user with username- v1
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:54:31.235+03:00  WARN 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 10
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MTAiLCJpYXQiOjE3MjEyNzEyNzEsImV4cCI6MTcyMTMwNzI3MX0.gSIgiMVG4j8BX96e2GlkOunn2oM0qqQRL2hLM38ulNs and username: v10
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: jane_doe
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: jane_doe
+2024-07-18T05:54:31.235+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: jane_doe: User doesn't exist in the system
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : rjane_doe trying to approve owner to store : John's Apple Store
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : rjane_doe trying to approve owner to store : John's Apple Store
+2024-07-18T05:54:31.235+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : New owner user is not logged , while trying to approve owner to store : John's Apple Store
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjane_doe
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjane_doe
+2024-07-18T05:54:31.235+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging out user: rjane_doe: User rjane_doe already Logged out
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v3
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v3
+2024-07-18T05:54:31.235+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v3: No such user with username- v3
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:54:31.235+03:00  WARN 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 11
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MTEiLCJpYXQiOjE3MjEyNzEyNzEsImV4cCI6MTcyMTMwNzI3MX0.LqAM6wd5x7H6jXWl2Gi9ea24bTJYj5LkhC8LBgwBY8k and username: v11
+2024-07-18T05:54:31.235+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: scooby_doe
+2024-07-18T05:54:31.250+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: scooby_doe
+2024-07-18T05:54:31.250+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: scooby_doe: User doesn't exist in the system
+2024-07-18T05:54:31.251+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to approve manage to store : John's Apple Store
+2024-07-18T05:54:31.251+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to approve manage to store : John's Apple Store
+2024-07-18T05:54:31.251+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : New Manager user is not logged , while trying to approve management to store : John's Apple Store
+2024-07-18T05:54:31.251+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe is trying to add products to store : John's Apple Store with product Id : 12345 , product name : Secret Apple, product description : This is a secret to tell about the apple. , product price : 99.99 ,product quantity : 10 , rating : 4.0 , category : 3 , key words : apple, secret 
+2024-07-18T05:54:31.251+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while adding product: Secret Apple to store: John's Apple Store: Product with id 12345 already exists
+2024-07-18T05:54:31.251+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe is trying to add products to store : John's Apple Store with product Id : 67890 , product name : Mystery Apple, product description : Unveil the mystery behind this extraordinary apple. , product price : 149.99 ,product quantity : 5 , rating : 4.7 , category : 3 , key words : apple, mystery 
+2024-07-18T05:54:31.251+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while adding product: Mystery Apple to store: John's Apple Store: Product with id 67890 already exists
+2024-07-18T05:54:31.251+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rscooby_doe
+2024-07-18T05:54:31.251+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rscooby_doe
+2024-07-18T05:54:31.251+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging out user: rscooby_doe: User rscooby_doe already Logged out
+2024-07-18T05:54:31.251+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v5
+2024-07-18T05:54:31.251+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v5
+2024-07-18T05:54:31.251+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v5: No such user with username- v5
+2024-07-18T05:54:31.251+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:54:31.251+03:00  WARN 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:54:31.251+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:54:31.251+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 12
+2024-07-18T05:54:31.251+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MTIiLCJpYXQiOjE3MjEyNzEyNzEsImV4cCI6MTcyMTMwNzI3MX0.ZGSGNKv8fq0lYf0IR14fe1d8s3Y5kzVYBWv3wsMkXeI and username: v12
+2024-07-18T05:54:31.251+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 12345
+2024-07-18T05:54:31.267+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 12345
+2024-07-18T05:54:31.267+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.domain.users.UserFacadeImp         : User not found: v6
+2024-07-18T05:54:31.267+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : User not found: v6 , Failed Trying adding to cart  product with id: 12345
+2024-07-18T05:54:31.267+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Approving purchase for registered user with ID: v6 
+2024-07-18T05:54:31.267+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Approving purchase for registered user with ID: v6 
+2024-07-18T05:54:31.267+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.domain.users.UserFacadeImp         : User not found
+2024-07-18T05:54:31.267+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error approving purchase for registered user with ID: v6, error: User not found
+2024-07-18T05:54:31.267+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v6
+2024-07-18T05:54:31.267+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v6
+2024-07-18T05:54:31.275+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v6: No such user with username- v6
+2024-07-18T05:54:31.275+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:54:31.275+03:00  WARN 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:54:31.275+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:54:31.275+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 13
+2024-07-18T05:54:31.275+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MTMiLCJpYXQiOjE3MjEyNzEyNzEsImV4cCI6MTcyMTMwNzI3MX0.q8O_1HNVQExVSzHmuUTYIUxLWM9gjvANK0fCsUQO4dI and username: v13
+2024-07-18T05:54:31.275+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: jane_doe
+2024-07-18T05:54:31.275+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: jane_doe
+2024-07-18T05:54:31.275+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: jane_doe: User doesn't exist in the system
+2024-07-18T05:54:31.275+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 67890
+2024-07-18T05:54:31.275+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 67890
+2024-07-18T05:54:31.275+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.domain.users.UserFacadeImp         : User is not logged in: rjane_doe
+2024-07-18T05:54:31.275+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : User is not logged in: rjane_doe , Failed Trying adding to cart  product with id: 67890
+2024-07-18T05:54:31.275+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Approving purchase for registered user with ID: rjane_doe 
+2024-07-18T05:54:31.275+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Approving purchase for registered user with ID: rjane_doe 
+2024-07-18T05:54:31.275+03:00 ERROR 16860 --- [Trading_System] [main] c.e.trading_system.domain.users.User     : User is not logged in
+2024-07-18T05:54:31.275+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error approving purchase for registered user with ID: rjane_doe, error: User is not logged in
+2024-07-18T05:54:31.283+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjane_doe
+2024-07-18T05:54:31.283+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjane_doe
+2024-07-18T05:54:31.283+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging out user: rjane_doe: User rjane_doe already Logged out
+2024-07-18T05:54:31.283+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v8
+2024-07-18T05:54:31.283+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v8
+2024-07-18T05:54:31.283+03:00 ERROR 16860 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v8: No such user with username- v8
+2024-07-18T05:54:31.535+03:00  WARN 16860 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d2d502ee-29b4-4a7b-bf56-505c50234ff9
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-07-18T05:54:31.818+03:00  INFO 16860 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@47c163bb, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@f25176a, org.springframework.security.web.context.SecurityContextHolderFilter@784fb189, org.springframework.security.web.header.HeaderWriterFilter@447522b4, org.springframework.web.filter.CorsFilter@5f8a0d7f, org.springframework.security.web.authentication.logout.LogoutFilter@3bcebb8f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6fd6d887, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@22e733f5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@26df4e2f, org.springframework.security.web.access.ExceptionTranslationFilter@7b7695f, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6d8dc329]
+2024-07-18T05:54:32.038+03:00  INFO 16860 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
+2024-07-18T05:54:32.054+03:00  INFO 16860 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-07-18T05:54:32.054+03:00  INFO 16860 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@12139db0]]
+2024-07-18T05:54:32.054+03:00  INFO 16860 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-07-18T05:54:32.054+03:00  INFO 16860 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 9.122 seconds (process running for 9.59)
+2024-07-18T05:55:22.227+03:00  INFO 16860 --- [Trading_System] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-18T05:55:22.227+03:00  INFO 16860 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-07-18T05:55:22.232+03:00  INFO 16860 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2024-07-18T05:55:22.459+03:00  INFO 16860 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to logout user: rlana
+2024-07-18T05:55:22.464+03:00  INFO 16860 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : Trying to logout user: rlana
+2024-07-18T05:55:22.464+03:00 ERROR 16860 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Error occurred while logging out user: rlana: No such user rlana
+2024-07-18T05:55:30.851+03:00  INFO 16860 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to login user: john_doe
+2024-07-18T05:55:30.851+03:00  INFO 16860 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.UserServiceImp             : Trying to login user: john_doe
+2024-07-18T05:55:30.851+03:00 ERROR 16860 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: john_doe: User doesn't exist in the system
+2024-07-18T05:55:32.036+03:00  INFO 16860 --- [Trading_System] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2024-07-18T05:57:45.637+03:00  INFO 16860 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-07-18T05:57:45.637+03:00  INFO 16860 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@12139db0]]
+2024-07-18T05:57:45.644+03:00  INFO 16860 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-07-18T05:57:45.660+03:00  INFO 16860 --- [Trading_System] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T05:57:45.660+03:00  INFO 16860 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-07-18T05:57:45.675+03:00  INFO 16860 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-07-18T05:57:51.913+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 13572 (C:\Users\alex\Documents\trading_system\target\classes started by alex in C:\Users\alex\Documents\trading_system)
+2024-07-18T05:57:51.923+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-18T05:57:52.461+03:00  INFO 13572 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-18T05:57:52.493+03:00  INFO 13572 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 14 ms. Found 0 JPA repository interfaces.
+2024-07-18T05:57:52.906+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : Starting TradingSystemSpringConfiguration
+2024-07-18T05:57:53.328+03:00  INFO 13572 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-18T05:57:53.343+03:00  INFO 13572 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-18T05:57:53.343+03:00  INFO 13572 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-18T05:57:53.395+03:00  INFO 13572 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-18T05:57:53.395+03:00  INFO 13572 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1423 ms
+2024-07-18T05:57:53.626+03:00  INFO 13572 --- [Trading_System] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-18T05:57:53.689+03:00  INFO 13572 --- [Trading_System] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-07-18T05:57:53.720+03:00  INFO 13572 --- [Trading_System] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-07-18T05:57:54.080+03:00  INFO 13572 --- [Trading_System] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-07-18T05:57:54.112+03:00  INFO 13572 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-18T05:57:54.427+03:00  INFO 13572 --- [Trading_System] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: bfc87aac-6f49-42e1-b2ea-699661142a6d
+2024-07-18T05:57:54.427+03:00  INFO 13572 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-18T05:57:56.167+03:00  INFO 13572 --- [Trading_System] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-07-18T05:57:57.602+03:00  INFO 13572 --- [Trading_System] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T05:57:57.947+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: john_doe with password : Password123 and birthdate : 1990-01-01 
+2024-07-18T05:57:58.073+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User registered successfully : john_doe with password : Password123 and birthdate : 1990-01-01
+2024-07-18T05:57:58.088+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:57:58.088+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System opened successfully
+2024-07-18T05:57:58.088+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:57:58.088+03:00  WARN 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:57:58.088+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:57:58.088+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 0
+2024-07-18T05:57:58.088+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MCIsImlhdCI6MTcyMTI3MTQ3OCwiZXhwIjoxNzIxMzA3NDc4fQ.Ew80FvcSQzFC7QeTRWGdvXUDg72O-tOCnXrajtEE4aY and username: v0
+2024-07-18T05:57:58.088+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: jane_doe with password : Password456 and birthdate : 1992-02-02 
+2024-07-18T05:57:58.182+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User registered successfully : jane_doe with password : Password456 and birthdate : 1992-02-02
+2024-07-18T05:57:58.182+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: scooby_doe with password : Password789 and birthdate : 1995-05-05 
+2024-07-18T05:57:58.261+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User registered successfully : scooby_doe with password : Password789 and birthdate : 1995-05-05
+2024-07-18T05:57:58.261+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: john_doe
+2024-07-18T05:57:58.261+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: john_doe
+2024-07-18T05:57:58.354+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: john_doe logged in
+2024-07-18T05:57:58.371+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: john_doe logged in successfully
+2024-07-18T05:57:58.371+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying opening store with name: John's Apple Store
+2024-07-18T05:57:58.371+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying opening store with name: John's Apple Store
+2024-07-18T05:57:58.386+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished opening store with name: John's Apple Store
+2024-07-18T05:57:58.386+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished opening store with name: John's Apple Store
+2024-07-18T05:57:58.386+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : rjohn_doe trying to suggest user : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T05:57:58.386+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : rjohn_doe trying to suggest user : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T05:57:58.386+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished suggesting  : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T05:57:58.386+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished suggesting  : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T05:57:58.386+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to suggest user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T05:57:58.402+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to suggest user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T05:57:58.402+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished suggesting manager : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T05:57:58.402+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished suggesting manager : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T05:57:58.402+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjohn_doe
+2024-07-18T05:57:58.402+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjohn_doe
+2024-07-18T05:57:58.402+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: rjohn_doe logged out
+2024-07-18T05:57:58.402+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: rjohn_doe logged out successfully
+2024-07-18T05:57:58.402+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:57:58.402+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 1
+2024-07-18T05:57:58.402+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MSIsImlhdCI6MTcyMTI3MTQ3OCwiZXhwIjoxNzIxMzA3NDc4fQ.AP2atjrBkJ-RIVxn8D5sWIMIomwNv46hb8Xxu7BX4RU and username: v1
+2024-07-18T05:57:58.402+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v1
+2024-07-18T05:57:58.418+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v1
+2024-07-18T05:57:58.418+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v1
+2024-07-18T05:57:58.418+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:57:58.418+03:00  WARN 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:57:58.418+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:57:58.418+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 2
+2024-07-18T05:57:58.418+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MiIsImlhdCI6MTcyMTI3MTQ3OCwiZXhwIjoxNzIxMzA3NDc4fQ.4-yGF3IpW3IbM_iNA-8DUB4LVU1YhomzQSTDBcGRKJU and username: v2
+2024-07-18T05:57:58.418+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: jane_doe
+2024-07-18T05:57:58.418+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: jane_doe
+2024-07-18T05:57:58.497+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: jane_doe logged in
+2024-07-18T05:57:58.497+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: jane_doe logged in successfully
+2024-07-18T05:57:58.497+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : rjane_doe trying to approve owner to store : John's Apple Store
+2024-07-18T05:57:58.497+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : rjane_doe trying to approve owner to store : John's Apple Store
+2024-07-18T05:57:58.497+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished approving owner to store : John's Apple Store
+2024-07-18T05:57:58.497+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished approving owner to store : John's Apple Store
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjane_doe
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjane_doe
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: rjane_doe logged out
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: rjane_doe logged out successfully
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 3
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MyIsImlhdCI6MTcyMTI3MTQ3OCwiZXhwIjoxNzIxMzA3NDc4fQ.R-DXAKE2Ff1yOWcH_IQaiWKsijtCpE-7LhsbRFalyw4 and username: v3
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v3
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v3
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v3
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:57:58.513+03:00  WARN 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 4
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NCIsImlhdCI6MTcyMTI3MTQ3OCwiZXhwIjoxNzIxMzA3NDc4fQ.A_HN5nJOzpzCjCtaBnH2Yji-XQajj7_K4sP1OGXua2Y and username: v4
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: scooby_doe
+2024-07-18T05:57:58.513+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: scooby_doe
+2024-07-18T05:57:58.592+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: scooby_doe logged in
+2024-07-18T05:57:58.592+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: scooby_doe logged in successfully
+2024-07-18T05:57:58.608+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to approve manage to store : John's Apple Store
+2024-07-18T05:57:58.608+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to approve manage to store : John's Apple Store
+2024-07-18T05:57:58.608+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished approving manage to store : John's Apple Store
+2024-07-18T05:57:58.608+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished approving manage to store : John's Apple Store
+2024-07-18T05:57:58.608+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe is trying to add products to store : John's Apple Store with product Id : 12345 , product name : Secret Apple, product description : This is a secret to tell about the apple. , product price : 99.99 ,product quantity : 10 , rating : 4.0 , category : 3 , key words : apple, secret 
+2024-07-18T05:57:58.608+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe finished to add products to store : John's Apple Store with product Id : 12345 , product name : Secret Apple, product description : This is a secret to tell about the apple. , product price : 99.99 ,product quantity : 10 , rating : 4.0 , category : 3 , key words : apple, secret 
+2024-07-18T05:57:58.608+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe is trying to add products to store : John's Apple Store with product Id : 67890 , product name : Mystery Apple, product description : Unveil the mystery behind this extraordinary apple. , product price : 149.99 ,product quantity : 5 , rating : 4.7 , category : 3 , key words : apple, mystery 
+2024-07-18T05:57:58.624+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe finished to add products to store : John's Apple Store with product Id : 67890 , product name : Mystery Apple, product description : Unveil the mystery behind this extraordinary apple. , product price : 149.99 ,product quantity : 5 , rating : 4.7 , category : 3 , key words : apple, mystery 
+2024-07-18T05:57:58.626+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rscooby_doe
+2024-07-18T05:57:58.626+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rscooby_doe
+2024-07-18T05:57:58.626+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: rscooby_doe logged out
+2024-07-18T05:57:58.626+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: rscooby_doe logged out successfully
+2024-07-18T05:57:58.626+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:57:58.626+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 5
+2024-07-18T05:57:58.626+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NSIsImlhdCI6MTcyMTI3MTQ3OCwiZXhwIjoxNzIxMzA3NDc4fQ.xPamgo8arcOiNo-M58Mpu9vEze55_qBdm-3HH1FuR_k and username: v5
+2024-07-18T05:57:58.626+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v5
+2024-07-18T05:57:58.626+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v5
+2024-07-18T05:57:58.626+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v5
+2024-07-18T05:57:58.626+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:57:58.626+03:00  WARN 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:57:58.626+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:57:58.626+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 6
+2024-07-18T05:57:58.626+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NiIsImlhdCI6MTcyMTI3MTQ3OCwiZXhwIjoxNzIxMzA3NDc4fQ.dBr1M2UsyoYf9vw-RKqYqSikDWU_sleJWizjOAxc4Sk and username: v6
+2024-07-18T05:57:58.639+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 12345
+2024-07-18T05:57:58.639+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 12345
+2024-07-18T05:57:58.639+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished adding to cart product with id: 12345
+2024-07-18T05:57:58.639+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished adding to cart product with id: 12345
+2024-07-18T05:57:58.639+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Approving purchase for registered user with ID: v6 
+2024-07-18T05:57:58.639+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Approving purchase for registered user with ID: v6 
+2024-07-18T05:57:58.687+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.domain.stores.Product              : Removed 2 products. New quantity: 8
+2024-07-18T05:57:58.695+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Succeeded making delivery to 456 Elm St, Anytown
+2024-07-18T05:57:58.695+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Succeed making payment of 199.98 USD
+2024-07-18T05:57:58.695+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Purchase approved for registered user with ID: v6
+2024-07-18T05:57:58.695+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v6
+2024-07-18T05:57:58.703+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v6
+2024-07-18T05:57:58.703+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v6
+2024-07-18T05:57:58.703+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:57:58.703+03:00  WARN 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:57:58.703+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:57:58.703+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 7
+2024-07-18T05:57:58.703+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NyIsImlhdCI6MTcyMTI3MTQ3OCwiZXhwIjoxNzIxMzA3NDc4fQ._MCizSGT83_VeqL7u8ja7gjibVOlxIwAuq5m5XPO70o and username: v7
+2024-07-18T05:57:58.703+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: jane_doe
+2024-07-18T05:57:58.703+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: jane_doe
+2024-07-18T05:57:58.781+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: jane_doe logged in
+2024-07-18T05:57:58.781+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: jane_doe logged in successfully
+2024-07-18T05:57:58.797+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 67890
+2024-07-18T05:57:58.797+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 67890
+2024-07-18T05:57:58.797+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished adding to cart product with id: 67890
+2024-07-18T05:57:58.797+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished adding to cart product with id: 67890
+2024-07-18T05:57:58.797+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Approving purchase for registered user with ID: rjane_doe 
+2024-07-18T05:57:58.797+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Approving purchase for registered user with ID: rjane_doe 
+2024-07-18T05:57:58.797+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.domain.stores.Product              : Removed 1 products. New quantity: 4
+2024-07-18T05:57:58.797+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Succeeded making delivery to 123 Main St, Anytown
+2024-07-18T05:57:58.797+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Succeed making payment of 149.99 USD
+2024-07-18T05:57:58.797+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Purchase approved for registered user with ID: rjane_doe
+2024-07-18T05:57:58.815+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjane_doe
+2024-07-18T05:57:58.815+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjane_doe
+2024-07-18T05:57:58.815+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: rjane_doe logged out
+2024-07-18T05:57:58.815+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: rjane_doe logged out successfully
+2024-07-18T05:57:58.815+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:57:58.815+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 8
+2024-07-18T05:57:58.815+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2OCIsImlhdCI6MTcyMTI3MTQ3OCwiZXhwIjoxNzIxMzA3NDc4fQ.RdqcTdckFMi-4Ee1KVcVK1VpFldVcYBbCDaHa31wa_Q and username: v8
+2024-07-18T05:57:58.815+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v8
+2024-07-18T05:57:58.815+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v8
+2024-07-18T05:57:58.815+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v8
+2024-07-18T05:57:58.829+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: john_doe with password : Password123 and birthdate : 1990-01-01 
+2024-07-18T05:57:58.829+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while registering user : john_doe with password : Password123 and birthdate : 1990-01-01 : username already exists - john_doe
+2024-07-18T05:57:58.829+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:57:58.829+03:00  WARN 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:57:58.829+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:57:58.829+03:00  WARN 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:57:58.829+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:57:58.829+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 9
+2024-07-18T05:57:58.829+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2OSIsImlhdCI6MTcyMTI3MTQ3OCwiZXhwIjoxNzIxMzA3NDc4fQ.ElpPgy3zkUlOrLikYUx1uenUzxumcqQHLyBDg6K4R0U and username: v9
+2024-07-18T05:57:58.829+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: jane_doe with password : Password456 and birthdate : 1992-02-02 
+2024-07-18T05:57:58.829+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while registering user : jane_doe with password : Password456 and birthdate : 1992-02-02 : username already exists - jane_doe
+2024-07-18T05:57:58.829+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: scooby_doe with password : Password789 and birthdate : 1995-05-05 
+2024-07-18T05:57:58.829+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while registering user : scooby_doe with password : Password789 and birthdate : 1995-05-05 : username already exists - scooby_doe
+2024-07-18T05:57:58.829+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: john_doe
+2024-07-18T05:57:58.829+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: john_doe
+2024-07-18T05:57:58.829+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: john_doe: User doesn't exist in the system
+2024-07-18T05:57:58.829+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying opening store with name: John's Apple Store
+2024-07-18T05:57:58.829+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying opening store with name: John's Apple Store
+2024-07-18T05:57:58.829+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.domain.users.UserFacadeImp         : While opening store - Store with name: John's Apple Store already exists
+2024-07-18T05:57:58.829+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : Store with name John's Apple Store already exists , Failed opening store with name: John's Apple Store
+2024-07-18T05:57:58.829+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : rjohn_doe trying to suggest user : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T05:57:58.843+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : rjohn_doe trying to suggest user : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T05:57:58.843+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : Appoint user is not logged , while trying to suggest the user : rjohn_doe to be a owner in store : John's Apple Store
+2024-07-18T05:57:58.845+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to suggest user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T05:57:58.845+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to suggest user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T05:57:58.845+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : Appoint user is not logged , while trying to suggest the user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T05:57:58.845+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjohn_doe
+2024-07-18T05:57:58.845+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjohn_doe
+2024-07-18T05:57:58.845+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging out user: rjohn_doe: User rjohn_doe already Logged out
+2024-07-18T05:57:58.845+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v1
+2024-07-18T05:57:58.845+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v1
+2024-07-18T05:57:58.845+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v1: No such user with username- v1
+2024-07-18T05:57:58.845+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:57:58.845+03:00  WARN 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:57:58.845+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:57:58.845+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 10
+2024-07-18T05:57:58.845+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MTAiLCJpYXQiOjE3MjEyNzE0NzgsImV4cCI6MTcyMTMwNzQ3OH0.yF29zpcmeZpud_bhaYPlVZ0zG8asavmRQ0UA1-MKT-U and username: v10
+2024-07-18T05:57:58.845+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: jane_doe
+2024-07-18T05:57:58.845+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: jane_doe
+2024-07-18T05:57:58.845+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: jane_doe: User doesn't exist in the system
+2024-07-18T05:57:58.845+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : rjane_doe trying to approve owner to store : John's Apple Store
+2024-07-18T05:57:58.845+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : rjane_doe trying to approve owner to store : John's Apple Store
+2024-07-18T05:57:58.845+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : New owner user is not logged , while trying to approve owner to store : John's Apple Store
+2024-07-18T05:57:58.861+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjane_doe
+2024-07-18T05:57:58.861+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjane_doe
+2024-07-18T05:57:58.861+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging out user: rjane_doe: User rjane_doe already Logged out
+2024-07-18T05:57:58.861+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v3
+2024-07-18T05:57:58.861+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v3
+2024-07-18T05:57:58.861+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v3: No such user with username- v3
+2024-07-18T05:57:58.861+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:57:58.861+03:00  WARN 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:57:58.861+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:57:58.861+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 11
+2024-07-18T05:57:58.861+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MTEiLCJpYXQiOjE3MjEyNzE0NzgsImV4cCI6MTcyMTMwNzQ3OH0.IXFMW5kEM9f5GVT9Kw-7SFY73QYWWZ-tNsjWs42_mHg and username: v11
+2024-07-18T05:57:58.861+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: scooby_doe
+2024-07-18T05:57:58.861+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: scooby_doe
+2024-07-18T05:57:58.861+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: scooby_doe: User doesn't exist in the system
+2024-07-18T05:57:58.861+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to approve manage to store : John's Apple Store
+2024-07-18T05:57:58.861+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to approve manage to store : John's Apple Store
+2024-07-18T05:57:58.861+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : New Manager user is not logged , while trying to approve management to store : John's Apple Store
+2024-07-18T05:57:58.861+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe is trying to add products to store : John's Apple Store with product Id : 12345 , product name : Secret Apple, product description : This is a secret to tell about the apple. , product price : 99.99 ,product quantity : 10 , rating : 4.0 , category : 3 , key words : apple, secret 
+2024-07-18T05:57:58.876+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while adding product: Secret Apple to store: John's Apple Store: Product with id 12345 already exists
+2024-07-18T05:57:58.876+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe is trying to add products to store : John's Apple Store with product Id : 67890 , product name : Mystery Apple, product description : Unveil the mystery behind this extraordinary apple. , product price : 149.99 ,product quantity : 5 , rating : 4.7 , category : 3 , key words : apple, mystery 
+2024-07-18T05:57:58.876+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while adding product: Mystery Apple to store: John's Apple Store: Product with id 67890 already exists
+2024-07-18T05:57:58.876+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rscooby_doe
+2024-07-18T05:57:58.876+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rscooby_doe
+2024-07-18T05:57:58.876+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging out user: rscooby_doe: User rscooby_doe already Logged out
+2024-07-18T05:57:58.876+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v5
+2024-07-18T05:57:58.876+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v5
+2024-07-18T05:57:58.876+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v5: No such user with username- v5
+2024-07-18T05:57:58.876+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:57:58.876+03:00  WARN 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:57:58.876+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:57:58.876+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 12
+2024-07-18T05:57:58.876+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MTIiLCJpYXQiOjE3MjEyNzE0NzgsImV4cCI6MTcyMTMwNzQ3OH0.5EYNfFgT7Tkjp4YshMQbzcaqhLUZLW5zOI5SFwItOig and username: v12
+2024-07-18T05:57:58.876+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 12345
+2024-07-18T05:57:58.876+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 12345
+2024-07-18T05:57:58.876+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.domain.users.UserFacadeImp         : User not found: v6
+2024-07-18T05:57:58.876+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : User not found: v6 , Failed Trying adding to cart  product with id: 12345
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Approving purchase for registered user with ID: v6 
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Approving purchase for registered user with ID: v6 
+2024-07-18T05:57:58.892+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.domain.users.UserFacadeImp         : User not found
+2024-07-18T05:57:58.892+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error approving purchase for registered user with ID: v6, error: User not found
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v6
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v6
+2024-07-18T05:57:58.892+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v6: No such user with username- v6
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:57:58.892+03:00  WARN 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 13
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MTMiLCJpYXQiOjE3MjEyNzE0NzgsImV4cCI6MTcyMTMwNzQ3OH0.C0hB1uuEPkgMrzEdzM1BHH7aXV6rNE6Jy9uzPaEFujs and username: v13
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: jane_doe
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: jane_doe
+2024-07-18T05:57:58.892+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: jane_doe: User doesn't exist in the system
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 67890
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 67890
+2024-07-18T05:57:58.892+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.domain.users.UserFacadeImp         : User is not logged in: rjane_doe
+2024-07-18T05:57:58.892+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : User is not logged in: rjane_doe , Failed Trying adding to cart  product with id: 67890
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Approving purchase for registered user with ID: rjane_doe 
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Approving purchase for registered user with ID: rjane_doe 
+2024-07-18T05:57:58.892+03:00 ERROR 13572 --- [Trading_System] [main] c.e.trading_system.domain.users.User     : User is not logged in
+2024-07-18T05:57:58.892+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error approving purchase for registered user with ID: rjane_doe, error: User is not logged in
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjane_doe
+2024-07-18T05:57:58.892+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjane_doe
+2024-07-18T05:57:58.908+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging out user: rjane_doe: User rjane_doe already Logged out
+2024-07-18T05:57:58.908+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v8
+2024-07-18T05:57:58.908+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v8
+2024-07-18T05:57:58.908+03:00 ERROR 13572 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v8: No such user with username- v8
+2024-07-18T05:57:59.191+03:00  WARN 13572 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 055c2bce-acbc-4024-b940-61220f18befd
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-07-18T05:57:59.458+03:00  INFO 13572 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3310bb28, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@22eccd2c, org.springframework.security.web.context.SecurityContextHolderFilter@5c71329f, org.springframework.security.web.header.HeaderWriterFilter@18accf9c, org.springframework.web.filter.CorsFilter@ddca64d, org.springframework.security.web.authentication.logout.LogoutFilter@1cd97ebe, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7940d27b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@19e3ce9a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5d39797a, org.springframework.security.web.access.ExceptionTranslationFilter@993bc47, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@3fa13835]
+2024-07-18T05:57:59.662+03:00  INFO 13572 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
+2024-07-18T05:57:59.678+03:00  INFO 13572 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-07-18T05:57:59.678+03:00  INFO 13572 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6c826924]]
+2024-07-18T05:57:59.678+03:00  INFO 13572 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-07-18T05:57:59.693+03:00  INFO 13572 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 8.322 seconds (process running for 8.746)
+2024-07-18T05:58:14.163+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-18T05:58:14.163+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-07-18T05:58:14.163+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2024-07-18T05:58:14.367+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T05:58:14.367+03:00  WARN 13572 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T05:58:14.367+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T05:58:14.367+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 14
+2024-07-18T05:58:14.367+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MTQiLCJpYXQiOjE3MjEyNzE0OTQsImV4cCI6MTcyMTMwNzQ5NH0.q2ZirQ0a51mwvQ6EHT5IUb8DIfcG9g7qbG2P8wUlCEA and username: v14
+2024-07-18T05:58:25.404+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to login user: john_doe
+2024-07-18T05:58:25.404+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : Trying to login user: john_doe
+2024-07-18T05:58:25.658+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : User: john_doe logged in
+2024-07-18T05:58:25.658+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : User: john_doe logged in successfully
+2024-07-18T05:58:25.690+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: rjohn_doe
+2024-07-18T05:58:25.721+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: rjohn_doe
+2024-07-18T05:58:32.654+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-18T05:58:32.660+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-7] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-18T05:58:33.767+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rjohn_doe
+2024-07-18T05:58:33.774+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-8] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rjohn_doe
+2024-07-18T05:58:36.010+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Managers of the Store
+2024-07-18T05:58:36.011+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-9] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Managers of the Store
+2024-07-18T05:58:36.027+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Trying to Gather Information of Owners of the Store
+2024-07-18T05:58:36.027+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-10] c.e.t.service.TradingSystemImp           : Finish to Gather Information of Owners of the Store
+2024-07-18T05:58:59.654+03:00  INFO 13572 --- [Trading_System] [MessageBroker-7] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[1 current WS(1)-HttpStream(0)-HttpPoll(0), 1 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 6, active threads = 0, queued tasks = 0, completed tasks = 6], outboundChannel[pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 2, completed tasks = 8]
+2024-07-18T05:59:23.156+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Trying to Gather Purchase History
+2024-07-18T05:59:23.158+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Finish to Gather Purchase History for Store
+2024-07-18T05:59:34.046+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to Gather All Stores Details
+2024-07-18T05:59:34.050+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : FINISHED Gather All Stores Details by JSON format
+2024-07-18T05:59:34.654+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Trying to Get permissions for rjohn_doe
+2024-07-18T05:59:34.654+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : FINISHED Get permissions for rjohn_doe
+2024-07-18T06:00:00.334+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : Trying to Gather All Products Details of store John's Apple Store
+2024-07-18T06:00:00.334+03:00  INFO 13572 --- [Trading_System] [http-nio-8082-exec-6] c.e.t.service.TradingSystemImp           : FINISHED Gather All Products Details of store John's Apple Store
+2024-07-18T06:00:42.249+03:00  INFO 13572 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-07-18T06:00:42.249+03:00  INFO 13572 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6c826924]]
+2024-07-18T06:00:42.249+03:00  INFO 13572 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-07-18T06:00:42.260+03:00  INFO 13572 --- [Trading_System] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T06:00:42.276+03:00  INFO 13572 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-07-18T06:00:42.281+03:00  INFO 13572 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-07-18T06:02:36.107+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 20564 (C:\Users\alex\Documents\trading_system\target\classes started by alex in C:\Users\alex\Documents\trading_system)
+2024-07-18T06:02:36.111+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-18T06:02:36.675+03:00  INFO 20564 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-18T06:02:36.715+03:00  INFO 20564 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 32 ms. Found 0 JPA repository interfaces.
+2024-07-18T06:02:37.114+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : Starting TradingSystemSpringConfiguration
+2024-07-18T06:02:37.530+03:00  INFO 20564 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-18T06:02:37.530+03:00  INFO 20564 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-18T06:02:37.530+03:00  INFO 20564 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-18T06:02:37.593+03:00  INFO 20564 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-18T06:02:37.593+03:00  INFO 20564 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1419 ms
+2024-07-18T06:02:37.828+03:00  INFO 20564 --- [Trading_System] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-18T06:02:37.875+03:00  INFO 20564 --- [Trading_System] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-07-18T06:02:37.907+03:00  INFO 20564 --- [Trading_System] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-07-18T06:02:38.300+03:00  INFO 20564 --- [Trading_System] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-07-18T06:02:38.332+03:00  INFO 20564 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-18T06:02:38.693+03:00  INFO 20564 --- [Trading_System] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: c59f0c8f-0146-4181-94a9-e3628ec7a08e
+2024-07-18T06:02:38.693+03:00  INFO 20564 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-18T06:02:40.390+03:00  INFO 20564 --- [Trading_System] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-07-18T06:02:41.802+03:00  INFO 20564 --- [Trading_System] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T06:02:42.149+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: john_doe with password : Password123 and birthdate : 1990-01-01 
+2024-07-18T06:02:42.259+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User registered successfully : john_doe with password : Password123 and birthdate : 1990-01-01
+2024-07-18T06:02:42.274+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T06:02:42.274+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System opened successfully
+2024-07-18T06:02:42.274+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T06:02:42.274+03:00  WARN 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T06:02:42.274+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:02:42.274+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 0
+2024-07-18T06:02:42.274+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MCIsImlhdCI6MTcyMTI3MTc2MiwiZXhwIjoxNzIxMzA3NzYyfQ.SYD8oIhmN6uSomz4E0wYTa_Rzw0KNcIrdMbXRfbxzyk and username: v0
+2024-07-18T06:02:42.274+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: jane_doe with password : Password456 and birthdate : 1992-02-02 
+2024-07-18T06:02:42.368+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User registered successfully : jane_doe with password : Password456 and birthdate : 1992-02-02
+2024-07-18T06:02:42.379+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: scooby_doe with password : Password789 and birthdate : 1995-05-05 
+2024-07-18T06:02:42.463+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User registered successfully : scooby_doe with password : Password789 and birthdate : 1995-05-05
+2024-07-18T06:02:42.463+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: taylor_doe with password : Password135 and birthdate : 1995-05-05 
+2024-07-18T06:02:42.542+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User registered successfully : taylor_doe with password : Password135 and birthdate : 1995-05-05
+2024-07-18T06:02:42.555+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: john_doe
+2024-07-18T06:02:42.555+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: john_doe
+2024-07-18T06:02:42.636+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: john_doe logged in
+2024-07-18T06:02:42.652+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: john_doe logged in successfully
+2024-07-18T06:02:42.652+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying opening store with name: John's Apple Store
+2024-07-18T06:02:42.652+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying opening store with name: John's Apple Store
+2024-07-18T06:02:42.652+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished opening store with name: John's Apple Store
+2024-07-18T06:02:42.652+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished opening store with name: John's Apple Store
+2024-07-18T06:02:42.652+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : rjohn_doe trying to suggest user : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T06:02:42.652+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : rjohn_doe trying to suggest user : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T06:02:42.652+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished suggesting  : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T06:02:42.652+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished suggesting  : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T06:02:42.667+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to suggest user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to suggest user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished suggesting manager : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished suggesting manager : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjohn_doe
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjohn_doe
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: rjohn_doe logged out
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: rjohn_doe logged out successfully
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 1
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MSIsImlhdCI6MTcyMTI3MTc2MiwiZXhwIjoxNzIxMzA3NzYyfQ.OyjDeaq72A0Y4C-FG1-gfs52HbRiMH46VEzFNI0xYkI and username: v1
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v1
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v1
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v1
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T06:02:42.668+03:00  WARN 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 2
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MiIsImlhdCI6MTcyMTI3MTc2MiwiZXhwIjoxNzIxMzA3NzYyfQ.BS0qGQVniTEssh1kbRfglYw-chrms4wEMV7tbZtFIyc and username: v2
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: jane_doe
+2024-07-18T06:02:42.668+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: jane_doe
+2024-07-18T06:02:42.761+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: jane_doe logged in
+2024-07-18T06:02:42.761+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: jane_doe logged in successfully
+2024-07-18T06:02:42.761+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : rjane_doe trying to approve owner to store : John's Apple Store
+2024-07-18T06:02:42.761+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : rjane_doe trying to approve owner to store : John's Apple Store
+2024-07-18T06:02:42.761+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished approving owner to store : John's Apple Store
+2024-07-18T06:02:42.761+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished approving owner to store : John's Apple Store
+2024-07-18T06:02:42.761+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjane_doe
+2024-07-18T06:02:42.761+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjane_doe
+2024-07-18T06:02:42.761+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: rjane_doe logged out
+2024-07-18T06:02:42.761+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: rjane_doe logged out successfully
+2024-07-18T06:02:42.761+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:02:42.761+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 3
+2024-07-18T06:02:42.761+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MyIsImlhdCI6MTcyMTI3MTc2MiwiZXhwIjoxNzIxMzA3NzYyfQ.AtbdS-7USbefnRtGeezo2W8BbJ9o6a1AEJgjKmzhns4 and username: v3
+2024-07-18T06:02:42.761+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v3
+2024-07-18T06:02:42.777+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v3
+2024-07-18T06:02:42.777+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v3
+2024-07-18T06:02:42.777+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T06:02:42.777+03:00  WARN 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T06:02:42.777+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:02:42.777+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 4
+2024-07-18T06:02:42.777+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NCIsImlhdCI6MTcyMTI3MTc2MiwiZXhwIjoxNzIxMzA3NzYyfQ._qNxwlJvdMP1Q1BfetHrY3ukvQcSlOu7vB_t_2WPXsg and username: v4
+2024-07-18T06:02:42.777+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: scooby_doe
+2024-07-18T06:02:42.777+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: scooby_doe
+2024-07-18T06:02:42.864+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: scooby_doe logged in
+2024-07-18T06:02:42.864+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: scooby_doe logged in successfully
+2024-07-18T06:02:42.864+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to approve manage to store : John's Apple Store
+2024-07-18T06:02:42.864+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to approve manage to store : John's Apple Store
+2024-07-18T06:02:42.864+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished approving manage to store : John's Apple Store
+2024-07-18T06:02:42.864+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished approving manage to store : John's Apple Store
+2024-07-18T06:02:42.872+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe is trying to add products to store : John's Apple Store with product Id : 12345 , product name : Secret Apple, product description : This is a secret to tell about the apple. , product price : 99.99 ,product quantity : 10 , rating : 4.0 , category : 3 , key words : apple, secret 
+2024-07-18T06:02:42.872+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe finished to add products to store : John's Apple Store with product Id : 12345 , product name : Secret Apple, product description : This is a secret to tell about the apple. , product price : 99.99 ,product quantity : 10 , rating : 4.0 , category : 3 , key words : apple, secret 
+2024-07-18T06:02:42.872+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe is trying to add products to store : John's Apple Store with product Id : 67890 , product name : Mystery Apple, product description : Unveil the mystery behind this extraordinary apple. , product price : 149.99 ,product quantity : 5 , rating : 4.7 , category : 3 , key words : apple, mystery 
+2024-07-18T06:02:42.872+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe finished to add products to store : John's Apple Store with product Id : 67890 , product name : Mystery Apple, product description : Unveil the mystery behind this extraordinary apple. , product price : 149.99 ,product quantity : 5 , rating : 4.7 , category : 3 , key words : apple, mystery 
+2024-07-18T06:02:42.872+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rscooby_doe
+2024-07-18T06:02:42.872+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rscooby_doe
+2024-07-18T06:02:42.872+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: rscooby_doe logged out
+2024-07-18T06:02:42.872+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: rscooby_doe logged out successfully
+2024-07-18T06:02:42.872+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:02:42.872+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 5
+2024-07-18T06:02:42.872+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NSIsImlhdCI6MTcyMTI3MTc2MiwiZXhwIjoxNzIxMzA3NzYyfQ.GM2iHLD8ZM-ukdkmCIGTgGCVIE6ZcWVhWL0map97Tkg and username: v5
+2024-07-18T06:02:42.872+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v5
+2024-07-18T06:02:42.887+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v5
+2024-07-18T06:02:42.887+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v5
+2024-07-18T06:02:42.887+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T06:02:42.887+03:00  WARN 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T06:02:42.887+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:02:42.887+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 6
+2024-07-18T06:02:42.887+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NiIsImlhdCI6MTcyMTI3MTc2MiwiZXhwIjoxNzIxMzA3NzYyfQ.E3ed_RFEzq-b3_CgKZBwkKcMCV-vYLrDXq268zEYqxo and username: v6
+2024-07-18T06:02:42.887+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 12345
+2024-07-18T06:02:42.887+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 12345
+2024-07-18T06:02:42.887+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished adding to cart product with id: 12345
+2024-07-18T06:02:42.887+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished adding to cart product with id: 12345
+2024-07-18T06:02:42.887+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Approving purchase for registered user with ID: v6 
+2024-07-18T06:02:42.887+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Approving purchase for registered user with ID: v6 
+2024-07-18T06:02:42.934+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.domain.stores.Product              : Removed 2 products. New quantity: 8
+2024-07-18T06:02:42.934+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Succeeded making delivery to 456 Elm St, Anytown
+2024-07-18T06:02:42.934+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Succeed making payment of 199.98 USD
+2024-07-18T06:02:42.934+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Purchase approved for registered user with ID: v6
+2024-07-18T06:02:42.934+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v6
+2024-07-18T06:02:42.934+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v6
+2024-07-18T06:02:42.934+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v6
+2024-07-18T06:02:42.950+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T06:02:42.950+03:00  WARN 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T06:02:42.950+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:02:42.950+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 7
+2024-07-18T06:02:42.950+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NyIsImlhdCI6MTcyMTI3MTc2MiwiZXhwIjoxNzIxMzA3NzYyfQ.j5AsE-ryQatcq_GcM2GT1exQphd6Kq7Arli40umithU and username: v7
+2024-07-18T06:02:42.950+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: jane_doe
+2024-07-18T06:02:42.950+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: jane_doe
+2024-07-18T06:02:43.028+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: jane_doe logged in
+2024-07-18T06:02:43.028+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: jane_doe logged in successfully
+2024-07-18T06:02:43.028+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 67890
+2024-07-18T06:02:43.028+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 67890
+2024-07-18T06:02:43.028+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Finished adding to cart product with id: 67890
+2024-07-18T06:02:43.028+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Finished adding to cart product with id: 67890
+2024-07-18T06:02:43.028+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Approving purchase for registered user with ID: rjane_doe 
+2024-07-18T06:02:43.028+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Approving purchase for registered user with ID: rjane_doe 
+2024-07-18T06:02:43.044+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.domain.stores.Product              : Removed 1 products. New quantity: 4
+2024-07-18T06:02:43.044+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Succeeded making delivery to 123 Main St, Anytown
+2024-07-18T06:02:43.044+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Succeed making payment of 149.99 USD
+2024-07-18T06:02:43.044+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Purchase approved for registered user with ID: rjane_doe
+2024-07-18T06:02:43.044+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjane_doe
+2024-07-18T06:02:43.044+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjane_doe
+2024-07-18T06:02:43.044+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : User: rjane_doe logged out
+2024-07-18T06:02:43.044+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User: rjane_doe logged out successfully
+2024-07-18T06:02:43.044+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:02:43.044+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 8
+2024-07-18T06:02:43.044+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2OCIsImlhdCI6MTcyMTI3MTc2MywiZXhwIjoxNzIxMzA3NzYzfQ.SsCpAW8PVILH_9CjGvCMmeGuV4RXpl3GWduq5NvNXCk and username: v8
+2024-07-18T06:02:43.044+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v8
+2024-07-18T06:02:43.044+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v8
+2024-07-18T06:02:43.044+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User exited successfully: v8
+2024-07-18T06:02:43.060+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: john_doe with password : Password123 and birthdate : 1990-01-01 
+2024-07-18T06:02:43.060+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while registering user : john_doe with password : Password123 and birthdate : 1990-01-01 : username already exists - john_doe
+2024-07-18T06:02:43.060+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T06:02:43.060+03:00  WARN 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T06:02:43.067+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T06:02:43.067+03:00  WARN 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T06:02:43.067+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:02:43.067+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 9
+2024-07-18T06:02:43.067+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2OSIsImlhdCI6MTcyMTI3MTc2MywiZXhwIjoxNzIxMzA3NzYzfQ.r5AZAGUbquX-2gE4_Xig0v5ddhYvqWsPoj7xL4w0lJg and username: v9
+2024-07-18T06:02:43.067+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: jane_doe with password : Password456 and birthdate : 1992-02-02 
+2024-07-18T06:02:43.067+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while registering user : jane_doe with password : Password456 and birthdate : 1992-02-02 : username already exists - jane_doe
+2024-07-18T06:02:43.067+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: scooby_doe with password : Password789 and birthdate : 1995-05-05 
+2024-07-18T06:02:43.067+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while registering user : scooby_doe with password : Password789 and birthdate : 1995-05-05 : username already exists - scooby_doe
+2024-07-18T06:02:43.067+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to register user: taylor_doe with password : Password135 and birthdate : 1995-05-05 
+2024-07-18T06:02:43.067+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while registering user : taylor_doe with password : Password135 and birthdate : 1995-05-05 : username already exists - taylor_doe
+2024-07-18T06:02:43.067+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: john_doe
+2024-07-18T06:02:43.067+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: john_doe
+2024-07-18T06:02:43.067+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: john_doe: User doesn't exist in the system
+2024-07-18T06:02:43.067+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying opening store with name: John's Apple Store
+2024-07-18T06:02:43.074+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying opening store with name: John's Apple Store
+2024-07-18T06:02:43.074+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.domain.users.UserFacadeImp         : While opening store - Store with name: John's Apple Store already exists
+2024-07-18T06:02:43.074+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : Store with name John's Apple Store already exists , Failed opening store with name: John's Apple Store
+2024-07-18T06:02:43.076+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : rjohn_doe trying to suggest user : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T06:02:43.076+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : rjohn_doe trying to suggest user : rjane_doe to be a owner in store : John's Apple Store
+2024-07-18T06:02:43.076+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : Appoint user is not logged , while trying to suggest the user : rjohn_doe to be a owner in store : John's Apple Store
+2024-07-18T06:02:43.076+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to suggest user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T06:02:43.076+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to suggest user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T06:02:43.076+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : Appoint user is not logged , while trying to suggest the user : rscooby_doe to be a manager in store : John's Apple Store
+2024-07-18T06:02:43.076+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjohn_doe
+2024-07-18T06:02:43.076+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjohn_doe
+2024-07-18T06:02:43.076+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging out user: rjohn_doe: User rjohn_doe already Logged out
+2024-07-18T06:02:43.084+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v1
+2024-07-18T06:02:43.085+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v1
+2024-07-18T06:02:43.085+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v1: No such user with username- v1
+2024-07-18T06:02:43.085+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T06:02:43.085+03:00  WARN 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T06:02:43.085+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:02:43.085+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 10
+2024-07-18T06:02:43.085+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MTAiLCJpYXQiOjE3MjEyNzE3NjMsImV4cCI6MTcyMTMwNzc2M30.VIC0nsGmWbohk8SMmKJnOl7gnI1c6HYC_6rfKS_X4ng and username: v10
+2024-07-18T06:02:43.090+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: jane_doe
+2024-07-18T06:02:43.090+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: jane_doe
+2024-07-18T06:02:43.090+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: jane_doe: User doesn't exist in the system
+2024-07-18T06:02:43.092+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : rjane_doe trying to approve owner to store : John's Apple Store
+2024-07-18T06:02:43.092+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : rjane_doe trying to approve owner to store : John's Apple Store
+2024-07-18T06:02:43.092+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : New owner user is not logged , while trying to approve owner to store : John's Apple Store
+2024-07-18T06:02:43.092+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjane_doe
+2024-07-18T06:02:43.092+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjane_doe
+2024-07-18T06:02:43.092+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging out user: rjane_doe: User rjane_doe already Logged out
+2024-07-18T06:02:43.092+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v3
+2024-07-18T06:02:43.092+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v3
+2024-07-18T06:02:43.092+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v3: No such user with username- v3
+2024-07-18T06:02:43.092+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T06:02:43.092+03:00  WARN 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T06:02:43.092+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:02:43.092+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 11
+2024-07-18T06:02:43.092+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MTEiLCJpYXQiOjE3MjEyNzE3NjMsImV4cCI6MTcyMTMwNzc2M30.IDA0MXp-Gwo0vpiMVDCqzmXboAvjVLhc9rcWx8NY9go and username: v11
+2024-07-18T06:02:43.092+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: scooby_doe
+2024-07-18T06:02:43.092+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: scooby_doe
+2024-07-18T06:02:43.092+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: scooby_doe: User doesn't exist in the system
+2024-07-18T06:02:43.092+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to approve manage to store : John's Apple Store
+2024-07-18T06:02:43.092+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to approve manage to store : John's Apple Store
+2024-07-18T06:02:43.092+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : New Manager user is not logged , while trying to approve management to store : John's Apple Store
+2024-07-18T06:02:43.104+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe is trying to add products to store : John's Apple Store with product Id : 12345 , product name : Secret Apple, product description : This is a secret to tell about the apple. , product price : 99.99 ,product quantity : 10 , rating : 4.0 , category : 3 , key words : apple, secret 
+2024-07-18T06:02:43.108+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while adding product: Secret Apple to store: John's Apple Store: Product with id 12345 already exists
+2024-07-18T06:02:43.108+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User rscooby_doe is trying to add products to store : John's Apple Store with product Id : 67890 , product name : Mystery Apple, product description : Unveil the mystery behind this extraordinary apple. , product price : 149.99 ,product quantity : 5 , rating : 4.7 , category : 3 , key words : apple, mystery 
+2024-07-18T06:02:43.108+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while adding product: Mystery Apple to store: John's Apple Store: Product with id 67890 already exists
+2024-07-18T06:02:43.108+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rscooby_doe
+2024-07-18T06:02:43.108+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rscooby_doe
+2024-07-18T06:02:43.108+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging out user: rscooby_doe: User rscooby_doe already Logged out
+2024-07-18T06:02:43.108+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v5
+2024-07-18T06:02:43.108+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v5
+2024-07-18T06:02:43.108+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v5: No such user with username- v5
+2024-07-18T06:02:43.108+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T06:02:43.108+03:00  WARN 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T06:02:43.108+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:02:43.108+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 12
+2024-07-18T06:02:43.108+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MTIiLCJpYXQiOjE3MjEyNzE3NjMsImV4cCI6MTcyMTMwNzc2M30.aWYUByd4Mt7YRTv-mLv2Qu6FpqwQqEbsZLDUvULkdxE and username: v12
+2024-07-18T06:02:43.108+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 12345
+2024-07-18T06:02:43.108+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 12345
+2024-07-18T06:02:43.108+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.domain.users.UserFacadeImp         : User not found: v6
+2024-07-18T06:02:43.108+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : User not found: v6 , Failed Trying adding to cart  product with id: 12345
+2024-07-18T06:02:43.108+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Approving purchase for registered user with ID: v6 
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Approving purchase for registered user with ID: v6 
+2024-07-18T06:02:43.124+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.domain.users.UserFacadeImp         : User not found
+2024-07-18T06:02:43.124+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error approving purchase for registered user with ID: v6, error: User not found
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v6
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v6
+2024-07-18T06:02:43.124+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v6: No such user with username- v6
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to open system
+2024-07-18T06:02:43.124+03:00  WARN 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : System attempted to open twice
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 13
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MTMiLCJpYXQiOjE3MjEyNzE3NjMsImV4cCI6MTcyMTMwNzc2M30.jXVT3OwAQyka_SiQ54SAvlgHBChJqTV-IWrbnZs6AMY and username: v13
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to login user: jane_doe
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to login user: jane_doe
+2024-07-18T06:02:43.124+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging in user: jane_doe: User doesn't exist in the system
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying adding to cart  product with id: 67890
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying adding to cart  product with id: 67890
+2024-07-18T06:02:43.124+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.domain.users.UserFacadeImp         : User is not logged in: rjane_doe
+2024-07-18T06:02:43.124+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred : User is not logged in: rjane_doe , Failed Trying adding to cart  product with id: 67890
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Approving purchase for registered user with ID: rjane_doe 
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Approving purchase for registered user with ID: rjane_doe 
+2024-07-18T06:02:43.124+03:00 ERROR 20564 --- [Trading_System] [main] c.e.trading_system.domain.users.User     : User is not logged in
+2024-07-18T06:02:43.124+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error approving purchase for registered user with ID: rjane_doe, error: User is not logged in
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjane_doe
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.UserServiceImp             : Trying to logout user: rjane_doe
+2024-07-18T06:02:43.124+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while logging out user: rjane_doe: User rjane_doe already Logged out
+2024-07-18T06:02:43.124+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Attempting to exit user: v8
+2024-07-18T06:02:43.140+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Trying exit to system as a user , with username: v8
+2024-07-18T06:02:43.140+03:00 ERROR 20564 --- [Trading_System] [main] c.e.t.service.TradingSystemImp           : Error occurred while exiting user: v8: No such user with username- v8
+2024-07-18T06:02:43.406+03:00  WARN 20564 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: f67790ed-5987-4fe1-b598-fe233786532c
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-07-18T06:02:43.656+03:00  INFO 20564 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@d594a5a, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@77199818, org.springframework.security.web.context.SecurityContextHolderFilter@4dc9de0e, org.springframework.security.web.header.HeaderWriterFilter@2081c267, org.springframework.web.filter.CorsFilter@72216f0b, org.springframework.security.web.authentication.logout.LogoutFilter@aecfc07, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4b37ede0, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@67f07fa1, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3fa13835, org.springframework.security.web.access.ExceptionTranslationFilter@22e733f5, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@fcecc45]
+2024-07-18T06:02:43.877+03:00  INFO 20564 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
+2024-07-18T06:02:43.880+03:00  INFO 20564 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-07-18T06:02:43.883+03:00  INFO 20564 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@992f314]]
+2024-07-18T06:02:43.883+03:00  INFO 20564 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-07-18T06:02:43.888+03:00  INFO 20564 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 8.366 seconds (process running for 8.777)
+2024-07-18T06:02:54.238+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-18T06:02:54.238+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-07-18T06:02:54.253+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 15 ms
+2024-07-18T06:02:54.471+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Attempting to logout user: rjohn_doe
+2024-07-18T06:02:54.471+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.UserServiceImp             : Trying to logout user: rjohn_doe
+2024-07-18T06:02:54.487+03:00 ERROR 20564 --- [Trading_System] [http-nio-8082-exec-1] c.e.t.service.TradingSystemImp           : Error occurred while logging out user: rjohn_doe: User rjohn_doe already Logged out
+2024-07-18T06:03:23.650+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : Attempting to login user: taylor_doe
+2024-07-18T06:03:23.650+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.UserServiceImp             : Trying to login user: taylor_doe
+2024-07-18T06:03:23.897+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.UserServiceImp             : User: taylor_doe logged in
+2024-07-18T06:03:23.897+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-2] c.e.t.service.TradingSystemImp           : User: taylor_doe logged in successfully
+2024-07-18T06:03:23.929+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Attempting to send pending notifications for user: rtaylor_doe
+2024-07-18T06:03:23.929+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-3] c.e.t.service.TradingSystemImp           : Pending notifications sent successfully for user: rtaylor_doe
+2024-07-18T06:03:43.874+03:00  INFO 20564 --- [Trading_System] [MessageBroker-4] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[1 current WS(1)-HttpStream(0)-HttpPoll(0), 1 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 6, active threads = 0, queued tasks = 0, completed tasks = 6], outboundChannel[pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 2, completed tasks = 4]
+2024-07-18T06:03:53.662+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to logout user: rtaylor_doe
+2024-07-18T06:03:53.662+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : Trying to logout user: rtaylor_doe
+2024-07-18T06:03:53.662+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.UserServiceImp             : User: rtaylor_doe logged out
+2024-07-18T06:03:53.662+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : User: rtaylor_doe logged out successfully
+2024-07-18T06:03:53.671+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Attempting to enter system
+2024-07-18T06:03:53.671+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : Trying to enter the system as a visitor, with id: 14
+2024-07-18T06:03:53.671+03:00  INFO 20564 --- [Trading_System] [http-nio-8082-exec-5] c.e.t.service.TradingSystemImp           : User entered successfully with token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2MTQiLCJpYXQiOjE3MjEyNzE4MzMsImV4cCI6MTcyMTMwNzgzM30.CTUi9Xp3AsfDNnOC_e9_MEvEuIVXCZpVe250FUhVmU0 and username: v14
+2024-07-18T06:03:56.318+03:00  INFO 20564 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-07-18T06:03:56.318+03:00  INFO 20564 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@992f314]]
+2024-07-18T06:03:56.318+03:00  INFO 20564 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-07-18T06:03:56.334+03:00  INFO 20564 --- [Trading_System] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T06:03:56.334+03:00  INFO 20564 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-07-18T06:03:56.349+03:00  INFO 20564 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

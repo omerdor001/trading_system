@@ -32,6 +32,14 @@
     }
   },
   {
+    "useCase": "register",
+    "arguments": {
+      "username": "taylor_doe",
+      "password": "Password135",
+      "birthdate": "1995-05-05"
+    }
+  },
+  {
     "useCase": "login",
     "arguments": {
       "token": "",
