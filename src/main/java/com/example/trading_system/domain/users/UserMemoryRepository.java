@@ -1,20 +1,18 @@
 package com.example.trading_system.domain.users;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-//@Service
+@Repository
 public class UserMemoryRepository implements UserRepository {
     private static UserMemoryRepository instance = null;
     private HashMap<String, User> users;
 
-    //@Autowired
-    private UserMemoryRepository() {
+    public UserMemoryRepository() {
         users = new HashMap<>();
     }
 
@@ -92,7 +90,8 @@ public class UserMemoryRepository implements UserRepository {
     }
 
     @Override
-    public void saveUsers(List<User> users) {}
+    public void saveUsers(List<User> users) {
+    }
 
     @Override
     public boolean checkIfRegistersEmpty() {
@@ -107,10 +106,8 @@ public class UserMemoryRepository implements UserRepository {
     }
 
     @Override
-    public Registered getRegistered(String userName){
-        if (userName.charAt(0) != 'r')
-            throw new RuntimeException("User is not registerd");
-        else
-            return (Registered) users.get(userName);
+    public Registered getRegistered(String userName) {
+        if (userName.charAt(0) != 'r') throw new RuntimeException("User is not registerd");
+        else return (Registered) users.get(userName);
     }
 }
