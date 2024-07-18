@@ -1,5 +1,11 @@
 [
   {
+    "useCase": "ignore",
+    "arguments": {
+       "value": "true"
+    }
+  },
+  {
     "useCase": "register",
     "arguments": {
       "username": "john_doe",
@@ -28,14 +34,6 @@
     "arguments": {
       "username": "scooby_doe",
       "password": "Password789",
-      "birthdate": "1995-05-05"
-    }
-  },
-  {
-    "useCase": "register",
-    "arguments": {
-      "username": "taylor_doe",
-      "password": "Password135",
       "birthdate": "1995-05-05"
     }
   },

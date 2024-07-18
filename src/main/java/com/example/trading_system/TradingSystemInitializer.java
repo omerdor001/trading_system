@@ -25,6 +25,9 @@ public class TradingSystemInitializer {
             List<Map<String, Object>> useCases = objectMapper.readValue(file, new TypeReference<List<Map<String, Object>>>() {});
             Set<String> usernames=new HashSet<>();
             for (Map<String, Object> useCase : useCases) {
+                if ("ignore".equals(useCase.get("useCase")) && "true".equals(String.valueOf(((Map<String, Object>) useCase.get("arguments")).get("value")))) {
+                    return;
+                }
                 Map<String, Object> arguments = (Map<String, Object>) useCase.get("arguments");
                 usernames.addAll(extractUsernames(arguments));
             }
