@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @TestPropertySource(locations = "classpath:applicationTests.properties")
 @Transactional
-public class UserPersistenceTests {
+@Disabled
+public class UserPersistenceTests { //TESTS TO BE RUN MANUALLY WITH A DB CONNECTION
 
     @PersistenceContext
     private EntityManager entityManager;

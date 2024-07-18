@@ -7,10 +7,7 @@ import com.example.trading_system.domain.stores.discountPolicies.DiscountPolicy;
 import com.example.trading_system.domain.stores.purchasePolicies.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -26,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 @TestPropertySource(locations = "classpath:applicationTests.properties")
 @Transactional
-public class StorePersistentTests {
+@Disabled
+public class StorePersistentTests { //TESTS TO BE RUN MANUALLY WITH A DB CONNECTION
     @PersistenceContext
     private EntityManager entityManager;
 
