@@ -11,8 +11,6 @@ import java.util.List;
 
 @Repository
 @Transactional
-
-
 public class StoreDatabaseRepository implements StoreRepository {
 
     private static StoreDatabaseRepository instance = null;

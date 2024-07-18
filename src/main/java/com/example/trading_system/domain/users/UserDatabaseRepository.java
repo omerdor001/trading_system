@@ -65,8 +65,7 @@ public class UserDatabaseRepository implements UserRepository {
     public boolean isAdminRegistered() {
         List<Registered> registeredUsers = entityManager.createQuery("SELECT u FROM Registered u", Registered.class).getResultList();
         for (User user : registeredUsers) {
-            if (user.isAdmin())
-                return true;
+            if (user.isAdmin()) return true;
         }
         return false;
     }
@@ -128,8 +127,7 @@ public class UserDatabaseRepository implements UserRepository {
         if (user instanceof Registered) {
             Registered registeredUser = (Registered) user;
             Cart cart = registeredUser.getCart();
-            if (cart != null)
-                entityManager.persist(cart);
+            if (cart != null) entityManager.persist(cart);
             for (Role role : registeredUser.getRoles()) {
                 role.setRegisteredUser(registeredUser); // Ensure each role is associated with the user
                 entityManager.persist(role.getRoleState());
@@ -152,10 +150,9 @@ public class UserDatabaseRepository implements UserRepository {
     }
 
     @Override
-    public Registered getRegistered(String userName){
-        Registered user = entityManager.find(Registered.class,userName);
-        if(user == null)
-            throw new RuntimeException("No such user");
+    public Registered getRegistered(String userName) {
+        Registered user = entityManager.find(Registered.class, userName);
+        if (user == null) throw new RuntimeException("No such user");
         return user;
     }
 }

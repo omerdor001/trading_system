@@ -1080,3 +1080,178 @@ This generated password is for development use only. Your security configuration
 2024-07-17T19:51:32.652+03:00  INFO 22176 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2024-07-17T19:51:32.657+03:00  INFO 22176 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
 >>>>>>> main
+2024-07-18T05:27:00.014+03:00  INFO 3332 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 3332 (C:\Users\marti\Documents\University\year 3\Semester 2\Trading_System\target\classes started by martin in C:\Users\marti\Documents\University\year 3\Semester 2\Trading_System)
+2024-07-18T05:27:00.017+03:00  INFO 3332 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-18T05:27:00.632+03:00  INFO 3332 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-18T05:27:00.669+03:00  INFO 3332 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 0 JPA repository interfaces.
+2024-07-18T05:27:01.118+03:00  INFO 3332 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : Starting TradingSystemSpringConfiguration
+2024-07-18T05:27:01.722+03:00  INFO 3332 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-18T05:27:01.741+03:00  INFO 3332 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-18T05:27:01.742+03:00  INFO 3332 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-18T05:27:01.813+03:00  INFO 3332 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-18T05:27:01.814+03:00  INFO 3332 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1741 ms
+2024-07-18T05:27:02.125+03:00  INFO 3332 --- [Trading_System] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-18T05:27:02.186+03:00  INFO 3332 --- [Trading_System] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-07-18T05:27:02.222+03:00  INFO 3332 --- [Trading_System] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-07-18T05:27:02.620+03:00  INFO 3332 --- [Trading_System] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-07-18T05:27:02.649+03:00  INFO 3332 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-18T05:27:02.974+03:00  INFO 3332 --- [Trading_System] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 3907a232-a55e-4485-9c95-f9d95483b985
+2024-07-18T05:27:02.977+03:00  INFO 3332 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-18T05:27:04.775+03:00  INFO 3332 --- [Trading_System] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-07-18T05:27:08.352+03:00  INFO 3332 --- [Trading_System] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T05:27:08.373+03:00  WARN 3332 --- [Trading_System] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'marketFacadeImp' defined in file [C:\Users\marti\Documents\University\year 3\Semester 2\Trading_System\target\classes\com\example\trading_system\domain\stores\MarketFacadeImp.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'com.example.trading_system.domain.stores.StoreRepository' available: expected single matching bean but found 2: storeDatabaseRepository,getStoreRepository
+2024-07-18T05:27:08.373+03:00  INFO 3332 --- [Trading_System] [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T05:27:08.374+03:00  INFO 3332 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-07-18T05:27:08.378+03:00  INFO 3332 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-07-18T05:27:08.381+03:00  INFO 3332 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-07-18T05:27:08.396+03:00  INFO 3332 --- [Trading_System] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-07-18T05:27:08.421+03:00 ERROR 3332 --- [Trading_System] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.example.trading_system.domain.stores.MarketFacadeImp required a single bean, but 2 were found:
+	- storeDatabaseRepository: defined in file [C:\Users\marti\Documents\University\year 3\Semester 2\Trading_System\target\classes\com\example\trading_system\domain\stores\StoreDatabaseRepository.class]
+	- getStoreRepository: defined by method 'getStoreRepository' in class path resource [com/example/trading_system/TradingSystemSpringConfiguration.class]
+
+This may be due to missing parameter name information
+
+Action:
+
+Consider marking one of the beans as @Primary, updating the consumer to accept multiple beans, or using @Qualifier to identify the bean that should be consumed
+
+Ensure that your compiler is configured to use the '-parameters' flag.
+You may need to update both your build tool settings as well as your IDE.
+(See https://github.com/spring-projects/spring-framework/wiki/Upgrading-to-Spring-Framework-6.x#parameter-name-retention)
+
+
+2024-07-18T05:29:21.191+03:00  INFO 28368 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 28368 (C:\Users\marti\Documents\University\year 3\Semester 2\Trading_System\target\classes started by martin in C:\Users\marti\Documents\University\year 3\Semester 2\Trading_System)
+2024-07-18T05:29:21.193+03:00  INFO 28368 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-18T05:29:21.967+03:00  INFO 28368 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-18T05:29:21.999+03:00  INFO 28368 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 21 ms. Found 0 JPA repository interfaces.
+2024-07-18T05:29:22.422+03:00  INFO 28368 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : Starting TradingSystemSpringConfiguration
+2024-07-18T05:29:23.014+03:00  INFO 28368 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-18T05:29:23.026+03:00  INFO 28368 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-18T05:29:23.026+03:00  INFO 28368 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-18T05:29:23.086+03:00  INFO 28368 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-18T05:29:23.086+03:00  INFO 28368 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1838 ms
+2024-07-18T05:29:23.340+03:00  INFO 28368 --- [Trading_System] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-18T05:29:23.408+03:00  INFO 28368 --- [Trading_System] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-07-18T05:29:23.446+03:00  INFO 28368 --- [Trading_System] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-07-18T05:29:23.854+03:00  INFO 28368 --- [Trading_System] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-07-18T05:29:23.882+03:00  INFO 28368 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-18T05:29:24.217+03:00  INFO 28368 --- [Trading_System] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 1345fb50-3a68-4e15-a1ce-e690d06da133
+2024-07-18T05:29:24.222+03:00  INFO 28368 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-18T05:29:26.018+03:00  INFO 28368 --- [Trading_System] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-07-18T05:29:26.541+03:00  INFO 28368 --- [Trading_System] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T05:29:26.560+03:00  WARN 28368 --- [Trading_System] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'marketFacadeImp' defined in file [C:\Users\marti\Documents\University\year 3\Semester 2\Trading_System\target\classes\com\example\trading_system\domain\stores\MarketFacadeImp.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'com.example.trading_system.domain.stores.StoreRepository' available: expected single matching bean but found 3: storeDatabaseRepository,storeMemoryRepository,getStoreRepository
+2024-07-18T05:29:26.560+03:00  INFO 28368 --- [Trading_System] [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T05:29:26.562+03:00  INFO 28368 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-07-18T05:29:26.565+03:00  INFO 28368 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-07-18T05:29:26.569+03:00  INFO 28368 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-07-18T05:29:26.582+03:00  INFO 28368 --- [Trading_System] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-07-18T05:29:26.607+03:00 ERROR 28368 --- [Trading_System] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.example.trading_system.domain.stores.MarketFacadeImp required a single bean, but 3 were found:
+	- storeDatabaseRepository: defined in file [C:\Users\marti\Documents\University\year 3\Semester 2\Trading_System\target\classes\com\example\trading_system\domain\stores\StoreDatabaseRepository.class]
+	- storeMemoryRepository: defined in file [C:\Users\marti\Documents\University\year 3\Semester 2\Trading_System\target\classes\com\example\trading_system\domain\stores\StoreMemoryRepository.class]
+	- getStoreRepository: defined by method 'getStoreRepository' in class path resource [com/example/trading_system/TradingSystemSpringConfiguration.class]
+
+This may be due to missing parameter name information
+
+Action:
+
+Consider marking one of the beans as @Primary, updating the consumer to accept multiple beans, or using @Qualifier to identify the bean that should be consumed
+
+Ensure that your compiler is configured to use the '-parameters' flag.
+You may need to update both your build tool settings as well as your IDE.
+(See https://github.com/spring-projects/spring-framework/wiki/Upgrading-to-Spring-Framework-6.x#parameter-name-retention)
+
+
+2024-07-18T05:32:59.776+03:00  INFO 29140 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 29140 (C:\Users\marti\Documents\University\year 3\Semester 2\Trading_System\target\classes started by martin in C:\Users\marti\Documents\University\year 3\Semester 2\Trading_System)
+2024-07-18T05:32:59.779+03:00  INFO 29140 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-18T05:33:00.966+03:00  INFO 29140 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-18T05:33:01.006+03:00  INFO 29140 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 0 JPA repository interfaces.
+2024-07-18T05:33:01.904+03:00  INFO 29140 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : Starting TradingSystemSpringConfiguration
+2024-07-18T05:33:02.466+03:00  INFO 29140 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-18T05:33:02.480+03:00  INFO 29140 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-18T05:33:02.480+03:00  INFO 29140 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-18T05:33:02.541+03:00  INFO 29140 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-18T05:33:02.541+03:00  INFO 29140 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2694 ms
+2024-07-18T05:33:02.803+03:00  INFO 29140 --- [Trading_System] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-18T05:33:02.905+03:00  INFO 29140 --- [Trading_System] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-07-18T05:33:02.955+03:00  INFO 29140 --- [Trading_System] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-07-18T05:33:03.383+03:00  INFO 29140 --- [Trading_System] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-07-18T05:33:03.410+03:00  INFO 29140 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-18T05:33:03.742+03:00  INFO 29140 --- [Trading_System] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 1d164010-7fca-4485-8fc3-546fae82c11e
+2024-07-18T05:33:03.746+03:00  INFO 29140 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-18T05:33:05.342+03:00  INFO 29140 --- [Trading_System] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-07-18T05:33:05.832+03:00  INFO 29140 --- [Trading_System] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T05:33:21.718+03:00  WARN 29140 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 4e4c8f6a-7e35-4983-90e3-ad7cb32a1f5e
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-07-18T05:33:22.091+03:00  INFO 29140 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@272600e1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1c1b9de9, org.springframework.security.web.context.SecurityContextHolderFilter@7a6433f3, org.springframework.security.web.header.HeaderWriterFilter@77614e7c, org.springframework.web.filter.CorsFilter@125c1134, org.springframework.security.web.authentication.logout.LogoutFilter@4cf5db07, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@330a6b76, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@34018757, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1992b8b, org.springframework.security.web.access.ExceptionTranslationFilter@1a288163, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4285b1bd]
+2024-07-18T05:33:22.342+03:00  INFO 29140 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
+2024-07-18T05:33:22.344+03:00  INFO 29140 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-07-18T05:33:22.346+03:00  INFO 29140 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@25379b3c]]
+2024-07-18T05:33:22.346+03:00  INFO 29140 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-07-18T05:33:22.352+03:00  INFO 29140 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 23.353 seconds (process running for 24.105)
+2024-07-18T05:33:22.354+03:00  INFO 29140 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-07-18T05:33:22.355+03:00  INFO 29140 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@25379b3c]]
+2024-07-18T05:33:22.355+03:00  INFO 29140 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-07-18T05:33:22.364+03:00  INFO 29140 --- [Trading_System] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T05:33:22.365+03:00  INFO 29140 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-07-18T05:33:22.368+03:00  INFO 29140 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-07-18T05:33:30.265+03:00  INFO 30340 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Starting TradingSystemApplication using Java 22.0.1 with PID 30340 (C:\Users\marti\Documents\University\year 3\Semester 2\Trading_System\target\classes started by martin in C:\Users\marti\Documents\University\year 3\Semester 2\Trading_System)
+2024-07-18T05:33:30.268+03:00  INFO 30340 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : No active profile set, falling back to 1 default profile: "default"
+2024-07-18T05:33:30.814+03:00  INFO 30340 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-18T05:33:30.860+03:00  INFO 30340 --- [Trading_System] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 31 ms. Found 0 JPA repository interfaces.
+2024-07-18T05:33:31.337+03:00  INFO 30340 --- [Trading_System] [main] c.e.t.TradingSystemSpringConfiguration   : Starting TradingSystemSpringConfiguration
+2024-07-18T05:33:31.859+03:00  INFO 30340 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-07-18T05:33:31.874+03:00  INFO 30340 --- [Trading_System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-18T05:33:31.875+03:00  INFO 30340 --- [Trading_System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-07-18T05:33:31.953+03:00  INFO 30340 --- [Trading_System] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-18T05:33:31.953+03:00  INFO 30340 --- [Trading_System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1641 ms
+2024-07-18T05:33:32.168+03:00  INFO 30340 --- [Trading_System] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-18T05:33:32.228+03:00  INFO 30340 --- [Trading_System] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-07-18T05:33:32.262+03:00  INFO 30340 --- [Trading_System] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-07-18T05:33:32.692+03:00  INFO 30340 --- [Trading_System] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-07-18T05:33:32.729+03:00  INFO 30340 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-18T05:33:33.044+03:00  INFO 30340 --- [Trading_System] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: bd664e73-252b-4883-ac84-3c5ffeb589fd
+2024-07-18T05:33:33.046+03:00  INFO 30340 --- [Trading_System] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-18T05:33:34.650+03:00  INFO 30340 --- [Trading_System] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-07-18T05:33:34.847+03:00  INFO 30340 --- [Trading_System] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T05:34:03.430+03:00  WARN 30340 --- [Trading_System] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: f72ddf97-a8a3-469e-9794-65abbce99694
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-07-18T05:34:03.827+03:00  INFO 30340 --- [Trading_System] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3c8802cf, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@68a1906f, org.springframework.security.web.context.SecurityContextHolderFilter@6434827e, org.springframework.security.web.header.HeaderWriterFilter@283c6f00, org.springframework.web.filter.CorsFilter@558bff39, org.springframework.security.web.authentication.logout.LogoutFilter@39ee039d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d555b85, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1132c14, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7e01d838, org.springframework.security.web.access.ExceptionTranslationFilter@6c40ae2d, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1992b8b]
+2024-07-18T05:34:04.149+03:00  INFO 30340 --- [Trading_System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path ''
+2024-07-18T05:34:04.153+03:00  INFO 30340 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-07-18T05:34:04.156+03:00  INFO 30340 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@13b52853]]
+2024-07-18T05:34:04.157+03:00  INFO 30340 --- [Trading_System] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-07-18T05:34:04.165+03:00  INFO 30340 --- [Trading_System] [main] c.e.t.TradingSystemApplication           : Started TradingSystemApplication in 34.478 seconds (process running for 34.942)
+2024-07-18T05:34:04.169+03:00  INFO 30340 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-07-18T05:34:04.170+03:00  INFO 30340 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@13b52853]]
+2024-07-18T05:34:04.170+03:00  INFO 30340 --- [Trading_System] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-07-18T05:34:04.182+03:00  INFO 30340 --- [Trading_System] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-18T05:34:04.183+03:00  INFO 30340 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-07-18T05:34:04.189+03:00  INFO 30340 --- [Trading_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

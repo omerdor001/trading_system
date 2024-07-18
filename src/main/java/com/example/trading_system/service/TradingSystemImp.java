@@ -20,13 +20,13 @@ import java.util.stream.Collectors;
 
 public class TradingSystemImp implements TradingSystem {
     private static final Logger logger = LoggerFactory.getLogger(TradingSystemImp.class);
-    private static TradingSystemImp instance = null;
+    public static TradingSystemImp instance = null;
     public UserService userService;
     public MarketService marketService;
     public int counter_user = 0;
     private boolean systemOpen;
 
-    private TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
+    public TradingSystemImp(PaymentService paymentService, DeliveryService deliveryService, NotificationSender notificationSender, UserRepository userRepository, StoreRepository storeRepository) {
         this.systemOpen = false;
         this.userService = UserServiceImp.getInstance(paymentService, deliveryService, notificationSender, userRepository, storeRepository);
         this.marketService = MarketServiceImp.getInstance(storeRepository);
