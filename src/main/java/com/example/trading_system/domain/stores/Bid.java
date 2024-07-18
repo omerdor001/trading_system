@@ -33,9 +33,9 @@ public class Bid {
 
     @Column(nullable = false)
     private boolean allOwnersApproved;
-    @ManyToOne
-    @JoinColumn(name = "store_id")
-    private Store store;
+
+    @Column(name = "store_name", nullable = false)
+    private String store_name;
 
     @Getter
     @Column(nullable = false)
@@ -78,7 +78,7 @@ public class Bid {
     @Column(nullable = false)
     private boolean customerApproved;
 
-    public Bid(String userName, int productID, double price, String productName, String address, String amount, String currency,String cardNumber, String month,String year,String holder,String ccv,String id) {
+    public Bid(String userName, String storeName, int productID, double price, String productName, String address, String amount, String currency,String cardNumber, String month,String year,String holder,String ccv,String id) {
         this.userName = userName;
         this.productID = productID;
         this.price = price;
@@ -95,6 +95,7 @@ public class Bid {
         this.ccv = ccv;
         this.holderId = id;
         this.customerApproved = true;
+        this.store_name = storeName;
     }
 
     public Bid() {

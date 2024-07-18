@@ -17,7 +17,7 @@ public class Product {
     @Column(nullable = false, unique = true)
     private int product_id;
 
-    @Column
+    @Column(name = "store_name")
     private String store_name;
 
     @Column
@@ -38,9 +38,9 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "store_id")
-    private Store store;
+   // @ManyToOne
+   // @JoinColumn(name = "store_id")
+   // private Store store;
 
     @ElementCollection
     @CollectionTable(name = "product_keywords", joinColumns = @JoinColumn(name = "product_id"))

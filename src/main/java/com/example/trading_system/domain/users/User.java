@@ -245,4 +245,8 @@ public abstract class User {
     public Set<String> cancelOwnerShip(String storeName){
         throw new RuntimeException("Only registered users can be owners.");
     }
+
+    public void removeManagerSuggestions() {
+        throw new RuntimeException("Only registered users can remove manager suggestions.");
+    }
 }

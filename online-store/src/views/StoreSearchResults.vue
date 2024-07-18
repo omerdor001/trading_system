@@ -68,6 +68,7 @@ export default {
           description: store.description,
           rating: store.rating
         }));
+
       } catch (error) {
         if (error.response && error.response.data) {
           toast.add({ severity: 'error', summary: 'Error', detail: error.response.data, life: 3000 });
