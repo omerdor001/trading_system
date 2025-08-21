@@ -45,6 +45,8 @@ The system is organized around a central service interface called `TradingSystem
 - Stateless session handling using JWT for authentication.
 - Well-isolated modules for testing and development efficiency.
 
+  ____________________________________________________________________________________________________________________________________________________________________________________
+
 ###    Getting Started
 
 To run this project locally, follow these steps:
