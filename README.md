@@ -1,20 +1,51 @@
-Trading System
-===================
+# 🛒 Trading System Project
 
-Description
------------
+**Third Year, Second Semester | Java (Spring Boot) | Vue.js | SQL Server | JUnit | Mockito**
 
-This project is a Spring Boot application built using Maven. It demonstrates a System for buying products from different stores (examples: ebay, amazon , ...)
+## 📋 Overview
 
-Prerequisites
--------------
+This project is a fully-featured trading system developed as part of the **Software Engineering Project** course. It supports store and product management, user administration, shopping cart functionality, purchasing operations, discount and purchase policies, and product search. The system is implemented in **Java** using **Spring Boot**, following best practices in modular architecture, maintainability, and security.
 
-*   Java Development Kit (JDK) version 22 or higher
-*   Apache Maven installed and configured
-*   IDE (e.g., IntelliJ IDEA, Eclipse) for development (optional but recommended)
+## 🚀 Features
 
-Getting Started
----------------
+- **Store Management**: Create, update, and remove stores. Manage ownership and permissions.
+- **Product Management**: Add, edit, and remove products with inventory tracking and categorization.
+- **User Management**: Registration, login, logout, role-based access control (guest, member, owner, admin).
+- **Cart & Purchase Handling**: Add to cart, view cart, and make purchases with policy enforcement.
+- **Discount & Purchase Policies**: Define and apply compound discount rules (AND, OR, XOR) and purchasing conditions.
+- **Search**: Search products by name, category, keywords, or price range.
+- **Authentication**: Secure login using hashed passwords and JWT-based session tokens.
+- **Architecture**: Clean modular design with layered services and a central service interface.
+- **Testing**: Comprehensive acceptance and unit tests for each major module.
+- **Documentation**: Includes architecture diagrams, API description, and design documentation.
+
+## 🛠️ Technologies Used
+
+- Java 22  
+- Spring Boot  
+- Spring Security  
+- Hibernate / JPA  
+- SQL Server  
+- JWT (JSON Web Tokens)  
+- Maven  
+- JUnit & Mockito  
+- UML (for diagrams)
+
+## 🧱 System Architecture
+
+The system is organized around a central service interface called `TradingSystem`, which encapsulates all user-facing functionalities. Internally, the logic is divided into subsystems:
+
+- **UserService**: Manages user data, sessions, and permissions.
+- **MarketService**: Handles store creation, updates, and ownership hierarchy.
+
+### 🧩 Design Highlights
+
+- Central facade pattern (`TradingSystem`) for consistent access.
+- Policy trees for flexible discount and purchase conditions.
+- Stateless session handling using JWT for authentication.
+- Well-isolated modules for testing and development efficiency.
+
+###  Getting Started
 
 To run this project locally, follow these steps:
 
